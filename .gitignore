@@ -1,0 +1,9 @@
+.idea
+venv
+__pycache__
+dist
+build
+*.pyc
+*.egg-info
+
+db.sqllite3

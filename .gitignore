@@ -6,4 +6,4 @@ build
 *.pyc
 *.egg-info
 
-db.sqllite3
+*.sqlite3

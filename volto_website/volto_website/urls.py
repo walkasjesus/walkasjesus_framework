@@ -1,4 +1,4 @@
-"""volto URL Configuration
+"""volto_website URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -18,5 +18,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('web_app/', include('web_app.urls')),
+    path('proto_one_app/', include('proto_one_app.urls')),
     path('admin/', admin.site.urls),
 ]

@@ -1,0 +1,27 @@
+{% if callings %}
+    <ul>
+    {% for calling in callings %}
+        <li><a href="{% url 'detail' calling.id %}">{{ calling.quote }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No callings are available.</p>
+{% endif %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if callings.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ callings.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ callings.number }} of {{ callings.paginator.num_pages }}.
+        </span>
+
+        {% if callings.has_next %}
+            <a href="?page={{ callings.next_page_number }}">next</a>
+            <a href="?page={{ callings.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>

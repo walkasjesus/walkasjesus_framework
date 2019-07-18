@@ -1,0 +1,9 @@
+{% if calling_list %}
+    <ul>
+    {% for calling in calling_list %}
+        <li><a href="/calling/{{ calling.id }}/">{{ calling.quote }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No callings are available.</p>
+{% endif %}

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ProtoOneAppConfig(AppConfig):
-    name = 'proto_one_app'
+    name = 'callings_app'

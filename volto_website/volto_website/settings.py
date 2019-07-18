@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'proto_one_app.apps.ProtoOneAppConfig',
+    'callings_app.apps.ProtoOneAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

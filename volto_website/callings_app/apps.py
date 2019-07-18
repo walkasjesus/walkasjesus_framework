@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ProtoOneAppConfig(AppConfig):
+class CallingsAppConfig(AppConfig):
     name = 'callings_app'

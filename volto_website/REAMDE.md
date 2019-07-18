@@ -4,6 +4,8 @@
 
 The project can be run by installing the dependencies with ```install.sh``` and starting the project with ```run_server.sh```
 
+If no database is available yet (or an outdated), run the ```update_database.sh``` before running the server. This will update the database schemes.
+
 ## Development
 
 ### Creating a new project
@@ -20,3 +22,7 @@ From the project root (containing the manage.py) run
 
 ```source ./venv/Scripts/activate```
 ```python manage.py startapp app_name```
+
+### Changing the database
+
+After editing any model, run the ```make_migration.sh```

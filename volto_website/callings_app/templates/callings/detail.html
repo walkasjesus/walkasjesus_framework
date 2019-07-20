@@ -2,7 +2,10 @@
 
 {% block content %}
 
-<h1>{{ calling.quote }}</h1>
+<h1>{{ calling.quote }} ({{ calling.primarybiblereference }})</h1>
+<h2></h2>
+
+<p>{{ calling.description }}</p>
 
 {% if bible_references %}
     <ul>

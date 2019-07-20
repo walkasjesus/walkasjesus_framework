@@ -17,11 +17,23 @@ class ImageInline(admin.TabularInline):
     extra = 0
 
 
+class SongInline(admin.TabularInline):
+    model = Song
+    extra = 0
+
+
+class SermonInline(admin.TabularInline):
+    model = Sermon
+    extra = 0
+
+
 class CallingAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferenceInline,
         SecondaryBibleReferenceInline,
-        ImageInline
+        ImageInline,
+        SongInline,
+        SermonInline,
     ]
 
 

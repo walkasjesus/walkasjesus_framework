@@ -7,3 +7,5 @@ build
 *.egg-info
 
 *.sqlite3
+
+media

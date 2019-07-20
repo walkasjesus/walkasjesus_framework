@@ -6,6 +6,12 @@ from callings_app.lib.bible_books import BibleBooks
 class Calling(models.Model):
     quote = models.CharField(max_length=256)
 
+    def bible_references(self):
+        return self.biblereference_set.all()
+
+    def images(self):
+        return self.image_set.filter(is_public=True)
+
     def __str__(self):
         return self.quote
 
@@ -25,7 +31,8 @@ class BibleReference(models.Model):
 class Image(models.Model):
     calling = models.ForeignKey(Calling, on_delete=models.CASCADE)
     title = models.TextField()
-    url = models.ImageField(upload_to='images/')
+    is_public = models.BooleanField(default=False)
+    file = models.ImageField(upload_to='images/')
 
     def __str__(self):
         return self.title

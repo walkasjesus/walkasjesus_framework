@@ -21,5 +21,8 @@ def listing(request):
 
 def detail(request, calling_id):
     calling = get_object_or_404(Calling, pk=calling_id)
-    bible_references = calling.biblereference_set.all()
-    return render(request, 'callings/detail.html', {'calling': calling, 'bible_references': bible_references})
+    bible_references = calling.bible_references()
+    images = calling.images()
+    return render(request, 'callings/detail.html', {'calling': calling,
+                                                    'bible_references': bible_references,
+                                                    'images': images})

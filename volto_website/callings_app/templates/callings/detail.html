@@ -12,4 +12,12 @@
     </ul>
 {% endif %}
 
+{% if images %}
+    <ul>
+    {% for image in images %}
+        <li><img src="{{ image.file.url }}" alt="{{ image.title }}"></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 {% endblock %}

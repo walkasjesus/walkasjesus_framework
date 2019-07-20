@@ -3,8 +3,12 @@ from django.contrib import admin
 from .models import *
 
 
-class BibleReferenceInline(admin.TabularInline):
-    model = BibleReference
+class PrimaryBibleReferenceInline(admin.TabularInline):
+    model = PrimaryBibleReference
+
+
+class SecondaryBibleReferenceInline(admin.TabularInline):
+    model = SecondaryBibleReference
     extra = 0
 
 
@@ -15,7 +19,8 @@ class ImageInline(admin.TabularInline):
 
 class CallingAdmin(admin.ModelAdmin):
     inlines = [
-        BibleReferenceInline,
+        PrimaryBibleReferenceInline,
+        SecondaryBibleReferenceInline,
         ImageInline
     ]
 

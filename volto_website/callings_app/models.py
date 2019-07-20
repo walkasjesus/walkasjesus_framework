@@ -7,7 +7,7 @@ class Calling(models.Model):
     quote = models.CharField(max_length=256)
 
     def bible_references(self):
-        return self.biblereference_set.all()
+        return self.secondarybiblereference_set.all()
 
     def images(self):
         return self.image_set.filter(is_public=True)
@@ -16,23 +16,52 @@ class Calling(models.Model):
         return self.quote
 
 
-class BibleReference(models.Model):
-    calling = models.ForeignKey(Calling, on_delete=models.CASCADE)
+class AbstractBibleReference(models.Model):
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
                             default=BibleBooks.Genesis)
     chapter = models.IntegerField(default=1)
     verse = models.IntegerField(default=1)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)
 
 
-class Image(models.Model):
+class PrimaryBibleReference(AbstractBibleReference):
+    calling = models.OneToOneField(Calling, on_delete=models.CASCADE)
+
+
+class SecondaryBibleReference(AbstractBibleReference):
+    calling = models.ForeignKey(Calling, on_delete=models.CASCADE)
+
+
+class Media(models.Model):
+    """" Abstract base class for other media models. """
     calling = models.ForeignKey(Calling, on_delete=models.CASCADE)
     title = models.TextField()
     is_public = models.BooleanField(default=False)
-    file = models.ImageField(upload_to='images/')
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
         return self.title
+
+
+class Image(Media):
+    file = models.ImageField(upload_to='images/')
+
+
+class Song(Media):
+    file = models.FileField(upload_to='songs/')
+
+
+class Sermon(Media):
+    file = models.FileField(upload_to='sermons/')
+
+
+class File(Media):
+    file = models.ImageField(upload_to='files/')

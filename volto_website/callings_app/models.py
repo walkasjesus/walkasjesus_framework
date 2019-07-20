@@ -20,3 +20,12 @@ class BibleReference(models.Model):
 
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)
+
+
+class Image(models.Model):
+    calling = models.ForeignKey(Calling, on_delete=models.CASCADE)
+    title = models.TextField()
+    url = models.ImageField(upload_to='images/')
+
+    def __str__(self):
+        return self.title

@@ -5,6 +5,7 @@ from .models import *
 
 class BibleReferenceInline(admin.TabularInline):
     model = BibleReference
+    extra = 0
 
 
 class CallingAdmin(admin.ModelAdmin):

@@ -9,3 +9,5 @@ build
 *.sqlite3
 
 media
+
+API_KEY.txt

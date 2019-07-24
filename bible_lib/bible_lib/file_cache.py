@@ -2,23 +2,26 @@ import json
 from pathlib import Path
 
 
-class FileCache:
-    def __init__(self, file_path: Path):
-        self.file_path = file_path
+class SimpleCache:
+    def __init__(self):
         self._cache = {}
 
-    def get(self, key):
-        return self._cache[key]
+    def get(self, get_function, arguments):
+        if arguments not in self._cache:
+            value = get_function(arguments)
+            # Stringify when storing, otherwise we run into problems
+            # when serializing to disk, where json serializer make int 5 a string '5'
+            # which will be seen as something different when reloading the data.
+            self._cache[str(arguments)] = value
 
-    def set(self, key, value):
-        self._cache[key] = value
+        return self._cache[str(arguments)]
 
-    def load_state(self):
+    def load_state(self, file_path: Path):
         """" Load the cache content from disk. """
-        with self.file_path.open() as file:
+        with file_path.open() as file:
             self._cache = json.load(file)
 
-    def store_state(self):
+    def store_state(self, file_path: Path):
         """" Store the cache content to disk. """
-        with self.file_path.open('w+') as file:
+        with file_path.open('w+') as file:
             json.dump(self._cache, file)

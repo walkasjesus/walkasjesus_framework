@@ -1,5 +1,4 @@
 import logging
-
 import requests
 
 from config import API_KEY
@@ -18,4 +17,4 @@ class BibleApiClient:
     def get(self, relative_path: str):
         url = self._base_url + relative_path.lstrip('/')
         self.logger.info('GET {}'.format(url))
-        return requests.get(url, headers={'api-key': API_KEY})
+        return requests.get(url, headers={'api-key': API_KEY}).text

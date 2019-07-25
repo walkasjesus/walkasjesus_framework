@@ -1,14 +1,33 @@
+import json
+
+from bible_api_client import BibleApiClient
 from bible_books import BibleBooks
 
 
 class Bible:
-    def __init__(self):
-        self.id = None
+    def __init__(self, bible_id=None):
+        self.id = bible_id
         self.name = ''
         self.language = ''
+        self.client = BibleApiClient()
 
     def verse(self, book: BibleBooks, chapter: int, verse: int) -> str:
-        return 'unimplemented'
+        book_id = self._get_book_id(book)
+        verse_id = '{}.{}.{}'.format(book_id, chapter, verse)
+
+        response_string = self.client.get('bibles/{}/verses/{}'.format(self.id, verse_id))
+        verse = json.loads(response_string)['data']
+        return verse['content']
+
+    def verses(self,
+               book: BibleBooks,
+               start_chapter: int,
+               start_verse: int,
+               end_chapter: int,
+               end_verse: int) -> str:
+        # verse object has a next, containing the id of the next verse,
+        # use this in case we span multiple chapters
+        return 'not implemented'
 
     def _get_book_id(self, book: BibleBooks) -> str:
         """" Convert the bible book enum to the id used on the bible api. """

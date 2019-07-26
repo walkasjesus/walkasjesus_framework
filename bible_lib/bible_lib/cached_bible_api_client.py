@@ -4,16 +4,7 @@ from bible_api_client import BibleApiClient
 from simple_cache import SimpleCache
 
 
-class Singleton(object):
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if not isinstance(cls._instance, cls):
-            cls._instance = object.__new__(cls, *args, **kwargs)
-        return cls._instance
-
-
-class CachedBibleApiClient(BibleApiClient, Singleton):
+class CachedBibleApiClient(BibleApiClient):
     def __init__(self, cache_location: Path = Path('bible_api_cache.json')):
         super(CachedBibleApiClient, self).__init__()
         self.cache = SimpleCache()

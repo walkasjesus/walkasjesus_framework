@@ -1,12 +1,11 @@
 from setuptools import setup
 
 setup(
-   name='bible_lib',
+   name='bible_app',
    version='0.1.0',
-   description='Library to retrieve bible texts',
+   description='Library to query bible verses.',
    author='LV',
    author_email='verzend.aan@gmail.com',
-   packages=['bible_lib'],
-   test_suite="tests",
+   packages=['bible_app'],
    install_requires=[],
 )

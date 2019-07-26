@@ -5,6 +5,7 @@ from bible import Bible
 from bible_books import BibleBooks
 from bibles import Bibles
 from cached_bible_api_client import CachedBibleApiClient
+from config import store_cache_every_number_of_hits
 
 
 @skip('Only run module test manually as it connects to external API')
@@ -31,7 +32,7 @@ class TestModule(TestCase):
         self.assertEqual(4, internal_cache.cache_hits)
 
     def test_caching_persist(self):
-        # every 10 missed items we store to disk,
+        # every store_cache_every_number_of_hits missed items we store to disk,
         # so we can reuse without connecting to the api
 
         bible = Bible('ead7b4cc5007389c-01')
@@ -40,13 +41,13 @@ class TestModule(TestCase):
         if cache_location.exists():
             cache_location.unlink()
 
-        for i in range(1, 12):
+        for i in range(1, store_cache_every_number_of_hits):
             bible.verse(BibleBooks.John, 3, i)
 
         self.assertTrue(cache_location.exists())
 
     def test_caching_restore(self):
-        # every 10 missed items we store to disk,
+        # every store_cache_every_number_of_hits missed items we store to disk,
         # so we can reuse without connecting to the api
 
         bible = Bible('ead7b4cc5007389c-01')
@@ -55,7 +56,7 @@ class TestModule(TestCase):
         client = CachedBibleApiClient(Path('data') / 'bible_api_cache.json')
         bible.client = client
 
-        for i in range(1, 10):
+        for i in range(1, store_cache_every_number_of_hits):
             bible.verse(BibleBooks.John, 3, i)
 
         self.assertEqual(0, bible.client.cache.cache_misses)

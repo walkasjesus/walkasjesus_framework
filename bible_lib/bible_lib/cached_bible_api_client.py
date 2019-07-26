@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from bible_api_client import BibleApiClient
+from config import store_cache_every_number_of_hits
 from simple_cache import SimpleCache
 
 
@@ -13,7 +14,7 @@ class CachedBibleApiClient(BibleApiClient):
 
     def get(self, relative_path: str):
         # Very simple mechanism to store the cache contents
-        if self.cache.cache_items_not_persisted >= 10:
+        if self.cache.cache_items_not_persisted >= store_cache_every_number_of_hits:
             self.cache.store_state(self.cache_location)
 
         return self.cache.get(super(CachedBibleApiClient, self).get, relative_path)

@@ -18,9 +18,21 @@ class Bible:
               verse: int) -> str:
         book_id = self._get_book_id(book)
         url = f'bibles/{self.id}/verses/{book_id}.{chapter}.{verse}'
-        response_string = self.client.get(url)
-        verse = json.loads(response_string)['data']
-        return verse['content']
+        try:
+            response = self.client.get(url)
+        except Exception as ex:
+            self.logger.warning(f'Failed to retrieve {book_id} {chapter}:{verse} for bible {self.id}.')
+            self.logger.warning(ex)
+            return ''
+
+        try:
+            verse = json.loads(response)['data']['content']
+        except Exception as ex:
+            self.logger.warning(f'Failed to parse {book_id} {chapter}:{verse} for bible {self.id}.')
+            self.logger.warning(ex)
+            return ''
+
+        return verse
 
     def verses(self,
                book: BibleBooks,

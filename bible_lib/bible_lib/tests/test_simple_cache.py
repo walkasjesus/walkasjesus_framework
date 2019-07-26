@@ -2,10 +2,17 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock
 
-from file_cache import SimpleCache
+from simple_cache import SimpleCache
 
 
 class TestSimpleCache(TestCase):
+    cache_path = Path('cache.json')
+
+    def tearDown(self):
+        # Clean up file
+        if self.cache_path.exists():
+            self.cache_path.unlink()
+
     def test_get(self):
         cache = SimpleCache()
         method = Mock(return_value='my_value')
@@ -22,22 +29,17 @@ class TestSimpleCache(TestCase):
         self.assertEqual(cached_value, 25)
 
     def test_load_and_store(self):
-        cache_path = Path('cache.json')
-
         cache = SimpleCache()
         cache.get(lambda f: f, 'test')
         cache.get(lambda f: f, 'another_value')
         cache.get(lambda f: f*f, 5)
 
         cache_before_load = cache._cache
-        cache.store_state(cache_path)
+        cache.store_state(self.cache_path)
 
         # Make a new cache to really test restore mechanism
         cache = SimpleCache()
-        cache.load_state(cache_path)
+        cache.load_state(self.cache_path)
         cache_after_load = cache._cache
-
-        # Clean up file
-        cache_path.unlink()
 
         self.assertEqual(cache_before_load, cache_after_load)

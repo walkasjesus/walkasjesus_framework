@@ -2,12 +2,12 @@ import json
 import logging
 
 from bible import Bible
-from bible_api_client import BibleApiClient
+from cached_bible_api_client import CachedBibleApiClient
 
 
 class Bibles(object):
     def __init__(self):
-        self.client = BibleApiClient()
+        self.client = CachedBibleApiClient()
         self.logger = logging.getLogger()
 
     def list(self):

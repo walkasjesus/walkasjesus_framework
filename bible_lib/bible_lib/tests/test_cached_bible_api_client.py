@@ -23,3 +23,15 @@ class TestCachedBibleApiClient(TestCase):
         cache_api.cache.cache_items_not_persisted = 10
         cache_api.get('url/2')
         self.assertEqual(cache_api.cache.store_state.call_count, 1)
+
+    def test_singleton(self):
+        """" Because we do not want every new client to begin its own cache
+        and disrupt other caches, we use a singleton to ensure we only have one object.
+        This is not the most elegant solution, but it is simple and enough for now."""
+        cache_api_1 = CachedBibleApiClient()
+        cache_api_2 = CachedBibleApiClient()
+
+        cache_api_1.temp_var = 1
+        cache_api_2.temp_var = 2
+
+        self.assertEqual(cache_api_1.temp_var, cache_api_2.temp_var)

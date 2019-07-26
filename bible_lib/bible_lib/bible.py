@@ -1,7 +1,7 @@
 import json
 
-from bible_api_client import BibleApiClient
 from bible_books import BibleBooks
+from cached_bible_api_client import CachedBibleApiClient
 
 
 class Bible:
@@ -9,7 +9,7 @@ class Bible:
         self.id = bible_id
         self.name = ''
         self.language = ''
-        self.client = BibleApiClient()
+        self.client = CachedBibleApiClient()
 
     def verse(self,
               book:

@@ -1,4 +1,10 @@
+from pathlib import Path
+
+
 class DummyResponses:
+    def __init__(self):
+        self.directory = Path('data')
+
     def bibles(self):
         return self._load('bibles_response.txt')
 
@@ -17,5 +23,7 @@ class DummyResponses:
         return self._load('search_verses_response.txt')
 
     def _load(self, file_name: str):
-        with open(file_name, encoding='utf-8') as file:
+        file_path = self.directory / file_name
+
+        with file_path.open(encoding='utf-8') as file:
             return file.read().replace('\n', '')

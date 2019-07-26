@@ -10,7 +10,7 @@
 {% if bible_references %}
     <ul>
     {% for bible_reference in bible_references %}
-        <li>{{ bible_reference }}</a></li>
+        <li>{{ bible_reference }} {{ bible_reference.text }}</a></li>
     {% endfor %}
     </ul>
 {% endif %}

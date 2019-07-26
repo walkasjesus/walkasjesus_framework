@@ -37,5 +37,5 @@ class SimpleCache:
     def store_state(self, file_path: Path):
         """" Store the cache content to disk. """
         with file_path.open('w+') as file:
-            json.dump(self._cache, file)
+            json.dump(self._cache, file, indent=4)
             self.cache_items_not_persisted = 0

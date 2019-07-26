@@ -30,13 +30,14 @@ class AbstractBibleReference(models.Model):
     chapter = models.IntegerField(default=1)
     verse = models.IntegerField(default=1)
     bible_id = 'ead7b4cc5007389c-01' # maybe some user setting from user preferences?
+    text = 'not loaded'
 
     class Meta:
         abstract = True
 
-    def text(self):
+    def load_text(self):
         """Get the verse text from the bible api."""
-        return Bible(self.bible_id).verse(self.book, self.chapter, self.verse)
+        self.text = Bible(self.bible_id).verse(BibleBooks[self.book], self.chapter, self.verse)
 
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)

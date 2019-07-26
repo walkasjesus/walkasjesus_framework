@@ -17,3 +17,11 @@ class TestBibles(TestCase):
                 found = True
 
         self.assertTrue(found)
+
+    def test_list_bibles_corrupt_data(self):
+        bibles = Bibles()
+        bibles.client.get = Mock(return_value='something unparsable')
+
+        # We just want an empty list, no need to crash here.
+        self.assertEqual([], bibles.list())
+

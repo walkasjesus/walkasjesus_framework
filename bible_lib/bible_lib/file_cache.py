@@ -5,9 +5,11 @@ from pathlib import Path
 class SimpleCache:
     def __init__(self):
         self._cache = {}
+        self.cache_items_not_persisted = 0
 
     def get(self, get_function, arguments):
         if arguments not in self._cache:
+            self.cache_items_not_persisted += 1
             value = get_function(arguments)
             # Stringify when storing, otherwise we run into problems
             # when serializing to disk, where json serializer make int 5 a string '5'
@@ -25,3 +27,4 @@ class SimpleCache:
         """" Store the cache content to disk. """
         with file_path.open('w+') as file:
             json.dump(self._cache, file)
+            self.cache_items_not_persisted = 0

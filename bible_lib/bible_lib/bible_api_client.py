@@ -2,6 +2,7 @@ import logging
 import requests
 
 from config import API_KEY
+from exceptions import UnauthorizedException, NotFoundException, BadRequestException
 
 
 class BibleApiClient:
@@ -17,4 +18,28 @@ class BibleApiClient:
     def get(self, relative_path: str):
         url = self._base_url + relative_path.lstrip('/')
         self.logger.info('GET {}'.format(url))
-        return requests.get(url, headers={'api-key': API_KEY}).text
+
+        try:
+            response = requests.get(url, headers={'api-key': API_KEY})
+        except Exception as ex:
+            self.logger.error(f'GET request for {relative_path} failed.')
+            self.logger.error(ex)
+            raise ex
+
+        if response.ok:
+            return response.text
+        if response.status_code == '400':
+            self.logger.warning('Invalid ID supplied.')
+            raise BadRequestException()
+        if response.status_code == '401':
+            self.logger.warning('The API key provided is either missing, invalid, or unauthorized for API access.')
+            raise UnauthorizedException()
+        if response.status_code == '403':
+            self.logger.warning('Server understood the request, but provided API key is not authorized to retrieve '
+                                'this information.')
+            raise UnauthorizedException()
+        if response.status_code == '404':
+            self.logger.warning('Resource not found.')
+            raise NotFoundException()
+
+        raise Exception(f'GET {relative_path} failed with status code {response.status_code}.')

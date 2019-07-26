@@ -11,11 +11,14 @@ class Bible:
         self.language = ''
         self.client = BibleApiClient()
 
-    def verse(self, book: BibleBooks, chapter: int, verse: int) -> str:
+    def verse(self,
+              book:
+              BibleBooks,
+              chapter: int,
+              verse: int) -> str:
         book_id = self._get_book_id(book)
-        verse_id = '{}.{}.{}'.format(book_id, chapter, verse)
-
-        response_string = self.client.get('bibles/{}/verses/{}'.format(self.id, verse_id))
+        url = f'bibles/{self.id}/verses/{book_id}.{chapter}.{verse}'
+        response_string = self.client.get(url)
         verse = json.loads(response_string)['data']
         return verse['content']
 
@@ -25,9 +28,13 @@ class Bible:
                start_verse: int,
                end_chapter: int,
                end_verse: int) -> str:
-        # verse object has a next, containing the id of the next verse,
-        # use this in case we span multiple chapters
-        return 'not implemented'
+        book_id = self._get_book_id(book)
+        verse_query = f'{book_id}.{start_chapter}.{start_verse}-{end_chapter}.{end_verse}'
+        url = f'bibles/{self.id}/search?query={verse_query}'
+        response_string = self.client.get(url)
+        data = json.loads(response_string)['data']
+        verses = data['passages'][0]['content']
+        return verses
 
     def _get_book_id(self, book: BibleBooks) -> str:
         """" Convert the bible book enum to the id used on the bible api. """

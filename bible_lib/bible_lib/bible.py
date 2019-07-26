@@ -16,23 +16,7 @@ class Bible:
               BibleBooks,
               chapter: int,
               verse: int) -> str:
-        book_id = self._get_book_id(book)
-        url = f'bibles/{self.id}/verses/{book_id}.{chapter}.{verse}'
-        try:
-            response = self.client.get(url)
-        except Exception as ex:
-            self.logger.warning(f'Failed to retrieve {book_id} {chapter}:{verse} for bible {self.id}.')
-            self.logger.warning(ex)
-            return ''
-
-        try:
-            verse = json.loads(response)['data']['content']
-        except Exception as ex:
-            self.logger.warning(f'Failed to parse {book_id} {chapter}:{verse} for bible {self.id}.')
-            self.logger.warning(ex)
-            return ''
-
-        return verse
+        return self.verses(book, chapter, verse, chapter, verse)
 
     def verses(self,
                book: BibleBooks,
@@ -43,9 +27,21 @@ class Bible:
         book_id = self._get_book_id(book)
         verse_query = f'{book_id}.{start_chapter}.{start_verse}-{end_chapter}.{end_verse}'
         url = f'bibles/{self.id}/search?query={verse_query}'
-        response_string = self.client.get(url)
-        data = json.loads(response_string)['data']
-        verses = data['passages'][0]['content']
+        try:
+            response = self.client.get(url)
+        except Exception as ex:
+            self.logger.warning(f'Failed to retrieve {verse_query} for bible {self.id}.')
+            self.logger.warning(ex)
+            return 'Not found'
+
+        try:
+            data = json.loads(response)['data']
+            verses = data['passages'][0]['content']
+        except Exception as ex:
+            self.logger.warning(f'Failed to parse {verse_query} for bible {self.id}.')
+            self.logger.warning(ex)
+            return 'Not found'
+
         return verses
 
     def _get_book_id(self, book: BibleBooks) -> str:

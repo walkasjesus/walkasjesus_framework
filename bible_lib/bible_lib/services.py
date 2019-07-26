@@ -1,4 +1,4 @@
-from cached_bible_api_client import CachedBibleApiClient
+from bible_lib.cached_bible_api_client import CachedBibleApiClient
 
 
 class Services:

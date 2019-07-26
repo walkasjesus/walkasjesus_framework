@@ -1,8 +1,8 @@
 import json
 import logging
 
-from bible_books import BibleBooks
-from services import Services
+from bible_lib.bible_books import BibleBooks
+from bible_lib.services import Services
 
 
 class Bible:

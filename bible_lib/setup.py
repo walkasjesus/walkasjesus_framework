@@ -8,5 +8,5 @@ setup(
    author_email='verzend.aan@gmail.com',
    packages=['bible_lib'],
    test_suite="tests",
-   install_requires=[],
+   install_requires=['requests'],
 )

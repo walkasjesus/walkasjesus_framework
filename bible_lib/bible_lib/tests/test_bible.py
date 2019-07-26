@@ -1,9 +1,9 @@
 from unittest import TestCase
 from unittest.mock import Mock
 
-from bible import Bible
-from bible_books import BibleBooks
-from tests.dummy_responses import DummyResponses
+from bible_lib.bible import Bible
+from bible_lib.bible_books import BibleBooks
+from bible_lib.tests.dummy_responses import DummyResponses
 
 
 class TestBible(TestCase):

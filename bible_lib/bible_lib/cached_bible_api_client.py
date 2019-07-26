@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from bible_api_client import BibleApiClient
-from config import store_cache_every_number_of_hits
-from simple_cache import SimpleCache
+from bible_lib.bible_api_client import BibleApiClient
+from bible_lib.config import store_cache_every_number_of_hits
+from bible_lib.simple_cache import SimpleCache
 
 
 class CachedBibleApiClient(BibleApiClient):

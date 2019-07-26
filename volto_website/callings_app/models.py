@@ -1,6 +1,6 @@
+from bible_lib.bible import Bible
+from bible_lib.bible_books import BibleBooks
 from django.db import models
-
-from callings_app.lib.bible_books import BibleBooks
 
 
 class Calling(models.Model):
@@ -29,9 +29,14 @@ class AbstractBibleReference(models.Model):
                             default=BibleBooks.Genesis)
     chapter = models.IntegerField(default=1)
     verse = models.IntegerField(default=1)
+    bible_id = 'ead7b4cc5007389c-01' # maybe some user setting from user preferences?
 
     class Meta:
         abstract = True
+
+    def text(self):
+        """Get the verse text from the bible api."""
+        return Bible(self.bible_id).verse(self.book, self.chapter, self.verse)
 
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)

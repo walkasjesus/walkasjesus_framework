@@ -2,7 +2,7 @@ from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock
 
-from simple_cache import SimpleCache
+from bible_lib.simple_cache import SimpleCache
 
 
 class TestSimpleCache(TestCase):

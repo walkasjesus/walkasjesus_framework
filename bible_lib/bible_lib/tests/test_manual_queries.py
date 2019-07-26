@@ -1,10 +1,10 @@
 import json
 from unittest import TestCase, skip
 
-from bible import Bible
-from bible_api_client import BibleApiClient
-from bible_books import BibleBooks
-from tests.dummy_responses import DummyResponses
+from bible_lib.bible import Bible
+from bible_lib.bible_api_client import BibleApiClient
+from bible_lib.bible_books import BibleBooks
+from bible_lib.tests.dummy_responses import DummyResponses
 
 
 @skip('Only used for development')

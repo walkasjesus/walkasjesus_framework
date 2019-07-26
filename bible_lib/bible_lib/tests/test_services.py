@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from services import Services
+from bible_lib.services import Services
 
 
 class TestServices(TestCase):

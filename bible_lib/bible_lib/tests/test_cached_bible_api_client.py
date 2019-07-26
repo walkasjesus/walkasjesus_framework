@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock
 
-from cached_bible_api_client import CachedBibleApiClient
-from config import store_cache_every_number_of_hits
+from bible_lib.cached_bible_api_client import CachedBibleApiClient
+from bible_lib.config import store_cache_every_number_of_hits
 
 
 class TestCachedBibleApiClient(TestCase):

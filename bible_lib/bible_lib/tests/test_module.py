@@ -1,11 +1,11 @@
 from pathlib import Path
 from unittest import TestCase, skip
 
-from bible import Bible
-from bible_books import BibleBooks
-from bibles import Bibles
-from cached_bible_api_client import CachedBibleApiClient
-from config import store_cache_every_number_of_hits
+from bible_lib.bible import Bible
+from bible_lib.bible_books import BibleBooks
+from bible_lib.bibles import Bibles
+from bible_lib.cached_bible_api_client import CachedBibleApiClient
+from bible_lib.config import store_cache_every_number_of_hits
 
 
 @skip('Only run module test manually as it connects to external API')

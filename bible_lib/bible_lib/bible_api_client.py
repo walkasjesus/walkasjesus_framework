@@ -1,8 +1,8 @@
 import logging
 import requests
 
-from config import API_KEY
-from exceptions import UnauthorizedException, NotFoundException, BadRequestException
+from bible_lib.config import API_KEY
+from bible_lib.exceptions import *
 
 
 class BibleApiClient:

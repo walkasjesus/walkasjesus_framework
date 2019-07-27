@@ -1,40 +1,32 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
   <head>
     <title>Christian - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
 
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="css/aos.css">
 
-    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-
-	{% if messages %}
-	<ul class="messages">
-		{% for message in messages %}
-		<li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
-
+	  
+	  
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="index.html"><span class="flaticon-bible"></span>Christian</a>
@@ -57,7 +49,7 @@
 	    </div>
 	  </nav>
 	  <section class="home-slider js-fullheight owl-carousel">
-      <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
+      <div class="slider-item js-fullheight" style="background-image:url(images/bg_1.jpg);">
       	<div class="overlay"></div>
 	        <div class="container">
 	          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -75,7 +67,7 @@
         </div>
       </div>
 
-      <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+      <div class="slider-item js-fullheight" style="background-image:url(images/bg_2.jpg);">
       	<div class="overlay"></div>
 	        <div class="container">
 	          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -97,7 +89,7 @@
     <section class="ftco-section ftco-no-pt ftco-no-pb ftco-about-section" id="about-section">
     	<div class="container-fluid px-0">
     		<div class="row d-md-flex text-wrapper">
-					<div class="one-half img" style="background-image: url({% static 'images/about.jpg' %});"></div>
+					<div class="one-half img" style="background-image: url('images/about.jpg');"></div>
 					<div class="one-half half-text d-flex justify-content-end align-items-center ftco-animate">
 						<div class="text-inner pl-md-5">
               <h3 class="heading">Welcome to <span>Christian</span> Church</h3>
@@ -164,7 +156,7 @@
         </div>
     	</div>
     </section>
-
+		
 		<section class="ftco-section ftco-services-2" id="services-section">
 			<div class="container">
 				<div class="row justify-content-center pb-5">
@@ -182,7 +174,7 @@
                 <h3 class="heading mb-3">Daily Prayers</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
-            </div>
+            </div>      
           </div>
           <div class="col-md d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services text-center d-block">
@@ -191,7 +183,7 @@
                 <h3 class="heading mb-3">Continous Teaching</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
-            </div>
+            </div>      
           </div>
           <div class="col-md d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services text-center d-block">
@@ -200,7 +192,7 @@
                 <h3 class="heading mb-3">Set of Sermons</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
-            </div>
+            </div>      
           </div>
           <div class="col-md d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services text-center d-block">
@@ -209,7 +201,7 @@
                 <h3 class="heading mb-3">Wedding</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
-            </div>
+            </div>      
           </div>
           <div class="col-md d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services text-center d-block">
@@ -218,7 +210,7 @@
                 <h3 class="heading mb-3">Community Helpers</h3>
                 <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
-            </div>
+            </div>      
           </div>
         </div>
 			</div>
@@ -236,7 +228,7 @@
 				<div class="row">
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-1.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-1.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -258,7 +250,7 @@
         	</div>
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-2.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-2.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -280,7 +272,7 @@
         	</div>
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-3.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-3.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -303,7 +295,7 @@
 
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-4.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-4.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -325,7 +317,7 @@
         	</div>
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-5.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-5.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -347,7 +339,7 @@
         	</div>
         	<div class="col-md-4">
         		<div class="sermon-wrap ftco-animate">
-    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-6.jpg' %});">
+    					<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/sermon-6.jpg);">
     						<div class="text-content p-4 text-center">
     							<span>by pastor:</span>
     							<h3>Jerry Simon</h3>
@@ -371,7 +363,7 @@
 			</div>
 		</section>
 
-		<section class="ftco-intro img" id="events-section" style="background-image: url({% static 'images/bg_3.jpg' %} %});">
+		<section class="ftco-intro img" id="events-section" style="background-image: url(images/bg_3.jpg);">
 			<div class="overlay"></div>
 			<div class="container">
 				<div class="row">
@@ -390,7 +382,7 @@
 				<div class="row">
 					<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-1.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-1.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -406,7 +398,7 @@
         	</div>
         	<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-2.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-2.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -422,7 +414,7 @@
         	</div>
         	<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-3.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-3.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -439,7 +431,7 @@
 
         	<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-4.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-4.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -455,7 +447,7 @@
         	</div>
         	<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-5.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-5.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -471,7 +463,7 @@
         	</div>
         	<div class="col-md-12 col-lg-6 col-xl-4">
         		<div class="event-wrap d-flex ftco-animate">
-        			<div class="img" style="background-image: url({% static 'images/event-6.jpg' %});"></div>
+        			<div class="img" style="background-image: url(images/event-6.jpg);"></div>
         			<div class="text p-4 d-flex align-items-center">
         				<div>
 	        				<span class="time">8:30am - 11:30am</span>
@@ -488,7 +480,7 @@
 				</div>
 			</div>
 		</section>
-
+		
 
 		<section class="ftco-section ftco-causes ftco-no-pb" id="causes-section">
 			<div class="container">
@@ -502,7 +494,7 @@
 				<div class="row">
 					<div class="col-md-6 col-lg-3">
 						<div class="cause-entry ftco-animate">
-							<a href="#" class="img" style="background-image: url({% static 'images/cause-1.jpg' %});"></a>
+							<a href="#" class="img" style="background-image: url(images/cause-1.jpg);"></a>
 							<div class="text p-3">
 								<h3><a href="cause.html">Health care, Food</a></h3>
 								<div class="progress mb-4">
@@ -519,7 +511,7 @@
 					</div>
 					<div class="col-md-6 col-lg-3">
 						<div class="cause-entry ftco-animate">
-							<a href="#" class="img" style="background-image: url({% static 'images/cause-2.jpg' %});"></a>
+							<a href="#" class="img" style="background-image: url(images/cause-2.jpg);"></a>
 							<div class="text p-3">
 								<h3><a href="cause.html">Restored the Old City Church</a></h3>
 								<div class="progress mb-4">
@@ -536,7 +528,7 @@
 					</div>
 					<div class="col-md-6 col-lg-3">
 						<div class="cause-entry ftco-animate">
-							<a href="#" class="img" style="background-image: url({% static 'images/cause-3.jpg' %});"></a>
+							<a href="#" class="img" style="background-image: url(images/cause-3.jpg);"></a>
 							<div class="text p-3">
 								<h3><a href="cause.html">Save Childern For Hunger</a></h3>
 								<div class="progress mb-4">
@@ -553,7 +545,7 @@
 					</div>
 					<div class="col-md-6 col-lg-3">
 						<div class="cause-entry ftco-animate">
-							<a href="#" class="img" style="background-image: url({% static 'images/cause-4.jpg' %});"></a>
+							<a href="#" class="img" style="background-image: url(images/cause-4.jpg);"></a>
 							<div class="text p-3">
 								<h3><a href="cause.html">Save Childern For Hunger</a></h3>
 								<div class="progress mb-4">
@@ -582,7 +574,7 @@
 		</section>
 
 
-		<section class="ftco-daily-verse img" style="background-image: url({% static 'images/bg_4.jpg' %});">
+		<section class="ftco-daily-verse img" style="background-image: url(images/bg_4.jpg);">
 			<div class="overlay"></div>
     	<div class="container">
     		<div class="row justify-content-center">
@@ -616,7 +608,7 @@
         <div class="row d-flex">
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url({% static 'images/image_1.jpg' %} %});">
+              <a href="single.html" class="block-20" style="background-image: url('images/image_1.jpg');">
               </a>
               <div class="text float-right d-block">
               	<div class="d-flex align-items-center pt-2 mb-4 topp">
@@ -642,7 +634,7 @@
           </div>
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url({% static 'images/image_2.jpg' %});">
+              <a href="single.html" class="block-20" style="background-image: url('images/image_2.jpg');">
               </a>
               <div class="text float-right d-block">
               	<div class="d-flex align-items-center pt-2 mb-4 topp">
@@ -668,7 +660,7 @@
           </div>
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry">
-              <a href="single.html" class="block-20" style="background-image: url({% static 'images/image_3.jpg' %});">
+              <a href="single.html" class="block-20" style="background-image: url('images/image_3.jpg');">
               </a>
               <div class="text float-right d-block">
               	<div class="d-flex align-items-center pt-2 mb-4 topp">
@@ -709,7 +701,7 @@
 					<div class="col-md-6 col-lg-3 ftco-animate">
 						<div class="staff">
 							<div class="img-wrap d-flex align-items-stretch">
-								<div class="img align-self-stretch" style="background-image: url({% static 'images/staff-1.jpg' %});"></div>
+								<div class="img align-self-stretch" style="background-image: url(images/staff-1.jpg);"></div>
 							</div>
 							<div class="text d-flex align-items-center pt-3 text-center">
 								<div>
@@ -730,7 +722,7 @@
 					<div class="col-md-6 col-lg-3 ftco-animate">
 						<div class="staff">
 							<div class="img-wrap d-flex align-items-stretch">
-								<div class="img align-self-stretch" style="background-image: url({% static 'images/staff-2.jpg' %});"></div>
+								<div class="img align-self-stretch" style="background-image: url(images/staff-2.jpg);"></div>
 							</div>
 							<div class="text d-flex align-items-center pt-3 text-center">
 								<div>
@@ -751,7 +743,7 @@
 					<div class="col-md-6 col-lg-3 ftco-animate">
 						<div class="staff">
 							<div class="img-wrap d-flex align-items-stretch">
-								<div class="img align-self-stretch" style="background-image: url({% static 'images/staff-3.jpg' %});"></div>
+								<div class="img align-self-stretch" style="background-image: url(images/staff-3.jpg);"></div>
 							</div>
 							<div class="text d-flex align-items-center pt-3 text-center">
 								<div>
@@ -772,7 +764,7 @@
 					<div class="col-md-6 col-lg-3 ftco-animate">
 						<div class="staff">
 							<div class="img-wrap d-flex align-items-stretch">
-								<div class="img align-self-stretch" style="background-image: url({% static 'images/staff-4.jpg' %});"></div>
+								<div class="img align-self-stretch" style="background-image: url(images/staff-4.jpg);"></div>
 							</div>
 							<div class="text d-flex align-items-center pt-3 text-center">
 								<div>
@@ -823,7 +815,7 @@
                 <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
               </div>
             </form>
-
+          
           </div>
 
           <div class="col-md-5 d-flex">
@@ -877,7 +869,7 @@
         </div>
       </div>
     </section>
-
+		
 		<section class="ftco-section ftco-no-pt ftco-no-pb">
 			<div id="map" class="bg-white"></div>
 		</section>
@@ -892,28 +884,28 @@
         </div>
     		<div class="row">
 					<div class="col-md-3 ftco-animate">
-						<a href="images/gallery-1.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
+						<a href="images/gallery-1.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-1.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-instagram"></span>
     					</div>
 						</a>
 					</div>
 					<div class="col-md-3 ftco-animate">
-						<a href="images/gallery-2.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
+						<a href="images/gallery-2.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-2.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-instagram"></span>
     					</div>
 						</a>
 					</div>
 					<div class="col-md-3 ftco-animate">
-						<a href="images/gallery-3.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
+						<a href="images/gallery-3.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-3.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-instagram"></span>
     					</div>
 						</a>
 					</div>
 					<div class="col-md-3 ftco-animate">
-						<a href="images/gallery-4.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-4.jpg' %});">
+						<a href="images/gallery-4.jpg" class="gallery image-popup img d-flex align-items-center" style="background-image: url(images/gallery-4.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-instagram"></span>
     					</div>
@@ -985,29 +977,29 @@
         </div>
       </div>
     </footer>
-
-
+    
+  
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
-  <script src="{% static 'js/jquery.min.js' %}"></script>
-  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
-  <script src="{% static 'js/popper.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
-  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
-  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
-  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
-  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
-  <script src="{% static 'js/aos.js' %}"></script>
-  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
-  <script src="{% static 'js/scrollax.min.js' %}"></script>
-  <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
-  <script src="{% static 'js/google-map.js' %}"></script>
-
-  <script src="{% static 'js/main.js' %}"></script>
-
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map.js"></script>
+  
+  <script src="js/main.js"></script>
+    
   </body>
 </html>

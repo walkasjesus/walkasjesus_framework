@@ -126,13 +126,18 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">Connect</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Home Groups</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Recovery Groups</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Memberships</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Children &amp; Students</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Volunteer</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Counseling</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Assistance</a></li>
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>profile ({{ user.username }})</a></li>
+                    <li><a href="{% url 'logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>login</a></li>
+                    <li><a href="{% url 'signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>register</a></li>
+                {% endif %}
+
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>admin</a></li>
+                {% endif %}
               </ul>
             </div>
           </div>

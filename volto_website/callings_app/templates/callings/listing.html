@@ -1,33 +1,69 @@
-{% extends "base.html" %}
 
+{% extends "base.html" %}
+{% load static %}
 {% block content %}
 
-{% if callings %}
-    <ul>
-    {% for calling in callings %}
-        <li><a href="{% url 'detail' calling.id %}">{{ calling.quote }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No callings are available.</p>
-{% endif %}
-
-<div class="pagination">
-    <span class="step-links">
-        {% if callings.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ callings.previous_page_number }}">previous</a>
+<section class="ftco-section bg-light" id="sermons-section">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Commandments</span>
+                <h2 class="mb-4">Jesus commandments</h2>
+                <p>What did Jesus teach when walking the earth?</p>
+            </div>
+        </div>
+    <div class="row">
+        {% if callings %}
+            {% for calling in callings %}
+                <div class="col-md-4">
+                    <div class="sermon-wrap ftco-animate">
+                        <div class="img d-flex align-items-center justify-content-center" style="background-image: url({% static 'images/sermon-1.jpg' %});">
+                            <div class="text-content p-4 text-center">
+                                <span>by pastor:</span>
+                                <h3>Jerry Simon</h3>
+                                <p class="">
+                                        <a href="https://vimeo.com/45830194" class="btn-custom mb-2 p-2 text-center popup-vimeo"><span class="icon-play"></span> Watch</a>
+                                        <a href="#" class="btn-custom p-2 text-center"><span class="icon-download"></span> Download</a>
+                                    </p>
+                            </div>
+                        </div>
+                        <div class="text pt-3 text-center">
+                            <h2 class="mb-0"><a href="{% url 'detail' calling.id %}">{{ calling.quote }}</a></h2>
+                            <div class="meta">
+                                <p class="mb-0">
+                                    <span>{{ calling.primarybiblereference }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No callings are available.</p>
         {% endif %}
+    </div>
+        <div class="row justify-content-center pb-5">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if callings.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ callings.previous_page_number }}">previous</a>
+                        {% endif %}
 
-        <span class="current">
-            Page {{ callings.number }} of {{ callings.paginator.num_pages }}.
-        </span>
+                        <span class="current">
+                            Page {{ callings.number }} of {{ callings.paginator.num_pages }}.
+                        </span>
 
-        {% if callings.has_next %}
-            <a href="?page={{ callings.next_page_number }}">next</a>
-            <a href="?page={{ callings.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+                        {% if callings.has_next %}
+                            <a href="?page={{ callings.next_page_number }}">next</a>
+                            <a href="?page={{ callings.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}

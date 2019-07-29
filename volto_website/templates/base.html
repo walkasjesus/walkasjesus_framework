@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="en">
   <head>
-    <title>Christian - Free Bootstrap 4 Template by Colorlib</title>
+    <title>Jesus commandments</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -29,7 +29,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="index.html"><span class="flaticon-bible"></span>Christian</a>
+	      <a class="navbar-brand" href="{% url 'callings:index' %}"><span class="flaticon-bible"></span>Jesus commandments</a>
 	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
@@ -56,7 +56,7 @@
 	          			<span>Jesus commandments</span>
 	          		</div>
 		            <h1 class="mb-4">Following <span>Jesus</span> wherever we are</h1>
-		            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+		            <p>When Jesus walked the earth he thought use many things, we just list them as they are</p>
 		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">Read more</a></p>
 	            </div>
 	          </div>
@@ -83,19 +83,22 @@
       </div>
     </section>
 
+    <div class="container">
+        {% include "messages.html" %}
+    </div>
 
-    {% include "messages.html" %}
-
-	{% block content %}
-	{% endblock %}
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
       <div class="container">
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2 logo"><span>Christian</span> Church</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              <h2 class="ftco-heading-2 logo"><span>Jesus </span> commandments</h2>
+              <p>When Jesus walked the earth he thought use many things, we just list them as they are.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -120,7 +123,7 @@
           </div>
           <div class="col-md">
             <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">Connect</h2>
+              <h2 class="ftco-heading-2">Account</h2>
               <ul class="list-unstyled">
 
                 {% if user.is_authenticated %}
@@ -139,10 +142,9 @@
           </div>
           <div class="col-md">
              <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Service Hours</h2>
+              <h2 class="ftco-heading-2">Contact us</h2>
               <div class="opening-hours">
-              	<p>Saturday Prayer Meeting: <span class="mb-3">10:00 am to 11:30 am</span></p>
-              	<p>Sunday Service: <span class="mb-3">8:30 am to 11:30 am</span></p>
+              	<p>Email: <span class="mb-3">info@jesuscommandments.com</span></p>
               </div>
             </div>
           </div>

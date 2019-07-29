@@ -33,7 +33,6 @@ class TestBibleReference(TestCase):
         self.assertEqual(1, ref.end_chapter)
         self.assertEqual(2, ref.end_verse)
 
-    @skip('Valid case, but not implemented yet')
     def test_create_from_string_multiple_chapters(self):
         ref = BibleReference().create_from_string('2 Jon 3:4-5:6')
 

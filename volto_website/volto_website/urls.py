@@ -19,12 +19,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('callings/', include('callings_app.urls')),
-	path('account/', include('account_app.urls')),
-    path('account/', include('django.contrib.auth.urls')),
+    path('callings/', include('callings_app.urls', namespace='callings')),
+    path('account/', include('account_app.urls', namespace='account')),
+    # path('account/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
-
 
 # Not sure why but all tuts only do this in debug mode,
 # Is it something special, or just because it is recommended

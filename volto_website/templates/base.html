@@ -36,14 +36,10 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="#home-section" class="nav-link"><span>Home</span></a></li>
-	          <li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>
-	          <li class="nav-item"><a href="#sermons-section" class="nav-link"><span>Sermons</span></a></li>
-	          <li class="nav-item"><a href="#events-section" class="nav-link"><span>Events</span></a></li>
-	          <li class="nav-item"><a href="#causes-section" class="nav-link"><span>Causes</span></a></li>
-	          <li class="nav-item"><a href="#blog-section" class="nav-link"><span>Blog</span></a></li>
-	          <li class="nav-item"><a href="#pastor-section" class="nav-link"><span>Pastor</span></a></li>
-	          <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contact</span></a></li>
+	          <li class="nav-item"><a href="{% url 'callings:index' %}" class="nav-link"><span>Home</span></a></li>
+	          <li class="nav-item"><a href="{% url 'callings:listing' %}" class="nav-link"><span>Commandments</span></a></li>
+	          <li class="nav-item"><a href="#" class="nav-link"><span>Empty</span></a></li>
+	          <li class="nav-item"><a href="#" class="nav-link"><span>Also empty</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -128,11 +124,11 @@
               <ul class="list-unstyled">
 
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>profile ({{ user.username }})</a></li>
-                    <li><a href="{% url 'logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>logout</a></li>
+                    <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>profile ({{ user.username }})</a></li>
+                    <li><a href="{% url 'account:logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>login</a></li>
-                    <li><a href="{% url 'signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>register</a></li>
+                    <li><a href="{% url 'account:login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>login</a></li>
+                    <li><a href="{% url 'account:signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>register</a></li>
                 {% endif %}
 
                 {% if user.is_superuser %}

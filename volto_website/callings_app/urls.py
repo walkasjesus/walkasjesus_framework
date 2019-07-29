@@ -5,6 +5,8 @@ from callings_app.views.detail_view import DetailView
 from callings_app.views.index_view import IndexView
 from callings_app.views.listing_view import ListingView
 
+
+app_name = 'callings'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('demo', DemoView.as_view(), name='demo'),

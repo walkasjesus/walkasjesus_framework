@@ -16,7 +16,7 @@ class CallingImporter(object):
             if len(group['QuoteDutch'].dropna()) > 0:
                 calling.quote = group['QuoteDutch'].dropna().iloc[0]
             # A commandment has several bible refs.
-            for verse in df['BiblePhrase'].dropna():
+            for verse in group['BiblePhrase'].dropna():
                 try:
                     calling.bible_references.append(BibleReference.create_from_string(verse))
                 except Exception as ex:

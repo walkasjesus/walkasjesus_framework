@@ -9,7 +9,7 @@ print('Adding %s callings' % len(callings))
 
 def add_bible_ref(calling_id, reference):
     model_reference = SecondaryBibleReference(calling_id=calling_id)
-    model_reference.book = reference.book
+    model_reference.book = reference.book.name
     model_reference.chapter = reference.start_chapter
     model_reference.verse = reference.start_verse
     model_reference.save()
@@ -19,6 +19,7 @@ def add(calling):
     model_calling = Calling()
     model_calling.quote = calling.quote
     model_calling.save()
+    print(f'Added calling {model_calling.id}')
     [add_bible_ref(model_calling.id, ref) for ref in calling.bible_references]
 
 

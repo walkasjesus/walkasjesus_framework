@@ -1,3 +1,9 @@
-source ./venv/Scripts/activate
+if [[ -f ./venv/Scripts/activate ]]; then
+	source ./venv/Scripts/activate
+elif [[ -f ./venv/bin/activate ]]; then 
+	source ./venv/bin/activate
+else
+	echo "error: cannot find environment binary"
+fi
 python manage.py shell < ./tools/create_users.py
 python manage.py shell < ./tools/create_callings.py

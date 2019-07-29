@@ -11,14 +11,16 @@ class CallingImporter(object):
         callings = []
 
         # Handle each commandment
-        for name, group in df.groupby(['Stap']):
+        for name, group in df.groupby(['Step']):
             calling = Calling()
-            calling.quote = df['Bijbeloproep (synopsis)']
+            if len(group['QuoteDutch'].dropna()) > 0:
+                calling.quote = group['QuoteDutch'].dropna().iloc[0]
             # A commandment has several bible refs.
-            for verse in df['Bijbeltekst'].dropna():
+            for verse in df['BiblePhrase'].dropna():
                 try:
                     calling.bible_references.append(BibleReference.create_from_string(verse))
                 except Exception as ex:
                     print(f'Could not parse {verse} from {name}')
+            callings.append(calling)
 
         return callings

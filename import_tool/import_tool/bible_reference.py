@@ -42,7 +42,6 @@ class BibleReference:
     def parse_book(book: str) -> BibleBooks:
         book_normalized = book.upper().strip().replace('.', '')
 
-        # TODO mapping is not correct yet, just filled in some
         mapping = {
             'GEN': BibleBooks.Genesis,
             'EX': BibleBooks.Exodus,

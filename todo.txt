@@ -1,0 +1,1 @@
+-bible_lib forwards html, the template view is set to safe, but this gives the possibilty for an attack if the bible api is hacked

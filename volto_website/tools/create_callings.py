@@ -1,18 +1,25 @@
-import pandas
+from import_tool import CallingImporter
+from callings_app.models import Calling, SecondaryBibleReference
 
-callings_data_frame = pandas.read_csv('./data/callings.csv', delimiter=';')
+importer = CallingImporter()
+callings = importer.load('./data/callings.csv')
 
-quotes = callings_data_frame['Bijbeloproep (synopsis)'].dropna().to_list()
-
-from callings_app.models import Calling
-
-print('Adding %s quotes' % len(quotes))
+print('Adding %s callings' % len(callings))
 
 
-def add(quote):
-    calling = Calling()
-    calling.quote = quote
-    calling.save()
+def add_bible_ref(calling_id, reference):
+    model_reference = SecondaryBibleReference(calling_id=calling_id)
+    model_reference.book = reference.book
+    model_reference.chapter = reference.start_chapter
+    model_reference.verse = reference.start_verse
+    model_reference.save()
 
 
-[add(quote) for quote in quotes]
+def add(calling):
+    model_calling = Calling()
+    model_calling.quote = calling.quote
+    model_calling.save()
+    [add_bible_ref(model_calling.id, ref) for ref in calling.bible_references]
+
+
+[add(calling) for calling in callings]

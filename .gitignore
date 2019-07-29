@@ -9,6 +9,8 @@ build
 *.sqlite3
 *.sqlite3-journal
 
+bible_api_cache.json
+
 media
 
 API_KEY.txt

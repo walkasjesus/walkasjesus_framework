@@ -1,9 +1,26 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 
-<p>Welcome</p>
-
-<a href="{% url 'listing' %}">A list of all callings</a>
+<section class="ftco-section bg-light" id="sermons-section">
+	<div class="container">
+		<div class="row justify-content-center pb-5">
+  <div class="col-md-12 heading-section text-center ftco-animate">
+	<span class="subheading">Commandments</span>
+	<h2 class="mb-4">Jesus commandments</h2>
+	<p>What did Jesus teach when walking the earth?</p>
+  </div>
+</div>
+	<div class="row">
+	{% if callings %}
+		{% for calling in callings %}
+			{% include "callings/single_calling_overview.html" %}
+		{% endfor %}
+	{% else %}
+		<p>No callings are available.</p>
+	{% endif %}
+</div>
+</div>
+</section>
 
 {% endblock %}

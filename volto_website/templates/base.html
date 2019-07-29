@@ -1,140 +1,187 @@
+<!DOCTYPE html>
 {% load static %}
+<html lang="en">
+  <head>
+    <title>Christian - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!DOCTYPE HTML>
-<!--
-	Caminar by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
-<html>
-	<head>
-		<title>Work in progress</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
-	</head>
-	<body>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
 
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
 
-		<!-- Header -->
-			<header id="header">
-				<div class="logo"><a href="{% url 'index' %}">Jesus<span>commandments</span></a></div>
-			</header>
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
 
-		<!-- Main -->
-			<section id="main">
-				<div class="inner">
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
 
-				<!-- One -->
-					<section id="one" class="wrapper style1">
-						<!--
-						<div class="image fit flush">
-							<img src="{% static 'images/header.jpg' %}" alt="" />
-						</div>-->
-						<!--
-						<header class="special">
-							<h2>Header</h2>
-							<p>Sub header</p>
-						</header>
-						-->
-						<div class="content">
-						    {% block content %}
-                            {% endblock %}
-                        </div>
-					</section>
-				<!--
-					<section id="two" class="wrapper style2">
-						<header>
-							<h2>Vestibulum Convallis</h2>
-							<p>vehicula urna sed justo bibendum</p>
-						</header>
-						<div class="content">
-							<div class="gallery">
-								<div>
-									<div class="image fit flush">
-										<a href="{% static 'images/pic03.jpg' %}"><img src="{% static 'images/pic03.jpg' %}" alt="" /></a>
-									</div>
-								</div>
-								<div>
-									<div class="image fit flush">
-										<a href="{% static 'images/pic01.jpg' %}"><img src="{% static 'images/pic01.jpg' %}" alt="" /></a>
-									</div>
-								</div>
-								<div>
-									<div class="image fit flush">
-										<a href="{% static 'images/pic04.jpg' %}"><img src="{% static 'images/pic04.jpg' %}" alt="" /></a>
-									</div>
-								</div>
-								<div>
-									<div class="image fit flush">
-										<a href="{% static 'images/pic05.jpg' %}"><img src="{% static 'images/pic05.jpg' %}" alt="" /></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
 
-					<section id="three" class="wrapper">
-						<div class="spotlight">
-							<div class="image flush"><img src="{% static 'images/pic06.jpg' %}" alt="" /></div>
-							<div class="inner">
-								<h3>Viverra Hendrerit</h3>
-								<p>Curabitur eget semper ante. Morbi eleifend ultricies est, a blandit diam vehicula vel. Vestibulum porttitor nisi quis viverra hendrerit. Suspendisse vel volutpat nibh, vel elementum lacus. Maecenas commodo pulvinar dui, at cursus metus imperdiet vel.</p>
-							</div>
-						</div>
-						<div class="spotlight alt">
-							<div class="image flush"><img src="{% static 'images/pic07.jpg' %}" alt="" /></div>
-							<div  class="inner">
-								<h3>Curabitur Eget</h3>
-								<p>Curabitur eget semper ante. Morbi eleifend ultricies est, a blandit diam vehicula vel. Vestibulum porttitor nisi quis viverra hendrerit. Suspendisse vel volutpat nibh, vel elementum lacus. Maecenas commodo pulvinar dui, at cursus metus imperdiet vel.</p>
-							</div>
-						</div>
-						<div class="spotlight">
-							<div class="image flush"><img src="{% static 'images/pic08.jpg' %}" alt="" /></div>
-							<div class="inner">
-								<h3>Morbi Eleifend</h3>
-								<p>Curabitur eget semper ante. Morbi eleifend ultricies est, a blandit diam vehicula vel. Vestibulum porttitor nisi quis viverra hendrerit. Suspendisse vel volutpat nibh, vel elementum lacus. Maecenas commodo pulvinar dui, at cursus metus imperdiet vel.</p>
-							</div>
-						</div>
-					</section>
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
 
-				</div>
-			</section>
-		-->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="index.html"><span class="flaticon-bible"></span>Christian</a>
+	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
 
-		<!-- Footer -->
-			<footer id="footer">
-				<div class="container">
-					<ul class="icons">
-						{% if user.is_authenticated %}
-							<li><a href="{% url 'profile' %}"><span class="label">profile ({{ user.username }})</span></a></li>
-							<li><a href="{% url 'logout' %}"><span class="label">logout</span></a></li>
-						{% else %}
-							<li><a href="{% url 'login' %}"><span class="label">login</span></a></li>
-							<li><a href="{% url 'signup' %}"><span class="label">register</span></a></li>
-						{% endif %}
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav nav ml-auto">
+	          <li class="nav-item"><a href="#home-section" class="nav-link"><span>Home</span></a></li>
+	          <li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>
+	          <li class="nav-item"><a href="#sermons-section" class="nav-link"><span>Sermons</span></a></li>
+	          <li class="nav-item"><a href="#events-section" class="nav-link"><span>Events</span></a></li>
+	          <li class="nav-item"><a href="#causes-section" class="nav-link"><span>Causes</span></a></li>
+	          <li class="nav-item"><a href="#blog-section" class="nav-link"><span>Blog</span></a></li>
+	          <li class="nav-item"><a href="#pastor-section" class="nav-link"><span>Pastor</span></a></li>
+	          <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contact</span></a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
 
-						{% if user.is_superuser %}
-							<li><a href="{% url 'admin:index' %}"><span class="label">admin</span></a></li>
-						{% endif %}
-					</ul>
-				</div>
-			</footer>
+	<section class="home-slider js-fullheight owl-carousel">
+      <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
+      	<div class="overlay"></div>
+	        <div class="container">
+	          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+	          <div class="col-md-8 text-center ftco-animate mt-5">
+	          	<div class="text">
+	          		<div class="subheading">
+	          			<span>Jesus commandments</span>
+	          		</div>
+		            <h1 class="mb-4">Following <span>Jesus</span> wherever we are</h1>
+		            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">Read more</a></p>
+	            </div>
+	          </div>
+	        </div>
+        </div>
+      </div>
+
+      <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+      	<div class="overlay"></div>
+	        <div class="container">
+	          <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+	          <div class="col-md-8 text-center ftco-animate mt-5">
+	          	<div class="text">
+	          		<div class="subheading">
+	          			<span>Jesus commandments</span>
+	          		</div>
+		            <h1 class="mb-4">We <span>Love</span> God, We Believe in God</h1>
+		            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">Read more</a></p>
+	            </div>
+	          </div>
+	        </div>
+        </div>
+      </div>
+    </section>
 
 
-		<!-- Scripts -->
-			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/jquery.poptrox.min.js' %}"></script>
-			<script src="{% static 'js/skel.min.js' %}"></script>
-			<script src="{% static 'js/util.js' %}"></script>
-			<script src="{% static 'js/main.js' %}"></script>
+    {% include "messages.html" %}
 
-	</body>
+	{% block content %}
+	{% endblock %}
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2 logo"><span>Christian</span> Church</h2>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">About</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Staff</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Beliefs</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>History</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Mission</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Wedding &amp; Funerals</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Jobs &amp; Internship</a></li>
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Fellowships</a></li>
+
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Connect</h2>
+              <ul class="list-unstyled">
+
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>profile ({{ user.username }})</a></li>
+                    <li><a href="{% url 'logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>login</a></li>
+                    <li><a href="{% url 'signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>register</a></li>
+                {% endif %}
+
+                {% if user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>admin</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Service Hours</h2>
+              <div class="opening-hours">
+              	<p>Saturday Prayer Meeting: <span class="mb-3">10:00 am to 11:30 am</span></p>
+              	<p>Sunday Service: <span class="mb-3">8:30 am to 11:30 am</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
+  <script src="{% static 'js/google-map.js' %}"></script>
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+  </body>
 </html>

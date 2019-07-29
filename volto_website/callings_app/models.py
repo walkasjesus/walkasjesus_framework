@@ -1,5 +1,5 @@
-from bible_lib.bible import Bible
-from bible_lib.bible_books import BibleBooks
+from bible_lib import Bible
+from bible_lib import BibleBooks
 from django.db import models
 
 

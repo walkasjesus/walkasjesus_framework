@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from callings_app.lib.bible_books import BibleBooks
+from bible_lib import BibleBooks
 from callings_app.models import AbstractBibleReference
 
 

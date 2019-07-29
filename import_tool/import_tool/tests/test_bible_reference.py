@@ -34,7 +34,7 @@ class TestBibleReference(TestCase):
         self.assertEqual(2, ref.end_verse)
 
     def test_create_from_string_multiple_chapters(self):
-        ref = BibleReference().create_from_string('2 Jon 3:4-5:6')
+        ref = BibleReference().create_from_string('2 Joh 3:4-5:6')
 
         self.assertEqual(BibleBooks.JohnSecondBook, ref.book)
         self.assertEqual(3, ref.start_chapter)

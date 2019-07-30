@@ -5,5 +5,5 @@ elif [[ -f ./venv/bin/activate ]]; then
 else
 	echo "error: cannot find environment binary"
 fi
-python manage.py shell < ./tools/create_users.py
-python manage.py shell < ./tools/create_callings.py
+python manage.py import_users
+python manage.py import_commandments

@@ -14,3 +14,6 @@ bible_api_cache.json
 media
 
 API_KEY.txt
+
+# At the moment we are not yet translating, so include locale files
+locale

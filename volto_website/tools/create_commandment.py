@@ -17,7 +17,7 @@ def add_bible_ref(commandment_id, reference):
 
 def add(commandment):
     model_commandment = Commandment()
-    model_commandment.title = commandment.quote
+    model_commandment.title = commandment.title
     model_commandment.save()
     print(f'Added commandment {model_commandment.id}')
     [add_bible_ref(model_commandment.id, ref) for ref in commandment.bible_references]

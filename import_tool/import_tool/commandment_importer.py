@@ -14,7 +14,7 @@ class CommandmentImporter(object):
         for name, group in df.groupby(['Step']):
             commandment = Commandment()
             if len(group['QuoteDutch'].dropna()) > 0:
-                commandment.quote = group['QuoteEnglish'].dropna().iloc[0]
+                commandment.title = group['QuoteEnglish'].dropna().iloc[0]
             # A commandment has several bible refs.
             for verse in group['BiblePhrase'].dropna():
                 try:

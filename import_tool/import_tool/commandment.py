@@ -1,4 +1,4 @@
 class Commandment:
     def __init__(self):
-        self.quote = ''
+        self.title = ''
         self.bible_references = []

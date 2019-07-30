@@ -1,1 +1,1 @@
-from .calling_importer import CallingImporter
+from .commandment_importer import CommandmentImporter

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from bible_lib import BibleBooks
-from callings_app.models import AbstractBibleReference
+from commandments_app.models import AbstractBibleReference
 
 
 class TestBibleReference(TestCase):

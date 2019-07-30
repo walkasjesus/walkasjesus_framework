@@ -41,7 +41,7 @@ class TestModule(TestCase):
         if cache_location.exists():
             cache_location.unlink()
 
-        for i in range(1, store_cache_every_number_of_hits):
+        for i in range(1, store_cache_every_number_of_hits+1):
             bible.verse(BibleBooks.John, 3, i)
 
         self.assertTrue(cache_location.exists())
@@ -56,7 +56,7 @@ class TestModule(TestCase):
         client = CachedBibleApiClient(Path('data') / 'bible_api_cache.json')
         bible.client = client
 
-        for i in range(1, store_cache_every_number_of_hits):
+        for i in range(1, store_cache_every_number_of_hits+1):
             bible.verse(BibleBooks.John, 3, i)
 
         self.assertEqual(0, bible.client.cache.cache_misses)

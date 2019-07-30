@@ -27,7 +27,7 @@ class SermonInline(admin.TabularInline):
     extra = 0
 
 
-class CallingAdmin(admin.ModelAdmin):
+class CommandmentAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferenceInline,
         SecondaryBibleReferenceInline,
@@ -37,4 +37,4 @@ class CallingAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Calling, CallingAdmin)
+admin.site.register(Commandment, CommandmentAdmin)

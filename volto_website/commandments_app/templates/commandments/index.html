@@ -12,12 +12,12 @@
   </div>
 </div>
 	<div class="row">
-	{% if callings %}
-		{% for calling in callings %}
-			{% include "callings/single_calling_overview.html" %}
+	{% if commandments %}
+		{% for commandment in commandments %}
+			{% include "commandments/single_commandment_overview.html" %}
 		{% endfor %}
 	{% else %}
-		<p>No callings are available.</p>
+		<p>No commandments are available.</p>
 	{% endif %}
 </div>
 </div>

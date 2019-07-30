@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'callings_app.apps.CallingsAppConfig',
+    'commandments_app.apps.CommandmentsAppConfig',
     'account_app.apps.AccountAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,8 +123,8 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_REDIRECT_URL = '/callings/'
-LOGOUT_REDIRECT_URL = '/callings/'
+LOGIN_REDIRECT_URL = '/commandments/'
+LOGOUT_REDIRECT_URL = '/commandments/'
 
 
 # Map django message level to Bootstrap alert, using the tag attribute

@@ -1,26 +1,26 @@
 import pandas
 
 from import_tool.bible_reference import BibleReference
-from import_tool.calling import Calling
+from import_tool.commandment import Commandment
 
 
-class CallingImporter(object):
-    def load(self, file_path='../../../volto_website/data/callings.csv'):
+class CommandmentImporter(object):
+    def load(self, file_path='../../../volto_website/data/commandments.csv'):
         df = pandas.read_csv(file_path, delimiter=';')
 
-        callings = []
+        commandments = []
 
         # Handle each commandment
         for name, group in df.groupby(['Step']):
-            calling = Calling()
+            commandment = Commandment()
             if len(group['QuoteDutch'].dropna()) > 0:
-                calling.quote = group['QuoteDutch'].dropna().iloc[0]
+                commandment.quote = group['QuoteEnglish'].dropna().iloc[0]
             # A commandment has several bible refs.
             for verse in group['BiblePhrase'].dropna():
                 try:
-                    calling.bible_references.append(BibleReference.create_from_string(verse))
+                    commandment.bible_references.append(BibleReference.create_from_string(verse))
                 except Exception as ex:
                     print(f'Could not parse {verse} from {name}')
-            callings.append(calling)
+            commandments.append(commandment)
 
-        return callings
+        return commandments

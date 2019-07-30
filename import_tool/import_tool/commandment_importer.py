@@ -15,12 +15,15 @@ class CommandmentImporter(object):
             commandment = Commandment()
             if len(group['QuoteDutch'].dropna()) > 0:
                 commandment.title = group['QuoteEnglish'].dropna().iloc[0]
+                commandment.category = group['Category'].dropna().iloc[0]
             # A commandment has several bible refs.
-            for verse in group['BiblePhrase'].dropna():
+            for index, row in group.iterrows():
                 try:
-                    commandment.bible_references.append(BibleReference.create_from_string(verse))
+                    reference = BibleReference.create_from_string(row['BiblePhrase'])
+                    reference.is_primary = row['PrimarySecondary'].lower() == 'primary'
+                    commandment.bible_references.append(reference)
                 except Exception as ex:
-                    print(f'Could not parse {verse} from {name}')
+                    print(f'Could not parse {row}')
             commandments.append(commandment)
 
         return commandments

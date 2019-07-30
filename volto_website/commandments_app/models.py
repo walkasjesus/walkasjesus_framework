@@ -39,9 +39,6 @@ class Commandment(models.Model):
         """ Secondary references are extra, maybe indirect references. """
         return self.secondarybiblereference_set.all()
 
-    def all_bible_references(self):
-        return self.primary_bible_references() + self.secondary_bible_references()
-
     def images(self):
         return self.image_set.filter(is_public=True)
 

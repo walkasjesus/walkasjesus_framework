@@ -3,6 +3,7 @@ from enum import Enum
 from bible_lib import Bible
 from bible_lib import BibleBooks
 from django.db import models
+from django.utils import translation
 from django.utils.translation import gettext
 
 
@@ -59,15 +60,25 @@ class AbstractBibleReference(models.Model):
                             default=BibleBooks.Genesis)
     chapter = models.IntegerField(default=1)
     verse = models.IntegerField(default=1)
-    bible_id = 'ead7b4cc5007389c-01'  # maybe some user setting from user preferences?
     text = gettext('Could not load text at the moment.')
 
     class Meta:
         abstract = True
 
+    def bible_id(self):
+        current_user_language = translation.get_language()
+
+        if current_user_language == 'nl':
+            return 'ead7b4cc5007389c-01'
+
+        if current_user_language == 'en':
+            return 'de4e12af7f28f599-01'
+
+        return 'de4e12af7f28f599-01'
+
     def load_text(self):
         """Get the verse text from the bible api."""
-        self.text = Bible(self.bible_id).verse(BibleBooks[self.book], self.chapter, self.verse)
+        self.text = Bible(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
 
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)

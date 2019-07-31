@@ -3,25 +3,26 @@ from enum import Enum
 from bible_lib import Bible
 from bible_lib import BibleBooks
 from django.db import models
+from django.utils.translation import gettext
 
 
 class CommandmentCategories(Enum):
-    Salvation = "Salvation commands"
-    Discipleship = "Discipleship Commands"
-    EffectiveWorship = "Effective worship commands"
-    Blessings = "Blessings"
-    JudgmentSeat = "Judgment Seat and Rewards commands"
-    Relationship = "Relationship Commands"
-    Marriage = "Marriage commands"
-    Persecution = "Persecution Commands"
-    HowToBe = "How to Be, Do or Think commands"
-    EthicOfLove = "Ethic of Love"
-    Prayer = "Prayer Commands"
-    FalseTeachers = "False Teachers Commands"
-    Evangelism = "Evangelism and Missions"
-    Greatest = "Greatest Commands"
-    Finance = "Finance Commands"
-    EndTimes = "End Times"
+    Salvation = gettext("Salvation commands")
+    Discipleship = gettext("Discipleship Commands")
+    EffectiveWorship = gettext("Effective worship commands")
+    Blessings = gettext("Blessings")
+    JudgmentSeat = gettext("Judgment Seat and Rewards commands")
+    Relationship = gettext("Relationship Commands")
+    Marriage = gettext("Marriage commands")
+    Persecution = gettext("Persecution Commands")
+    HowToBe = gettext("How to Be, Do or Think commands")
+    EthicOfLove = gettext("Ethic of Love")
+    Prayer = gettext("Prayer Commands")
+    FalseTeachers = gettext("False Teachers Commands")
+    Evangelism = gettext("Evangelism and Missions")
+    Greatest = gettext("Greatest Commands")
+    Finance = gettext("Finance Commands")
+    EndTimes = gettext("End Times")
 
 
 class Commandment(models.Model):
@@ -59,7 +60,7 @@ class AbstractBibleReference(models.Model):
     chapter = models.IntegerField(default=1)
     verse = models.IntegerField(default=1)
     bible_id = 'ead7b4cc5007389c-01'  # maybe some user setting from user preferences?
-    text = 'not loaded'
+    text = gettext('Could not load text at the moment.')
 
     class Meta:
         abstract = True

@@ -29,8 +29,9 @@ class Command(BaseCommand):
 
     def _add_commandment(self, commandment):
         try:
-            model_commandment = Commandment()
+            model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
+            model_commandment.title_nl = commandment.title_nl
             model_commandment.category = CommandmentCategories(commandment.category).name
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')

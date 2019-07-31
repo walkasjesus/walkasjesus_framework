@@ -1,5 +1,6 @@
 django>=2.2.3
 pandas>=0.24.2
 Pillow>=6.1.0
+django-modeltranslation>=0.13.3
 -e ../bible_lib
 -e ../import_tool

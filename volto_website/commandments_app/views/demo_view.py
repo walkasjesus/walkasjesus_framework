@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.views import View
 
-from commandments_app.models import Commandment
-
 
 class DemoView(View):
     def get(self, request):

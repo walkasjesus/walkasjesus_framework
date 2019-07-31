@@ -14,6 +14,8 @@ import os
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.utils.translation import gettext_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +31,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# Note that for some apps order is important!
 INSTALLED_APPS = [
+    'modeltranslation',
     'commandments_app.apps.CommandmentsAppConfig',
     'account_app.apps.AccountAppConfig',
     'django.contrib.admin',
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -111,13 +116,22 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+    ('en', gettext_lazy('English')),  # First language is the default for modeltranslation
+    ('nl', gettext_lazy('Dutch')),
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
+    os.path.join(BASE_DIR, 'static')
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
 ]
 
 MEDIA_URL = '/media/'
@@ -125,7 +139,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/commandments/'
 LOGOUT_REDIRECT_URL = '/commandments/'
-
 
 # Map django message level to Bootstrap alert, using the tag attribute
 # Now message.level is the django name, message.tag is the bootstrap name.

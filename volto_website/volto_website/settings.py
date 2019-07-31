@@ -116,8 +116,8 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = [
+    ('en', 'English'),  # First language is the default for modeltranslation
     ('nl', 'Dutch'),
-    ('en', 'English'),
 ]
 
 # Static files (CSS, JavaScript, Images)

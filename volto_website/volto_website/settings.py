@@ -14,6 +14,7 @@ import os
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.utils.translation import gettext_lazy
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -116,8 +117,8 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = [
-    ('en', 'English'),  # First language is the default for modeltranslation
-    ('nl', 'Dutch'),
+    ('en', gettext_lazy('English')),  # First language is the default for modeltranslation
+    ('nl', gettext_lazy('Dutch')),
 ]
 
 # Static files (CSS, JavaScript, Images)

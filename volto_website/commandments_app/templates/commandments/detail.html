@@ -2,40 +2,44 @@
 {% load static %}
 {% block content %}
 
-<section class="ftco-daily-verse img" style="background-image: url({% static 'images/bg_4.jpg' %});">
+<!-- Background images contains a bug that it won't be displayed if multiple images are in the loop -->
+<section class="ftco-daily-verse img" style="background-image: url('{% for image in images %}{{ image.file.url }}{% endfor %}');">
         <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-2 ftco-animate">
-                        <div class="icon">
-                            <span class="flaticon-church"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-10 daily-verse pl-md-5 ftco-animate">
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
                         <span class="subheading">{{ commandment.title }}</span>
                         <h3>{{ commandment.description }}</h3>
-                        <h4 class="h5 mt-4 font-weight-bold"><span>Bible:</span></h4>
+                        <h4 class="h5 mt-4 font-weight-bold"><span>Bible References:</span></h4>
                         {% if primary_bible_references %}
                         <h4 class="h5 mt-4 font-weight-bold">
                             <ul>
                             {% for bible_reference in primary_bible_references %}
                                 <li><b>{{ bible_reference }} {{ bible_reference.text | safe }}</a></b></li>
                             {% endfor %}
+                            </ul>
+                        </h4>
+
+                        {% if secondary_bible_references %}
+                        <h4 class="h5 mt-4 font-weight-bold"><span>More Bible References:</span></h4>
+                        <h4 class="h5 mt-4 font-weight-bold">
+                            <ul>
                             {% for bible_reference in secondary_bible_references %}
                                 <li>{{ bible_reference }} {{ bible_reference.text | safe }}</a></li>
                             {% endfor %}
+                            {% endif %}
                             </ul>
                         </h4>
                     {% endif %}
 
+                    <h4 class="h5 mt-4 font-weight-bold"><span>Drawings for this Commandment:</span></h4>
                     {% if images %}
-                        <ul>
                         {% for image in images %}
-                            <li><img src="{{ image.file.url }}" alt="{{ image.title }}"></li>
+                            <img src="{{ image.file.url }}" alt="{{ image.title }}" style="max-width:100%;max-height:100%;">
+                            <span class="icon-user mr-1"> {{ image.title }}</span>
                         {% endfor %}
-                        </ul>
                     {% endif %}
                     </div>
                 </div>

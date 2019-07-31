@@ -24,7 +24,8 @@ class ManualQueriesTest(TestCase):
         #response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/books/dag/chapters')
         #response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/verses/DAG.2.4')
         #response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/search?query=MAT.5.43-44')
-        response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/search?query=JHN.1.51-2.1')
+        #response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/search?query=JHN.1.51-2.1')
+        response_string = BibleApiClient().get('bibles/ead7b4cc5007389c-01/passages/JHN.1.51-JHN.2.1')
         print(response_string)
         entries = json.loads(response_string)['data']
         self.assertTrue(True)

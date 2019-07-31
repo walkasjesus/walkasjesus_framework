@@ -27,8 +27,8 @@ class Bible:
                end_chapter: int,
                end_verse: int) -> str:
         book_id = self._get_book_id(book)
-        verse_query = f'{book_id}.{start_chapter}.{start_verse}-{end_chapter}.{end_verse}'
-        url = f'bibles/{self.id}/search?query={verse_query}'
+        verse_query = f'{book_id}.{start_chapter}.{start_verse}-{book_id}.{end_chapter}.{end_verse}'
+        url = f'bibles/{self.id}/passages/{verse_query}'
         try:
             response = self.client.get(url)
         except Exception as ex:
@@ -37,8 +37,7 @@ class Bible:
             return 'Not found'
 
         try:
-            data = json.loads(response)['data']
-            verses = data['passages'][0]['content']
+            verses = json.loads(response)['data']['content']
         except Exception as ex:
             self.logger.warning(f'Failed to parse {verse_query} for bible {self.id}.')
             self.logger.warning(ex)

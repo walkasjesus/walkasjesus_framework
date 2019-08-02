@@ -10,7 +10,16 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="row justify-content-center align-items-center">
+                    {% if background_song %}
+                        <div>
+                            <audio controls autoplay>
+                                <source src="{{ background_song.file.url }}" />
+                                {% trans 'Your browser does not support the audio tag.' %}
+                            </audio>
+                        </div>
+                        {% endif %}
                     <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
+
                         <span class="subheading">{{ commandment.title }}</span>
                         <h3>{{ commandment.description }}</h3>
                         <h4 class="h5 mt-4 font-weight-bold"><span>Bible References:</span></h4>

@@ -15,5 +15,5 @@ media
 
 API_KEY.txt
 
-# At the moment we are not yet translating, so include locale files
-locale
+# Compiled translation files
+*.mo

@@ -1,6 +1,6 @@
-
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <section class="ftco-section bg-light" id="sermons-section">
@@ -8,8 +8,8 @@
         <div class="row justify-content-center pb-5">
             <div class="col-md-12 heading-section text-center ftco-animate">
                 <span class="subheading">Commandments</span>
-                <h2 class="mb-4">Jesus commandments</h2>
-                <p>What did Jesus teach when walking the earth?</p>
+                <h2 class="mb-4">{% trans 'Jesus commandments' %}</h2>
+                <p>{% trans 'What did Jesus teach when walking the earth?' %}</p>
             </div>
         </div>
     <div class="row">
@@ -18,7 +18,7 @@
                 {% include "commandments/single_commandment_overview.html" %}
             {% endfor %}
         {% else %}
-            <p>No commandments are available.</p>
+            <p>{% trans 'No commandments are available.' %}</p>
         {% endif %}
     </div>
         <div class="row justify-content-center pb-5">
@@ -26,17 +26,17 @@
                 <div class="pagination">
                     <span class="step-links">
                         {% if commandments.has_previous %}
-                            <a href="?page=1">&laquo; first</a>
-                            <a href="?page={{ commandments.previous_page_number }}">previous</a>
+                            <a href="?page=1">&laquo; {% trans 'first' %}</a>
+                            <a href="?page={{ commandments.previous_page_number }}">{% trans 'previous' %}</a>
                         {% endif %}
 
                         <span class="current">
-                            Page {{ commandments.number }} of {{ commandments.paginator.num_pages }}.
+                            {% trans 'Page' %} {{ commandments.number }} of {{ commandments.paginator.num_pages }}.
                         </span>
 
                         {% if commandments.has_next %}
-                            <a href="?page={{ commandments.next_page_number }}">next</a>
-                            <a href="?page={{ commandments.paginator.num_pages }}">last &raquo;</a>
+                            <a href="?page={{ commandments.next_page_number }}">{% trans 'next' %}</a>
+                            <a href="?page={{ commandments.paginator.num_pages }}">{% trans 'last' %} &raquo;</a>
                         {% endif %}
                     </span>
                 </div>

@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <section class="ftco-section contact-section ftco-no-pb" id="contact-section">
       <div class="container">
       	<div class="row justify-content-center mb-5 pb-3">
           <div class="col-md-7 heading-section text-center ftco-animate">
-            <span class="subheading">Signup</span>
-            <h2 class="mb-4">Register for a new account</h2>
-            <p>Creating a new account will enable you to personalize the website, and give feedback.</p>
+            <span class="subheading">{% trans 'Signup' %}</span>
+            <h2 class="mb-4">{% trans 'Register for a new account' %}</h2>
+            <p>{% trans 'Creating a new account will enable you to personalize the website, and give feedback.' %}</p>
           </div>
         </div>
 
@@ -17,7 +18,7 @@
             <form method="post">
               {% csrf_token %}
               {{ form.as_p }}
-              <button type="submit">Sign up</button>
+              <button type="submit">{% trans 'Sign up' %}</button>
             </form>
           </div>
 

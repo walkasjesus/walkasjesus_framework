@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 <html lang="en">
   <head>
-    <title>Jesus commandments</title>
+    <title>{% trans 'Jesus commandments' %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -29,15 +30,15 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="flaticon-bible"></span>Jesus commandments</a>
+	      <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="flaticon-bible"></span>{% trans 'Jesus commandments' %}</a>
 	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
+	        <span class="oi oi-menu"></span> {% trans 'Menu' %}
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>Home</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>Commandments</span></a></li>
+	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
 	          <li class="nav-item"><a href="#" class="nav-link"><span>Empty</span></a></li>
 	          <li class="nav-item"><a href="#" class="nav-link"><span>Also empty</span></a></li>
 	        </ul>
@@ -53,11 +54,11 @@
 	          <div class="col-md-8 text-center ftco-animate mt-5">
 	          	<div class="text">
 	          		<div class="subheading">
-	          			<span>Jesus commandments</span>
+	          			<span>{% trans 'Jesus commandments' %}</span>
 	          		</div>
-		            <h1 class="mb-4">Following <span>Jesus</span> wherever we are</h1>
-		            <p>When Jesus walked the earth he thought use many things, we just list them as they are</p>
-		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">Read more</a></p>
+		            <h1 class="mb-4">{% trans 'Following ' %}<span>{% trans 'Jesus' %}</span> {% trans 'wherever we are' %}</h1>
+		            <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are' %}</p>
+		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Read more' %}</a></p>
 	            </div>
 	          </div>
 	        </div>
@@ -71,11 +72,11 @@
 	          <div class="col-md-8 text-center ftco-animate mt-5">
 	          	<div class="text">
 	          		<div class="subheading">
-	          			<span>Jesus commandments</span>
+	          			<span>{% trans 'Jesus commandments' %}</span>
 	          		</div>
-		            <h1 class="mb-4">We <span>Love</span> God, We Believe in God</h1>
-		            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">Read more</a></p>
+		            <h1 class="mb-4">{% trans 'We' %} <span>{% trans 'Love' %}</span> {% trans 'God, We Believe in God' %}</h1>
+		            <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are' %}</p>
+		            <p><a href="#" class="btn btn-primary py-2 px-4">{% trans 'Be part of us' %}</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Read more' %}</a></p>
 	            </div>
 	          </div>
 	        </div>
@@ -97,8 +98,8 @@
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2 logo"><span>Jesus </span> commandments</h2>
-              <p>When Jesus walked the earth he thought use many things, we just list them as they are.</p>
+              <h2 class="ftco-heading-2 logo"><span>{% trans 'Jesus' %} </span> {% trans 'commandments' %}</h2>
+              <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are.' %}</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -127,24 +128,24 @@
               <ul class="list-unstyled">
 
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>profile ({{ user.username }})</a></li>
-                    <li><a href="{% url 'account:logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>logout</a></li>
+                    <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'profile' %} ({{ user.username }})</a></li>
+                    <li><a href="{% url 'account:logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'logout' %}</a></li>
                 {% else %}
-                    <li><a href="{% url 'account:login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>login</a></li>
-                    <li><a href="{% url 'account:signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>register</a></li>
+                    <li><a href="{% url 'account:login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'login' %}</a></li>
+                    <li><a href="{% url 'account:signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'register' %}</a></li>
                 {% endif %}
 
                 {% if user.is_superuser %}
-                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>admin</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'admin' %}</a></li>
                 {% endif %}
               </ul>
             </div>
           </div>
           <div class="col-md">
              <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Contact us</h2>
+              <h2 class="ftco-heading-2">{% trans 'Contact us' %}</h2>
               <div class="opening-hours">
-              	<p>Email: <span class="mb-3">info@jesuscommandments.com</span></p>
+              	<p>{% trans 'Email: ' %}<span class="mb-3">info@jesuscommandments.com</span></p>
               </div>
             </div>
           </div>
@@ -176,9 +177,6 @@
   <script src="{% static 'js/aos.js' %}"></script>
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
-  <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>-->
-  <script src="{% static 'js/google-map.js' %}"></script>
-
   <script src="{% static 'js/main.js' %}"></script>
 
   </body>

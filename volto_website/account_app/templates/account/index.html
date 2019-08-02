@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block content %}
 
 <ul>
-    <li><a href="{% url 'account:signup' %}">Signup</a></li>
-    <li><a href="{% url 'account:login' %}">Login</a></li>
-    <li><a href="{% url 'account:logout' %}">Logout</a></li>
-    <li><a href="{% url 'account:profile' %}">Profile</a></li>
-    <li><a href="{% url 'account:change_password' %}">Change password</a></li>
+    <li><a href="{% url 'account:signup' %}">{% trans 'Signup' %}</a></li>
+    <li><a href="{% url 'account:login' %}">{% trans 'Login' %}</a></li>
+    <li><a href="{% url 'account:logout' %}">{% trans 'Logout' %}</a></li>
+    <li><a href="{% url 'account:profile' %}">{% trans 'Profile' %}</a></li>
+    <li><a href="{% url 'account:change_password' %}">{% trans 'Change password' %}</a></li>
 </ul>
 
 {% endblock %}

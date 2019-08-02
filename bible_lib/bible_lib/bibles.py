@@ -1,7 +1,7 @@
 import json
 import logging
 
-from bible_lib.bible import Bible
+from bible_lib.api_bible import ApiBible
 from bible_lib.services import Services
 
 
@@ -28,7 +28,7 @@ class Bibles(object):
         try:
             bibles = []
             for bible_entry in bible_entries:
-                bible = Bible()
+                bible = ApiBible()
                 bible.id = bible_entry['id']
                 bible.name = bible_entry['nameLocal']
                 bible.language = bible_entry['language']['nameLocal']

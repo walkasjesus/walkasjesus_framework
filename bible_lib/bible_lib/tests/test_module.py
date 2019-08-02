@@ -1,7 +1,7 @@
 from pathlib import Path
 from unittest import TestCase, skip
 
-from bible_lib.bible import Bible
+from bible_lib.api_bible import ApiBible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.bibles import Bibles
 from bible_lib.cached_bible_api_client import CachedBibleApiClient
@@ -16,12 +16,12 @@ class TestModule(TestCase):
         self.assertEqual(116, len(bible_list))
 
     def test_get_verse(self):
-        bible = Bible('ead7b4cc5007389c-01')
+        bible = ApiBible('ead7b4cc5007389c-01')
         verse = bible.verse(BibleBooks.John, 3, 16)
         self.assertIn('Want zo lief heeft God de wereld gehad', verse)
 
     def test_caching_get(self):
-        bible = Bible('ead7b4cc5007389c-01')
+        bible = ApiBible('ead7b4cc5007389c-01')
 
         for i in range(5):
             bible.verse(BibleBooks.John, 3, 16)
@@ -35,7 +35,7 @@ class TestModule(TestCase):
         # every store_cache_every_number_of_hits missed items we store to disk,
         # so we can reuse without connecting to the api
 
-        bible = Bible('ead7b4cc5007389c-01')
+        bible = ApiBible('ead7b4cc5007389c-01')
 
         cache_location = bible.client.cache_location
         if cache_location.exists():
@@ -50,7 +50,7 @@ class TestModule(TestCase):
         # every store_cache_every_number_of_hits missed items we store to disk,
         # so we can reuse without connecting to the api
 
-        bible = Bible('ead7b4cc5007389c-01')
+        bible = ApiBible('ead7b4cc5007389c-01')
 
         # Use our client with an existing test cache
         client = CachedBibleApiClient(Path('data') / 'bible_api_cache.json')

@@ -1,6 +1,6 @@
 from enum import Enum
 
-from bible_lib import Bible
+from bible_lib import BibleFactory
 from bible_lib import BibleBooks
 from django.db import models
 from django.utils import translation
@@ -69,7 +69,7 @@ class AbstractBibleReference(models.Model):
         current_user_language = translation.get_language()
 
         if current_user_language == 'nl':
-            return 'ead7b4cc5007389c-01'
+            return 'hsv'
 
         if current_user_language == 'en':
             return 'de4e12af7f28f599-01'
@@ -78,7 +78,7 @@ class AbstractBibleReference(models.Model):
 
     def load_text(self):
         """Get the verse text from the bible api."""
-        self.text = Bible(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
+        self.text = BibleFactory().create(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
 
     def __str__(self):
         return '{} {}:{}'.format(self.book, self.chapter, self.verse)

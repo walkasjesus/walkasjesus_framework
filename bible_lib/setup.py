@@ -7,6 +7,7 @@ setup(
    author='LV',
    author_email='verzend.aan@gmail.com',
    packages=['bible_lib'],
+   data_files = [('data', ['data/hsv_bible.zip'])],
    test_suite="tests",
    install_requires=['requests'],
 )

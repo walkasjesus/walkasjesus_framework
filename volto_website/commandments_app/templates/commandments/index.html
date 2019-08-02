@@ -9,7 +9,7 @@
   <div class="col-md-12 heading-section text-center ftco-animate">
 	<span class="subheading">Commandments</span>
 	<h2 class="mb-4">{% trans 'Jesus commandments' %}</h2>
-	<p>What did Jesus teach when walking the earth?</p>
+	<p>{% trans 'What did Jesus teach when walking the earth?' %}</p>
   </div>
 </div>
 	<div class="row">
@@ -18,7 +18,7 @@
 			{% include "commandments/single_commandment_overview.html" %}
 		{% endfor %}
 	{% else %}
-		<p>No commandments are available.</p>
+		<p>{% trans 'No commandments are available.' %}</p>
 	{% endif %}
 </div>
 </div>

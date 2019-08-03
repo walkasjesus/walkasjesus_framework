@@ -1,29 +1,100 @@
 from enum import Enum
 
 from bible_lib import BibleFactory
-from bible_lib import BibleBooks
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext
 
 
 class CommandmentCategories(Enum):
-    Salvation = gettext("Salvation commands")
-    Discipleship = gettext("Discipleship Commands")
-    EffectiveWorship = gettext("Effective worship commands")
-    Blessings = gettext("Blessings")
-    JudgmentSeat = gettext("Judgment Seat and Rewards commands")
-    Relationship = gettext("Relationship Commands")
-    Marriage = gettext("Marriage commands")
-    Persecution = gettext("Persecution Commands")
-    HowToBe = gettext("How to Be, Do or Think commands")
-    EthicOfLove = gettext("Ethic of Love")
-    Prayer = gettext("Prayer Commands")
-    FalseTeachers = gettext("False Teachers Commands")
-    Evangelism = gettext("Evangelism and Missions")
-    Greatest = gettext("Greatest Commands")
-    Finance = gettext("Finance Commands")
-    EndTimes = gettext("End Times")
+    Salvation = gettext('Salvation commands')
+    Discipleship = gettext('Discipleship Commands')
+    EffectiveWorship = gettext('Effective worship commands')
+    Blessings = gettext('Blessings')
+    JudgmentSeat = gettext('Judgment Seat and Rewards commands')
+    Relationship = gettext('Relationship Commands')
+    Marriage = gettext('Marriage commands')
+    Persecution = gettext('Persecution Commands')
+    HowToBe = gettext('How to Be, Do or Think commands')
+    EthicOfLove = gettext('Ethic of Love')
+    Prayer = gettext('Prayer Commands')
+    FalseTeachers = gettext('False Teachers Commands')
+    Evangelism = gettext('Evangelism and Missions')
+    Greatest = gettext('Greatest Commands')
+    Finance = gettext('Finance Commands')
+    EndTimes = gettext('End Times')
+    
+
+class BibleBooks(Enum):
+    """" This is a copy of the enum in bible_lib,
+    but I did not know how to tag it for translation
+    without making a copy. """
+    Genesis = gettext('Genesis')
+    Exodus = gettext('Exodus')
+    Leviticus = gettext('Leviticus')
+    Numbers = gettext('Numbers')
+    Deuteronomy = gettext('Deuteronomy')
+    Joshua = gettext('Joshua')
+    Judges = gettext('Judges')
+    Ruth = gettext('Ruth')
+    SamuelFirstBook = gettext('1 Samuel')
+    SamuelSecondBook = gettext('2 Samuel')
+    KingsFirstBook = gettext('1 Kings')
+    KingsSecondBook = gettext('2 Kings')
+    ChroniclesFirstBook = gettext('1 Chronicles')
+    ChroniclesSecondBook = gettext('2 Chronicles')
+    Ezra = gettext('Ezra')
+    Nehemiah = gettext('Nehemiah')
+    Esther = gettext('Esther')
+    Job = gettext('Job')
+    Psalms = gettext('Psalms')
+    Proverbs = gettext('Proverbs')
+    Ecclesiastes = gettext('Ecclesiastes')
+    SongOfSolomon = gettext('Song of Solomon')
+    Isaiah = gettext('Isaiah')
+    Jeremiah = gettext('Jeremiah')
+    Lamentations = gettext('Lamentations')
+    Ezekiel = gettext('Ezekiel')
+    Daniel = gettext('Daniel')
+    Hosea = gettext('Hosea')
+    Joel = gettext('Joel')
+    Amos = gettext('Amos')
+    Obadiah = gettext('Obadiah')
+    Jonah = gettext('Jonah')
+    Micah = gettext('Micah')
+    Nahum = gettext('Nahum')
+    Habakkuk = gettext('Habakkuk')
+    Zephaniah = gettext('Zephaniah')
+    Haggai = gettext('Haggai')
+    Zechariah = gettext('Zechariah')
+    Malachi = gettext('Malachi')
+    Matthew = gettext('Matthew')
+    Mark = gettext('Mark')
+    Luke = gettext('Luke')
+    John = gettext('John')
+    Acts = gettext('Acts (of the Apostles)')
+    Romans = gettext('Romans')
+    CorinthiansFirstBook = gettext('1 Corinthians')
+    CorinthiansSecondBook = gettext('2 Corinthians')
+    Galatians = gettext('Galatians')
+    Ephesians = gettext('Ephesians')
+    Philippians = gettext('Philippians')
+    Colossians = gettext('Colossians')
+    ThessaloniansFirstBook = gettext('1 Thessalonians')
+    ThessaloniansSecondBook = gettext('2 Thessalonians')
+    TimothyFirstBook = gettext('1 Timothy')
+    TimothySecondBook = gettext('2 Timothy')
+    Titus = gettext('Titus')
+    Philemon = gettext('Philemon')
+    Hebrews = gettext('Hebrews')
+    James = gettext('James')
+    PeterFirstBook = gettext('1 Peter')
+    PeterSecondBook = gettext('2 Peter')
+    JohnFirstBook = gettext('1 John')
+    JohnSecondBook = gettext('2 John')
+    JohnThirdBook = gettext('3 John')
+    Jude = gettext('Jude')
+    Revelation = gettext('Revelation')
 
 
 class Commandment(models.Model):
@@ -80,8 +151,11 @@ class AbstractBibleReference(models.Model):
         """Get the verse text from the bible api."""
         self.text = BibleFactory().create(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
 
+    def book_name(self):
+        return gettext(BibleBooks[self.book].value)
+
     def __str__(self):
-        return '{} {}:{}'.format(self.book, self.chapter, self.verse)
+        return f'{self.book_name()} {self.chapter}:{self.verse}'
 
 
 class PrimaryBibleReference(AbstractBibleReference):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-02 22:11+0200\n"
+"POT-Creation-Date: 2019-08-03 02:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "Wijzigingen opslaan"
 msgid "Signup"
 msgstr "Inschrijven"
 
-#: account_app/templates/account/index.html:7
+#: account_app/templates/account/index.html:7 templates/base.html:43
 msgid "Login"
 msgstr "Log in"
 
@@ -61,7 +61,7 @@ msgid ""
 "Creating a new account will enable you to personalize the website, and give "
 "feedback."
 msgstr ""
-"Als u een nieuw account maakt, kunt u de website personaliseren en feedback "
+"Als u een nieuw account maakt, kunt u aan de website meewerken en feedback "
 "geven."
 
 #: account_app/templates/registration/signup.html:21
@@ -70,7 +70,7 @@ msgstr "Inschrijven"
 
 #: account_app/views.py:36
 msgid "Your profile was successfully updated!"
-msgstr "Je profiel is succesvol bijgewerkt!"
+msgstr "Uw profiel is succesvol bijgewerkt!"
 
 #: account_app/views.py:39 account_app/views.py:57
 #, fuzzy
@@ -84,39 +84,39 @@ msgstr "Uw wachtwoord is succesvol bijgewerkt!"
 
 #: commandments_app/models.py:11
 msgid "Salvation commands"
-msgstr "Redding"
+msgstr "Redding geboden"
 
 #: commandments_app/models.py:12
 msgid "Discipleship Commands"
-msgstr "Discipelschap"
+msgstr "Discipelschap geboden"
 
 #: commandments_app/models.py:13
 msgid "Effective worship commands"
-msgstr "Effectieve aanbidding bevelen"
+msgstr "Effectieve aanbidding geboden"
 
 #: commandments_app/models.py:14
 msgid "Blessings"
-msgstr "zegeningen"
+msgstr "Zaligsprekingen"
 
 #: commandments_app/models.py:15
 msgid "Judgment Seat and Rewards commands"
-msgstr "Beoordeling van zitplaatsen en beloningen"
+msgstr "Beoordeling en Beloningen"
 
 #: commandments_app/models.py:16
 msgid "Relationship Commands"
-msgstr "Relatieopdrachten"
+msgstr "Relatie geboden"
 
 #: commandments_app/models.py:17
 msgid "Marriage commands"
-msgstr "Huwelijksopdrachten"
+msgstr "Huwelijks geboden"
 
 #: commandments_app/models.py:18
 msgid "Persecution Commands"
-msgstr "Vervolgopdrachten"
+msgstr "Vervolgings geboden"
 
 #: commandments_app/models.py:19
 msgid "How to Be, Do or Think commands"
-msgstr "Opdrachten voor zijn, doen of denken"
+msgstr "geboden om te zijn, doen of denken"
 
 #: commandments_app/models.py:20
 msgid "Ethic of Love"
@@ -124,11 +124,11 @@ msgstr "Ethiek van liefde"
 
 #: commandments_app/models.py:21
 msgid "Prayer Commands"
-msgstr "Gebed Commando's"
+msgstr "Gebeds geboden"
 
 #: commandments_app/models.py:22
 msgid "False Teachers Commands"
-msgstr "Valse lerarenopdrachten"
+msgstr "Valse leraren geboden"
 
 #: commandments_app/models.py:23
 msgid "Evangelism and Missions"
@@ -156,40 +156,78 @@ msgstr "Uw browser ondersteunt de audiotag niet."
 
 #: commandments_app/templates/commandments/index.html:11
 #: commandments_app/templates/commandments/listing.html:11
-#: templates/base.html:6 templates/base.html:33 templates/base.html:57
-#: templates/base.html:75
-msgid "Jesus commandments"
-msgstr "Jezus geboden"
+#: templates/base.html:101
+msgid "If you love Me"
+msgstr "Als u Mij liefhebt"
+
+#: commandments_app/templates/commandments/index.html:11
+#: commandments_app/templates/commandments/listing.html:11
+#: templates/base.html:101
+msgid "keep my commands"
+msgstr "Neem dan mijn geboden in acht"
 
 #: commandments_app/templates/commandments/index.html:12
 #: commandments_app/templates/commandments/listing.html:12
-msgid "What did Jesus teach when walking the earth?"
-msgstr "Wat leerde Jezus ons in zijn tijd hier op aarde?"
+msgid ""
+"This website will help you in applying all commandments in your life. How? "
+"We collect as much as possible related"
+msgstr ""
+"Deze website helpt u om alle geboden toe te passen in uw leven. Hoe dan? We "
+"verzamelen zoveel mogelijk gerelateerde"
 
-#: commandments_app/templates/commandments/index.html:21
-#: commandments_app/templates/commandments/listing.html:21
+#: commandments_app/templates/commandments/index.html:13
+#: commandments_app/templates/commandments/listing.html:13
+msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures, Books"
+msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's, Boeken"
+
+#: commandments_app/templates/commandments/index.html:13
+#: commandments_app/templates/commandments/listing.html:13
+msgid "to feed your heart, soul and mind"
+msgstr "om uw hart, ziel en verstand te voeden"
+
+#: commandments_app/templates/commandments/index.html:14
+#: commandments_app/templates/commandments/listing.html:14
+msgid ""
+"All commandments are ideal for personal Bible study, Small Groups, "
+"Discipleship Groups, mentoring, ministry enrichment or meditations in how to"
+" improve your walk with the Lord"
+msgstr ""
+"Alle geboden zijn ideaal voor persoonlijke Bijbel studie, Kleine groepen, "
+"Dischipelschaps groepen, mentoring, toerustings scholen of meditaties hoe u"
+" uw wandel met Jezus kan verrijken"
+
+#: commandments_app/templates/commandments/index.html:23
+#: commandments_app/templates/commandments/listing.html:23
 msgid "No commandments are available."
 msgstr "Geen geboden gevonden."
 
-#: commandments_app/templates/commandments/listing.html:29
+#: commandments_app/templates/commandments/listing.html:31
 msgid "first"
 msgstr "eerste"
 
-#: commandments_app/templates/commandments/listing.html:30
+#: commandments_app/templates/commandments/listing.html:32
 msgid "previous"
 msgstr "voorgaand"
 
-#: commandments_app/templates/commandments/listing.html:34
+#: commandments_app/templates/commandments/listing.html:36
 msgid "Page"
 msgstr "Pagina"
 
-#: commandments_app/templates/commandments/listing.html:38
+#: commandments_app/templates/commandments/listing.html:36
+msgid "of"
+msgstr "van"
+
+#: commandments_app/templates/commandments/listing.html:40
 msgid "next"
 msgstr "volgende"
 
-#: commandments_app/templates/commandments/listing.html:39
+#: commandments_app/templates/commandments/listing.html:41
 msgid "last"
 msgstr "laatste"
+
+#: templates/base.html:6 templates/base.html:33 templates/base.html:57
+msgid "Jesus commandments"
+msgstr "Jezus geboden"
 
 #: templates/base.html:35
 msgid "Menu"
@@ -197,95 +235,87 @@ msgstr "Menu"
 
 #: templates/base.html:40
 msgid "Home"
-msgstr "Huis"
+msgstr "Home"
 
 #: templates/base.html:41
 #, fuzzy
 #| msgid "Jesus commandments"
 msgid "Commandments"
-msgstr "Jezus geboden"
+msgstr "Geboden"
+
+#: templates/base.html:42 templates/base.html:61 templates/base.html:79
+msgid "Help improving"
+msgstr "Meehelpen"
 
 #: templates/base.html:59
-msgid "Following "
-msgstr "Volgend op"
-
-#: templates/base.html:59 templates/base.html:101
-msgid "Jesus"
-msgstr "Jezus"
+msgid "Following Jesus"
+msgstr "Jezus Volgen"
 
 #: templates/base.html:59
-msgid "wherever we are"
-msgstr "waar we ook zijn"
+msgid "#howto"
+msgstr "#hoedan"
 
-#: templates/base.html:60 templates/base.html:78
-msgid ""
-"When Jesus walked the earth he thought use many things, we just list them as"
-" they are"
-msgstr ""
-"Toen Jezus over de aarde wandelde, dacht hij dat hij veel dingen zou "
-"gebruiken, we noemen ze gewoon zoals ze zijn"
+#: templates/base.html:60
+msgid "Jesus tought many different things. We help applying all"
+msgstr "Jezus onderwees in vele verschillende dingen. Wij helpen om alle"
 
-#: templates/base.html:61 templates/base.html:79
-msgid "Read more"
-msgstr "Lees verder"
+#: templates/base.html:60
+msgid "unique commandments in your daily life"
+msgstr "unieke geboden toe te passen in uw dagelijks leven"
 
-#: templates/base.html:77
-#, fuzzy
-#| msgid "Wed"
-msgid "We"
-msgstr "trouwen"
+#: templates/base.html:75
+msgid "Matthew 28:19-20"
+msgstr "Mattheüs 28:19"
 
 #: templates/base.html:77
-msgid "Love"
-msgstr "Liefde"
+msgid "Therefore go and make"
+msgstr "maakt dan voort maakt alle volkeren tot"
 
 #: templates/base.html:77
-msgid "God, We Believe in God"
-msgstr "God, wij geloven in God"
+msgid "Disciples"
+msgstr "Leerlingen"
 
-#: templates/base.html:79
-msgid "Be part of us"
-msgstr "Maak deel uit van ons"
+#: templates/base.html:77
+msgid "of all nations"
+msgstr " "
 
-#: templates/base.html:101
-#, fuzzy
-#| msgid "Jesus commandments"
-msgid "commandments"
-msgstr "Jezus geboden"
+#: templates/base.html:78
+msgid "Teaching them to"
+msgstr "Hen onderrichtend"
 
-#: templates/base.html:102
-msgid ""
-"When Jesus walked the earth he thought use many things, we just list them as"
-" they are."
-msgstr ""
-"Toen Jezus over de aarde wandelde, dacht hij dat hij veel dingen zou "
-"gebruiken, we noemen ze gewoon zoals ze zijn."
+#: templates/base.html:78
+msgid "obey everything"
+msgstr "in het bewaren"
 
-#: templates/base.html:131
+#: templates/base.html:78
+msgid "I have commanded you"
+msgstr "van al wat ik u heb geboden"
+
+#: templates/base.html:130
 msgid "profile"
 msgstr "profiel"
 
-#: templates/base.html:132
+#: templates/base.html:131
 msgid "logout"
 msgstr "uitloggen"
 
-#: templates/base.html:134
+#: templates/base.html:133
 msgid "login"
 msgstr "Log in"
 
-#: templates/base.html:135
+#: templates/base.html:134
 msgid "register"
 msgstr "registreren"
 
-#: templates/base.html:139
+#: templates/base.html:138
 msgid "admin"
 msgstr "beheerder"
 
-#: templates/base.html:146
+#: templates/base.html:145
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
-#: templates/base.html:148
+#: templates/base.html:147
 #, fuzzy
 #| msgid "Email address"
 msgid "Email: "
@@ -293,7 +323,7 @@ msgstr "E-mailadres"
 
 #: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
 msgid "Messages"
-msgstr "berichten"
+msgstr "Berichten"
 
 #: venv/lib/python3.6/site-packages/django/contrib/sitemaps/apps.py:7
 msgid "Site Maps"
@@ -305,7 +335,7 @@ msgstr "Statische bestanden"
 
 #: venv/lib/python3.6/site-packages/django/contrib/syndication/apps.py:7
 msgid "Syndication"
-msgstr "syndication"
+msgstr "Syndication"
 
 #: venv/lib/python3.6/site-packages/django/core/paginator.py:45
 msgid "That page number is not an integer"
@@ -1577,3 +1607,20 @@ msgstr "Engels"
 #: volto_website/settings.py:121
 msgid "Dutch"
 msgstr "Nederlands"
+
+#~ msgid "Jesus"
+#~ msgstr "Jezus"
+
+#~ msgid "Read more"
+#~ msgstr "Lees verder"
+
+#, fuzzy
+#~ msgid "commandments"
+#~ msgstr "geboden"
+
+#~ msgid ""
+#~ "When Jesus walked the earth he thought use many things, we just list them as"
+#~ " they are."
+#~ msgstr ""
+#~ "Toen Jezus over de aarde wandelde, dacht hij dat hij veel dingen zou "
+#~ "gebruiken, we noemen ze gewoon zoals ze zijn."

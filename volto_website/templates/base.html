@@ -39,8 +39,8 @@
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
-	          <li class="nav-item"><a href="#" class="nav-link"><span>Empty</span></a></li>
-	          <li class="nav-item"><a href="#" class="nav-link"><span>Also empty</span></a></li>
+	          <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
 	        </ul>
 	      </div>
 	    </div>
@@ -56,9 +56,9 @@
 	          		<div class="subheading">
 	          			<span>{% trans 'Jesus commandments' %}</span>
 	          		</div>
-		            <h1 class="mb-4">{% trans 'Following ' %}<span>{% trans 'Jesus' %}</span> {% trans 'wherever we are' %}</h1>
-		            <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are' %}</p>
-		            <p><a href="#" class="btn btn-primary py-2 px-4">Be part of us</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Read more' %}</a></p>
+                <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
+		            <p>{% trans 'Jesus tought many different things. We help applying all' %}<strong class="number" data-number="9891000"> 77 </strong>{% trans 'unique commandments in your daily life' %}</p>
+		            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
 	            </div>
 	          </div>
 	        </div>
@@ -72,11 +72,11 @@
 	          <div class="col-md-8 text-center ftco-animate mt-5">
 	          	<div class="text">
 	          		<div class="subheading">
-	          			<span>{% trans 'Jesus commandments' %}</span>
+	          			<span>{% trans 'Matthew 28:19-20' %}</span>
 	          		</div>
-		            <h1 class="mb-4">{% trans 'We' %} <span>{% trans 'Love' %}</span> {% trans 'God, We Believe in God' %}</h1>
-		            <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are' %}</p>
-		            <p><a href="#" class="btn btn-primary py-2 px-4">{% trans 'Be part of us' %}</a> <a href="#" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Read more' %}</a></p>
+		            <h1 class="mb-4">{% trans 'Therefore go and make' %} <span>{% trans 'Disciples'%} </span>{% trans 'of all nations' %}</h1>
+		            <p>{% trans 'Teaching them to' %} <span><strong>{% trans 'obey everything' %}</strong></span> {% trans 'I have commanded you' %}</p>
+		            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
 	            </div>
 	          </div>
 	        </div>
@@ -98,8 +98,7 @@
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2 logo"><span>{% trans 'Jesus' %} </span> {% trans 'commandments' %}</h2>
-              <p>{% trans 'When Jesus walked the earth he thought use many things, we just list them as they are.' %}</p>
+              <h2 class="ftco-heading-2 logo"><span>{% trans 'If you love Me' %}</span> {% trans 'keep my commands' %}</h2>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                 <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>

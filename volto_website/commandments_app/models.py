@@ -1,29 +1,100 @@
 from enum import Enum
 
 from bible_lib import BibleFactory
-from bible_lib import BibleBooks
 from django.db import models
 from django.utils import translation
-from django.utils.translation import gettext
+from django.utils.translation import gettext, gettext_lazy
 
 
 class CommandmentCategories(Enum):
-    Salvation = gettext("Salvation commands")
-    Discipleship = gettext("Discipleship Commands")
-    EffectiveWorship = gettext("Effective worship commands")
-    Blessings = gettext("Blessings")
-    JudgmentSeat = gettext("Judgment Seat and Rewards commands")
-    Relationship = gettext("Relationship Commands")
-    Marriage = gettext("Marriage commands")
-    Persecution = gettext("Persecution Commands")
-    HowToBe = gettext("How to Be, Do or Think commands")
-    EthicOfLove = gettext("Ethic of Love")
-    Prayer = gettext("Prayer Commands")
-    FalseTeachers = gettext("False Teachers Commands")
-    Evangelism = gettext("Evangelism and Missions")
-    Greatest = gettext("Greatest Commands")
-    Finance = gettext("Finance Commands")
-    EndTimes = gettext("End Times")
+    Salvation = gettext_lazy('Salvation commands')
+    Discipleship = gettext_lazy('Discipleship Commands')
+    EffectiveWorship = gettext_lazy('Effective worship commands')
+    Blessings = gettext_lazy('Blessings')
+    JudgmentSeat = gettext_lazy('Judgment Seat and Rewards commands')
+    Relationship = gettext_lazy('Relationship Commands')
+    Marriage = gettext_lazy('Marriage commands')
+    Persecution = gettext_lazy('Persecution Commands')
+    HowToBe = gettext_lazy('How to Be, Do or Think commands')
+    EthicOfLove = gettext_lazy('Ethic of Love')
+    Prayer = gettext_lazy('Prayer Commands')
+    FalseTeachers = gettext_lazy('False Teachers Commands')
+    Evangelism = gettext_lazy('Evangelism and Missions')
+    Greatest = gettext_lazy('Greatest Commands')
+    Finance = gettext_lazy('Finance Commands')
+    EndTimes = gettext_lazy('End Times')
+    
+
+class BibleBooks(Enum):
+    """" This is a copy of the enum in bible_lib,
+    but I did not know how to tag it for translation
+    without making a copy. """
+    Genesis = gettext_lazy('Genesis')
+    Exodus = gettext_lazy('Exodus')
+    Leviticus = gettext_lazy('Leviticus')
+    Numbers = gettext_lazy('Numbers')
+    Deuteronomy = gettext_lazy('Deuteronomy')
+    Joshua = gettext_lazy('Joshua')
+    Judges = gettext_lazy('Judges')
+    Ruth = gettext_lazy('Ruth')
+    SamuelFirstBook = gettext_lazy('1 Samuel')
+    SamuelSecondBook = gettext_lazy('2 Samuel')
+    KingsFirstBook = gettext_lazy('1 Kings')
+    KingsSecondBook = gettext_lazy('2 Kings')
+    ChroniclesFirstBook = gettext_lazy('1 Chronicles')
+    ChroniclesSecondBook = gettext_lazy('2 Chronicles')
+    Ezra = gettext_lazy('Ezra')
+    Nehemiah = gettext_lazy('Nehemiah')
+    Esther = gettext_lazy('Esther')
+    Job = gettext_lazy('Job')
+    Psalms = gettext_lazy('Psalms')
+    Proverbs = gettext_lazy('Proverbs')
+    Ecclesiastes = gettext_lazy('Ecclesiastes')
+    SongOfSolomon = gettext_lazy('Song of Solomon')
+    Isaiah = gettext_lazy('Isaiah')
+    Jeremiah = gettext_lazy('Jeremiah')
+    Lamentations = gettext_lazy('Lamentations')
+    Ezekiel = gettext_lazy('Ezekiel')
+    Daniel = gettext_lazy('Daniel')
+    Hosea = gettext_lazy('Hosea')
+    Joel = gettext_lazy('Joel')
+    Amos = gettext_lazy('Amos')
+    Obadiah = gettext_lazy('Obadiah')
+    Jonah = gettext_lazy('Jonah')
+    Micah = gettext_lazy('Micah')
+    Nahum = gettext_lazy('Nahum')
+    Habakkuk = gettext_lazy('Habakkuk')
+    Zephaniah = gettext_lazy('Zephaniah')
+    Haggai = gettext_lazy('Haggai')
+    Zechariah = gettext_lazy('Zechariah')
+    Malachi = gettext_lazy('Malachi')
+    Matthew = gettext_lazy('Matthew')
+    Mark = gettext_lazy('Mark')
+    Luke = gettext_lazy('Luke')
+    John = gettext_lazy('John')
+    Acts = gettext_lazy('Acts (of the Apostles)')
+    Romans = gettext_lazy('Romans')
+    CorinthiansFirstBook = gettext_lazy('1 Corinthians')
+    CorinthiansSecondBook = gettext_lazy('2 Corinthians')
+    Galatians = gettext_lazy('Galatians')
+    Ephesians = gettext_lazy('Ephesians')
+    Philippians = gettext_lazy('Philippians')
+    Colossians = gettext_lazy('Colossians')
+    ThessaloniansFirstBook = gettext_lazy('1 Thessalonians')
+    ThessaloniansSecondBook = gettext_lazy('2 Thessalonians')
+    TimothyFirstBook = gettext_lazy('1 Timothy')
+    TimothySecondBook = gettext_lazy('2 Timothy')
+    Titus = gettext_lazy('Titus')
+    Philemon = gettext_lazy('Philemon')
+    Hebrews = gettext_lazy('Hebrews')
+    James = gettext_lazy('James')
+    PeterFirstBook = gettext_lazy('1 Peter')
+    PeterSecondBook = gettext_lazy('2 Peter')
+    JohnFirstBook = gettext_lazy('1 John')
+    JohnSecondBook = gettext_lazy('2 John')
+    JohnThirdBook = gettext_lazy('3 John')
+    Jude = gettext_lazy('Jude')
+    Revelation = gettext_lazy('Revelation')
 
 
 class Commandment(models.Model):
@@ -80,8 +151,11 @@ class AbstractBibleReference(models.Model):
         """Get the verse text from the bible api."""
         self.text = BibleFactory().create(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
 
+    def book_name(self):
+        return gettext_lazy(BibleBooks[self.book].value)
+
     def __str__(self):
-        return '{} {}:{}'.format(self.book, self.chapter, self.verse)
+        return f'{self.book_name()} {self.chapter}:{self.verse}'
 
 
 class PrimaryBibleReference(AbstractBibleReference):

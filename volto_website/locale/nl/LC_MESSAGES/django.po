@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
@@ -142,6 +142,10 @@ msgstr "Belangrijkste geboden"
 msgid "Finance Commands"
 msgstr "Financiële geboden"
 
+#: .\commandments_app\templates\commandments\index.html:12
+#: .\commandments_app\templates\commandments\listing.html:12
+msgid "What did Jesus teach when walking the earth?"
+msgstr "Wat leerde Jezus ons in zijn tijd hier op aarde?"
 #: commandments_app/models.py:26
 msgid "End Times"
 msgstr "Einddtijd"
@@ -150,6 +154,8 @@ msgstr "Einddtijd"
 msgid "Could not load text at the moment."
 msgstr "Kan de tekst niet laden op dit moment."
 
+#: .\commandments_app\templates\commandments\index.html:21
+#: .\commandments_app\templates\commandments\listing.html:21
 #: commandments_app/templates/commandments/detail.html:17
 msgid "Your browser does not support the audio tag."
 msgstr "Uw browser ondersteunt de audiotag niet."
@@ -287,6 +293,7 @@ msgstr "Hen onderrichtend"
 msgid "obey everything"
 msgstr "in het bewaren"
 
+#: .\templates\base.html:131
 #: templates/base.html:78
 msgid "I have commanded you"
 msgstr "van al wat ik u heb geboden"
@@ -376,8 +383,8 @@ msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:246
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
-" hyphens."
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
 msgstr ""
 "Voer een geldige 'slak' in die bestaat uit Unicode-letters, cijfers, "
 "onderstrepingstekens of koppeltekens."
@@ -610,8 +617,8 @@ msgstr "Datum (zonder tijd)"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1290
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ] format."
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
 msgstr ""
 "De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
 "JJJJ-MM-DD HH:MM[:ss[.uuuuuu]][TZ] hebben."
@@ -619,8 +626,8 @@ msgstr ""
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1294
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
 msgstr ""
 "'%(value)s' waarde heeft het juiste formaat (JJJJ-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ]) maar het is een ongeldige datum / tijd."
@@ -641,8 +648,8 @@ msgstr "Decimaal getal"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1587
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] "
-"[HH:[MM:]]ss[.uuuuuu] format."
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
 msgstr ""
 "De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
 "[HH:[MM:]]ss[.uuuuuu] hebben."
@@ -952,8 +959,7 @@ msgstr "De inline-waarde kwam niet overeen met de bovenliggende instantie."
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
-"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
-"keuzes."
+"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare keuzes."
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1272
 #, python-format
@@ -1416,8 +1422,8 @@ msgid ""
 msgstr ""
 "U ziet dit bericht omdat voor deze HTTPS-site een 'Verwijzende koptekst' "
 "vereist is die door uw webbrowser moet worden verzonden, maar er is er geen "
-"verzonden. Deze header is vereist om veiligheidsredenen, om ervoor te zorgen"
-" dat uw browser niet wordt gekaapt door derden."
+"verzonden. Deze header is vereist om veiligheidsredenen, om ervoor te zorgen "
+"dat uw browser niet wordt gekaapt door derden."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:120
 msgid ""
@@ -1431,11 +1437,11 @@ msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:124
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
-" including the 'Referrer-Policy: no-referrer' header, please remove them. "
-"The CSRF protection requires the 'Referer' header to do strict referer "
-"checking. If you're concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" ...> for links to third-party sites."
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
+"CSRF protection requires the 'Referer' header to do strict referer checking. "
+"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" ...> for links to third-party sites."
 msgstr ""
 "Als u de tag <meta name = \"referrer\" content = \"no-referrer\"> gebruikt "
 "of de kop 'Referrer-Policy: no-referrer' bevat, verwijdert u deze. De CSRF-"
@@ -1497,8 +1503,8 @@ msgstr "Geen %(verbose_name_plural)s beschikbaar"
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:589
 #, python-format
 msgid ""
-"Future %(verbose_name_plural)s not available because "
-"%(class_name)s.allow_future is False."
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
 msgstr ""
 "Future %(verbose_name_plural)s niet beschikbaar omdat "
 "%(class_name)s.allow_future False is."
@@ -1562,15 +1568,15 @@ msgstr "De installatie is geslaagd! Gefeliciteerd!"
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #, python-format
 msgid ""
-"You are seeing this page because <a "
-"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
-"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
-"and you have not configured any URLs."
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
 msgstr ""
-"U ziet deze pagina omdat <a "
-"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
-"target=\"_blank\" rel=\"noopener\"> DEBUG = True </a> staat in uw "
-"instellingenbestand en u hebt geen URL's geconfigureerd."
+"U ziet deze pagina omdat <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener\"> DEBUG "
+"= True </a> staat in uw instellingenbestand en u hebt geen URL's "
+"geconfigureerd."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 msgid "Django Documentation"

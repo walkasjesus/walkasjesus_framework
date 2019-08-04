@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-03 02:04+0200\n"
+"POT-Creation-Date: 2019-08-04 06:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,15 +170,15 @@ msgstr "Neem dan mijn geboden in acht"
 #: commandments_app/templates/commandments/listing.html:12
 msgid ""
 "This website will help you in applying all commandments in your life. How? "
-"We collect as much as possible related"
+"For each commandment, we collect as much as possible related"
 msgstr ""
-"Deze website helpt u om alle geboden toe te passen in uw leven. Hoe dan? We "
-"verzamelen zoveel mogelijk gerelateerde"
+"Deze website helpt u om alle geboden toe te passen in uw leven. Hoe dan? "
+"Voor ieder gebod verzamelen we zoveel mogelijk gerelateerde"
 
 #: commandments_app/templates/commandments/index.html:13
 #: commandments_app/templates/commandments/listing.html:13
-msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures, Books"
-msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's, Boeken"
+msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures and Books"
+msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's en Boeken"
 
 #: commandments_app/templates/commandments/index.html:13
 #: commandments_app/templates/commandments/listing.html:13
@@ -193,8 +193,8 @@ msgid ""
 " improve your walk with the Lord"
 msgstr ""
 "Alle geboden zijn ideaal voor persoonlijke Bijbel studie, Kleine groepen, "
-"Dischipelschaps groepen, mentoring, toerustings scholen of meditaties hoe u"
-" uw wandel met Jezus kan verrijken"
+"Dischipelschaps groepen, mentoring, toerustings scholen of meditaties hoe u "
+"uw wandel met Jezus kan verrijken"
 
 #: commandments_app/templates/commandments/index.html:23
 #: commandments_app/templates/commandments/listing.html:23

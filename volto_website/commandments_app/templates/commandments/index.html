@@ -3,6 +3,58 @@
 {% load i18n %}
 {% block content %}
 
+<section class="ftco-counter" id="section-counter">
+    	<div class="container-fluid px-0">
+    		<div class="row no-gutters">
+          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center py-5">
+              <div class="text">
+              	<div class="icon d-flex justify-content-center align-items-center">
+					<img src="{% static 'images/list.png' %}" width="80px" alt="">
+              	</div>
+                <strong class="number" data-number="77">0</strong>
+                <span>{% trans 'Unique commandments' %}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center py-5">
+              <div class="text">
+              	<div class="icon d-flex justify-content-center align-items-center">
+					<img src="{% static 'images/bible.png' %}" width="80px" alt="">
+				</div>
+                <strong class="number" data-number="890">0</strong>
+                <span>{% trans 'Bible references' %}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center py-5">
+              <div class="text">
+              	<div class="icon d-flex justify-content-center align-items-center">
+					<img src="{% static 'images/languages.png' %}" width="80px" alt="">
+				</div>
+                <strong class="number" data-number="39">0</strong>
+                <span>{% trans 'Languages' %}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 text-center py-5">
+              <div class="text">
+              	<div class="icon d-flex justify-content-center align-items-center">
+					<img src="{% static 'images/people.png' %}" width="80px" alt="">
+				</div>
+                <strong class="number" data-number="25">0</strong>
+                <span>Contributers</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    	</div>
+    </section>
+
+
 <section class="ftco-section bg-light" id="sermons-section">
 	<div class="container">
 		<div class="row justify-content-center pb-5">

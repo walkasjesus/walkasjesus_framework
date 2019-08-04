@@ -5,56 +5,173 @@
 
 <!-- Background images contains a bug that it won't be displayed if multiple images are in the loop -->
 <section class="ftco-daily-verse img" style="background-image: url('{% for image in images %}{{ image.file.url }}{% endfor %}');">
-        <div class="overlay"></div>
+<div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 <div class="row justify-content-center align-items-center">
-                    {% if background_song %}
-                        <div>
-                            <audio controls autoplay>
-                                <source src="{{ background_song.file.url }}" />
-                                {% trans 'Your browser does not support the audio tag.' %}
-                            </audio>
-                        </div>
-                        {% endif %}
-                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
-
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">        
                         <span class="subheading">{{ commandment.title }}</span>
-                        <h3>{{ commandment.description }}</h3>
-                        <h4 class="h5 mt-4 font-weight-bold"><span>Bible References:</span></h4>
-                        {% if primary_bible_references %}
-                        <h4 class="h5 mt-4 font-weight-bold">
-                            <ul>
-                            {% for bible_reference in primary_bible_references %}
-                                <li><b>{{ bible_reference }} {{ bible_reference.text | safe }}</a></b></li>
-                            {% endfor %}
-                            </ul>
-                        </h4>
-
-                        {% if secondary_bible_references %}
-                        <h4 class="h5 mt-4 font-weight-bold"><span>More Bible References:</span></h4>
-                        <h4 class="h5 mt-4 font-weight-bold">
-                            <ul>
-                            {% for bible_reference in secondary_bible_references %}
-                                <li>{{ bible_reference }} {{ bible_reference.text | safe }}</a></li>
-                            {% endfor %}
-                            {% endif %}
-                            </ul>
-                        </h4>
-                    {% endif %}
-
-                    <h4 class="h5 mt-4 font-weight-bold"><span>Drawings for this Commandment:</span></h4>
-                    {% if images %}
-                        {% for image in images %}
-                            <img src="{{ image.file.url }}" alt="{{ image.title }}" style="max-width:100%;max-height:100%;">
-                            <span class="icon-user mr-1"> {{ image.title }}</span>
-                        {% endfor %}
-                    {% endif %}
                     </div>
                 </div>
             </div>
-        </div>
+        </div>                               
+        <div class="row">
+            <!-- {% if commandment.description %} -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/description.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Description' %}</h4>
+                            {{ commandment.description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- {% endif %} -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/bible.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Bible References' %}</h4>
+                            {% if primary_bible_references %}
+                                <ul>
+                                {% for bible_reference in primary_bible_references %}
+                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if secondary_bible_references %}
+                            <h4>{% trans 'More Bible References' %}</h4>
+                                <ul>
+                                {% for bible_reference in secondary_bible_references %}
+                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/drawing.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Drawings' %}</h4>
+                            {% if images %}
+                            {% for image in images %}
+                                <img src="{{ image.file.url }}" alt="{{ image.title }}" style="max-width:93%;max-height:93%;">
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/shortmovie.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Short Movies' %}</h4>
+                            <div class="video-iframe">
+                                <iframe src="https://player.vimeo.com/video/263398045?dnt=1&app_id=122963" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                            </div>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/song.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Songs' %}</h4>
+                            <div class="video-iframe">
+                                <iframe src="https://www.youtube.com/embed/GfosSggwQS0" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/movie.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Movies' %}</h4>
+                            <p>Use all your senses to experience this commandment in the following movies:</p>
+                            <ul>
+                                <li> Great Movie 1</li>
+                                <li> Super great Movie 2</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/testimony.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Testimonies' %}</h4>
+                            <p>Hear from others their experience</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/book.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Books' %}</h4>
+                            <p>Want to dig deeper? Read these books:</p>
+                            <ul>
+                                <li> Great Book 1</li>
+                                <li> Super great Book 2</li>
+                            </ul>    
+                        </div>
+                    </div>
+                </div>
+            </div>              
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/questions.png' %}" width="80px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Questions' %}</h4>
+                            <p>Share your hearts together by discussing the following questions:</p>
+                            <ul>
+                                <li> How do you feel about question 1</li>
+                                <li> What about question 2</li>
+                            </ul>    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>         
     </div>
 </section>
 

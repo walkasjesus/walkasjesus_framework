@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-snippet.css' %}">   
+
   </head>
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
 
@@ -45,7 +48,6 @@
 	      </div>
 	    </div>
 	  </nav>
-
 	<section class="home-slider js-fullheight owl-carousel">
       <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
       	<div class="overlay"></div>
@@ -57,7 +59,7 @@
 	          			<span>{% trans 'Jesus commandments' %}</span>
 	          		</div>
                 <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
-		            <p>{% trans 'Jesus tought many different things. We help applying all' %}<strong class="number" data-number="9891000"> 77 </strong>{% trans 'unique commandments in your daily life' %}</p>
+		            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="77">77</strong> {% trans 'unique commandments in your daily life' %}</p>
 		            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
 	            </div>
 	          </div>

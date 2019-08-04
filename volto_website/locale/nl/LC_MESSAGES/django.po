@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-04 06:03+0200\n"
+"POT-Creation-Date: 2019-08-04 22:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "Wijzigingen opslaan"
 msgid "Signup"
 msgstr "Inschrijven"
 
-#: account_app/templates/account/index.html:7 templates/base.html:43
+#: account_app/templates/account/index.html:7 templates/base.html:49
 msgid "Login"
 msgstr "Log in"
 
@@ -45,7 +45,9 @@ msgid "Change password"
 msgstr "Wachtwoord wijzigen"
 
 #: account_app/templates/account/login.html:7
-msgid "Your username and password didn"
+#, fuzzy
+#| msgid "Your username and password didn"
+msgid "Your username and password didn\\"
 msgstr "Uw gebruikersnaam en wachtwoord didn"
 
 #: account_app/templates/account/login.html:16
@@ -82,97 +84,411 @@ msgstr "Corrigeer de onderstaande dubbele waarden."
 msgid "Your password was successfully updated!"
 msgstr "Uw wachtwoord is succesvol bijgewerkt!"
 
-#: commandments_app/models.py:11
+#: commandments_app/models.py:10
 msgid "Salvation commands"
 msgstr "Redding geboden"
 
-#: commandments_app/models.py:12
+#: commandments_app/models.py:11
 msgid "Discipleship Commands"
 msgstr "Discipelschap geboden"
 
-#: commandments_app/models.py:13
+#: commandments_app/models.py:12
 msgid "Effective worship commands"
 msgstr "Effectieve aanbidding geboden"
 
-#: commandments_app/models.py:14
+#: commandments_app/models.py:13
 msgid "Blessings"
 msgstr "Zaligsprekingen"
 
-#: commandments_app/models.py:15
+#: commandments_app/models.py:14
 msgid "Judgment Seat and Rewards commands"
 msgstr "Beoordeling en Beloningen"
 
-#: commandments_app/models.py:16
+#: commandments_app/models.py:15
 msgid "Relationship Commands"
 msgstr "Relatie geboden"
 
-#: commandments_app/models.py:17
+#: commandments_app/models.py:16
 msgid "Marriage commands"
 msgstr "Huwelijks geboden"
 
-#: commandments_app/models.py:18
+#: commandments_app/models.py:17
 msgid "Persecution Commands"
 msgstr "Vervolgings geboden"
 
-#: commandments_app/models.py:19
+#: commandments_app/models.py:18
 msgid "How to Be, Do or Think commands"
 msgstr "geboden om te zijn, doen of denken"
 
-#: commandments_app/models.py:20
+#: commandments_app/models.py:19
 msgid "Ethic of Love"
 msgstr "Ethiek van liefde"
 
-#: commandments_app/models.py:21
+#: commandments_app/models.py:20
 msgid "Prayer Commands"
 msgstr "Gebeds geboden"
 
-#: commandments_app/models.py:22
+#: commandments_app/models.py:21
 msgid "False Teachers Commands"
 msgstr "Valse leraren geboden"
 
-#: commandments_app/models.py:23
+#: commandments_app/models.py:22
 msgid "Evangelism and Missions"
 msgstr "Evangelisatie en missies"
 
-#: commandments_app/models.py:24
+#: commandments_app/models.py:23
 msgid "Greatest Commands"
 msgstr "Belangrijkste geboden"
 
-#: commandments_app/models.py:25
+#: commandments_app/models.py:24
 msgid "Finance Commands"
 msgstr "Financiële geboden"
 
-#: .\commandments_app\templates\commandments\index.html:12
-#: .\commandments_app\templates\commandments\listing.html:12
-msgid "What did Jesus teach when walking the earth?"
-msgstr "Wat leerde Jezus ons in zijn tijd hier op aarde?"
-#: commandments_app/models.py:26
+#: commandments_app/models.py:25
 msgid "End Times"
 msgstr "Einddtijd"
 
+#: commandments_app/models.py:32
+msgid "Genesis"
+msgstr "Genesis"
+
+#: commandments_app/models.py:33
+msgid "Exodus"
+msgstr "Exodus"
+
+#: commandments_app/models.py:34
+msgid "Leviticus"
+msgstr "Leviticus"
+
+#: commandments_app/models.py:35
+#, fuzzy
+#| msgid "November"
+msgid "Numbers"
+msgstr "Numerie"
+
+#: commandments_app/models.py:36
+msgid "Deuteronomy"
+msgstr "Deuteronomium"
+
+#: commandments_app/models.py:37
+msgid "Joshua"
+msgstr "Jozua"
+
+#: commandments_app/models.py:38
+msgid "Judges"
+msgstr "Rechters"
+
+#: commandments_app/models.py:39
+msgid "Ruth"
+msgstr "Ruth"
+
+#: commandments_app/models.py:40
+msgid "1 Samuel"
+msgstr "1 Samuël"
+
+#: commandments_app/models.py:41
+msgid "2 Samuel"
+msgstr "2 Samuël"
+
+#: commandments_app/models.py:42
+msgid "1 Kings"
+msgstr "1 Koningen"
+
+#: commandments_app/models.py:43
+msgid "2 Kings"
+msgstr "2 Koningen"
+
+#: commandments_app/models.py:44
+msgid "1 Chronicles"
+msgstr "1 Kronieken"
+
+#: commandments_app/models.py:45
+msgid "2 Chronicles"
+msgstr "2 Kronieken"
+
+#: commandments_app/models.py:46
+msgid "Ezra"
+msgstr "Ezra"
+
+#: commandments_app/models.py:47
+msgid "Nehemiah"
+msgstr "Nehemia"
+
+#: commandments_app/models.py:48
+msgid "Esther"
+msgstr "Esther"
+
+#: commandments_app/models.py:49
+msgid "Job"
+msgstr "Job"
+
+#: commandments_app/models.py:50
+msgid "Psalms"
+msgstr "Psalmen"
+
+#: commandments_app/models.py:51
+msgid "Proverbs"
+msgstr "Spreuken"
+
+#: commandments_app/models.py:52
+msgid "Ecclesiastes"
+msgstr "Prediker"
+
+#: commandments_app/models.py:53
+msgid "Song of Solomon"
+msgstr "Hooglied"
+
+#: commandments_app/models.py:54
+msgid "Isaiah"
+msgstr "Jesaja"
+
+#: commandments_app/models.py:55
+msgid "Jeremiah"
+msgstr "Jeremiah"
+
+#: commandments_app/models.py:56
+msgid "Django Documentation"
+msgstr "Django-documentatie"
+
+#: commandments_app/models.py:57
+msgid "Ezekiel"
+msgstr "Ezechiël"
+
+#: commandments_app/models.py:58
+msgid "Daniel"
+msgstr "Daniël"
+
+#: commandments_app/models.py:59
+msgid "Hosea"
+msgstr "Hosea"
+
+#: commandments_app/models.py:60
+msgid "Joel"
+msgstr "Joël"
+
+#: commandments_app/models.py:61
+msgid "Amos"
+msgstr "Amos"
+
+#: commandments_app/models.py:62
+msgid "Obadiah"
+msgstr "Obadja"
+
 #: commandments_app/models.py:63
+msgid "Jonah"
+msgstr "Jona"
+
+#: commandments_app/models.py:64
+msgid "Micah"
+msgstr "Micha"
+
+#: commandments_app/models.py:65
+msgid "Nahum"
+msgstr "Nahum"
+
+#: commandments_app/models.py:66
+msgid "Habakkuk"
+msgstr "Habakuk"
+
+#: commandments_app/models.py:67
+msgid "Zephaniah"
+msgstr "Zefanja"
+
+#: commandments_app/models.py:68
+msgid "Haggai"
+msgstr "Haggai"
+
+#: commandments_app/models.py:69
+msgid "Zechariah"
+msgstr "Zacharia"
+
+#: commandments_app/models.py:70
+msgid "Malachi"
+msgstr "Maleachi"
+
+#: commandments_app/models.py:71
+msgid "Matthew 28:19-20"
+msgstr "Mattheüs 28:19-20"
+
+#: commandments_app/models.py:71
+msgid "Matthew"
+msgstr "Mattheüs"
+
+#: commandments_app/models.py:72
+msgid "Mark"
+msgstr "Markus"
+
+#: commandments_app/models.py:73
+msgid "Luke"
+msgstr "Lukas"
+
+#: commandments_app/models.py:74
+msgid "John"
+msgstr "Johannes"
+
+#: commandments_app/models.py:75
+msgid "Acts (of the Apostles)"
+msgstr "Handelingen"
+
+#: commandments_app/models.py:76
+msgid "Romans"
+msgstr "Romeinen"
+
+#: commandments_app/models.py:77
+msgid "1 Corinthians"
+msgstr "1 Korinthiërs"
+
+#: commandments_app/models.py:78
+msgid "2 Corinthians"
+msgstr "2 Korinthiërs"
+
+#: commandments_app/models.py:79
+msgid "Galatians"
+msgstr "Galaten"
+
+#: commandments_app/models.py:80
+msgid "Ephesians"
+msgstr "Efeziërs"
+
+#: commandments_app/models.py:81
+msgid "Philippians"
+msgstr "Filipijnen"
+
+#: commandments_app/models.py:82
+msgid "Colossians"
+msgstr "Kolossenzen"
+
+#: commandments_app/models.py:83
+msgid "1 Thessalonians"
+msgstr "1 Tessalonicenzen"
+
+#: commandments_app/models.py:84
+msgid "2 Thessalonians"
+msgstr "2 Thessalonicenzen"
+
+#: commandments_app/models.py:85
+msgid "1 Timothy"
+msgstr "1 Timotheüs"
+
+#: commandments_app/models.py:86
+msgid "2 Timothy"
+msgstr "2 Timotheüs"
+
+#: commandments_app/models.py:87
+msgid "Titus"
+msgstr "Titus"
+
+#: commandments_app/models.py:88
+msgid "Philemon"
+msgstr "Filemon"
+
+#: commandments_app/models.py:89
+msgid "Hebrews"
+msgstr "Hebreeën"
+
+#: commandments_app/models.py:90
+msgid "James"
+msgstr "Jakobes"
+
+#: commandments_app/models.py:91
+msgid "1 Peter"
+msgstr "1 Petrus"
+
+#: commandments_app/models.py:92
+msgid "2 Peter"
+msgstr "2 Petrus"
+
+#: commandments_app/models.py:93
+msgid "1 John"
+msgstr "1 Johannes"
+
+#: commandments_app/models.py:94
+msgid "2 John"
+msgstr "2 Johannes"
+
+#: commandments_app/models.py:95
+msgid "3 John"
+msgstr "3 Johannes"
+
+#: commandments_app/models.py:96
+msgid "Jude"
+msgstr "Judas"
+
+#: commandments_app/models.py:97
+msgid "Revelation"
+msgstr "Openbaring"
+
+#: commandments_app/models.py:134
 msgid "Could not load text at the moment."
 msgstr "Kan de tekst niet laden op dit moment."
 
-#: .\commandments_app\templates\commandments\index.html:21
-#: .\commandments_app\templates\commandments\listing.html:21
-#: commandments_app/templates/commandments/detail.html:17
-msgid "Your browser does not support the audio tag."
-msgstr "Uw browser ondersteunt de audiotag niet."
+#: commandments_app/templates/commandments/detail.html:28
+#, fuzzy
+#| msgid "Duration"
+msgid "Description"
+msgstr "Looptijd"
 
-#: commandments_app/templates/commandments/index.html:11
+#: commandments_app/templates/commandments/detail.html:42
+msgid "Bible References"
+msgstr "Bijbelverwijzingen"
+
+#: commandments_app/templates/commandments/detail.html:51
+msgid "More Bible References"
+msgstr "Meer Bijbelverwijzingen"
+
+#: commandments_app/templates/commandments/detail.html:69
+msgid "Drawings"
+msgstr "Illustraties"
+
+#: commandments_app/templates/commandments/detail.html:86
+msgid "Short Movies"
+msgstr "Korte films"
+
+#: commandments_app/templates/commandments/detail.html:102
+msgid "Songs"
+msgstr "Muziek"
+
+#: commandments_app/templates/commandments/detail.html:117
+msgid "Movies"
+msgstr "Films"
+
+#: commandments_app/templates/commandments/detail.html:134
+msgid "Testimonies"
+msgstr "Getuigenissen"
+
+#: commandments_app/templates/commandments/detail.html:147
+msgid "Books"
+msgstr "Boeken"
+
+#: commandments_app/templates/commandments/detail.html:164
+msgid "Questions"
+msgstr "Vragen"
+
+#: commandments_app/templates/commandments/index.html:16
+msgid "Unique commandments"
+msgstr "Unieke geboden"
+
+#: commandments_app/templates/commandments/index.html:27
+msgid "Bible references"
+msgstr "Bijbelverwijzingen"
+
+#: commandments_app/templates/commandments/index.html:38
+msgid "Languages"
+msgstr "Talen"
+
+#: commandments_app/templates/commandments/index.html:63
 #: commandments_app/templates/commandments/listing.html:11
-#: templates/base.html:101
+#: templates/base.html:106
 msgid "If you love Me"
 msgstr "Als u Mij liefhebt"
 
-#: commandments_app/templates/commandments/index.html:11
+#: commandments_app/templates/commandments/index.html:63
 #: commandments_app/templates/commandments/listing.html:11
-#: templates/base.html:101
+#: templates/base.html:106
 msgid "keep my commands"
 msgstr "Neem dan mijn geboden in acht"
 
-#: commandments_app/templates/commandments/index.html:12
+#: commandments_app/templates/commandments/index.html:64
 #: commandments_app/templates/commandments/listing.html:12
 msgid ""
 "This website will help you in applying all commandments in your life. How? "
@@ -181,17 +497,17 @@ msgstr ""
 "Deze website helpt u om alle geboden toe te passen in uw leven. Hoe dan? "
 "Voor ieder gebod verzamelen we zoveel mogelijk gerelateerde"
 
-#: commandments_app/templates/commandments/index.html:13
+#: commandments_app/templates/commandments/index.html:65
 #: commandments_app/templates/commandments/listing.html:13
 msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures and Books"
 msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's en Boeken"
 
-#: commandments_app/templates/commandments/index.html:13
+#: commandments_app/templates/commandments/index.html:65
 #: commandments_app/templates/commandments/listing.html:13
 msgid "to feed your heart, soul and mind"
 msgstr "om uw hart, ziel en verstand te voeden"
 
-#: commandments_app/templates/commandments/index.html:14
+#: commandments_app/templates/commandments/index.html:66
 #: commandments_app/templates/commandments/listing.html:14
 msgid ""
 "All commandments are ideal for personal Bible study, Small Groups, "
@@ -202,7 +518,7 @@ msgstr ""
 "Dischipelschaps groepen, mentoring, toerustings scholen of meditaties hoe u "
 "uw wandel met Jezus kan verrijken"
 
-#: commandments_app/templates/commandments/index.html:23
+#: commandments_app/templates/commandments/index.html:75
 #: commandments_app/templates/commandments/listing.html:23
 msgid "No commandments are available."
 msgstr "Geen geboden gevonden."
@@ -231,101 +547,98 @@ msgstr "volgende"
 msgid "last"
 msgstr "laatste"
 
-#: templates/base.html:6 templates/base.html:33 templates/base.html:57
+#: templates/base.html:6 templates/base.html:39 templates/base.html:62
 msgid "Jesus commandments"
 msgstr "Jezus geboden"
 
-#: templates/base.html:35
+#: templates/base.html:41
 msgid "Menu"
 msgstr "Menu"
 
-#: templates/base.html:40
+#: templates/base.html:46
 msgid "Home"
 msgstr "Home"
 
-#: templates/base.html:41
+#: templates/base.html:47
 #, fuzzy
 #| msgid "Jesus commandments"
 msgid "Commandments"
 msgstr "Geboden"
 
-#: templates/base.html:42 templates/base.html:61 templates/base.html:79
+#: templates/base.html:48 templates/base.html:66 templates/base.html:84
 msgid "Help improving"
 msgstr "Meehelpen"
 
-#: templates/base.html:59
+#: templates/base.html:64
 msgid "Following Jesus"
 msgstr "Jezus Volgen"
 
-#: templates/base.html:59
+#: templates/base.html:64
 msgid "#howto"
 msgstr "#hoedan"
 
-#: templates/base.html:60
+#: templates/base.html:65
 msgid "Jesus tought many different things. We help applying all"
 msgstr "Jezus onderwees in vele verschillende dingen. Wij helpen om alle"
 
-#: templates/base.html:60
+#: templates/base.html:65
 msgid "unique commandments in your daily life"
 msgstr "unieke geboden toe te passen in uw dagelijks leven"
 
-#: templates/base.html:75
+#: templates/base.html:80
 msgid "Matthew 28:19-20"
 msgstr "Mattheüs 28:19"
 
-#: templates/base.html:77
+#: templates/base.html:82
 msgid "Therefore go and make"
 msgstr "maakt dan voort maakt alle volkeren tot"
 
-#: templates/base.html:77
+#: templates/base.html:82
 msgid "Disciples"
 msgstr "Leerlingen"
 
-#: templates/base.html:77
+#: templates/base.html:82
 msgid "of all nations"
 msgstr " "
 
-#: templates/base.html:78
+#: templates/base.html:83
 msgid "Teaching them to"
 msgstr "Hen onderrichtend"
 
-#: templates/base.html:78
+#: templates/base.html:83
 msgid "obey everything"
 msgstr "in het bewaren"
 
-#: .\templates\base.html:131
-#: templates/base.html:78
+#: templates/base.html:83
 msgid "I have commanded you"
 msgstr "van al wat ik u heb geboden"
 
-#: templates/base.html:130
+#: templates/base.html:135
 msgid "profile"
 msgstr "profiel"
 
-#: templates/base.html:131
+#: templates/base.html:136
 msgid "logout"
 msgstr "uitloggen"
 
-#: templates/base.html:133
+#: templates/base.html:138
 msgid "login"
 msgstr "Log in"
 
-#: templates/base.html:134
+#: templates/base.html:139
 msgid "register"
 msgstr "registreren"
 
-#: templates/base.html:138
+#: templates/base.html:143
 msgid "admin"
 msgstr "beheerder"
 
-#: templates/base.html:145
+#: templates/base.html:150
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
-#: templates/base.html:147
-#, fuzzy
-#| msgid "Email address"
-msgid "Email: "
+#: templates/base.html:152
+msgid "Email address"
 msgstr "E-mailadres"
 
 #: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
@@ -383,8 +696,8 @@ msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:246
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
+" hyphens."
 msgstr ""
 "Voer een geldige 'slak' in die bestaat uit Unicode-letters, cijfers, "
 "onderstrepingstekens of koppeltekens."
@@ -617,8 +930,8 @@ msgstr "Datum (zonder tijd)"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1290
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
 msgstr ""
 "De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
 "JJJJ-MM-DD HH:MM[:ss[.uuuuuu]][TZ] hebben."
@@ -626,8 +939,8 @@ msgstr ""
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1294
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
+"'%(value)s' value has the correct format (YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
 msgstr ""
 "'%(value)s' waarde heeft het juiste formaat (JJJJ-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ]) maar het is een ongeldige datum / tijd."
@@ -648,8 +961,8 @@ msgstr "Decimaal getal"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1587
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
-"uuuuuu] format."
+"'%(value)s' value has an invalid format. It must be in [DD] "
+"[HH:[MM:]]ss[.uuuuuu] format."
 msgstr ""
 "De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
 "[HH:[MM:]]ss[.uuuuuu] hebben."
@@ -959,7 +1272,8 @@ msgstr "De inline-waarde kwam niet overeen met de bovenliggende instantie."
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
-"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare keuzes."
+"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
+"keuzes."
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1272
 #, python-format
@@ -1422,8 +1736,8 @@ msgid ""
 msgstr ""
 "U ziet dit bericht omdat voor deze HTTPS-site een 'Verwijzende koptekst' "
 "vereist is die door uw webbrowser moet worden verzonden, maar er is er geen "
-"verzonden. Deze header is vereist om veiligheidsredenen, om ervoor te zorgen "
-"dat uw browser niet wordt gekaapt door derden."
+"verzonden. Deze header is vereist om veiligheidsredenen, om ervoor te zorgen"
+" dat uw browser niet wordt gekaapt door derden."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:120
 msgid ""
@@ -1437,11 +1751,11 @@ msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:124
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
-"CSRF protection requires the 'Referer' header to do strict referer checking. "
-"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
-"\" ...> for links to third-party sites."
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
+" including the 'Referrer-Policy: no-referrer' header, please remove them. "
+"The CSRF protection requires the 'Referer' header to do strict referer "
+"checking. If you're concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" ...> for links to third-party sites."
 msgstr ""
 "Als u de tag <meta name = \"referrer\" content = \"no-referrer\"> gebruikt "
 "of de kop 'Referrer-Policy: no-referrer' bevat, verwijdert u deze. De CSRF-"
@@ -1503,8 +1817,8 @@ msgstr "Geen %(verbose_name_plural)s beschikbaar"
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:589
 #, python-format
 msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
 msgstr ""
 "Future %(verbose_name_plural)s niet beschikbaar omdat "
 "%(class_name)s.allow_future False is."
@@ -1568,15 +1882,15 @@ msgstr "De installatie is geslaagd! Gefeliciteerd!"
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #, python-format
 msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-"\">DEBUG=True</a> is in your settings file and you have not configured any "
-"URLs."
+"You are seeing this page because <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
+"and you have not configured any URLs."
 msgstr ""
-"U ziet deze pagina omdat <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener\"> DEBUG "
-"= True </a> staat in uw instellingenbestand en u hebt geen URL's "
-"geconfigureerd."
+"U ziet deze pagina omdat <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\"> DEBUG = True </a> staat in uw "
+"instellingenbestand en u hebt geen URL's geconfigureerd."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 msgid "Django Documentation"
@@ -1614,15 +1928,17 @@ msgstr "Engels"
 msgid "Dutch"
 msgstr "Nederlands"
 
+#~ msgid "What did Jesus teach when walking the earth?"
+#~ msgstr "Wat leerde Jezus ons in zijn tijd hier op aarde?"
+
+#~ msgid "Your browser does not support the audio tag."
+#~ msgstr "Uw browser ondersteunt de audiotag niet."
+
 #~ msgid "Jesus"
 #~ msgstr "Jezus"
 
 #~ msgid "Read more"
 #~ msgstr "Lees verder"
-
-#, fuzzy
-#~ msgid "commandments"
-#~ msgstr "geboden"
 
 #~ msgid ""
 #~ "When Jesus walked the earth he thought use many things, we just list them as"

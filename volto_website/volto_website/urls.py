@@ -21,7 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path('commandments/', include('commandments_app.urls', namespace='commandments')),
     path('account/', include('account_app.urls', namespace='account')),
-    # path('account/', include('django.contrib.auth.urls')),
+    path('rosetta/', include('rosetta.urls')),
     path('admin/', admin.site.urls),
 ]
 

@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 # Note that for some apps order is important!
 INSTALLED_APPS = [
-    'modeltranslation',
+    'vinaigrette',
     'commandments_app.apps.CommandmentsAppConfig',
     'account_app.apps.AccountAppConfig',
     'django.contrib.admin',

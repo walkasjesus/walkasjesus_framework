@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from commandments_app.modeltranslation.offline_tabbed_translation_admin import OfflineTabbedTranslationAdmin
 from .models import *
 
 
@@ -29,7 +28,7 @@ class SermonInline(admin.TabularInline):
     extra = 0
 
 
-class CommandmentAdmin(OfflineTabbedTranslationAdmin):
+class CommandmentAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,

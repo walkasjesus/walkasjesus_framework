@@ -6,7 +6,7 @@ else
 	echo "error: cannot find environment binary"
 fi
 echo "Adding new texts to the .po files."
-django-admin makemessages -l nl
+python manage.py makemessages
 echo "Translating files."
 python auto_translate_files.py
 echo "Compiling the .po files. Run this also after changing the .po files."

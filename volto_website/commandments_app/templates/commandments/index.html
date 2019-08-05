@@ -1,6 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+
+{% block homebanner %}
+
+<section class="home-slider js-fullheight owl-carousel">
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Jesus commandments' %}</span>
+            </div>
+            <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
+            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="77">77</strong> {% trans 'unique commandments in your daily life' %}</p>
+            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Matthew 28:19-20' %}</span>
+            </div>
+            <h1 class="mb-4">{% trans 'Therefore go and make' %} <span>{% trans 'Disciples'%} </span>{% trans 'of all nations' %}</h1>
+            <p>{% trans 'Teaching them to' %} <span><strong>{% trans 'obey everything' %}</strong></span> {% trans 'I have commanded you' %}</p>
+            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
 {% block content %}
 
 <section class="ftco-counter" id="section-counter">

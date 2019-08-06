@@ -3,6 +3,63 @@
 {% load i18n %}
 {% block content %}
 
+<nav class="floating-menu">
+    <ul class="main-menu">
+        <li>
+            <a href="#description" class="ripple">
+                <i class="fas fa-home fa-lg"><img src="{% static 'images/description.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#biblereferences" class="ripple">
+                <i class="fas fa-user fa-lg"><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#drawings" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#shortmovies" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#songs" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#movies" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#testimonies" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#sermons" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#books" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        <li>
+            <a href="#questions" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+    </ul>
+    <div class="menu-bg"></div>
+</nav>
+
+
 <!-- Background images contains a bug that it won't be displayed if multiple images are in the loop -->
 <section class="ftco-daily-verse img" style="background-image: url('{% for image in images %}{{ image.file.url }}{% endfor %}');">
 <div class="overlay"></div>
@@ -18,13 +75,13 @@
         </div>                               
         <div class="row">
             <!-- {% if commandment.description %} -->
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="description" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/description.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/description.png' %}" width="65px" alt="">
                         </div>
-                        <div class="our-services-text">
+                        <div id="description" class="our-services-text">
                             <h4>{% trans 'Description' %}</h4>
                             {{ commandment.description }}
                         </div>
@@ -32,11 +89,11 @@
                 </div>
             </div>
             <!-- {% endif %} -->
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/bible.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/bible.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Bible References' %}</h4>
@@ -59,11 +116,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/drawing.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/drawing.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
@@ -76,11 +133,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/shortmovie.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/shortmovie.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
@@ -92,11 +149,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/song.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/song.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
@@ -107,11 +164,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
+                    <div id="movie" class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/movie.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/movie.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
@@ -124,11 +181,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/testimony.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/testimony.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
@@ -137,11 +194,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/sermon.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/sermon.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
@@ -152,11 +209,11 @@
                     </div>
                 </div>
             </div>              
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/book.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/book.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Books' %}</h4>
@@ -169,11 +226,11 @@
                     </div>
                 </div>
             </div>              
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/questions.png' %}" width="80px" alt="">
+                        <img src="{% static 'images/questions.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Questions' %}</h4>

@@ -5,14 +5,14 @@
     background: #ffffff none repeat scroll 0 0;
     opacity: 0.8;
     border: 2px solid #ffd615;
-    margin-left: 35px;
+    margin-left: 22px;
     transition: .3s;
     border-radius: 10px;
 }
 .our-services-img {
     float: left;
     margin-left: -36px;
-    margin-right: 22px;
+    margin-right: 0px;
     margin-top: 28px;
 }
 .our-services-text {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 19:22+0200\n"
+"POT-Creation-Date: 2019-08-06 07:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1869,335 +1869,335 @@ msgstr "Geen"
 msgid "Obsolete translation kept alive with Viniagrette"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:2
+#: .\commandments_app.Commandment/title:1
 msgid "Repent and believe the gospel"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:3
+#: .\commandments_app.Commandment/title:2
 msgid "Be fertile"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:4
+#: .\commandments_app.Commandment/title:3
 msgid "Worship the Lord your God, and serve him only"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:5
+#: .\commandments_app.Commandment/title:4
 msgid "Blessed are those who mourn, for they will be comforted"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:6
+#: .\commandments_app.Commandment/title:5
 msgid "Blessed are the meek, for they will inherit the earth"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:7
+#: .\commandments_app.Commandment/title:6
 msgid ""
 "Blessed are those who hunger and thirst for righteousness, for they will be "
 "filled"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:8
+#: .\commandments_app.Commandment/title:7
 msgid "Blessed are the merciful, for they will be shown mercy"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:9
+#: .\commandments_app.Commandment/title:8
 msgid "Blessed are the pure in heart, for they will see God"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:10
+#: .\commandments_app.Commandment/title:9
 msgid "Blessed are the peacemakers, for they will be called children of God"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:11
+#: .\commandments_app.Commandment/title:10
 msgid ""
 "Blessed are those who are persecuted because of righteousness, for theirs is "
 "the kingdom of heaven"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:12
+#: .\commandments_app.Commandment/title:11
 msgid "Rejoice and be glad, because great is your reward in heaven"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:13
+#: .\commandments_app.Commandment/title:12
 msgid "You are the salt of the earth"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:14
+#: .\commandments_app.Commandment/title:13
 msgid "You are the light of the world"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:15
+#: .\commandments_app.Commandment/title:14
 msgid ""
 "Whoever practices and teaches these commands will be called great in the "
 "kingdom of heaven"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:16
+#: .\commandments_app.Commandment/title:15
 msgid "Be patient"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:17
+#: .\commandments_app.Commandment/title:16
 msgid "Reconcile with your brother as quickly as possible"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:18
+#: .\commandments_app.Commandment/title:17
 msgid "Be loyal to your partner"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:19
+#: .\commandments_app.Commandment/title:18
 msgid ""
 "Blessed are those whose ways are blameless, who walk according to the law of "
 "the Lord"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:20
+#: .\commandments_app.Commandment/title:19
 msgid "Overcome evil by doing good"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:21
+#: .\commandments_app.Commandment/title:20
 msgid "Give to those who demand something from you"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:22
+#: .\commandments_app.Commandment/title:21
 msgid "Love your enemies so that your children will be the Father's"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:23
+#: .\commandments_app.Commandment/title:22
 msgid "Be perfect then, just as your Father who is in heaven is perfect."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:24
+#: .\commandments_app.Commandment/title:23
 msgid ""
 "For everyone who raises himself will be humiliated and he who humiliates "
 "himself will be raised."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:25
+#: .\commandments_app.Commandment/title:24
 msgid ""
 "Pray in Faith! And whatever you ask in My Name, I will do so that the Father "
 "may be glorified in the Son."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:26
+#: .\commandments_app.Commandment/title:25
 msgid "just as Christ forgave you, so must you"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:27
+#: .\commandments_app.Commandment/title:26
 msgid "Fixed regularly"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:28
+#: .\commandments_app.Commandment/title:27
 msgid "Collect treasures for you in heaven"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:29
+#: .\commandments_app.Commandment/title:28
 msgid ""
 "Therefore do not worry about tomorrow, for tomorrow will worry about itself"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:30
+#: .\commandments_app.Commandment/title:29
 msgid "Point brothers and sisters in a spirit of meekness, and do not judge"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:31
+#: .\commandments_app.Commandment/title:30
 msgid "Seek, and you shall find"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:32
+#: .\commandments_app.Commandment/title:31
 msgid "True, and it will be opened for you"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:33
+#: .\commandments_app.Commandment/title:32
 msgid "Treat others as you would like to be treated yourself"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:34
+#: .\commandments_app.Commandment/title:33
 msgid "Be careful that nobody misleads you"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:35
+#: .\commandments_app.Commandment/title:34
 msgid "Hear, understand and do"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:36
+#: .\commandments_app.Commandment/title:35
 msgid "Keep good spirits!"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:37
+#: .\commandments_app.Commandment/title:36
 msgid "Be moved with inner compassion with the people around you"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:38
+#: .\commandments_app.Commandment/title:37
 msgid "Find the lost sheep"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:39
+#: .\commandments_app.Commandment/title:38
 msgid "Proclaim the gospel of Jesus Christ to all nations"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:40
+#: .\commandments_app.Commandment/title:39
 msgid "Heal the sick, clean lepers, raise the dead, cast out demons."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:41
+#: .\commandments_app.Commandment/title:40
 #, fuzzy
 #| msgid "obey everything"
 msgid "Love God above everything"
 msgstr "in het bewaren"
 
-#: .\vinaigrette-deleteme.py:42
+#: .\commandments_app.Commandment/title:41
 msgid "Follow Jesus and take on your cross daily"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:43
+#: .\commandments_app.Commandment/title:42
 msgid "Receive him whom I will send"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:44
+#: .\commandments_app.Commandment/title:43
 msgid "Share what you have with others who need it"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:45
+#: .\commandments_app.Commandment/title:44
 msgid "blessed is he who does not offend Me."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:46
+#: .\commandments_app.Commandment/title:45
 msgid "Come to Me, all who are tired and burdened, and I will give you rest."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:47
+#: .\commandments_app.Commandment/title:46
 msgid "The statements of a just are a source of life"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:48
+#: .\commandments_app.Commandment/title:47
 msgid "Do the will of the Father"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:49
+#: .\commandments_app.Commandment/title:48
 msgid "Listen to Jesus"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:50
+#: .\commandments_app.Commandment/title:49
 msgid ""
 "Give to the emperor what is from the emperor, and to God what is from God."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:51
+#: .\commandments_app.Commandment/title:50
 msgid "Receive the Kingdom of God as a child"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:52
+#: .\commandments_app.Commandment/title:51
 msgid "Let the children come to Me"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:53
+#: .\commandments_app.Commandment/title:52
 msgid "Avoid temptation"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:54
+#: .\commandments_app.Commandment/title:53
 msgid "Be united"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:55
+#: .\commandments_app.Commandment/title:54
 msgid "Honor your father and your mother"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:56
+#: .\commandments_app.Commandment/title:55
 msgid ""
 "If anyone wants to be the first, he must be the last of all and a servant of "
 "all."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:57
+#: .\commandments_app.Commandment/title:56
 msgid "Love the Lord your God with all your heart"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:58
+#: .\commandments_app.Commandment/title:57
 msgid "Love the Lord your God with all your soul"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:59
+#: .\commandments_app.Commandment/title:58
 msgid "Love the Lord your God with all your mind"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:60
+#: .\commandments_app.Commandment/title:59
 msgid "Love the Lord your God with all your strenght"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:61
+#: .\commandments_app.Commandment/title:60
 msgid "Love your neighbor as yourself"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:62
+#: .\commandments_app.Commandment/title:61
 msgid "Be vigilant for the coming of Jesus"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:63
+#: .\commandments_app.Commandment/title:62
 msgid "Use your talents to the honor of the Father"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:64
+#: .\commandments_app.Commandment/title:63
 msgid "Feed the hungry (physically, emotionally and mentally)"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:65
+#: .\commandments_app.Commandment/title:64
 msgid "Give the (physical, emotional and spiritual) thirsty to drink"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:66
+#: .\commandments_app.Commandment/title:65
 msgid "Dress the (physical, emotional and spiritual) nudes"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:67
+#: .\commandments_app.Commandment/title:66
 msgid ""
 "Commemorate the suffering, dying, and rising of Jesus, for forgiveness and "
 "victory over our sins by means of. celebrating the supper"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:68
+#: .\commandments_app.Commandment/title:67
 msgid "Get baptized"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:69
+#: .\commandments_app.Commandment/title:68
 msgid "Always keep in mind that Jesus is with us"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:70
+#: .\commandments_app.Commandment/title:69
 msgid "His mercy is on those who fear Him from generation to generation."
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:71
+#: .\commandments_app.Commandment/title:70
 msgid "Be wary of greed and content with what you have"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:72
+#: .\commandments_app.Commandment/title:71
 msgid "Then hold on, your waist girded with truth"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:73
+#: .\commandments_app.Commandment/title:72
 msgid "Fight to enter through the narrow gate"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:74
+#: .\commandments_app.Commandment/title:73
 msgid "Look forward to the wedding of the Lamb"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:75
+#: .\commandments_app.Commandment/title:74
 msgid "Strengthen and encourage your brothers and sisters"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:76
+#: .\commandments_app.Commandment/title:75
 msgid "Stay in me;"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:77
+#: .\commandments_app.Commandment/title:76
 msgid "We are called to glorify the Name of God in Christ Jesus!"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:78
+#: .\commandments_app.Commandment/title:77
 msgid "Hoed mijn schapen, of laat je hoeden door een herder"
 msgstr ""
 
-#: .\vinaigrette-deleteme.py:79
+#: .\commandments_app.Commandment/description:77
 msgid "Description field"
 msgstr ""
 

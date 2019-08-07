@@ -15,13 +15,12 @@ class DetailView(View):
         for bible_reference in secondary_bible_references:
             bible_reference.load_text()
 
-        if len(commandment.songs()) >= 1:
-            background_song = commandment.songs()[0]
-        else:
-            background_song = None
+        background_song = commandment.songs()[0] if commandment.songs() else ''
+        background_image = commandment.images()[0] if commandment.images() else ''
 
         return render(request, 'commandments/detail.html', {'commandment': commandment,
                                                             'background_song': background_song,
+                                                            'background_image': background_image,
                                                             'primary_bible_references': primary_bible_references,
                                                             'secondary_bible_references': secondary_bible_references,
                                                             'questions': commandment.questions(),

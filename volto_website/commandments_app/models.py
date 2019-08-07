@@ -23,7 +23,7 @@ class CommandmentCategories(Enum):
     Greatest = gettext_lazy('Greatest Commands')
     Finance = gettext_lazy('Finance Commands')
     EndTimes = gettext_lazy('End Times')
-    
+
 
 class BibleBooks(Enum):
     """" This is a copy of the enum in bible_lib,
@@ -179,44 +179,69 @@ class Media(models.Model):
         return self.title
 
 
+class MediaUrl(Media):
+    file = models.URLField()
+
+    class Meta:
+        abstract = True
+
+    def url(self):
+        return self.url()
+
+
 class Image(Media):
     file = models.ImageField(upload_to='images/')
 
+    def url(self):
+        return self.file.url
 
-class ImageUrl(Media):
-    file = models.URLField()
+
+class ImageUrl(MediaUrl):
+    pass
 
 
 class Song(Media):
     file = models.FileField(upload_to='songs/')
 
+    def url(self):
+        return self.file.url
 
-class SongUrl(Media):
-    file = models.URLField()
+
+class SongUrl(MediaUrl):
+    pass
 
 
 class Video(Media):
     file = models.FileField(upload_to='videos/')
 
+    def url(self):
+        return self.file.url
 
-class VideoUrl(Media):
-    file = models.URLField()
+
+class VideoUrl(MediaUrl):
+    pass
 
 
 class Sermon(Media):
     file = models.FileField(upload_to='sermons/')
 
+    def url(self):
+        return self.file.url
 
-class SermonUrl(Media):
-    file = models.URLField()
+
+class SermonUrl(MediaUrl):
+    pass
 
 
 class File(Media):
     file = models.ImageField(upload_to='files/')
 
+    def url(self):
+        return self.file.url
 
-class FileUrl(Media):
-    file = models.URLField()
+
+class FileUrl(MediaUrl):
+    pass
 
 
 class Question(models.Model):

@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
         print(f'Adding {media.title}')
         model_reference.title = media.title
-        model_reference.link = media.link
+        model_reference.file = media.link
         model_reference.author = media.author
         model_reference.is_public = media.is_public
         model_reference.save()

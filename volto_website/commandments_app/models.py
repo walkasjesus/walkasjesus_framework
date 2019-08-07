@@ -186,7 +186,7 @@ class MediaUrl(Media):
         abstract = True
 
     def url(self):
-        return self.url()
+        return self.file
 
 
 class Image(Media):

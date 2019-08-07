@@ -65,7 +65,7 @@ class Command(BaseCommand):
             for item in commandment.bible_references:
                 self._add_bible_ref(model_commandment.id, item)
             for item in commandment.questions:
-                self._add_bible_ref(model_commandment.id, item)
+                self._add_question(model_commandment.id, item)
             for item in commandment.media:
                 self._add_media(model_commandment.id, item)
         except Exception as ex:

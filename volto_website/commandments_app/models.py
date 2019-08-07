@@ -221,7 +221,8 @@ class FileUrl(Media):
 
 class Question(models.Model):
     """" Abstract base class for other media models. """
-    text = models.TextField()
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+    text = models.TextField(default='')
 
     def __str__(self):
         return self.text

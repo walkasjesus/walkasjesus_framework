@@ -113,10 +113,7 @@ class Commandment(models.Model):
         return self.secondarybiblereference_set.all()
 
     def images(self):
-        image_files = self.image_set.filter(is_public=True)
-        image_urls = self.imageurl_set.filter(is_public=True)
-
-        return {''}
+        return self.image_set.filter(is_public=True)
 
     def songs(self):
         return self.song_set.filter(is_public=True)

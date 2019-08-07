@@ -118,6 +118,9 @@ class Commandment(models.Model):
     def songs(self):
         return self.song_set.filter(is_public=True)
 
+    def videos(self):
+        return self.video_set.filter(is_public=True)
+
     def sermons(self):
         return self.sermon_set.filter(is_public=True)
 

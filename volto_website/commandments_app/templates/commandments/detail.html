@@ -116,6 +116,7 @@
                     </div>
                 </div>
             </div>
+            {% if images %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -124,15 +125,16 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
-                            {% if images %}
+
                             {% for image in images %}
-                                <img src="{{ image.file.url }}" alt="{{ image.title }}" style="max-width:93%;max-height:93%;">
+                                <img src="{{ image.url }}" alt="{{ image.title }}" style="max-width:93%;max-height:93%;">
                             {% endfor %}
-                            {% endif %}
+
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
             <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -157,9 +159,11 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
+                            {% for song in songs %}
                             <div class="video-iframe">
-                                <iframe src="https://www.youtube.com/embed/xXKG-ooExGs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -174,8 +178,11 @@
                             <h4>{% trans 'Movies' %}</h4>
                             <p>Use all your senses to experience this commandment in the following movies:</p>
                             <ul>
-                                <li> Great Movie 1</li>
-                                <li> Super great Movie 2</li>
+                                {% for video in videos %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ video.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                </div>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -202,9 +209,11 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
+                            {% for sermon in sermons %}
                             <div class="video-iframe">
-                                <iframe src="https://www.youtube.com/embed/FrNamnkxzkA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -217,7 +226,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Books' %}</h4>
-                            <p>Want to dig deeper? Read these books:</p>
+                            <p>{% trans 'Want to dig deeper? Read these books:' %}</p>
                             <ul>
                                 <li> Great Book 1</li>
                                 <li> Super great Book 2</li>

@@ -25,4 +25,7 @@ class DetailView(View):
                                                             'primary_bible_references': primary_bible_references,
                                                             'secondary_bible_references': secondary_bible_references,
                                                             'questions': commandment.questions(),
+                                                            'songs': commandment.songs(),
+                                                            'videos': commandment.videos(),
+                                                            'sermons': commandment.sermons(),
                                                             'images': commandment.images()})

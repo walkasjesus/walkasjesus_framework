@@ -113,13 +113,19 @@ class Commandment(models.Model):
         return self.secondarybiblereference_set.all()
 
     def images(self):
-        return self.image_set.filter(is_public=True)
+        image_files = self.image_set.filter(is_public=True)
+        image_urls = self.imageurl_set.filter(is_public=True)
+
+        return {''}
 
     def songs(self):
         return self.song_set.filter(is_public=True)
 
     def sermons(self):
         return self.sermon_set.filter(is_public=True)
+
+    def questions(self):
+        return self.question_set.all()
 
     def __str__(self):
         return self.title
@@ -169,7 +175,9 @@ class SecondaryBibleReference(AbstractBibleReference):
 class Media(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    title = models.TextField()
+    title = models.CharField(max_length=128, default='')
+    author = models.CharField(max_length=64, default='')
+    url = models.URLField(default='#')
     is_public = models.BooleanField(default=False)
 
     class Meta:
@@ -179,69 +187,28 @@ class Media(models.Model):
         return self.title
 
 
-class MediaUrl(Media):
-    file = models.URLField()
-
-    class Meta:
-        abstract = True
-
-    def url(self):
-        return self.file
-
-
 class Image(Media):
-    file = models.ImageField(upload_to='images/')
-
-    def url(self):
-        return self.file.url
-
-
-class ImageUrl(MediaUrl):
     pass
 
 
 class Song(Media):
-    file = models.FileField(upload_to='songs/')
-
-    def url(self):
-        return self.file.url
-
-
-class SongUrl(MediaUrl):
     pass
 
 
 class Video(Media):
-    file = models.FileField(upload_to='videos/')
-
-    def url(self):
-        return self.file.url
-
-
-class VideoUrl(MediaUrl):
     pass
 
 
 class Sermon(Media):
-    file = models.FileField(upload_to='sermons/')
-
-    def url(self):
-        return self.file.url
-
-
-class SermonUrl(MediaUrl):
     pass
 
 
-class File(Media):
+class File(models.Model):
+    title = models.CharField(max_length=128, default='')
     file = models.ImageField(upload_to='files/')
 
-    def url(self):
-        return self.file.url
-
-
-class FileUrl(MediaUrl):
-    pass
+    def __str__(self):
+        return self.title
 
 
 class Question(models.Model):

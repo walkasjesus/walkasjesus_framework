@@ -20,9 +20,9 @@ class DetailView(View):
         else:
             background_song = None
 
-        images = commandment.images()
         return render(request, 'commandments/detail.html', {'commandment': commandment,
                                                             'background_song': background_song,
                                                             'primary_bible_references': primary_bible_references,
                                                             'secondary_bible_references': secondary_bible_references,
-                                                            'images': images})
+                                                            'questions': commandment.questions(),
+                                                            'images': commandment.images()})

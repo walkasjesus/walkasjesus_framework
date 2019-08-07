@@ -23,18 +23,8 @@ class ImageInline(admin.TabularInline):
     extra = 0
 
 
-class ImageUrlInline(admin.TabularInline):
-    model = ImageUrl
-    extra = 0
-
-
 class SongInline(admin.TabularInline):
     model = Song
-    extra = 0
-
-
-class SongUrlInline(admin.TabularInline):
-    model = SongUrl
     extra = 0
 
 
@@ -43,18 +33,8 @@ class VideoInline(admin.TabularInline):
     extra = 0
 
 
-class VideoUrlInline(admin.TabularInline):
-    model = VideoUrl
-    extra = 0
-
-
 class SermonInline(admin.TabularInline):
     model = Sermon
-    extra = 0
-
-
-class SermonUrlInline(admin.TabularInline):
-    model = SermonUrl
     extra = 0
 
 
@@ -63,10 +43,6 @@ class CommandmentAdmin(admin.ModelAdmin):
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,
         QuestionInline,
-        ImageUrlInline,
-        SongUrlInline,
-        VideoUrlInline,
-        SermonUrlInline,
         ImageInline,
         SongInline,
         VideoInline,
@@ -75,3 +51,4 @@ class CommandmentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Commandment, CommandmentAdmin)
+admin.site.register(File)

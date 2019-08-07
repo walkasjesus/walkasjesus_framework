@@ -234,10 +234,11 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Questions' %}</h4>
-                            <p>Share your hearts together by discussing the following questions:</p>
+                            <p>{% trans 'Share your hearts together by discussing the following questions:' %}</p>
                             <ul>
-                                <li> How do you feel about question 1</li>
-                                <li> What about question 2</li>
+                                {% for question in questions %}
+                                <li>{{ question.text }}</li>
+                                {% endfor %}
                             </ul>    
                         </div>
                     </div>

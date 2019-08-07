@@ -2,10 +2,16 @@ import pandas
 
 from import_tool.bible_reference import BibleReference
 from import_tool.commandment import Commandment
+from import_tool.media import Media
 
 
 def first(data_frame, column):
-    return data_frame[column].dropna().iloc[0]
+    cleaned_column = data_frame[column].dropna()
+
+    if not cleaned_column.any():
+        return ''
+
+    return cleaned_column.iloc[0]
 
 
 class CommandmentImporter(object):
@@ -15,21 +21,36 @@ class CommandmentImporter(object):
         commandments = []
 
         # Handle each commandment
-        for name, group in df.groupby(['Step']):
+        for name, group in df.groupby(['step']):
             commandment = Commandment()
-            if len(group['QuoteDutch'].dropna()) > 0:
-                commandment.id = first(group, 'Step')
-                commandment.title = first(group, 'QuoteEnglish')
-                commandment.title_nl = first(group, 'QuoteDutch')
-                commandment.category = first(group, 'Category')
-            # A commandment has several bible refs.
+            commandment.id = first(group, 'step')
+            commandment.title = first(group, 'title_en')
+            commandment.description = first(group, 'title_description_en')
+            commandment.category = first(group, 'category')
+
+            # Parse bible refs
             for index, row in group.iterrows():
                 try:
-                    reference = BibleReference.create_from_string(row['BiblePhrase'])
-                    reference.is_primary = row['PrimarySecondary'].lower() == 'primary'
+                    reference = BibleReference.create_from_string(row['bible_ref'])
+                    reference.is_primary = row['primary_secondary'].lower() == 'primary'
                     commandment.bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
+
+            # Parse media
+            for index, row in group.iterrows():
+                if isinstance(row['media_link'], str):
+                    media = Media()
+                    media.title = row['media_title']
+                    media.link = row['media_link']
+                    media.type = row['media_type']
+                    media.author = row['media_author']
+                    media.is_public = str(row['media_public']).lower() == 'yes'
+                    commandment.media.append(media)
+
+            # Parse questions
+            commandment.questions += group['questions'].dropna().tolist()
+
             commandments.append(commandment)
 
         return commandments

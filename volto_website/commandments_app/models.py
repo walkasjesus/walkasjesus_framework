@@ -183,13 +183,45 @@ class Image(Media):
     file = models.ImageField(upload_to='images/')
 
 
+class ImageUrl(Media):
+    file = models.URLField()
+
+
 class Song(Media):
     file = models.FileField(upload_to='songs/')
+
+
+class SongUrl(Media):
+    file = models.URLField()
+
+
+class Video(Media):
+    file = models.FileField(upload_to='videos/')
+
+
+class VideoUrl(Media):
+    file = models.URLField()
 
 
 class Sermon(Media):
     file = models.FileField(upload_to='sermons/')
 
 
+class SermonUrl(Media):
+    file = models.URLField()
+
+
 class File(Media):
     file = models.ImageField(upload_to='files/')
+
+
+class FileUrl(Media):
+    file = models.URLField()
+
+
+class Question(models.Model):
+    """" Abstract base class for other media models. """
+    text = models.TextField()
+
+    def __str__(self):
+        return self.text

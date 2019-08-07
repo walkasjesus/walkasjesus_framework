@@ -11,6 +11,6 @@ class TestCommandmentImporter(TestCase):
         commandments = importer.load()
 
         self.assertEqual('Repent and believe the gospel', commandments[0].title)
-        self.assertEqual('Be fertile', commandments[1].title)
+        self.assertEqual('Be fruitful', commandments[1].title)
 
         self.assertEqual(BibleBooks.Matthew, commandments[0].bible_references[0].book)

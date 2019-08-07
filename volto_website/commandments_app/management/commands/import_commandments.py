@@ -1,8 +1,11 @@
+import logging
 import os
 
 from django.core.management import BaseCommand
 from import_tool import CommandmentImporter
-from commandments_app.models import Commandment, SecondaryBibleReference, PrimaryBibleReference, CommandmentCategories
+
+from commandments_app.models import Commandment, SecondaryBibleReference, PrimaryBibleReference, CommandmentCategories, \
+    Question, SongUrl, VideoUrl, ImageUrl
 from volto_website.settings import BASE_DIR
 
 
@@ -27,14 +30,45 @@ class Command(BaseCommand):
         model_reference.verse = reference.start_verse
         model_reference.save()
 
+    def _add_question(self, commandment_id, question):
+        question_model = Question(commandment_id=commandment_id)
+        question_model.text = question
+        question_model.save()
+
+    def _add_media(self, commandment_id, media):
+        media_type = media.type.lower().strip()
+        if media_type == 'song':
+            model_reference = SongUrl(commandment_id=commandment_id)
+        elif media_type == 'shortmovie' or media_type == 'movie':
+            model_reference = VideoUrl(commandment_id=commandment_id)
+        elif media_type == 'picture' or media_type == 'drawing':
+            model_reference = ImageUrl(commandment_id=commandment_id)
+        else:
+            logging.getLogger().warning(f'Type {media_type} not yet implemented in import command')
+            return
+
+        print(f'Adding {media.title}')
+        model_reference.title = media.title
+        model_reference.link = media.link
+        model_reference.author = media.author
+        model_reference.is_public = media.is_public
+        model_reference.save()
+
     def _add_commandment(self, commandment):
         try:
             model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
+            model_commandment.description = commandment.description
             model_commandment.category = CommandmentCategories(commandment.category).name
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')
-            for ref in commandment.bible_references:
-                self._add_bible_ref(model_commandment.id, ref)
+            for item in commandment.bible_references:
+                self._add_bible_ref(model_commandment.id, item)
+            for item in commandment.questions:
+                self._add_bible_ref(model_commandment.id, item)
+            for item in commandment.media:
+                self._add_media(model_commandment.id, item)
         except Exception as ex:
             print(f'Failed to import {commandment.id}')
+
+

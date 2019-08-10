@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-06 19:14+0200\n"
+"POT-Creation-Date: 2019-08-07 20:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "Wijzigingen opslaan"
 msgid "Signup"
 msgstr "Inschrijven"
 
-#: .\account_app\templates\account\index.html:7 .\templates\base.html:46
+#: .\account_app\templates\account\index.html:7 .\templates\base.html:76
 msgid "Login"
 msgstr "Log in"
 
@@ -418,58 +418,66 @@ msgstr ""
 msgid "Revelation"
 msgstr ""
 
-#: .\commandments_app\models.py:134
+#: .\commandments_app\models.py:140
 msgid "Could not load text at the moment."
 msgstr "Kan de tekst niet laden op dit moment."
 
-#: .\commandments_app\templates\commandments\detail.html:28
+#: .\commandments_app\templates\commandments\detail.html:85
 #, fuzzy
 #| msgid "Duration"
 msgid "Description"
 msgstr "Looptijd"
 
-#: .\commandments_app\templates\commandments\detail.html:42
+#: .\commandments_app\templates\commandments\detail.html:99
 msgid "Bible References"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:51
+#: .\commandments_app\templates\commandments\detail.html:108
 msgid "More Bible References"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:69
+#: .\commandments_app\templates\commandments\detail.html:127
 msgid "Drawings"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:86
+#: .\commandments_app\templates\commandments\detail.html:145
 msgid "Short Movies"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:102
+#: .\commandments_app\templates\commandments\detail.html:161
 msgid "Songs"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:117
+#: .\commandments_app\templates\commandments\detail.html:178
 msgid "Movies"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:134
+#: .\commandments_app\templates\commandments\detail.html:198
 msgid "Testimonies"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:147
+#: .\commandments_app\templates\commandments\detail.html:211
 msgid "Sermons"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:162
+#: .\commandments_app\templates\commandments\detail.html:228
 msgid "Books"
 msgstr ""
 
-#: .\commandments_app\templates\commandments\detail.html:179
+#: .\commandments_app\templates\commandments\detail.html:229
+msgid "Want to dig deeper? Read these books:"
+msgstr ""
+
+#: .\commandments_app\templates\commandments\detail.html:245
 msgid "Questions"
 msgstr ""
 
+#: .\commandments_app\templates\commandments\detail.html:246
+msgid "Share your hearts together by discussing the following questions:"
+msgstr ""
+
 #: .\commandments_app\templates\commandments\index.html:15
-#: .\templates\base.html:6 .\templates\base.html:36
+#: .\templates\base.html:6 .\templates\base.html:66
 msgid "Jesus commandments"
 msgstr "Jezus geboden"
 
@@ -491,7 +499,7 @@ msgstr "unieke geboden toe te passen in uw dagelijks leven"
 
 #: .\commandments_app\templates\commandments\index.html:19
 #: .\commandments_app\templates\commandments\index.html:37
-#: .\templates\base.html:45
+#: .\templates\base.html:75
 msgid "Help improving"
 msgstr "Meehelpen"
 
@@ -538,13 +546,13 @@ msgstr ""
 
 #: .\commandments_app\templates\commandments\index.html:106
 #: .\commandments_app\templates\commandments\listing.html:12
-#: .\templates\base.html:69
+#: .\templates\base.html:99
 msgid "If you love Me"
 msgstr "Als u Mij liefhebt"
 
 #: .\commandments_app\templates\commandments\index.html:106
 #: .\commandments_app\templates\commandments\listing.html:12
-#: .\templates\base.html:69
+#: .\templates\base.html:99
 msgid "keep my commands"
 msgstr "Neem dan mijn geboden in acht"
 
@@ -613,45 +621,45 @@ msgstr "volgende"
 msgid "last"
 msgstr "laatste"
 
-#: .\templates\base.html:38
+#: .\templates\base.html:68
 msgid "Menu"
 msgstr "Menu"
 
-#: .\templates\base.html:43
+#: .\templates\base.html:73
 msgid "Home"
 msgstr "Home"
 
-#: .\templates\base.html:44
+#: .\templates\base.html:74
 #, fuzzy
 #| msgid "Jesus commandments"
 msgid "Commandments"
 msgstr "Geboden"
 
-#: .\templates\base.html:98
+#: .\templates\base.html:128
 msgid "profile"
 msgstr "profiel"
 
-#: .\templates\base.html:99
+#: .\templates\base.html:129
 msgid "logout"
 msgstr "uitloggen"
 
-#: .\templates\base.html:101
+#: .\templates\base.html:131
 msgid "login"
 msgstr "Log in"
 
-#: .\templates\base.html:102
+#: .\templates\base.html:132
 msgid "register"
 msgstr "registreren"
 
-#: .\templates\base.html:106
+#: .\templates\base.html:136
 msgid "admin"
 msgstr "beheerder"
 
-#: .\templates\base.html:113
+#: .\templates\base.html:143
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
-#: .\templates\base.html:115
+#: .\templates\base.html:145
 #, fuzzy
 #| msgid "Email address"
 msgid "Email: "
@@ -1939,8 +1947,24 @@ msgstr ""
 msgid "Repent and believe the gospel"
 msgstr ""
 
+#: .\commandments_app.Commandment/description:1
+msgid ""
+"If you confess your sins, God is faithful and just to forgive us our sins, "
+"and to cleanse us from all unrighteousness. Then, turn your back to the "
+"world, and follow Jesus. How? Just start by applying all the commandments on "
+"this website in your life. Step by step, together with God. And if you know "
+"any other christians, take part on this journey together."
+msgstr ""
+
 #: .\commandments_app.Commandment/title:2
-msgid "Be fertile"
+msgid "Be fruitful"
+msgstr ""
+
+#: .\commandments_app.Commandment/description:2
+msgid ""
+"1 important part of the commission that God gave Adam was to be fruitful. "
+"Throughout the Bible you see this assignment coming back time and time "
+"again. God gives the fruit and we can work the earth to be fruitful."
 msgstr ""
 
 #: .\commandments_app.Commandment/title:3
@@ -2044,11 +2068,11 @@ msgid ""
 msgstr ""
 
 #: .\commandments_app.Commandment/title:25
-msgid "just as Christ forgave you, so must you"
+msgid "Forgive one another"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:26
-msgid "Fixed regularly"
+msgid "Fast regularly"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:27
@@ -2069,11 +2093,11 @@ msgid "Seek, and you shall find"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:31
-msgid "True, and it will be opened for you"
+msgid "Knock, and it will be opened for you"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:32
-msgid "Treat others as you would like to be treated yourself"
+msgid "Treat others as you would like to be treated"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:33
@@ -2085,7 +2109,7 @@ msgid "Hear, understand and do"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:35
-msgid "Keep good spirits!"
+msgid "Be strong and courageous"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:36
@@ -2107,11 +2131,11 @@ msgstr ""
 #: .\commandments_app.Commandment/title:40
 #, fuzzy
 #| msgid "obey everything"
-msgid "Love God above everything"
+msgid "Love God above all"
 msgstr "in het bewaren"
 
 #: .\commandments_app.Commandment/title:41
-msgid "Follow Jesus and take on your cross daily"
+msgid "Follow Jesus and carry your cross"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:42
@@ -2119,15 +2143,15 @@ msgid "Receive him whom I will send"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:43
-msgid "Share what you have with others who need it"
+msgid "Share what you have with others"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:44
-msgid "blessed is he who does not offend Me."
+msgid "Blessed is he who does not offend Me"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:45
-msgid "Come to Me, all who are tired and burdened, and I will give you rest."
+msgid "Come to Me, all who are tired and burdened, and I will give you rest"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:46
@@ -2144,7 +2168,7 @@ msgstr ""
 
 #: .\commandments_app.Commandment/title:49
 msgid ""
-"Give to the emperor what is from the emperor, and to God what is from God."
+"Give to the emperor what is from the emperor, and to God what is from God"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:50
@@ -2170,7 +2194,7 @@ msgstr ""
 #: .\commandments_app.Commandment/title:55
 msgid ""
 "If anyone wants to be the first, he must be the last of all and a servant of "
-"all."
+"all"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:56
@@ -2202,15 +2226,19 @@ msgid "Use your talents to the honor of the Father"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:63
-msgid "Feed the hungry (physically, emotionally and mentally)"
+msgid "Feed the hungry"
+msgstr ""
+
+#: .\commandments_app.Commandment/description:63
+msgid "physically, emotionally and mentally"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:64
-msgid "Give the (physical, emotional and spiritual) thirsty to drink"
+msgid "Give the thirsty to drink"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:65
-msgid "Dress the (physical, emotional and spiritual) nudes"
+msgid "Dress the nudes"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:66
@@ -2228,7 +2256,7 @@ msgid "Always keep in mind that Jesus is with us"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:69
-msgid "His mercy is on those who fear Him from generation to generation."
+msgid "His mercy is on those who fear Him from generation to generation"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:70
@@ -2252,7 +2280,7 @@ msgid "Strengthen and encourage your brothers and sisters"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:75
-msgid "Stay in me;"
+msgid "Stay in me"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:76
@@ -2260,11 +2288,7 @@ msgid "We are called to glorify the Name of God in Christ Jesus!"
 msgstr ""
 
 #: .\commandments_app.Commandment/title:77
-msgid "Hoed mijn schapen, of laat je hoeden door een herder"
-msgstr ""
-
-#: .\commandments_app.Commandment/description:77
-msgid "Description field"
+msgid "Herd my sheep"
 msgstr ""
 
 #: .\volto_website\settings.py:121

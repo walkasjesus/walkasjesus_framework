@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-07 20:42+0200\n"
+"POT-Creation-Date: 2019-08-10 19:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,273 +150,269 @@ msgstr "Einddtijd"
 
 #: .\commandments_app\models.py:32
 msgid "Genesis"
-msgstr ""
+msgstr "Genesis"
 
 #: .\commandments_app\models.py:33
 msgid "Exodus"
-msgstr ""
+msgstr "Exodus"
 
 #: .\commandments_app\models.py:34
 msgid "Leviticus"
-msgstr ""
+msgstr "Leviticus"
 
 #: .\commandments_app\models.py:35
 #, fuzzy
 #| msgid "November"
 msgid "Numbers"
-msgstr "november"
+msgstr "Numerie"
 
 #: .\commandments_app\models.py:36
 msgid "Deuteronomy"
-msgstr ""
+msgstr "Deuteronomium"
 
 #: .\commandments_app\models.py:37
 msgid "Joshua"
-msgstr ""
+msgstr "Jozua"
 
 #: .\commandments_app\models.py:38
 msgid "Judges"
-msgstr ""
+msgstr "Rechters"
 
 #: .\commandments_app\models.py:39
 msgid "Ruth"
-msgstr ""
+msgstr "Ruth"
 
 #: .\commandments_app\models.py:40
 msgid "1 Samuel"
-msgstr ""
+msgstr "1 Samuël"
 
 #: .\commandments_app\models.py:41
 msgid "2 Samuel"
-msgstr ""
+msgstr "2 Samuël"
 
 #: .\commandments_app\models.py:42
 msgid "1 Kings"
-msgstr ""
+msgstr "1 Koningen"
 
 #: .\commandments_app\models.py:43
 msgid "2 Kings"
-msgstr ""
+msgstr "2 Koningen"
 
 #: .\commandments_app\models.py:44
 msgid "1 Chronicles"
-msgstr ""
+msgstr "1 Kronieken"
 
 #: .\commandments_app\models.py:45
 msgid "2 Chronicles"
-msgstr ""
+msgstr "2 Kronieken"
 
 #: .\commandments_app\models.py:46
 msgid "Ezra"
-msgstr ""
+msgstr "Ezra"
 
 #: .\commandments_app\models.py:47
 msgid "Nehemiah"
-msgstr ""
+msgstr "Nehemia"
 
 #: .\commandments_app\models.py:48
 msgid "Esther"
-msgstr ""
+msgstr "Esther"
 
 #: .\commandments_app\models.py:49
 msgid "Job"
-msgstr ""
+msgstr "Job"
 
 #: .\commandments_app\models.py:50
 msgid "Psalms"
-msgstr ""
+msgstr "Psalmen"
 
 #: .\commandments_app\models.py:51
 msgid "Proverbs"
-msgstr ""
+msgstr "Spreuken"
 
 #: .\commandments_app\models.py:52
 msgid "Ecclesiastes"
-msgstr ""
+msgstr "Prediker"
 
 #: .\commandments_app\models.py:53
 msgid "Song of Solomon"
-msgstr ""
+msgstr "Hooglied"
 
 #: .\commandments_app\models.py:54
 msgid "Isaiah"
-msgstr ""
+msgstr "Jesaja"
 
 #: .\commandments_app\models.py:55
 msgid "Jeremiah"
-msgstr ""
+msgstr "Jeremiah"
 
 #: .\commandments_app\models.py:56
-#, fuzzy
-#| msgid "Django Documentation"
 msgid "Lamentations"
-msgstr "Django-documentatie"
+msgstr "Klaagliederen"
 
 #: .\commandments_app\models.py:57
 msgid "Ezekiel"
-msgstr ""
+msgstr "Ezechiël"
 
 #: .\commandments_app\models.py:58
 msgid "Daniel"
-msgstr ""
+msgstr "Daniël"
 
 #: .\commandments_app\models.py:59
 msgid "Hosea"
-msgstr ""
+msgstr "Hosea"
 
 #: .\commandments_app\models.py:60
 msgid "Joel"
-msgstr ""
+msgstr "Joël"
 
 #: .\commandments_app\models.py:61
 msgid "Amos"
-msgstr ""
+msgstr "Amos"
 
 #: .\commandments_app\models.py:62
 msgid "Obadiah"
-msgstr ""
+msgstr "Obadja"
 
 #: .\commandments_app\models.py:63
 msgid "Jonah"
-msgstr ""
+msgstr "Jona"
 
 #: .\commandments_app\models.py:64
 msgid "Micah"
-msgstr ""
+msgstr "Micha"
 
 #: .\commandments_app\models.py:65
 msgid "Nahum"
-msgstr ""
+msgstr "Nahum"
 
 #: .\commandments_app\models.py:66
 msgid "Habakkuk"
-msgstr ""
+msgstr "Habakuk"
 
 #: .\commandments_app\models.py:67
 msgid "Zephaniah"
-msgstr ""
+msgstr "Zefanja"
 
 #: .\commandments_app\models.py:68
 msgid "Haggai"
-msgstr ""
+msgstr "Haggai"
 
 #: .\commandments_app\models.py:69
 msgid "Zechariah"
-msgstr ""
+msgstr "Zacharia"
 
 #: .\commandments_app\models.py:70
 msgid "Malachi"
-msgstr ""
+msgstr "Maleachi"
 
 #: .\commandments_app\models.py:71
-#, fuzzy
-#| msgid "Matthew 28:19-20"
 msgid "Matthew"
-msgstr "Mattheüs 28:19"
+msgstr "Mattheüs"
 
 #: .\commandments_app\models.py:72
 msgid "Mark"
-msgstr ""
+msgstr "Markus"
 
 #: .\commandments_app\models.py:73
 msgid "Luke"
-msgstr ""
+msgstr "Lukas"
 
 #: .\commandments_app\models.py:74
 msgid "John"
-msgstr ""
+msgstr "Johannes"
 
 #: .\commandments_app\models.py:75
 msgid "Acts (of the Apostles)"
-msgstr ""
+msgstr "Handelingen"
 
 #: .\commandments_app\models.py:76
 msgid "Romans"
-msgstr ""
+msgstr "Romeinen"
 
 #: .\commandments_app\models.py:77
 msgid "1 Corinthians"
-msgstr ""
+msgstr "1 Korinthiërs"
 
 #: .\commandments_app\models.py:78
 msgid "2 Corinthians"
-msgstr ""
+msgstr "2 Korinthiërs"
 
 #: .\commandments_app\models.py:79
 msgid "Galatians"
-msgstr ""
+msgstr "Galaten"
 
 #: .\commandments_app\models.py:80
 msgid "Ephesians"
-msgstr ""
+msgstr "Efeziërs"
 
 #: .\commandments_app\models.py:81
 msgid "Philippians"
-msgstr ""
+msgstr "Filipijnen"
 
 #: .\commandments_app\models.py:82
 msgid "Colossians"
-msgstr ""
+msgstr "Kolossenzen"
 
 #: .\commandments_app\models.py:83
 msgid "1 Thessalonians"
-msgstr ""
+msgstr "1 Tessalonicenzen"
 
 #: .\commandments_app\models.py:84
 msgid "2 Thessalonians"
-msgstr ""
+msgstr "2 Tessalonicenzen"
 
 #: .\commandments_app\models.py:85
 msgid "1 Timothy"
-msgstr ""
+msgstr "1 Timotheüs"
 
 #: .\commandments_app\models.py:86
 msgid "2 Timothy"
-msgstr ""
+msgstr "2 Timotheüs"
 
 #: .\commandments_app\models.py:87
 msgid "Titus"
-msgstr ""
+msgstr "Titus"
 
 #: .\commandments_app\models.py:88
 msgid "Philemon"
-msgstr ""
+msgstr "Filemon"
 
 #: .\commandments_app\models.py:89
 msgid "Hebrews"
-msgstr ""
+msgstr "Hebreeën"
 
 #: .\commandments_app\models.py:90
 msgid "James"
-msgstr ""
+msgstr "Jakobes"
 
 #: .\commandments_app\models.py:91
 msgid "1 Peter"
-msgstr ""
+msgstr "1 Petrus"
 
 #: .\commandments_app\models.py:92
 msgid "2 Peter"
-msgstr ""
+msgstr "2 Petrus"
 
 #: .\commandments_app\models.py:93
 msgid "1 John"
-msgstr ""
+msgstr "1 Johannes"
 
 #: .\commandments_app\models.py:94
 msgid "2 John"
-msgstr ""
+msgstr "2 Johannes"
 
 #: .\commandments_app\models.py:95
 msgid "3 John"
-msgstr ""
+msgstr "3 Johannes"
 
 #: .\commandments_app\models.py:96
 msgid "Jude"
-msgstr ""
+msgstr "Judas"
 
 #: .\commandments_app\models.py:97
 msgid "Revelation"
-msgstr ""
+msgstr "Openbaring"
 
 #: .\commandments_app\models.py:140
 msgid "Could not load text at the moment."
@@ -438,31 +434,31 @@ msgstr ""
 
 #: .\commandments_app\templates\commandments\detail.html:127
 msgid "Drawings"
-msgstr ""
+msgstr "Illustraties"
 
 #: .\commandments_app\templates\commandments\detail.html:145
 msgid "Short Movies"
-msgstr ""
+msgstr "Korte films"
 
 #: .\commandments_app\templates\commandments\detail.html:161
 msgid "Songs"
-msgstr ""
+msgstr "Muziek"
 
 #: .\commandments_app\templates\commandments\detail.html:178
 msgid "Movies"
-msgstr ""
+msgstr "Films"
 
 #: .\commandments_app\templates\commandments\detail.html:198
 msgid "Testimonies"
-msgstr ""
+msgstr "Getuigenissen"
 
 #: .\commandments_app\templates\commandments\detail.html:211
 msgid "Sermons"
-msgstr ""
+msgstr "Preken"
 
 #: .\commandments_app\templates\commandments\detail.html:228
 msgid "Books"
-msgstr ""
+msgstr "Boeken"
 
 #: .\commandments_app\templates\commandments\detail.html:229
 msgid "Want to dig deeper? Read these books:"
@@ -470,7 +466,7 @@ msgstr ""
 
 #: .\commandments_app\templates\commandments\detail.html:245
 msgid "Questions"
-msgstr ""
+msgstr "Vragen"
 
 #: .\commandments_app\templates\commandments\detail.html:246
 msgid "Share your hearts together by discussing the following questions:"
@@ -2289,6 +2285,10 @@ msgstr ""
 
 #: .\commandments_app.Commandment/title:77
 msgid "Herd my sheep"
+msgstr ""
+
+#: .\commandments_app.Commandment/description:77
+msgid "Verplicht"
 msgstr ""
 
 #: .\volto_website\settings.py:121

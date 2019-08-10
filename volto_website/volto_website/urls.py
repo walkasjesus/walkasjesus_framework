@@ -23,6 +23,7 @@ urlpatterns = [
     path('account/', include('account_app.urls', namespace='account')),
     path('rosetta/', include('rosetta.urls')),
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
 
 # Not sure why but all tuts only do this in debug mode,

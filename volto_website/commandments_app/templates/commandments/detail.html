@@ -15,51 +15,69 @@
                 <i class="fas fa-user fa-lg"><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% if drawings %}
         <li>
             <a href="#drawings" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if shortmovies %}
         <li>
             <a href="#shortmovies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if songs %}
         <li>
             <a href="#songs" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if movies %}
         <li>
             <a href="#movies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if pictures %}
         <li>
             <a href="#pictures" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if testimonies %}
         <li>
             <a href="#testimonies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if sermons %}
         <li>
             <a href="#sermons" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if books %}
         <li>
             <a href="#books" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if questions %}
         <li>
             <a href="#questions" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
     </ul>
     <div class="menu-bg"></div>
 </nav>
@@ -121,6 +139,7 @@
                     </div>
                 </div>
             </div>
+            {% if drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -137,6 +156,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if shortmovies %}
             <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -155,6 +176,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if songs %}
             <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -173,6 +196,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if movies %}
             <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div id="movie" class="services-inner">
@@ -191,6 +216,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% if pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -235,6 +261,7 @@
                 </div>
             </div>
             {% endif %}
+            {% if testimonies %}
             <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -253,6 +280,8 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if sermons %}
             <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -271,6 +300,8 @@
                     </div>
                 </div>
             </div>              
+            {% endif %}
+            {% if books %}
             <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -293,6 +324,8 @@
                     </div>
                 </div>
             </div>              
+            {% endif %}
+            {% if questions %}
             <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -311,6 +344,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>         
     </div>
 </section>

@@ -146,6 +146,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for shortmovie in shortmovies %}
+                            <h5>{{ shortmovie.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -180,15 +181,12 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
-                            <p>Use all your senses to experience this commandment in the following movies:</p>
-                            <ul>            
-                                {% for video in videos %}
-                                <h5>{{ video.title }}</h5>
-                                <div class="video-iframe">
-                                    <iframe src="{{ video.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                </div>
-                                {% endfor %}
-                            </ul>
+                            {% for movie in movies %}
+                            <h5>{{ movie.title }}</h5>
+                            <div class="video-iframe">
+                                <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

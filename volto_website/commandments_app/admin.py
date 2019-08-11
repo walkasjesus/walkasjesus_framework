@@ -28,8 +28,13 @@ class SongInline(admin.TabularInline):
     extra = 0
 
 
-class VideoInline(admin.TabularInline):
-    model = Video
+class MovieInline(admin.TabularInline):
+    model = Movie
+    extra = 0
+
+
+class ShortmovieInline(admin.TabularInline):
+    model = Shortmovie
     extra = 0
 
 
@@ -60,7 +65,8 @@ class CommandmentAdmin(admin.ModelAdmin):
         QuestionInline,
         DrawingInline,
         SongInline,
-        VideoInline,
+        MovieInline,
+        ShortmovieInline,
         SermonInline,
         PictureInline,
         TestimonyInline,

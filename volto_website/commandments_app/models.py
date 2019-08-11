@@ -118,8 +118,11 @@ class Commandment(models.Model):
     def songs(self):
         return self.song_set.filter(is_public=True)
 
-    def videos(self):
-        return self.video_set.filter(is_public=True)
+    def movies(self):
+        return self.movie_set.filter(is_public=True)
+
+    def shortmovies(self):
+        return self.shortmovie_set.filter(is_public=True)
 
     def sermons(self):
         return self.sermon_set.filter(is_public=True)
@@ -204,7 +207,11 @@ class Song(Media):
     pass
 
 
-class Video(Media):
+class Movie(Media):
+    pass
+
+
+class Shortmovie(Media):
     pass
 
 

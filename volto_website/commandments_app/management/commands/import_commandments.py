@@ -5,7 +5,7 @@ from django.core.management import BaseCommand
 from import_tool import CommandmentImporter
 
 from commandments_app.models import Commandment, SecondaryBibleReference, PrimaryBibleReference, CommandmentCategories, \
-    Question, Song, Video, Drawing, Testimony, Sermon, Picture, Book
+    Question, Song, Movie, Shortmovie, Drawing, Testimony, Sermon, Picture, Book
 from volto_website.settings import BASE_DIR
 
 
@@ -39,8 +39,10 @@ class Command(BaseCommand):
         media_type = media.type.lower().strip()
         if media_type == 'song':
             model_reference = Song(commandment_id=commandment_id)
-        elif media_type == 'shortmovie' or media_type == 'movie':
-            model_reference = Video(commandment_id=commandment_id)
+        elif media_type == 'movie':
+            model_reference = Movie(commandment_id=commandment_id)
+        elif media_type == 'shortmovie':
+            model_reference = Shortmovie(commandment_id=commandment_id)
         elif media_type == 'drawing':
             model_reference = Drawing(commandment_id=commandment_id)
         elif media_type == 'testimony':

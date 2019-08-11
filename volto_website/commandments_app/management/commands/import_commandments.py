@@ -4,8 +4,7 @@ import os
 from django.core.management import BaseCommand
 from import_tool import CommandmentImporter
 
-from commandments_app.models import Commandment, SecondaryBibleReference, PrimaryBibleReference, CommandmentCategories, \
-    Question, Song, Video, Image
+from commandments_app.models import *
 from volto_website.settings import BASE_DIR
 
 

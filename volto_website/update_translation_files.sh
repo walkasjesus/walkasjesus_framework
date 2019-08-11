@@ -8,6 +8,6 @@ fi
 echo "Adding new texts to the .po files."
 python manage.py makemessages -l nl
 echo "Translating files."
-python auto_translate_files.py
+python manage.py auto_translate
 echo "Compiling the .po files. Run this also after changing the .po files."
 django-admin compilemessages

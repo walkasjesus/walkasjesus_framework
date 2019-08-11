@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from django.contrib.messages import constants as messages
+from django.utils.translation import gettext_lazy
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from django.utils.translation import gettext_lazy
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -150,3 +151,9 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# Monitoring application
+sentry_sdk.init(
+    dsn="https://3caa949e65db4d419d486668fe5180a4@sentry.io/1527507",
+    integrations=[DjangoIntegration()]
+)

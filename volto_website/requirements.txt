@@ -1,9 +1,15 @@
+# Application core
 django>=2.2.3
 pandas>=0.24.2
 Pillow>=6.1.0
 django-vinaigrette>=1.2.1
 django-rosetta>=0.9.3
 -e ../bible_lib
+
+# Tools
 -e ../import_tool
 -e ../translate_tool
 polib>=1.1.0
+
+# Monitoring
+sentry-sdk>=0.10.2

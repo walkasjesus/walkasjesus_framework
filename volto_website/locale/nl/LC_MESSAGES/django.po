@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-11 16:40+0200\n"
-"PO-Revision-Date: 2019-08-11 16:40+0000\n"
+"PO-Revision-Date: 2019-08-11 16:45+0000\n"
 "Last-Translator: b'  <admin@email.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -46,10 +46,9 @@ msgid "Change password"
 msgstr "Wachtwoord wijzigen"
 
 #: .\account_app\templates\account\login.html:7
-#, fuzzy
 #| msgid "Your username and password didn"
 msgid "Your username and password didn\\"
-msgstr "Uw gebruikersnaam en wachtwoord didn"
+msgstr "Uw gebruikersnaam en wachtwoord kwamen niet overeen"
 
 #: .\account_app\templates\account\login.html:16
 msgid "Please login to see this page."
@@ -76,7 +75,6 @@ msgid "Your profile was successfully updated!"
 msgstr "Uw profiel is succesvol bijgewerkt!"
 
 #: .\account_app\views.py:39 .\account_app\views.py:57
-#, fuzzy
 #| msgid "Please correct the duplicate values below."
 msgid "Please correct the error below."
 msgstr "Corrigeer de onderstaande dubbele waarden."
@@ -418,7 +416,6 @@ msgid "Could not load text at the moment."
 msgstr "Kan de tekst niet laden op dit moment."
 
 #: .\commandments_app\templates\commandments\detail.html:85
-#, fuzzy
 #| msgid "Duration"
 msgid "Description"
 msgstr "Beschrijving"
@@ -552,7 +549,6 @@ msgstr "Neem dan mijn geboden in acht"
 
 #: .\commandments_app\templates\commandments\index.html:107
 #: .\commandments_app\templates\commandments\listing.html:13
-#, fuzzy
 #| msgid ""
 #| "This website will help you in applying all commandments in your life. How? "
 #| "We collect as much as possible related"
@@ -622,7 +618,6 @@ msgid "Home"
 msgstr "Home"
 
 #: .\templates\base.html:74
-#, fuzzy
 #| msgid "Jesus commandments"
 msgid "Commandments"
 msgstr "Geboden"
@@ -652,7 +647,6 @@ msgid "Contact us"
 msgstr "Neem contact met ons op"
 
 #: .\templates\base.html:146
-#, fuzzy
 #| msgid "Email address"
 msgid "Email: "
 msgstr "E-mailadres"
@@ -760,7 +754,7 @@ msgstr ""
 "Zorg ervoor dat deze waarde groter is dan of gelijk is aan %(limit_value)s."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:361
-#, fuzzy, python-format
+#, python-format
 #| msgid ""
 #| "Ensure this value has at least %(limit_value)d character (it has "
 #| "%(show_value)d)."
@@ -778,7 +772,7 @@ msgstr[1] ""
 "is %(show_value)d)"
 
 #: .\venv\Lib\site-packages\django\core\validators.py:376
-#, fuzzy, python-format
+#, python-format
 #| msgid ""
 #| "Ensure this value has at most %(limit_value)d character (it has "
 #| "%(show_value)d)."
@@ -802,7 +796,7 @@ msgid "Enter a number."
 msgstr "Voer een nummer in."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:397
-#, fuzzy, python-format
+#, python-format
 #| msgid "Ensure that there are no more than %(max)s digit in total."
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
@@ -810,7 +804,7 @@ msgstr[0] "Zorg ervoor dat er niet meer dan %(max)s cijfers zijn."
 msgstr[1] "Zorg ervoor dat er niet meer dan %(max)s cijfers zijn."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:402
-#, fuzzy, python-format
+#, python-format
 #| msgid "Ensure that there are no more than %(max)s decimal place."
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
@@ -818,7 +812,7 @@ msgstr[0] "Zorg ervoor dat er niet meer dan %(max)s decimalen zijn."
 msgstr[1] "Zorg ervoor dat er niet meer dan %(max)s decimalen zijn."
 
 #: .\venv\Lib\site-packages\django\core\validators.py:407
-#, fuzzy, python-format
+#, python-format
 #| msgid ""
 #| "Ensure that there are no more than %(max)s digit before the decimal point."
 msgid ""
@@ -1173,7 +1167,7 @@ msgid "The submitted file is empty."
 msgstr "Het ingediende bestand is leeg."
 
 #: .\venv\Lib\site-packages\django\forms\fields.py:536
-#, fuzzy, python-format
+#, python-format
 #| msgid ""
 #| "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid ""
@@ -1237,7 +1231,7 @@ msgid "ManagementForm data is missing or has been tampered with"
 msgstr "ManagementForm-gegevens ontbreken of er is mee geknoeid"
 
 #: .\venv\Lib\site-packages\django\forms\formsets.py:338
-#, fuzzy, python-format
+#, python-format
 #| msgid "Please submit %d or fewer forms."
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
@@ -1245,7 +1239,7 @@ msgstr[0] "Dien alstublieft %d of minder formulieren in."
 msgstr[1] "Dien alstublieft %d of minder formulieren in."
 
 #: .\venv\Lib\site-packages\django\forms\formsets.py:345
-#, fuzzy, python-format
+#, python-format
 #| msgid "Please submit %d or more forms."
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
@@ -1339,7 +1333,7 @@ msgstr "Ja! Nee! Misschien"
 
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:817
 #: .\venv\Lib\site-packages\django\template\defaultfilters.py:834
-#, fuzzy, python-format
+#, python-format
 #| msgid "%(size)d byte"
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
@@ -1688,7 +1682,7 @@ msgid ", "
 msgstr ", "
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:9
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d year"
 msgid "%d year"
 msgid_plural "%d years"
@@ -1696,7 +1690,7 @@ msgstr[0] "%d jaar"
 msgstr[1] "%d jaar"
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:10
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d month"
 msgid "%d month"
 msgid_plural "%d months"
@@ -1704,7 +1698,7 @@ msgstr[0] "%d maanden"
 msgstr[1] "%d maanden"
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:11
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d week"
 msgid "%d week"
 msgid_plural "%d weeks"
@@ -1712,7 +1706,7 @@ msgstr[0] "%d week"
 msgstr[1] "%d week"
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:12
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d day"
 msgid "%d day"
 msgid_plural "%d days"
@@ -1720,7 +1714,7 @@ msgstr[0] "%d dag"
 msgstr[1] "%d dag"
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:13
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d hour"
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -1728,7 +1722,7 @@ msgstr[0] "%d uur"
 msgstr[1] "%d uur"
 
 #: .\venv\Lib\site-packages\django\utils\timesince.py:14
-#, fuzzy, python-format
+#, python-format
 #| msgid "%d minute"
 msgid "%d minute"
 msgid_plural "%d minutes"
@@ -2157,10 +2151,9 @@ msgid "Heal the sick, clean lepers, raise the dead, cast out demons."
 msgstr "Genees zieken, reinig melaatsen, wek doden op, drijf demonen uit."
 
 #: .\commandments_app.Commandment/title:40
-#, fuzzy
 #| msgid "obey everything"
 msgid "Love God above all"
-msgstr "in het bewaren"
+msgstr "Heb God lief boven alles"
 
 #: .\commandments_app.Commandment/title:41
 msgid "Follow Jesus and carry your cross"

@@ -74,7 +74,7 @@
             </div>
         </div>                               
         <div class="row">
-            <!-- {% if commandment.description %} -->
+            {% if commandment.description %}
             <div id="description" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <!-- {% endif %} -->
+            {% endif %}
             <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -128,6 +128,7 @@
 
                             {% for image in images %}
                                 <img src="{{ image.url }}" alt="{{ image.title }}" style="max-width:93%;max-height:93%;">
+                                <p>Artist: {{ image.author }}</p>
                             {% endfor %}
 
                         </div>
@@ -143,10 +144,11 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
+                            {% for shortmovie in shortmovies %}
                             <div class="video-iframe">
-                                <iframe src="https://player.vimeo.com/video/263398045?dnt=1&app_id=122963" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
                             </div>
-    
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -160,6 +162,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in songs %}
+                            <h5>{{ song.author }} - {{ song.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
                             </div>
@@ -177,8 +180,9 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
                             <p>Use all your senses to experience this commandment in the following movies:</p>
-                            <ul>
+                            <ul>            
                                 {% for video in videos %}
+                                <h5>{{ video.title }}</h5>
                                 <div class="video-iframe">
                                     <iframe src="{{ video.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
                                 </div>
@@ -196,7 +200,12 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
-                            <p>Hear from others their experience</p>
+                            {% for testimony in testimonies %}
+                            <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                            <div class="video-iframe">
+                                <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -209,6 +218,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
+                            <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
                             {% for sermon in sermons %}
                             <div class="video-iframe">
                                 <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
@@ -228,8 +238,9 @@
                             <h4>{% trans 'Books' %}</h4>
                             <p>{% trans 'Want to dig deeper? Read these books:' %}</p>
                             <ul>
-                                <li> Great Book 1</li>
-                                <li> Super great Book 2</li>
+                                {% for book in books %}
+                                <li>{{ book.text }}</li>
+                                {% endfor %}
                             </ul>    
                         </div>
                     </div>

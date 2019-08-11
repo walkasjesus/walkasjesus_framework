@@ -3,15 +3,16 @@ import os
 from django.core.management import BaseCommand
 from translate_tool import PoTranslator
 
-from volto_website.settings import BASE_DIR
+from volto_website.settings import BASE_DIR, LANGUAGES
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        languages = ['nl']
+        languages = [code for code, name in LANGUAGES]
 
         translator = PoTranslator()
 
         for language in languages:
-            file_path = os.path.join(BASE_DIR, 'locale', language, 'LC_MESSAGES', 'django.po')
-            translator.translate(file_path, 'en', language)
+            if language != 'en':
+                file_path = os.path.join(BASE_DIR, 'locale', language, 'LC_MESSAGES', 'django.po')
+                translator.translate(file_path, 'en', language)

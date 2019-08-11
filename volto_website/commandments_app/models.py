@@ -112,8 +112,8 @@ class Commandment(models.Model):
         """ Secondary references are extra, maybe indirect references. """
         return self.secondarybiblereference_set.all()
 
-    def images(self):
-        return self.image_set.filter(is_public=True)
+    def drawings(self):
+        return self.drawing_set.filter(is_public=True)
 
     def songs(self):
         return self.song_set.filter(is_public=True)
@@ -124,8 +124,14 @@ class Commandment(models.Model):
     def sermons(self):
         return self.sermon_set.filter(is_public=True)
 
+    def pictures(self):
+        return self.picture_set.filter(is_public=True)
+
     def testimonies(self):
         return self.testimony_set.filter(is_public=True)
+
+    def books(self):
+        return self.book_set.filter(is_public=True)
 
     def questions(self):
         return self.question_set.all()
@@ -190,7 +196,7 @@ class Media(models.Model):
         return self.title
 
 
-class Image(Media):
+class Drawing(Media):
     pass
 
 
@@ -206,7 +212,15 @@ class Sermon(Media):
     pass
 
 
+class Picture(Media):
+    pass
+
+
 class Testimony(Media):
+    pass
+
+
+class Book(Media):
     pass
 
 

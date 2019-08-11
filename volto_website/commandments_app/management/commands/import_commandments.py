@@ -5,7 +5,7 @@ from django.core.management import BaseCommand
 from import_tool import CommandmentImporter
 
 from commandments_app.models import Commandment, SecondaryBibleReference, PrimaryBibleReference, CommandmentCategories, \
-    Question, Song, Video, Image, Testimony, Sermon
+    Question, Song, Video, Drawing, Testimony, Sermon, Picture, Book
 from volto_website.settings import BASE_DIR
 
 
@@ -41,17 +41,21 @@ class Command(BaseCommand):
             model_reference = Song(commandment_id=commandment_id)
         elif media_type == 'shortmovie' or media_type == 'movie':
             model_reference = Video(commandment_id=commandment_id)
-        elif media_type == 'picture' or media_type == 'drawing':
-            model_reference = Image(commandment_id=commandment_id)
+        elif media_type == 'drawing':
+            model_reference = Drawing(commandment_id=commandment_id)
         elif media_type == 'testimony':
             model_reference = Testimony(commandment_id=commandment_id)
+        elif media_type == 'picture':
+            model_reference = Picture(commandment_id=commandment_id)
         elif media_type == 'sermon':
             model_reference = Sermon(commandment_id=commandment_id)
+        elif media_type == 'book':
+            model_reference = Book(commandment_id=commandment_id)
         else:
             logging.getLogger().warning(f'Type {media_type} not yet implemented in import command')
             return
 
-        print(f'Adding {media.title}')
+        print(f'Adding {media_type}: {media.title} - {media.author}')
         model_reference.title = media.title
         model_reference.url = media.link
         model_reference.author = media.author

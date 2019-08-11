@@ -25,7 +25,9 @@ class CommandmentImporter(object):
             commandment = Commandment()
             commandment.id = first(group, 'step')
             commandment.title = first(group, 'title_en')
+            commandment.title_nl = first(group, 'title_nl')
             commandment.description = first(group, 'title_description_en')
+            commandment.description_nl = first(group, 'title_description_nl')
             commandment.category = first(group, 'category')
 
             # Parse bible refs

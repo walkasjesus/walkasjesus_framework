@@ -7,3 +7,4 @@ else
 fi
 python manage.py import_users
 python manage.py import_commandments
+python manage.py import_dutch_translation

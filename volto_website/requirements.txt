@@ -6,3 +6,4 @@ django-rosetta>=0.9.3
 -e ../bible_lib
 -e ../import_tool
 -e ../translate_tool
+polib>=1.1.0

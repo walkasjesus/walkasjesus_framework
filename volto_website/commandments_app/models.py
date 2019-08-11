@@ -124,6 +124,9 @@ class Commandment(models.Model):
     def sermons(self):
         return self.sermon_set.filter(is_public=True)
 
+    def testimonies(self):
+        return self.testimony_set.filter(is_public=True)
+
     def questions(self):
         return self.question_set.all()
 
@@ -200,6 +203,10 @@ class Video(Media):
 
 
 class Sermon(Media):
+    pass
+
+
+class Testimony(Media):
     pass
 
 

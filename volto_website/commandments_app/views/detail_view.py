@@ -27,4 +27,5 @@ class DetailView(View):
                                                             'songs': commandment.songs(),
                                                             'videos': commandment.videos(),
                                                             'sermons': commandment.sermons(),
+                                                            'testimonies': commandment.testimonies(),
                                                             'images': commandment.images()})

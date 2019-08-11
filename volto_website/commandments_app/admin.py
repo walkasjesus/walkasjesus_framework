@@ -38,6 +38,11 @@ class SermonInline(admin.TabularInline):
     extra = 0
 
 
+class TestimonyInline(admin.TabularInline):
+    model = Testimony
+    extra = 0
+
+
 class CommandmentAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferencesInline,
@@ -47,6 +52,7 @@ class CommandmentAdmin(admin.ModelAdmin):
         SongInline,
         VideoInline,
         SermonInline,
+        TestimonyInline,
     ]
 
 

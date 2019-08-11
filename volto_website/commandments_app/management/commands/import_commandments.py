@@ -38,15 +38,25 @@ class Command(BaseCommand):
         media_type = media.type.lower().strip()
         if media_type == 'song':
             model_reference = Song(commandment_id=commandment_id)
-        elif media_type == 'shortmovie' or media_type == 'movie':
-            model_reference = Video(commandment_id=commandment_id)
-        elif media_type == 'picture' or media_type == 'drawing':
-            model_reference = Image(commandment_id=commandment_id)
+        elif media_type == 'movie':
+            model_reference = Movie(commandment_id=commandment_id)
+        elif media_type == 'shortmovie':
+            model_reference = Shortmovie(commandment_id=commandment_id)
+        elif media_type == 'drawing':
+            model_reference = Drawing(commandment_id=commandment_id)
+        elif media_type == 'testimony':
+            model_reference = Testimony(commandment_id=commandment_id)
+        elif media_type == 'picture':
+            model_reference = Picture(commandment_id=commandment_id)
+        elif media_type == 'sermon':
+            model_reference = Sermon(commandment_id=commandment_id)
+        elif media_type == 'book':
+            model_reference = Book(commandment_id=commandment_id)
         else:
             logging.getLogger().warning(f'Type {media_type} not yet implemented in import command')
             return
 
-        print(f'Adding {media.title}')
+        print(f'Adding {media_type}: {media.title} - {media.author}')
         model_reference.title = media.title
         model_reference.url = media.link
         model_reference.author = media.author

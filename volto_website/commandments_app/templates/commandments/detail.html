@@ -15,53 +15,74 @@
                 <i class="fas fa-user fa-lg"><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% if drawings %}
         <li>
             <a href="#drawings" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if shortmovies %}
         <li>
             <a href="#shortmovies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if songs %}
         <li>
             <a href="#songs" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if movies %}
         <li>
             <a href="#movies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if pictures %}
+        <li>
+            <a href="#pictures" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if testimonies %}
         <li>
             <a href="#testimonies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if sermons %}
         <li>
             <a href="#sermons" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if books %}
         <li>
             <a href="#books" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
+        {% if questions %}
         <li>
             <a href="#questions" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
     </ul>
     <div class="menu-bg"></div>
 </nav>
 
-
-<!-- Background images contains a bug that it won't be displayed if multiple images are in the loop -->
-<section class="ftco-daily-verse img" style="background-image: url('{{ background_image.url }}');">
+<section class="ftco-daily-verse img" style="background-image: url('{{ background_drawing.url }}');">
 <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
@@ -74,7 +95,7 @@
             </div>
         </div>                               
         <div class="row">
-            <!-- {% if commandment.description %} -->
+            {% if commandment.description %}
             <div id="description" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -88,7 +109,7 @@
                     </div>
                 </div>
             </div>
-            <!-- {% endif %} -->
+            {% endif %}
             <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -116,7 +137,7 @@
                     </div>
                 </div>
             </div>
-            {% if images %}
+            {% if drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -125,16 +146,16 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
-
-                            {% for image in images %}
-                                <img src="{{ image.url }}" alt="{{ image.title }}" style="max-width:93%;max-height:93%;">
+                            {% for drawing in drawings %}
+                                <img src="{{ drawing.url }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
+                                <p>Artist: {{ drawing.author }}</p>
                             {% endfor %}
-
                         </div>
                     </div>
                 </div>
             </div>
             {% endif %}
+            {% if shortmovies %}
             <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -143,14 +164,18 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
+                            {% for shortmovie in shortmovies %}
+                            <h5>{{ shortmovie.title }}</h5>
                             <div class="video-iframe">
-                                <iframe src="https://player.vimeo.com/video/263398045?dnt=1&app_id=122963" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
-    
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if songs %}
             <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -160,14 +185,17 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in songs %}
+                            <h5>{{ song.author }} - {{ song.title }}</h5>
                             <div class="video-iframe">
-                                <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if movies %}
             <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div id="movie" class="services-inner">
@@ -176,18 +204,62 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
-                            <p>Use all your senses to experience this commandment in the following movies:</p>
-                            <ul>
-                                {% for video in videos %}
-                                <div class="video-iframe">
-                                    <iframe src="{{ video.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
-                                </div>
-                                {% endfor %}
-                            </ul>
+                            {% for movie in movies %}
+                            <h5>{{ movie.title }}</h5>
+                            <div class="video-iframe">
+                                <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if pictures %}
+            <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/picture.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Pictures' %}</h4>
+                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                                    </ol>
+                                    <div class="carousel-inner" style="width:97%;height:97%;">
+                                        {% for picture in pictures|slice:":3" %}
+                                        {% if forloop.first %}
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
+                                                <p>Photographer: {{ picture.author }}</p>
+                                        {% else %}
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
+                                                <p>Photographer: {{ picture.author }}</p>
+                                        {% endif %}
+                                            </div>
+                                        {% endfor %}                                                    
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if testimonies %}
             <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -196,11 +268,18 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
-                            <p>Hear from others their experience</p>
+                            {% for testimony in testimonies %}
+                            <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                            <div class="video-iframe">
+                                <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
+            {% if sermons %}
             <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -210,14 +289,17 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
                             {% for sermon in sermons %}
+                            <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
                             <div class="video-iframe">
-                                <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:93%;height:93%;"></iframe>
+                                <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>              
+            {% endif %}
+            {% if books %}
             <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -226,15 +308,22 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Books' %}</h4>
-                            <p>{% trans 'Want to dig deeper? Read these books:' %}</p>
-                            <ul>
-                                <li> Great Book 1</li>
-                                <li> Super great Book 2</li>
-                            </ul>    
+                            {% for book in books %}
+                            <div class="media">
+                                <img class="d-flex align-self-start mr-3" style="max-width:20%;max-height:20%;" src="{{ book.url }}" alt="{{ book.author }} - {{ book.title }}">
+                                <div class="media-body">
+                                    </br>
+                                    </br>
+                                    <h5 class="mt-0 font-weight-bold">{{ book.author }} - {{ book.title }}</h5>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>              
+            {% endif %}
+            {% if questions %}
             <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -243,7 +332,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Questions' %}</h4>
-                            <p>{% trans 'Share your hearts together by discussing the following questions:' %}</p>
+                            <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
                                 {% for question in questions %}
                                 <li>{{ question.text }}</li>
@@ -253,6 +342,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>         
     </div>
 </section>

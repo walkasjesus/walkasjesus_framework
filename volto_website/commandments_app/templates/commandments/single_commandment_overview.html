@@ -2,12 +2,11 @@
 {% load i18n %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
-        <!-- Background images contains a bug that it won't be displayed if multiple images are in the loop -->
-        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% for image in commandment.images %}{{ image.file.url }}{% endfor %}');">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{{ background_drawing.url }}');">
             <div class="text-content p-4 text-center">
                 <h3>{{ commandment.title }}</h3>
                 <p class="">
-                    <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> More info</a>
+                    <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
                 </p>
             </div>
         </div>

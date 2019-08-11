@@ -18,8 +18,8 @@ class QuestionInline(admin.TabularInline):
     extra = 0
 
 
-class ImageInline(admin.TabularInline):
-    model = Image
+class DrawingInline(admin.TabularInline):
+    model = Drawing
     extra = 0
 
 
@@ -28,8 +28,13 @@ class SongInline(admin.TabularInline):
     extra = 0
 
 
-class VideoInline(admin.TabularInline):
-    model = Video
+class MovieInline(admin.TabularInline):
+    model = Movie
+    extra = 0
+
+
+class ShortmovieInline(admin.TabularInline):
+    model = Shortmovie
     extra = 0
 
 
@@ -38,15 +43,34 @@ class SermonInline(admin.TabularInline):
     extra = 0
 
 
+class PictureInline(admin.TabularInline):
+    model = Picture
+    extra = 0
+
+
+class TestimonyInline(admin.TabularInline):
+    model = Testimony
+    extra = 0
+
+
+class BookInline(admin.TabularInline):
+    model = Book
+    extra = 0
+
+
 class CommandmentAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,
         QuestionInline,
-        ImageInline,
+        DrawingInline,
         SongInline,
-        VideoInline,
+        MovieInline,
+        ShortmovieInline,
         SermonInline,
+        PictureInline,
+        TestimonyInline,
+        BookInline,
     ]
 
 

@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-10 19:36+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2019-08-11 16:40+0200\n"
+"PO-Revision-Date: 2019-08-11 16:40+0000\n"
+"Last-Translator: b'  <admin@email.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.9.3\n"
 
 #: .\account_app\templates\account\change_password.html:8
 #: .\account_app\templates\account\profile.html:8
@@ -161,10 +162,8 @@ msgid "Leviticus"
 msgstr "Leviticus"
 
 #: .\commandments_app\models.py:35
-#, fuzzy
-#| msgid "November"
 msgid "Numbers"
-msgstr "Numerie"
+msgstr "Numeri"
 
 #: .\commandments_app\models.py:36
 msgid "Deuteronomy"
@@ -422,15 +421,15 @@ msgstr "Kan de tekst niet laden op dit moment."
 #, fuzzy
 #| msgid "Duration"
 msgid "Description"
-msgstr "Looptijd"
+msgstr "Beschrijving"
 
 #: .\commandments_app\templates\commandments\detail.html:99
 msgid "Bible References"
-msgstr ""
+msgstr "Bijbelverwijzingen"
 
 #: .\commandments_app\templates\commandments\detail.html:108
 msgid "More Bible References"
-msgstr ""
+msgstr "Meer Bijbelverwijzingen"
 
 #: .\commandments_app\templates\commandments\detail.html:127
 msgid "Drawings"
@@ -462,7 +461,7 @@ msgstr "Boeken"
 
 #: .\commandments_app\templates\commandments\detail.html:229
 msgid "Want to dig deeper? Read these books:"
-msgstr ""
+msgstr "Meer weten? Lees deze boeken:"
 
 #: .\commandments_app\templates\commandments\detail.html:245
 msgid "Questions"
@@ -528,27 +527,26 @@ msgid "I have commanded you"
 msgstr "van al wat ik u heb geboden"
 
 #: .\commandments_app\templates\commandments\index.html:59
-#, fuzzy
 msgid "Unique commandments"
-msgstr "geboden"
+msgstr "Unieke geboden"
 
 #: .\commandments_app\templates\commandments\index.html:70
 msgid "Bible references"
-msgstr ""
+msgstr "Bijbelverwijzingen"
 
 #: .\commandments_app\templates\commandments\index.html:81
 msgid "Languages"
-msgstr ""
+msgstr "Talen"
 
 #: .\commandments_app\templates\commandments\index.html:106
 #: .\commandments_app\templates\commandments\listing.html:12
-#: .\templates\base.html:99
+#: .\templates\base.html:100
 msgid "If you love Me"
 msgstr "Als u Mij liefhebt"
 
 #: .\commandments_app\templates\commandments\index.html:106
 #: .\commandments_app\templates\commandments\listing.html:12
-#: .\templates\base.html:99
+#: .\templates\base.html:100
 msgid "keep my commands"
 msgstr "Neem dan mijn geboden in acht"
 
@@ -567,11 +565,8 @@ msgstr ""
 
 #: .\commandments_app\templates\commandments\index.html:108
 #: .\commandments_app\templates\commandments\listing.html:14
-#, fuzzy
-#| msgid ""
-#| "Bible References, Drawings, Movies, Songs, Sermons, Pictures, Books"
 msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures and Books"
-msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's, Boeken"
+msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's en Boeken"
 
 #: .\commandments_app\templates\commandments\index.html:108
 #: .\commandments_app\templates\commandments\listing.html:14
@@ -632,35 +627,39 @@ msgstr "Home"
 msgid "Commandments"
 msgstr "Geboden"
 
-#: .\templates\base.html:128
+#: .\templates\base.html:129
 msgid "profile"
 msgstr "profiel"
 
-#: .\templates\base.html:129
+#: .\templates\base.html:130
 msgid "logout"
 msgstr "uitloggen"
 
-#: .\templates\base.html:131
+#: .\templates\base.html:132
 msgid "login"
 msgstr "Log in"
 
-#: .\templates\base.html:132
+#: .\templates\base.html:133
 msgid "register"
 msgstr "registreren"
 
-#: .\templates\base.html:136
+#: .\templates\base.html:137
 msgid "admin"
 msgstr "beheerder"
 
-#: .\templates\base.html:143
+#: .\templates\base.html:144
 msgid "Contact us"
 msgstr "Neem contact met ons op"
 
-#: .\templates\base.html:145
+#: .\templates\base.html:146
 #, fuzzy
 #| msgid "Email address"
 msgid "Email: "
 msgstr "E-mailadres"
+
+#: .\templates\language.html:15
+msgid "switch language"
+msgstr ""
 
 #: .\venv\Lib\site-packages\django\contrib\messages\apps.py:7
 msgid "Messages"
@@ -1943,7 +1942,7 @@ msgstr "Geen"
 
 #: .\venv\Lib\site-packages\vinaigrette\management\commands\makemessages.py:147
 msgid "Obsolete translation kept alive with Viniagrette"
-msgstr ""
+msgstr "Verouderde vertaling, door Viniagretta behouden"
 
 #: .\commandments_app.Commandment/title:1
 msgid "Repent and believe the gospel"
@@ -2329,13 +2328,13 @@ msgstr "Hoed mijn schapen, of laat je hoeden door een herder"
 
 #: .\commandments_app.Commandment/description:77
 msgid "Verplicht"
-msgstr ""
+msgstr "Verplicht"
 
-#: .\volto_website\settings.py:121
+#: .\volto_website\settings.py:122
 msgid "English"
 msgstr "Engels"
 
-#: .\volto_website\settings.py:122
+#: .\volto_website\settings.py:123
 msgid "Dutch"
 msgstr "Nederlands"
 

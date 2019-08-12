@@ -153,7 +153,9 @@
 			} 
 			if ( st > 350 ) {
 				if ( !navbar.hasClass('awake') ) {
-					navbar.addClass('awake');	
+					if(document.URL.indexOf("\/commandments\/detail\/") <= 0){ 
+						navbar.addClass('awake');	
+					}
 				}
 				
 				if(sd.length > 0) {

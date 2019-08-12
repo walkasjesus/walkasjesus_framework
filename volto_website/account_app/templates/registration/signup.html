@@ -9,8 +9,21 @@
           <div class="col-md-7 heading-section text-center ftco-animate">
             <span class="subheading">{% trans 'Signup' %}</span>
             <h2 class="mb-4">{% trans 'Register for a new account' %}</h2>
-            <p>{% trans 'Creating a new account will enable you to personalize the website, and give feedback.' %}</p>
-          </div>
+            <p>{% trans 'The content of this website is made possible by contributors around the world. You can help improving by:' %}</p>
+
+			<div class="list-group-flush">
+					<div class="list-group-item">
+						<div class="signup-icon"><img src="{% static 'images/languages.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Translating to your language, since most translation is done automatically, corrections are very welcome!' %}</p></div>
+					</div>
+					<div class="list-group-item">
+	   					<div class="signup-icon"><img src="{% static 'images/bible.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding or correcting commandments along with their Bible references' %}</p></div>
+					</div>
+					<div class="list-group-item">
+						<div class="signup-icon"><img src="{% static 'images/media.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding media items (Movies, Books, Testimonies, Songs, Pictures, Illustrations and Sermons) which are related to the corresponding commandment' %}</p></div>
+					</div>
+			</div>
+
+		</div>
         </div>
 
         <div class="row block-9">

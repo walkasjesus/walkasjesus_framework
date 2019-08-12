@@ -4,7 +4,10 @@ from bible_lib import BibleFactory
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
+from url_or_relative_url_field.fields import URLOrRelativeURLField
 
+class Redirect(models.Model):
+    url = URLOrRelativeURLField()
 
 class CommandmentCategories(Enum):
     Salvation = gettext_lazy('Salvation commands')
@@ -189,7 +192,7 @@ class Media(models.Model):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     title = models.CharField(max_length=128, default='')
     author = models.CharField(max_length=64, default='')
-    url = models.URLField(default='#')
+    url = URLOrRelativeURLField(default='#')
     is_public = models.BooleanField(default=False)
 
     class Meta:

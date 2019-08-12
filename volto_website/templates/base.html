@@ -73,6 +73,9 @@
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
+            {% if user.is_superuser %}
+            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'admin' %}</span></a></li>
+            {% endif %}
             {% if user.is_authenticated %}
 	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'profile' %} ({{ user.username }})</span></a></li>
 	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'logout' %}</span></a></li>

@@ -72,8 +72,13 @@
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
+            {% if user.is_authenticated %}
+	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'profile' %} ({{ user.username }})</span></a></li>
+	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'logout' %}</span></a></li>
+            {% else %}
+            <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
+            <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
+            {% endif %}
 	          <li class="nav-item"><span>{% include "language.html" %}</span></li>
 	        </ul>
 	      </div>
@@ -99,9 +104,9 @@
             <div class="ftco-footer-widget mb-4">
               <h2 class="ftco-heading-2 logo"><span>{% trans 'If you love Me' %}</span> {% trans 'keep my commands' %}</h2>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                <li class="ftco-animate"><a href="https://twitter.com/JCommandments"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.facebook.com/jesus.commandments.144"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/jesuscommandments/"><span class="icon-instagram"></span></a></li>
               </ul>
             </div>
           </div>
@@ -109,14 +114,9 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">About</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Staff</a></li>
                 <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Beliefs</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>History</a></li>
                 <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Mission</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Wedding &amp; Funerals</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Jobs &amp; Internship</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Fellowships</a></li>
-
+                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Contributors</a></li>
               </ul>
             </div>
           </div>

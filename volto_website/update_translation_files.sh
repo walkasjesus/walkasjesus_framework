@@ -7,6 +7,8 @@ else
 fi
 echo "Adding new texts to the .po files."
 python manage.py makemessages -l nl
+python manage.py makemessages -l fr
+python manage.py makemessages -l de
 echo "Import dutch translation from the csv file"
 python manage.py import_dutch_translation
 echo "Translating files."

@@ -9,46 +9,45 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-13 14:55+0000\n"
-"PO-Revision-Date: 2019-08-12 20:05+0000\n"
-"Last-Translator: b'  <>'\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Translated-Using: django-rosetta 0.9.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: account_app/templates/account/change_password.html:8
 #: account_app/templates/account/profile.html:21
 msgid "Save changes"
-msgstr "Wijzigingen opslaan"
+msgstr ""
 
 #: account_app/templates/account/index.html:6
 #: account_app/templates/registration/signup.html:12
 msgid "Signup"
-msgstr "Inschrijven"
+msgstr ""
 
 #: account_app/templates/account/index.html:7
 #: account_app/templates/account/login.html:11 templates/base.html:84
 msgid "Login"
-msgstr "Log in"
+msgstr ""
 
 #: account_app/templates/account/index.html:8
 msgid "Logout"
-msgstr "Uitloggen"
+msgstr ""
 
 #: account_app/templates/account/index.html:9
 msgid "Profile"
-msgstr "Profiel"
+msgstr ""
 
 #: account_app/templates/account/index.html:10
 msgid "Change password"
-msgstr "Wachtwoord wijzigen"
+msgstr ""
 
 #: account_app/templates/account/login.html:10
 msgid "Contribute"
-msgstr "Bijdragen"
+msgstr ""
 
 #: account_app/templates/account/login.html:12
 #: account_app/templates/account/profile.html:12
@@ -56,545 +55,530 @@ msgid ""
 "Thank you for helping in teaching the words and commandments of Jesus all "
 "around the world!"
 msgstr ""
-"Bedankt dat je hebt geholpen bij het onderwijzen van de woorden en geboden "
-"van Jezus over de hele wereld!"
 
 #: account_app/templates/account/login.html:20
 msgid "Your username and password didn\\"
-msgstr "Uw gebruikersnaam en wachtwoord kwamen niet overeen"
+msgstr ""
 
 #: account_app/templates/account/login.html:29
 msgid "Please login to see this page."
-msgstr "Log in om deze pagina te bekijken."
+msgstr ""
 
 #: account_app/templates/account/login.html:51
 msgid "Not an account yet and want to contribute? Please register"
-msgstr "Nog geen account en wil je bijdragen? Registreer alsjeblieft"
+msgstr ""
 
 #: account_app/templates/account/profile.html:10
-#, fuzzy
-#| msgid "profile"
 msgid "My profile"
-msgstr "profiel"
+msgstr ""
 
 #: account_app/templates/account/profile.html:11
-#, fuzzy
-#| msgid "Profile"
 msgid "My Profile"
-msgstr "Profiel"
+msgstr ""
 
 #: account_app/templates/registration/signup.html:13
 msgid "Register for a new account"
-msgstr "Registreer voor een nieuw account"
+msgstr ""
 
 #: account_app/templates/registration/signup.html:14
 msgid ""
 "The content of this website is made possible by contributors around the "
 "world. You can help improving by:"
 msgstr ""
-"De inhoud van deze website wordt mogelijk gemaakt door medewerkers over de "
-"hele wereld. U kunt helpen verbeteren door:"
 
 #: account_app/templates/registration/signup.html:18
 msgid ""
 "Translating to your language, since most translation is done automatically, "
 "corrections are very welcome!"
 msgstr ""
-"Vertalen naar uw taal, aangezien de meeste vertalingen automatisch worden "
-"gedaan, zijn correcties van harte welkom!"
 
 #: account_app/templates/registration/signup.html:21
 msgid "Adding or correcting commandments along with their Bible references"
-msgstr "Geboden toevoegen of corrigeren samen met hun bijbelverwijzingen"
+msgstr ""
 
 #: account_app/templates/registration/signup.html:24
 msgid ""
 "Adding media items (Movies, Books, Testimonies, Songs, Pictures, "
-"Illustrations and Sermons) which are related to the corresponding "
-"commandment"
+"Illustrations and Sermons) which are related to the corresponding commandment"
 msgstr ""
-"Toevoegen van media-items (films, boeken, getuigenissen, liedjes, "
-"afbeeldingen, illustraties en preken) die betrekking hebben op het "
-"overeenkomstige gebod"
 
 #: account_app/templates/registration/signup.html:36
 msgid "Sign up"
-msgstr "Inschrijven"
+msgstr ""
 
 #: account_app/views.py:36
 msgid "Your profile was successfully updated!"
-msgstr "Uw profiel is succesvol bijgewerkt!"
+msgstr ""
 
 #: account_app/views.py:39 account_app/views.py:57
 msgid "Please correct the error below."
-msgstr "Corrigeer de onderstaande dubbele waarden."
+msgstr ""
 
 #: account_app/views.py:54
 msgid "Your password was successfully updated!"
-msgstr "Uw wachtwoord is succesvol bijgewerkt!"
+msgstr ""
 
 #: commandments_app/models.py:13
 msgid "Salvation commands"
-msgstr "Redding geboden"
+msgstr ""
 
 #: commandments_app/models.py:14
 msgid "Discipleship Commands"
-msgstr "Discipelschap geboden"
+msgstr ""
 
 #: commandments_app/models.py:15
 msgid "Effective worship commands"
-msgstr "Effectieve aanbidding geboden"
+msgstr ""
 
 #: commandments_app/models.py:16
 msgid "Blessings"
-msgstr "Zaligsprekingen"
+msgstr ""
 
 #: commandments_app/models.py:17
 msgid "Judgment Seat and Rewards commands"
-msgstr "Beoordeling en Beloningen"
+msgstr ""
 
 #: commandments_app/models.py:18
 msgid "Relationship Commands"
-msgstr "Relatie geboden"
+msgstr ""
 
 #: commandments_app/models.py:19
 msgid "Marriage commands"
-msgstr "Huwelijks geboden"
+msgstr ""
 
 #: commandments_app/models.py:20
 msgid "Persecution Commands"
-msgstr "Vervolgings geboden"
+msgstr ""
 
 #: commandments_app/models.py:21
 msgid "How to Be, Do or Think commands"
-msgstr "geboden om te zijn, doen of denken"
+msgstr ""
 
 #: commandments_app/models.py:22
 msgid "Ethic of Love"
-msgstr "Ethiek van liefde"
+msgstr ""
 
 #: commandments_app/models.py:23
 msgid "Prayer Commands"
-msgstr "Gebeds geboden"
+msgstr ""
 
 #: commandments_app/models.py:24
 msgid "False Teachers Commands"
-msgstr "Valse leraren geboden"
+msgstr ""
 
 #: commandments_app/models.py:25
 msgid "Evangelism and Missions"
-msgstr "Evangelisatie en missies"
+msgstr ""
 
 #: commandments_app/models.py:26
 msgid "Greatest Commands"
-msgstr "Belangrijkste geboden"
+msgstr ""
 
 #: commandments_app/models.py:27
 msgid "Finance Commands"
-msgstr "Financiële geboden"
+msgstr ""
 
 #: commandments_app/models.py:28
 msgid "End Times"
-msgstr "Einddtijd"
+msgstr ""
 
 #: commandments_app/models.py:35
 msgid "Genesis"
-msgstr "Genesis"
+msgstr ""
 
 #: commandments_app/models.py:36
 msgid "Exodus"
-msgstr "Exodus"
+msgstr ""
 
 #: commandments_app/models.py:37
 msgid "Leviticus"
-msgstr "Leviticus"
+msgstr ""
 
 #: commandments_app/models.py:38
 msgid "Numbers"
-msgstr "Numeri"
+msgstr ""
 
 #: commandments_app/models.py:39
 msgid "Deuteronomy"
-msgstr "Deuteronomium"
+msgstr ""
 
 #: commandments_app/models.py:40
 msgid "Joshua"
-msgstr "Jozua"
+msgstr ""
 
 #: commandments_app/models.py:41
 msgid "Judges"
-msgstr "Rechters"
+msgstr ""
 
 #: commandments_app/models.py:42
 msgid "Ruth"
-msgstr "Ruth"
+msgstr ""
 
 #: commandments_app/models.py:43
 msgid "1 Samuel"
-msgstr "1 Samuël"
+msgstr ""
 
 #: commandments_app/models.py:44
 msgid "2 Samuel"
-msgstr "2 Samuël"
+msgstr ""
 
 #: commandments_app/models.py:45
 msgid "1 Kings"
-msgstr "1 Koningen"
+msgstr ""
 
 #: commandments_app/models.py:46
 msgid "2 Kings"
-msgstr "2 Koningen"
+msgstr ""
 
 #: commandments_app/models.py:47
 msgid "1 Chronicles"
-msgstr "1 Kronieken"
+msgstr ""
 
 #: commandments_app/models.py:48
 msgid "2 Chronicles"
-msgstr "2 Kronieken"
+msgstr ""
 
 #: commandments_app/models.py:49
 msgid "Ezra"
-msgstr "Ezra"
+msgstr ""
 
 #: commandments_app/models.py:50
 msgid "Nehemiah"
-msgstr "Nehemia"
+msgstr ""
 
 #: commandments_app/models.py:51
 msgid "Esther"
-msgstr "Esther"
+msgstr ""
 
 #: commandments_app/models.py:52
 msgid "Job"
-msgstr "Job"
+msgstr ""
 
 #: commandments_app/models.py:53
 msgid "Psalms"
-msgstr "Psalmen"
+msgstr ""
 
 #: commandments_app/models.py:54
 msgid "Proverbs"
-msgstr "Spreuken"
+msgstr ""
 
 #: commandments_app/models.py:55
 msgid "Ecclesiastes"
-msgstr "Prediker"
+msgstr ""
 
 #: commandments_app/models.py:56
 msgid "Song of Solomon"
-msgstr "Hooglied"
+msgstr ""
 
 #: commandments_app/models.py:57
 msgid "Isaiah"
-msgstr "Jesaja"
+msgstr ""
 
 #: commandments_app/models.py:58
 msgid "Jeremiah"
-msgstr "Jeremiah"
+msgstr ""
 
 #: commandments_app/models.py:59
 msgid "Lamentations"
-msgstr "Klaagliederen"
+msgstr ""
 
 #: commandments_app/models.py:60
 msgid "Ezekiel"
-msgstr "Ezechiël"
+msgstr ""
 
 #: commandments_app/models.py:61
 msgid "Daniel"
-msgstr "Daniël"
+msgstr ""
 
 #: commandments_app/models.py:62
 msgid "Hosea"
-msgstr "Hosea"
+msgstr ""
 
 #: commandments_app/models.py:63
 msgid "Joel"
-msgstr "Joël"
+msgstr ""
 
 #: commandments_app/models.py:64
 msgid "Amos"
-msgstr "Amos"
+msgstr ""
 
 #: commandments_app/models.py:65
 msgid "Obadiah"
-msgstr "Obadja"
+msgstr ""
 
 #: commandments_app/models.py:66
 msgid "Jonah"
-msgstr "Jona"
+msgstr ""
 
 #: commandments_app/models.py:67
 msgid "Micah"
-msgstr "Micha"
+msgstr ""
 
 #: commandments_app/models.py:68
 msgid "Nahum"
-msgstr "Nahum"
+msgstr ""
 
 #: commandments_app/models.py:69
 msgid "Habakkuk"
-msgstr "Habakuk"
+msgstr ""
 
 #: commandments_app/models.py:70
 msgid "Zephaniah"
-msgstr "Zefanja"
+msgstr ""
 
 #: commandments_app/models.py:71
 msgid "Haggai"
-msgstr "Haggai"
+msgstr ""
 
 #: commandments_app/models.py:72
 msgid "Zechariah"
-msgstr "Zacharia"
+msgstr ""
 
 #: commandments_app/models.py:73
 msgid "Malachi"
-msgstr "Maleachi"
+msgstr ""
 
 #: commandments_app/models.py:74
 msgid "Matthew"
-msgstr "Mattheüs"
+msgstr ""
 
 #: commandments_app/models.py:75
 msgid "Mark"
-msgstr "Markus"
+msgstr ""
 
 #: commandments_app/models.py:76
 msgid "Luke"
-msgstr "Lukas"
+msgstr ""
 
 #: commandments_app/models.py:77
 msgid "John"
-msgstr "Johannes"
+msgstr ""
 
 #: commandments_app/models.py:78
 msgid "Acts (of the Apostles)"
-msgstr "Handelingen"
+msgstr ""
 
 #: commandments_app/models.py:79
 msgid "Romans"
-msgstr "Romeinen"
+msgstr ""
 
 #: commandments_app/models.py:80
 msgid "1 Corinthians"
-msgstr "1 Korinthiërs"
+msgstr ""
 
 #: commandments_app/models.py:81
 msgid "2 Corinthians"
-msgstr "2 Korinthiërs"
+msgstr ""
 
 #: commandments_app/models.py:82
 msgid "Galatians"
-msgstr "Galaten"
+msgstr ""
 
 #: commandments_app/models.py:83
 msgid "Ephesians"
-msgstr "Efeziërs"
+msgstr ""
 
 #: commandments_app/models.py:84
 msgid "Philippians"
-msgstr "Filipijnen"
+msgstr ""
 
 #: commandments_app/models.py:85
 msgid "Colossians"
-msgstr "Kolossenzen"
+msgstr ""
 
 #: commandments_app/models.py:86
 msgid "1 Thessalonians"
-msgstr "1 Tessalonicenzen"
+msgstr ""
 
 #: commandments_app/models.py:87
 msgid "2 Thessalonians"
-msgstr "2 Tessalonicenzen"
+msgstr ""
 
 #: commandments_app/models.py:88
 msgid "1 Timothy"
-msgstr "1 Timotheüs"
+msgstr ""
 
 #: commandments_app/models.py:89
 msgid "2 Timothy"
-msgstr "2 Timotheüs"
+msgstr ""
 
 #: commandments_app/models.py:90
 msgid "Titus"
-msgstr "Titus"
+msgstr ""
 
 #: commandments_app/models.py:91
 msgid "Philemon"
-msgstr "Filemon"
+msgstr ""
 
 #: commandments_app/models.py:92
 msgid "Hebrews"
-msgstr "Hebreeën"
+msgstr ""
 
 #: commandments_app/models.py:93
 msgid "James"
-msgstr "Jakobes"
+msgstr ""
 
 #: commandments_app/models.py:94
 msgid "1 Peter"
-msgstr "1 Petrus"
+msgstr ""
 
 #: commandments_app/models.py:95
 msgid "2 Peter"
-msgstr "2 Petrus"
+msgstr ""
 
 #: commandments_app/models.py:96
 msgid "1 John"
-msgstr "1 Johannes"
+msgstr ""
 
 #: commandments_app/models.py:97
 msgid "2 John"
-msgstr "2 Johannes"
+msgstr ""
 
 #: commandments_app/models.py:98
 msgid "3 John"
-msgstr "3 Johannes"
+msgstr ""
 
 #: commandments_app/models.py:99
 msgid "Jude"
-msgstr "Judas"
+msgstr ""
 
 #: commandments_app/models.py:100
 msgid "Revelation"
-msgstr "Openbaring"
+msgstr ""
 
 #: commandments_app/models.py:155
 msgid "Could not load text at the moment."
-msgstr "Kan de tekst niet laden op dit moment."
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:106
 msgid "Description"
-msgstr "Beschrijving"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:120
 msgid "Bible References"
-msgstr "Bijbelverwijzingen"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:129
 msgid "More Bible References"
-msgstr "Meer Bijbelverwijzingen"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:148
 msgid "Drawings"
-msgstr "Illustraties"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:166
 msgid "Short Movies"
-msgstr "Korte films"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:186
 msgid "Songs"
-msgstr "Muziek"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:206
 msgid "Movies"
-msgstr "Films"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:226
 msgid "Pictures"
-msgstr "Afbeeldingen"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:270
 msgid "Testimonies"
-msgstr "Getuigenissen"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:290
 msgid "Sermons"
-msgstr "Preken"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:310
 msgid "Books"
-msgstr "Boeken"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:334
 msgid "Questions"
-msgstr "Vragen"
+msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:335
 msgid "Share your hearts together by discussing the following questions:"
-msgstr "Deel uw harten door de volgende vragen te bespreken:"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:15 templates/base.html:6
 #: templates/base.html:67
 msgid "Jesus commandments"
-msgstr "Jezus geboden"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:17
 msgid "Following Jesus"
-msgstr "Jezus Volgen"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:17
 msgid "#howto"
-msgstr "#hoedan"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:18
 msgid "Jesus tought many different things. We help applying all"
-msgstr "Jezus onderwees in vele verschillende dingen. Wij helpen om alle"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:18
 msgid "unique commandments in your daily life"
-msgstr "unieke geboden toe te passen in uw dagelijks leven"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:19
-#: commandments_app/templates/commandments/index.html:37
-#: templates/base.html:83
+#: commandments_app/templates/commandments/index.html:37 templates/base.html:83
 msgid "Help improving"
-msgstr "Meehelpen"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:33
 msgid "Matthew 28:19-20"
-msgstr "Mattheüs 28:19"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:35
 msgid "Therefore go and make"
-msgstr "maakt dan voort maakt alle volkeren tot"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:35
 msgid "Disciples"
-msgstr "Leerlingen"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:35
 msgid "of all nations"
-msgstr " "
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:36
 msgid "Teaching them to"
-msgstr "Hen onderrichtend"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:36
 msgid "obey everything"
-msgstr "in het bewaren"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:36
 msgid "I have commanded you"
-msgstr "van al wat ik u heb geboden"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:59
 msgid "Unique commandments"
-msgstr "Unieke geboden"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:70
 msgid "Bible references"
-msgstr "Bijbelverwijzingen"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:81
 msgid "Languages"
-msgstr "Talen"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:106
 #: commandments_app/templates/commandments/listing.html:12
 #: templates/base.html:109
 msgid "If you love Me"
-msgstr "Als u Mij liefhebt"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:106
 #: commandments_app/templates/commandments/listing.html:12
 #: templates/base.html:109
 msgid "keep my commands"
-msgstr "Neem dan mijn geboden in acht"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:107
 #: commandments_app/templates/commandments/listing.html:13
@@ -602,206 +586,192 @@ msgid ""
 "This website will help you in applying all commandments in your life. How? "
 "For each commandment, we collect as much as possible related"
 msgstr ""
-"Deze website helpt u om alle geboden toe te passen in uw leven. Hoe dan? We "
-"verzamelen zoveel mogelijk gerelateerde"
 
 #: commandments_app/templates/commandments/index.html:108
 #: commandments_app/templates/commandments/listing.html:14
 msgid "Bible References, Drawings, Movies, Songs, Sermons, Pictures and Books"
-msgstr "Bijbel verzen, Tekeningen, Films, Muziek, Preken, Foto's en Boeken"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:108
 #: commandments_app/templates/commandments/listing.html:14
 msgid "to feed your heart, soul and mind"
-msgstr "om uw hart, ziel en verstand te voeden"
+msgstr ""
 
 #: commandments_app/templates/commandments/index.html:109
 #: commandments_app/templates/commandments/listing.html:15
 msgid ""
 "All commandments are ideal for personal Bible study, Small Groups, "
-"Discipleship Groups, mentoring, ministry enrichment or meditations in how to"
-" improve your walk with the Lord"
+"Discipleship Groups, mentoring, ministry enrichment or meditations in how to "
+"improve your walk with the Lord"
 msgstr ""
-"Alle geboden zijn ideaal voor persoonlijke Bijbel studie, Kleine groepen, "
-"Dischipelschaps groepen, mentoring, toerustings scholen of meditaties hoe u "
-"uw wandel met Jezus kan verrijken"
 
 #: commandments_app/templates/commandments/index.html:118
 #: commandments_app/templates/commandments/listing.html:24
 msgid "No commandments are available."
-msgstr "Geen geboden gevonden."
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:32
 msgid "first"
-msgstr "eerste"
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:33
 msgid "previous"
-msgstr "voorgaand"
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:37
 msgid "Page"
-msgstr "Pagina"
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:37
 msgid "of"
-msgstr "van"
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:41
 msgid "next"
-msgstr "volgende"
+msgstr ""
 
 #: commandments_app/templates/commandments/listing.html:42
 msgid "last"
-msgstr "laatste"
+msgstr ""
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:9
-#, fuzzy
-#| msgid "#howto"
 msgid "Howto"
-msgstr "#hoedan"
+msgstr ""
 
 #: templates/base.html:69
 msgid "Menu"
-msgstr "Menu"
+msgstr ""
 
 #: templates/base.html:74
 msgid "Home"
-msgstr "Home"
+msgstr ""
 
 #: templates/base.html:75
 msgid "Commandments"
-msgstr "Geboden"
+msgstr ""
 
 #: templates/base.html:77 templates/base.html:141
 msgid "admin"
-msgstr "beheerder"
+msgstr ""
 
 #: templates/base.html:80 templates/base.html:133
 msgid "profile"
-msgstr "profiel"
+msgstr ""
 
 #: templates/base.html:81 templates/base.html:134
 msgid "logout"
-msgstr "uitloggen"
+msgstr ""
 
 #: templates/base.html:136
 msgid "login"
-msgstr "Log in"
+msgstr ""
 
 #: templates/base.html:137
 msgid "register"
-msgstr "registreren"
+msgstr ""
 
 #: templates/base.html:148
 msgid "Contact us"
-msgstr "Neem contact met ons op"
+msgstr ""
 
 #: templates/base.html:150
 msgid "Email: "
-msgstr "E-mailadres"
+msgstr ""
 
 #: templates/language.html:15
 msgid "switch language"
-msgstr "schakel taal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
 msgid "Messages"
-msgstr "Berichten"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/contrib/sitemaps/apps.py:7
 msgid "Site Maps"
-msgstr "Sitekaarten"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/contrib/staticfiles/apps.py:9
 msgid "Static Files"
-msgstr "Statische bestanden"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/contrib/syndication/apps.py:7
 msgid "Syndication"
-msgstr "Syndication"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/paginator.py:45
 msgid "That page number is not an integer"
-msgstr "Dat paginanummer is geen geheel getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/paginator.py:47
 msgid "That page number is less than 1"
-msgstr "Dat paginanummer is minder dan 1"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/paginator.py:52
 msgid "That page contains no results"
-msgstr "Die pagina bevat geen resultaten"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:31
 msgid "Enter a valid value."
-msgstr "Voer een geldige waarde in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:102
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:658
 msgid "Enter a valid URL."
-msgstr "Voer een geldige URL in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:154
 msgid "Enter a valid integer."
-msgstr "Voer een geldig geheel getal in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:165
 msgid "Enter a valid email address."
-msgstr "Voer een geldig e-mailadres in."
+msgstr ""
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
 #: venv/lib/python3.6/site-packages/django/core/validators.py:239
 msgid ""
 "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
 msgstr ""
-"Voer een geldige 'slak' in bestaande uit letters, cijfers, "
-"onderstrepingstekens of koppeltekens."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:246
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
-" hyphens."
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
 msgstr ""
-"Voer een geldige 'slak' in die bestaat uit Unicode-letters, cijfers, "
-"onderstrepingstekens of koppeltekens."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:255
 #: venv/lib/python3.6/site-packages/django/core/validators.py:275
 msgid "Enter a valid IPv4 address."
-msgstr "Voer een geldig IPv4-adres in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:260
 #: venv/lib/python3.6/site-packages/django/core/validators.py:276
 msgid "Enter a valid IPv6 address."
-msgstr "Voer een geldig IPv6-adres in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:270
 #: venv/lib/python3.6/site-packages/django/core/validators.py:274
 msgid "Enter a valid IPv4 or IPv6 address."
-msgstr "Voer een geldig IPv4- of IPv6-adres in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:304
 msgid "Enter only digits separated by commas."
-msgstr "Voer alleen cijfers in, gescheiden door komma's."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:310
 #, python-format
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
 msgstr ""
-"Zorg ervoor dat deze waarde %(limit_value)s is (het is %(show_value)s)."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:342
 #, python-format
 msgid "Ensure this value is less than or equal to %(limit_value)s."
 msgstr ""
-"Zorg ervoor dat deze waarde kleiner is dan of gelijk is aan %(limit_value)s."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:351
 #, python-format
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
 msgstr ""
-"Zorg ervoor dat deze waarde groter is dan of gelijk is aan %(limit_value)s."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:361
 #, python-format
@@ -812,11 +782,7 @@ msgid_plural ""
 "Ensure this value has at least %(limit_value)d characters (it has "
 "%(show_value)d)."
 msgstr[0] ""
-"Zorg ervoor dat deze waarde ten minste %(limit_value)d karakters heeft (het "
-"is %(show_value)d)"
 msgstr[1] ""
-"Zorg ervoor dat deze waarde ten minste %(limit_value)d karakters heeft (het "
-"is %(show_value)d)"
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:376
 #, python-format
@@ -827,31 +793,27 @@ msgid_plural ""
 "Ensure this value has at most %(limit_value)d characters (it has "
 "%(show_value)d)."
 msgstr[0] ""
-"Zorg ervoor dat deze waarde maximaal %(limit_value)d karakters heeft (het is"
-" %(show_value)d)."
 msgstr[1] ""
-"Zorg ervoor dat deze waarde maximaal %(limit_value)d karakters heeft (het is"
-" %(show_value)d)."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:395
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:290
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:325
 msgid "Enter a number."
-msgstr "Voer een nummer in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:397
 #, python-format
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] "Zorg ervoor dat er niet meer dan %(max)s cijfers zijn."
-msgstr[1] "Zorg ervoor dat er niet meer dan %(max)s cijfers zijn."
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:402
 #, python-format
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] "Zorg ervoor dat er niet meer dan %(max)s decimalen zijn."
-msgstr[1] "Zorg ervoor dat er niet meer dan %(max)s decimalen zijn."
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:407
 #, python-format
@@ -860,9 +822,7 @@ msgid ""
 msgid_plural ""
 "Ensure that there are no more than %(max)s digits before the decimal point."
 msgstr[0] ""
-"Zorg ervoor dat er niet meer dan %(max)s cijfers staan voor de komma."
 msgstr[1] ""
-"Zorg ervoor dat er niet meer dan %(max)s cijfers staan voor de komma."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:469
 #, python-format
@@ -870,40 +830,38 @@ msgid ""
 "File extension '%(extension)s' is not allowed. Allowed extensions are: "
 "'%(allowed_extensions)s'."
 msgstr ""
-"Bestandsextensie '%(extension)s' is niet toegestaan. Toegestane extensies "
-"zijn: '%(allowed_extensions)s'."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:521
 msgid "Null characters are not allowed."
-msgstr "Null tekens zijn niet toegestaan."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/base.py:1162
 #: venv/lib/python3.6/site-packages/django/forms/models.py:756
 msgid "and"
-msgstr "en"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/base.py:1164
 #, python-format
 msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr "%(model_name)s met deze %(field_labels)s bestaat al."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:104
 #, python-format
 msgid "Value %(value)r is not a valid choice."
-msgstr "Waarde %(value)r is geen geldige keuze."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:105
 msgid "This field cannot be null."
-msgstr "Dit veld kan niet nul zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:106
 msgid "This field cannot be blank."
-msgstr "Dit veld mag niet leeg zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:107
 #, python-format
 msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "%(model_name)s met dit %(field_label)s bestaat al."
+msgstr ""
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
@@ -912,51 +870,50 @@ msgstr "%(model_name)s met dit %(field_label)s bestaat al."
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
-"%(field_label)s moet uniek zijn voor %(date_field_label)s %(lookup_type)s."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:128
 #, python-format
 msgid "Field of type: %(field_type)s"
-msgstr "Veldtype: %(field_type)s"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:899
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1766
 msgid "Integer"
-msgstr "Geheel getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:903
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1764
 #, python-format
 msgid "'%(value)s' value must be an integer."
-msgstr "De waarde '%(value)s' moet een geheel getal zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:978
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1844
 msgid "Big (8 byte) integer"
-msgstr "Groot (8 byte) geheel getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:990
 #, python-format
 msgid "'%(value)s' value must be either True or False."
-msgstr "De waarde '%(value)s' moet True of False zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:991
 #, python-format
 msgid "'%(value)s' value must be either True, False, or None."
-msgstr "De waarde '%(value)s' moet True, False of None zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:993
 msgid "Boolean (Either True or False)"
-msgstr "Boolean (True of False)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1034
 #, python-format
 msgid "String (up to %(max_length)s)"
-msgstr "String (tot %(max_length)s)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1098
 msgid "Comma-separated integers"
-msgstr "Door komma's gescheiden gehele getallen"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1147
 #, python-format
@@ -964,8 +921,6 @@ msgid ""
 "'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
 "format."
 msgstr ""
-"'%(value)s' waarde heeft een ongeldige datumnotatie. Het moet de indeling "
-"JJJJ-MM-DD hebben."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1149
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1292
@@ -974,112 +929,104 @@ msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
 "date."
 msgstr ""
-"De waarde '%(value)s' heeft de juiste indeling (JJJJ-MM-DD) maar is een "
-"ongeldige datum."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1152
 msgid "Date (without time)"
-msgstr "Datum (zonder tijd)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1290
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ] format."
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
 msgstr ""
-"De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
-"JJJJ-MM-DD HH:MM[:ss[.uuuuuu]][TZ] hebben."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1294
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
 msgstr ""
-"'%(value)s' waarde heeft het juiste formaat (JJJJ-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ]) maar het is een ongeldige datum / tijd."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1298
 msgid "Date (with time)"
-msgstr "Datum (met tijd)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1446
 #, python-format
 msgid "'%(value)s' value must be a decimal number."
-msgstr "De waarde '%(value)s' moet een decimaal getal zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1448
 msgid "Decimal number"
-msgstr "Decimaal getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1587
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] "
-"[HH:[MM:]]ss[.uuuuuu] format."
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
 msgstr ""
-"De waarde '%(value)s' heeft een ongeldige notatie. Het moet de indeling "
-"[HH:[MM:]]ss[.uuuuuu] hebben."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1590
 msgid "Duration"
-msgstr "Looptijd"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1640
 msgid "Email address"
-msgstr "E-mailadres"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1663
 msgid "File path"
-msgstr "Bestandspad"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1729
 #, python-format
 msgid "'%(value)s' value must be a float."
-msgstr "'%(value)s' waarde moet een float zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1731
 msgid "Floating point number"
-msgstr "Drijvend puntnummer"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1860
 msgid "IPv4 address"
-msgstr "IPv4-adres"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1891
 msgid "IP address"
-msgstr "IP adres"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1971
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1972
 #, python-format
 msgid "'%(value)s' value must be either None, True or False."
-msgstr "De waarde '%(value)s' moet None, True of False zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1974
 msgid "Boolean (Either True, False or None)"
-msgstr "Boolean (True, False of None)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2009
 msgid "Positive integer"
-msgstr "Positief integer"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2022
 msgid "Positive small integer"
-msgstr "Positief klein geheel getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2036
 #, python-format
 msgid "Slug (up to %(max_length)s)"
-msgstr "Slug (tot %(max_length)s)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2068
 msgid "Small integer"
-msgstr "Klein geheel getal"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2075
 msgid "Text"
-msgstr "Tekst"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2103
 #, python-format
@@ -1087,8 +1034,6 @@ msgid ""
 "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
-"De waarde '%(value)s heeft een ongeldige notatie. Het moet de indeling "
-"HH:MM[:ss[.uuuuuu]] hebben."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2105
 #, python-format
@@ -1096,140 +1041,129 @@ msgid ""
 "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
-"'%(value)s' waarde heeft het juiste formaat (HH:MM[:ss[.uuuuuu]]) maar het "
-"is een ongeldige tijd."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2108
 msgid "Time"
-msgstr "Tijd"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2234
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2256
 msgid "Raw binary data"
-msgstr "Ruwe binaire gegevens"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2306
 #, python-format
 msgid "'%(value)s' is not a valid UUID."
-msgstr "'%(value)s' is geen geldige UUID."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2308
 msgid "Universally unique identifier"
-msgstr "Universeel unieke identificatiecode"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/files.py:221
 msgid "File"
-msgstr "Bestand"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/files.py:360
 msgid "Image"
-msgstr "Beeld"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:778
 #, python-format
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr "%(model)s exemplaar met %(field)s %(value)r bestaat niet."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:780
 msgid "Foreign Key (type determined by related field)"
-msgstr "Foreign Key (type bepaald door gerelateerd veld)"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1007
 msgid "One-to-one relationship"
-msgstr "Eén op één relatie"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1057
 #, python-format
 msgid "%(from)s-%(to)s relationship"
-msgstr "%(from)s-%(to)s relatie"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1058
 #, python-format
 msgid "%(from)s-%(to)s relationships"
-msgstr "%(from)s-%(to)s relaties"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1100
 msgid "Many-to-many relationship"
-msgstr "Veel-op-veel-relatie"
+msgstr ""
 
 #. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the
-#. label
+#. characters will prevent the default label_suffix to be appended to the label
 #: venv/lib/python3.6/site-packages/django/forms/boundfield.py:146
 msgid ":?.!"
-msgstr ":?.!"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:53
 msgid "This field is required."
-msgstr "Dit veld is verplicht."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:245
 msgid "Enter a whole number."
-msgstr "Voer een heel nummer in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:396
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:1126
 msgid "Enter a valid date."
-msgstr "Voer een geldige datum in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:420
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:1127
 msgid "Enter a valid time."
-msgstr "Voer een geldige tijd in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:442
 msgid "Enter a valid date/time."
-msgstr "Voer een geldige datum / tijd in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:471
 msgid "Enter a valid duration."
-msgstr "Voer een geldige duur in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:472
 #, python-brace-format
 msgid "The number of days must be between {min_days} and {max_days}."
-msgstr "Het aantal dagen moet tussen {min_days} en {max_days} zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:532
 msgid "No file was submitted. Check the encoding type on the form."
 msgstr ""
-"Er is geen bestand ingediend. Controleer het coderingstype op het formulier."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:533
 msgid "No file was submitted."
-msgstr "Er is geen bestand ingediend."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:534
 msgid "The submitted file is empty."
-msgstr "Het ingediende bestand is leeg."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:536
 #, python-format
-msgid ""
-"Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
 "Ensure this filename has at most %(max)d characters (it has %(length)d)."
 msgstr[0] ""
-"Zorg dat de bestandsnaam maximaal %(max)d karakters heeft (het is "
-"%(length)d)."
 msgstr[1] ""
-"Zorg dat de bestandsnaam maximaal %(max)d karakters heeft (het is "
-"%(length)d)."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:539
 msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr "Dien een bestand in of schakel het selectievakje in, niet beide."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:600
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
-"Upload een geldige afbeelding. Het bestand dat je hebt geüpload was geen "
-"afbeelding of een beschadigde afbeelding."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:762
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:852
@@ -1237,69 +1171,67 @@ msgstr ""
 #, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
-"Selecteer een geldige keuze. %(value)s is niet een van de beschikbare "
-"keuzes."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:853
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:968
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1269
 msgid "Enter a list of values."
-msgstr "Voer een zoeklijst in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:969
 msgid "Enter a complete value."
-msgstr "Voer een volledige waarde in."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:1185
 msgid "Enter a valid UUID."
-msgstr "Voer een geldige UUID in."
+msgstr ""
 
 #. Translators: This is the default suffix added to form field labels
 #: venv/lib/python3.6/site-packages/django/forms/forms.py:86
 msgid ":"
-msgstr ":"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/forms.py:212
 #, python-format
 msgid "(Hidden field %(name)s) %(error)s"
-msgstr "(Verborgen veld %(name)s) %(error)s"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:91
 msgid "ManagementForm data is missing or has been tampered with"
-msgstr "ManagementForm-gegevens ontbreken of er is mee geknoeid"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:338
 #, python-format
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
-msgstr[0] "Dien alstublieft %d of minder formulieren in."
-msgstr[1] "Dien alstublieft %d of minder formulieren in."
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:345
 #, python-format
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
-msgstr[0] "Dien alstublieft %d of meer formulieren in."
-msgstr[1] "Dien alstublieft %d of meer formulieren in."
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:371
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:373
 msgid "Order"
-msgstr "Bestellen"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:375
 msgid "Delete"
-msgstr "Verwijder"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:751
 #, python-format
 msgid "Please correct the duplicate data for %(field)s."
-msgstr "Corrigeer de dubbele gegevens voor %(field)s."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:755
 #, python-format
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr "Corrigeer de dubbele gegevens voor %(field)s, die uniek moeten zijn."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:761
 #, python-format
@@ -1307,28 +1239,23 @@ msgid ""
 "Please correct the duplicate data for %(field_name)s which must be unique "
 "for the %(lookup)s in %(date_field)s."
 msgstr ""
-"Corrigeer de dubbele gegevens voor %(field_name)s die uniek moeten zijn voor"
-" de %(lookup)s in %(date_field)s."
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:770
 msgid "Please correct the duplicate values below."
-msgstr "Corrigeer de onderstaande dubbele waarden."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1091
 msgid "The inline value did not match the parent instance."
-msgstr "De inline-waarde kwam niet overeen met de bovenliggende instantie."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1158
-msgid ""
-"Select a valid choice. That choice is not one of the available choices."
+msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
-"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
-"keuzes."
 
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1272
 #, python-format
 msgid "\"%(pk)s\" is not a valid value."
-msgstr "\"%(pk)s\" is geen geldige waarde."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/utils.py:162
 #, python-format
@@ -1336,439 +1263,437 @@ msgid ""
 "%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
 "may be ambiguous or it may not exist."
 msgstr ""
-"%(datetime)s kon niet worden geïnterpreteerd in tijdzone "
-"%(current_timezone)s; het kan dubbelzinnig zijn of het kan niet bestaan."
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:395
 msgid "Clear"
-msgstr "Duidelijk"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:396
 msgid "Currently"
-msgstr "Momenteel"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:397
 msgid "Change"
-msgstr "Verandering"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:711
 msgid "Unknown"
-msgstr "Onbekend"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:712
 msgid "Yes"
-msgstr "Ja"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/forms/widgets.py:713
 msgid "No"
-msgstr "Nee"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:788
 msgid "yes,no,maybe"
-msgstr "Ja! Nee! Misschien"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:817
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:834
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] "%(size)d byte"
-msgstr[1] "%(size)d byte"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:836
 #, python-format
 msgid "%s KB"
-msgstr "%s KB"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:838
 #, python-format
 msgid "%s MB"
-msgstr "%s MB"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:840
 #, python-format
 msgid "%s GB"
-msgstr "%s GB"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:842
 #, python-format
 msgid "%s TB"
-msgstr "%s TB"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:844
 #, python-format
 msgid "%s PB"
-msgstr "%s PB"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:62
 msgid "p.m."
-msgstr "p.m."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:63
 msgid "a.m."
-msgstr "a.m."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:68
 msgid "PM"
-msgstr "PM"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:69
 msgid "AM"
-msgstr "AM"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:150
 msgid "midnight"
-msgstr "middernacht"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dateformat.py:152
 msgid "noon"
-msgstr "middag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:6
 msgid "Monday"
-msgstr "maandag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:6
 msgid "Tuesday"
-msgstr "dinsdag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:6
 msgid "Wednesday"
-msgstr "woensdag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:6
 msgid "Thursday"
-msgstr "donderdag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:6
 msgid "Friday"
-msgstr "vrijdag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:7
 msgid "Saturday"
-msgstr "zaterdag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:7
 msgid "Sunday"
-msgstr "zondag"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:10
 msgid "Mon"
-msgstr "ma"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:10
 msgid "Tue"
-msgstr "Din"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:10
 msgid "Wed"
-msgstr "trouwen"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:10
 msgid "Thu"
-msgstr "Don"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:10
 msgid "Fri"
-msgstr "vr"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:11
 msgid "Sat"
-msgstr "Za"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:11
 msgid "Sun"
-msgstr "Zon"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "January"
-msgstr "januari-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "February"
-msgstr "februari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "March"
-msgstr "maart"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "April"
-msgstr "april"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "May"
-msgstr "mei"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:14
 msgid "June"
-msgstr "juni"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:15
 msgid "July"
-msgstr "juli"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:15
 msgid "August"
-msgstr "augustus"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:15
 msgid "September"
-msgstr "september"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:15
 msgid "October"
-msgstr "oktober"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:15
 msgid "November"
-msgstr "november"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:16
 msgid "December"
-msgstr "december"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "jan"
-msgstr "januari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "feb"
-msgstr "februari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "mar"
-msgstr "bederven"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "apr"
-msgstr "april"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "may"
-msgstr "mei"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:19
 msgid "jun"
-msgstr "juni"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "jul"
-msgstr "juli"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "aug"
-msgstr "augustus"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "sep"
-msgstr "september"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "oct"
-msgstr "oktober"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "nov"
-msgstr "november"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:20
 msgid "dec"
-msgstr "december"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:23
 msgctxt "abbrev. month"
 msgid "Jan."
-msgstr "Januari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:24
 msgctxt "abbrev. month"
 msgid "Feb."
-msgstr "Februari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:25
 msgctxt "abbrev. month"
 msgid "March"
-msgstr "maart"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:26
 msgctxt "abbrev. month"
 msgid "April"
-msgstr "april"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:27
 msgctxt "abbrev. month"
 msgid "May"
-msgstr "mei"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:28
 msgctxt "abbrev. month"
 msgid "June"
-msgstr "juni-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:29
 msgctxt "abbrev. month"
 msgid "July"
-msgstr "juli-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:30
 msgctxt "abbrev. month"
 msgid "Aug."
-msgstr "Augustus"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:31
 msgctxt "abbrev. month"
 msgid "Sept."
-msgstr "September"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:32
 msgctxt "abbrev. month"
 msgid "Oct."
-msgstr "Oktober"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:33
 msgctxt "abbrev. month"
 msgid "Nov."
-msgstr "November"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:34
 msgctxt "abbrev. month"
 msgid "Dec."
-msgstr "December"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:37
 msgctxt "alt. month"
 msgid "January"
-msgstr "januari-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:38
 msgctxt "alt. month"
 msgid "February"
-msgstr "februari"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:39
 msgctxt "alt. month"
 msgid "March"
-msgstr "maart"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:40
 msgctxt "alt. month"
 msgid "April"
-msgstr "april"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:41
 msgctxt "alt. month"
 msgid "May"
-msgstr "mei"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:42
 msgctxt "alt. month"
 msgid "June"
-msgstr "juni-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:43
 msgctxt "alt. month"
 msgid "July"
-msgstr "juli-"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:44
 msgctxt "alt. month"
 msgid "August"
-msgstr "augustus"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:45
 msgctxt "alt. month"
 msgid "September"
-msgstr "september"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:46
 msgctxt "alt. month"
 msgid "October"
-msgstr "oktober"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:47
 msgctxt "alt. month"
 msgid "November"
-msgstr "november"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:48
 msgctxt "alt. month"
 msgid "December"
-msgstr "december"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/ipv6.py:8
 msgid "This is not a valid IPv6 address."
-msgstr "Dit is geen geldig IPv6-adres."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/text.py:67
 #, python-format
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
-msgstr "%(truncated_text)s ..."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/text.py:233
 msgid "or"
-msgstr "of"
+msgstr ""
 
 #. Translators: This string is used as a separator between list elements
 #: venv/lib/python3.6/site-packages/django/utils/text.py:252
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:83
 msgid ", "
-msgstr ", "
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:9
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
-msgstr[0] "%d jaar"
-msgstr[1] "%d jaar"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:10
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
-msgstr[0] "%d maanden"
-msgstr[1] "%d maanden"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:11
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
-msgstr[0] "%d week"
-msgstr[1] "%d week"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:12
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] "%d dag"
-msgstr[1] "%d dag"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:13
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
-msgstr[0] "%d uur"
-msgstr[1] "%d uur"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:14
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
-msgstr[0] "%d minuut"
-msgstr[1] "%d minuut"
+msgstr[0] ""
+msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:72
 msgid "0 minutes"
-msgstr "0 minuten"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:110
 msgid "Forbidden"
-msgstr "Verboden"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:111
 msgid "CSRF verification failed. Request aborted."
-msgstr "CSRF-verificatie is mislukt. Verzoek afgebroken."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:115
 msgid ""
@@ -1777,10 +1702,6 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
-"U ziet dit bericht omdat voor deze HTTPS-site een 'Verwijzende koptekst' "
-"vereist is die door uw webbrowser moet worden verzonden, maar er is er geen "
-"verzonden. Deze header is vereist om veiligheidsredenen, om ervoor te zorgen"
-" dat uw browser niet wordt gekaapt door derden."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:120
 msgid ""
@@ -1788,23 +1709,15 @@ msgid ""
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
-"Als u uw browser hebt geconfigureerd om 'Verwijzende' headers uit te "
-"schakelen, schakel deze dan opnieuw in, tenminste voor deze site, of voor "
-"HTTPS-verbindingen, of voor 'zelfde oorsprong'-aanvragen."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:124
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
-" including the 'Referrer-Policy: no-referrer' header, please remove them. "
-"The CSRF protection requires the 'Referer' header to do strict referer "
-"checking. If you're concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" ...> for links to third-party sites."
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
+"CSRF protection requires the 'Referer' header to do strict referer checking. "
+"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" ...> for links to third-party sites."
 msgstr ""
-"Als u de tag <meta name = \"referrer\" content = \"no-referrer\"> gebruikt "
-"of de kop 'Referrer-Policy: no-referrer' bevat, verwijdert u deze. De CSRF-"
-"beveiliging vereist dat de kop 'Verwijzer' strikte verwijzende controles "
-"uitvoert. Als u zich zorgen maakt over privacy, gebruikt u alternatieven "
-"zoals <a rel=\"noreferrer\" ...> voor links naar sites van derden."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:132
 msgid ""
@@ -1812,101 +1725,93 @@ msgid ""
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
-"U ziet dit bericht omdat deze site een CSRF-cookie vereist bij het indienen "
-"van formulieren. Deze cookie is vereist om veiligheidsredenen, om ervoor te "
-"zorgen dat uw browser niet wordt gekaapt door derden."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:137
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
-"Als u uw browser hebt geconfigureerd om cookies uit te schakelen, schakel "
-"deze dan opnieuw in, tenminste voor deze site, of voor verzoeken van "
-"'dezelfde oorsprong'."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:142
 msgid "More information is available with DEBUG=True."
-msgstr "Meer informatie is beschikbaar met DEBUG = True."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:41
 msgid "No year specified"
-msgstr "Geen jaar opgegeven"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:61
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:111
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:208
 msgid "Date out of range"
-msgstr "Datum buiten bereik"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:90
 msgid "No month specified"
-msgstr "Geen maand opgegeven"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:142
 msgid "No day specified"
-msgstr "Geen dag opgegeven"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:188
 msgid "No week specified"
-msgstr "Geen week opgegeven"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:338
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:367
 #, python-format
 msgid "No %(verbose_name_plural)s available"
-msgstr "Geen %(verbose_name_plural)s beschikbaar"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:589
 #, python-format
 msgid ""
-"Future %(verbose_name_plural)s not available because "
-"%(class_name)s.allow_future is False."
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
 msgstr ""
-"Future %(verbose_name_plural)s niet beschikbaar omdat "
-"%(class_name)s.allow_future False is."
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:623
 #, python-format
 msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
-msgstr "Ongeldige datumreeks '%(datestr)s' opgegeven indeling '%(format)s'"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/detail.py:54
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
-msgstr "Geen %(verbose_name)s gevonden die overeenkomen met de zoekopdracht"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:67
 msgid "Page is not 'last', nor can it be converted to an int."
-msgstr "Pagina is niet 'laatste' en kan ook niet worden omgezet in een int."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:72
 #, python-format
 msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr "Ongeldige pagina (%(page_number)s): %(message)s"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:154
 #, python-format
 msgid "Empty list and '%(class_name)s.allow_empty' is False."
-msgstr "Lege lijst en '%(class_name)s.allow_empty' is False."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:40
 msgid "Directory indexes are not allowed here."
-msgstr "Directory-indexen zijn hier niet toegestaan."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:42
 #, python-format
 msgid "\"%(path)s\" does not exist"
-msgstr "\"%(path)s\" bestaat niet"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:80
 #, python-format
 msgid "Index of %(directory)s"
-msgstr "Index van %(directory)s"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:6
 msgid "Django: the Web framework for perfectionists with deadlines."
-msgstr "Django: het webraamwerk voor perfectionisten met deadlines."
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:345
 #, python-format
@@ -1914,66 +1819,59 @@ msgid ""
 "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
 "target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
-"Bekijk <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\"> release-opmerkingen </a> voor Django "
-"%(version)s"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:367
 msgid "The install worked successfully! Congratulations!"
-msgstr "De installatie is geslaagd! Gefeliciteerd!"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #, python-format
 msgid ""
-"You are seeing this page because <a "
-"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
-"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
-"and you have not configured any URLs."
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
 msgstr ""
-"U ziet deze pagina omdat <a "
-"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
-"target=\"_blank\" rel=\"noopener\"> DEBUG = True </a> staat in uw "
-"instellingenbestand en u hebt geen URL's geconfigureerd."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 msgid "Django Documentation"
-msgstr "Django-documentatie"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
 msgid "Topics, references, &amp; how-to's"
-msgstr "Onderwerpen, referenties & amp; how-to's"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:395
 msgid "Tutorial: A Polling App"
-msgstr "Zelfstudie: een Polling-app"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:396
 msgid "Get started with Django"
-msgstr "Aan de slag met Django"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:407
 msgid "Django Community"
-msgstr "Django-gemeenschap"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:408
 msgid "Connect, get help, or contribute"
-msgstr "Maak verbinding, krijg hulp of draag bij"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/modeltranslation/widgets.py:25
 msgid "None"
-msgstr "Geen"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/url_or_relative_url_field/fields.py:9
 msgid "URL or path"
-msgstr "URL of pad"
+msgstr ""
 
 #: venv/lib/python3.6/site-packages/vinaigrette/management/commands/makemessages.py:147
 msgid "Obsolete translation kept alive with Viniagrette"
-msgstr "Verouderde vertaling, door Viniagretta behouden"
+msgstr ""
 
 #: commandments_app.Commandment/title:1
 msgid "Bekeer u en geloof het evangelie"
-msgstr "Bekeer u en geloof het evangelie"
+msgstr ""
 
 #: commandments_app.Commandment/description:1
 msgid ""
@@ -1983,15 +1881,10 @@ msgid ""
 "geboden op deze website in je leven. Stap voor stap, samen met God. En als "
 "je andere christenen kent, neem dan samen deel aan deze reis."
 msgstr ""
-"Als je je zonden belijdt is God trouw en rechtvaardig om onze zonden te "
-"vergeven en ons te reinigen van alle ongerechtigheid. Keer dan je rug naar "
-"de wereld en volg Jezus. Schoffel? Begin gewoon met het toepassen van alle "
-"geboden op deze website in je leven. Stap voor stap, samen ontmoette God. En"
-" als je andere christenen kent, neem dan samen deel aan deze reis."
 
 #: commandments_app.Commandment/title:2
 msgid "Be fruitful"
-msgstr "Wees vruchtbaar"
+msgstr ""
 
 #: commandments_app.Commandment/description:2
 msgid ""
@@ -1999,343 +1892,23 @@ msgid ""
 "Throughout the Bible you see this assignment coming back time and time "
 "again. God gives the fruit and we can work the earth to be fruitful."
 msgstr ""
-"1 belangrijk onderdeel van de opdracht welke God aan Adam gaf was om "
-"vruchtbaar te zijn. Door de hele Bijbel heen zie je deze opdracht keer op "
-"keer terugkomen. God geeft de vrucht en wij kunnen de aarde bewerken om "
-"vruchtbaar te zijn."
 
 #: commandments_app.Commandment/title:3
 msgid "Worship the Lord your God, and serve him only"
-msgstr "De Heere, uw God, zult u aanbidden en Hem alleen dienen."
+msgstr ""
 
 #: volto_website/settings.py:123
 msgid "English"
-msgstr "Engels"
+msgstr ""
 
 #: volto_website/settings.py:124
 msgid "Dutch"
-msgstr "Nederlands"
+msgstr ""
 
 #: volto_website/settings.py:125
 msgid "German"
-msgstr "Duitse"
+msgstr ""
 
 #: volto_website/settings.py:126
 msgid "French"
-msgstr "Frans"
-
-#~ msgid "Repent and believe the gospel"
-#~ msgstr "Bekeer u en geloof het evangelie"
-
-#~ msgid ""
-#~ "If you confess your sins, God is faithful and just to forgive us our sins, "
-#~ "and to cleanse us from all unrighteousness. Then, turn your back to the "
-#~ "world, and follow Jesus. How? Just start by applying all the commandments on"
-#~ " this website in your life. Step by step, together with God. And if you know"
-#~ " any other christians, take part on this journey together."
-#~ msgstr ""
-#~ "Als je je zonden belijdt is God trouw en rechtvaardig om onze zonden te "
-#~ "vergeven en ons te reinigen van alle ongerechtigheid. Keer dan je rug naar "
-#~ "de wereld en volg Jezus. Hoe? Begin gewoon met het toepassen van alle "
-#~ "geboden op deze website in je leven. Stap voor stap, samen met God. En als "
-#~ "je andere christenen kent, neem dan samen deel aan deze reis."
-
-#~ msgid "Blessed are those who mourn, for they will be comforted"
-#~ msgstr "Zalig zijn zij die treuren, want zij zullen vertroost worden"
-
-#~ msgid "Blessed are the meek, for they will inherit the earth"
-#~ msgstr "Zalig zijn de zachtmoedigen, want zij zullen de aarde beërven"
-
-#~ msgid ""
-#~ "Blessed are those who hunger and thirst for righteousness, for they will be "
-#~ "filled"
-#~ msgstr ""
-#~ "Zalig zijn zij die hongeren en dorsten naar de gerechtigheid, want zij "
-#~ "zullen worden verzadigd"
-
-#~ msgid "Blessed are the merciful, for they will be shown mercy"
-#~ msgstr ""
-#~ "Zalig zijn de barmhartigen, want aan hen zal barmhartigheid bewezen worden"
-
-#~ msgid "Blessed are the pure in heart, for they will see God"
-#~ msgstr "Zalig zijn de reinen van hart, want zij zullen God zien"
-
-#~ msgid "Blessed are the peacemakers, for they will be called children of God"
-#~ msgstr ""
-#~ "Zalig zijn de vredestichters, want zij zullen zonen van God genoemd worden"
-
-#~ msgid ""
-#~ "Blessed are those who are persecuted because of righteousness, for theirs is"
-#~ " the kingdom of heaven"
-#~ msgstr ""
-#~ "Zalig is de man die verzoeking verdraagt, hij zal de kroon van het leven "
-#~ "ontvangen"
-
-#~ msgid "Rejoice and be glad, because great is your reward in heaven"
-#~ msgstr "Verblijd en verheug u, want uw loon is groot in de hemelen"
-
-#~ msgid "You are the salt of the earth"
-#~ msgstr "U bent het zout van de aarde"
-
-#~ msgid "You are the light of the world"
-#~ msgstr "U bent het licht van de wereld"
-
-#~ msgid ""
-#~ "Whoever practices and teaches these commands will be called great in the "
-#~ "kingdom of heaven"
-#~ msgstr ""
-#~ "Wie de wet doet en onderwijst, zal groot genoemd worden in het Koninkrijk "
-#~ "der hemelen"
-
-#~ msgid "Be patient"
-#~ msgstr "Wees geduldig"
-
-#~ msgid "Reconcile with your brother as quickly as possible"
-#~ msgstr "Verzoen je zo snel mogelijk met je broeder"
-
-#~ msgid "Be loyal to your partner"
-#~ msgstr "Wees trouw aan je partner"
-
-#~ msgid ""
-#~ "Blessed are those whose ways are blameless, who walk according to the law of"
-#~ " the Lord"
-#~ msgstr ""
-#~ "Welzalig zijn de oprechten van wandel, die in de wet van de HEERE gaan."
-
-#~ msgid "Overcome evil by doing good"
-#~ msgstr "Overwin het kwade door het goede te doen"
-
-#~ msgid "Give to those who demand something from you"
-#~ msgstr "Geef aan hen die iets van u eisen"
-
-#~ msgid "Love your enemies so that your children will be the Father's"
-#~ msgstr "Heb uw vijanden lief, zodat je kinderen van de Vader zal zijn"
-
-#~ msgid "Be perfect then, just as your Father who is in heaven is perfect."
-#~ msgstr ""
-#~ "Weest u dan volmaakt, zoals uw Vader, Die in de hemelen is, volmaakt is."
-
-#~ msgid ""
-#~ "For everyone who raises himself will be humiliated and he who humiliates "
-#~ "himself will be raised."
-#~ msgstr ""
-#~ "Want ieder die zichzelf verhoogt, zal vernederd worden en wie zichzelf "
-#~ "vernedert, zal verhoogd worden."
-
-#~ msgid ""
-#~ "Pray in Faith! And whatever you ask in My Name, I will do so that the Father"
-#~ " may be glorified in the Son."
-#~ msgstr ""
-#~ "Bid in Geloof! En wat u ook zult vragen in Mijn Naam, dat zal Ik doen, opdat"
-#~ " de Vader in de Zoon verheerlijkt zal worden."
-
-#~ msgid "Forgive one another"
-#~ msgstr "zoals ook Christus u vergeven heeft, zo moet ook u doen"
-
-#~ msgid "Fast regularly"
-#~ msgstr "Vast regelmatig"
-
-#~ msgid "Collect treasures for you in heaven"
-#~ msgstr "Verzamel schatten voor u in de hemel"
-
-#~ msgid ""
-#~ "Therefore do not worry about tomorrow, for tomorrow will worry about itself"
-#~ msgstr ""
-#~ "Wees niet bezorgd over de dag van morgen, want de dag van morgen zal voor "
-#~ "zichzelf zorgen"
-
-#~ msgid "Point brothers and sisters in a spirit of meekness, and do not judge"
-#~ msgstr ""
-#~ "Wijs broers en zussen terecht in een geest van zachtmoedigheid, en oordeel "
-#~ "niet"
-
-#~ msgid "Seek, and you shall find"
-#~ msgstr "Zoek, en u zult vinden"
-
-#~ msgid "Knock, and it will be opened for you"
-#~ msgstr "Klopt, en er zal voor u opengedaan worden"
-
-#~ msgid "Treat others as you would like to be treated"
-#~ msgstr "Behandel anderen zoals je zelf behandeld zou willen worden"
-
-#~ msgid "Be careful that nobody misleads you"
-#~ msgstr "Pas op dat niemand u misleidt"
-
-#~ msgid "Hear, understand and do"
-#~ msgstr "Hoor, begrijp en doe"
-
-#~ msgid "Be strong and courageous"
-#~ msgstr "Houd goede moed!"
-
-#~ msgid "Be moved with inner compassion with the people around you"
-#~ msgstr "Wees met innerlijke ontferming bewogen met de mensen om je heen"
-
-#~ msgid "Find the lost sheep"
-#~ msgstr "Zoek de verloren schapen"
-
-#~ msgid "Proclaim the gospel of Jesus Christ to all nations"
-#~ msgstr "Verkondig het evangelie van Jezus Christus onder alle volken"
-
-#~ msgid "Heal the sick, clean lepers, raise the dead, cast out demons."
-#~ msgstr "Genees zieken, reinig melaatsen, wek doden op, drijf demonen uit."
-
-#~ msgid "Love God above all"
-#~ msgstr "Heb God lief boven alles"
-
-#~ msgid "Follow Jesus and carry your cross"
-#~ msgstr "Volg Jezus en neem je kruis dagelijks op je"
-
-#~ msgid "Receive him whom I will send"
-#~ msgstr "Ontvang hem die Ik zal zenden"
-
-#~ msgid "Share what you have with others"
-#~ msgstr "Deel wat je hebt met anderen die het nodig hebben"
-
-#~ msgid "Blessed is he who does not offend Me"
-#~ msgstr "zalig is hij die aan Mij geen aanstoot neemt."
-
-#~ msgid "Come to Me, all who are tired and burdened, and I will give you rest"
-#~ msgstr ""
-#~ "Kom naar Mij toe, allen die vermoeid en belast zijn, en Ik zal u rust geven."
-
-#~ msgid "The statements of a just are a source of life"
-#~ msgstr "De uitspraken van een rechtvaardige zijn een bron van leven"
-
-#~ msgid "Do the will of the Father"
-#~ msgstr "Doe de wil van de Vader"
-
-#~ msgid "Listen to Jesus"
-#~ msgstr "Luister naar Jezus"
-
-#~ msgid ""
-#~ "Give to the emperor what is from the emperor, and to God what is from God"
-#~ msgstr "Geef aan de keizer wat van de keizer is, en aan God wat van God is."
-
-#~ msgid "Receive the Kingdom of God as a child"
-#~ msgstr "Ontvang het Koninkrijk van God als een kind"
-
-#~ msgid "Let the children come to Me"
-#~ msgstr "Laat de kinderen tot Mij komen"
-
-#~ msgid "Avoid temptation"
-#~ msgstr "Voorkom verleiding"
-
-#~ msgid "Be united"
-#~ msgstr "Wees eensgezindt"
-
-#~ msgid "Honor your father and your mother"
-#~ msgstr "Eer je vader en je moeder"
-
-#~ msgid ""
-#~ "If anyone wants to be the first, he must be the last of all and a servant of"
-#~ " all"
-#~ msgstr ""
-#~ "Als iemand de eerste wil zijn, moet hij de laatste van allen zijn en een "
-#~ "dienaar van allen."
-
-#~ msgid "Love the Lord your God with all your heart"
-#~ msgstr "En u zult de Heere, uw God, liefhebben met heel uw hart"
-
-#~ msgid "Love the Lord your God with all your soul"
-#~ msgstr "U zult de Here uw God liefhebben met heel uw ziel "
-
-#~ msgid "Love the Lord your God with all your mind"
-#~ msgstr "U zult de Here uw God liefhebben met heel uw verstand"
-
-#~ msgid "Love the Lord your God with all your strenght"
-#~ msgstr "U zult de Here uw God liefhebben met heel uw kracht"
-
-#~ msgid "Love your neighbor as yourself"
-#~ msgstr "U zult uw naaste liefhebben als uzelf."
-
-#~ msgid "Be vigilant for the coming of Jesus"
-#~ msgstr "Wees waakzaam om de komst van Jezus"
-
-#~ msgid "Use your talents to the honor of the Father"
-#~ msgstr "Gebruik je talenten tot eer van de Vader"
-
-#~ msgid "Feed the hungry"
-#~ msgstr "Geef de hongerigen te eten"
-
-#~ msgid "physically, emotionally and mentally"
-#~ msgstr "fysiek, emotioneel en mentaal"
-
-#~ msgid "Give the thirsty to drink"
-#~ msgstr "Geef de (lichamelijk, emotioneel en geestelijk) dorstige te drinken"
-
-#~ msgid "Dress the nudes"
-#~ msgstr "Kleed de (lichamelijk, emotioneel en geestelijke) naakten"
-
-#~ msgid ""
-#~ "Commemorate the suffering, dying, and rising of Jesus, for forgiveness and "
-#~ "victory over our sins by means of. celebrating the supper"
-#~ msgstr ""
-#~ "Herdenk het lijden, sterven en opstaan van Jezus, ter vergeving en "
-#~ "overwinning op onze zonden d.m.v. het vieren van het avondmaal"
-
-#~ msgid "Get baptized"
-#~ msgstr "Laat je dopen"
-
-#~ msgid "Always keep in mind that Jesus is with us"
-#~ msgstr "Houd altijd voor ogen dat Jezus bij ons is"
-
-#~ msgid "His mercy is on those who fear Him from generation to generation"
-#~ msgstr ""
-#~ "Zijn barmhartigheid is van geslacht tot geslacht over hen die Hem vrezen."
-
-#~ msgid "Be wary of greed and content with what you have"
-#~ msgstr "Wees op uw hoede voor de hebzucht en tevreden met wat je hebt"
-
-#~ msgid "Then hold on, your waist girded with truth"
-#~ msgstr "Houd dan stand, uw middel omgord met de waarheid"
-
-#~ msgid "Fight to enter through the narrow gate"
-#~ msgstr "Strijd om binnen te gaan door de nauwe poort"
-
-#~ msgid "Look forward to the wedding of the Lamb"
-#~ msgstr "Zie uit naar de bruiloft van het Lam"
-
-#~ msgid "Strengthen and encourage your brothers and sisters"
-#~ msgstr "Versterk en bemoedig je broers en zussen"
-
-#~ msgid "Stay in me"
-#~ msgstr "Blijf in Mij"
-
-#~ msgid "We are called to glorify the Name of God in Christ Jesus!"
-#~ msgstr ""
-#~ "Wij zijn geroepen om de Naam van God te verheerlijken, in Christus Jezus!"
-
-#~ msgid "Herd my sheep"
-#~ msgstr "Hoed mijn schapen, of laat je hoeden door een herder"
-
-#~ msgid ""
-#~ "Creating a new account will enable you to personalize the website, and give "
-#~ "feedback."
-#~ msgstr ""
-#~ "Als u een nieuw account maakt, kunt u aan de website meewerken en feedback "
-#~ "geven."
-
-#~ msgid "Want to dig deeper? Read these books:"
-#~ msgstr "Meer weten? Lees deze boeken:"
-
-#~ msgid "Verplicht"
-#~ msgstr "Verplicht"
-
-#~ msgid "Your browser does not support the audio tag."
-#~ msgstr "Uw browser ondersteunt de audiotag niet."
-
-#~ msgid "What did Jesus teach when walking the earth?"
-#~ msgstr "Wat leerde Jezus ons in zijn tijd hier op aarde?"
-
-#~ msgid "Jesus"
-#~ msgstr "Jezus"
-
-#~ msgid "Read more"
-#~ msgstr "Lees verder"
-
-#~ msgid ""
-#~ "When Jesus walked the earth he thought use many things, we just list them as"
-#~ " they are."
-#~ msgstr ""
-#~ "Toen Jezus over de aarde wandelde, dacht hij dat hij veel dingen zou "
-#~ "gebruiken, we noemen ze gewoon zoals ze zijn."
+msgstr ""

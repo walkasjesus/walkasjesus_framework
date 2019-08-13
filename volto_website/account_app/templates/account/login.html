@@ -2,36 +2,56 @@
 {% load i18n %}
 {% block content %}
 
-{% if form.errors %}
-<div class="alert alert-warning" role="alert">
-    {% trans 'Your username and password didn\'t match. Please try again.' %}
-</div>
-{% endif %}
+<div class="bg-container">
+    <section class="ftco-section contact-section ftco-no-pb" id="contact-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+            <span class="subheading">{% trans 'Contribute' %}</span>
+            <h2 class="mb-4">{% trans 'Login' %}</h2>
+            <h5>{% trans 'Thank you for helping in teaching the words and commandments of Jesus all around the world!' %}</h5>
+            </div>
+        </div>
+        </div>
+    </section>
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>{% trans 'Your account doesn\'t have access to this page. To proceed,
-    please login with an account that has access.' %}</p>
-    {% else %}
-    <p>{% trans 'Please login to see this page.' %}</p>
+    {% if form.errors %}
+    <div class="alert alert-warning" role="alert">
+        {% trans 'Your username and password didn\'t match. Please try again.' %}
+    </div>
     {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'account:login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+    {% if next %}
+        {% if user.is_authenticated %}
+        <p>{% trans 'Your account doesn\'t have access to this page. To proceed,
+        please login with an account that has access.' %}</p>
+        {% else %}
+        <p>{% trans 'Please login to see this page.' %}</p>
+        {% endif %}
+    {% endif %}
 
-<input type="submit" value="login" class="btn btn-primary py-3 px-5">
-<input type="hidden" name="next" value="{{ next }}">
-</form>
+    <div class="row justify-content-center mb-5 pb-3">
+        <div class="col-md-7 order-md-last d-flex">
+                
+        <form class="bg-light p-4 p-md-5 contact-form" method="post" action="{% url 'account:login' %}">
+        {% csrf_token %}
+        <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table>
 
+        <input type="submit" value="login" class="btn btn-primary py-3 px-5">
+        <input type="hidden" name="next" value="{{ next }}">
+        <p><a href="{% url 'account:signup' %}">{% trans 'Not an account yet and want to contribute? Please register' %}</a></p>
+        </form>
+
+        </div>
+    </div>
+</div>
 {% endblock %}

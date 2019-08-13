@@ -3,38 +3,41 @@
 {% load i18n %}
 {% block content %}
 
-<section class="ftco-section contact-section ftco-no-pb" id="contact-section">
-      <div class="container">
-      	<div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-            <span class="subheading">{% trans 'Signup' %}</span>
-            <h2 class="mb-4">{% trans 'Register for a new account' %}</h2>
-            <p>{% trans 'The content of this website is made possible by contributors around the world. You can help improving by:' %}</p>
+<div class="bg-container">
 
-			<div class="list-group-flush">
-					<div class="list-group-item">
-						<div class="signup-icon"><img src="{% static 'images/languages.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Translating to your language, since most translation is done automatically, corrections are very welcome!' %}</p></div>
-					</div>
-					<div class="list-group-item">
-	   					<div class="signup-icon"><img src="{% static 'images/bible.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding or correcting commandments along with their Bible references' %}</p></div>
-					</div>
-					<div class="list-group-item">
-						<div class="signup-icon"><img src="{% static 'images/media.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding media items (Movies, Books, Testimonies, Songs, Pictures, Illustrations and Sermons) which are related to the corresponding commandment' %}</p></div>
-					</div>
-			</div>
+  <section class="ftco-section contact-section ftco-no-pb" id="contact-section">
+        <div class="container">
+          <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+              <span class="subheading">{% trans 'Signup' %}</span>
+              <h2 class="mb-4">{% trans 'Register for a new account' %}</h2>
+              <h5>{% trans 'The content of this website is made possible by contributors around the world. You can help improving by:' %}</h5>
 
-		  </div>
+        <div class="list-group-flush">
+            <div class="list-group-item">
+              <div class="signup-icon"><img src="{% static 'images/languages.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Translating to your language, since most translation is done automatically, corrections are very welcome!' %}</p></div>
+            </div>
+            <div class="list-group-item">
+                <div class="signup-icon"><img src="{% static 'images/bible.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding or correcting commandments along with their Bible references' %}</p></div>
+            </div>
+            <div class="list-group-item">
+              <div class="signup-icon"><img src="{% static 'images/media.png' %}" width="60px" alt=""></div><div class="signup-text"><p class="mb-0">{% trans 'Adding media items (Movies, Books, Testimonies, Songs, Pictures, Illustrations and Sermons) which are related to the corresponding commandment' %}</p></div>
+            </div>
         </div>
 
-        <div class="row block-9">
-          <div class="col-md-7 order-md-last d-flex">
-            <form method="post">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <button type="submit">{% trans 'Sign up' %}</button>
-            </form>
+        </div>
+          </div>
+
+          <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 order-md-last d-flex">
+              <form class="bg-light p-4 p-md-5 contact-form" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">{% trans 'Sign up' %}</button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+</div>
 {% endblock %}

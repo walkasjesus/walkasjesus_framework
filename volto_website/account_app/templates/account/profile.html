@@ -2,10 +2,23 @@
 {% load i18n %}
 {% block content %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ user_form.as_p }}
-  <button type="submit">{% trans 'Save changes' %}</button>
-</form>
+<div class="bg-container">
+    <section class="ftco-section contact-section ftco-no-pb" id="contact-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+            <div class="col-md-7 heading-section text-center ftco-animate">
+            <span class="subheading">{% trans 'My profile' %}</span>
+            <h2 class="mb-4">{% trans 'My Profile' %}</h2>
+            <h5>{% trans 'Thank you for helping in teaching the words and commandments of Jesus all around the world!' %}</h5>
+            </div>
+        </div>
+        </div>
+    </section>
 
+  <form class="bg-light p-4 p-md-5 contact-form" method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit">{% trans 'Save changes' %}</button>
+  </form>
+</div>
 {% endblock %}

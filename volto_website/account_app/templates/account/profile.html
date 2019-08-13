@@ -15,10 +15,15 @@
         </div>
     </section>
 
-  <form class="bg-light p-4 p-md-5 contact-form" method="post">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    <button type="submit">{% trans 'Save changes' %}</button>
-  </form>
+    <div class="row justify-content-center mb-5 pb-3">
+        <div class="col-md-7 order-md-last d-flex">
+        
+        <form class="bg-light p-4 p-md-5 contact-form" method="post">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          <button type="submit">{% trans 'Save changes' %}</button>
+        </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

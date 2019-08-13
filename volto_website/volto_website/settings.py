@@ -122,6 +122,8 @@ USE_TZ = True
 LANGUAGES = [
     ('en', gettext_lazy('English')),  # First language is the default for modeltranslation
     ('nl', gettext_lazy('Dutch')),
+    ('de', gettext_lazy('German')),
+    ('fr', gettext_lazy('French')),
 ]
 
 # Static files (CSS, JavaScript, Images)
@@ -141,7 +143,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/account/login/'
-LOGIN_REDIRECT_URL = '/commandments/'
+LOGIN_REDIRECT_URL = '/admin/'
 LOGOUT_REDIRECT_URL = '/commandments/'
 
 # Map django message level to Bootstrap alert, using the tag attribute
@@ -159,3 +161,11 @@ sentry_sdk.init(
     dsn="https://3caa949e65db4d419d486668fe5180a4@sentry.io/1527507",
     integrations=[DjangoIntegration()]
 )
+
+# Rosetta settings
+ROSETTA_SHOW_AT_ADMIN_PANEL = True
+ROSETTA_LANGUAGE_GROUPS = [
+    'translators-nl',
+    'translators-de',
+    'translators-fr',
+]

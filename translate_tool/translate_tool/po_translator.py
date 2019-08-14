@@ -7,10 +7,14 @@ class PoTranslator:
         po = polib.pofile(po_file_path)
         translator = Translator()
 
-        for entry in po.untranslated_entries():
-            # Mark as fuzzy as it was machine translated, humans will know to check the translation
-            entry.flags.append('fuzzy')
-            translation = translator.translate(entry.msgid, src=source_language, dest=destination_language)
-            entry.msgstr = translation.text
+        try:
+            for entry in po.untranslated_entries():
+                # Mark as fuzzy as it was machine translated, humans will know to check the translation
+                entry.flags.append('fuzzy')
+                translation = translator.translate(entry.msgid, src=source_language, dest=destination_language)
+                entry.msgstr = translation.text
+        except Exception as ex:
+            print(ex)
+            print('Could not translate all items, stopped on above error.')
 
         po.save()

@@ -8,6 +8,8 @@ class PoTranslator:
         translator = Translator()
 
         for entry in po.untranslated_entries():
+            # Mark as fuzzy as it was machine translated, humans will know to check the translation
+            entry.flags.append('fuzzy')
             translation = translator.translate(entry.msgid, src=source_language, dest=destination_language)
             entry.msgstr = translation.text
 

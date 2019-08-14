@@ -1,5 +1,4 @@
 from unittest import TestCase
-import polib
 from google_trans import Translator
 
 

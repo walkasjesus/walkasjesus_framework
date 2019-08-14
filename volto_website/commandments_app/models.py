@@ -1,13 +1,16 @@
 from enum import Enum
 
 from bible_lib import BibleFactory
+from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
+
 class Redirect(models.Model):
     url = URLOrRelativeURLField()
+
 
 class CommandmentCategories(Enum):
     Salvation = gettext_lazy('Salvation commands')
@@ -170,7 +173,12 @@ class AbstractBibleReference(models.Model):
 
     def load_text(self):
         """Get the verse text from the bible api."""
-        self.text = BibleFactory().create(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
+
+        # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
+        # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
+        self.text = BibleFactory().create(self.bible_id()).verse(BibleLibBibleBooks[self.book],
+                                                                 self.chapter,
+                                                                 self.verse)
 
     def book_name(self):
         return gettext_lazy(BibleBooks[self.book].value)

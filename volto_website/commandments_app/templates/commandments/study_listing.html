@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<section class="ftco-daily-verse img" style="background-color: #8c8c8c;">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Overview of Jesus Commandments</span>
+                    <h2 class="mb-4"><span>{% trans 'Study the commandments yourself' %},</span></h2>
+                    <p>{% trans 'In the following table you can see a list of all the commandments we found which Jesus tought us.' %}
+                    <p>{% trans 'If you have any suggestions or corrections, we\'d like to hear from you. Please signup or just sent and email.' %}</p>
+                </div>
+            </div>
+        <div class="col-md-12">
+                
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                    <th class="th-sm">#
+                    </th>
+                    <th class="th-sm">Commandment Title
+                    </th>
+                    <th class="th-sm">Bible Reference
+                    </th>
+                    <th class="th-sm">Bible Reference Text
+                    </th>
+                    <th class="th-sm">Category
+                    </th>
+                    <th class="th-sm">Presedence
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if primary_bible_references %}
+                    {% for entry in primary_bible_references %}
+                    <tr>
+                        <th scope="row">{{ entry.commandment.id }}</th>
+                        <td>{{ entry.commandment.title }}</td>
+                        <td>{{ entry.bible_reference }}</td>
+                        <td>{{ entry.bible_reference.text | safe }}</td>
+                        <td>{{ entry.commandment.category }}</td>
+                        <td>{{ entry.commandment.primarypresedence }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if secondary_bible_references %}
+                    {% for entry in secondary_bible_references %}
+                    <tr>
+                        <th scope="row">{{ entry.commandment.id }}</th>
+                        <td>{{ entry.commandment.title }}</td>
+                        <td>{{ entry.bible_reference }}</td>
+                        <td>{{ entry.bible_reference.text | safe }}</td>
+                        <td>{{ entry.commandment.category }}</td>
+                        <td>{{ entry.commandment.secondarypresedence }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if tertiary_bible_references %}
+                    {% for entry in tertiary_bible_references %}
+                    <tr>
+                        <th scope="row">{{ entry.commandment.id }}</th>
+                        <td>{{ entry.commandment.title }}</td>
+                        <td>{{ entry.bible_reference }}</td>
+                        <td>{{ entry.bible_reference.text | safe }}</td>
+                        <td>{{ entry.commandment.category }}</td>
+                        <td>{{ entry.commandment.tertiarypresedence }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="th-sm">Commandment ID
+                        </th>
+                        <th class="th-sm">Commandment Title
+                        </th>
+                        <th class="th-sm">Bible Reference
+                        </th>
+                        <th class="th-sm">Bible Reference Text
+                        </th>
+                        <th class="th-sm">Category
+                        </th>
+                        <th class="th-sm">Presedence
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+</section>
+
+
+{% endblock %}

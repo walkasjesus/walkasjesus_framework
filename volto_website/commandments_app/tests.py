@@ -8,7 +8,7 @@ class TestBibleReference(TestCase):
     def test_str(self):
         reference = AbstractBibleReference()
         reference.book = BibleBooks.Daniel.name
-        reference.chapter = 2
-        reference.verse = 15
+        reference.begin_chapter = 2
+        reference.begin_verse = 15
 
         self.assertEqual('Daniel 2:15', str(reference))

@@ -112,11 +112,11 @@ class Commandment(models.Model):
 
     def primary_bible_references(self):
         """ Primary references are the most important references, directly related to the commandment. """
-        return self.primarybiblereference_set.all()
+        return self._get_bible_references(self.primarybiblereference_set.all())
 
     def secondary_bible_references(self):
         """ Secondary references are extra, maybe indirect references. """
-        return self.secondarybiblereference_set.all()
+        return self._get_bible_references(self.secondarybiblereference_set.all())
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -144,6 +144,10 @@ class Commandment(models.Model):
 
     def questions(self):
         return self.question_set.all()
+
+    def _get_bible_references(self, query_set):
+        [f.load_text() for f in query_set]
+        return query_set
 
     def __str__(self):
         return self.title

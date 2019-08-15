@@ -9,11 +9,7 @@ class DetailView(View):
         commandment = get_object_or_404(Commandment, pk=commandment_id)
 
         primary_bible_references = commandment.primary_bible_references()
-        for bible_reference in primary_bible_references:
-            bible_reference.load_text()
-            secondary_bible_references = commandment.primary_bible_references()
-        for bible_reference in secondary_bible_references:
-            bible_reference.load_text()
+        secondary_bible_references = commandment.primary_bible_references()
 
         background_song = commandment.songs()[0] if commandment.songs() else ''
         background_drawing = commandment.drawings()[0] if commandment.drawings() else ''

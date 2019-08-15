@@ -108,12 +108,16 @@ class Commandment(models.Model):
                                 default=CommandmentCategories.Salvation)
 
     def primary_bible_references(self):
-        """ Primary references are the most important references, directly related to the commandment. """
+        """ Primary references is the first found unique reference according to the words of Jesus, directly related to the commandment. """
         return self.primarybiblereference_set.all()
 
     def secondary_bible_references(self):
-        """ Secondary references are extra, maybe indirect references. """
+        """ Secondary references are extra references which are related te the same priciple. """
         return self.secondarybiblereference_set.all()
+
+    def tertiary_bible_references(self):
+        """ Tertiary references are extra, maybe indirect references, also relating to the same priciple. """
+        return self.tertiarybiblereference_set.all()
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -187,6 +191,10 @@ class SecondaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
 
+class TertiaryBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    
 class Media(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)

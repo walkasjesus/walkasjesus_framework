@@ -34,7 +34,9 @@ class CommandmentImporter(object):
             for index, row in group.iterrows():
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
-                    reference.is_primary = row['primary_secondary'].lower() == 'primary'
+                    reference.primarypresedence = row['presedence'].lower() == 'primary'
+                    reference.secondarypresedence = row['presedence'].lower() == 'secondary'
+                    reference.tertiarypresedence = row['presedence'].lower() == 'tertiary'
                     commandment.bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')

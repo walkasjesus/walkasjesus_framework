@@ -27,8 +27,10 @@ class Command(BaseCommand):
             model_reference = TertiaryBibleReference(commandment_id=commandment_id)
 
         model_reference.book = reference.book.name
-        model_reference.chapter = reference.start_chapter
-        model_reference.verse = reference.start_verse
+        model_reference.begin_chapter = reference.start_chapter
+        model_reference.begin_verse = reference.start_verse
+        model_reference.end_chapter = reference.end_chapter
+        model_reference.end_verse = reference.end_verse
         model_reference.save()
 
     def _add_question(self, commandment_id, question):

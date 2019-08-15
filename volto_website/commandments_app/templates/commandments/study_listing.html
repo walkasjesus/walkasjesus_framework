@@ -42,7 +42,7 @@
                         <td>{{ entry.bible_reference }}</td>
                         <td>{{ entry.bible_reference.text | safe }}</td>
                         <td>{{ entry.commandment.category }}</td>
-                        <td>{{ entry.commandment.primarypresedence }}</td>
+                        <td>{% trans 'Primary' %}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
@@ -55,7 +55,7 @@
                         <td>{{ entry.bible_reference }}</td>
                         <td>{{ entry.bible_reference.text | safe }}</td>
                         <td>{{ entry.commandment.category }}</td>
-                        <td>{{ entry.commandment.secondarypresedence }}</td>
+                        <td>{% trans 'Secondary' %}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
@@ -68,7 +68,7 @@
                         <td>{{ entry.bible_reference }}</td>
                         <td>{{ entry.bible_reference.text | safe }}</td>
                         <td>{{ entry.commandment.category }}</td>
-                        <td>{{ entry.commandment.tertiarypresedence }}</td>
+                        <td>{% trans 'Tertiary' %}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}

@@ -109,15 +109,24 @@ class Commandment(models.Model):
 
     def primary_bible_references(self):
         """ Primary references is the first found unique reference according to the words of Jesus, directly related to the commandment. """
-        return self.primarybiblereference_set.all()
+        references = self.primarybiblereference_set.all()
+        [ref.load_text() for ref in references]
+        return references
 
     def secondary_bible_references(self):
         """ Secondary references are extra references which are related te the same priciple. """
-        return self.secondarybiblereference_set.all()
+        references = self.secondarybiblereference_set.all()
+        [ref.load_text() for ref in references]
+        return references
 
     def tertiary_bible_references(self):
         """ Tertiary references are extra, maybe indirect references, also relating to the same priciple. """
-        return self.tertiarybiblereference_set.all()
+        references = self.tertiarybiblereference_set.all()
+        [ref.load_text() for ref in references]
+        return references
+
+    def background_drawing(self):
+        return self.drawings()[0] if self.drawings() else ''
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -154,8 +163,10 @@ class AbstractBibleReference(models.Model):
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
                             default=BibleBooks.Genesis)
-    chapter = models.IntegerField(default=1)
-    verse = models.IntegerField(default=1)
+    begin_chapter = models.IntegerField(default=1)
+    begin_verse = models.IntegerField(default=1)
+    end_chapter = models.IntegerField(default=0)
+    end_verse = models.IntegerField(default=0)
     text = gettext('Could not load text at the moment.')
 
     class Meta:
@@ -174,13 +185,30 @@ class AbstractBibleReference(models.Model):
 
     def load_text(self):
         """Get the verse text from the bible api."""
-        self.text = BibleFactory().create(self.bible_id()).verse(BibleBooks[self.book], self.chapter, self.verse)
+        if self.end_chapter == 0:
+            end_chapter = self.begin_chapter
+        else:
+            end_chapter = self.end_chapter
+
+        if self.end_verse == 0:
+            end_verse = self.begin_verse
+        else:
+            end_verse = self.end_verse
+
+        self.text = BibleFactory().create(self.bible_id()).verses(BibleBooks[self.book],
+                                                                  self.begin_chapter,
+                                                                  self.begin_verse,
+                                                                  end_chapter,
+                                                                  end_verse)
 
     def book_name(self):
         return gettext_lazy(BibleBooks[self.book].value)
 
     def __str__(self):
-        return f'{self.book_name()} {self.chapter}:{self.verse}'
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return f'{self.book_name()} {self.begin_chapter}:{self.begin_verse}'
+        else:
+            return f'{self.book_name()} {self.begin_chapter}:{self.begin_verse}-{self.end_chapter}:{self.end_chapter}'
 
 
 class PrimaryBibleReference(AbstractBibleReference):

@@ -4,6 +4,7 @@ from django.views import View
 from commandments_app.models import Commandment
 from django.conf import settings
 
+
 class IndexView(View):
     def get(self, request):
         commandments_all = Commandment.objects.order_by('title')
@@ -11,6 +12,9 @@ class IndexView(View):
         languages_all = settings.LANGUAGES
         languages_total = len(languages_all)
         commandments = Commandment.objects.order_by('title')[0:20]
+
+        for commandment in commandments:
+            commandment.background_drawing = commandment.background_drawing()
 
         return render(request, 'commandments/index.html', {'commandments': commandments,
                                                            'languages_all': languages_all,

@@ -8,9 +8,12 @@ from commandments_app.models import Commandment
 class ListingView(View):
     def get(self, request):
         number_of_items = 25
-        commandment_list = Commandment.objects.all()
-        paginator = Paginator(commandment_list, number_of_items)
+        paginator = Paginator(Commandment.objects.all(), number_of_items)
 
         page = request.GET.get('page')
         commandments = paginator.get_page(page)
+
+        for commandment in commandments:
+            commandment.background_drawing = commandment.background_drawing()
+
         return render(request, 'commandments/listing.html', {'commandments': commandments})

@@ -15,7 +15,7 @@
               <span>{% trans 'Jesus commandments' %}</span>
             </div>
             <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
-            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="{{ commandments|length }}">{{ commandments|length }}</strong> {% trans 'unique commandments in your daily life' %}</p>
+            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="{{ commandments_total }}">{{ commandments_total }}</strong> {% trans 'unique commandments in your daily life' %}</p>
             <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
           </div>
         </div>
@@ -55,7 +55,7 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/list.png' %}" width="80px" alt="">
               	</div>
-                <strong class="number" data-number="{{ commandments|length }}">0</strong>
+                <strong class="number" data-number="{{ commandments_total }}">0</strong>
                 <span>{% trans 'Unique commandments' %}</span>
               </div>
             </div>
@@ -77,7 +77,7 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/languages.png' %}" width="80px" alt="">
 				</div>
-                <strong class="number" data-number="39">0</strong>
+                <strong class="number" data-number="{{ languages_total }}">0</strong>
                 <span>{% trans 'Languages' %}</span>
               </div>
             </div>

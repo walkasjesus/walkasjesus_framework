@@ -121,24 +121,24 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Bible References' %}</h4>
-                            {% if primary_bible_references %}
+                            {% if commandment.primary_bible_references %}
                                 <ul>
-                                {% for bible_reference in primary_bible_references %}
+                                {% for bible_reference in commandment.primary_bible_references %}
                                     <li><b>{{ bible_reference }} {{ bible_reference.text | safe }}</b></li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}
-                            {% if secondary_bible_references %}
+                            {% if commandment.secondary_bible_references %}
                                 <ul>
-                                {% for bible_reference in secondary_bible_references %}
+                                {% for bible_reference in commandment.secondary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}   
-                            {% if tertiary_bible_references %}
+                            {% if commandment.tertiary_bible_references %}
                             <h4>{% trans 'More Bible References' %}</h4>
                                 <ul>
-                                {% for bible_reference in tertiary_bible_references %}
+                                {% for bible_reference in commandment.tertiary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
                                 {% endfor %}
                                 </ul>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </div>
-            {% if drawings %}
+            {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -156,7 +156,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
-                            {% for drawing in drawings %}
+                            {% for drawing in commandment.drawings %}
                                 <img src="{{ drawing.url }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
                                 <p>Artist: {{ drawing.author }}</p>
                             {% endfor %}
@@ -165,7 +165,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if shortmovies %}
+            {% if commandment.shortmovies %}
             <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -174,7 +174,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
-                            {% for shortmovie in shortmovies %}
+                            {% for shortmovie in commandment.shortmovies %}
                             <h5>{{ shortmovie.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
@@ -185,7 +185,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if songs %}
+            {% if commandment.songs %}
             <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -194,7 +194,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
-                            {% for song in songs %}
+                            {% for song in commandment.songs %}
                             <h5>{{ song.author }} - {{ song.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
@@ -205,7 +205,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if movies %}
+            {% if commandment.movies %}
             <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div id="movie" class="services-inner">
@@ -214,7 +214,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
-                            {% for movie in movies %}
+                            {% for movie in commandment.movies %}
                             <h5>{{ movie.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
@@ -225,7 +225,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if pictures %}
+            {% if commandment.pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -241,7 +241,7 @@
                                         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                                     </ol>
                                     <div class="carousel-inner" style="width:97%;height:97%;">
-                                        {% for picture in pictures|slice:":3" %}
+                                        {% for picture in commandment.pictures|slice:":3" %}
                                         {% if forloop.first %}
                                             <div class="carousel-item active">
                                                 <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
@@ -269,7 +269,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if testimonies %}
+            {% if commandment.testimonies %}
             <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -278,7 +278,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
-                            {% for testimony in testimonies %}
+                            {% for testimony in commandment.testimonies %}
                             <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
@@ -289,7 +289,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if sermons %}
+            {% if commandment.sermons %}
             <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -298,7 +298,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
-                            {% for sermon in sermons %}
+                            {% for sermon in commandment.sermons %}
                             <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
@@ -309,7 +309,7 @@
                 </div>
             </div>              
             {% endif %}
-            {% if books %}
+            {% if commandment.books %}
             <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -318,7 +318,7 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Books' %}</h4>
-                            {% for book in books %}
+                            {% for book in commandment.books %}
                             <div class="media">
                                 <img class="d-flex align-self-start mr-3" style="max-width:20%;max-height:20%;" src="{{ book.url }}" alt="{{ book.author }} - {{ book.title }}">
                                 <div class="media-body">
@@ -333,7 +333,7 @@
                 </div>
             </div>              
             {% endif %}
-            {% if questions %}
+            {% if commandment.questions %}
             <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -344,7 +344,7 @@
                             <h4>{% trans 'Questions' %}</h4>
                             <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
-                                {% for question in questions %}
+                                {% for question in commandment.questions %}
                                 <li>{{ question.text }}</li>
                                 {% endfor %}
                             </ul>    

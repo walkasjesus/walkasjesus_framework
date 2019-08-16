@@ -13,7 +13,4 @@ class ListingView(View):
         page = request.GET.get('page')
         commandments = paginator.get_page(page)
 
-        for commandment in commandments:
-            commandment.background_drawing = commandment.background_drawing()
-
         return render(request, 'commandments/listing.html', {'commandments': commandments})

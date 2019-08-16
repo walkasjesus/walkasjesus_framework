@@ -13,9 +13,6 @@ class IndexView(View):
         languages_total = len(languages_all)
         commandments = Commandment.objects.order_by('title')[0:20]
 
-        for commandment in commandments:
-            commandment.background_drawing = commandment.background_drawing()
-
         return render(request, 'commandments/index.html', {'commandments': commandments,
                                                            'languages_all': languages_all,
                                                            'languages_total': languages_total,

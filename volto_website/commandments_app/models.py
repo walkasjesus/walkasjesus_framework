@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 from bible_lib import BibleFactory
@@ -113,18 +114,21 @@ class Commandment(models.Model):
     def primary_bible_references(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
         directly related to the commandment. """
-        return self._get_bible_references(self.primarybiblereference_set.all())
+        return self.primarybiblereference_set.all()
 
     def secondary_bible_references(self):
         """ Secondary references are extra references which are related te the same priciple. """
-        return self._get_bible_references(self.secondarybiblereference_set.all())
+        return self.secondarybiblereference_set.all()
 
     def tertiary_bible_references(self):
         """ Tertiary references are extra, maybe indirect references, also relating to the same priciple. """
-        return self._get_bible_references(self.tertiarybiblereference_set.all())
+        return self.tertiarybiblereference_set.all()
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''
+
+    def background_song(self):
+        return self.songs()[0] if self.drawings() else ''
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -153,10 +157,6 @@ class Commandment(models.Model):
     def questions(self):
         return self.question_set.all()
 
-    def _get_bible_references(self, query_set):
-        [f.load_text() for f in query_set]
-        return query_set
-
     def __str__(self):
         return self.title
 
@@ -169,7 +169,6 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    text = gettext('Could not load text at the moment.')
 
     class Meta:
         abstract = True
@@ -185,7 +184,7 @@ class AbstractBibleReference(models.Model):
 
         return 'de4e12af7f28f599-01'
 
-    def load_text(self):
+    def text(self):
         """Get the verse text from the bible api."""
         if self.end_chapter == 0:
             end_chapter = self.begin_chapter
@@ -197,13 +196,20 @@ class AbstractBibleReference(models.Model):
         else:
             end_verse = self.end_verse
 
-        # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
-        # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
-        self.text = BibleFactory().create(self.bible_id()).verses(BibleLibBibleBooks[self.book],
-                                                                  self.begin_chapter,
-                                                                  self.begin_verse,
-                                                                  end_chapter,
-                                                                  end_verse)
+        try:
+            # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
+            # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
+            return BibleFactory().create(self.bible_id()).verses(BibleLibBibleBooks[self.book],
+                                                                 self.begin_chapter,
+                                                                 self.begin_verse,
+                                                                 end_chapter,
+                                                                 end_verse)
+
+        except Exception as ex:
+            logging.getLogger().warning('Failed to load bible text')
+            logging.getLogger().exception(ex)
+
+        return gettext('Could not load text at the moment.')
 
     def book_name(self):
         return gettext_lazy(BibleBooks[self.book].value)

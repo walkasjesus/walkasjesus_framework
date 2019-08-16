@@ -108,7 +108,7 @@ class Commandment(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField(default='')
     category = models.CharField(max_length=32,
-                                choices=[(tag.name, gettext_lazy(tag.name)) for tag in CommandmentCategories],
+                                choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
 
     def primary_bible_references(self):
@@ -211,14 +211,11 @@ class AbstractBibleReference(models.Model):
 
         return gettext('Could not load text at the moment.')
 
-    def book_name(self):
-        return gettext_lazy(BibleBooks[self.book].value)
-
     def __str__(self):
         if self.begin_chapter == 0 or self.end_verse == 0:
-            return f'{self.book_name()} {self.begin_chapter}:{self.begin_verse}'
+            return f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
         else:
-            return f'{self.book_name()} {self.begin_chapter}:{self.begin_verse}-{self.end_chapter}:{self.end_chapter}'
+            return f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}-{self.end_chapter}:{self.end_chapter}'
 
 
 class PrimaryBibleReference(AbstractBibleReference):

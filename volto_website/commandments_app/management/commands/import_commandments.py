@@ -19,14 +19,18 @@ class Command(BaseCommand):
             self._add_commandment(item)
 
     def _add_bible_ref(self, commandment_id, reference):
-        if reference.is_primary:
+        if reference.primarypresedence:
             model_reference = PrimaryBibleReference(commandment_id=commandment_id)
+        elif reference.secondarypresedence:
+            model_reference = SecondaryBibleReference(commandment_id=commandment_id)    
         else:
-            model_reference = SecondaryBibleReference(commandment_id=commandment_id)
+            model_reference = TertiaryBibleReference(commandment_id=commandment_id)
 
         model_reference.book = reference.book.name
-        model_reference.chapter = reference.start_chapter
-        model_reference.verse = reference.start_verse
+        model_reference.begin_chapter = reference.start_chapter
+        model_reference.begin_verse = reference.start_verse
+        model_reference.end_chapter = reference.end_chapter
+        model_reference.end_verse = reference.end_verse
         model_reference.save()
 
     def _add_question(self, commandment_id, question):

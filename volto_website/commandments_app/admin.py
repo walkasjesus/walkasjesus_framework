@@ -13,6 +13,11 @@ class SecondaryBibleReferenceInline(admin.TabularInline):
     extra = 0
 
 
+class TertiaryBibleReferenceInline(admin.TabularInline):
+    model = TertiaryBibleReference
+    extra = 0
+    
+
 class QuestionInline(admin.TabularInline):
     model = Question
     extra = 0
@@ -62,6 +67,7 @@ class CommandmentAdmin(admin.ModelAdmin):
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,
+        TertiaryBibleReferenceInline,
         QuestionInline,
         DrawingInline,
         SongInline,

@@ -31,6 +31,10 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-signup.css' %}">       
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- MDBootstrap Datatables  -->
+    <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+
     <script>
     $(document).ready(function(){
       // Add smooth scrolling to all links
@@ -73,6 +77,7 @@
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
             <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'admin' %}</span></a></li>
             {% endif %}
@@ -180,6 +185,16 @@
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+
+  <!-- MDBootstrap Datatables  -->
+  <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+
+  <script>
+      $(document).ready(function () {
+      $('#dtBasicExample').DataTable();
+      $('.dataTables_length').addClass('bs-select');
+      });
+  </script>
 
   </body>
 </html>

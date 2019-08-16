@@ -88,7 +88,10 @@
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">        
+                    <div class="col-md-12 heading-section text-center ftco-animate">
+                            <span class="subheading">{{ commandment.category }}</span>
+                    </div>        
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
                         <span class="subheading" style="padding-left: 20px;">{{ commandment.title }}</span>
                     </div>
                 </div>
@@ -121,14 +124,21 @@
                             {% if primary_bible_references %}
                                 <ul>
                                 {% for bible_reference in primary_bible_references %}
-                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
+                                    <li><b>{{ bible_reference }} {{ bible_reference.text | safe }}</b></li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}
                             {% if secondary_bible_references %}
-                            <h4>{% trans 'More Bible References' %}</h4>
                                 <ul>
                                 {% for bible_reference in secondary_bible_references %}
+                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}   
+                            {% if tertiary_bible_references %}
+                            <h4>{% trans 'More Bible References' %}</h4>
+                                <ul>
+                                {% for bible_reference in tertiary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
                                 {% endfor %}
                                 </ul>

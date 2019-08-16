@@ -38,7 +38,7 @@ class Command(BaseCommand):
         elif media_type == 'movie':
             model_reference = Movie(commandment_id=commandment_id)
         elif media_type == 'shortmovie':
-            model_reference = Shortmovie(commandment_id=commandment_id)
+            model_reference = ShortMovie(commandment_id=commandment_id)
         elif media_type == 'drawing':
             model_reference = Drawing(commandment_id=commandment_id)
         elif media_type == 'testimony':

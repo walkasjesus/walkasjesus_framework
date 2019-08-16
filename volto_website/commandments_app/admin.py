@@ -39,7 +39,7 @@ class MovieInline(admin.TabularInline):
 
 
 class ShortmovieInline(admin.TabularInline):
-    model = Shortmovie
+    model = ShortMovie
     extra = 0
 
 

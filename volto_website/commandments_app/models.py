@@ -212,10 +212,12 @@ class AbstractBibleReference(models.Model):
         return gettext('Could not load text at the moment.')
 
     def __str__(self):
+        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
+
         if self.begin_chapter == 0 or self.end_verse == 0:
-            return f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
+            return book_chapter_verse
         else:
-            return f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}-{self.end_chapter}:{self.end_chapter}'
+            return f'{book_chapter_verse}-{self.end_chapter}:{self.end_chapter}'
 
 
 class PrimaryBibleReference(AbstractBibleReference):
@@ -257,7 +259,7 @@ class Movie(Media):
     pass
 
 
-class Shortmovie(Media):
+class ShortMovie(Media):
     pass
 
 

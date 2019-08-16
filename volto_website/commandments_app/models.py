@@ -108,7 +108,7 @@ class Commandment(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField(default='')
     category = models.CharField(max_length=32,
-                                choices=[(tag.name, tag.value) for tag in CommandmentCategories],
+                                choices=[(tag.name, gettext_lazy(tag.name)) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
 
     def primary_bible_references(self):

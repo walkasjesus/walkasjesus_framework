@@ -18,14 +18,7 @@ class Command(BaseCommand):
         for item in commandments:
             self._add_commandment(item)
 
-    def _add_bible_ref(self, commandment_id, reference):
-        if reference.primarypresedence:
-            model_reference = PrimaryBibleReference(commandment_id=commandment_id)
-        elif reference.secondarypresedence:
-            model_reference = SecondaryBibleReference(commandment_id=commandment_id)    
-        else:
-            model_reference = TertiaryBibleReference(commandment_id=commandment_id)
-
+    def _add_bible_ref(self, model_reference, reference):
         model_reference.book = reference.book.name
         model_reference.begin_chapter = reference.start_chapter
         model_reference.begin_verse = reference.start_verse
@@ -75,13 +68,18 @@ class Command(BaseCommand):
             model_commandment.category = CommandmentCategories(commandment.category).name
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')
-            for item in commandment.bible_references:
-                self._add_bible_ref(model_commandment.id, item)
+            for item in commandment.primary_bible_references:
+                self._add_bible_ref(PrimaryBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.secondary_bible_references:
+                self._add_bible_ref(SecondaryBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.tertiary_bible_references:
+                self._add_bible_ref(TertiaryBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.questions:
                 self._add_question(model_commandment.id, item)
             for item in commandment.media:
                 self._add_media(model_commandment.id, item)
         except Exception as ex:
+            print(ex)
             print(f'Failed to import {commandment.id}')
 
 

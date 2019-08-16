@@ -6,6 +6,8 @@ class Commandment:
         self.description = ''
         self.description_nl = ''
         self.category = ''
-        self.bible_references = []
+        self.primary_bible_references = []
+        self.secondary_bible_references = []
+        self.tertiary_bible_references = []
         self.media = []
         self.questions = []

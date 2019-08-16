@@ -139,7 +139,7 @@ class Commandment(models.Model):
     def movies(self):
         return self.movie_set.filter(is_public=True)
 
-    def shortmovies(self):
+    def short_movies(self):
         return self.shortmovie_set.filter(is_public=True)
 
     def sermons(self):

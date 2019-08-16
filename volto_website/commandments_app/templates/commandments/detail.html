@@ -22,9 +22,9 @@
             </a>
         </li>
         {% endif %}
-        {% if shortmovies %}
+        {% if short_movies %}
         <li>
-            <a href="#shortmovies" class="ripple">
+            <a href="#short_movies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
@@ -165,8 +165,8 @@
                 </div>
             </div>
             {% endif %}
-            {% if commandment.shortmovies %}
-            <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            {% if commandment.short_movies %}
+            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -174,10 +174,10 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
-                            {% for shortmovie in commandment.shortmovies %}
-                            <h5>{{ shortmovie.title }}</h5>
+                            {% for short_movie in commandment.short_movies %}
+                            <h5>{{ short_movie.title }}</h5>
                             <div class="video-iframe">
-                                <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
                             {% endfor %}
                         </div>

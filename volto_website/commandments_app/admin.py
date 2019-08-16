@@ -38,7 +38,7 @@ class MovieInline(admin.TabularInline):
     extra = 0
 
 
-class ShortmovieInline(admin.TabularInline):
+class ShortMovieInline(admin.TabularInline):
     model = ShortMovie
     extra = 0
 
@@ -72,7 +72,7 @@ class CommandmentAdmin(admin.ModelAdmin):
         DrawingInline,
         SongInline,
         MovieInline,
-        ShortmovieInline,
+        ShortMovieInline,
         SermonInline,
         PictureInline,
         TestimonyInline,

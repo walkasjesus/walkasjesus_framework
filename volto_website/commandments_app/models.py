@@ -1,8 +1,10 @@
 import logging
 from enum import Enum
+from importlib import import_module
 
-from bible_lib import BibleFactory
+from bible_lib import BibleFactory, Bibles, Bible
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from django.conf import settings
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
@@ -161,6 +163,37 @@ class Commandment(models.Model):
         return self.title
 
 
+class UserPreferences:
+    def __init__(self, session):
+        self.session = session
+
+    def bible(self) -> Bible:
+        if 'bible_id' in self.session:
+            return BibleFactory().create(self.session['bible_id'])
+
+        current_user_language = translation.get_language()
+
+        if current_user_language == 'nl':
+            return BibleFactory().create('hsv')
+
+        return BibleFactory().create('de4e12af7f28f599-01')
+
+    def set_bible_id(self, bible_id: str):
+        self.session['bible_id'] = bible_id
+
+
+class BibleTranslation:
+    bibles = Bibles()
+
+    def all(self) -> [Bible]:
+        return self.bibles.list()
+
+    def all_in_user_language(self) -> [Bible]:
+        current_user_language = translation.get_language()
+        # TODO filter below on language
+        return self.all()
+
+
 class AbstractBibleReference(models.Model):
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
@@ -172,17 +205,6 @@ class AbstractBibleReference(models.Model):
 
     class Meta:
         abstract = True
-
-    def bible_id(self):
-        current_user_language = translation.get_language()
-
-        if current_user_language == 'nl':
-            return 'hsv'
-
-        if current_user_language == 'en':
-            return 'de4e12af7f28f599-01'
-
-        return 'de4e12af7f28f599-01'
 
     def text(self):
         """Get the verse text from the bible api."""
@@ -199,11 +221,11 @@ class AbstractBibleReference(models.Model):
         try:
             # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
             # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
-            return BibleFactory().create(self.bible_id()).verses(BibleLibBibleBooks[self.book],
-                                                                 self.begin_chapter,
-                                                                 self.begin_verse,
-                                                                 end_chapter,
-                                                                 end_verse)
+            return BibleFactory().create('hsv').verses(BibleLibBibleBooks[self.book],
+                                                       self.begin_chapter,
+                                                       self.begin_verse,
+                                                       end_chapter,
+                                                       end_verse)
 
         except Exception as ex:
             logging.getLogger().warning('Failed to load bible text')

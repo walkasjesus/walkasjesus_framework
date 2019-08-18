@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select name="bible_id" onchange="this.form.submit()">
+        {% for bible in bible_translation.all_in_user_language %}
+            <option value="{{ bible.id }}"{% if bible.id == user_preferences.bible.id %} selected{% endif %}>
+                {{ bible.name }} ({{ bible.language }})
+            </option>
+        {% endfor %}
+    </select>
+    <!-- <input type="submit" value="{% trans 'select bible' %}" id="submit_button"> -->
+</form>

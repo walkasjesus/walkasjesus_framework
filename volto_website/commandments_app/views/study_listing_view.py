@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 
-from commandments_app.models import Commandment
+from commandments_app.models import Commandment, UserPreferences
 
 
 class StudyListingView(View):
@@ -12,7 +12,11 @@ class StudyListingView(View):
         secondary_bible_references = []
         tertiary_bible_references = []
 
+        user_bible = UserPreferences(request.session).bible
+
         for commandment in commandments:
+            commandment.bible = user_bible
+
             for bible_reference in commandment.primary_bible_references():
                 entry = {'commandment': commandment,
                          'bible_reference': bible_reference}

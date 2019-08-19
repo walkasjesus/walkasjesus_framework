@@ -112,19 +112,20 @@ class Commandment(models.Model):
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
+    bible = BibleFactory().create('hsv')
 
     def primary_bible_references(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
         directly related to the commandment. """
-        return self.primarybiblereference_set.all()
+        return self._get_translated_bible_references(self.primarybiblereference_set.all())
 
     def secondary_bible_references(self):
         """ Secondary references are extra references which are related te the same priciple. """
-        return self.secondarybiblereference_set.all()
+        return self._get_translated_bible_references(self.secondarybiblereference_set.all())
 
     def tertiary_bible_references(self):
-        """ Tertiary references are extra, maybe indirect references, also relating to the same priciple. """
-        return self.tertiarybiblereference_set.all()
+        """ Tertiary references are extra, maybe indirect references, also relating to the same principle. """
+        return self._get_translated_bible_references(self.tertiarybiblereference_set.all())
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''
@@ -159,6 +160,10 @@ class Commandment(models.Model):
     def questions(self):
         return self.question_set.all()
 
+    def _get_translated_bible_references(self, query_set):
+        [ref.set_bible(self.bible) for ref in query_set]
+        return query_set
+
     def __str__(self):
         return self.title
 
@@ -167,7 +172,8 @@ class UserPreferences:
     def __init__(self, session):
         self.session = session
 
-    def bible(self) -> Bible:
+    @property
+    def bible(self):
         if 'bible_id' in self.session:
             return BibleFactory().create(self.session['bible_id'])
 
@@ -178,8 +184,9 @@ class UserPreferences:
 
         return BibleFactory().create('de4e12af7f28f599-01')
 
-    def set_bible_id(self, bible_id: str):
-        self.session['bible_id'] = bible_id
+    @bible.setter
+    def bible(self, value):
+        self.session['bible_id'] = value
 
 
 class BibleTranslation:
@@ -202,9 +209,14 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
+    bible = BibleFactory().create('hsv')
 
     class Meta:
         abstract = True
+
+    def set_bible(self, bible: Bible):
+        """ Set a bible to get the text in that bible translation."""
+        self.bible = bible
 
     def text(self):
         """Get the verse text from the bible api."""
@@ -221,11 +233,11 @@ class AbstractBibleReference(models.Model):
         try:
             # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
             # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
-            return BibleFactory().create('hsv').verses(BibleLibBibleBooks[self.book],
-                                                       self.begin_chapter,
-                                                       self.begin_verse,
-                                                       end_chapter,
-                                                       end_verse)
+            return self.bible.verses(BibleLibBibleBooks[self.book],
+                                     self.begin_chapter,
+                                     self.begin_verse,
+                                     end_chapter,
+                                     end_verse)
 
         except Exception as ex:
             logging.getLogger().warning('Failed to load bible text')

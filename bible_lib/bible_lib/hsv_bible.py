@@ -1,8 +1,9 @@
 import json
 import zipfile
 
-from bible_lib import BibleBooks, _DATA_PATH
+from bible_lib import _DATA_PATH
 from bible_lib.bible import Bible
+from bible_lib.bible_books import BibleBooks
 
 
 class HsvBible(Bible):

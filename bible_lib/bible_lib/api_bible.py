@@ -9,8 +9,6 @@ from bible_lib.services import Services
 class ApiBible(Bible):
     def __init__(self, bible_id=None):
         self.id = bible_id
-        self.name = ''
-        self.language = ''
         self.client = Services().api_client
         self.logger = logging.getLogger()
 

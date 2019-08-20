@@ -6,7 +6,7 @@ class Bible:
         self.id = bible_id
         self.name = ''
         self.language = ''
-        
+
     def verse(self,
               book:
               BibleBooks,

@@ -1,14 +1,14 @@
 import logging
 from enum import Enum
-from importlib import import_module
 
-from bible_lib import BibleFactory, Bibles, Bible
 from bible_lib import BibleBooks as BibleLibBibleBooks
-from django.conf import settings
+from bible_lib import BibleFactory, Bibles, Bible
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
 from url_or_relative_url_field.fields import URLOrRelativeURLField
+
+from commandments_app.lib.ordered_enum import OrderedEnum
 
 
 class Redirect(models.Model):
@@ -34,7 +34,7 @@ class CommandmentCategories(Enum):
     EndTimes = gettext_lazy('End Times')
 
 
-class BibleBooks(Enum):
+class BibleBooks(OrderedEnum):
     """" This is a copy of the enum in bible_lib,
     but I did not know how to tag it for translation
     without making a copy. """
@@ -186,7 +186,7 @@ class UserPreferences:
 
     @bible.setter
     def bible(self, value):
-        self.session['bible_id'] = value
+        self.session['bible_id'] = value.id
 
 
 class BibleTranslation:
@@ -197,8 +197,7 @@ class BibleTranslation:
 
     def all_in_user_language(self) -> [Bible]:
         current_user_language = translation.get_language()
-        # TODO filter below on language
-        return self.all()
+        return [b for b in self.all() if b.language == current_user_language]
 
 
 class AbstractBibleReference(models.Model):
@@ -252,6 +251,21 @@ class AbstractBibleReference(models.Model):
             return book_chapter_verse
         else:
             return f'{book_chapter_verse}-{self.end_chapter}:{self.end_chapter}'
+
+    def __lt__(self, other):
+        if self.__class__ is not other.__class__:
+            return NotImplemented
+
+        if self.book < other.book:
+            return True
+
+        if self.book == other.book and self.begin_chapter < self.begin_chapter:
+            return True
+
+        if self.book == other.book and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
+            return True
+
+        return False
 
 
 class PrimaryBibleReference(AbstractBibleReference):

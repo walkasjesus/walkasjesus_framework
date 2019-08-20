@@ -6,7 +6,9 @@ from commandments_app.models import Commandment, UserPreferences
 
 class StudyListingView(View):
     def get(self, request):
-        commandments = Commandment.objects.all()
+        commandments = list(Commandment.objects.all())
+        # TODO this will fail if no prim bible ref! Maybe should be one on one relation in model?
+        commandments.sort(key=lambda x: x.primary_bible_references()[0])
 
         primary_bible_references = []
         secondary_bible_references = []

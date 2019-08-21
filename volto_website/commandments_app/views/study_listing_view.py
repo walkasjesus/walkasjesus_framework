@@ -1,11 +1,12 @@
+from bible_lib import BibleFactory
 from django.shortcuts import render
 from django.views import View
 
-from commandments_app.models import Commandment, UserPreferences
+from commandments_app.models import Commandment
 
 
 class StudyListingView(View):
-    def get(self, request):
+    def get(self, request, bible_id: str):
         commandments = list(Commandment.objects.all())
         # TODO this will fail if no prim bible ref! Maybe should be one on one relation in model?
         commandments.sort(key=lambda x: x.primary_bible_references()[0])
@@ -14,7 +15,7 @@ class StudyListingView(View):
         secondary_bible_references = []
         tertiary_bible_references = []
 
-        user_bible = UserPreferences(request.session).bible
+        user_bible = BibleFactory().create(bible_id)
 
         for commandment in commandments:
             commandment.bible = user_bible

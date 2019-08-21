@@ -6,7 +6,7 @@
             <div class="text-content p-4 text-center">
                 <h3>{{ commandment.title }}</h3>
                 <p class="">
-                    <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
+                    <a href="{% url 'commandments:detail' user_preferences.bible.id commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
                 </p>
             </div>
         </div>

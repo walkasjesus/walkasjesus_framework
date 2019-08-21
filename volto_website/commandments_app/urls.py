@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from commandments_app.views.bible_view import BibleView
 from commandments_app.views.demo_view import DemoView
@@ -12,10 +13,10 @@ app_name = 'commandments'
 
 
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
+    path('', cache_page(60*60)(IndexView.as_view()), name='index'),
     path('demo', DemoView.as_view(), name='demo'),
     path('bible', BibleView.as_view(), name='bible'),
-    path('listing', ListingView.as_view(), name='listing'),
+    path('listing', cache_page(60*60)(ListingView.as_view()), name='listing'),
     path('study_listing', StudyListingView.as_view(), name='study_listing'),
     path('detail/<int:commandment_id>/', DetailView.as_view(), name='detail'),
 ]

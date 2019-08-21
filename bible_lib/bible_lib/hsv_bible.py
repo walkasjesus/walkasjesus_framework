@@ -1,9 +1,11 @@
 import json
+import logging
 import zipfile
 
 from bible_lib import _DATA_PATH
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
+from bible_lib.performance_time_decorator import performance_time
 
 
 class HsvBible(Bible):
@@ -19,7 +21,9 @@ class HsvBible(Bible):
         if HsvBible._content is None:
             HsvBible._content = self._load()
 
+    @performance_time
     def _load(self):
+        logging.getLogger().info('Loading HSV bible contents from disk')
         with zipfile.ZipFile(_DATA_PATH / 'hsv_bible.zip', mode='r') as zip_file:
             json_content = zip_file.read('hsv_bible.json', pwd='bible'.encode()).decode('utf-8')
             return json.loads(json_content)

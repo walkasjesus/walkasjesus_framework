@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
 
 {% block homebanner %}
-
+{% cache 3600 commandments_index_homebanner %}
 <section class="home-slider js-fullheight owl-carousel">
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <div class="overlay"></div>
@@ -41,11 +42,11 @@
     </div>
   </div>
 </section>
-
+{% endcache %}
 {% endblock %}
 
 {% block content %}
-
+{% cache 3600 commandments_index_content %}
 <section class="ftco-counter" id="section-counter">
     	<div class="container-fluid px-0">
     		<div class="row no-gutters">
@@ -120,5 +121,5 @@
 </div>
 </div>
 </section>
-
+{% endcache %}
 {% endblock %}

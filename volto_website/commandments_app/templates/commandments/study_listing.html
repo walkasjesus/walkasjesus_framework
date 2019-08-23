@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
 {% block content %}
-
+{% cache 3600 commandments_study_listing %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">
@@ -91,8 +92,8 @@
                 </tfoot>
             </table>
         </div>
+        </div>
     </section>
 </section>
-
-
+{% endcache %}
 {% endblock %}

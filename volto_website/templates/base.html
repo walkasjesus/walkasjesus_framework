@@ -2,8 +2,9 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 <html lang="en">
-  {% cache 3600 head %}
+  {% cache 3600 head LANGUAGE_CODE %}
   <head>
     <title>{% trans 'Jesus commandments' %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>

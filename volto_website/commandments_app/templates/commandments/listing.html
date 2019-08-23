@@ -2,8 +2,9 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block content %}
-{% cache 3600 commandments_listing %}
+{% cache 3600 commandments_listing LANGUAGE_CODE %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
 <div class="ftco-section bg-light" id="sermons-section">
     <div class="container">

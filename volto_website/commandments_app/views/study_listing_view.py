@@ -1,8 +1,8 @@
-from functools import lru_cache
-
 from bible_lib import BibleFactory
 from bible_lib.performance_time_decorator import performance_time
 from django.shortcuts import render
+from django.core.cache import cache
+from django.utils import translation
 from django.views import View
 
 from commandments_app.models import Commandment
@@ -10,13 +10,14 @@ from commandments_app.models import Commandment
 
 class StudyListingView(View):
     def get(self, request, bible_id: str):
-        data_context = self._get_data_context(bible_id)
-        return render(request, 'commandments/study_listing.html', data_context)
+        cache_key = translation.get_language() + '.StudyListingViewContext'
+        if cache_key not in cache:
+            cache.set(cache_key, self._get_data_context(bible_id), 60*60)
 
-    @staticmethod
+        return render(request, 'commandments/study_listing.html', cache.get(cache_key))
+
     @performance_time
-    @lru_cache(maxsize=None)
-    def _get_data_context(bible_id):
+    def _get_data_context(self, bible_id):
         commandments = list(Commandment.objects.all())
         # TODO this will fail if no prim bible ref! Maybe should be one on one relation in model?
         commandments.sort(key=lambda x: x.primary_bible_references()[0])

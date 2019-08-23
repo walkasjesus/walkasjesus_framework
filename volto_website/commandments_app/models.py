@@ -16,22 +16,21 @@ class Redirect(models.Model):
 
 
 class CommandmentCategories(Enum):
-    Salvation = gettext_lazy('Salvation commands')
+    Salvation = gettext_lazy('Salvation Commands')
     Discipleship = gettext_lazy('Discipleship Commands')
-    EffectiveWorship = gettext_lazy('Effective worship commands')
+    Worship = gettext_lazy('Worship Commands')
     Blessings = gettext_lazy('Blessings')
-    JudgmentSeat = gettext_lazy('Judgment Seat and Rewards commands')
+    JudgmentSeat = gettext_lazy('Judgment Seat Commands')
     Relationship = gettext_lazy('Relationship Commands')
-    Marriage = gettext_lazy('Marriage commands')
+    Marriage = gettext_lazy('Marriage Commands')
     Persecution = gettext_lazy('Persecution Commands')
-    HowToBe = gettext_lazy('How to Be, Do or Think commands')
-    EthicOfLove = gettext_lazy('Ethic of Love')
+    Thinking = gettext_lazy('Thinking Commands')
     Prayer = gettext_lazy('Prayer Commands')
     FalseTeachers = gettext_lazy('False Teachers Commands')
-    Evangelism = gettext_lazy('Evangelism and Missions')
+    Witnessing = gettext_lazy('Witnessing Commands')
     Greatest = gettext_lazy('Greatest Commands')
     Finance = gettext_lazy('Finance Commands')
-    EndTimes = gettext_lazy('End Times')
+    Holiness = gettext_lazy('Holiness Commands')
 
 
 class BibleBooks(OrderedEnum):

@@ -13,7 +13,7 @@ class HsvBible(Bible):
     _content = None
 
     def __init__(self):
-        self.id = 'HSV'
+        self.id = 'hsv'
         self.name = 'Herziene Staten Vertaling'
         self.language = 'nl'
 

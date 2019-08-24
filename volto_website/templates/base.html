@@ -2,10 +2,12 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 <html lang="en">
-  {% cache 3600 head %}
+  {% cache 3600 head LANGUAGE_CODE %}
   <head>
     <title>{% trans 'Jesus commandments' %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,53 +18,18 @@
 
     <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-snippet.css' %}">   
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-menu.css' %}">   
-    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-signup.css' %}">       
-
-    <!-- MDBootstrap Datatables  -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-signup.css' %}">
     <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
-
-    <script>
-    $(document).ready(function(){
-      // Add smooth scrolling to all links
-      $("a").on('click', function(event) {
-
-        // Make sure this.hash has a value before overriding default behavior
-        if (this.hash !== "") {
-          // Prevent default anchor click behavior
-          event.preventDefault();
-
-          // Store hash
-          var hash = this.hash;
-
-          // Using jQuery's animate() method to add smooth page scroll
-          // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-          $('html, body').animate({
-            scrollTop: $(hash).offset().top
-          }, 800, function(){
-
-            // Add hash (#) to URL when done scrolling (default click behavior)
-            window.location.hash = hash;
-          });
-        } // End if
-      });
-    });
-    </script>
   </head>
   {% endcache %}
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -173,7 +140,7 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-  {% cache 3600 head_ext %}
+  {% cache 3600 javascript %}
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
   <script src="{% static 'js/popper.min.js' %}"></script>
@@ -187,12 +154,40 @@
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
 
   <script>
       $(document).ready(function () {
       $('#dtBasicExample').DataTable();
       $('.dataTables_length').addClass('bs-select');
       });
+  </script>
+
+  <script>
+  $(document).ready(function(){
+    // Add smooth scrolling to all links
+    $("a").on('click', function(event) {
+
+      // Make sure this.hash has a value before overriding default behavior
+      if (this.hash !== "") {
+        // Prevent default anchor click behavior
+        event.preventDefault();
+
+        // Store hash
+        var hash = this.hash;
+
+        // Using jQuery's animate() method to add smooth page scroll
+        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+        $('html, body').animate({
+          scrollTop: $(hash).offset().top
+        }, 800, function(){
+
+          // Add hash (#) to URL when done scrolling (default click behavior)
+          window.location.hash = hash;
+        });
+      } // End if
+    });
+  });
   </script>
 
   {% endcache %}

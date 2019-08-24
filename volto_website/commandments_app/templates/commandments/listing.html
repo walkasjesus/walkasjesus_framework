@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 {% block content %}
-
+{% cache 3600 commandments_listing LANGUAGE_CODE %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
-<section class="ftco-section bg-light" id="sermons-section">
+<div class="ftco-section bg-light" id="sermons-section">
     <div class="container">
         <div class="row justify-content-center pb-5">
             <div class="col-md-12 heading-section text-center ftco-animate">
@@ -46,6 +48,7 @@
             </div>
         </div>
     </div>
+</div>
 </section>
-
+{% endcache %}
 {% endblock %}

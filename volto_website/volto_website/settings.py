@@ -163,6 +163,7 @@ MESSAGE_TAGS = {
 
 CACHES = {
     'default': {
+        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake-volto-1',
     }

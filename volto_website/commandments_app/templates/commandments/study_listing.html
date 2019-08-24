@@ -36,8 +36,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if primary_bible_references %}
-                    {% for entry in primary_bible_references %}
+                    {% if bible_references.primary %}
+                    {% for entry in bible_references.primary %}
                     <tr>
                         <th scope="row">{{ entry.commandment.id }}</th>
                         <td>{{ entry.commandment.title }}</td>
@@ -49,8 +49,8 @@
                     {% endfor %}
                     {% endif %}
 
-                    {% if secondary_bible_references %}
-                    {% for entry in secondary_bible_references %}
+                    {% if bible_references.secondary %}
+                    {% for entry in bible_references.secondary %}
                     <tr>
                         <th scope="row">{{ entry.commandment.id }}</th>
                         <td>{{ entry.commandment.title }}</td>
@@ -62,8 +62,8 @@
                     {% endfor %}
                     {% endif %}
 
-                    {% if tertiary_bible_references %}
-                    {% for entry in tertiary_bible_references %}
+                    {% if bible_references.tertiary %}
+                    {% for entry in bible_references.tertiary %}
                     <tr>
                         <th scope="row">{{ entry.commandment.id }}</th>
                         <td>{{ entry.commandment.title }}</td>

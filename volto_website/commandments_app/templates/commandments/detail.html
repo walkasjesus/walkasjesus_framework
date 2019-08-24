@@ -57,6 +57,13 @@
             </a>
         </li>
         {% endif %}
+        {% if blogs %}
+        <li>
+            <a href="#blogs" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if sermons %}
         <li>
             <a href="#sermons" class="ripple">
@@ -282,6 +289,26 @@
                             <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                             <div class="video-iframe">
                                 <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if commandment.blogs %}
+            <div id="blogs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Blogs' %}</h4>
+                            {% for blog in commandment.blogs %}
+                            <h5>{{ blog.author }} - {{ blog.title }}</h5>
+                            <div class="video-iframe">
+                                <iframe src="{{ blog.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
                             {% endfor %}
                         </div>

@@ -153,6 +153,9 @@ class Commandment(models.Model):
     def testimonies(self):
         return self.testimony_set.filter(is_public=True)
 
+    def blogs(self):
+        return self.blog_set.filter(is_public=True)
+
     def books(self):
         return self.book_set.filter(is_public=True)
 
@@ -319,6 +322,10 @@ class Picture(Media):
 
 
 class Testimony(Media):
+    pass
+
+
+class Blog(Media):
     pass
 
 

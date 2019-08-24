@@ -43,6 +43,8 @@ class Command(BaseCommand):
             model_reference = Drawing(commandment_id=commandment_id)
         elif media_type == 'testimony':
             model_reference = Testimony(commandment_id=commandment_id)
+        elif media_type == 'blog':
+            model_reference = Blog(commandment_id=commandment_id)
         elif media_type == 'picture':
             model_reference = Picture(commandment_id=commandment_id)
         elif media_type == 'sermon':

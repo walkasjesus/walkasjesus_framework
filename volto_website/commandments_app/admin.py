@@ -58,6 +58,11 @@ class TestimonyInline(admin.TabularInline):
     extra = 0
 
 
+class BlogInline(admin.TabularInline):
+    model = Blog
+    extra = 0
+
+
 class BookInline(admin.TabularInline):
     model = Book
     extra = 0
@@ -76,6 +81,7 @@ class CommandmentAdmin(admin.ModelAdmin):
         SermonInline,
         PictureInline,
         TestimonyInline,
+        BlogInline,
         BookInline,
     ]
 

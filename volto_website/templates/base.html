@@ -47,11 +47,11 @@
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:study_listing' user_preferences.bible.id %}" class="nav-link"><span>{% trans 'Study' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
-            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'admin' %}</span></a></li>
+            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Panel' %}</span></a></li>
             {% endif %}
             {% if user.is_authenticated %}
-	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'profile' %} ({{ user.username }})</span></a></li>
-	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'logout' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
+	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'Logout' %}</span></a></li>
             {% else %}
             <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
             <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>

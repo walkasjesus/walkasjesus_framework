@@ -68,8 +68,8 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/bible.png' %}" width="80px" alt="">
 				</div>
-                <strong class="number" data-number="890">0</strong>
-                <span>{% trans 'Bible references' %}</span>
+                <strong class="number" data-number="{{ bibles_total }}">0</strong>
+                <span>{% trans 'Bible translations' %}</span>
               </div>
             </div>
           </div>
@@ -114,8 +114,10 @@
 	<div class="row">
 	{% if commandments %}
 		{% for commandment in commandments %}
-			{% include "commandments/single_commandment_overview.html" %}
-		{% endfor %}
+      {% if commandment.background_drawing.url is not defined %}
+          {% include "commandments/single_commandment_overview.html" %}
+      {% endif %}
+    {% endfor %}
 	{% else %}
 		<p>{% trans 'No commandments are available.' %}</p>
 	{% endif %}

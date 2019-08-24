@@ -37,39 +37,39 @@
                 </thead>
                 <tbody>
                     {% if bible_references.primary %}
-                    {% for entry in bible_references.primary %}
+                    {% for bible_reference in bible_references.primary %}
                     <tr>
-                        <th scope="row">{{ entry.commandment.id }}</th>
-                        <td>{{ entry.commandment.title }}</td>
-                        <td>{{ entry.bible_reference }}</td>
-                        <td>{{ entry.bible_reference.text | safe }}</td>
-                        <td>{{ entry.commandment.get_category_display }}</td>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference}}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Primary' %}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
 
                     {% if bible_references.secondary %}
-                    {% for entry in bible_references.secondary %}
+                    {% for bible_reference in bible_references.secondary %}
                     <tr>
-                        <th scope="row">{{ entry.commandment.id }}</th>
-                        <td>{{ entry.commandment.title }}</td>
-                        <td>{{ entry.bible_reference }}</td>
-                        <td>{{ entry.bible_reference.text | safe }}</td>
-                        <td>{{ entry.commandment.get_category_display }}</td>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference }}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Secondary' %}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}
 
                     {% if bible_references.tertiary %}
-                    {% for entry in bible_references.tertiary %}
+                    {% for bible_reference in bible_references.tertiary %}
                     <tr>
-                        <th scope="row">{{ entry.commandment.id }}</th>
-                        <td>{{ entry.commandment.title }}</td>
-                        <td>{{ entry.bible_reference }}</td>
-                        <td>{{ entry.bible_reference.text | safe }}</td>
-                        <td>{{ entry.commandment.get_category_display }}</td>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference }}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Tertiary' %}</td>
                     </tr>
                     {% endfor %}

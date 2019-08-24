@@ -285,45 +285,23 @@ class BibleReferences:
         self.bible = BibleFactory().create('hsv')
         self._data = None
 
-    def _all(self):
-        if self._data is None:
-            commandments = Commandment.objects.all()
-            # commandments = list(Commandment.objects.all())
-            # TODO this will fail if no prim bible ref! Maybe should be one on one relation in model?
-            # commandments.sort(key=lambda x: x.primary_bible_references()[0])
-            primary = []
-            secondary = []
-            tertiary = []
-            for commandment in commandments:
-                commandment.bible = self.bible
-
-                for bible_reference in commandment.primary_bible_references():
-                    entry = {'commandment': commandment,
-                             'bible_reference': bible_reference}
-                    primary.append(entry)
-
-                for bible_reference in commandment.secondary_bible_references():
-                    entry = {'commandment': commandment,
-                             'bible_reference': bible_reference}
-                    secondary.append(entry)
-
-                for bible_reference in commandment.tertiary_bible_references():
-                    entry = {'commandment': commandment,
-                             'bible_reference': bible_reference}
-                    tertiary.append(entry)
-
-                self._data = primary, secondary, tertiary
-
-        return self._data
-
     def primary(self):
-        return self._all()[0]
+        return self._query_references(PrimaryBibleReference.objects.filter(commandment__gt=0))
 
     def secondary(self):
-        return self._all()[1]
+        return self._query_references(SecondaryBibleReference.objects.filter(commandment__gt=0))
 
     def tertiary(self):
-        return self._all()[2]
+        return self._query_references(TertiaryBibleReference.objects.filter(commandment__gt=0))
+
+    def _query_references(self, query):
+        # This will reduce the amount of sql queries as we already know we also want the commandments
+        query = query.select_related()
+
+        # Set the bible for each reference
+        for ref in query:
+            ref.set_bible(self.bible)
+        return query
 
 
 class Media(models.Model):

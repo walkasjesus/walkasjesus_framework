@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'commandments_app.context_processors.bible_translation',
                 'commandments_app.context_processors.user_preferences',
+                'commandments_app.context_processors.cache_settings',
             ],
         },
     },

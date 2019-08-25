@@ -301,8 +301,8 @@ class BibleReferences:
         query = query.select_related()
 
         # Set the bible for each reference
-        for ref in query:
-            ref.set_bible(self.bible)
+        [ref.set_bible(self.bible) for ref in query]
+
         return query
 
 

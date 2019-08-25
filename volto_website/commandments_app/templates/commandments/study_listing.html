@@ -4,7 +4,7 @@
 {% load cache %}
 {% get_current_language as LANGUAGE_CODE %}
 {% block content %}
-{% cache 3600 commandments_study_listing LANGUAGE_CODE %}
+{% cache 3600 commandments_study_listing LANGUAGE_CODE user_preferences.bible.id %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">

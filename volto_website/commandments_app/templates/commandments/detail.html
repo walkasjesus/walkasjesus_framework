@@ -4,7 +4,7 @@
 {% load cache %}
 {% get_current_language as LANGUAGE_CODE %}
 {% block content %}
-{% cache 3600 commandments_detail LANGUAGE_CODE %}
+{% cache 3600 commandments_detail LANGUAGE_CODE user_preferences.bible.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         <li>

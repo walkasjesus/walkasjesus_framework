@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 
-from bible_lib import bibles
+from django.contrib.auth.models import User
 from commandments_app.models import Commandment
 from django.conf import settings
 
@@ -12,8 +12,13 @@ class IndexView(View):
         languages_total = len(languages_all)
         commandments = Commandment.objects.order_by('title')[0:100]
         commandments_total = Commandment.objects.count()
+        users_total = User.objects.count()
 
         return render(request, 'commandments/index.html', {'commandments': commandments,
                                                            'languages_all': languages_all,
                                                            'languages_total': languages_total,
-                                                           'commandments_total': commandments_total})
+                                                           'commandments_total': commandments_total,
+                                                           'users_total': users_total})
+
+
+

@@ -3,15 +3,18 @@ import logging
 
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
+from bible_lib.formatters.formatter import Formatter
+from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
 from bible_lib.services import Services
 
 
 class ApiBible(Bible):
-    def __init__(self, bible_id=None):
+    def __init__(self, bible_id=None, text_formatter: Formatter=PlainTextFormatter()):
         self.id = bible_id
         self.name = ''
         self.language = ''
         self.client = Services().api_client
+        self.formatter = text_formatter
         self.logger = logging.getLogger()
 
     def verses(self,
@@ -36,6 +39,13 @@ class ApiBible(Bible):
             self.logger.warning(f'Failed to parse {verse_query} for bible {self.id}.')
             self.logger.warning(ex)
             return 'Not found'
+
+        # TODO split the data like:<p class="p"><span data-number="51" class="v">51</span>En Hij sprak tot hem: Voorwaar, voorwaar, Ik zeg u: Gij zult de hemel geopend zien, en de engelen Gods zien opstijgen en nederdalen over den Mensenzoon.</p><p class="p"><span data-number="1" class="v">1</span>En de derde dag werd er een bruiloft gevierd te Kana van Galilea. De moeder van Jesus was er tegenwoordig, </p>
+        # This is the idea after the split
+        for verse in verses:
+            self.formatter.add_verse(current_chapter,
+                                     current_verse,
+                                     self._get(book, current_chapter, current_verse))
 
         return verses
 

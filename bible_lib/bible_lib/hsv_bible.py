@@ -3,16 +3,19 @@ import zipfile
 
 from bible_lib import BibleBooks, _DATA_PATH
 from bible_lib.bible import Bible
+from bible_lib.formatters.formatter import Formatter
+from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
 
 
 class HsvBible(Bible):
     # share variable between HsvBible
     _content = None
 
-    def __init__(self):
+    def __init__(self, text_formatter: Formatter = PlainTextFormatter()):
         self.id = 'HSV'
         self.name = 'Herziene Staten Vertaling'
         self.language = 'nl'
+        self.formatter = text_formatter
 
         # Do not load if already done by another instance
         if HsvBible._content is None:
@@ -30,21 +33,21 @@ class HsvBible(Bible):
                end_chapter: int,
                end_verse: int) -> str:
 
-        verses_texts = []
         current_chapter = start_chapter
         current_verse = start_verse
 
         while current_chapter <= end_chapter:
-            while self._contains(book, current_chapter, current_verse) and not (current_chapter >= end_chapter and current_verse > end_verse):
-                verses_texts.append(self._get(book, current_chapter, current_verse))
+            while self._contains(book, current_chapter, current_verse) and not (
+                    current_chapter >= end_chapter and current_verse > end_verse):
+                self.formatter.add_verse(current_chapter,
+                                         current_verse,
+                                         self._get(book, current_chapter, current_verse))
                 current_verse += 1
 
             current_chapter += 1
             current_verse = 1
 
-        # TODO inject verse numbers with span like other interface
-
-        return ' '.join(verses_texts)
+        return self.formatter.flush()
 
     def _get(self, book: BibleBooks, chapter: int, verse: int) -> bool:
         return HsvBible._content[book.name][str(chapter)][str(verse)]

@@ -1,10 +1,7 @@
 from bible_lib import Bible
 from bible_lib.api_bible import ApiBible
+from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
 from bible_lib.hsv_bible import HsvBible
-
-
-class PlainTextFormatter(object):
-    pass
 
 
 class BibleFactory:
@@ -15,5 +12,4 @@ class BibleFactory:
         if bible_id.lower() == 'hsv':
             return HsvBible(self.text_formatter)
         else:
-            return ApiBible(bible_id=bible_id, self.text_formatter)
-
+            return ApiBible(bible_id, self.text_formatter)

@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% get_current_language as LANGUAGE_CODE %}
 {% load cache %}
 
 {% block homebanner %}
-{% cache 3600 commandments_index_homebanner LANGUAGE_CODE %}
+{% cache cache_timeout commandments_detail cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <div class="overlay"></div>
@@ -47,7 +46,7 @@
 {% endblock %}
 
 {% block content %}
-{% cache 3600 commandments_index_content LANGUAGE_CODE user_preferences.bible.id %}
+{% cache cache_timeout commandments_detail cache_on_bible %}
 <section class="ftco-counter" id="section-counter">
     	<div class="container-fluid px-0">
     		<div class="row no-gutters">

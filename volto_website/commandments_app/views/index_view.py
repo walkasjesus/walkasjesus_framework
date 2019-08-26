@@ -9,11 +9,12 @@ from commandments_app.models import Commandment
 class IndexView(View):
     def get(self, request):
         languages_total = len(settings.LANGUAGES)
-        commandments = Commandment.objects.order_by('title')[0:100]
         commandments_total = Commandment.objects.count()
         users_total = User.objects.count()
 
-        return render(request, 'commandments/index.html', {'commandments': commandments,
+        commandments_with_background_drawing = [c for c in Commandment.objects.all() if c.background_drawing()]
+
+        return render(request, 'commandments/index.html', {'commandments': commandments_with_background_drawing,
                                                            'languages_total': languages_total,
                                                            'commandments_total': commandments_total,
                                                            'users_total': users_total})

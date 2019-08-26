@@ -131,10 +131,8 @@
 	<div class="row">
 	{% if commandments %}
 		{% for commandment in commandments %}
-      {% if commandment.background_drawing.url is not defined %}
           {% include "commandments/single_commandment_overview.html" %}
-      {% endif %}
-    {% endfor %}
+        {% endfor %}
 	{% else %}
 		<p>{% trans 'No commandments are available.' %}</p>
 	{% endif %}

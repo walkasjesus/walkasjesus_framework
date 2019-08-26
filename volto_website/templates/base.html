@@ -14,8 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel='stylesheet' id='fontawesome-css' href='https://use.fontawesome.com/releases/v5.0.1/css/all.css?ver=4.9.1' type='text/css' media='all' />    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
@@ -44,7 +43,7 @@
 	        <ul class="navbar-nav nav ml-auto">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
             <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Panel' %}</span></a></li>
             {% endif %}

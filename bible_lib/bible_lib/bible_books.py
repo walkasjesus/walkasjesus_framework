@@ -52,7 +52,7 @@ class BibleBooks(Enum):
     Mark = 'Mark'
     Luke = 'Luke'
     John = 'John'
-    Acts = 'Acts (of the Apostles)'
+    Acts = 'Acts'
     Romans = 'Romans'
     CorinthiansFirstBook = '1 Corinthians'
     CorinthiansSecondBook = '2 Corinthians'

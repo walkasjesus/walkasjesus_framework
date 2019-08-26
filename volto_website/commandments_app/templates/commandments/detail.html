@@ -7,8 +7,8 @@
 <nav class="floating-menu">
     <ul class="main-menu">
         <li>
-            <a href="#description" class="ripple">
-                <i class="fas fa-home fa-lg"><img src="{% static 'images/description.png' %}" width="40px" alt=""></i>
+            <a href="#devotional" class="ripple">
+                <i class="fas fa-home fa-lg"><img src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         <li>
@@ -106,16 +106,17 @@
             </div>
         </div>                               
         <div class="row">
-            {% if commandment.description %}
-            <div id="description" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            {% if commandment.devotional %}
+            <div id="devotional" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/description.png' %}" width="65px" alt="">
+                        <img src="{% static 'images/devotional.png' %}" width="65px" alt="">
                         </div>
-                        <div id="description" class="our-services-text">
-                            <h4>{% trans 'Description' %}</h4>
-                            {{ commandment.description }}
+                        <div id="devotional" class="our-services-text">
+                            <h4>{% trans 'Devotional' %}</h4>
+                            <p>{{ commandment.devotional }}</p>
+                            {% if commandment.devotional_source is not defined %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
                         </div>
                     </div>
                 </div>
@@ -128,15 +129,16 @@
                         <img src="{% static 'images/bible.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
-                            <h4>{% trans 'Bible References' %}</h4>
-                            {% if commandment.primary_bible_references %}
+                            <h4>{% trans 'Primary Bible Reference' %}</h4>
+                            <p><i>{% trans 'Primary references is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.primary_bible_references %}
                                     <li><b>{{ bible_reference }} {{ bible_reference.text | safe }}</b></li>
                                 {% endfor %}
                                 </ul>
-                            {% endif %}
                             {% if commandment.secondary_bible_references %}
+                            <h4>{% trans 'Secondary Bible References' %}</h4>
+                            <p><i>{% trans 'Secondary references are extra references which are related te the same priciple' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.secondary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
@@ -144,7 +146,8 @@
                                 </ul>
                             {% endif %}   
                             {% if commandment.tertiary_bible_references %}
-                            <h4>{% trans 'More Bible References' %}</h4>
+                            <h4>{% trans 'Tertiary Bible References' %}</h4>
+                            <p><i>{% trans 'Tertiary references are extra, maybe indirect references, also relating to the same principle' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.tertiary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
@@ -166,6 +169,7 @@
                             <h4>{% trans 'Drawings' %}</h4>
                             {% for drawing in commandment.drawings %}
                                 <img src="{{ drawing.url }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
+                                {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
                                 <p>Artist: {{ drawing.author }}</p>
                             {% endfor %}
                         </div>
@@ -184,6 +188,7 @@
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in commandment.short_movies %}
                             <h5>{{ short_movie.title }}</h5>
+                            {% if short_movie.description != "nan" %}<p>{{ short_movie.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -204,6 +209,7 @@
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in commandment.songs %}
                             <h5>{{ song.author }} - {{ song.title }}</h5>
+                            {% if song.description != "nan" %}<p>{{ song.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -224,6 +230,7 @@
                             <h4>{% trans 'Movies' %}</h4>
                             {% for movie in commandment.movies %}
                             <h5>{{ movie.title }}</h5>
+                            {% if movie.description != "nan" %}<p>{{ movie.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -288,6 +295,7 @@
                             <h4>{% trans 'Testimonies' %}</h4>
                             {% for testimony in commandment.testimonies %}
                             <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                            {% if testimony.description != "nan" %}<p>{{ testimony.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -308,6 +316,7 @@
                             <h4>{% trans 'Blogs' %}</h4>
                             {% for blog in commandment.blogs %}
                             <h5><a href="{{ blog.url }}" target="_blank">{{ blog.author }} - {{ blog.title }}</a></h5>
+                            {% if blog.description != "nan" %}<p>{{ blog.description }}</p>{% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -325,6 +334,7 @@
                             <h4>{% trans 'Sermons' %}</h4>
                             {% for sermon in commandment.sermons %}
                             <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
+                            {% if sermon.description != "nan" %}<p>{{ sermon.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -350,6 +360,7 @@
                                     </br>
                                     </br>
                                     <h5 class="mt-0 font-weight-bold">{{ book.author }} - {{ book.title }}</h5>
+                                    {% if book.description != "nan" %}<p>{{ book.description }}</p>{% endif %}
                                 </div>
                             </div>
                             {% endfor %}

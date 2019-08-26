@@ -57,6 +57,7 @@ class Command(BaseCommand):
 
         print(f'Adding {media_type}: {media.title} - {media.author}')
         model_reference.title = media.title
+        model_reference.description = media.description
         model_reference.url = media.link
         model_reference.author = media.author
         model_reference.is_public = media.is_public
@@ -66,7 +67,7 @@ class Command(BaseCommand):
         try:
             model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
-            model_commandment.description = commandment.description
+            model_commandment.devotional = commandment.devotional
             model_commandment.category = CommandmentCategories(commandment.category).name
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')

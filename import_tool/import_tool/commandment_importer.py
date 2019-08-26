@@ -26,8 +26,8 @@ class CommandmentImporter(object):
             commandment.id = first(group, 'step')
             commandment.title = first(group, 'title_en')
             commandment.title_nl = first(group, 'title_nl')
-            commandment.description = first(group, 'title_description_en')
-            commandment.description_nl = first(group, 'title_description_nl')
+            commandment.devotional = first(group, 'devotional_en')
+            commandment.devotional_nl = first(group, 'devotional_nl')
             commandment.category = first(group, 'category')
 
             # Parse bible refs
@@ -48,6 +48,7 @@ class CommandmentImporter(object):
                 if isinstance(row['media_link'], str):
                     media = Media()
                     media.title = row['media_title']
+                    media.description = row['media_description_en']
                     media.link = row['media_link']
                     media.type = row['media_type']
                     media.author = row['media_author']

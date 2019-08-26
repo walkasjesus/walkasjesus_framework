@@ -107,7 +107,7 @@ class BibleBooks(OrderedEnum):
 
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
-    description = models.TextField(default='')
+    devotional = models.TextField(default='')
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
@@ -310,6 +310,7 @@ class Media(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     title = models.CharField(max_length=128, default='')
+    description = models.TextField(default='')
     author = models.CharField(max_length=64, default='')
     url = URLOrRelativeURLField(default='#')
     is_public = models.BooleanField(default=False)

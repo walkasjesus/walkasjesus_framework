@@ -259,13 +259,13 @@ class AbstractBibleReference(models.Model):
         if self.__class__ is not other.__class__:
             return NotImplemented
 
-        if self.book < other.book:
+        if BibleBooks[self.book] < BibleBooks[other.book]:
             return True
 
-        if self.book == other.book and self.begin_chapter < self.begin_chapter:
+        if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter < self.begin_chapter:
             return True
 
-        if self.book == other.book and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
+        if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
             return True
 
         return False

@@ -68,6 +68,7 @@ class Command(BaseCommand):
             model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
             model_commandment.devotional = commandment.devotional
+            model_commandment.devotional_source = commandment.devotional_source
             model_commandment.category = CommandmentCategories(commandment.category).name
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')

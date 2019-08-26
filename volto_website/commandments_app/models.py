@@ -131,7 +131,7 @@ class Commandment(models.Model):
         return self.drawings()[0] if self.drawings() else ''
 
     def background_song(self):
-        return self.songs()[0] if self.drawings() else ''
+        return self.songs()[0] if self.songs() else ''
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -320,7 +320,7 @@ class Media(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.title
+        return f'Media at: {self.url}'
 
 
 class Drawing(Media):

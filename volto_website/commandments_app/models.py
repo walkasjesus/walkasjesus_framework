@@ -115,10 +115,12 @@ class Commandment(models.Model):
                                 default=CommandmentCategories.Salvation)
     bible = BibleFactory().create('hsv')
 
-    def primary_bible_references(self):
+    def primary_bible_reference(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
         directly related to the commandment. """
-        return self._get_translated_bible_references(self.primarybiblereference_set.all())
+        reference = self.primarybiblereference
+        reference.set_bible(self.bible)
+        return reference
 
     def secondary_bible_references(self):
         """ Secondary references are extra references which are related te the same priciple. """
@@ -277,7 +279,7 @@ class AbstractBibleReference(models.Model):
 
 
 class PrimaryBibleReference(AbstractBibleReference):
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+    commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
 
 
 class SecondaryBibleReference(AbstractBibleReference):

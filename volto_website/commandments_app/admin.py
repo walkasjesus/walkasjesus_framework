@@ -69,7 +69,7 @@ class BookInline(admin.TabularInline):
 
 
 class CommandmentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title',  'primary_bible_references', 'category']
+    list_display = ['id', 'title',  'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,

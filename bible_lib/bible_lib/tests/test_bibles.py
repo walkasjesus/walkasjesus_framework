@@ -6,7 +6,7 @@ from bible_lib.tests.dummy_responses import DummyResponses
 
 
 class TestBibles(TestCase):
-    def test_list_bibles(self):
+    def test_list(self):
         bibles = Bibles()
         bibles.client.get = Mock(return_value=DummyResponses().bibles())
         bible_list = bibles.list()
@@ -17,6 +17,14 @@ class TestBibles(TestCase):
                 found = True
 
         self.assertTrue(found)
+
+    def test_dictionary(self):
+        bibles = Bibles()
+        bibles.client.get = Mock(return_value=DummyResponses().bibles())
+
+        bible = bibles.dictionary()['ead7b4cc5007389c-01']
+        self.assertEqual(bible.language, 'nl')
+        self.assertEqual(bible.name, 'De Heilige Schrift, Petrus Canisiusvertaling, 1939')
 
     def test_list_bibles_corrupt_data(self):
         bibles = Bibles()

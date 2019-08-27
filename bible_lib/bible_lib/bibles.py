@@ -1,6 +1,8 @@
 import json
 import logging
 
+import pycountry
+
 from bible_lib.api_bible import ApiBible
 from bible_lib.hsv_bible import HsvBible
 from bible_lib.services import Services
@@ -51,15 +53,10 @@ class Bibles(object):
         return list(self.dictionary().values())
 
     def get_language_code(self, bible_entry):
-        mapping = {'nederlands': 'nl',
-                   'english': 'en',
-                   'deutsch': 'de',
-                   'français': 'fr',
-                   }
+        api_code = bible_entry['language']['id']
+        language_code = pycountry.languages.get(alpha_3=api_code)
 
-        api_language_name = bible_entry['language']['nameLocal'].lower()
+        if hasattr(language_code, 'alpha_2'):
+            return language_code.alpha_2
 
-        if api_language_name in mapping:
-            return mapping[api_language_name]
-        else:
-            return api_language_name
+        return api_code

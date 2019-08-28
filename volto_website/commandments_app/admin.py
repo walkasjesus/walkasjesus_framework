@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import *
+from froala_editor.fields import FroalaField
 
 
 class PrimaryBibleReferencesInline(admin.TabularInline):
@@ -66,6 +67,10 @@ class BlogInline(admin.TabularInline):
 class BookInline(admin.TabularInline):
     model = Book
     extra = 0
+
+
+class Devotional(models.Model):
+  content = FroalaField()
 
 
 class CommandmentAdmin(admin.ModelAdmin):

@@ -1,11 +1,15 @@
+import logging
 from enum import Enum
 
-from bible_lib import BibleFactory
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from bible_lib import BibleFactory, Bibles, Bible
+from django.conf import settings
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
 from url_or_relative_url_field.fields import URLOrRelativeURLField
+
+from commandments_app.lib.ordered_enum import OrderedEnum
 
 
 class Redirect(models.Model):
@@ -13,25 +17,24 @@ class Redirect(models.Model):
 
 
 class CommandmentCategories(Enum):
-    Salvation = gettext_lazy('Salvation commands')
+    Salvation = gettext_lazy('Salvation Commands')
     Discipleship = gettext_lazy('Discipleship Commands')
-    EffectiveWorship = gettext_lazy('Effective worship commands')
+    Worship = gettext_lazy('Worship Commands')
     Blessings = gettext_lazy('Blessings')
-    JudgmentSeat = gettext_lazy('Judgment Seat and Rewards commands')
+    JudgmentSeat = gettext_lazy('Judgment Seat Commands')
     Relationship = gettext_lazy('Relationship Commands')
-    Marriage = gettext_lazy('Marriage commands')
+    Marriage = gettext_lazy('Marriage Commands')
     Persecution = gettext_lazy('Persecution Commands')
-    HowToBe = gettext_lazy('How to Be, Do or Think commands')
-    EthicOfLove = gettext_lazy('Ethic of Love')
+    Thinking = gettext_lazy('Thinking Commands')
     Prayer = gettext_lazy('Prayer Commands')
     FalseTeachers = gettext_lazy('False Teachers Commands')
-    Evangelism = gettext_lazy('Evangelism and Missions')
+    Witnessing = gettext_lazy('Witnessing Commands')
     Greatest = gettext_lazy('Greatest Commands')
     Finance = gettext_lazy('Finance Commands')
-    EndTimes = gettext_lazy('End Times')
+    Holiness = gettext_lazy('Holiness Commands')
 
 
-class BibleBooks(Enum):
+class BibleBooks(OrderedEnum):
     """" This is a copy of the enum in bible_lib,
     but I did not know how to tag it for translation
     without making a copy. """
@@ -78,7 +81,7 @@ class BibleBooks(Enum):
     Mark = gettext_lazy('Mark')
     Luke = gettext_lazy('Luke')
     John = gettext_lazy('John')
-    Acts = gettext_lazy('Acts (of the Apostles)')
+    Acts = gettext_lazy('Acts')
     Romans = gettext_lazy('Romans')
     CorinthiansFirstBook = gettext_lazy('1 Corinthians')
     CorinthiansSecondBook = gettext_lazy('2 Corinthians')
@@ -105,18 +108,33 @@ class BibleBooks(Enum):
 
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
-    description = models.TextField(default='')
+    devotional = models.TextField(default='')
+    devotional_source = models.CharField(max_length=256, default=None, blank=True, null=True)
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
+    bible = BibleFactory().create('hsv')
 
-    def primary_bible_references(self):
-        """ Primary references are the most important references, directly related to the commandment. """
-        return self._get_bible_references(self.primarybiblereference_set.all())
+    def primary_bible_reference(self):
+        """ Primary references is the first found unique reference according to the words of Jesus,
+        directly related to the commandment. """
+        reference = self.primarybiblereference
+        reference.set_bible(self.bible)
+        return reference
 
     def secondary_bible_references(self):
-        """ Secondary references are extra, maybe indirect references. """
-        return self._get_bible_references(self.secondarybiblereference_set.all())
+        """ Secondary references are extra references which are related te the same priciple. """
+        return self._get_translated_bible_references(self.secondarybiblereference_set.all())
+
+    def tertiary_bible_references(self):
+        """ Tertiary references are extra, maybe indirect references, also relating to the same principle. """
+        return self._get_translated_bible_references(self.tertiarybiblereference_set.all())
+
+    def background_drawing(self):
+        return self.drawings()[0] if self.drawings() else ''
+
+    def background_song(self):
+        return self.songs()[0] if self.songs() else ''
 
     def drawings(self):
         return self.drawing_set.filter(is_public=True)
@@ -127,7 +145,7 @@ class Commandment(models.Model):
     def movies(self):
         return self.movie_set.filter(is_public=True)
 
-    def shortmovies(self):
+    def short_movies(self):
         return self.shortmovie_set.filter(is_public=True)
 
     def sermons(self):
@@ -139,70 +157,168 @@ class Commandment(models.Model):
     def testimonies(self):
         return self.testimony_set.filter(is_public=True)
 
+    def blogs(self):
+        return self.blog_set.filter(is_public=True)
+
     def books(self):
         return self.book_set.filter(is_public=True)
 
     def questions(self):
         return self.question_set.all()
 
-    def _get_bible_references(self, query_set):
-        [f.load_text() for f in query_set]
+    def _get_translated_bible_references(self, query_set):
+        [ref.set_bible(self.bible) for ref in query_set]
         return query_set
 
     def __str__(self):
         return self.title
 
 
+class UserPreferences:
+    def __init__(self, session):
+        self.session = session
+
+    @property
+    def bible(self):
+        if 'bible_id' in self.session:
+            return BibleFactory().create(self.session['bible_id'])
+
+        current_user_language = translation.get_language()
+
+        if current_user_language == 'nl':
+            return BibleFactory().create('hsv')
+
+        return BibleFactory().create('de4e12af7f28f599-01')
+
+    @bible.setter
+    def bible(self, value):
+        self.session['bible_id'] = value.id
+
+
+class BibleTranslation:
+    bibles = Bibles()
+
+    def all(self) -> [Bible]:
+        return self.bibles.list()
+
+    def all_in_user_language(self) -> [Bible]:
+        current_user_language = translation.get_language()
+        return [b for b in self.all() if b.language == current_user_language]
+
+    def all_in_supported_languages(self):
+        languages = [code for code, name in settings.LANGUAGES]
+        return [b for b in self.all() if b.language in languages]
+
+
 class AbstractBibleReference(models.Model):
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
                             default=BibleBooks.Genesis)
-    chapter = models.IntegerField(default=1)
-    verse = models.IntegerField(default=1)
-    text = gettext('Could not load text at the moment.')
+    begin_chapter = models.IntegerField(default=1)
+    begin_verse = models.IntegerField(default=1)
+    end_chapter = models.IntegerField(default=0)
+    end_verse = models.IntegerField(default=0)
+    bible = BibleFactory().create('hsv')
 
     class Meta:
         abstract = True
 
-    def bible_id(self):
-        current_user_language = translation.get_language()
+    def set_bible(self, bible: Bible):
+        """ Set a bible to get the text in that bible translation."""
+        self.bible = bible
 
-        if current_user_language == 'nl':
-            return 'hsv'
-
-        if current_user_language == 'en':
-            return 'de4e12af7f28f599-01'
-
-        return 'de4e12af7f28f599-01'
-
-    def load_text(self):
+    def text(self):
         """Get the verse text from the bible api."""
+        if self.end_chapter == 0:
+            end_chapter = self.begin_chapter
+        else:
+            end_chapter = self.end_chapter
 
-        # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
-        # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
-        self.text = BibleFactory().create(self.bible_id()).verse(BibleLibBibleBooks[self.book],
-                                                                 self.chapter,
-                                                                 self.verse)
+        if self.end_verse == 0:
+            end_verse = self.begin_verse
+        else:
+            end_verse = self.end_verse
 
-    def book_name(self):
-        return gettext_lazy(BibleBooks[self.book].value)
+        try:
+            # Here we run into a bit of code smell, we do not use the enum provided by bible_lib,
+            # As we want to translate the enum values. However before sending a query we convert to the bible_lib enum.
+            return self.bible.verses(BibleLibBibleBooks[self.book],
+                                     self.begin_chapter,
+                                     self.begin_verse,
+                                     end_chapter,
+                                     end_verse)
+
+        except Exception as ex:
+            logging.getLogger().warning('Failed to load bible text')
+            logging.getLogger().exception(ex)
+
+        return gettext('Could not load text at the moment.')
 
     def __str__(self):
-        return f'{self.book_name()} {self.chapter}:{self.verse}'
+        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
+
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return book_chapter_verse
+        else:
+            return f'{book_chapter_verse}-{self.end_chapter}:{self.end_chapter}'
+
+    def __lt__(self, other):
+        if self.__class__ is not other.__class__:
+            return NotImplemented
+
+        if BibleBooks[self.book] < BibleBooks[other.book]:
+            return True
+
+        if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter < self.begin_chapter:
+            return True
+
+        if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
+            return True
+
+        return False
 
 
 class PrimaryBibleReference(AbstractBibleReference):
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+    commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
 
 
 class SecondaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
 
+class TertiaryBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+
+class BibleReferences:
+    def __init__(self):
+        self.bible = BibleFactory().create('hsv')
+        self._data = None
+
+    def primary(self):
+        return self._query_references(PrimaryBibleReference.objects.filter(commandment__gt=0))
+
+    def secondary(self):
+        return self._query_references(SecondaryBibleReference.objects.filter(commandment__gt=0))
+
+    def tertiary(self):
+        return self._query_references(TertiaryBibleReference.objects.filter(commandment__gt=0))
+
+    def _query_references(self, query):
+        # This will reduce the amount of sql queries as we already know we also want the commandments
+        query = query.select_related()
+
+        # Set the bible for each reference
+        [ref.set_bible(self.bible) for ref in query]
+
+        return query
+
+
 class Media(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     title = models.CharField(max_length=128, default='')
+    description = models.TextField(default='')
     author = models.CharField(max_length=64, default='')
     url = URLOrRelativeURLField(default='#')
     is_public = models.BooleanField(default=False)
@@ -211,7 +327,7 @@ class Media(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.title
+        return f'Media at: {self.url}'
 
 
 class Drawing(Media):
@@ -226,7 +342,7 @@ class Movie(Media):
     pass
 
 
-class Shortmovie(Media):
+class ShortMovie(Media):
     pass
 
 
@@ -239,6 +355,10 @@ class Picture(Media):
 
 
 class Testimony(Media):
+    pass
+
+
+class Blog(Media):
     pass
 
 

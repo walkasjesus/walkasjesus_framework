@@ -11,8 +11,6 @@ from bible_lib.services import Services
 class ApiBible(Bible):
     def __init__(self, bible_id=None, text_formatter: Formatter=PlainTextFormatter()):
         self.id = bible_id
-        self.name = ''
-        self.language = ''
         self.client = Services().api_client
         self.formatter = text_formatter
         self.logger = logging.getLogger()

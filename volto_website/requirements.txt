@@ -14,3 +14,6 @@ polib>=1.1.0
 
 # Monitoring
 sentry-sdk>=0.10.2
+
+# Debug and Development
+django-debug-toolbar

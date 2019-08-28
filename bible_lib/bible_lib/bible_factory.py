@@ -1,15 +1,11 @@
-from bible_lib import Bible
-from bible_lib.api_bible import ApiBible
-from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
-from bible_lib.hsv_bible import HsvBible
+from bible_lib import Bible, Bibles
 
 
 class BibleFactory:
-    def __init__(self, text_formatter=PlainTextFormatter()):
-        self.text_formatter = text_formatter
+    def create(self, bible_id: str) -> Bible:
+        all_bibles = Bibles().dictionary()
 
-    def create(self, bible_id: str, ) -> Bible:
-        if bible_id.lower() == 'hsv':
-            return HsvBible(self.text_formatter)
-        else:
-            return ApiBible(bible_id, self.text_formatter)
+        if bible_id in all_bibles:
+            return all_bibles[bible_id]
+
+        raise KeyError(f'Bible {bible_id} not found')

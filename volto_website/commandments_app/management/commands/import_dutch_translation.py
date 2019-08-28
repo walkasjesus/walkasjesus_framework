@@ -27,5 +27,5 @@ class Command(BaseCommand):
         for entry in po.untranslated_entries() + po.translated_entries():
             if entry.msgid == commandment.title:
                 entry.msgstr = commandment.title_nl
-            if entry.msgid == commandment.description:
-                entry.msgstr = commandment.description_nl
+            if entry.msgid == commandment.devotional:
+                entry.msgstr = commandment.devotional_nl

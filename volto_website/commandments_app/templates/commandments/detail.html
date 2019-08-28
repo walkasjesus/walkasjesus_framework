@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
 {% block content %}
-
+{% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         <li>
-            <a href="#description" class="ripple">
-                <i class="fas fa-home fa-lg"><img src="{% static 'images/description.png' %}" width="40px" alt=""></i>
+            <a href="#devotional" class="ripple">
+                <i class="fas fa-home fa-lg"><img src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         <li>
@@ -15,63 +16,70 @@
                 <i class="fas fa-user fa-lg"><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
-        {% if drawings %}
+        {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if shortmovies %}
+        {% if commandment.short_movies %}
         <li>
-            <a href="#shortmovies" class="ripple">
+            <a href="#short_movies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if songs %}
+        {% if commandment.songs %}
         <li>
             <a href="#songs" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if movies %}
+        {% if commandment.movies %}
         <li>
             <a href="#movies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if pictures %}
+        {% if commandment.pictures %}
         <li>
             <a href="#pictures" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if testimonies %}
+        {% if commandment.testimonies %}
         <li>
             <a href="#testimonies" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if sermons %}
+        {% if commandment.blogs %}
+        <li>
+            <a href="#blogs" class="ripple">
+                <i class="far fa-user fa-lg"><img src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if commandment.sermons %}
         <li>
             <a href="#sermons" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if books %}
+        {% if commandment.books %}
         <li>
             <a href="#books" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
-        {% if questions %}
+        {% if commandment.questions %}
         <li>
             <a href="#questions" class="ripple">
                 <i class="far fa-user fa-lg"><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
@@ -88,23 +96,27 @@
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="row justify-content-center align-items-center">
-                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">        
+                    <div class="col-md-12 heading-section text-center ftco-animate">
+                            <span class="subheading">{{ commandment.get_category_display }}</span>
+                    </div>        
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
                         <span class="subheading" style="padding-left: 20px;">{{ commandment.title }}</span>
                     </div>
                 </div>
             </div>
         </div>                               
         <div class="row">
-            {% if commandment.description %}
-            <div id="description" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            {% if commandment.devotional %}
+            <div id="devotional" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/description.png' %}" width="65px" alt="">
+                        <img src="{% static 'images/devotional.png' %}" width="65px" alt="">
                         </div>
-                        <div id="description" class="our-services-text">
-                            <h4>{% trans 'Description' %}</h4>
-                            {{ commandment.description }}
+                        <div id="devotional" class="our-services-text">
+                            <h4>{% trans 'Devotional' %}</h4>
+                            <p>{{ commandment.devotional }}</p>
+                            {% if commandment.devotional_source is not defined %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
                         </div>
                     </div>
                 </div>
@@ -117,18 +129,25 @@
                         <img src="{% static 'images/bible.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
-                            <h4>{% trans 'Bible References' %}</h4>
-                            {% if primary_bible_references %}
+                            <h4>{% trans 'Primary Bible Reference' %}</h4>
+                            <p><i>{% trans 'Primary references is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                                 <ul>
-                                {% for bible_reference in primary_bible_references %}
+                                    <li><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text | safe }}</b></li>
+                                </ul>
+                            {% if commandment.secondary_bible_references %}
+                            <h4>{% trans 'Secondary Bible References' %}</h4>
+                            <p><i>{% trans 'Secondary references are extra references which are related te the same priciple' %}.</i></p>
+                                <ul>
+                                {% for bible_reference in commandment.secondary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
                                 {% endfor %}
                                 </ul>
-                            {% endif %}
-                            {% if secondary_bible_references %}
-                            <h4>{% trans 'More Bible References' %}</h4>
+                            {% endif %}   
+                            {% if commandment.tertiary_bible_references %}
+                            <h4>{% trans 'Tertiary Bible References' %}</h4>
+                            <p><i>{% trans 'Tertiary references are extra, maybe indirect references, also relating to the same principle' %}.</i></p>
                                 <ul>
-                                {% for bible_reference in secondary_bible_references %}
+                                {% for bible_reference in commandment.tertiary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
                                 {% endfor %}
                                 </ul>
@@ -137,7 +156,7 @@
                     </div>
                 </div>
             </div>
-            {% if drawings %}
+            {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -146,8 +165,9 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
-                            {% for drawing in drawings %}
+                            {% for drawing in commandment.drawings %}
                                 <img src="{{ drawing.url }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
+                                {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
                                 <p>Artist: {{ drawing.author }}</p>
                             {% endfor %}
                         </div>
@@ -155,8 +175,8 @@
                 </div>
             </div>
             {% endif %}
-            {% if shortmovies %}
-            <div id="shortmovies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            {% if commandment.short_movies %}
+            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -164,10 +184,11 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
-                            {% for shortmovie in shortmovies %}
-                            <h5>{{ shortmovie.title }}</h5>
+                            {% for short_movie in commandment.short_movies %}
+                            <h5>{{ short_movie.title }}</h5>
+                            {% if short_movie.description != "nan" %}<p>{{ short_movie.description }}</p>{% endif %}
                             <div class="video-iframe">
-                                <iframe src="{{ shortmovie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
                             {% endfor %}
                         </div>
@@ -175,7 +196,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if songs %}
+            {% if commandment.songs %}
             <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -184,8 +205,9 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
-                            {% for song in songs %}
+                            {% for song in commandment.songs %}
                             <h5>{{ song.author }} - {{ song.title }}</h5>
+                            {% if song.description != "nan" %}<p>{{ song.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -195,7 +217,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if movies %}
+            {% if commandment.movies %}
             <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div id="movie" class="services-inner">
@@ -204,8 +226,9 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
-                            {% for movie in movies %}
+                            {% for movie in commandment.movies %}
                             <h5>{{ movie.title }}</h5>
+                            {% if movie.description != "nan" %}<p>{{ movie.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -215,7 +238,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if pictures %}
+            {% if commandment.pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -231,7 +254,7 @@
                                         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                                     </ol>
                                     <div class="carousel-inner" style="width:97%;height:97%;">
-                                        {% for picture in pictures|slice:":3" %}
+                                        {% for picture in commandment.pictures|slice:":3" %}
                                         {% if forloop.first %}
                                             <div class="carousel-item active">
                                                 <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
@@ -259,7 +282,7 @@
                 </div>
             </div>
             {% endif %}
-            {% if testimonies %}
+            {% if commandment.testimonies %}
             <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -268,8 +291,9 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
-                            {% for testimony in testimonies %}
+                            {% for testimony in commandment.testimonies %}
                             <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                            {% if testimony.description != "nan" %}<p>{{ testimony.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -279,7 +303,25 @@
                 </div>
             </div>
             {% endif %}
-            {% if sermons %}
+            {% if commandment.blogs %}
+            <div id="blogs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Blogs' %}</h4>
+                            {% for blog in commandment.blogs %}
+                            <h5><a href="{{ blog.url }}" target="_blank">{{ blog.author }} - {{ blog.title }}</a></h5>
+                            {% if blog.description != "nan" %}<p>{{ blog.description }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if commandment.sermons %}
             <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -288,8 +330,9 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Sermons' %}</h4>
-                            {% for sermon in sermons %}
+                            {% for sermon in commandment.sermons %}
                             <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
+                            {% if sermon.description != "nan" %}<p>{{ sermon.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -299,7 +342,7 @@
                 </div>
             </div>              
             {% endif %}
-            {% if books %}
+            {% if commandment.books %}
             <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -308,13 +351,14 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Books' %}</h4>
-                            {% for book in books %}
+                            {% for book in commandment.books %}
                             <div class="media">
                                 <img class="d-flex align-self-start mr-3" style="max-width:20%;max-height:20%;" src="{{ book.url }}" alt="{{ book.author }} - {{ book.title }}">
                                 <div class="media-body">
                                     </br>
                                     </br>
                                     <h5 class="mt-0 font-weight-bold">{{ book.author }} - {{ book.title }}</h5>
+                                    {% if book.description != "nan" %}<p>{{ book.description }}</p>{% endif %}
                                 </div>
                             </div>
                             {% endfor %}
@@ -323,7 +367,7 @@
                 </div>
             </div>              
             {% endif %}
-            {% if questions %}
+            {% if commandment.questions %}
             <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -334,7 +378,7 @@
                             <h4>{% trans 'Questions' %}</h4>
                             <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
-                                {% for question in questions %}
+                                {% for question in commandment.questions %}
                                 <li>{{ question.text }}</li>
                                 {% endfor %}
                             </ul>    
@@ -346,5 +390,5 @@
         </div>         
     </div>
 </section>
-
+{% endcache %}
 {% endblock %}

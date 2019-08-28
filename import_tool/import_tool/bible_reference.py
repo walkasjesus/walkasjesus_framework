@@ -10,7 +10,6 @@ class BibleReference:
         self.start_verse = 0
         self.end_chapter = 0
         self.end_verse = 0
-        self.is_primary = False
 
     @staticmethod
     def create_from_string(verse_string : str):

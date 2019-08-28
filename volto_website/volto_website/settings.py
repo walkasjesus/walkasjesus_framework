@@ -56,7 +56,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        ]
+
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
 
 ROOT_URLCONF = 'volto_website.urls'
 
@@ -71,6 +81,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'commandments_app.context_processors.bible_translation',
+                'commandments_app.context_processors.user_preferences',
+                'commandments_app.context_processors.cache_settings',
             ],
         },
     },
@@ -156,6 +169,14 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+CACHES = {
+    'default': {
+        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake-volto-1',
+    }
+}
+
 # Monitoring application
 sentry_sdk.init(
     dsn="https://3caa949e65db4d419d486668fe5180a4@sentry.io/1527507",
@@ -168,4 +189,9 @@ ROSETTA_LANGUAGE_GROUPS = [
     'translators-nl',
     'translators-de',
     'translators-fr',
+]
+
+# Debug toolbar settings
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]

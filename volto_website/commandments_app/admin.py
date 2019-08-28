@@ -13,6 +13,11 @@ class SecondaryBibleReferenceInline(admin.TabularInline):
     extra = 0
 
 
+class TertiaryBibleReferenceInline(admin.TabularInline):
+    model = TertiaryBibleReference
+    extra = 0
+    
+
 class QuestionInline(admin.TabularInline):
     model = Question
     extra = 0
@@ -33,8 +38,8 @@ class MovieInline(admin.TabularInline):
     extra = 0
 
 
-class ShortmovieInline(admin.TabularInline):
-    model = Shortmovie
+class ShortMovieInline(admin.TabularInline):
+    model = ShortMovie
     extra = 0
 
 
@@ -53,23 +58,31 @@ class TestimonyInline(admin.TabularInline):
     extra = 0
 
 
+class BlogInline(admin.TabularInline):
+    model = Blog
+    extra = 0
+
+
 class BookInline(admin.TabularInline):
     model = Book
     extra = 0
 
 
 class CommandmentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title',  'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,
+        TertiaryBibleReferenceInline,
         QuestionInline,
         DrawingInline,
         SongInline,
         MovieInline,
-        ShortmovieInline,
+        ShortMovieInline,
         SermonInline,
         PictureInline,
         TestimonyInline,
+        BlogInline,
         BookInline,
     ]
 

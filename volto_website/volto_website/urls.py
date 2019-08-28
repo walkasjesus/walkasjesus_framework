@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('commandments/', include('commandments_app.urls', namespace='commandments')),
+    path('', include('commandments_app.urls', namespace='commandments')),
     path('account/', include('account_app.urls', namespace='account')),
     path('rosetta/', include('rosetta.urls')),
     path('admin/', admin.site.urls),
@@ -31,3 +31,7 @@ urlpatterns = [
 # to use a different server for file serving?
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

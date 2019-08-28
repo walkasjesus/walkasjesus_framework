@@ -3,9 +3,12 @@ class Commandment:
         self.id = 0
         self.title = ''
         self.title_nl = ''
-        self.description = ''
-        self.description_nl = ''
+        self.devotional = ''
+        self.devotional_nl = ''
+        self.devotional_source = ''
         self.category = ''
-        self.bible_references = []
+        self.primary_bible_references = []
+        self.secondary_bible_references = []
+        self.tertiary_bible_references = []
         self.media = []
         self.questions = []

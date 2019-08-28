@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load cache %}
 
 {% block homebanner %}
-
+{% cache cache_timeout commandments_index_banner cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <div class="overlay"></div>
@@ -15,8 +16,8 @@
               <span>{% trans 'Jesus commandments' %}</span>
             </div>
             <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
-            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="{{ commandments|length }}">{{ commandments|length }}</strong> {% trans 'unique commandments in your daily life' %}</p>
-            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
+            <p>{% trans 'Jesus tought many different things. We help applying all' %} <strong class="number" data-number="{{ commandments_total }}">{{ commandments_total }}</strong> {% trans 'unique commandments in your daily life' %}</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
           </div>
         </div>
       </div>
@@ -32,9 +33,27 @@
             <div class="subheading">
               <span>{% trans 'Matthew 28:19-20' %}</span>
             </div>
-            <h1 class="mb-4">{% trans 'Therefore go and make' %} <span>{% trans 'Disciples'%} </span>{% trans 'of all nations' %}</h1>
+            <h1 class="mb-4">{% trans 'Therefore go and' %} <span>{% trans 'make Disciples'%} </span>{% trans 'of all nations' %}</h1>
             <p>{% trans 'Teaching them to' %} <span><strong>{% trans 'obey everything' %}</strong></span> {% trans 'I have commanded you' %}</p>
-            <p><a href="{% url 'account:signup' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Help improving' %}</a></p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_3.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'True disciples' %}</span>
+            </div>
+            <h1 class="mb-4">{% trans 'If we' %} <span>{% trans 'reproduce the character'%} </span>{% trans 'of Jesus Christ in our disciple' %}</h1>
+            <p>{% trans 'Than we are a good disciple' %}.</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
           </div>
         </div>
       </div>
@@ -42,10 +61,11 @@
   </div>
 </section>
 
+{% endcache %}
 {% endblock %}
 
 {% block content %}
-
+{% cache cache_timeout commandments_index cache_on_bible %}
 <section class="ftco-counter" id="section-counter">
     	<div class="container-fluid px-0">
     		<div class="row no-gutters">
@@ -55,7 +75,7 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/list.png' %}" width="80px" alt="">
               	</div>
-                <strong class="number" data-number="{{ commandments|length }}">0</strong>
+                <strong class="number" data-number="{{ commandments_total }}">0</strong>
                 <span>{% trans 'Unique commandments' %}</span>
               </div>
             </div>
@@ -66,8 +86,8 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/bible.png' %}" width="80px" alt="">
 				</div>
-                <strong class="number" data-number="890">0</strong>
-                <span>{% trans 'Bible references' %}</span>
+                <strong class="number" data-number="{{ bibles_total }}">0</strong>
+                <span>{% trans 'Bible translations' %}</span>
               </div>
             </div>
           </div>
@@ -77,7 +97,7 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/languages.png' %}" width="80px" alt="">
 				</div>
-                <strong class="number" data-number="39">0</strong>
+                <strong class="number" data-number="{{ languages_total }}">0</strong>
                 <span>{% trans 'Languages' %}</span>
               </div>
             </div>
@@ -88,7 +108,7 @@
               	<div class="icon d-flex justify-content-center align-items-center">
 					<img src="{% static 'images/people.png' %}" width="80px" alt="">
 				</div>
-                <strong class="number" data-number="25">0</strong>
+                <strong class="number" data-number="{{ users_total }}">0</strong>
                 <span>Contributers</span>
               </div>
             </div>
@@ -97,28 +117,27 @@
     	</div>
     </section>
 
-
 <section class="ftco-section bg-light" id="sermons-section">
 	<div class="container">
 		<div class="row justify-content-center pb-5">
-  <div class="col-md-12 heading-section text-center ftco-animate">
-	<span class="subheading">John 14:15</span>
-	<h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
-	<p>{% trans 'This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related' %}
-	<strong>{% trans 'Bible References, Drawings, Movies, Songs, Sermons, Pictures and Books' %}</strong> {% trans 'to feed your heart, soul and mind' %}</p>
-	<p>{% trans 'All commandments are ideal for personal Bible study, Small Groups, Discipleship Groups, mentoring, ministry enrichment or meditations in how to improve your walk with the Lord' %} </p>
-</div>
-</div>
+          <div class="col-md-12 heading-section text-center ftco-animate">
+            <span class="subheading">John 14:15</span>
+            <h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
+            <p>{% trans 'This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related' %}
+            <strong>{% trans 'Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books' %}</strong> {% trans 'to feed your heart, soul and mind' %}.</p>
+            <p>{% trans 'To succeed in becoming a good disciple, we need to live out all of these commandments. The best way is to do this together. Take your time for each commandment to dive into the greatness of it, and discuss them in your Small Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one discipleship, to become followers in all of Jesus teachings.' %} </p>
+        </div>
+    </div>
 	<div class="row">
 	{% if commandments %}
 		{% for commandment in commandments %}
-			{% include "commandments/single_commandment_overview.html" %}
-		{% endfor %}
+          {% include "commandments/single_commandment_overview.html" %}
+        {% endfor %}
 	{% else %}
 		<p>{% trans 'No commandments are available.' %}</p>
 	{% endif %}
 </div>
 </div>
 </section>
-
+{% endcache %}
 {% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load cache %}
+{% block content %}
+{% cache cache_timeout commandments_study_listing cache_on_bible %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">Overview of Jesus Commandments</span>
+                    <h2 class="mb-4"><span>{% trans 'Study the commandments yourself' %}</span></h2>
+                    <p>{% trans 'In the following table you can see a list of all the commandments we found which Jesus tought us.' %}
+                    <p>{% trans 'If you have any suggestions or corrections, we\'d like to hear from you. Please' %} <a href="{% url 'account:signup' %}">{% trans 'register' %}</a> {% trans 'or just sent us a' %} <a href="mailto:info@jesuscommandments.org">{% trans 'email' %}</a>.</p>
+                </div>
+            </div>
+        <div class="col-md-12">
+                
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                    <th class="th-sm">#
+                    </th>
+                    <th class="th-sm">Commandment Title
+                    </th>
+                    <th class="th-sm">Bible Reference
+                    </th>
+                    <th class="th-sm">Bible Reference Text
+                    </th>
+                    <th class="th-sm">Category
+                    </th>
+                    <th class="th-sm">Presedence
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if bible_references.primary %}
+                    {% for bible_reference in bible_references.primary %}
+                    <tr>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference}}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
+                        <td>{% trans 'Primary' %}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if bible_references.secondary %}
+                    {% for bible_reference in bible_references.secondary %}
+                    <tr>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference }}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
+                        <td>{% trans 'Secondary' %}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if bible_references.tertiary %}
+                    {% for bible_reference in bible_references.tertiary %}
+                    <tr>
+                        <th scope="row">{{ bible_reference.commandment.id }}</th>
+                        <td>{{ bible_reference.commandment.title }}</td>
+                        <td>{{ bible_reference }}</td>
+                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.commandment.get_category_display }}</td>
+                        <td>{% trans 'Tertiary' %}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="th-sm">Commandment ID
+                        </th>
+                        <th class="th-sm">Commandment Title
+                        </th>
+                        <th class="th-sm">Bible Reference
+                        </th>
+                        <th class="th-sm">Bible Reference Text
+                        </th>
+                        <th class="th-sm">Category
+                        </th>
+                        <th class="th-sm">Presedence
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        </div>
+    </section>
+</section>
+{% endcache %}
+{% endblock %}

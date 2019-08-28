@@ -26,16 +26,21 @@ class CommandmentImporter(object):
             commandment.id = first(group, 'step')
             commandment.title = first(group, 'title_en')
             commandment.title_nl = first(group, 'title_nl')
-            commandment.description = first(group, 'title_description_en')
-            commandment.description_nl = first(group, 'title_description_nl')
+            commandment.devotional = first(group, 'devotional_en')
+            commandment.devotional_nl = first(group, 'devotional_nl')
+            commandment.devotional_source = first(group, 'devotional_source')
             commandment.category = first(group, 'category')
 
             # Parse bible refs
             for index, row in group.iterrows():
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
-                    reference.is_primary = row['primary_secondary'].lower() == 'primary'
-                    commandment.bible_references.append(reference)
+                    if row['precedence'].lower() == 'primary':
+                        commandment.primary_bible_references.append(reference)
+                    if row['precedence'].lower() == 'secondary':
+                        commandment.secondary_bible_references.append(reference)
+                    if row['precedence'].lower() == 'tertiary':
+                        commandment.tertiary_bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
 
@@ -44,6 +49,7 @@ class CommandmentImporter(object):
                 if isinstance(row['media_link'], str):
                     media = Media()
                     media.title = row['media_title']
+                    media.description = row['media_description_en']
                     media.link = row['media_link']
                     media.type = row['media_type']
                     media.author = row['media_author']

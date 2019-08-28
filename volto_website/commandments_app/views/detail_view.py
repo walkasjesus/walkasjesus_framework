@@ -1,30 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
-from commandments_app.models import Commandment
+from commandments_app.models import Commandment, UserPreferences
 
 
 class DetailView(View):
-    def get(self, request, commandment_id):
+    def get(self, request, commandment_id: int):
         commandment = get_object_or_404(Commandment, pk=commandment_id)
-
-        primary_bible_references = commandment.primary_bible_references()
-        secondary_bible_references = commandment.primary_bible_references()
-
-        background_song = commandment.songs()[0] if commandment.songs() else ''
-        background_drawing = commandment.drawings()[0] if commandment.drawings() else ''
-
-        return render(request, 'commandments/detail.html', {'commandment': commandment,
-                                                            'background_song': background_song,
-                                                            'background_drawing': background_drawing,
-                                                            'primary_bible_references': primary_bible_references,
-                                                            'secondary_bible_references': secondary_bible_references,
-                                                            'questions': commandment.questions(),
-                                                            'songs': commandment.songs(),
-                                                            'movies': commandment.movies(),
-                                                            'shortmovies': commandment.shortmovies(),
-                                                            'sermons': commandment.sermons(),
-                                                            'pictures': commandment.pictures(),
-                                                            'testimonies': commandment.testimonies(),
-                                                            'books': commandment.books(),
-                                                            'drawings': commandment.drawings()})
+        commandment.bible = UserPreferences(request.session).bible
+        return render(request, 'commandments/detail.html', {'commandment': commandment})

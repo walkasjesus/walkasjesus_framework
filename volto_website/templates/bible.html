@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+    <select name="bible_id" onchange="this.form.submit()">
+        <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
+        <option value="{{ user_preferences.bible.id }}" selected>
+            {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
+        </option>
+        {% for bible in bible_translation.all_in_user_language %}
+            {% if bible.id != user_preferences.bible.id %}
+            <option value="{{ bible.id }}">
+                {{ bible.name }} ({{ bible.language }})
+            </option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <!-- <input type="submit" value="{% trans 'select bible' %}" id="submit_button"> -->
+</form>

@@ -8,81 +8,81 @@
     <ul class="main-menu">
         <li>
             <a href="#devotional" class="ripple">
-                <i class="fas fa-home fa-lg"><img src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         <li>
             <a href="#biblereferences" class="ripple">
-                <i class="fas fa-user fa-lg"><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.short_movies %}
         <li>
             <a href="#short_movies" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.songs %}
         <li>
             <a href="#songs" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.movies %}
         <li>
             <a href="#movies" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.pictures %}
         <li>
             <a href="#pictures" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.testimonies %}
         <li>
             <a href="#testimonies" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.blogs %}
         <li>
             <a href="#blogs" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.sermons %}
         <li>
             <a href="#sermons" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.books %}
         <li>
             <a href="#books" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.questions %}
         <li>
             <a href="#questions" class="ripple">
-                <i class="far fa-user fa-lg"><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
+                <i><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
@@ -93,11 +93,32 @@
 <section class="ftco-daily-verse img" style="background-image: url('{{ background_drawing.url }}');">
 <div class="overlay"></div>
     <div class="container">
+        <div class="alert alert-info" role="alert">
+            <div class="multiselect" id="countries" multiple="multiple" data-target="multi-0">
+                <div class="title noselect">
+                    <span class="text">{% trans 'Select Media Languages' %}</span>
+                    <span class="close-icon">&times;</span>
+                    <span class="expand-icon">&plus;</span>
+                </div>
+                <div class="container">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}">
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                    {% endfor %}
+                </div>
+            </div>
+            <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        
+        </div>
+              
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="row justify-content-center align-items-center">
                     <div class="col-md-12 heading-section text-center ftco-animate">
-                            <span class="subheading">{{ commandment.get_category_display }}</span>
+                        <span class="subheading">{{ commandment.get_category_display }}</span>
                     </div>        
                     <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
                         <span class="subheading" style="padding-left: 20px;">{{ commandment.title }}</span>

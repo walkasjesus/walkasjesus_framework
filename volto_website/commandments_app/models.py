@@ -3,11 +3,11 @@ from enum import Enum
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib import BibleFactory, Bibles, Bible
-from django.conf import settings
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
 from url_or_relative_url_field.fields import URLOrRelativeURLField
+from froala_editor.fields import FroalaField
 
 from commandments_app.lib.ordered_enum import OrderedEnum
 
@@ -108,7 +108,7 @@ class BibleBooks(OrderedEnum):
 
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
-    devotional = models.TextField(default='')
+    devotional = FroalaField()
     devotional_source = models.CharField(max_length=256, default=None, blank=True, null=True)
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
@@ -202,10 +202,6 @@ class BibleTranslation:
     def all_in_user_language(self) -> [Bible]:
         current_user_language = translation.get_language()
         return [b for b in self.all() if b.language == current_user_language]
-
-    def all_in_supported_languages(self):
-        languages = [code for code, name in settings.LANGUAGES]
-        return [b for b in self.all() if b.language in languages]
 
 
 class AbstractBibleReference(models.Model):

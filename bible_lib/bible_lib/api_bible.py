@@ -1,15 +1,17 @@
 import json
 import logging
+import re
 
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.formatters.formatter import Formatter
 from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
 from bible_lib.services import Services
+from bible_lib.verse import Verse
 
 
 class ApiBible(Bible):
-    def __init__(self, bible_id=None, text_formatter: Formatter=PlainTextFormatter()):
+    def __init__(self, bible_id=None, text_formatter: Formatter = PlainTextFormatter()):
         self.id = bible_id
         self.client = Services().api_client
         self.formatter = text_formatter
@@ -32,20 +34,44 @@ class ApiBible(Bible):
             return 'Not found'
 
         try:
-            verses = json.loads(response)['data']['content']
+            verses_html = json.loads(response)['data']['content']
         except Exception as ex:
             self.logger.warning(f'Failed to parse {verse_query} for bible {self.id}.')
             self.logger.warning(ex)
             return 'Not found'
 
-        # TODO split the data like:<p class="p"><span data-number="51" class="v">51</span>En Hij sprak tot hem: Voorwaar, voorwaar, Ik zeg u: Gij zult de hemel geopend zien, en de engelen Gods zien opstijgen en nederdalen over den Mensenzoon.</p><p class="p"><span data-number="1" class="v">1</span>En de derde dag werd er een bruiloft gevierd te Kana van Galilea. De moeder van Jesus was er tegenwoordig, </p>
-        # This is the idea after the split
-        for verse in verses:
-            self.formatter.add_verse(current_chapter,
-                                     current_verse,
-                                     self._get(book, current_chapter, current_verse))
+        try:
+            for verse in self.extract_verses(book, start_chapter, verses_html):
+                self.formatter.add_verse(verse)
+        except Exception as ex:
+            self.logger.warning(f'Failed to parse verse beginning at {book} {start_chapter}')
+            self.logger.warning(ex)
+            return 'Could not read text'
 
-        return verses
+        return self.formatter.flush()
+
+    def extract_verses(self, book: BibleBooks, start_chapter: int, verses_html: str) -> [Verse]:
+        parsed_verses = []
+        current_chapter = start_chapter
+
+        # Format is like this:
+        #  <p class="p"><span data-number="51" class="v">51</span>...text...</p>
+        #  <p class="p"><span data-number="1" class="v">1</span>...text...</p>
+        verses_html = verses_html.replace('</p>', '')
+        split_verses_html = verses_html.split('<p class="p">')
+
+        # extract verse number and texts
+        for verse_html in split_verses_html:
+            capture_groups = re.match(r'<span data-number="\d+" class="v">(\d+)<\/span>(.+)', verse_html)
+            if capture_groups:
+                current_verse = int(capture_groups.group(1))
+                text = capture_groups.group(2)
+
+                if current_verse == 1:
+                    current_chapter += 1
+                parsed_verses.append(Verse(book, current_chapter, current_verse, text))
+
+        return parsed_verses
 
     def _get_book_id(self, book: BibleBooks) -> str:
         """" Convert the bible book enum to the id used on the bible api. """
@@ -66,19 +92,19 @@ class ApiBible(Bible):
             BibleBooks.ChroniclesSecondBook: '2CH',
             BibleBooks.Ezra: 'EZR',
             BibleBooks.Nehemiah: 'NEH',
-            BibleBooks.Tobit : 'TOB',
-            BibleBooks.Judith : 'JDT',
+            BibleBooks.Tobit: 'TOB',
+            BibleBooks.Judith: 'JDT',
             BibleBooks.Job: 'JOB',
             BibleBooks.Psalms: 'PSA',
             BibleBooks.Proverbs: 'PRO',
             BibleBooks.Ecclesiastes: 'ECC',
             BibleBooks.SongOfSolomon: 'SNG',
-            BibleBooks.Wisdom : 'WIS',
-            BibleBooks.Sirach : 'SIR',
+            BibleBooks.Wisdom: 'WIS',
+            BibleBooks.Sirach: 'SIR',
             BibleBooks.Isaiah: 'ISA',
             BibleBooks.Jeremiah: 'JER',
             BibleBooks.Lamentations: 'LAM',
-            BibleBooks.Baruch : 'BAR',
+            BibleBooks.Baruch: 'BAR',
             BibleBooks.Ezekiel: 'EZK',
             BibleBooks.Daniel: 'DAG',
             BibleBooks.Hosea: 'HOS',

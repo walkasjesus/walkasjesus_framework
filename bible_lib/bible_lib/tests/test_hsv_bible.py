@@ -8,7 +8,7 @@ class TestHsvBible(TestCase):
     def test_load(self):
         bible = HsvBible()
 
-        self.assertEqual('HSV', bible.id)
+        self.assertEqual('hsv', bible.id)
         self.assertNotEqual(None, bible._content)
 
     def test_verse(self):

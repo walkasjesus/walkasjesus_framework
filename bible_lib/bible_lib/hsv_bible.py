@@ -8,14 +8,14 @@ from bible_lib.bible_books import BibleBooks
 from bible_lib.performance_time_decorator import performance_time
 from bible_lib.formatters.formatter import Formatter
 from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
-
+from bible_lib.verse import Verse
 
 
 class HsvBible(Bible):
     # share variable between HsvBible
     _content = None
 
-    def __init__(self):
+    def __init__(self, text_formatter: Formatter = PlainTextFormatter()):
         self.id = 'hsv'
         self.name = 'Herziene Staten Vertaling'
         self.language = 'nl'
@@ -45,9 +45,11 @@ class HsvBible(Bible):
         while current_chapter <= end_chapter:
             while self._contains(book, current_chapter, current_verse) and not (
                     current_chapter >= end_chapter and current_verse > end_verse):
-                self.formatter.add_verse(current_chapter,
-                                         current_verse,
-                                         self._get(book, current_chapter, current_verse))
+                verse = Verse(book,
+                              current_chapter,
+                              current_verse,
+                              self._get(book, current_chapter, current_verse))
+                self.formatter.add_verse(verse)
                 current_verse += 1
 
             current_chapter += 1

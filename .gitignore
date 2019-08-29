@@ -15,5 +15,7 @@ media
 
 API_KEY.txt
 
+volto_website/volto_website/settings.py
+
 # Compiled translation files
 *.mo

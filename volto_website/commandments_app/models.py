@@ -3,6 +3,7 @@ from enum import Enum
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib import BibleFactory, Bibles, Bible
+from django.conf import settings
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
@@ -204,6 +205,10 @@ class BibleTranslation:
     def all_in_user_language(self) -> [Bible]:
         current_user_language = translation.get_language()
         return [b for b in self.all() if b.language == current_user_language]
+
+    def all_in_supported_languages(self):
+        languages = [code for code, name in settings.LANGUAGES]
+        return [b for b in self.all() if b.language in languages]
 
 
 class AbstractBibleReference(models.Model):

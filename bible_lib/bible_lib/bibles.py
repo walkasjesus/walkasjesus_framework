@@ -3,9 +3,9 @@ import logging
 
 import pycountry
 
-from bible_lib.api_bible import ApiBible
-from bible_lib.hsv_bible import HsvBible
-from bible_lib.services import Services
+from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.bible_hsv.hsv_bible import HsvBible
+from bible_lib.bible_api.services import Services
 
 
 class Bibles(object):
@@ -30,19 +30,16 @@ class Bibles(object):
             return {}
 
         try:
-            bibles = {}
-
-            # Hard coded add HSV
-            bibles['hsv'] = HsvBible()
+            bibles = {'hsv': HsvBible()}
 
             for bible_entry in bible_entries:
                 bible = ApiBible()
                 bible.id = bible_entry['id']
                 bible.name = bible_entry['nameLocal']
-                bible.language = self.get_language_code(bible_entry)
+                bible.language = self._get_language_code(bible_entry)
                 bibles[bible.id] = bible
         except Exception as ex:
-            self.logger.warning('Failed to parse at least on of the bible entries.')
+            self.logger.warning('Failed to parse at least one of the bible entries.')
             self.logger.warning(ex)
             return {}
 
@@ -52,7 +49,7 @@ class Bibles(object):
         """ Return a list of Bible. """
         return list(self.dictionary().values())
 
-    def get_language_code(self, bible_entry):
+    def _get_language_code(self, bible_entry):
         api_code = bible_entry['language']['id']
         language_code = pycountry.languages.get(alpha_3=api_code)
 

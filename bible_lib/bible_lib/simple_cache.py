@@ -2,8 +2,6 @@ import json
 import logging
 from pathlib import Path
 
-from bible_lib.performance_time_decorator import performance_time
-
 
 class SimpleCache:
     def __init__(self):
@@ -13,7 +11,6 @@ class SimpleCache:
         self.cache_items_not_persisted = 0
         self.logger = logging.getLogger()
 
-    @performance_time
     def get(self, get_function, arguments):
         if arguments not in self._cache:
             self.cache_misses += 1
@@ -28,7 +25,15 @@ class SimpleCache:
 
         return self._cache[str(arguments)]
 
-    @performance_time
+    def __contains__(self, item):
+        return item in self._cache
+
+    def clear_key(self, key: str):
+        del self._cache[key]
+
+    def cached_keys(self) -> [str]:
+        return list(self._cache.keys())
+
     def load_state(self, file_path: Path):
         """" Load the cache content from disk. """
         if not file_path.exists():
@@ -38,7 +43,6 @@ class SimpleCache:
         with file_path.open() as file:
             self._cache = json.load(file)
 
-    @performance_time
     def store_state(self, file_path: Path):
         """" Store the cache content to disk. """
         with file_path.open('w+') as file:

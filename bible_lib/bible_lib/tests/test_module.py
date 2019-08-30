@@ -1,10 +1,10 @@
 from pathlib import Path
 from unittest import TestCase, skip
 
-from bible_lib.api_bible import ApiBible
+from bible_lib.bible_api.api_bible import ApiBible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.bibles import Bibles
-from bible_lib.cached_bible_api_client import CachedBibleApiClient
+from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.config import store_cache_every_number_of_hits
 
 

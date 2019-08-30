@@ -19,3 +19,16 @@ class TestCacheController(TestCase):
         self.assertFalse(controller.contains_verses('bible_id', BibleBooks.Proverbs, 1, 1, 2, 2))
         self.assertTrue(controller.contains_verses('bible_id_2', BibleBooks.Proverbs, 1, 1, 2, 2))
 
+    def test_clear_bible_list(self):
+        cache = SimpleCache()
+        controller = CacheController(cache)
+
+        key = QueryBuilder().get_bibles()
+
+        # By calling get the cache is filled with the given url
+        cache.get(lambda x: 'test_value', key)
+
+        self.assertIn(key, cache)
+        controller.clear_bible_list()
+        self.assertNotIn(key, cache)
+

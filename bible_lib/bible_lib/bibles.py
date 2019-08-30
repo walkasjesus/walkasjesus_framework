@@ -4,6 +4,7 @@ import logging
 import pycountry
 
 from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.bible_api.query_builder import QueryBuilder
 from bible_lib.bible_hsv.hsv_bible import HsvBible
 from bible_lib.bible_api.services import Services
 
@@ -12,11 +13,12 @@ class Bibles(object):
     def __init__(self):
         self.client = Services().api_client
         self.logger = logging.getLogger()
+        self.query_builder = QueryBuilder()
 
     def dictionary(self) -> {}:
         """ Return a dictionary with key:Bible """
         try:
-            response = self.client.get('bibles')
+            response = self.client.get(self.query_builder.get_bibles())
         except Exception as ex:
             self.logger.warning('Failed to retrieve bible list data.')
             self.logger.warning(ex)

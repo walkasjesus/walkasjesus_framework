@@ -22,3 +22,6 @@ class CacheController:
         for key in self.cache.cached_keys():
             if f'/{bible_id}/' in key:
                 self.cache.clear_key(key)
+
+    def clear_bible_list(self):
+        self.cache.clear_key(self.query_builder.get_bibles())

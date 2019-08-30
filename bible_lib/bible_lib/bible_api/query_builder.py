@@ -10,6 +10,9 @@ class QueryBuilder:
     def _base_url(self):
         return '{}/{}/'.format(self.server_url.rstrip('/'), self.api_version)
 
+    def get_bibles(self):
+        return f'{self._base_url}bibles'
+
     def get_verses(self,
                    bible_id,
                    book: BibleBooks,

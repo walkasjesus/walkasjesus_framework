@@ -260,8 +260,14 @@ class AbstractBibleReference(models.Model):
 
         if self.begin_chapter == 0 or self.end_verse == 0:
             return book_chapter_verse
-        else:
-            return f'{book_chapter_verse}-{self.end_chapter}:{self.end_chapter}'
+
+        if self.begin_chapter == self.end_chapter and self.begin_verse == self.end_verse:
+            return book_chapter_verse
+
+        if self.begin_chapter == self.end_chapter and self.end_verse > self.begin_verse:
+            return f'{book_chapter_verse}-{self.end_verse}'
+
+        return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
 
     def __lt__(self, other):
         if self.__class__ is not other.__class__:
@@ -273,7 +279,8 @@ class AbstractBibleReference(models.Model):
         if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter < self.begin_chapter:
             return True
 
-        if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
+        if BibleBooks[self.book] == BibleBooks[
+            other.book] and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
             return True
 
         return False

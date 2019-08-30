@@ -1,5 +1,19 @@
+{% load i18n %}
+
+<form action="{% url 'commandments:admin_reset_bibles' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+    <input type="submit" value="{% trans 'Clear bible list cache' %}">
+</form>
+
 <ul>
 {% for bible in bibles %}
-    <li>{{ bible }} <a href="{% url 'commandments:temp_detail' bible.id %}">load texts</a></li>
+    <li>{{ bible }} {% trans 'Percentage cached' %}: {{ bible.percentage_cached|floatformat:0 }}</li>
+    <form action="{% url 'commandments:admin_cache_bible' %}" method="post">
+        {% csrf_token %}
+        <input name="bible_id" type="hidden" value="{{ bible.id }}">
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <input type="submit" value="{% trans 'Cache bible texts' %}">
+    </form>
 {% endfor %}
 </ul>

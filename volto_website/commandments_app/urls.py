@@ -1,7 +1,8 @@
 from django.urls import path
 
-from commandments_app.views.bible_admin_view import BibleAdminView
-from commandments_app.views.bible_detail_admin_view import BibleDetailAdminView
+from commandments_app.views.admin_bible_view import AdminBibleView
+from commandments_app.views.admin_cache_bible import AdminCacheBible
+from commandments_app.views.admin_reset_bibles import AdminResetBibles
 from commandments_app.views.bible_view import BibleView
 from commandments_app.views.detail_view import DetailView
 from commandments_app.views.index_view import IndexView
@@ -18,6 +19,7 @@ urlpatterns = [
     path('detail/<int:commandment_id>', DetailView.as_view(), name='detail'),
 
     # Todo rename urls
-    path('temp', BibleAdminView.as_view(), name='temp'),
-    path('temp_detail/<str:bible_id>', BibleDetailAdminView.as_view(), name='temp_detail'),
+    path('admin_bible', AdminBibleView.as_view(), name='admin_bible'),
+    path('admin_reset_bibles', AdminResetBibles.as_view(), name='admin_reset_bibles'),
+    path('admin_cache_bible', AdminCacheBible.as_view(), name='admin_cache_bible'),
 ]

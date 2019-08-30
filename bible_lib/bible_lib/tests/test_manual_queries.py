@@ -1,8 +1,8 @@
 import json
 from unittest import TestCase, skip
 
-from bible_lib.api_bible import ApiBible
-from bible_lib.bible_api_client import BibleApiClient
+from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.bible_api.bible_api_client import BibleApiClient
 from bible_lib.bible_books import BibleBooks
 from bible_lib.tests.dummy_responses import DummyResponses
 

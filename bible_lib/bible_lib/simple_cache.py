@@ -2,18 +2,17 @@ import json
 import logging
 from pathlib import Path
 
-from bible_lib.performance_time_decorator import performance_time
-
 
 class SimpleCache:
-    def __init__(self):
+    def __init__(self, cache_path: Path = Path('cache.json')):
         self._cache = {}
         self.cache_hits = 0
         self.cache_misses = 0
         self.cache_items_not_persisted = 0
+        self.cache_path = cache_path
         self.logger = logging.getLogger()
+        self.load_state()
 
-    @performance_time
     def get(self, get_function, arguments):
         if arguments not in self._cache:
             self.cache_misses += 1
@@ -28,19 +27,26 @@ class SimpleCache:
 
         return self._cache[str(arguments)]
 
-    @performance_time
-    def load_state(self, file_path: Path):
+    def __contains__(self, item):
+        return item in self._cache
+
+    def clear_key(self, key: str):
+        del self._cache[key]
+
+    def cached_keys(self) -> [str]:
+        return list(self._cache.keys())
+
+    def load_state(self,):
         """" Load the cache content from disk. """
-        if not file_path.exists():
-            self.logger.warning(f'Could not find cache at {file_path}')
+        if not self.cache_path.exists():
+            self.logger.warning(f'Could not find cache at {self.cache_path}')
             return
 
-        with file_path.open() as file:
+        with self.cache_path.open() as file:
             self._cache = json.load(file)
 
-    @performance_time
-    def store_state(self, file_path: Path):
+    def store_state(self):
         """" Store the cache content to disk. """
-        with file_path.open('w+') as file:
+        with self.cache_path.open('w+') as file:
             json.dump(self._cache, file, indent=4)
             self.cache_items_not_persisted = 0

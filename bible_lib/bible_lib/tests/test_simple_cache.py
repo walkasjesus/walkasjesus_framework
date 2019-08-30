@@ -29,17 +29,17 @@ class TestSimpleCache(TestCase):
         self.assertEqual(cached_value, 25)
 
     def test_load_and_store(self):
-        cache = SimpleCache()
+        cache = SimpleCache(self.cache_path)
         cache.get(lambda f: f, 'test')
         cache.get(lambda f: f, 'another_value')
         cache.get(lambda f: f*f, 5)
 
         cache_before_load = cache._cache
-        cache.store_state(self.cache_path)
+        cache.store_state()
 
         # Make a new cache to really test restore mechanism
-        cache = SimpleCache()
-        cache.load_state(self.cache_path)
+        cache = SimpleCache(self.cache_path)
+        cache.load_state()
         cache_after_load = cache._cache
 
         self.assertEqual(cache_before_load, cache_after_load)

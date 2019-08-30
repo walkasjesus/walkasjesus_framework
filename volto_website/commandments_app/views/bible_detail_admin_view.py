@@ -1,14 +1,19 @@
+from bible_lib import BibleFactory
 from django.conf import settings
 from django.shortcuts import render
 from django.views import View
 
-from commandments_app.models import BibleTranslation
+from commandments_app.models import BibleReferences
 
 
-class BibleAdminView(View):
-    def get(self, request):
+class BibleDetailAdminView(View):
+    def get(self, request, bible_id: str):
         if not settings.DEBUG:
             raise Exception('Not implemented login for this page')
 
-        bibles = BibleTranslation().all_in_supported_languages()
-        return render(request, 'admin/bible_admin.html', {'bibles': bibles})
+        bible = BibleFactory().create(bible_id)
+        bible_references = BibleReferences()
+        bible_references.bible = bible
+
+        return render(request, 'admin/bible_detail_admin.html', {'bible': bible,
+                                                                 'bible_references': bible_references})

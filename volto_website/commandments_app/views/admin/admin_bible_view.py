@@ -1,8 +1,6 @@
-from pathlib import Path
-
 from bible_lib import BibleBooks
 from bible_lib.bible_api.cache_controller import CacheController
-from bible_lib.simple_cache import SimpleCache
+from bible_lib.bible_api.services import Services
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -15,8 +13,7 @@ class AdminBibleView(View):
     @method_decorator(staff_member_required)
     def get(self, request):
         bibles = BibleTranslation().all_in_supported_languages()
-        cache = SimpleCache()
-        cache.load_state(Path('bible_api_cache.json'))
+        cache = Services().cache
         cache_controller = CacheController(cache)
 
         for bible in bibles:

@@ -1,5 +1,7 @@
-from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
+from pathlib import Path
+
+from bible_lib.simple_cache import SimpleCache
 
 
 class Services:
-    api_client = CachedBibleApiClient()
+    cache = SimpleCache(Path('bible_api_cache.json'))

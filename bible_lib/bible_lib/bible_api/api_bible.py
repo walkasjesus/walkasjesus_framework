@@ -3,18 +3,18 @@ import logging
 import re
 
 from bible_lib.bible import Bible
+from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.bible_api.query_builder import QueryBuilder
 from bible_lib.bible_books import BibleBooks
 from bible_lib.formatters.formatter import Formatter
 from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
-from bible_lib.bible_api.services import Services
 from bible_lib.verse import Verse
 
 
 class ApiBible(Bible):
     def __init__(self, bible_id=None, text_formatter: Formatter = PlainTextFormatter()):
         self.id = bible_id
-        self.client = Services().api_client
+        self.client = CachedBibleApiClient()
         self.formatter = text_formatter
         self.query_builder = QueryBuilder()
         self.logger = logging.getLogger()

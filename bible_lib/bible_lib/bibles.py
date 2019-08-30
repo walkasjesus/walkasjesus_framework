@@ -4,14 +4,14 @@ import logging
 import pycountry
 
 from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.bible_api.query_builder import QueryBuilder
 from bible_lib.bible_hsv.hsv_bible import HsvBible
-from bible_lib.bible_api.services import Services
 
 
 class Bibles(object):
     def __init__(self):
-        self.client = Services().api_client
+        self.client = CachedBibleApiClient()
         self.logger = logging.getLogger()
         self.query_builder = QueryBuilder()
 

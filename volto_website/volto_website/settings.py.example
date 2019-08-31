@@ -179,10 +179,11 @@ CACHES = {
 }
 
 # Monitoring application
-sentry_sdk.init(
-    dsn="https://3caa949e65db4d419d486668fe5180a4@sentry.io/1527507",
-    integrations=[DjangoIntegration()]
-)
+if not DEBUG:
+    sentry_sdk.init(
+        dsn="https://3caa949e65db4d419d486668fe5180a4@sentry.io/1527507",
+        integrations=[DjangoIntegration()]
+    )
 
 # Rosetta settings
 ROSETTA_SHOW_AT_ADMIN_PANEL = True

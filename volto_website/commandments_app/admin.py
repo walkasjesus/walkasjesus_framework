@@ -1,7 +1,24 @@
 from django.contrib import admin
+from django.urls import path
 
-from .models import *
-from froala_editor.fields import FroalaField
+from commandments_app.models import *
+from commandments_app.views.admin.admin_bible_view import AdminBibleView
+
+
+class Bible(models.Model):
+    class Meta:
+        verbose_name_plural = 'Bible'
+        app_label = 'commandments_app'
+
+
+class BibleAdmin(admin.ModelAdmin):
+    model = Bible
+
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [
+            path('', AdminBibleView.as_view(), name=view_name),
+        ]
 
 
 class PrimaryBibleReferencesInline(admin.TabularInline):
@@ -17,7 +34,7 @@ class SecondaryBibleReferenceInline(admin.TabularInline):
 class TertiaryBibleReferenceInline(admin.TabularInline):
     model = TertiaryBibleReference
     extra = 0
-    
+
 
 class QuestionInline(admin.TabularInline):
     model = Question
@@ -70,11 +87,11 @@ class BookInline(admin.TabularInline):
 
 
 class Devotional(models.Model):
-  content = FroalaField()
+    content = FroalaField()
 
 
 class CommandmentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title',  'primary_bible_reference', 'category']
+    list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,
         SecondaryBibleReferenceInline,
@@ -92,5 +109,7 @@ class CommandmentAdmin(admin.ModelAdmin):
     ]
 
 
+admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(File)
+

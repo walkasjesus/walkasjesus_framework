@@ -2342,22 +2342,22 @@ msgstr ""
 msgid "Worship the Lord your God, and serve him only"
 msgstr "Adore le Seigneur ton Dieu et ne le sers que"
 
-#: volto_website/settings.py:123
+#: jesus_commandments_website/settings.py:123
 #, fuzzy
 msgid "English"
 msgstr "Anglais"
 
-#: volto_website/settings.py:124
+#: jesus_commandments_website/settings.py:124
 #, fuzzy
 msgid "Dutch"
 msgstr "néerlandais"
 
-#: volto_website/settings.py:125
+#: jesus_commandments_website/settings.py:125
 #, fuzzy
 msgid "German"
 msgstr "allemand"
 
-#: volto_website/settings.py:126
+#: jesus_commandments_website/settings.py:126
 #, fuzzy
 msgid "French"
 msgstr "français"

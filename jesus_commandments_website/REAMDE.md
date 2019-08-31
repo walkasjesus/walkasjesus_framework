@@ -1,4 +1,4 @@
-# VolTo Project
+# jesus_commandments Project
 
 ## Running the website
 

@@ -3,7 +3,7 @@ import os
 from django.core.management import BaseCommand
 from translate_tool import PoTranslator
 
-from volto_website.settings import BASE_DIR, LANGUAGES
+from jesus_commandments_website.settings import BASE_DIR, LANGUAGES
 
 
 class Command(BaseCommand):

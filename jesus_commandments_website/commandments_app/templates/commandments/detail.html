@@ -151,13 +151,13 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Primary Bible Reference' %}</h4>
-                            <p><i>{% trans 'Primary references is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
+                            <p><i>{% trans 'A Primary reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                                 <ul>
                                     <li><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text | safe }}</b></li>
                                 </ul>
                             {% if commandment.secondary_bible_references %}
                             <h4>{% trans 'Secondary Bible References' %}</h4>
-                            <p><i>{% trans 'Secondary references are extra references which are related te the same priciple' %}.</i></p>
+                            <p><i>{% trans 'Secondary references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.secondary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>
@@ -166,7 +166,7 @@
                             {% endif %}   
                             {% if commandment.tertiary_bible_references %}
                             <h4>{% trans 'Tertiary Bible References' %}</h4>
-                            <p><i>{% trans 'Tertiary references are extra, maybe indirect references, also relating to the same principle' %}.</i></p>
+                            <p><i>{% trans 'Tertiary references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.tertiary_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text | safe }}</li>

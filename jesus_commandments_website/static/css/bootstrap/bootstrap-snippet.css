@@ -63,3 +63,7 @@ p {
     position: relative;
     padding-top:56.25%;
 }
+
+.infobox {
+    text-align: left;    
+}

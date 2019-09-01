@@ -9925,3 +9925,11 @@ textarea.form-control {
 .bg-container {
   background-image: url("/static/images/bg_1.jpg");
   min-height: 1153px; }
+
+.jclogo {
+  padding-right: 5px;
+}
+
+.jclogo img {
+  width: 50px;
+}

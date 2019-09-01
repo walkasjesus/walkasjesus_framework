@@ -4,7 +4,7 @@
     <div class="sermon-wrap ftco-animate">
         <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{{ commandment.background_drawing.url }}');">
             <div class="text-content p-4 text-center">
-                <h3>{{ commandment.title }}</h3>
+                <h3>{{ commandment.id }} - {{ commandment.title }}</h3>
                 <p class="">
                     <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
                 </p>

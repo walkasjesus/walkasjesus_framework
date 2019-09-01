@@ -16,35 +16,14 @@
                 <p>{% trans 'To succeed in becoming a good disciple, we need to live out all of these commandments. The best way is to do this together. Take your time for each commandment to dive into the greatness of it, and discuss them in your Small Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one discipleship, to become followers in all of Jesus teachings.' %} </p>
             </div>
         </div>
-    <div class="row">
-        {% if commandments %}
-            {% for commandment in commandments %}
-                {% include "commandments/single_commandment_overview.html" %}
-            {% endfor %}
-        {% else %}
-            <p>{% trans 'No commandments are available.' %}</p>
-        {% endif %}
-    </div>
-        <div class="row justify-content-center pb-5">
-            <div class="col-md-12 heading-section text-center ftco-animate">
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if commandments.has_previous %}
-                            <a href="?page=1">&laquo; {% trans 'first' %}</a>
-                            <a href="?page={{ commandments.previous_page_number }}">{% trans 'previous' %}</a>
-                        {% endif %}
-
-                        <span class="current">
-                            {% trans 'Page' %} {{ commandments.number }} {% trans 'of' %} {{ commandments.paginator.num_pages }}.
-                        </span>
-
-                        {% if commandments.has_next %}
-                            <a href="?page={{ commandments.next_page_number }}">{% trans 'next' %}</a>
-                            <a href="?page={{ commandments.paginator.num_pages }}">{% trans 'last' %} &raquo;</a>
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
+        <div class="row">
+            {% if commandments %}
+                {% for commandment in commandments %}
+                    {% include "commandments/single_commandment_overview.html" %}
+                {% endfor %}
+            {% else %}
+                <p>{% trans 'No commandments are available.' %}</p>
+            {% endif %}
         </div>
     </div>
 </div>

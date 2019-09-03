@@ -16,6 +16,7 @@ media
 API_KEY.txt
 
 jesus_commandments_website/jesus_commandments_website/settings.py
+jesus_commandments_website/account_app/management/commands/import_users.py
 
 # Compiled translation files
 *.mo

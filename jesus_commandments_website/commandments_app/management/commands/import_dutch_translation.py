@@ -1,11 +1,9 @@
-import logging
 import os
 
 import polib
 from django.core.management import BaseCommand
 from import_tool import CommandmentImporter
 
-from commandments_app.models import *
 from jesus_commandments_website.settings import BASE_DIR
 
 

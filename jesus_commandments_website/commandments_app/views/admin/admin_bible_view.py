@@ -27,6 +27,8 @@ class AdminBibleView(View):
             bible.percentage_cached = cached_count / max(total_count, 0.0001) * 100
             bible.enabled = (bible.id in enabled_bible_ids)
 
+        bibles.sort(key=lambda b: (b.enabled, b.percentage_cached), reverse=True)
+
         return render(request, 'admin/bible_admin.html', {'bibles': bibles})
 
     def bible_count_in_cache(self, bible, cache_controller):

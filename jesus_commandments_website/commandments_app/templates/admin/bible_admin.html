@@ -19,24 +19,13 @@
         <th>{% trans 'Language' %}</th>
         <th>{% trans 'Enabled' %}</th>
         <th>{% trans 'Percentage cached' %}</th>
-        <th>{% trans 'Actions' %}</th>
     </tr>
     {% for bible in bibles %}
     <tr>
         <td>{{ bible.name }}</td>
         <td>{{ bible.language }}</td>
         <td>{{ bible.enabled }}</td>
-        <td>{{ bible.percentage_cached|floatformat:0 }}</td>
-        <td>
-        {% if bible.enabled %}
-        <form action="{% url 'commandments:admin_cache_bible' %}" method="post">
-            {% csrf_token %}
-            <input name="bible_id" type="hidden" value="{{ bible.id }}">
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <input type="submit" value="{% trans 'Cache bible texts' %}">
-        </form>
-        {% endif %}
-        </td>
+        <td>{{ bible.percentage_cached|floatformat:0 }}</td>        
     </tr>
     {% endfor %}
 </table>

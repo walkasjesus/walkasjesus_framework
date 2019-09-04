@@ -1,6 +1,7 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 
 from bible_lib import BibleFactory
+from bible_lib.bible_api.services import Services
 from django.core.management import BaseCommand
 
 from commandments_app.models import BibleReferences, BibleTranslation
@@ -24,6 +25,9 @@ class Command(BaseCommand):
             return
 
         self.load_bible_verses(bible_id)
+        
+        cache = Services().cache
+        cache.store_state()
 
     def load_bible_verses(self, bible_id: str):
         bible_references = BibleReferences()

@@ -116,6 +116,7 @@ class Commandment(models.Model):
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
     bible = BibleFactory().create('hsv')
+    languages = [translation.get_language()]
 
     def primary_bible_reference(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
@@ -142,31 +143,34 @@ class Commandment(models.Model):
         return self.drawing_set.filter(is_public=True)
 
     def songs(self):
-        return self.song_set.filter(is_public=True)
+        return self._filter_on_language(self.song_set)
 
     def movies(self):
-        return self.movie_set.filter(is_public=True)
+        return self._filter_on_language(self.movie_set)
 
     def short_movies(self):
-        return self.shortmovie_set.filter(is_public=True)
+        return self._filter_on_language(self.shortmovie_set)
 
     def sermons(self):
-        return self.sermon_set.filter(is_public=True)
+        return self._filter_on_language(self.sermon_set)
 
     def pictures(self):
         return self.picture_set.filter(is_public=True)
 
     def testimonies(self):
-        return self.testimony_set.filter(is_public=True)
+        return self._filter_on_language(self.testimony_set)
 
     def blogs(self):
-        return self.blog_set.filter(is_public=True)
+        return self._filter_on_language(self.blog_set)
 
     def books(self):
-        return self.book_set.filter(is_public=True)
+        return self._filter_on_language(self.book_set)
 
     def questions(self):
         return self.question_set.all()
+
+    def _filter_on_language(self, query):
+        return query.filter(language__in=self.languages, is_public=True)
 
     def _get_translated_bible_references(self, query_set):
         [ref.set_bible(self.bible) for ref in query_set]
@@ -185,9 +189,7 @@ class UserPreferences:
         if 'bible_id' in self.session:
             return BibleFactory().create(self.session['bible_id'])
 
-        current_user_language = translation.get_language()
-
-        if current_user_language == 'nl':
+        if self.language == 'nl':
             return BibleFactory().create('hsv')
 
         return BibleFactory().create('de4e12af7f28f599-01')
@@ -195,6 +197,23 @@ class UserPreferences:
     @bible.setter
     def bible(self, value):
         self.session['bible_id'] = value.id
+
+    @property
+    def language(self):
+        return translation.get_language()
+
+    @property
+    def languages(self):
+        """ A user can select multiple languages (so more media is shown for example)"""
+        if 'languages' in self.session:
+            return self.session
+
+        return [self.language]
+
+    @languages.setter
+    def languages(self, value) -> []:
+        # Sort so when using in comparison or cache key [en, nl] is the same cache as [nl, en]
+        self.session['languages'] = value.sort()
 
 
 class BibleTranslation:

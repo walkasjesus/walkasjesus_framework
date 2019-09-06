@@ -177,6 +177,8 @@
                     </div>
                 </div>
             </div>
+            {% endcache %}
+            {% cache cache_timeout commandments_detail_media cache_on_multi_language commandment.id %}
             {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">

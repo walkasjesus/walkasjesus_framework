@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load cache %}
+{% block content %}
+{% cache cache_timeout vision %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_3.jpg' %});">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+
+
+                    <span class="subheading">{% trans 'The reason why' %}</span>
+                    <h2 class="mb-4"><span>{% trans 'Vision' %}</span></h2>
+                    <p>{% trans 'The world despirately needs Jesus! Not only the non-christians, but especially the christians. You cannot change someone else, but you can change yourself.' %}
+    
+
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+{% endcache %}
+{% endblock %}

@@ -8,7 +8,7 @@ class QueryBuilder:
         self.content_type = 'text'
 
     def build_url(self, relative_path):
-        return '{}/{}/{}?content-type={}'.format(self.server_url.rstrip('/'), self.api_version, relative_path.strip('/'), self.content_type)
+        return '{}/{}/{}'.format(self.server_url.rstrip('/'), self.api_version, relative_path.strip('/'))
 
     def get_bibles(self):
         return self.build_url('bibles')
@@ -23,7 +23,7 @@ class QueryBuilder:
         book_id = self._get_book_id(book)
         verse_query = f'{book_id}.{start_chapter}.{start_verse}-{book_id}.{end_chapter}.{end_verse}'
 
-        return self.build_url(f'bibles/{bible_id}/passages/{verse_query}')
+        return self.build_url(f'bibles/{bible_id}/passages/{verse_query}?content-type={self.content_type}')
 
     def _get_book_id(self, book: BibleBooks) -> str:
         """" Convert the bible book enum to the id used on the bible api. """

@@ -8981,6 +8981,7 @@ h1, h2, h3, h4, h5,
     display: inline-block;
     font-size: 40px;
     color: #fff;
+    padding-left: 20px;
     margin-bottom: 15px; }
   .daily-verse h3 {
     font-family: "Lora", Georgia, serif;

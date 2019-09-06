@@ -1,9 +1,7 @@
 from bible_lib import Bible, Bibles
-from bible_lib.performance_time_decorator import performance_time
 
 
 class BibleFactory:
-    @performance_time
     def create(self, bible_id: str) -> Bible:
         all_bibles = Bibles().dictionary()
 

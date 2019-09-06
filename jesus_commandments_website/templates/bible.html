@@ -10,7 +10,7 @@
         {% for bible in bible_translation.all_in_user_language %}
             {% if bible.id != user_preferences.bible.id %}
             <option value="{{ bible.id }}">
-                {{ bible.name }} ({{ bible.language }})
+                {{ bible.name }}
             </option>
             {% endif %}
         {% endfor %}

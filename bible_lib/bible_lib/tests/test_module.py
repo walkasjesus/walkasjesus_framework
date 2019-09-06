@@ -2,10 +2,10 @@ from pathlib import Path
 from unittest import TestCase, skip
 
 from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.bible_api.services import Services
 from bible_lib.bible_books import BibleBooks
 from bible_lib.bibles import Bibles
 from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
-from bible_lib.config import store_cache_every_number_of_hits
 
 
 @skip('Only run module test manually as it connects to external API')
@@ -41,8 +41,9 @@ class TestModule(TestCase):
         if cache_location.exists():
             cache_location.unlink()
 
-        for i in range(1, store_cache_every_number_of_hits+1):
-            bible.verse(BibleBooks.John, 3, i)
+        bible.verse(BibleBooks.John, 3, 1)
+
+        Services().cache.store_state()
 
         self.assertTrue(cache_location.exists())
 

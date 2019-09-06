@@ -1,5 +1,6 @@
 from django.urls import path
 
+from commandments_app.views.admin.admin_persist_bible_cache import AdminPersistBibleCache
 from commandments_app.views.admin.admin_reset_bibles import AdminResetBibles
 from commandments_app.views.bible_view import BibleView
 from commandments_app.views.detail_view import DetailView
@@ -17,4 +18,5 @@ urlpatterns = [
     path('detail/<int:commandment_id>', DetailView.as_view(), name='detail'),
 
     path('admin/reset_bibles', AdminResetBibles.as_view(), name='admin_reset_bibles'),
+    path('admin/persist_bible_cache', AdminPersistBibleCache.as_view(), name='admin_persist_bible_cache'),
 ]

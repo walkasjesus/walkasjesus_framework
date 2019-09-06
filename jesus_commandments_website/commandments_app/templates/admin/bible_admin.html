@@ -4,11 +4,22 @@
 {% block content %}
 <h1>{% trans 'Bible cache management' %}</h1>
 
-<form action="{% url 'commandments:admin_reset_bibles' %}" method="post">
-    {% csrf_token %}
-    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-    <input type="submit" value="{% trans 'Clear bible list cache' %}">
-</form>
+<div>
+    <form action="{% url 'commandments:admin_reset_bibles' %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <input type="submit" value="{% trans 'Clear bible list cache' %}">
+    </form>
+
+    {% trans 'Items in cache that are not saved to disk' %} {{ cache_items_not_persisted }}
+
+    <form action="{% url 'commandments:admin_persist_bible_cache' %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <input type="submit" value="{% trans 'Save bible cache to disk' %}">
+    </form>
+</div>
+
 <br />
 <br />
 <h1>{% trans 'Bibles available' %}</h1>

@@ -29,7 +29,8 @@ class AdminBibleView(View):
 
         bibles.sort(key=lambda b: (b.enabled, b.percentage_cached), reverse=True)
 
-        return render(request, 'admin/bible_admin.html', {'bibles': bibles})
+        return render(request, 'admin/bible_admin.html', {'bibles': bibles,
+                                                          'cache_items_not_persisted': cache.cache_items_not_persisted})
 
     def bible_count_in_cache(self, bible, cache_controller):
         bible_references = BibleReferences()

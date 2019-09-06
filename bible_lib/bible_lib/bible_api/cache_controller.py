@@ -25,3 +25,6 @@ class CacheController:
 
     def clear_bible_list(self):
         self.cache.clear_key(self.query_builder.get_bibles())
+
+    def persist_cache(self):
+        self.cache.store_state()

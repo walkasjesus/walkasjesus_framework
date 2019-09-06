@@ -136,7 +136,7 @@
                         </div>
                         <div id="devotional" class="our-services-text">
                             <h4>{% trans 'Devotional' %}</h4>
-                            <p>{{ commandment.devotional  }}</p>
+                            <p>{{ commandment.devotional | safe  }}</p>
                             {% if commandment.devotional_source is not defined %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
                         </div>
                     </div>

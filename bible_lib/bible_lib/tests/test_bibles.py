@@ -1,4 +1,5 @@
-from unittest import TestCase
+from collections import Counter
+from unittest import TestCase, skip
 from unittest.mock import Mock
 
 from bible_lib.bibles import Bibles
@@ -17,6 +18,16 @@ class TestBibles(TestCase):
                 found = True
 
         self.assertTrue(found)
+
+    def test_unique_names(self):
+        bibles = Bibles()
+        bibles.client.get = Mock(return_value=DummyResponses().bibles())
+        bible_list = bibles.list()
+
+        counted_names = Counter([b.name for b in bible_list])
+
+        for name, count in counted_names.items():
+            self.assertEqual(1, count, f'{name} has not an unique name')
 
     def test_dictionary(self):
         bibles = Bibles()

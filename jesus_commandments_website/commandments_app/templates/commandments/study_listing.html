@@ -96,7 +96,7 @@
                         <th scope="row">{{ bible_reference.commandment.id }}</th>
                         <td>{{ bible_reference.commandment.title }}</td>
                         <td>{{ bible_reference}}</td>
-                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.text}}</td>
                         <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Primary' %}</td>
                     </tr>
@@ -109,7 +109,7 @@
                         <th scope="row">{{ bible_reference.commandment.id }}</th>
                         <td>{{ bible_reference.commandment.title }}</td>
                         <td>{{ bible_reference }}</td>
-                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.text}}</td>
                         <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Secondary' %}</td>
                     </tr>
@@ -122,7 +122,7 @@
                         <th scope="row">{{ bible_reference.commandment.id }}</th>
                         <td>{{ bible_reference.commandment.title }}</td>
                         <td>{{ bible_reference }}</td>
-                        <td>{{ bible_reference.text | safe }}</td>
+                        <td>{{ bible_reference.text  }}</td>
                         <td>{{ bible_reference.commandment.get_category_display }}</td>
                         <td>{% trans 'Tertiary' %}</td>
                     </tr>

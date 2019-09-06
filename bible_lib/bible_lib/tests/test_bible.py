@@ -13,7 +13,7 @@ class TestBible(TestCase):
         verse = bible.verse(BibleBooks.John, 1, 51)
 
         bible.client.get.assert_called_with(
-            'https://api.scripture.api.bible/v1/bibles/ead7b4cc5007389c-01/passages/JHN.1.51-JHN.1.51')
+            'https://api.scripture.api.bible/v1/bibles/ead7b4cc5007389c-01/passages/JHN.1.51-JHN.1.51?content-type=text')
         self.assertIn('En Hij sprak tot hem: Voorwaar, voorwaar, Ik zeg u:', verse)
 
     def test_get_verses_spanning_multiple_chapters(self):
@@ -22,7 +22,7 @@ class TestBible(TestCase):
         verses = bible.verses(BibleBooks.John, 1, 51, 2, 1)
 
         bible.client.get.assert_called_with(
-            'https://api.scripture.api.bible/v1/bibles/ead7b4cc5007389c-01/passages/JHN.1.51-JHN.2.1')
+            'https://api.scripture.api.bible/v1/bibles/ead7b4cc5007389c-01/passages/JHN.1.51-JHN.2.1?content-type=text')
         # Part of verse 51
         self.assertIn('En Hij sprak tot hem: Voorwaar, voorwaar, Ik zeg u:', verses)
         # Part of verse 1

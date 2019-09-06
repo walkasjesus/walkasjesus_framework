@@ -52,22 +52,20 @@ class ApiBible(Bible):
 
         return self.formatter.flush()
 
-    def extract_verses(self, book: BibleBooks, start_chapter: int, verses_html: str) -> [Verse]:
+    def extract_verses(self, book: BibleBooks, start_chapter: int, verses_text: str) -> [Verse]:
         parsed_verses = []
         current_chapter = start_chapter
 
-        # Format is like this:
-        #  <p class="p"><span data-number="51" class="v">51</span>...text...</p>
-        #  <p class="p"><span data-number="1" class="v">1</span>...text...</p>
-        verses_html = verses_html.replace('</p>', '')
-        split_verses_html = verses_html.split('<p class="p">')
+        # Format when using content-type=text is like [1] text... [2] ... [1] ...
+        normalized_text = re.sub('\s+', ' ', verses_text).replace('\n', '')
+        split_verses = normalized_text.split('[')
 
         # extract verse number and texts
-        for verse_html in split_verses_html:
-            capture_groups = re.match(r'<span data-number="\d+" class="v">(\d+)<\/span>(.+)', verse_html)
+        for verse in split_verses:
+            capture_groups = re.match(r'(\d+)]\s+(.+)', verse)
             if capture_groups:
                 current_verse = int(capture_groups.group(1))
-                text = capture_groups.group(2)
+                text = capture_groups.group(2).strip()
 
                 if current_verse == 1:
                     current_chapter += 1

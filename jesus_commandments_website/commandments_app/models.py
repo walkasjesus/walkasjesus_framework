@@ -4,6 +4,7 @@ from enum import Enum
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib import BibleFactory, Bibles, Bible
 from django.conf import settings
+from django.conf.global_settings import LANGUAGES
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
@@ -279,8 +280,9 @@ class AbstractBibleReference(models.Model):
         if BibleBooks[self.book] == BibleBooks[other.book] and self.begin_chapter < self.begin_chapter:
             return True
 
-        if BibleBooks[self.book] == BibleBooks[
-            other.book] and self.begin_chapter == self.begin_chapter and self.begin_verse < self.begin_verse:
+        if BibleBooks[self.book] == BibleBooks[other.book] and \
+                self.begin_chapter == self.begin_chapter and \
+                self.begin_verse < self.begin_verse:
             return True
 
         return False
@@ -329,6 +331,7 @@ class Media(models.Model):
     description = models.TextField(default='')
     author = models.CharField(max_length=64, default='')
     url = URLOrRelativeURLField(default='#')
+    language = models.CharField(max_length=8, choices=LANGUAGES, default='en')
     is_public = models.BooleanField(default=False)
 
     class Meta:

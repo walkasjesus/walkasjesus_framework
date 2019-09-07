@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-menu.css' %}">   
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-signup.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/select.css' %}">
     <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
   </head>
   {% endcache %}
@@ -56,11 +57,13 @@
             <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
             <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
             {% endif %}
-	          <li class="nav-item"><span>{% include "language.html" %}</span></li>
-	          <li class="nav-item"><span>{% include "bible.html" %}</span></li>
-	        </ul>
-	      </div>
-	    </div>
+          </ul>
+          <div class="language-select">
+            <span>{% include "language.html" %}</span>
+            <span>{% include "bible.html" %}</span>
+          </div>  
+        </div>
+      </div>
 	  </nav>
 
     {% block homebanner %}

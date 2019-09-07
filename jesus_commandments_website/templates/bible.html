@@ -2,6 +2,7 @@
 
 <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
     <input name="next" type="hidden" value="{{ request.get_full_path }}">
+    <div class="select">
     <select name="bible_id" onchange="this.form.submit()">
         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
         <option value="{{ user_preferences.bible.id }}" selected>
@@ -15,5 +16,6 @@
             {% endif %}
         {% endfor %}
     </select>
+    </div>
     <!-- <input type="submit" value="{% trans 'select bible' %}" id="submit_button"> -->
 </form>

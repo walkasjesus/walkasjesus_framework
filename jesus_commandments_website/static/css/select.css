@@ -1,0 +1,65 @@
+/* Div Select */
+.language-select {
+    position: absolute;
+    right: 12px; }
+
+/* Reset Select */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #fff;
+    background-image: none;
+    border: 1px solid #000000;
+    opacity: 1.0;
+    padding: 2px;
+  }
+  /* Remove IE arrow */
+  select::-ms-expand {
+    display: none;
+  }
+  /* Custom Select */
+  .select {
+    position: relative;
+    display: flex;
+    max-width: 20em;
+    font-family: "Open Sans", Arial, sans-serif;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: #fff;
+    height: 2em;
+    line-height: 2;
+    background: #fff;
+    border: 1px solid #000000;
+    overflow: hidden;
+    border-radius: .25em;
+  }
+  select {
+    flex: 1;
+    padding: 0 .5em;
+    color: #000000;
+    cursor: pointer;
+  }
+  /* Arrow */
+  .select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #1b1919;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+  }
+  /* Transition */
+  .select:hover::after {
+    color: #ffd615;
+  }
+  

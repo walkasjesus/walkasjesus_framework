@@ -90,29 +90,29 @@
           </div>
           <div class="col-md">
             <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">About</h2>
+              <h2 class="ftco-heading-2">{% trans 'Site Navigation' %}</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Beliefs</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Mission</a></li>
-                <li><a href="#" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Contributors</a></li>
+                <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'List of Commandments' %}</a></li>
+                <li><a href="{% url 'commandments:study_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Study them' %}</a></li>
+                <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Our Vision' %}</a></li>
               </ul>
             </div>
           </div>
           <div class="col-md">
             <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">Account</h2>
+              <h2 class="ftco-heading-2">{% trans 'Account' %}</h2>
               <ul class="list-unstyled">
 
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'profile' %} ({{ user.username }})</a></li>
-                    <li><a href="{% url 'account:logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'logout' %}</a></li>
+                    <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Profile' %} ({{ user.username }})</a></li>
+                    <li><a href="{% url 'account:logout' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Logout' %}</a></li>
                 {% else %}
-                    <li><a href="{% url 'account:login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'login' %}</a></li>
-                    <li><a href="{% url 'account:signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'register' %}</a></li>
+                    <li><a href="{% url 'account:login' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Login' %}</a></li>
+                    <li><a href="{% url 'account:signup' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Register' %}</a></li>
                 {% endif %}
 
-                {% if user.is_superuser %}
-                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'admin' %}</a></li>
+                {% if user.is_superuser or user.is_staff %}
+                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Admin Panel' %}</a></li>
                 {% endif %}
               </ul>
             </div>

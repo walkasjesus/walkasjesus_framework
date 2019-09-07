@@ -153,7 +153,7 @@
 			} 
 			if ( st > 350 ) {
 				if ( !navbar.hasClass('awake') ) {
-					if(document.URL.indexOf("\/commandments\/detail\/") <= 0){ 
+					if(document.URL.indexOf("\/detail\/") <= 0){ 
 						navbar.addClass('awake');	
 					}
 				}

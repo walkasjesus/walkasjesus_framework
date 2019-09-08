@@ -9944,8 +9944,13 @@ textarea.form-control {
     stroke-dashoffset: -136px; } }
 
 .bg-container {
-  background-image: url("/static/images/bg_1.jpg");
-  min-height: 1153px; }
+  background-image: url("/static/images/drawing_placeholder.png");
+  min-height: 900px; }
+
+/* .bg-container {
+  background-color: rgb(194, 194, 194);
+  min-height: 1153px; } */
+  
 
 .jclogo {
   padding-right: 5px;
@@ -9953,4 +9958,22 @@ textarea.form-control {
 
 .jclogo img {
   width: 50px;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  background: rgb(220,220,220);
+  font-weight: bold;
+  color: rgb(120,120,120);
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: ease .3s;
+}
+
+.button:hover {
+  background: #ffd615;
+  color: #ffffff;
 }

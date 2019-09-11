@@ -102,14 +102,19 @@
                     <span class="expand-icon">&plus;</span>
                 </div>
                 <div class="container">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                        <option value="{{ language.code }}">
-                            {{ language.name_local }} ({{ language.code }})
-                        </option>
-                    {% endfor %}
+                    <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <select name="languages" multiple> <!--onchange="this.form.submit()"-->
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                            <option value="{{ language.code }}">
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="{% trans 'select languages' %}">
+                    </form>
                 </div>
             </div>
             <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        
@@ -137,7 +142,7 @@
                         </div>
                         <div id="devotional" class="our-services-text">
                             <h4>{% trans 'Devotional' %}</h4>
-                            <p>{{ commandment.devotional  }}</p>
+                            <p>{{ commandment.devotional | safe  }}</p>
                             {% if commandment.devotional_source is not defined %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
                         </div>
                     </div>
@@ -178,6 +183,8 @@
                     </div>
                 </div>
             </div>
+            {% endcache %}
+            {% cache cache_timeout commandments_detail_media cache_on_multi_language commandment.id %}
             {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">

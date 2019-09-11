@@ -18,6 +18,7 @@ def user_preferences(request):
 def cache_settings(request):
     return {
         'cache_timeout': 3600,
-        'cache_on_language': translation.get_language(),
+        'cache_on_language': UserPreferences(request.session).language,
+        'cache_on_multi_language': UserPreferences(request.session).languages,
         'cache_on_bible': translation.get_language() + '_' + UserPreferences(request.session).bible.id,
     }

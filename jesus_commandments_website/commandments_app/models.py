@@ -205,15 +205,16 @@ class UserPreferences:
     @property
     def languages(self):
         """ A user can select multiple languages (so more media is shown for example)"""
-        if 'languages' in self.session:
-            return self.session
+        if 'languages' in self.session and self.session['languages'] is not None:
+            return self.session['languages']
 
+        # If nothing is specified, default to user main language
         return [self.language]
 
     @languages.setter
     def languages(self, value) -> []:
         # Sort so when using in comparison or cache key [en, nl] is the same cache as [nl, en]
-        self.session['languages'] = value.sort()
+        self.session['languages'] = sorted(value)
 
 
 class BibleTranslation:

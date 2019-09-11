@@ -101,14 +101,19 @@
                     <span class="expand-icon">&plus;</span>
                 </div>
                 <div class="container">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                        <option value="{{ language.code }}">
-                            {{ language.name_local }} ({{ language.code }})
-                        </option>
-                    {% endfor %}
+                    <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <select name="languages" multiple> <!--onchange="this.form.submit()"-->
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                            <option value="{{ language.code }}">
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="{% trans 'select languages' %}">
+                    </form>
                 </div>
             </div>
             <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        

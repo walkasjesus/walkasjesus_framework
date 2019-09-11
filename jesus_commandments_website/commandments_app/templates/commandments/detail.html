@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% load watermark %}
 {% block content %}
 {% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
 <nav class="floating-menu">
@@ -90,7 +91,7 @@
     <div class="menu-bg"></div>
 </nav>
 
-<section class="ftco-daily-verse img" style="background-image: url('{{ background_drawing.url }}');">
+<section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.url is not defined %}{{ commandment.background_drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% endif %}');">
 <div class="overlay"></div>
     <div class="container">
         <div class="alert alert-info" role="alert">
@@ -126,7 +127,7 @@
                         <span class="subheading">{{ commandment.get_category_display }}</span>
                     </div>        
                     <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
-                        <span class="subheading" style="padding-left: 20px;">{{ commandment.title }}</span>
+                        <span class="subheading">{{ commandment.id }} - {{ commandment.title }}</span>
                     </div>
                 </div>
             </div>
@@ -194,7 +195,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
                             {% for drawing in commandment.drawings %}
-                                <img src="{{ drawing.url }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
+                                <img src="{{ drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
                                 {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
                                 <p>Artist: {{ drawing.author }}</p>
                             {% endfor %}

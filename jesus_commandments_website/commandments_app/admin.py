@@ -86,10 +86,6 @@ class BookInline(admin.TabularInline):
     extra = 0
 
 
-class Devotional(models.Model):
-    content = FroalaField()
-
-
 class CommandmentAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [

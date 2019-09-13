@@ -7,6 +7,7 @@ from commandments_app.views.admin.admin_bible_view import AdminBibleView
 
 class Bible(models.Model):
     class Meta:
+        managed = False
         verbose_name_plural = 'Bible'
         app_label = 'commandments_app'
 

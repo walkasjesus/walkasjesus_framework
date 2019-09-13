@@ -417,6 +417,20 @@
                 </div>
             </div>
             {% endif %}
+            {% if commandment.quote %}
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-md-12 daily-verse pl-md-5 ftco-animate fadeInUp ftco-animated">
+                                <span class="subheading-quote"><p>"{{ commandment.quote }}"</p></span>
+                                <h4 class="h5 mt-4 font-weight-bold"><span>Quote by:</span> {{ commandment.quote_source }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>         
     </div>
 </section>

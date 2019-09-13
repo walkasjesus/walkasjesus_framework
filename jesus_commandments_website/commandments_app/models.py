@@ -116,6 +116,8 @@ class Commandment(models.Model):
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
+    quote = models.TextField(default=None, blank=True, null=True)
+    quote_source = models.CharField(max_length=256, default=None, blank=True, null=True)
     bible = BibleFactory().create('hsv')
     languages = [translation.get_language()]
 

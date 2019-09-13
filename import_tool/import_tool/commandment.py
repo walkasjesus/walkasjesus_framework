@@ -13,3 +13,5 @@ class Commandment:
         self.tertiary_bible_references = []
         self.media = []
         self.questions = []
+        self.quote = ''
+        self.quote_source = ''

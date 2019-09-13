@@ -31,6 +31,8 @@ class CommandmentImporter(object):
             commandment.devotional_nl = first(group, 'devotional_nl')
             commandment.devotional_source = first(group, 'devotional_source')
             commandment.category = first(group, 'category')
+            commandment.quote = first(group, 'quote')
+            commandment.quote_source = first(group, 'quote_source')
 
             # Parse bible refs
             for index, row in group.iterrows():

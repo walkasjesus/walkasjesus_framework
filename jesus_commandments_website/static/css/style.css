@@ -8990,6 +8990,12 @@ h1, h2, h3, h4, h5,
       color: #e23f3f;
       padding-right: 20px;
       margin-bottom: 20px; }
+    .daily-verse .subheading-quote p {
+      font-family: "Great Vibes", cursive;
+      font-size: 35px;
+      color: #ffd615;
+      padding-right: 20px;
+      margin-bottom: 20px; }
   .daily-verse h3 {
     font-family: "Lora", Georgia, serif;
     font-style: italic;

@@ -25,6 +25,7 @@ class CommandmentImporter(object):
             commandment = Commandment()
             commandment.id = first(group, 'step')
             commandment.title = first(group, 'title_en')
+            commandment.title_negative = first(group, 'title_negative_en')
             commandment.title_nl = first(group, 'title_nl')
             commandment.devotional = first(group, 'devotional_en')
             commandment.devotional_nl = first(group, 'devotional_nl')

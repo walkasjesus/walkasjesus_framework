@@ -67,6 +67,7 @@ class Command(BaseCommand):
         try:
             model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
+            model_commandment.title_negative = commandment.title_negative
             model_commandment.devotional = commandment.devotional
             model_commandment.devotional_source = commandment.devotional_source
             model_commandment.category = CommandmentCategories(commandment.category).name

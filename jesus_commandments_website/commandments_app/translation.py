@@ -3,7 +3,7 @@ import vinaigrette
 
 def register_translations(app_config):
     translatable_model_fields = {
-        'Commandment': ['title', 'devotional'],
+        'Commandment': ['title', 'title_negative', 'devotional'],
         'Drawing': ['description'],
         'Song': ['description'],
         'Movie': ['description'],
@@ -13,6 +13,7 @@ def register_translations(app_config):
         'Testimony': ['description'],
         'Blog': ['description'],
         'Book': ['description'],
+        'Question': ['text'],
      }
 
     # Register fields to translate

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from django.contrib.admin import AdminSite
 
 from commandments_app.models import *
 from commandments_app.views.admin.admin_bible_view import AdminBibleView

@@ -59,7 +59,7 @@
 	          <li class="nav-item"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
 	          <li class="nav-item"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
-            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Panel' %}</span></a></li>
+            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
             {% endif %}
             {% if user.is_authenticated %}
 	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
@@ -126,7 +126,7 @@
                 {% endif %}
 
                 {% if user.is_superuser or user.is_staff %}
-                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Admin Panel' %}</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Admin Portal' %}</a></li>
                 {% endif %}
               </ul>
             </div>

@@ -22,9 +22,13 @@ urlpatterns = [
     path('', include('commandments_app.urls', namespace='commandments')),
     path('account/', include('account_app.urls', namespace='account')),
     path('rosetta/', include('rosetta.urls')),
-    path('admin/', admin.site.urls),
+    path('admin_portal/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
 ]
+
+admin.site.site_header = "Jesus Commandments Admin Portal"
+admin.site.site_title = "Jesus Commandments"
+admin.site.index_title = "Home Administration Portal"
 
 # Not sure why but all tuts only do this in debug mode,
 # Is it something special, or just because it is recommended

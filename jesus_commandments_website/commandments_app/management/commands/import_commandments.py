@@ -68,9 +68,12 @@ class Command(BaseCommand):
         try:
             model_commandment = Commandment(id=commandment.id)
             model_commandment.title = commandment.title
+            model_commandment.title_negative = commandment.title_negative
             model_commandment.devotional = commandment.devotional
             model_commandment.devotional_source = commandment.devotional_source
             model_commandment.category = CommandmentCategories(commandment.category).name
+            model_commandment.quote = commandment.quote
+            model_commandment.quote_source = commandment.quote_source
             model_commandment.save()
             print(f'Added commandment {model_commandment.id}')
             for item in commandment.primary_bible_references:

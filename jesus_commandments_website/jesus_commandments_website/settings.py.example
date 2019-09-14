@@ -159,7 +159,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/account/login/'
-LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_REDIRECT_URL = '/admin_portal/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Map django message level to Bootstrap alert, using the tag attribute

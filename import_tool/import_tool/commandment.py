@@ -2,6 +2,7 @@ class Commandment:
     def __init__(self):
         self.id = 0
         self.title = ''
+        self.title_negative = ''
         self.title_nl = ''
         self.devotional = ''
         self.devotional_nl = ''
@@ -12,3 +13,5 @@ class Commandment:
         self.tertiary_bible_references = []
         self.media = []
         self.questions = []
+        self.quote = ''
+        self.quote_source = ''

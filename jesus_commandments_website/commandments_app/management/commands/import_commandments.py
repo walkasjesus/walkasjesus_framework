@@ -58,6 +58,7 @@ class Command(BaseCommand):
         print(f'Adding {media_type}: {media.title} - {media.author}')
         model_reference.title = media.title
         model_reference.description = media.description
+        model_reference.language = media.language
         model_reference.url = media.link
         model_reference.author = media.author
         model_reference.is_public = media.is_public

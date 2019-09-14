@@ -50,6 +50,7 @@ class CommandmentImporter(object):
                     media = Media()
                     media.title = row['media_title']
                     media.description = row['media_description_en']
+                    media.language = row['media_lang']
                     media.link = row['media_link']
                     media.type = row['media_type']
                     media.author = row['media_author']

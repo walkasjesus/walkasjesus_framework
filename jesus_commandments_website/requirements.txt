@@ -6,13 +6,14 @@ django-vinaigrette>=1.2.1
 django-rosetta>=0.9.3
 -e ../bible_lib
 django-url-or-relative-url-field>=0.1.1
+sorl-thumbnail>=12.5.0
+django-froala-editor>=3.0.5
+django-watermark>=0.1.8
 
 # Tools
 -e ../import_tool
 -e ../translate_tool
 polib>=1.1.0
-django-froala-editor>=3.0.5
-django-watermark>=0.1.8
 
 # Monitoring
 sentry-sdk>=0.10.2

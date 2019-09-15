@@ -8,10 +8,12 @@ from django.conf.global_settings import LANGUAGES
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
-from url_or_relative_url_field.fields import URLOrRelativeURLField
 from froala_editor.fields import FroalaField
+from sorl.thumbnail import get_thumbnail
+from url_or_relative_url_field.fields import URLOrRelativeURLField
 
 from commandments_app.lib.ordered_enum import OrderedEnum
+from jesus_commandments_website.settings import MEDIA_URL
 
 
 class Redirect(models.Model):
@@ -366,6 +368,15 @@ class Media(models.Model):
 
 class Drawing(Media):
     pass
+
+    def thumbnail_url(self):
+        image_source_path = self.url
+        # The thumbnail searches relative to the media directory so remove the leading media directory.
+        if image_source_path.startswith(MEDIA_URL):
+            image_source_path = image_source_path[len(MEDIA_URL):]
+
+        thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
+        return thumbnail.url
 
 
 class Song(Media):

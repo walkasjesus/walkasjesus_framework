@@ -95,27 +95,20 @@
 <div class="overlay"></div>
     <div class="container">
         <div class="alert alert-info" role="alert">
-            <div class="multiselect" id="countries" multiple="multiple" data-target="multi-0">
-                <div class="title noselect">
-                    <span class="text">{% trans 'Select Media Languages' %}</span>
-                    <span class="close-icon">&times;</span>
-                    <span class="expand-icon">&plus;</span>
-                </div>
-                <div class="container">
-                    <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
-                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                        <select name="languages" multiple> <!--onchange="this.form.submit()"-->
-                            {% get_available_languages as LANGUAGES %}
-                            {% get_language_info_list for LANGUAGES as languages %}
-                            {% for language in languages %}
-                            <option value="{{ language.code }}">
-                                {{ language.name_local }} ({{ language.code }})
-                            </option>
-                            {% endfor %}
-                        </select>
-                        <input type="submit" value="{% trans 'select languages' %}">
-                    </form>
-                </div>
+            <div class="container">
+                <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <select id="multiselect" name="languages" multiple> <!--onchange="this.form.submit()"-->
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                        <option value="{{ language.code }}">
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="{% trans 'select languages' %}">
+                </form>
             </div>
             <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        
         </div>

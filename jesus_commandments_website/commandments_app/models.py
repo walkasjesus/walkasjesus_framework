@@ -110,6 +110,11 @@ class BibleBooks(OrderedEnum):
     Revelation = gettext_lazy('Revelation')
 
 
+class CommandmentManager(models.Manager):
+    def with_background(self):
+        return (c for c in Commandment.objects.all() if c.background_drawing())
+
+
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
     title_negative = models.CharField(max_length=256, default=None, blank=True, null=True)
@@ -122,6 +127,7 @@ class Commandment(models.Model):
     quote_source = models.CharField(max_length=256, default=None, blank=True, null=True)
     bible = BibleFactory().create('hsv')
     languages = [translation.get_language()]
+    objects = CommandmentManager()
 
     def primary_bible_reference(self):
         """ Primary references is the first found unique reference according to the words of Jesus,

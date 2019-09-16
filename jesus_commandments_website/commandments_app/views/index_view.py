@@ -13,9 +13,7 @@ class IndexView(View):
         users_total = User.objects.count()
         bibles_total = len(BibleTranslation().all_in_supported_languages())
 
-        commandments_with_background_drawing = [c for c in Commandment.objects.all() if c.background_drawing()]
-
-        return render(request, 'commandments/index.html', {'commandments': commandments_with_background_drawing,
+        return render(request, 'commandments/index.html', {'commandments': Commandment.objects.with_background(),
                                                            'languages_total': languages_total,
                                                            'bibles_total': bibles_total,
                                                            'commandments_total': commandments_total,

@@ -6,7 +6,4 @@ from commandments_app.models import Commandment
 
 class ListingView(View):
     def get(self, request):
-        commandments = list(Commandment.objects.all())
-        commandments.sort(key=lambda x: x.primary_bible_reference())
-
-        return render(request, 'commandments/listing.html', {'commandments': commandments})
+        return render(request, 'commandments/listing.html', {'commandments': Commandment.objects.order_by('id').all()})

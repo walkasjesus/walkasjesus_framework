@@ -95,7 +95,7 @@
 <div class="overlay"></div>
     <div class="container">
         <div class="alert alert-info" role="alert">
-            <div class="container">
+            <div class="multiselect">
                 <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <select id="multiselect" name="languages" multiple> <!--onchange="this.form.submit()"-->
@@ -107,7 +107,7 @@
                         </option>
                         {% endfor %}
                     </select>
-                    <input type="submit" class="btn btn-primary" value="{% trans 'select languages' %}">
+                    <input type="submit" class="button" value="{% trans 'Select languages' %}">
                 </form>
             </div>
             <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        

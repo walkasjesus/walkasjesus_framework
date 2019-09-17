@@ -6,4 +6,5 @@ from commandments_app.models import Commandment
 
 class ListingView(View):
     def get(self, request):
-        return render(request, 'commandments/listing.html', {'commandments': Commandment.objects.order_by('id').all()})
+        commandments_ordered = Commandment.objects.order_by('id').all().prefetch_related('drawing_set')
+        return render(request, 'commandments/listing.html', {'commandments': commandments_ordered})

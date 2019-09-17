@@ -112,7 +112,7 @@ class BibleBooks(OrderedEnum):
 
 class CommandmentManager(models.Manager):
     def with_background(self):
-        return (c for c in Commandment.objects.all() if c.background_drawing())
+        return (c for c in Commandment.objects.all().prefetch_related('drawing_set') if c.background_drawing())
 
 
 class Commandment(models.Model):
@@ -151,7 +151,9 @@ class Commandment(models.Model):
         return self.songs()[0] if self.songs() else ''
 
     def drawings(self):
-        return self.drawing_set.filter(is_public=True)
+        # This is actually faster than filter in in the query,
+        # as prefetch_related can be used if we do all() instead of filter()
+        return [d for d in self.drawing_set.all() if d.is_public]
 
     def songs(self):
         return self._filter_on_language(self.song_set)

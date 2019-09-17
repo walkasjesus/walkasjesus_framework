@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load cache %}
 {% block content %}
-{% cache cache_timeout vision %}
+{% cache cache_timeout vision cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_3.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">

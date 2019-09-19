@@ -22,7 +22,7 @@ def signup(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             messages.success(request, gettext('Thank you for your registration. We are validating your registration and will get in touch soon.'))
-            return redirect('signup')
+            return redirect('/account/profile')
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -35,7 +35,7 @@ def profile(request):
         if user_form.is_valid():
             user_form.save()
             messages.success(request, gettext('Your profile was successfully updated!'))
-            return redirect('profile')
+            return redirect('/account/profile')
         else:
             messages.error(request, gettext('Please correct the error below.'))
     else:
@@ -53,7 +53,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, gettext('Your password was successfully updated!'))
-            return redirect('change_password')
+            return redirect('account/change_password')
         else:
             messages.error(request, gettext('Please correct the error below.'))
     else:

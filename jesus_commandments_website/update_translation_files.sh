@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 

@@ -6,7 +6,9 @@ echo "Minor: A backwards compatible change, introducing new features"
 echo "Patch: A bugfix" 
 read -p "Please provide the new version: " version
 echo $version > version
-git tag -a "version $version" -m "version $version"
+git add version
 git commit -m "released version $version"
+git tag -a "version-$version" -m "version $version"
 echo $version-dev > version
+git add version
 git commit -m "started new development version"

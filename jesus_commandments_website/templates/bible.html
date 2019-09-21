@@ -2,7 +2,7 @@
 
 <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
     <input name="next" type="hidden" value="{{ request.get_full_path }}">
-    <div class="select">
+    <div class="select" data-toggle="tooltip" data-placement="left" title="{% trans 'With this setting, all Bible references found on this website are displayed with the set translation' %}">
     <select name="bible_id" onchange="this.form.submit()">
         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
         <option value="{{ user_preferences.bible.id }}" selected>

@@ -8,7 +8,7 @@ from bible_lib.bible_books import BibleBooks
 from bible_lib.tests.dummy_responses import DummyResponses
 
 
-#@skip('Only used for development')
+@skip('Only used for development')
 class ManualQueriesTest(TestCase):
     def test_list_books(self):
         response_string = DummyResponses().books()

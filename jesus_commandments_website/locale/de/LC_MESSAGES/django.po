@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-17 19:19+0000\n"
+"POT-Creation-Date: 2019-09-22 19:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,19 +32,19 @@ msgstr "Anmelden"
 
 #: account_app/templates/account/index.html:7
 #: account_app/templates/account/login.html:11 templates/base.html:69
-#: templates/base.html:124
+#: templates/base.html:125
 #, fuzzy
 msgid "Login"
 msgstr "Einloggen"
 
 #: account_app/templates/account/index.html:8 templates/base.html:66
-#: templates/base.html:122
+#: templates/base.html:123
 #, fuzzy
 msgid "Logout"
 msgstr "Ausloggen"
 
 #: account_app/templates/account/index.html:9 templates/base.html:65
-#: templates/base.html:121
+#: templates/base.html:122
 #, fuzzy
 msgid "Profile"
 msgstr "Profil"
@@ -70,13 +70,14 @@ msgstr ""
 
 #: account_app/templates/account/login.html:16
 #, fuzzy
-msgid "Your username and password didn\\"
+msgid "Your username and password didn't match. Please try again."
 msgstr "Ihr Benutzername und Passwort didn \\"
 
 #: account_app/templates/account/login.html:23
-#, fuzzy
-msgid "Your account doesn\\"
-msgstr "Ihr Konto nicht \\"
+msgid ""
+"Your account doesn't have access to this page. To proceed, please login with "
+"an account that has access."
+msgstr ""
 
 #: account_app/templates/account/login.html:26
 #, fuzzy
@@ -129,15 +130,13 @@ msgstr ""
 #: account_app/templates/registration/signup.html:20
 #, fuzzy
 msgid "Adding or correcting commandments along with their Bible references"
-msgstr ""
-"Das Hinzufügen oder Korrigieren Gebote zusammen mit ihren Bibelstellen"
+msgstr "Das Hinzufügen oder Korrigieren Gebote zusammen mit ihren Bibelstellen"
 
 #: account_app/templates/registration/signup.html:23
 #, fuzzy
 msgid ""
 "Adding media items (Movies, Books, Testimonies, Blogs, Songs, Pictures, "
-"Illustrations and Sermons) which are related to the corresponding "
-"commandment"
+"Illustrations and Sermons) which are related to the corresponding commandment"
 msgstr ""
 "Hinzufügen von Medienobjekten (Filme, Bücher, Zeugnisse, Blogs, Songs, "
 "Bilder, Illustrationen, Bilder und Predigten), die mit dem entsprechenden "
@@ -675,8 +674,7 @@ msgid ""
 "the primary, but expand or explain the same principle"
 msgstr ""
 "Sekundäre Referenzen sind zusätzliche Referenzen, die nicht genau das "
-"gleiche wie die primären, sondern erweitern oder das gleiche Prinzip "
-"erklären"
+"gleiche wie die primären, sondern erweitern oder das gleiche Prinzip erklären"
 
 #: commandments_app/templates/commandments/detail.html:168
 #, fuzzy
@@ -877,15 +875,14 @@ msgid ""
 "This website will help you in applying all commandments in your life. How? "
 "For each commandment, we collect as much as possible related"
 msgstr ""
-"Diese Website wird Ihnen helfen, alle Gebote in Ihrem Leben anzuwenden. Wie?"
-" Für jedes Gebot, sammeln wir so viel wie möglich verwandten"
+"Diese Website wird Ihnen helfen, alle Gebote in Ihrem Leben anzuwenden. Wie? "
+"Für jedes Gebot, sammeln wir so viel wie möglich verwandten"
 
 #: commandments_app/templates/commandments/index.html:127
 #: commandments_app/templates/commandments/listing.html:15
 #, fuzzy
 msgid ""
-"Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and "
-"Books"
+"Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books"
 msgstr ""
 "Bibel Referenzen, Zeichnungen, Filme, Songs, Blogs, Predigten, Bilder und "
 "Bücher"
@@ -902,15 +899,15 @@ msgstr "zu füttern Ihr Herz, Seele und Geist"
 msgid ""
 "To succeed in becoming a good disciple, we need to live out all of these "
 "commandments. The best way is to do this together. Take your time for each "
-"commandment to dive into the greatness of it, and discuss them in your Small"
-" Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one "
+"commandment to dive into the greatness of it, and discuss them in your Small "
+"Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one "
 "discipleship, to become followers in all of Jesus teachings."
 msgstr ""
 "Um erfolgreich zu sein in einen guten Schüler wird, müssen wir alle diese "
-"Gebote leben. Der beste Weg, dies gemeinsam zu tun. Nehmen Sie sich Zeit für"
-" jedes Gebot in der Größe es zu tauchen, und diskutieren sie in Ihrer Kleine"
-" Gruppen, Discipleship Gruppen, Mentoring, Ministerium Bereicherung oder "
-"One-on-One-Nachfolge, werden Anhänger in allen Jesus Lehren."
+"Gebote leben. Der beste Weg, dies gemeinsam zu tun. Nehmen Sie sich Zeit für "
+"jedes Gebot in der Größe es zu tauchen, und diskutieren sie in Ihrer Kleine "
+"Gruppen, Discipleship Gruppen, Mentoring, Ministerium Bereicherung oder One-"
+"on-One-Nachfolge, werden Anhänger in allen Jesus Lehren."
 
 #: commandments_app/templates/commandments/index.html:137
 #: commandments_app/templates/commandments/listing.html:25
@@ -991,9 +988,9 @@ msgstr "Mit dem Beispiel: „Liebe deinen Nächsten wie dich selbst“ (Mt 19.19
 #: commandments_app/templates/commandments/study_listing.html:26
 #, fuzzy
 msgid ""
-"A \"value\" is the way how a principle would pack out in a specific culture,"
-" time and place. If you have this, you need to derive the principle out of "
-"it by studying the context"
+"A \"value\" is the way how a principle would pack out in a specific culture, "
+"time and place. If you have this, you need to derive the principle out of it "
+"by studying the context"
 msgstr ""
 "Ein „Wert“ ist die Art und Weise, wie ein Prinzip in einer bestimmten "
 "Kultur, Zeit und Ort packen würde. Wenn Sie diese haben, müssen Sie das "
@@ -1007,8 +1004,8 @@ msgstr "Mit dem Beispiel: „Saluten sie mit einem heiligen Kuss“ (Röm 16,16)
 #: commandments_app/templates/commandments/study_listing.html:27
 #, fuzzy
 msgid ""
-"The principle is not kiss everybody, but to salute your brothers and sisters"
-" in an intimate way, based on your specific culture, time and place"
+"The principle is not kiss everybody, but to salute your brothers and sisters "
+"in an intimate way, based on your specific culture, time and place"
 msgstr ""
 "Das Prinzip ist nicht bei jedem Kuss, aber deine Brüder und Schwestern in "
 "intimer Weise zu begrüßen, auf der Grundlage Ihre spezifische Kultur, Zeit "
@@ -1070,8 +1067,8 @@ msgid ""
 "There are also some specific commandments which Jesus gave specifically to "
 "that person in that time, which will not directly apply for us today"
 msgstr ""
-"Es gibt auch einige spezifische Gebote, die Jesus speziell in dieser Zeit zu"
-" dieser Person gab, die heute für uns nicht direkt anwenden"
+"Es gibt auch einige spezifische Gebote, die Jesus speziell in dieser Zeit zu "
+"dieser Person gab, die heute für uns nicht direkt anwenden"
 
 #: commandments_app/templates/commandments/study_listing.html:35
 #, fuzzy
@@ -1080,8 +1077,8 @@ msgid ""
 "ye be entered into it, ye shall find a colt tied, whereon never man sat; "
 "loose him, and bring him.\" (Mark 11:2)"
 msgstr ""
-"Mit dem Beispiel: „Gehen Sie Ihren Weg in das Dorf, der vor euch, und sobald"
-" sie in sie eingegeben wird, werden sie ein Füllen angebunden finden, auf "
+"Mit dem Beispiel: „Gehen Sie Ihren Weg in das Dorf, der vor euch, und sobald "
+"sie in sie eingegeben wird, werden sie ein Füllen angebunden finden, auf "
 "denen nie einen Mann saß, verlieren ihn, und ihn bringen.“ (Mark 11: 2)"
 
 #: commandments_app/templates/commandments/study_listing.html:36
@@ -1092,16 +1089,16 @@ msgstr "Ist es ein „Verbot“ oder „Gebot“?"
 #: commandments_app/templates/commandments/study_listing.html:37
 #, fuzzy
 msgid ""
-"A prohibition is a negative commandment, something you should not do. To all"
-" prohibitions, there is an opposite commandment. In the unique commandments,"
-" we meantion only commandments, while in the references you will also find "
+"A prohibition is a negative commandment, something you should not do. To all "
+"prohibitions, there is an opposite commandment. In the unique commandments, "
+"we meantion only commandments, while in the references you will also find "
 "lots of the opposite prohibitions. So if you have a prohibition, derive the "
 "opposite commandment from it"
 msgstr ""
 "Ein Verbot ist ein negatives Gebot, etwas, was man nicht tun sollte. An "
 "allen Verbote gibt es ein entgegengesetztes Gebot. In den einzigartigen "
-"Geboten meantion wir nur Gebote, während in dem Verweisen Sie auch viele der"
-" gegenüberliegenden Verbote finden. Wenn Sie also ein Verbot haben, leitet "
+"Geboten meantion wir nur Gebote, während in dem Verweisen Sie auch viele der "
+"gegenüberliegenden Verbote finden. Wenn Sie also ein Verbot haben, leitet "
 "das Gegenteil Gebot von ihm"
 
 #: commandments_app/templates/commandments/study_listing.html:38
@@ -1109,8 +1106,8 @@ msgstr ""
 msgid ""
 "By example: \"That whosoever looketh on a woman to lust after her hath "
 "committed adultery with her already in his heart (Matthew 5:28). The "
-"prohibition is to not look with lust to another woman, the commandment is to"
-" stay loyal to your partner and keep your heart pure"
+"prohibition is to not look with lust to another woman, the commandment is to "
+"stay loyal to your partner and keep your heart pure"
 msgstr ""
 "Durch z. B. „Wer eine Frau ansieht, ihrer zu begehren, mit ihr bereits in "
 "seinem Herzen (Matthäus 5,28) Das Verbot Ehebruch begangen hat, ist nicht "
@@ -1136,9 +1133,8 @@ msgstr ""
 msgid ""
 "By example: \"Guard against self-deception, each of you. If someone among "
 "you thinks he is wise in this age, let him become foolish so that he can "
-"become wise (1 Cor 3:18). The progressive type here is to \"Guard "
-"continually\" and to \"become immediately foolish\" if you think you are "
-"wise"
+"become wise (1 Cor 3:18). The progressive type here is to \"Guard continually"
+"\" and to \"become immediately foolish\" if you think you are wise"
 msgstr ""
 "Mit dem Beispiel:.. „Schutz gegen Selbstbetrug, jeder von euch Wenn jemand "
 "unter euch denkt, dass er in diesem Alter klug ist, dann soll er dumm "
@@ -1164,8 +1160,7 @@ msgstr "In es mit seinem primären Bezug Bibel"
 #: commandments_app/templates/commandments/study_listing.html:48
 #, fuzzy
 msgid "Determine a short powerfull title which summarizes the commandment"
-msgstr ""
-"Bestimmen Sie einen kurzen leistungsfähigen Titel, der das Gebot fasst"
+msgstr "Bestimmen Sie einen kurzen leistungsfähigen Titel, der das Gebot fasst"
 
 #: commandments_app/templates/commandments/study_listing.html:49
 #, fuzzy
@@ -1175,8 +1170,8 @@ msgstr "Bestimmen Sie, in welchem ​​„Kategorie“ das Gebot fällt"
 #: commandments_app/templates/commandments/study_listing.html:52
 #, fuzzy
 msgid ""
-"If it is an allready existing, determine to which existing commandment(s) it"
-" should apply"
+"If it is an allready existing, determine to which existing commandment(s) it "
+"should apply"
 msgstr ""
 "Wenn es sich um eine bereits vorhandene ist, bestimmen, auf die bestehenden "
 "Gebote) sollte gelten"
@@ -1201,13 +1196,15 @@ msgstr ""
 "Referenzen, Alte und Neues Testament finden."
 
 #: commandments_app/templates/commandments/study_listing.html:63
-#, fuzzy
 msgid ""
 "Maybe you are wondering why we did not study all the commandments in the "
-"whole New Testament? Well, the easiest reason why we didn\\"
+"whole New Testament? Well, the easiest reason why we didn't, is because "
+"Jesus commanded didn't include the commandments which other apostles are "
+"saying, He said 'teaching them to observe all things that I have commanded "
+"you' (Matt 28:20). Of course, the other letters in the NT are still true, "
+"valueable and explaining or extending Jesus teachings, so maybe in the "
+"future we will add them to this website as well."
 msgstr ""
-"Vielleicht fragen Sie sich, warum wir nicht in der ganzen Neuen Testament "
-"alle Gebote studiert haben? Nun, der einfachste Grund, warum wir didn \\"
 
 #: commandments_app/templates/commandments/study_listing.html:68
 #, fuzzy
@@ -1225,7 +1222,9 @@ msgstr ""
 
 #: commandments_app/templates/commandments/study_listing.html:70
 #, fuzzy
-msgid "If you have any suggestions or corrections, we\\"
+msgid ""
+"If you have any suggestions or corrections, we'd like to hear from you. "
+"Please"
 msgstr "Wenn Sie Anregungen oder Korrekturen, wir \\"
 
 #: commandments_app/templates/commandments/study_listing.html:70
@@ -1323,33 +1322,33 @@ msgid ""
 "explaining in Matthew 13."
 msgstr ""
 "Die Welt braucht despirately Jesus! Nicht nur die Nicht-Christen, das "
-"Evangelium zu hören, sondern auch die Christen verwurzelt werden. Die Kirche"
-" wird Wordwide eine harte Zeit herauszufordern, wo nicht viele vorbereitet "
+"Evangelium zu hören, sondern auch die Christen verwurzelt werden. Die Kirche "
+"wird Wordwide eine harte Zeit herauszufordern, wo nicht viele vorbereitet "
 "werden. Die Menschen müssen in Christus verwurzeln und fruchtbar sein, wie "
 "die Parabel ist Jesus in Matthäus 13 zu erklären."
 
 #: commandments_app/templates/commandments/vision.html:19
 #, fuzzy
 msgid ""
-"\"Behold, a sower went forth to sow; 4 And when he sowed, some seeds fell by"
-" the way side, and the fowls came and devoured them up: 5 Some fell upon "
+"\"Behold, a sower went forth to sow; 4 And when he sowed, some seeds fell by "
+"the way side, and the fowls came and devoured them up: 5 Some fell upon "
 "stony places, where they had not much earth: and forthwith they sprung up, "
 "because they had no deepness of earth: 6 And when the sun was up, they were "
 "scorched; and because they had no root, they withered away. 7 And some fell "
 "among thorns; and the thorns sprung up, and choked them: 8 But other fell "
 "into good ground, and brought forth fruit, some an hundredfold, some "
-"sixtyfold, some thirtyfold. 9 Who hath ears to hear, let him hear.\" "
-"(Matthew 13:4-9)"
+"sixtyfold, some thirtyfold. 9 Who hath ears to hear, let him hear."
+"\" (Matthew 13:4-9)"
 msgstr ""
-"„Siehe, es ging ein Sämann aus, zu säen; 4 Und als er säte, einige Samen auf"
-" den Weg fiel, und die Vögel kamen und fraßen sie auf: 5 Etliches fiel auf "
-"felsigen Boden, wo es nicht viel Erde hatte und unverzüglich sie entstanden,"
-" weil sie keine tiefe Erde hatte: 6 und als die Sonne aufging, wurde es "
+"„Siehe, es ging ein Sämann aus, zu säen; 4 Und als er säte, einige Samen auf "
+"den Weg fiel, und die Vögel kamen und fraßen sie auf: 5 Etliches fiel auf "
+"felsigen Boden, wo es nicht viel Erde hatte und unverzüglich sie entstanden, "
+"weil sie keine tiefe Erde hatte: 6 und als die Sonne aufging, wurde es "
 "verbrannt, und weil es keine Wurzel hatte, verdorrte es 7 und einige unter "
 "die Dornen fiel, und die Dornen wuchsen auf und erstickten sie. : 8 Aber "
 "auch andere in guten Boden fiel und brachte Frucht, teils hundertfach, "
-"einige sechzigfältig, einige thirtyfold 9 Wer Ohren ihn hören „zu hören hat,"
-" der.. (Matthew 13: 4-9)"
+"einige sechzigfältig, einige thirtyfold 9 Wer Ohren ihn hören „zu hören hat, "
+"der.. (Matthew 13: 4-9)"
 
 #: commandments_app/templates/commandments/vision.html:20
 #, fuzzy
@@ -1367,22 +1366,22 @@ msgid ""
 "it; 21 Yet hath he not root in himself, but dureth for a while: for when "
 "tribulation or persecution ariseth because of the word, by and by he is "
 "offended. 22 He also that received seed among the thorns is he that heareth "
-"the word; and the care of this world, and the deceitfulness of riches, choke"
-" the word, and he becometh unfruitful. 23 But he that received seed into the"
-" good ground is he that heareth the word, and understandeth it; which also "
+"the word; and the care of this world, and the deceitfulness of riches, choke "
+"the word, and he becometh unfruitful. 23 But he that received seed into the "
+"good ground is he that heareth the word, and understandeth it; which also "
 "beareth fruit, and bringeth forth, some an hundredfold, some sixty, some "
 "thirty.\" (Matthew 13:18-23)"
 msgstr ""
 "„Hört ihr nun das Gleichnis vom Sämann. 19 Wenn jemand das Wort von dem "
 "Reich hört und nicht versteht, der Böse kommt und raubt das, was in sein "
-"Herz gesät. Das ist er die Samen erhalten durch . die Art und Weise Seite 20"
-" aber er, der den Samen in den felsigen Boden erhalten, der ist es, der das "
+"Herz gesät. Das ist er die Samen erhalten durch . die Art und Weise Seite 20 "
+"aber er, der den Samen in den felsigen Boden erhalten, der ist es, der das "
 "Wort hört und alsbald mit Freuden aufnimmt; 21 er hat aber Wurzel nicht in "
 "sich, sondern wendisch für eine Weile: wenn sich Trübsal oder . Verfolgung "
 "entsteht wegen des Wortes, nach und nach er beleidigt wird 22 er hat auch "
-"die Samen unter die Dornen erhalten ist es, der das Wort hört, und die Sorge"
-" der Welt und der Betrug des Reichtums ersticken das Wort, und er becometh ."
-" unfruchtbare 23 wer aber die Saat in den Boden gut erhalten ist, der das "
+"die Samen unter die Dornen erhalten ist es, der das Wort hört, und die Sorge "
+"der Welt und der Betrug des Reichtums ersticken das Wort, und er becometh . "
+"unfruchtbare 23 wer aber die Saat in den Boden gut erhalten ist, der das "
 "Wort hört und versteht es,. die Frucht auch gebiert, und bringt, einige "
 "hundertfach, die anderen sechzigfach, die dritten dreißig“ (Matthew 13: "
 "18-23)"
@@ -1409,9 +1408,11 @@ msgid "Be fruitful"
 msgstr "Seid fruchtbar"
 
 #: commandments_app/templates/commandments/vision.html:30
-#, fuzzy
-msgid "If we don\\"
-msgstr "Wenn wir don \\"
+msgid ""
+"If we don't take this serious, we won't last long! And how do you get "
+"rooted? How will you become fruitful? Jesus gives the answer just before he "
+"leaves the earth to his Father in Heaven:"
+msgstr ""
 
 #: commandments_app/templates/commandments/vision.html:31
 #, fuzzy
@@ -1436,16 +1437,15 @@ msgid ""
 "References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books to "
 "help you in your small group to apply all the commandments in your life."
 msgstr ""
-"Es ist eine sehr klare und kraftvolle Botschaft, Jesus alle Gläubigen bittet"
-" bewusst zu gehorchen, aber nicht nur in einigen Befehlen, oder nur der "
+"Es ist eine sehr klare und kraftvolle Botschaft, Jesus alle Gläubigen bittet "
+"bewusst zu gehorchen, aber nicht nur in einigen Befehlen, oder nur der "
 "größte Befehl, nein, in alle von ihnen! Gott ist allmächtig und kreativ in "
-"einer ultimative Art und Weise, und Er schaffte Milliarden von Menschen, die"
-" alle mit ihrer eigenen Einzigartigkeit und innen Kreativität. Sein Ziel ist"
-" es, dass ein bisschen von ihm ist durch dich ausgesetzt! Wir haben "
-"versucht, so viel wie möglich Gebot im Zusammenhang Bibel Referenzen, "
-"Zeichnungen, Filme, Songs zu sammeln, Blogs, Predigten, Bilder und Bücher, "
-"die Sie in Ihrer kleinen Gruppe zu helfen, alle Gebote in Ihrem Leben "
-"anzuwenden."
+"einer ultimative Art und Weise, und Er schaffte Milliarden von Menschen, die "
+"alle mit ihrer eigenen Einzigartigkeit und innen Kreativität. Sein Ziel ist "
+"es, dass ein bisschen von ihm ist durch dich ausgesetzt! Wir haben versucht, "
+"so viel wie möglich Gebot im Zusammenhang Bibel Referenzen, Zeichnungen, "
+"Filme, Songs zu sammeln, Blogs, Predigten, Bilder und Bücher, die Sie in "
+"Ihrer kleinen Gruppe zu helfen, alle Gebote in Ihrem Leben anzuwenden."
 
 #: commandments_app/templates/commandments/vision.html:34
 #, fuzzy
@@ -1473,13 +1473,13 @@ msgstr ""
 #: commandments_app/templates/commandments/vision.html:37
 #, fuzzy
 msgid ""
-"Whenever the word \"command\" is mentioned, it seems that people immediately"
-" put up their defenses and begin to argue why certain commands are "
-"unnecessary. Some say they do not want to be controlled by any "
-"\"commandment\"; rather, they want to be led by the Spirit. But is was the "
-"Spirit who gave all the commandments by inspiration. since they were all "
-"written down twenty to sixty years after Jesus ascended. We are expected to "
-"learn what He said and trust Him to give us the power to obey it."
+"Whenever the word \"command\" is mentioned, it seems that people immediately "
+"put up their defenses and begin to argue why certain commands are "
+"unnecessary. Some say they do not want to be controlled by any \"commandment"
+"\"; rather, they want to be led by the Spirit. But is was the Spirit who "
+"gave all the commandments by inspiration. since they were all written down "
+"twenty to sixty years after Jesus ascended. We are expected to learn what He "
+"said and trust Him to give us the power to obey it."
 msgstr ""
 "Jedes Mal, wenn das Wort „Befehl“ die Rede ist, so scheint es, dass die "
 "Menschen sofort ihre Verteidigung setzen und beginnen zu argumentieren, "
@@ -1497,9 +1497,10 @@ msgid ""
 "are all sinners, no amount of obedience or moral perfection can ever make "
 "any person acceptable to God, because one sin in a lifetime can condemn a "
 "person (James 2:10). Salvation and acceptance by God are only possible "
-"through His grace who offers to completely pay for all our sins by His death"
-" and His blood, shed on the cross of Calvary. When we trust in His payment "
-"for our sin\\"
+"through His grace who offers to completely pay for all our sins by His death "
+"and His blood, shed on the cross of Calvary. When we trust in His payment "
+"for our sin's results, we are rewarded with the gift of Christ's "
+"righteousness - that alone is what can make us acceptable (2 Cor 5:21)."
 msgstr ""
 "Es muss sehr klar sein, dass die Annahme vor Gott, kann nicht gewonnen "
 "werden. Wir sind alle Sünder, kein Betrag der Gehorsam oder moralischen "
@@ -1514,8 +1515,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "We need to understand deeply, that we are loved and accepted as we are. And "
-"out of love towards God, because we are loved by Him, we will listen to Him,"
-" and obey Him in all His teachings."
+"out of love towards God, because we are loved by Him, we will listen to Him, "
+"and obey Him in all His teachings."
 msgstr ""
 "Wir müssen tief verstehen, dass wir geliebt und akzeptiert, wie wir sind. "
 "Und aus Liebe zu Gott, weil wir von ihm geliebt sind, werden wir auf ihn "
@@ -1532,8 +1533,8 @@ msgid ""
 "Get a complete list of all the unique commandments of Jesus, from a "
 "theological perspective"
 msgstr ""
-"Hier finden Sie eine vollständige Liste aller einzigartigen Gebote Jesu, aus"
-" einer theologischen Perspektive"
+"Hier finden Sie eine vollständige Liste aller einzigartigen Gebote Jesu, aus "
+"einer theologischen Perspektive"
 
 #: commandments_app/templates/commandments/vision.html:45
 #, fuzzy
@@ -1560,7 +1561,8 @@ msgstr "Tun Sie dies in so vielen Sprachen wie möglich"
 #, fuzzy
 msgid ""
 "We definately need your help! If you want to help improving this website on "
-"any of the above points, or do you have any suggestions or corrections, we\\"
+"any of the above points, or do you have any suggestions or corrections, we'd "
+"like to hear from you. Please"
 msgstr ""
 "Wir brauchen auf jeden Fall Ihre Hilfe! Wenn Sie diese Website helfen "
 "wollen, die Verbesserung der auf eine der oben genannten Punkte, oder haben "
@@ -1571,14 +1573,14 @@ msgstr ""
 msgid ""
 "\"Now the God of peace, that brought again from the dead our Lord Jesus, "
 "that great shepherd of the sheep, through the blood of the everlasting "
-"covenant, Make you perfect in every good work to do his will, working in you"
-" that which is wellpleasing in his sight, through Jesus Christ; to whom be "
+"covenant, Make you perfect in every good work to do his will, working in you "
+"that which is wellpleasing in his sight, through Jesus Christ; to whom be "
 "glory for ever and ever. Amen.\" (Hebrews 13:20-21)"
 msgstr ""
 "„Der Gott des Friedens, der von den Toten unseres Herrn Jesus gebracht, der "
-"den großen Hirten der Schafe durch das Blut des ewigen Bundes, machen Sie in"
-" jedem guten Werk perfekt seinen Willen zu tun, in euch, was ist gefällig in"
-" seinen Augen, durch Jesus Christus, welchem ​​sei Ehre von Ewigkeit zu "
+"den großen Hirten der Schafe durch das Blut des ewigen Bundes, machen Sie in "
+"jedem guten Werk perfekt seinen Willen zu tun, in euch, was ist gefällig in "
+"seinen Augen, durch Jesus Christus, welchem ​​sei Ehre von Ewigkeit zu "
 "Ewigkeit! Amen. „. (Hebräer 13: 20-21)"
 
 #: commandments_app/views/user_preferences.py:17
@@ -1596,22 +1598,22 @@ msgstr "Nicht gelungen, die Benutzersprachen zu ändern"
 msgid "No languages selected"
 msgstr "Keine Sprachen ausgewählt"
 
-#: jesus_commandments_website/settings.py:144
+#: jesus_commandments_website/settings.py:148
 #, fuzzy
 msgid "English"
 msgstr "Englisch"
 
-#: jesus_commandments_website/settings.py:145
+#: jesus_commandments_website/settings.py:149
 #, fuzzy
 msgid "Dutch"
 msgstr "Niederländisch"
 
-#: jesus_commandments_website/settings.py:146
+#: jesus_commandments_website/settings.py:150
 #, fuzzy
 msgid "German"
 msgstr "Deutsche"
 
-#: jesus_commandments_website/settings.py:147
+#: jesus_commandments_website/settings.py:151
 #, fuzzy
 msgid "French"
 msgstr "Französisch"
@@ -1631,12 +1633,12 @@ msgstr "Zuhause"
 msgid "Commandments"
 msgstr "Gebote"
 
-#: templates/base.html:60 templates/base.html:110
+#: templates/base.html:60 templates/base.html:111
 #, fuzzy
 msgid "Study them"
 msgstr "studieren"
 
-#: templates/base.html:62 templates/base.html:129
+#: templates/base.html:62 templates/base.html:130
 #, fuzzy
 msgid "Admin Portal"
 msgstr "Admin-Portal"
@@ -1646,99 +1648,118 @@ msgstr "Admin-Portal"
 msgid "Help improving"
 msgstr "Hilfe verbessernden"
 
-#: templates/base.html:107
+#: templates/base.html:108
 #, fuzzy
 msgid "Site Navigation"
 msgstr "Seitennavigation"
 
-#: templates/base.html:109
+#: templates/base.html:110
 #, fuzzy
 msgid "List of Commandments"
 msgstr "Liste der Gebote"
 
-#: templates/base.html:111
+#: templates/base.html:112
 #, fuzzy
 msgid "Our Vision"
 msgstr "Unsere Vision"
 
-#: templates/base.html:117
+#: templates/base.html:118
 #, fuzzy
 msgid "Account"
 msgstr "Konto"
 
-#: templates/base.html:125
+#: templates/base.html:126
 #, fuzzy
 msgid "Register"
 msgstr "Registrieren"
 
-#: templates/base.html:136
+#: templates/base.html:137
 #, fuzzy
 msgid "Contact us"
 msgstr "Kontaktiere uns"
 
-#: templates/base.html:138
+#: templates/base.html:139
 #, fuzzy
 msgid "Email: "
 msgstr "Email:"
 
-#: venv/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
+#: templates/bible.html:5
+msgid ""
+"With this setting, all Bible references found on this website are displayed "
+"with the set translation"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
+#: venv/venv_old2/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
 #, fuzzy
 msgid "Messages"
 msgstr "Mitteilungen"
 
-#: venv/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
+#: venv/lib/python3.6/site-packages/django/contrib/sitemaps/apps.py:7
+#: venv/venv_old2/lib/python3.6/site-packages/django/contrib/sitemaps/apps.py:7
 #, fuzzy
 msgid "Site Maps"
 msgstr "Website-Karten"
 
-#: venv/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:9
+#: venv/lib/python3.6/site-packages/django/contrib/staticfiles/apps.py:9
+#: venv/venv_old2/lib/python3.6/site-packages/django/contrib/staticfiles/apps.py:9
 #, fuzzy
 msgid "Static Files"
 msgstr "statische Dateien"
 
-#: venv/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
+#: venv/lib/python3.6/site-packages/django/contrib/syndication/apps.py:7
+#: venv/venv_old2/lib/python3.6/site-packages/django/contrib/syndication/apps.py:7
 #, fuzzy
 msgid "Syndication"
 msgstr "Syndication"
 
-#: venv/lib/python3.7/site-packages/django/core/paginator.py:45
+#: venv/lib/python3.6/site-packages/django/core/paginator.py:45
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/paginator.py:45
 #, fuzzy
 msgid "That page number is not an integer"
 msgstr "Das Seitenzahl keine ganze Zahl ist"
 
-#: venv/lib/python3.7/site-packages/django/core/paginator.py:47
+#: venv/lib/python3.6/site-packages/django/core/paginator.py:47
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/paginator.py:47
 #, fuzzy
 msgid "That page number is less than 1"
 msgstr "Das Seitenzahl kleiner als 1"
 
-#: venv/lib/python3.7/site-packages/django/core/paginator.py:52
+#: venv/lib/python3.6/site-packages/django/core/paginator.py:52
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/paginator.py:52
 #, fuzzy
 msgid "That page contains no results"
 msgstr "Die Seite enthält keine Ergebnisse"
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:31
+#: venv/lib/python3.6/site-packages/django/core/validators.py:31
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:31
 #, fuzzy
 msgid "Enter a valid value."
 msgstr "Geben Sie einen gültigen Wert ein."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:102
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:658
+#: venv/lib/python3.6/site-packages/django/core/validators.py:102
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:658
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:102
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:658
 #, fuzzy
 msgid "Enter a valid URL."
 msgstr "Geben Sie eine gültige URL."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:154
+#: venv/lib/python3.6/site-packages/django/core/validators.py:154
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:154
 #, fuzzy
 msgid "Enter a valid integer."
 msgstr "Geben Sie eine gültige ganze Zahl ist."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:165
+#: venv/lib/python3.6/site-packages/django/core/validators.py:165
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:165
 #, fuzzy
 msgid "Enter a valid email address."
 msgstr "Geben sie eine gültige E-Mail-Adresse an."
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
-#: venv/lib/python3.7/site-packages/django/core/validators.py:239
+#: venv/lib/python3.6/site-packages/django/core/validators.py:239
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:239
 #, fuzzy
 msgid ""
 "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
@@ -1746,58 +1767,70 @@ msgstr ""
 "Geben Sie eine gültige ‚Schnecke‘, bestehend aus Buchstaben, Zahlen, "
 "Unterstrichen oder Bindestriche."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:246
+#: venv/lib/python3.6/site-packages/django/core/validators.py:246
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:246
 #, fuzzy
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
-" hyphens."
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
 msgstr ""
 "Geben Sie eine gültige ‚Slug‘, die aus Unicode Buchstaben, Zahlen, "
 "Unterstrichen oder Bindestriche."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:255
-#: venv/lib/python3.7/site-packages/django/core/validators.py:275
+#: venv/lib/python3.6/site-packages/django/core/validators.py:255
+#: venv/lib/python3.6/site-packages/django/core/validators.py:275
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:255
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:275
 #, fuzzy
 msgid "Enter a valid IPv4 address."
 msgstr "Geben Sie eine gültige IPv4-Adresse."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:260
-#: venv/lib/python3.7/site-packages/django/core/validators.py:276
+#: venv/lib/python3.6/site-packages/django/core/validators.py:260
+#: venv/lib/python3.6/site-packages/django/core/validators.py:276
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:260
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:276
 #, fuzzy
 msgid "Enter a valid IPv6 address."
 msgstr "Geben Sie eine gültige IPv6-Adresse."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:270
-#: venv/lib/python3.7/site-packages/django/core/validators.py:274
+#: venv/lib/python3.6/site-packages/django/core/validators.py:270
+#: venv/lib/python3.6/site-packages/django/core/validators.py:274
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:270
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:274
 #, fuzzy
 msgid "Enter a valid IPv4 or IPv6 address."
 msgstr "Geben Sie eine gültige IPv4 oder IPv6-Adresse."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:304
+#: venv/lib/python3.6/site-packages/django/core/validators.py:304
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:304
 #, fuzzy
 msgid "Enter only digits separated by commas."
 msgstr "Geben Sie nur durch Komma getrennt Ziffern."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:310
+#: venv/lib/python3.6/site-packages/django/core/validators.py:310
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:310
 #, fuzzy, python-format
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
 msgstr ""
 "Stellen Sie sicher, dieser Wert% (limit_value) s (es ist% (show_value) s)."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:342
+#: venv/lib/python3.6/site-packages/django/core/validators.py:342
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:342
 #, fuzzy, python-format
 msgid "Ensure this value is less than or equal to %(limit_value)s."
 msgstr ""
 "Stellen Sie sicher, dieser Wert kleiner als oder gleich% (limit_value) s."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:351
+#: venv/lib/python3.6/site-packages/django/core/validators.py:351
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:351
 #, fuzzy, python-format
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
 msgstr ""
 "Stellen Sie sicher, dieser Wert größer als oder gleich% (limit_value) s."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:361
-#, python-format, fuzzy
+#: venv/lib/python3.6/site-packages/django/core/validators.py:361
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:361
+#, python-format
 msgid ""
 "Ensure this value has at least %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1807,7 +1840,8 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:376
+#: venv/lib/python3.6/site-packages/django/core/validators.py:376
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:376
 #, python-format
 msgid ""
 "Ensure this value has at most %(limit_value)d character (it has "
@@ -1818,28 +1852,34 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:395
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:290
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:325
+#: venv/lib/python3.6/site-packages/django/core/validators.py:395
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:290
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:325
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:395
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:290
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:325
 #, fuzzy
 msgid "Enter a number."
 msgstr "Geben Sie eine Nummer."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:397
+#: venv/lib/python3.6/site-packages/django/core/validators.py:397
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:397
 #, python-format
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:402
+#: venv/lib/python3.6/site-packages/django/core/validators.py:402
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:402
 #, python-format
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:407
+#: venv/lib/python3.6/site-packages/django/core/validators.py:407
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:407
 #, python-format
 msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
@@ -1848,7 +1888,8 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:469
+#: venv/lib/python3.6/site-packages/django/core/validators.py:469
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:469
 #, fuzzy, python-format
 msgid ""
 "File extension '%(extension)s' is not allowed. Allowed extensions are: "
@@ -1857,101 +1898,122 @@ msgstr ""
 "Dateierweiterung ‚% (Erweiterung) s‘ ist nicht erlaubt. Erlaubte "
 "Erweiterungen sind: '% (allowed_extensions) s'."
 
-#: venv/lib/python3.7/site-packages/django/core/validators.py:521
+#: venv/lib/python3.6/site-packages/django/core/validators.py:521
+#: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:521
 #, fuzzy
 msgid "Null characters are not allowed."
 msgstr "Null-Zeichen sind nicht erlaubt."
 
-#: venv/lib/python3.7/site-packages/django/db/models/base.py:1162
-#: venv/lib/python3.7/site-packages/django/forms/models.py:756
+#: venv/lib/python3.6/site-packages/django/db/models/base.py:1162
+#: venv/lib/python3.6/site-packages/django/forms/models.py:756
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/base.py:1162
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:756
 #, fuzzy
 msgid "and"
 msgstr "und"
 
-#: venv/lib/python3.7/site-packages/django/db/models/base.py:1164
+#: venv/lib/python3.6/site-packages/django/db/models/base.py:1164
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/base.py:1164
 #, fuzzy, python-format
 msgid "%(model_name)s with this %(field_labels)s already exists."
 msgstr "% (Model_name) s mit diesem% (field_labels) s ist bereits vorhanden."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:104
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:104
 #, fuzzy, python-format
 msgid "Value %(value)r is not a valid choice."
 msgstr "Wert% (Wert) r ist keine gültige Wahl."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:105
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:105
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:105
 #, fuzzy
 msgid "This field cannot be null."
 msgstr "Dieses Feld kann nicht null sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:106
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:106
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:106
 #, fuzzy
 msgid "This field cannot be blank."
 msgstr "Dieses Feld kann nicht leer sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:107
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:107
 #, fuzzy, python-format
 msgid "%(model_name)s with this %(field_label)s already exists."
 msgstr "% (Model_name) s mit diesem% (FIELD_LABEL) s ist bereits vorhanden."
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:111
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:111
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:111
 #, fuzzy, python-format
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
-"% (FIELD_LABEL) s muss% (date_field_label) s% (lookup_type) s eindeutig "
-"sein."
+"% (FIELD_LABEL) s muss% (date_field_label) s% (lookup_type) s eindeutig sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:128
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:128
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:128
 #, fuzzy, python-format
 msgid "Field of type: %(field_type)s"
 msgstr "Feld vom Typ:% (field_type) s"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:901
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1768
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:901
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1768
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:901
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1768
 #, fuzzy
 msgid "Integer"
 msgstr "Ganze Zahl"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:905
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1766
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:905
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1766
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:905
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1766
 #, fuzzy, python-format
 msgid "'%(value)s' value must be an integer."
 msgstr "‚% (Wert) s‘ Wert muss eine ganze Zahl sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:980
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1846
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:980
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1846
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:980
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1846
 #, fuzzy
 msgid "Big (8 byte) integer"
 msgstr "Big (8 Byte) integer"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:992
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:992
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:992
 #, fuzzy, python-format
 msgid "'%(value)s' value must be either True or False."
 msgstr "‚% (Wert) s‘ Wert muss entweder wahr oder falsch sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:993
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:993
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:993
 #, fuzzy, python-format
 msgid "'%(value)s' value must be either True, False, or None."
 msgstr "'% (Wert) s' Wert muss entweder True, False oder Keine sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:995
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:995
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:995
 #, fuzzy
 msgid "Boolean (Either True or False)"
 msgstr "Boolean (entweder wahr oder falsch)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1036
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1036
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1036
 #, fuzzy, python-format
 msgid "String (up to %(max_length)s)"
 msgstr "String (bis zu% (max_length) s)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1100
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1100
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1100
 #, fuzzy
 msgid "Comma-separated integers"
 msgstr "Durch Komma getrennte Zahlen"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1149
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1149
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1149
 #, fuzzy, python-format
 msgid ""
 "'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
@@ -1960,8 +2022,10 @@ msgstr ""
 "‚% (Wert) s‘ Wert hat ein ungültiges Datumsformat. Es muss in YYYY-MM-DD-"
 "Format vorliegen."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1151
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1294
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1151
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1294
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1151
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1294
 #, fuzzy, python-format
 msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
@@ -1970,286 +2034,338 @@ msgstr ""
 "'% (Wert) s' Wert hat das richtige Format (YYYY-MM-DD), aber es ist ein "
 "ungültiges Datum."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1154
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1154
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1154
 #, fuzzy
 msgid "Date (without time)"
 msgstr "Datum (ohne Zeit)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1292
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1292
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1292
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ] format."
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
 msgstr ""
 "'% (Wert) s' Wert hat ein ungültiges Format. Es muss in YYYY-MM-DD HH sein: "
 "MM [: ss [.uuuuuu]] [TZ] Format."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1296
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1296
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1296
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
 msgstr ""
-"'% (Wert) s' Wert hat das richtige Format (YYYY-MM-DD HH: MM [: ss "
-"[.uuuuuu]] [TZ]), aber es ist ein ungültiges Datum / Uhrzeit."
+"'% (Wert) s' Wert hat das richtige Format (YYYY-MM-DD HH: MM [: ss [."
+"uuuuuu]] [TZ]), aber es ist ein ungültiges Datum / Uhrzeit."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1300
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1300
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1300
 #, fuzzy
 msgid "Date (with time)"
 msgstr "Datum (mit Uhrzeit)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1448
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1448
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1448
 #, fuzzy, python-format
 msgid "'%(value)s' value must be a decimal number."
 msgstr "‚% (Wert) s‘ Wert muss eine Dezimalzahl sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1450
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1450
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1450
 #, fuzzy
 msgid "Decimal number"
 msgstr "Dezimalzahl"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1589
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1589
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1589
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] "
-"[HH:[MM:]]ss[.uuuuuu] format."
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
 msgstr ""
 "'% (Wert) s' Wert hat ein ungültiges Format. Es muss in [DD] sein [HH: "
 "[MM:]] ss [.uuuuuu] Format."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1592
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1592
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1592
 #, fuzzy
 msgid "Duration"
 msgstr "Dauer"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1642
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1642
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1642
 #, fuzzy
 msgid "Email address"
 msgstr "E-Mail-Addresse"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1665
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1665
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1665
 #, fuzzy
 msgid "File path"
 msgstr "Dateipfad"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1731
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1731
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1731
 #, fuzzy, python-format
 msgid "'%(value)s' value must be a float."
 msgstr "‚% (Wert) s‘ Wert muss ein Schwimmer sein."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1733
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1733
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1733
 #, fuzzy
 msgid "Floating point number"
 msgstr "Gleitkommazahl"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1862
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1862
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1862
 #, fuzzy
 msgid "IPv4 address"
 msgstr "IPv4-Adresse"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1893
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1893
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1893
 #, fuzzy
 msgid "IP address"
 msgstr "IP Adresse"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1973
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1974
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1973
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1974
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1973
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1974
 #, fuzzy, python-format
 msgid "'%(value)s' value must be either None, True or False."
 msgstr "‚% (Wert) s‘ Wert muss entweder keine, Wahr oder Falsch."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1976
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1976
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1976
 #, fuzzy
 msgid "Boolean (Either True, False or None)"
 msgstr "Boolean (entweder True, False oder None)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2011
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2011
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2011
 #, fuzzy
 msgid "Positive integer"
 msgstr "Positive ganze Zahl"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2024
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2024
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2024
 #, fuzzy
 msgid "Positive small integer"
 msgstr "Positive kleine ganze Zahl"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2038
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2038
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2038
 #, fuzzy, python-format
 msgid "Slug (up to %(max_length)s)"
 msgstr "Slug (bis zu% (max_length) s)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2070
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2070
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2070
 #, fuzzy
 msgid "Small integer"
 msgstr "kleine integer"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2077
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2077
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2077
 #, fuzzy
 msgid "Text"
 msgstr "Text"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2105
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2105
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2105
 #, fuzzy, python-format
 msgid ""
 "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
-"'% (Wert) s' Wert hat ein ungültiges Format. Es muss in HH sein: MM [: ss "
-"[.uuuuuu]] Format."
+"'% (Wert) s' Wert hat ein ungültiges Format. Es muss in HH sein: MM [: ss [."
+"uuuuuu]] Format."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2107
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2107
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2107
 #, fuzzy, python-format
 msgid ""
 "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
-"'% (Wert) s' Wert hat das richtige Format (HH: MM [: ss [.uuuuuu]]), aber es"
-" ist eine ungültige Zeit."
+"'% (Wert) s' Wert hat das richtige Format (HH: MM [: ss [.uuuuuu]]), aber es "
+"ist eine ungültige Zeit."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2110
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2110
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2110
 #, fuzzy
 msgid "Time"
 msgstr "Zeit"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2236
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2236
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2236
 #, fuzzy
 msgid "URL"
 msgstr "URL"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2258
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2258
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2258
 #, fuzzy
 msgid "Raw binary data"
 msgstr "Raw Binärdaten"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2308
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2308
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2308
 #, fuzzy, python-format
 msgid "'%(value)s' is not a valid UUID."
 msgstr "'% (Wert) s' ist keine gültige UUID."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2310
+#: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2310
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2310
 #, fuzzy
 msgid "Universally unique identifier"
 msgstr "Universell eindeutige Kennung"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/files.py:221
+#: venv/lib/python3.6/site-packages/django/db/models/fields/files.py:221
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/files.py:221
 #, fuzzy
 msgid "File"
 msgstr "Datei"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/files.py:360
+#: venv/lib/python3.6/site-packages/django/db/models/fields/files.py:360
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/files.py:360
 #, fuzzy
 msgid "Image"
 msgstr "Bild"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:778
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:778
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:778
 #, fuzzy, python-format
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
 msgstr "% (Modell) s-Instanz mit% (Feld) s% (Wert) r nicht existiert."
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:780
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:780
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:780
 #, fuzzy
 msgid "Foreign Key (type determined by related field)"
 msgstr "Foreign Key (Typ von verwandtem Bereich bestimmt)"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1007
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1007
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:1007
 #, fuzzy
 msgid "One-to-one relationship"
 msgstr "Eins-zu-Eins-Beziehung"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1057
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1057
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:1057
 #, fuzzy, python-format
 msgid "%(from)s-%(to)s relationship"
 msgstr "% (Ab) s -% (auf) s Beziehung"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1058
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1058
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:1058
 #, fuzzy, python-format
 msgid "%(from)s-%(to)s relationships"
 msgstr "% (Ab) s -% (auf) s Beziehungen"
 
-#: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1100
+#: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1100
+#: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/related.py:1100
 #, fuzzy
 msgid "Many-to-many relationship"
 msgstr "Viele-zu-viele-Beziehung"
 
 #. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the
-#. label
-#: venv/lib/python3.7/site-packages/django/forms/boundfield.py:146
+#. characters will prevent the default label_suffix to be appended to the label
+#: venv/lib/python3.6/site-packages/django/forms/boundfield.py:146
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/boundfield.py:146
 #, fuzzy
 msgid ":?.!"
 msgstr ":?.!"
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:53
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:53
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:53
 #, fuzzy
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:245
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:245
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:245
 #, fuzzy
 msgid "Enter a whole number."
 msgstr "Geben Sie eine ganze Zahl."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:396
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:1126
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:396
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:1126
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:396
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:1126
 #, fuzzy
 msgid "Enter a valid date."
 msgstr "Gib ein gültiges Datum ein."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:420
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:1127
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:420
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:1127
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:420
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:1127
 #, fuzzy
 msgid "Enter a valid time."
 msgstr "Geben Sie eine gültige Zeit."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:442
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:442
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:442
 #, fuzzy
 msgid "Enter a valid date/time."
 msgstr "Geben Sie ein gültiges Datum / Uhrzeit."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:471
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:471
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:471
 #, fuzzy
 msgid "Enter a valid duration."
 msgstr "Geben Sie eine gültige Dauer."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:472
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:472
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:472
 #, fuzzy, python-brace-format
 msgid "The number of days must be between {min_days} and {max_days}."
 msgstr "Die Anzahl der Tage muss zwischen {MIN_DAYS} und {} MAX_DAYS."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:532
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:532
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:532
 #, fuzzy
 msgid "No file was submitted. Check the encoding type on the form."
 msgstr ""
 "Es wurde keine Datei eingereicht. Überprüfen Sie den Codierungstyp auf dem "
 "Formular."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:533
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:533
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:533
 #, fuzzy
 msgid "No file was submitted."
 msgstr "Es wurde keine Datei eingereicht."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:534
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:534
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:534
 #, fuzzy
 msgid "The submitted file is empty."
 msgstr "Die eingereichten Datei ist leer."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:536
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:536
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:536
 #, python-format
-msgid ""
-"Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
 "Ensure this filename has at most %(max)d characters (it has %(length)d)."
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:539
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:539
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:539
 #, fuzzy
 msgid "Please either submit a file or check the clear checkbox, not both."
 msgstr ""
 "Bitte entweder eine Datei einreichen oder die klare Checkbox, nicht beide."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:600
-#: venv/lib/python3.7/site-packages/sorl/thumbnail/fields.py:45
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:600
+#: venv/lib/python3.6/site-packages/sorl/thumbnail/fields.py:45
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:600
+#: venv/venv_old2/lib/python3.6/site-packages/sorl/thumbnail/fields.py:45
 #, fuzzy
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
@@ -2258,86 +2374,105 @@ msgstr ""
 "Laden Sie ein gültiges Bild. Die hochgeladene Datei war entweder kein Bild "
 "oder ein beschädigtes Bild."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:762
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:852
-#: venv/lib/python3.7/site-packages/django/forms/models.py:1270
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:762
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:852
+#: venv/lib/python3.6/site-packages/django/forms/models.py:1270
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:762
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:852
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1270
 #, fuzzy, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
 "Wählen Sie eine gültige Wahl. s% (Wert) ist nicht eine der verfügbaren "
 "Optionen."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:853
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:968
-#: venv/lib/python3.7/site-packages/django/forms/models.py:1269
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:853
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:968
+#: venv/lib/python3.6/site-packages/django/forms/models.py:1269
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:853
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:968
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1269
 #, fuzzy
 msgid "Enter a list of values."
 msgstr "Geben Sie eine Liste von Werten."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:969
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:969
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:969
 #, fuzzy
 msgid "Enter a complete value."
 msgstr "Geben Sie einen vollständigen Wert."
 
-#: venv/lib/python3.7/site-packages/django/forms/fields.py:1185
+#: venv/lib/python3.6/site-packages/django/forms/fields.py:1185
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:1185
 #, fuzzy
 msgid "Enter a valid UUID."
 msgstr "Geben Sie eine gültige UUID."
 
 #. Translators: This is the default suffix added to form field labels
-#: venv/lib/python3.7/site-packages/django/forms/forms.py:86
+#: venv/lib/python3.6/site-packages/django/forms/forms.py:86
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/forms.py:86
 #, fuzzy
 msgid ":"
 msgstr ":"
 
-#: venv/lib/python3.7/site-packages/django/forms/forms.py:212
+#: venv/lib/python3.6/site-packages/django/forms/forms.py:212
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/forms.py:212
 #, fuzzy, python-format
 msgid "(Hidden field %(name)s) %(error)s"
 msgstr "(Verborgenes Feld% (name) s)% (Fehler) s"
 
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:91
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:91
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:91
 #, fuzzy
 msgid "ManagementForm data is missing or has been tampered with"
 msgstr "ManagementForm Daten fehlen oder manipuliert wurden"
 
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:338
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:338
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:338
 #, python-format
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:345
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:345
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:345
 #, python-format
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:371
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:373
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:371
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:373
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:371
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:373
 #, fuzzy
 msgid "Order"
 msgstr "Bestellung"
 
-#: venv/lib/python3.7/site-packages/django/forms/formsets.py:375
+#: venv/lib/python3.6/site-packages/django/forms/formsets.py:375
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:375
 #, fuzzy
 msgid "Delete"
 msgstr "Löschen"
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:751
+#: venv/lib/python3.6/site-packages/django/forms/models.py:751
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:751
 #, fuzzy, python-format
 msgid "Please correct the duplicate data for %(field)s."
 msgstr "Bitte korrigieren Sie die doppelten Daten für% (Feld) s."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:755
+#: venv/lib/python3.6/site-packages/django/forms/models.py:755
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:755
 #, fuzzy, python-format
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
 msgstr ""
 "Bitte korrigieren Sie die doppelten Daten für% (Feld) s, die eindeutig sein "
 "muss."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:761
+#: venv/lib/python3.6/site-packages/django/forms/models.py:761
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:761
 #, fuzzy, python-format
 msgid ""
 "Please correct the duplicate data for %(field_name)s which must be unique "
@@ -2346,30 +2481,34 @@ msgstr ""
 "Bitte korrigieren Sie die doppelten Daten für% (field_name) s, die für das% "
 "(Lookup) s in% (DATE_FIELD) s eindeutig sein muss."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:770
+#: venv/lib/python3.6/site-packages/django/forms/models.py:770
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:770
 #, fuzzy
 msgid "Please correct the duplicate values below."
 msgstr "Bitte korrigieren Sie die doppelten Werte unten."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:1091
+#: venv/lib/python3.6/site-packages/django/forms/models.py:1091
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1091
 #, fuzzy
 msgid "The inline value did not match the parent instance."
 msgstr "Der Inline-Wert stimmen nicht überein die übergeordnete Instanz."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:1158
+#: venv/lib/python3.6/site-packages/django/forms/models.py:1158
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1158
 #, fuzzy
-msgid ""
-"Select a valid choice. That choice is not one of the available choices."
+msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 "Wählen Sie eine gültige Wahl. Diese Wahl ist nicht eine der verfügbaren "
 "Optionen."
 
-#: venv/lib/python3.7/site-packages/django/forms/models.py:1272
+#: venv/lib/python3.6/site-packages/django/forms/models.py:1272
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1272
 #, fuzzy, python-format
 msgid "\"%(pk)s\" is not a valid value."
 msgstr "\"% (Pk) s\" ist kein gültiger Wert."
 
-#: venv/lib/python3.7/site-packages/django/forms/utils.py:162
+#: venv/lib/python3.6/site-packages/django/forms/utils.py:162
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/utils.py:162
 #, fuzzy, python-format
 msgid ""
 "%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
@@ -2378,500 +2517,597 @@ msgstr ""
 "% (DATETIME) s nicht in der Zeitzone% (current_timezone) s interpretiert "
 "werden könnte; es kann nicht eindeutig sein oder es kann nicht existieren."
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:395
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:395
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:395
 #, fuzzy
 msgid "Clear"
 msgstr "klar"
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:396
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:396
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:396
 #, fuzzy
 msgid "Currently"
 msgstr "Zur Zeit"
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:397
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:397
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:397
 #, fuzzy
 msgid "Change"
 msgstr "Veränderung"
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:711
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:711
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:711
 #, fuzzy
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:712
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:712
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:712
 #, fuzzy
 msgid "Yes"
 msgstr "Ja"
 
-#: venv/lib/python3.7/site-packages/django/forms/widgets.py:713
+#: venv/lib/python3.6/site-packages/django/forms/widgets.py:713
+#: venv/venv_old2/lib/python3.6/site-packages/django/forms/widgets.py:713
 #, fuzzy
 msgid "No"
 msgstr "Nein"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:788
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:788
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:788
 #, fuzzy
 msgid "yes,no,maybe"
 msgstr "ja Nein Vielleicht"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:817
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:834
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:817
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:834
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:817
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:834
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:836
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:836
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:836
 #, fuzzy, python-format
 msgid "%s KB"
 msgstr "% S KB"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:838
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:838
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:838
 #, fuzzy, python-format
 msgid "%s MB"
 msgstr "% S MB"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:840
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:840
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:840
 #, fuzzy, python-format
 msgid "%s GB"
 msgstr "% S GB"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:842
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:842
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:842
 #, fuzzy, python-format
 msgid "%s TB"
 msgstr "% S TB"
 
-#: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:844
+#: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:844
+#: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:844
 #, fuzzy, python-format
 msgid "%s PB"
 msgstr "% S PB"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:62
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:62
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:62
 #, fuzzy
 msgid "p.m."
 msgstr "nachmittags"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:63
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:63
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:63
 #, fuzzy
 msgid "a.m."
 msgstr "vormittags"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:68
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:68
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:68
 #, fuzzy
 msgid "PM"
 msgstr "PM"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:69
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:69
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:69
 #, fuzzy
 msgid "AM"
 msgstr "AM"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:150
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:150
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:150
 #, fuzzy
 msgid "midnight"
 msgstr "Mitternacht"
 
-#: venv/lib/python3.7/site-packages/django/utils/dateformat.py:152
+#: venv/lib/python3.6/site-packages/django/utils/dateformat.py:152
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dateformat.py:152
 #, fuzzy
 msgid "noon"
 msgstr "Mittag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:6
 #, fuzzy
 msgid "Monday"
 msgstr "Montag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:6
 #, fuzzy
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:6
 #, fuzzy
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:6
 #, fuzzy
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:6
 #, fuzzy
 msgid "Friday"
 msgstr "Freitag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:7
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:7
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:7
 #, fuzzy
 msgid "Saturday"
 msgstr "Samstag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:7
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:7
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:7
 #, fuzzy
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:10
 #, fuzzy
 msgid "Mon"
 msgstr "Mon"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:10
 #, fuzzy
 msgid "Tue"
 msgstr "Di"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:10
 #, fuzzy
 msgid "Wed"
 msgstr "Heiraten"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:10
 #, fuzzy
 msgid "Thu"
 msgstr "Thu"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:10
 #, fuzzy
 msgid "Fri"
 msgstr "Fr"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:11
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:11
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:11
 #, fuzzy
 msgid "Sat"
 msgstr "Sa"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:11
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:11
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:11
 #, fuzzy
 msgid "Sun"
 msgstr "Sonne"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "January"
 msgstr "Januar"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "February"
 msgstr "Februar"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "March"
 msgstr "März"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "April"
 msgstr "April"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "May"
 msgstr "Kann"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:14
 #, fuzzy
 msgid "June"
 msgstr "Juni"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:15
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:15
 #, fuzzy
 msgid "July"
 msgstr "Juli"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:15
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:15
 #, fuzzy
 msgid "August"
 msgstr "August"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:15
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:15
 #, fuzzy
 msgid "September"
 msgstr "September"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:15
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:15
 #, fuzzy
 msgid "October"
 msgstr "Oktober"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:15
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:15
 #, fuzzy
 msgid "November"
 msgstr "November"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:16
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:16
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:16
 #, fuzzy
 msgid "December"
 msgstr "Dezember"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "jan"
 msgstr "Januar"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "feb"
 msgstr "FEBRUAR"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "mar"
 msgstr "beschädigen"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "apr"
 msgstr "April"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "may"
 msgstr "kann"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:19
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:19
 #, fuzzy
 msgid "jun"
 msgstr "Juni"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "jul"
 msgstr "Juli"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "aug"
 msgstr "August"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "sep"
 msgstr "September"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "oct"
 msgstr "Oktober"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "nov"
 msgstr "November"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:20
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:20
 #, fuzzy
 msgid "dec"
 msgstr "Dezember"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:23
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:23
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:23
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Jan."
 msgstr "Januar"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:24
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:24
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:24
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Feb."
 msgstr "Februar"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:25
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:25
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:25
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "March"
 msgstr "März"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:26
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:26
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:26
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "April"
 msgstr "April"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:27
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:27
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:27
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "May"
 msgstr "Kann"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:28
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:28
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:28
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "June"
 msgstr "Juni"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:29
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:29
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:29
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "July"
 msgstr "Juli"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:30
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:30
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:30
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Aug."
 msgstr "August"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:31
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:31
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:31
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Sept."
 msgstr "September"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:32
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:32
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:32
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Oct."
 msgstr "Oktober"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:33
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:33
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:33
 #, fuzzy
 msgctxt "abbrev. month"
 msgid "Nov."
 msgstr "November"
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:34
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:34
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:34
 msgctxt "abbrev. month"
 msgid "Dec."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:37
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:37
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:37
 msgctxt "alt. month"
 msgid "January"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:38
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:38
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:38
 msgctxt "alt. month"
 msgid "February"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:39
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:39
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:39
 msgctxt "alt. month"
 msgid "March"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:40
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:40
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:40
 msgctxt "alt. month"
 msgid "April"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:41
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:41
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:41
 msgctxt "alt. month"
 msgid "May"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:42
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:42
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:42
 msgctxt "alt. month"
 msgid "June"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:43
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:43
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:43
 msgctxt "alt. month"
 msgid "July"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:44
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:44
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:44
 msgctxt "alt. month"
 msgid "August"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:45
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:45
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:45
 msgctxt "alt. month"
 msgid "September"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:46
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:46
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:46
 msgctxt "alt. month"
 msgid "October"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:47
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:47
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:47
 msgctxt "alt. month"
 msgid "November"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/dates.py:48
+#: venv/lib/python3.6/site-packages/django/utils/dates.py:48
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:48
 msgctxt "alt. month"
 msgid "December"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/ipv6.py:8
+#: venv/lib/python3.6/site-packages/django/utils/ipv6.py:8
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/ipv6.py:8
 msgid "This is not a valid IPv6 address."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/text.py:67
+#: venv/lib/python3.6/site-packages/django/utils/text.py:67
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:67
 #, python-format
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/text.py:233
+#: venv/lib/python3.6/site-packages/django/utils/text.py:233
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:233
 msgid "or"
 msgstr ""
 
 #. Translators: This string is used as a separator between list elements
-#: venv/lib/python3.7/site-packages/django/utils/text.py:252
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:83
+#: venv/lib/python3.6/site-packages/django/utils/text.py:252
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:83
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:252
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:83
 msgid ", "
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:9
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:9
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:9
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:10
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:10
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:10
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:11
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:11
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:11
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:12
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:12
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:12
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:13
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:13
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:13
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:14
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:14
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:14
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: venv/lib/python3.7/site-packages/django/utils/timesince.py:72
+#: venv/lib/python3.6/site-packages/django/utils/timesince.py:72
+#: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:72
 msgid "0 minutes"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:110
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:110
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:110
 msgid "Forbidden"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:111
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:111
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:111
 msgid "CSRF verification failed. Request aborted."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:115
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:115
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:115
 msgid ""
 "You are seeing this message because this HTTPS site requires a 'Referer "
 "header' to be sent by your Web browser, but none was sent. This header is "
@@ -2879,178 +3115,300 @@ msgid ""
 "hijacked by third parties."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:120
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:120
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:120
 msgid ""
 "If you have configured your browser to disable 'Referer' headers, please re-"
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:124
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:124
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:124
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
-" including the 'Referrer-Policy: no-referrer' header, please remove them. "
-"The CSRF protection requires the 'Referer' header to do strict referer "
-"checking. If you're concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" ...> for links to third-party sites."
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
+"CSRF protection requires the 'Referer' header to do strict referer checking. "
+"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" ...> for links to third-party sites."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:132
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:132
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:132
 msgid ""
 "You are seeing this message because this site requires a CSRF cookie when "
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:137
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:137
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:137
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/csrf.py:142
+#: venv/lib/python3.6/site-packages/django/views/csrf.py:142
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:142
 msgid "More information is available with DEBUG=True."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:41
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:41
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:41
 msgid "No year specified"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:61
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:111
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:208
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:61
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:111
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:208
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:61
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:111
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:208
 msgid "Date out of range"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:90
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:90
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:90
 msgid "No month specified"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:142
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:142
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:142
 msgid "No day specified"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:188
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:188
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:188
 msgid "No week specified"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:338
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:367
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:338
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:367
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:338
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:367
 #, python-format
 msgid "No %(verbose_name_plural)s available"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:589
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:589
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:589
 #, python-format
 msgid ""
-"Future %(verbose_name_plural)s not available because "
-"%(class_name)s.allow_future is False."
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/dates.py:623
+#: venv/lib/python3.6/site-packages/django/views/generic/dates.py:623
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:623
 #, python-format
 msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/detail.py:54
+#: venv/lib/python3.6/site-packages/django/views/generic/detail.py:54
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/detail.py:54
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/list.py:67
+#: venv/lib/python3.6/site-packages/django/views/generic/list.py:67
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:67
 msgid "Page is not 'last', nor can it be converted to an int."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/list.py:72
+#: venv/lib/python3.6/site-packages/django/views/generic/list.py:72
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:72
 #, python-format
 msgid "Invalid page (%(page_number)s): %(message)s"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/generic/list.py:154
+#: venv/lib/python3.6/site-packages/django/views/generic/list.py:154
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:154
 #, python-format
 msgid "Empty list and '%(class_name)s.allow_empty' is False."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/static.py:40
+#: venv/lib/python3.6/site-packages/django/views/static.py:40
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:40
 msgid "Directory indexes are not allowed here."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/static.py:42
+#: venv/lib/python3.6/site-packages/django/views/static.py:42
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:42
 #, python-format
 msgid "\"%(path)s\" does not exist"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/static.py:80
+#: venv/lib/python3.6/site-packages/django/views/static.py:80
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:80
 #, python-format
 msgid "Index of %(directory)s"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:6
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:6
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:6
 msgid "Django: the Web framework for perfectionists with deadlines."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:345
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:345
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:345
 #, python-format
 msgid ""
 "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
 "target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:367
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:367
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:367
 msgid "The install worked successfully! Congratulations!"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:368
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #, python-format
 msgid ""
-"You are seeing this page because <a "
-"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
-"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
-"and you have not configured any URLs."
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:383
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 msgid "Django Documentation"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:384
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
 msgid "Topics, references, &amp; how-to's"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:395
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:395
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:395
 msgid "Tutorial: A Polling App"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:396
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:396
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:396
 msgid "Get started with Django"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:407
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:407
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:407
 msgid "Django Community"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:408
+#: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:408
+#: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:408
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/froala_editor/views.py:30
+#: venv/lib/python3.6/site-packages/froala_editor/views.py:30
+#: venv/venv_old2/lib/python3.6/site-packages/froala_editor/views.py:30
 msgid "You can only upload images."
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/url_or_relative_url_field/fields.py:9
+#: venv/lib/python3.6/site-packages/moderation/admin.py:35
+msgid "Approve selected moderated objects"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:43
+msgid "Reject selected moderated objects"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:50
+msgid "Set selected moderated objects as Pending"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:104
+msgid "Object is viewable on site, it will be removed if moderator rejects it"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:107
+msgid ""
+"Object is not viewable on site, it will be visible if moderator accepts it"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:110
+#, python-format
+msgid "Object has been rejected by moderator, reason: %s"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:113
+msgid "Object has been approved by moderator and is visible on site"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/admin.py:116
+msgid "This object is not registered with the moderation system."
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/filterspecs.py:57
+msgid "All"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:30
+msgid "Ready for moderation"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:31
+msgid "Draft"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:35
+msgid "Rejected"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:36
+msgid "Approved"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:37
+msgid "Pending"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:91
+msgid "Moderated Object"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/models.py:92
+msgid "Moderated Objects"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/templates/moderation/moderate_object.html:46
+#, fuzzy
+msgid "Change object"
+msgstr "Veränderung"
+
+#: venv/lib/python3.6/site-packages/moderation/templates/moderation/moderate_object.html:56
+#, fuzzy
+msgid "Object differences"
+msgstr "Bibel Referenz"
+
+#: venv/lib/python3.6/site-packages/moderation/templates/moderation/moderate_object.html:74
+msgid "Reject"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/templates/moderation/moderate_object.html:77
+msgid "Approve"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/moderation/templates/moderation/moderated_objects_list.html:4
+msgid "Select object to moderate"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/url_or_relative_url_field/fields.py:9
+#: venv/venv_old2/lib/python3.6/site-packages/url_or_relative_url_field/fields.py:9
 msgid "URL or path"
 msgstr ""
 
-#: venv/lib/python3.7/site-packages/vinaigrette/management/commands/makemessages.py:147
+#: venv/lib/python3.6/site-packages/vinaigrette/management/commands/makemessages.py:147
+#: venv/venv_old2/lib/python3.6/site-packages/vinaigrette/management/commands/makemessages.py:147
 msgid "Obsolete translation kept alive with Viniagrette"
 msgstr ""
 
 #: commandments_app.Blog/description:1 commandments_app.Book/description:1
 #: commandments_app.Drawing/description:1 commandments_app.Movie/description:4
-#: commandments_app.Picture/description:1
-#: commandments_app.Sermon/description:1
-#: commandments_app.ShortMovie/description:7
-#: commandments_app.Song/description:1
+#: commandments_app.Picture/description:1 commandments_app.Sermon/description:1
+#: commandments_app.ShortMovie/description:7 commandments_app.Song/description:1
 #: commandments_app.Testimony/description:1
 msgid "nan"
 msgstr ""
@@ -3063,9 +3421,9 @@ msgstr ""
 msgid ""
 "If you confess your sins, God is faithful and just to forgive us our sins, "
 "and to cleanse us from all unrighteousness. Then, turn your back to the "
-"world, and follow Jesus. How? Just start by applying all the commandments on"
-" this website in your life. Step by step, together with God. And if you know"
-" any other christians, take part on this journey together."
+"world, and follow Jesus. How? Just start by applying all the commandments on "
+"this website in your life. Step by step, together with God. And if you know "
+"any other christians, take part on this journey together."
 msgstr ""
 
 #: commandments_app.Commandment/title_negative:2
@@ -3074,8 +3432,12 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:2
 msgid ""
-"One important part of the commission that God gave Adam was to be fruitful. Throughout the Bible you see this assignment coming back time and time again. God gives the fruit and we can work the earth to be fruitful. \n"
-"Fruit is the result of the life source if the vine flowing into the branches. If we are bonded to the Vine of Christ by the Spirit, His word will bear fruit that will be inevitable in our lives."
+"One important part of the commission that God gave Adam was to be fruitful. "
+"Throughout the Bible you see this assignment coming back time and time "
+"again. God gives the fruit and we can work the earth to be fruitful. \n"
+"Fruit is the result of the life source if the vine flowing into the "
+"branches. If we are bonded to the Vine of Christ by the Spirit, His word "
+"will bear fruit that will be inevitable in our lives."
 msgstr ""
 
 #: commandments_app.Commandment/title:3
@@ -3121,8 +3483,8 @@ msgstr ""
 
 #: commandments_app.Commandment/title:11
 msgid ""
-"Blessed are those who are persecuted because of righteousness, for theirs is"
-" the kingdom of heaven"
+"Blessed are those who are persecuted because of righteousness, for theirs is "
+"the kingdom of heaven"
 msgstr ""
 
 #: commandments_app.Commandment/title:12
@@ -3131,8 +3493,18 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:12
 msgid ""
-"Jesus knew a day of rejoicing was coming for each of His disciples, so He asked them again to trust in His word. Jesus never spoke to His disciples about fame, popularity, or wealth. On the contrary, He told them that they would experience sorrow, weeping, losses, and suffering. We might not experience these things every day, but they will come to everyone someday, assuming we remain faithful and obedient to His word. \n"
-"The opportunity to suffer together with Jesus and the description of a promised reward of disproportionate size are sufficient to motivate faithfulness, even through the agony of persecution: “I consider that our present sufferings are not worthy to be compared to the glory that shall be revealed in us” (Rom 8:18). The eventual benefits are so great that we are to “continually rejoice”"
+"Jesus knew a day of rejoicing was coming for each of His disciples, so He "
+"asked them again to trust in His word. Jesus never spoke to His disciples "
+"about fame, popularity, or wealth. On the contrary, He told them that they "
+"would experience sorrow, weeping, losses, and suffering. We might not "
+"experience these things every day, but they will come to everyone someday, "
+"assuming we remain faithful and obedient to His word. \n"
+"The opportunity to suffer together with Jesus and the description of a "
+"promised reward of disproportionate size are sufficient to motivate "
+"faithfulness, even through the agony of persecution: “I consider that our "
+"present sufferings are not worthy to be compared to the glory that shall be "
+"revealed in us” (Rom 8:18). The eventual benefits are so great that we are "
+"to “continually rejoice”"
 msgstr ""
 
 #: commandments_app.Commandment/title:13
@@ -3141,8 +3513,20 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:13
 msgid ""
-"Salt is an indispensable requirement for the body. Is is both a tasty condiment and a preservative for food. Jesus told his disciples, “You are the salt of the earth” (Mat 5:13). They were to be the life-sustaining element in a dying world that would attract people to the gospel, and they were to be a preservative in a rotting world of sin. \n"
-"Their salty impact on society would generate “peace with each other”. If the disciples had kept the salt fresh in themselves, they would not have been arguing about who would be the greatest in Christ’s kingdom (Mark 9:34). Each was lusting to be more important that the other (Mark 10:35-45). They were losing their saltiness. Soon the responsibility of world evangelism would be placed in their hands, so peace among them was vital (Col 3:15). To maintain their team spirit and bond of unity, Paul encouraged Christians to “let your conversation be always full of grace, seasoned with salt” (Col 4:6). We are to keep each other submissive to His word."
+"Salt is an indispensable requirement for the body. Is is both a tasty "
+"condiment and a preservative for food. Jesus told his disciples, “You are "
+"the salt of the earth” (Mat 5:13). They were to be the life-sustaining "
+"element in a dying world that would attract people to the gospel, and they "
+"were to be a preservative in a rotting world of sin. \n"
+"Their salty impact on society would generate “peace with each other”. If the "
+"disciples had kept the salt fresh in themselves, they would not have been "
+"arguing about who would be the greatest in Christ’s kingdom (Mark 9:34). "
+"Each was lusting to be more important that the other (Mark 10:35-45). They "
+"were losing their saltiness. Soon the responsibility of world evangelism "
+"would be placed in their hands, so peace among them was vital (Col 3:15). To "
+"maintain their team spirit and bond of unity, Paul encouraged Christians to "
+"“let your conversation be always full of grace, seasoned with salt” (Col "
+"4:6). We are to keep each other submissive to His word."
 msgstr ""
 
 #: commandments_app.Commandment/title:14
@@ -3161,8 +3545,8 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:15
 msgid ""
-"I am pleading against a widespread kind of preaching that is Bible-based but"
-" not Bible-saturated.” He gives two reasons why preachers must show the "
+"I am pleading against a widespread kind of preaching that is Bible-based but "
+"not Bible-saturated.” He gives two reasons why preachers must show the "
 "people where they are getting their points in Scripture: (1) only the word "
 "of God has authority, and (2) only the word of God awakens life. He "
 "concludes, after more than forty years of preparing and delivering sermons, "
@@ -3195,16 +3579,16 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:18
 msgid ""
-"In the current culture almost half of the marrriages end up in a divorce. We"
-" always need to follow God’s principles in marriage to resolve conflicts and"
-" stay bonded together. By being loyal to each other, and faithful to God’s "
+"In the current culture almost half of the marrriages end up in a divorce. We "
+"always need to follow God’s principles in marriage to resolve conflicts and "
+"stay bonded together. By being loyal to each other, and faithful to God’s "
 "principles, you will have a strong marriage what cannot be broken."
 msgstr ""
 
 #: commandments_app.Commandment/title:19
 msgid ""
-"Blessed are those whose ways are blameless, who walk according to the law of"
-" the Lord"
+"Blessed are those whose ways are blameless, who walk according to the law of "
+"the Lord"
 msgstr ""
 
 #: commandments_app.Commandment/title:20
@@ -3225,8 +3609,16 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:21
 msgid ""
-"The lesson in all of these texts is not restricted to one thing. When God providentially brings needy people into your life, your new spirit should respond with a generous, wise, and voluntary sharing of resources. But not only physically. We can also take this emotionally or mentally. If someone thirsts for water, give him the living water which Jesus is giving. If someone is spiritually naked (and very vulnerable), help him get dressed with the weapon gear from Ephesians 6. \n"
-"Be compassionate and generous with the people whom God will send on your paths. Generous believers become the models for the body of Christ and demonstrate the joy of giving. "
+"The lesson in all of these texts is not restricted to one thing. When God "
+"providentially brings needy people into your life, your new spirit should "
+"respond with a generous, wise, and voluntary sharing of resources. But not "
+"only physically. We can also take this emotionally or mentally. If someone "
+"thirsts for water, give him the living water which Jesus is giving. If "
+"someone is spiritually naked (and very vulnerable), help him get dressed "
+"with the weapon gear from Ephesians 6. \n"
+"Be compassionate and generous with the people whom God will send on your "
+"paths. Generous believers become the models for the body of Christ and "
+"demonstrate the joy of giving. "
 msgstr ""
 
 #: commandments_app.Commandment/title:22
@@ -3239,12 +3631,28 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:22
 msgid ""
-"This sevenfold description of our obligation to love others shows the characteristics of our geavenly Father. We are expected to reflect the character and attitudes of our God and Savior. Of course, this is possible only by the power of the Spirit as He manifests the presence of God. This is how He is glorified.\n"
-"Jesus begins by addressing “you who are listening.” They were all hearing, but not all were listening. First, you are to “continually be loving your enemies”. This is not an emotional live or a friendly love. It is agape love: a decision to sacrifice for the benefit of others regardless of your feelings toward them.\n"
-"Second, you are to “do good to those who hate you”, which amplifies how we are to love our enemies. Good means “excellent, appropriate [or] beneficial.”\n"
-"Third, God says, “bless those who curse you,”, which means to “speak well of” anyone who “curses” or speak poorly of you, seeking to damage you.\n"
-"Fourth, you are to “be continually praying for those who mistreat you”. You must forgive them and pray that God will clarify to them the gospel’s value. \n"
-"The fifth through seventh commands are not to retaliate (Luke 6:29a), to give freely (6:29b-30), and to treat others they way we would want to be treated (6:31). Jesus’s love is unique from the world’s (6:32-33). His followers stand out because they care for everyone.  "
+"This sevenfold description of our obligation to love others shows the "
+"characteristics of our geavenly Father. We are expected to reflect the "
+"character and attitudes of our God and Savior. Of course, this is possible "
+"only by the power of the Spirit as He manifests the presence of God. This is "
+"how He is glorified.\n"
+"Jesus begins by addressing “you who are listening.” They were all hearing, "
+"but not all were listening. First, you are to “continually be loving your "
+"enemies”. This is not an emotional live or a friendly love. It is agape "
+"love: a decision to sacrifice for the benefit of others regardless of your "
+"feelings toward them.\n"
+"Second, you are to “do good to those who hate you”, which amplifies how we "
+"are to love our enemies. Good means “excellent, appropriate [or] "
+"beneficial.”\n"
+"Third, God says, “bless those who curse you,”, which means to “speak well "
+"of” anyone who “curses” or speak poorly of you, seeking to damage you.\n"
+"Fourth, you are to “be continually praying for those who mistreat you”. You "
+"must forgive them and pray that God will clarify to them the gospel’s "
+"value. \n"
+"The fifth through seventh commands are not to retaliate (Luke 6:29a), to "
+"give freely (6:29b-30), and to treat others they way we would want to be "
+"treated (6:31). Jesus’s love is unique from the world’s (6:32-33). His "
+"followers stand out because they care for everyone.  "
 msgstr ""
 
 #: commandments_app.Commandment/title:23
@@ -3261,9 +3669,20 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:24
 msgid ""
-"It is amazing how unashamedly people will tell you how great they are. The wold’s wisdom is, “If no one beats your drum, beat it yourself.” But Jesus’s basic rule of wisdom was never to let honor be due to self-promotion. \n"
-"Jesus’s concept of honor, given to the humble, is far from the normal way of thinking. Some attempt to dive the appearance of humility, however false, to manipulate others. others misconstrue humility to mean criticizing yourself in public. True humility only compares itself to Jesus, and those who are truly humble recognize their personal sinfulness and hold a realistic view of their limitations and capabilities to serve others. A humble person is dedicated to making others successful, meeting their needs, and helping them become all they were designed to be. \n"
-"The more we benefit others, the higher our probability of being recognized in due time. Waiting to be honored by others pleases Lord and builds good relationships."
+"It is amazing how unashamedly people will tell you how great they are. The "
+"wold’s wisdom is, “If no one beats your drum, beat it yourself.” But Jesus’s "
+"basic rule of wisdom was never to let honor be due to self-promotion. \n"
+"Jesus’s concept of honor, given to the humble, is far from the normal way of "
+"thinking. Some attempt to dive the appearance of humility, however false, to "
+"manipulate others. others misconstrue humility to mean criticizing yourself "
+"in public. True humility only compares itself to Jesus, and those who are "
+"truly humble recognize their personal sinfulness and hold a realistic view "
+"of their limitations and capabilities to serve others. A humble person is "
+"dedicated to making others successful, meeting their needs, and helping them "
+"become all they were designed to be. \n"
+"The more we benefit others, the higher our probability of being recognized "
+"in due time. Waiting to be honored by others pleases Lord and builds good "
+"relationships."
 msgstr ""
 
 #: commandments_app.Commandment/title:25
@@ -3272,10 +3691,28 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:25
 msgid ""
-"John quoted Jesus when he taught a similar promise as our text: “Therefore whatever you ask in My name, that I will do, that the Father may be glorified in the Son. If you ask anything in my name, I will do it” (John 14:13).\n"
-"How much more encouragement do we need to pray for great things that will honor and glorify the Father through the Son? The Father knows how to help us glorify Christ before we ask, but He waits for us to be concerned enough to ask “It shall come to pass that before they call, I will answer. and while they are still speaking, I will hear” (Isa 65:24. By His response, everyone will recognize it was God’s doing. \n"
-"Don’t be misled into thinking that this promise is all about you. it is all about God. James clarifies how to pray, saying, “You want what you don’t have, so you scheme and kill to get it. You are jealous of what others have, but you can’t get it, so you fight and wage war to take it away from them. Yet you don’t have what you want because you don’t ask God for it. And even when you ask, you don’t get it because your motives are all wrong. You want only what will give you pleasure.” (James 4:2-3) \n"
-"Stop a moment and think of all the ways you could glorify God through your life and service. He primarily becomes evident to others by answering the prayers of His servants who want Him to be recognized as a powerful and prayer-answering God. If only impossible need do you have that would most glorify God if it were answered? Pray for His glory’s sake."
+"John quoted Jesus when he taught a similar promise as our text: “Therefore "
+"whatever you ask in My name, that I will do, that the Father may be "
+"glorified in the Son. If you ask anything in my name, I will do it” (John "
+"14:13).\n"
+"How much more encouragement do we need to pray for great things that will "
+"honor and glorify the Father through the Son? The Father knows how to help "
+"us glorify Christ before we ask, but He waits for us to be concerned enough "
+"to ask “It shall come to pass that before they call, I will answer. and "
+"while they are still speaking, I will hear” (Isa 65:24. By His response, "
+"everyone will recognize it was God’s doing. \n"
+"Don’t be misled into thinking that this promise is all about you. it is all "
+"about God. James clarifies how to pray, saying, “You want what you don’t "
+"have, so you scheme and kill to get it. You are jealous of what others have, "
+"but you can’t get it, so you fight and wage war to take it away from them. "
+"Yet you don’t have what you want because you don’t ask God for it. And even "
+"when you ask, you don’t get it because your motives are all wrong. You want "
+"only what will give you pleasure.” (James 4:2-3) \n"
+"Stop a moment and think of all the ways you could glorify God through your "
+"life and service. He primarily becomes evident to others by answering the "
+"prayers of His servants who want Him to be recognized as a powerful and "
+"prayer-answering God. If only impossible need do you have that would most "
+"glorify God if it were answered? Pray for His glory’s sake."
 msgstr ""
 
 #: commandments_app.Commandment/title:26
@@ -3300,13 +3737,35 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:29
 msgid ""
-"One of the advantages of becoming a Christian is that you now have a purpose in life. Jesus called for a complete reorientation of life’s values, objectives, and purpose. \n"
-"Everyone needs to put bread on the table, but Jesus demands that His followers “not seek what you should eat or what you should drink, nor have an anxious mind.” (Luke 12:29). He then states, “For all these things the nations of the world seek after” (12:30). Jesus expects us to live with a different motivation and purpose, Neither survival nor comfort is to be our driving impulse. \n"
-"Luke introduces this command with “instead” to emphasize the opposite focus from the previous verse for the believer. Jesus said, “The Father knows that you need these things” (12:30). To begin with, can we trust Him? Can we rest securely in the awareness that He knows our needs? \n"
-"If we trust in Him, we are free to focus on His temporal and eternal purposes. He commands us to “be continually or habitually pursuing His kingdom.” The kingdom needs never end. \n"
-"This was an introduction to the Great Commission: “Go and make disciples of all nations” (Matt 28:19). Christ’s kingdom is extended by multiplying individual converts and leading them to surrender to the lordship of Christ on this earth. \n"
-"How obedient are you today in this task? What is more important: your job, home or business venture? What if His commitment to meet your needs were proportional to your commitment to Him? God does not promise riches, but He does promise to meet the needs of His servants who are reaching and building disciples in His kingdom. \n"
-"He must be King of your life as well as your Savior. His will must control your finances, work ethic, ambitions, relationships, thoughts, and daily plans. As Creator, He promises to take care of you if you are useful to His kingdom now."
+"One of the advantages of becoming a Christian is that you now have a purpose "
+"in life. Jesus called for a complete reorientation of life’s values, "
+"objectives, and purpose. \n"
+"Everyone needs to put bread on the table, but Jesus demands that His "
+"followers “not seek what you should eat or what you should drink, nor have "
+"an anxious mind.” (Luke 12:29). He then states, “For all these things the "
+"nations of the world seek after” (12:30). Jesus expects us to live with a "
+"different motivation and purpose, Neither survival nor comfort is to be our "
+"driving impulse. \n"
+"Luke introduces this command with “instead” to emphasize the opposite focus "
+"from the previous verse for the believer. Jesus said, “The Father knows that "
+"you need these things” (12:30). To begin with, can we trust Him? Can we rest "
+"securely in the awareness that He knows our needs? \n"
+"If we trust in Him, we are free to focus on His temporal and eternal "
+"purposes. He commands us to “be continually or habitually pursuing His "
+"kingdom.” The kingdom needs never end. \n"
+"This was an introduction to the Great Commission: “Go and make disciples of "
+"all nations” (Matt 28:19). Christ’s kingdom is extended by multiplying "
+"individual converts and leading them to surrender to the lordship of Christ "
+"on this earth. \n"
+"How obedient are you today in this task? What is more important: your job, "
+"home or business venture? What if His commitment to meet your needs were "
+"proportional to your commitment to Him? God does not promise riches, but He "
+"does promise to meet the needs of His servants who are reaching and building "
+"disciples in His kingdom. \n"
+"He must be King of your life as well as your Savior. His will must control "
+"your finances, work ethic, ambitions, relationships, thoughts, and daily "
+"plans. As Creator, He promises to take care of you if you are useful to His "
+"kingdom now."
 msgstr ""
 
 #: commandments_app.Commandment/title:30
@@ -3319,8 +3778,15 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:30
 msgid ""
-"If a brother sins (that is disobays the commands in Scripture) he or she needs to be confronted directly and privately in a spirit of humility by another believer. The objective is to help restore the offender. Sin means “missing the mark”, or an offense against God Himself and His reputation. A brother should confront the disobedient believer as soon as possible. \n"
-"The word “show him his fault” means “to bring to light or expose”. The disobedient person may not be aware of the command that he has transgressed. If done privately, in a spirit of live and confidence, a change of heart is more likely, and a more intimate bond of brotherhood can result."
+"If a brother sins (that is disobays the commands in Scripture) he or she "
+"needs to be confronted directly and privately in a spirit of humility by "
+"another believer. The objective is to help restore the offender. Sin means "
+"“missing the mark”, or an offense against God Himself and His reputation. A "
+"brother should confront the disobedient believer as soon as possible. \n"
+"The word “show him his fault” means “to bring to light or expose”. The "
+"disobedient person may not be aware of the command that he has transgressed. "
+"If done privately, in a spirit of live and confidence, a change of heart is "
+"more likely, and a more intimate bond of brotherhood can result."
 msgstr ""
 
 #: commandments_app.Commandment/title:31
@@ -3333,8 +3799,14 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:31
 msgid ""
-"Individuals tend to minimize their own sins while maximizing those of others. Whenever you seek to warn someone else against pursuing a sinful behaviour, understand that the person you seek to help could easily see a weakness or failure in your own life as a beam or log while viewing his own sin as a splinter. \n"
-"This text is obviously a hyperbole – an exaggerated statement – intented to provide a vivid picture of the biblical teachings so we may apply it to our personal lives before we attempt to help others."
+"Individuals tend to minimize their own sins while maximizing those of "
+"others. Whenever you seek to warn someone else against pursuing a sinful "
+"behaviour, understand that the person you seek to help could easily see a "
+"weakness or failure in your own life as a beam or log while viewing his own "
+"sin as a splinter. \n"
+"This text is obviously a hyperbole – an exaggerated statement – intented to "
+"provide a vivid picture of the biblical teachings so we may apply it to our "
+"personal lives before we attempt to help others."
 msgstr ""
 
 #: commandments_app.Commandment/title:32
@@ -3351,9 +3823,20 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:34
 msgid ""
-"The “Golden rule” is not the gospel – that is, no one will go to heaven by following the Golden Rule or the Sermon on the Mount. These sermons are policies for living out the Christ life today. The teachings in this context focus on our attitudes. These are Christlike dispositions, not legal duties. \n"
-"Our command is similar to saying, “Love your neighbor”. The present-tense imperative means “to be continuously producing, [or] causing something to happen”, especially for the benefit of another person in this context. The Golden Rule has no restrictions, because love is not dependent on the response of the other person. \n"
-"Our actions toward others should not be determined by their reaction to us. Our objective is to reflect the attitude of God toward others. His patience, love, forgiveness, commitment, and care for sinners become our attitude at all times toward all people."
+"The “Golden rule” is not the gospel – that is, no one will go to heaven by "
+"following the Golden Rule or the Sermon on the Mount. These sermons are "
+"policies for living out the Christ life today. The teachings in this context "
+"focus on our attitudes. These are Christlike dispositions, not legal "
+"duties. \n"
+"Our command is similar to saying, “Love your neighbor”. The present-tense "
+"imperative means “to be continuously producing, [or] causing something to "
+"happen”, especially for the benefit of another person in this context. The "
+"Golden Rule has no restrictions, because love is not dependent on the "
+"response of the other person. \n"
+"Our actions toward others should not be determined by their reaction to us. "
+"Our objective is to reflect the attitude of God toward others. His patience, "
+"love, forgiveness, commitment, and care for sinners become our attitude at "
+"all times toward all people."
 msgstr ""
 
 #: commandments_app.Commandment/title:35
@@ -3366,8 +3849,18 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:35
 msgid ""
-"An incorrect view of morality had led the Gentile Corinthians to allow perverse “sexual immorality” to remain unchallenged within their congregation. Paul said, this “is not good. Do you now know that a little leaven leavens the whole lump? Therefore purge out the old leaven, that you may be a new lump, since you truly are unleavened” (1 Cor 5:6-7).\n"
-"The true disciple is to be alert to the destructive influences of judgmental legalists and weak, politically correct deniers of biblical truth and morality. Both of these views teach a critical, retaliatory attitude towards anyone who opposes their traditions. New Testament instructions and command are ignored and their value minimized in favor of the legalistic traditions and politically correct power struggles of intimidating leaders. We are never to tolerate fear, threats, and intimidation among us."
+"An incorrect view of morality had led the Gentile Corinthians to allow "
+"perverse “sexual immorality” to remain unchallenged within their "
+"congregation. Paul said, this “is not good. Do you now know that a little "
+"leaven leavens the whole lump? Therefore purge out the old leaven, that you "
+"may be a new lump, since you truly are unleavened” (1 Cor 5:6-7).\n"
+"The true disciple is to be alert to the destructive influences of judgmental "
+"legalists and weak, politically correct deniers of biblical truth and "
+"morality. Both of these views teach a critical, retaliatory attitude towards "
+"anyone who opposes their traditions. New Testament instructions and command "
+"are ignored and their value minimized in favor of the legalistic traditions "
+"and politically correct power struggles of intimidating leaders. We are "
+"never to tolerate fear, threats, and intimidation among us."
 msgstr ""
 
 #: commandments_app.Commandment/title:36
@@ -3376,12 +3869,29 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:36
 msgid ""
-"Jesus was not just teaching a subject matter. He was communicating truths about life and eternity. His information was urgent, but all too often his hearers only gave Him halfhearted attention. \n"
-"The first command is to “continually listen to me.”. This means not just hearing but also giving “special attention to hear with the ear of the mind” (Zodhiates. #191). The elements of the truth must be clear before the dots can be connected. \n"
-"The second command is to “understand” what He was saying. It means to “put it together, comprehend, assembling individual facts into an organized whole.” \n"
-"The third command is to “obey”. If you keep doing what you did, you will get what you did. But if you will give hearing to what Jesus is teaching, you will do something new.\n"
-"The scene Peter, James and John have witnessed is the only audible message from God the Father to us: “This is my one dear Son, in whom I take great delight. Listen to him!”, The purpose was to make sure His disciples took seriously everything He said and later would say through the Spirit’s inspiration to the apostles and prophets. \n"
-"Everyone becomes to the one to whom he listens! The most repeated command in the book of Revelation is this: “He who has an ear, let him hear what the Spirit says to the churches” (Rev 2:7). Nine times “hear” is a command in the Revelation. The aorist form of these verbs demands an immediate response to what is commanded."
+"Jesus was not just teaching a subject matter. He was communicating truths "
+"about life and eternity. His information was urgent, but all too often his "
+"hearers only gave Him halfhearted attention. \n"
+"The first command is to “continually listen to me.”. This means not just "
+"hearing but also giving “special attention to hear with the ear of the "
+"mind” (Zodhiates. #191). The elements of the truth must be clear before the "
+"dots can be connected. \n"
+"The second command is to “understand” what He was saying. It means to “put "
+"it together, comprehend, assembling individual facts into an organized "
+"whole.” \n"
+"The third command is to “obey”. If you keep doing what you did, you will get "
+"what you did. But if you will give hearing to what Jesus is teaching, you "
+"will do something new.\n"
+"The scene Peter, James and John have witnessed is the only audible message "
+"from God the Father to us: “This is my one dear Son, in whom I take great "
+"delight. Listen to him!”, The purpose was to make sure His disciples took "
+"seriously everything He said and later would say through the Spirit’s "
+"inspiration to the apostles and prophets. \n"
+"Everyone becomes to the one to whom he listens! The most repeated command in "
+"the book of Revelation is this: “He who has an ear, let him hear what the "
+"Spirit says to the churches” (Rev 2:7). Nine times “hear” is a command in "
+"the Revelation. The aorist form of these verbs demands an immediate response "
+"to what is commanded."
 msgstr ""
 
 #: commandments_app.Commandment/title:37
@@ -3411,9 +3921,18 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:40
 msgid ""
-"Jesus concluded His ministry in Galilee, seeking disciples. Here we are given a glimpse into Jesus’s constant task of recruiting disciples and challenging them to give up their ambitions and follow Him. \n"
-"Though many (or most?) were focused on their own interests and walked away from Jesus’s challenge to them (Luke 9:57-61), He told them, “No one, having put his hand to the plow, and looking back is fit for the kingdom of God” (9:61). Half-hearted commitments never last. \n"
-"Do the unevangelized reserve a change to hear the gospel? “Certainly”, we respond, yet our real answer is betrayers by how little we pray for “workers” to go, by how little we care for people who have never heard, and how little we help those who are going. Be warned: as you pray for workers, you may be asking God to send you!"
+"Jesus concluded His ministry in Galilee, seeking disciples. Here we are "
+"given a glimpse into Jesus’s constant task of recruiting disciples and "
+"challenging them to give up their ambitions and follow Him. \n"
+"Though many (or most?) were focused on their own interests and walked away "
+"from Jesus’s challenge to them (Luke 9:57-61), He told them, “No one, having "
+"put his hand to the plow, and looking back is fit for the kingdom of "
+"God” (9:61). Half-hearted commitments never last. \n"
+"Do the unevangelized reserve a change to hear the gospel? “Certainly”, we "
+"respond, yet our real answer is betrayers by how little we pray for "
+"“workers” to go, by how little we care for people who have never heard, and "
+"how little we help those who are going. Be warned: as you pray for workers, "
+"you may be asking God to send you!"
 msgstr ""
 
 #: commandments_app.Commandment/title:41
@@ -3422,9 +3941,20 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:41
 msgid ""
-"In a mission conference, the banner across the front of the auditorium stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad of excuses for why we cannot go to preach the gospel. \n"
-"The resurrected Christ reiterated five times His final charge: “Go into to all the world.” Christ’s death on the cross was to be proclaimed around the world. There is no news more dramatic than this: “God made him who had no sin to be sin for us, so that in Him we might become the righteousness of God” (2 Cor 5:21). \n"
-"God asked the question: “Then I heard the voice of the Lord saying, ‘Whom shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we could appreciate Isaiah’s courage, or was it a glimpse into the perpetual heavenly issue? God is asking, “Who cares about our agenda for telling the world about Jesus?” "
+"In a mission conference, the banner across the front of the auditorium "
+"stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad "
+"of excuses for why we cannot go to preach the gospel. \n"
+"The resurrected Christ reiterated five times His final charge: “Go into to "
+"all the world.” Christ’s death on the cross was to be proclaimed around the "
+"world. There is no news more dramatic than this: “God made him who had no "
+"sin to be sin for us, so that in Him we might become the righteousness of "
+"God” (2 Cor 5:21). \n"
+"God asked the question: “Then I heard the voice of the Lord saying, ‘Whom "
+"shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He "
+"said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we "
+"could appreciate Isaiah’s courage, or was it a glimpse into the perpetual "
+"heavenly issue? God is asking, “Who cares about our agenda for telling the "
+"world about Jesus?” "
 msgstr ""
 
 #: commandments_app.Commandment/title:42
@@ -3443,8 +3973,8 @@ msgstr ""
 msgid ""
 "Serpants are considered to be wise, that is shrewd, smart, cunning and "
 "cautious. Jesus was a master at turning the traps of the Jews into "
-"unanswerable dilemmas. He was never fooled into condemming Rome’s leaders or"
-" approving their corruption. He was always one step ahead of his accusers."
+"unanswerable dilemmas. He was never fooled into condemming Rome’s leaders or "
+"approving their corruption. He was always one step ahead of his accusers."
 msgstr ""
 
 #: commandments_app.Commandment/title:44
@@ -3457,9 +3987,15 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:44
 msgid ""
-"Fear is a paralyzing emotuon impeding development in every area of life. Many Christians live privately, allowing only a few people to know the well, and their fear of criticism, rejection, or ridicule keeps them from boldly telling others about the most important relationship in their lives. \n"
+"Fear is a paralyzing emotuon impeding development in every area of life. "
+"Many Christians live privately, allowing only a few people to know the well, "
+"and their fear of criticism, rejection, or ridicule keeps them from boldly "
+"telling others about the most important relationship in their lives. \n"
 "\n"
-"We must openly and unashamedly tell to everyone we can about what God has taught us in private. This is contrary to tentomporary views of political correctness that tell us to avoid controversy at any cost for fear of offending someone."
+"We must openly and unashamedly tell to everyone we can about what God has "
+"taught us in private. This is contrary to tentomporary views of political "
+"correctness that tell us to avoid controversy at any cost for fear of "
+"offending someone."
 msgstr ""
 
 #: commandments_app.Commandment/title:45
@@ -3472,10 +4008,21 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:46
 msgid ""
-"First, if you are going to follow Christ, you must decide once and for all not to pay attention to yourself, to give up self-interest, and, in effect, to go against your pride or profit. Ouch! When have you given up something for Christ? Paul wrote, “Such things that once were gains to me these have I counted loss for Christ” (Phil 3:7).\n"
-"Second, it was necessary for a disciple to “take up his cross.” The condemned man was forces to carry his own cross to his execution, as Jesus did. But what the convict did under obligation, the disciple of Christ does willingly. He willingly accepts the hurt, embarrassment, shame, and persecution that inevitably will be his lot if he remains loyal to Jesus.\n"
-"Third, he must “keep on continually following [Jesus]”. This means that as Jesus “suffered for us, leaving us an example, we should follow His steps” (1 Pet 2:21), especially by obeying His commands (John 15:14).\n"
-"These three actions indicate a true conversion and why the power and filling of the Spirit is indispensable."
+"First, if you are going to follow Christ, you must decide once and for all "
+"not to pay attention to yourself, to give up self-interest, and, in effect, "
+"to go against your pride or profit. Ouch! When have you given up something "
+"for Christ? Paul wrote, “Such things that once were gains to me these have I "
+"counted loss for Christ” (Phil 3:7).\n"
+"Second, it was necessary for a disciple to “take up his cross.” The "
+"condemned man was forces to carry his own cross to his execution, as Jesus "
+"did. But what the convict did under obligation, the disciple of Christ does "
+"willingly. He willingly accepts the hurt, embarrassment, shame, and "
+"persecution that inevitably will be his lot if he remains loyal to Jesus.\n"
+"Third, he must “keep on continually following [Jesus]”. This means that as "
+"Jesus “suffered for us, leaving us an example, we should follow His "
+"steps” (1 Pet 2:21), especially by obeying His commands (John 15:14).\n"
+"These three actions indicate a true conversion and why the power and filling "
+"of the Spirit is indispensable."
 msgstr ""
 
 #: commandments_app.Commandment/title:47
@@ -3496,8 +4043,19 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:49
 msgid ""
-"Who do you want as your worst enemy: the world or God? Unfortunately, everyone has to choose. If you love the world, it may treat you well temporarily, but it is a fickle and cruel taskmaster. However, such a compromise with the world makes God an enemy: “Whoever therefore wants to be a friend of the world makes himself an enemy of God” (James 4:4). But friendship with God inevitable provokes the wraith of the world system. \n"
-"Jesus was hated at His birth and throughout His ministry. The disciples had to accept inevitable persecution or walk away, just as the seed sown in “rocky places” (Matt 13:20) is the one “who hears the word and at once receives it with joy. But since he has no root, he lasts only a short time. When trouble or persecution comes because of the Word, he quickly falls away” (Matt 13:21). We must decide to follow Jesus knowing that it will not be a popular dicision."
+"Who do you want as your worst enemy: the world or God? Unfortunately, "
+"everyone has to choose. If you love the world, it may treat you well "
+"temporarily, but it is a fickle and cruel taskmaster. However, such a "
+"compromise with the world makes God an enemy: “Whoever therefore wants to be "
+"a friend of the world makes himself an enemy of God” (James 4:4). But "
+"friendship with God inevitable provokes the wraith of the world system. \n"
+"Jesus was hated at His birth and throughout His ministry. The disciples had "
+"to accept inevitable persecution or walk away, just as the seed sown in "
+"“rocky places” (Matt 13:20) is the one “who hears the word and at once "
+"receives it with joy. But since he has no root, he lasts only a short time. "
+"When trouble or persecution comes because of the Word, he quickly falls "
+"away” (Matt 13:21). We must decide to follow Jesus knowing that it will not "
+"be a popular dicision."
 msgstr ""
 
 #: commandments_app.Commandment/title:50
@@ -3510,9 +4068,17 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:51
 msgid ""
-"In the context of revealing the Father and granting rest to the one who comes to Jesus in trust, Jesus challenges his followers, “Take my yoke upon you and learn from Me”. The yoke, with regard to animals, means control and submission to your owner, but with humans, the imagery signifies slavery to Jesus and His will. \n"
-"In the Hebrew world, a student is under the yoke of his teacher, which means he submits to his teachings. This first phrase is then parallel to the second phrase: “and learn from Me”. The word learn means to become a “disciple or learner”. \n"
-"As we become like Him, we too become trustworthy, modeling the peace that only truth can bring to a soul. Let’s become, and make, disciples like Jesus."
+"In the context of revealing the Father and granting rest to the one who "
+"comes to Jesus in trust, Jesus challenges his followers, “Take my yoke upon "
+"you and learn from Me”. The yoke, with regard to animals, means control and "
+"submission to your owner, but with humans, the imagery signifies slavery to "
+"Jesus and His will. \n"
+"In the Hebrew world, a student is under the yoke of his teacher, which means "
+"he submits to his teachings. This first phrase is then parallel to the "
+"second phrase: “and learn from Me”. The word learn means to become a "
+"“disciple or learner”. \n"
+"As we become like Him, we too become trustworthy, modeling the peace that "
+"only truth can bring to a soul. Let’s become, and make, disciples like Jesus."
 msgstr ""
 
 #: commandments_app.Commandment/title:52
@@ -3570,8 +4136,19 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:61
 msgid ""
-"One of Jesus’s most remarkable teachings concerned His view of leadership. He marked a distinction between how the believer leads and how the unsaved world leads: in the world, some “lord it over,” or control by “authority,” but this was not the way His followers were to lead their families and ministries. \n"
-"Jesus did not say there would be no leaders in His new order, but he said they would lead from entirely different principles. The only way a person can be a leader is if someone is following him! The question is, why do people follow any leader? Is it out of fear or anger or public criticism? Is it the charisma, importance, wealth, or popularity of a leader that attracts others to blindly follow him? Or is it due to the selfless, caring acts and edifying commitment of a servant-leader who seeks what is best for his followers rather than himself?"
+"One of Jesus’s most remarkable teachings concerned His view of leadership. "
+"He marked a distinction between how the believer leads and how the unsaved "
+"world leads: in the world, some “lord it over,” or control by “authority,” "
+"but this was not the way His followers were to lead their families and "
+"ministries. \n"
+"Jesus did not say there would be no leaders in His new order, but he said "
+"they would lead from entirely different principles. The only way a person "
+"can be a leader is if someone is following him! The question is, why do "
+"people follow any leader? Is it out of fear or anger or public criticism? Is "
+"it the charisma, importance, wealth, or popularity of a leader that attracts "
+"others to blindly follow him? Or is it due to the selfless, caring acts and "
+"edifying commitment of a servant-leader who seeks what is best for his "
+"followers rather than himself?"
 msgstr ""
 
 #: commandments_app.Commandment/title:62
@@ -3592,13 +4169,31 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:65
 msgid ""
-"<p> In Luke 12:35-40, Jesus begins to gird up your loins and have the lamp burning. He then called on to be vigilant and ready for the arrival of the Son of Man.</p>\n"
+"<p> In Luke 12:35-40, Jesus begins to gird up your loins and have the lamp "
+"burning. He then called on to be vigilant and ready for the arrival of the "
+"Son of Man.</p>\n"
 "\n"
-"<p>We hardly know the word loin today. A loincloth is a piece of clothing that consists only of a cotton cloth that is worn around the loins - the hips. The loins are the center of your body. The Hebrew expression \"the loins girded\" has more to do with a tunic, an undergarment. If something had to be done quickly, the tunic was tied around the loins with a leather belt. It was a starting position of someone who had to take action. In the East, both men and women wore long clothes that reached the feet. The rug was held up with the belt, so that the feet and legs had more freedom of movement. When girdling the loins, the long overcoat was taken up and put into the belt, or pulled up by the belt, when preparing to do work or travel. </p>\n"
+"<p>We hardly know the word loin today. A loincloth is a piece of clothing "
+"that consists only of a cotton cloth that is worn around the loins - the "
+"hips. The loins are the center of your body. The Hebrew expression \"the "
+"loins girded\" has more to do with a tunic, an undergarment. If something "
+"had to be done quickly, the tunic was tied around the loins with a leather "
+"belt. It was a starting position of someone who had to take action. In the "
+"East, both men and women wore long clothes that reached the feet. The rug "
+"was held up with the belt, so that the feet and legs had more freedom of "
+"movement. When girdling the loins, the long overcoat was taken up and put "
+"into the belt, or pulled up by the belt, when preparing to do work or "
+"travel. </p>\n"
 "\n"
-"<p>Someone who pulls up his long clothing and ties it around his loins with a belt, so he can move quickly. The Israelites had to be ready in the night of their departure from Egypt, the loins girded in order to be able to leave immediately. (Exodus 12:11). Elijah girded his loins to rush out for Ahab (1 Kings 18:46). We must also be ready to expect the arrival of the Son of Man at all times. </p>\n"
+"<p>Someone who pulls up his long clothing and ties it around his loins with "
+"a belt, so he can move quickly. The Israelites had to be ready in the night "
+"of their departure from Egypt, the loins girded in order to be able to leave "
+"immediately. (Exodus 12:11). Elijah girded his loins to rush out for Ahab (1 "
+"Kings 18:46). We must also be ready to expect the arrival of the Son of Man "
+"at all times. </p>\n"
 "\n"
-"<p><i>\"Blessed are those slaves whom the Lord will find waking when he comes.\" (Luke 12:37) </i></p>"
+"<p><i>\"Blessed are those slaves whom the Lord will find waking when he "
+"comes.\" (Luke 12:37) </i></p>"
 msgstr ""
 
 #: commandments_app.Commandment/title:66
@@ -3607,10 +4202,31 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:66
 msgid ""
-"There is no question that we are all unworthy of praise, but the word “undeserving” (Luke 17:10) means to be “useless, of no use or profit, or worthless.” Such a person is like the steward who received a talent of silver from his master, but was afraid to do anything with it and simply returned it to his master. There is no indication in the text that any oh the three stewards were told what to do with the wealth they had been given. The one who produced nothing more than what he was given was “useless” because he was unproductive. \n"
-"Employers become frustrated when they must tell their employees what to do every day, The better employee knows what needs to be done and uses his ingenuity, creativity, and skills to make the employer successful and accomplish his mission. Every employer dreams about this kind of employee. \n"
-"The classic illustration if this principle is the Great Commission. Jesus told the Twelve and other listeners to make sure the gospel is preached to every tongue, tribe, people, and ethnic people group on earth (Matt 24:14. 28:19-20). He never said how it should be done or who should do it. He expects the profitable servant to figure it out so that He may reward the servant for his creative service. \n"
-"The judgment seat of Christ is all about discerning who is “good” (profitable, useful) and who is “bad” (worthless, cowardly) for the kingdom’s sake (2 Cor 5:10). It is not about who has been good or bad morally but about who has contributed to expanding the kingdom around the globe without having to be told how – just because they know it is their Savior’s desire. All the rewards of heaven are promised to this kind of obedient believer."
+"There is no question that we are all unworthy of praise, but the word "
+"“undeserving” (Luke 17:10) means to be “useless, of no use or profit, or "
+"worthless.” Such a person is like the steward who received a talent of "
+"silver from his master, but was afraid to do anything with it and simply "
+"returned it to his master. There is no indication in the text that any oh "
+"the three stewards were told what to do with the wealth they had been given. "
+"The one who produced nothing more than what he was given was “useless” "
+"because he was unproductive. \n"
+"Employers become frustrated when they must tell their employees what to do "
+"every day, The better employee knows what needs to be done and uses his "
+"ingenuity, creativity, and skills to make the employer successful and "
+"accomplish his mission. Every employer dreams about this kind of employee. \n"
+"The classic illustration if this principle is the Great Commission. Jesus "
+"told the Twelve and other listeners to make sure the gospel is preached to "
+"every tongue, tribe, people, and ethnic people group on earth (Matt 24:14. "
+"28:19-20). He never said how it should be done or who should do it. He "
+"expects the profitable servant to figure it out so that He may reward the "
+"servant for his creative service. \n"
+"The judgment seat of Christ is all about discerning who is "
+"“good” (profitable, useful) and who is “bad” (worthless, cowardly) for the "
+"kingdom’s sake (2 Cor 5:10). It is not about who has been good or bad "
+"morally but about who has contributed to expanding the kingdom around the "
+"globe without having to be told how – just because they know it is their "
+"Savior’s desire. All the rewards of heaven are promised to this kind of "
+"obedient believer."
 msgstr ""
 
 #: commandments_app.Commandment/title:67
@@ -3646,13 +4262,38 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:71
 msgid ""
-"Teaching moments are spontaneous opportunities to illustrate an important principle or truth. During a Jewish holiday, Jesus and Hid disciples had been walking back and forth from Bethany to Jerusalem. The previous morning, they walked past a fig tree that was barren of fruit. Strangely, He declared, “let no one eat fruit from you ever again”. He was setting up a future teaching moment. \n"
-"The next morning, walking back into Jerusalem, they passed this same fig tree, only now “the fig tree dried up from the roots”. Shocked, Peter exclaimed, “Rabbi, look! The fig tree which You cursed was withered away”, to which Jesus replied, “Have faith in God”. \n"
-"The disciples were to have an unwavering trust in the omnipotent God who can do anything that He wills to do for His own purposes. The key to an unconditional faith is to have a “no-matter-what” trust and an “anything-is-possible” kind of confidence in the God who cares. through He may seem silent at time, He is always present and can change things any time He wants. \n"
-"If you fully give you life over to God (Rom 12:1-2), then whatever God allows to happen in your life is OK. It belongs to Him. He can do with it whatever He wants, even if that means tragedies or miraculous interventions. Either one is OK, since now your life belongs to Jesus. He makes no mistakes. \n"
-"The one who learns to trust God fully knows He can be trusted with however He may decide to answer to his prayers. Jesus continues in the next verse, “For assuredly, I say to you, whoever says to this mountain, ‘Be removed and be cast into the sea,’ and does not doubt in his heart, but believes that those things he says will be done, he will have whatever he says.” \\n\n"
-"Jesus, by using hyperbole, illustrated the virtually limitless possibilities for the believer with faith who “does not doubt in his heart”. \n"
-"Earlier Jesus had said, “With men it is impossible, but not with God. for with God all things are possible” (Mark 10:27). As committed as you are to His word and purpose in life, you can count on His power to assist you to accomplish His will and purpose for your life. “Have faith…”"
+"Teaching moments are spontaneous opportunities to illustrate an important "
+"principle or truth. During a Jewish holiday, Jesus and Hid disciples had "
+"been walking back and forth from Bethany to Jerusalem. The previous morning, "
+"they walked past a fig tree that was barren of fruit. Strangely, He "
+"declared, “let no one eat fruit from you ever again”. He was setting up a "
+"future teaching moment. \n"
+"The next morning, walking back into Jerusalem, they passed this same fig "
+"tree, only now “the fig tree dried up from the roots”. Shocked, Peter "
+"exclaimed, “Rabbi, look! The fig tree which You cursed was withered away”, "
+"to which Jesus replied, “Have faith in God”. \n"
+"The disciples were to have an unwavering trust in the omnipotent God who can "
+"do anything that He wills to do for His own purposes. The key to an "
+"unconditional faith is to have a “no-matter-what” trust and an “anything-is-"
+"possible” kind of confidence in the God who cares. through He may seem "
+"silent at time, He is always present and can change things any time He "
+"wants. \n"
+"If you fully give you life over to God (Rom 12:1-2), then whatever God "
+"allows to happen in your life is OK. It belongs to Him. He can do with it "
+"whatever He wants, even if that means tragedies or miraculous interventions. "
+"Either one is OK, since now your life belongs to Jesus. He makes no "
+"mistakes. \n"
+"The one who learns to trust God fully knows He can be trusted with however "
+"He may decide to answer to his prayers. Jesus continues in the next verse, "
+"“For assuredly, I say to you, whoever says to this mountain, ‘Be removed and "
+"be cast into the sea,’ and does not doubt in his heart, but believes that "
+"those things he says will be done, he will have whatever he says.” \\n\n"
+"Jesus, by using hyperbole, illustrated the virtually limitless possibilities "
+"for the believer with faith who “does not doubt in his heart”. \n"
+"Earlier Jesus had said, “With men it is impossible, but not with God. for "
+"with God all things are possible” (Mark 10:27). As committed as you are to "
+"His word and purpose in life, you can count on His power to assist you to "
+"accomplish His will and purpose for your life. “Have faith…”"
 msgstr ""
 
 #: commandments_app.Commandment/title:72
@@ -3670,12 +4311,12 @@ msgstr ""
 #: commandments_app.Commandment/devotional:73
 msgid ""
 "Jesus gave His disciples instructions for how to respond to inevitable "
-"persecution. They were commanded to “stop worrying” (implying that they were"
-" worrying) and to “continuously say” what the Spirit brought to their minds "
-"at the time (John 14:26). What we have learned of His word will come back to"
-" our minds when we need it: “Now when they saw the boldness of Peter and "
-"John, … they marveled. And they realized that they had been with Jesus” "
-"(Acts 4:13)."
+"persecution. They were commanded to “stop worrying” (implying that they were "
+"worrying) and to “continuously say” what the Spirit brought to their minds "
+"at the time (John 14:26). What we have learned of His word will come back to "
+"our minds when we need it: “Now when they saw the boldness of Peter and "
+"John, … they marveled. And they realized that they had been with "
+"Jesus” (Acts 4:13)."
 msgstr ""
 
 #: commandments_app.Commandment/title:74
@@ -3684,9 +4325,17 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:74
 msgid ""
-"One of the many attributes of Jesus was His ability to be ready for whatever happened. What seemed to hurt Him most was the selfishness or disinterest of His closest friends when He knew they would e tempted and fail Him. \n"
-"To the very end, Jesus was committed to training His disciples. He was telling them the secret of inner fortitude. Three times Jesus interrupted His prayers to check on His disciples who had lost interest and falles asleep. Each time, Jesus exhorted all three to “Stay awake”, or to stay alert for spiritual dangers, deceptions, or disillusionments. They were to “pray”, which expresses total dependence on the power and presence of God. \n"
-"The “spirit”, which is willing, must be strengthened through prayer to overcome the weakness of the self-interest of the flesh. "
+"One of the many attributes of Jesus was His ability to be ready for whatever "
+"happened. What seemed to hurt Him most was the selfishness or disinterest of "
+"His closest friends when He knew they would e tempted and fail Him. \n"
+"To the very end, Jesus was committed to training His disciples. He was "
+"telling them the secret of inner fortitude. Three times Jesus interrupted "
+"His prayers to check on His disciples who had lost interest and falles "
+"asleep. Each time, Jesus exhorted all three to “Stay awake”, or to stay "
+"alert for spiritual dangers, deceptions, or disillusionments. They were to "
+"“pray”, which expresses total dependence on the power and presence of God. \n"
+"The “spirit”, which is willing, must be strengthened through prayer to "
+"overcome the weakness of the self-interest of the flesh. "
 msgstr ""
 
 #: commandments_app.Commandment/title:75
@@ -3695,11 +4344,32 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:75
 msgid ""
-"Jesus commanded his disciples to be fearless even when threatened with physical death for proclaiming the good news. At worst, the opposition can only bring about physical death, which is meaningless in comparison to Him would likely result in a death sentence from the state, but is was not to be feared, is was to be welcomed! \n"
-"God commands us to fear Him. Whomever you fear, you will obey. When people fear the authorities are watching or will find about their actions, they tend to obey to the laws. \n"
-"Likewise, Christians can become presumptuous because of God’s patience, deceiving themselves into believing that God will do nothing. They think He is too loving and forgiving to punish them. Satan deceived Eve into believing that God would do nothing if she disobeyed. When she believed the lie, she became vulnerable to disobedience. \n"
-"Proverbs 1:7 says: “The fear of the Lord is the beginning of knowledge, but fools despise wisdom and discipline.” The first lesson a believer should learn – the beginning of wisdom – is that it is a painful experience to disobey the Lord. The author of Hebrews wrote “My son, do not despise the chastening of the Lord. Nor be discouraged when you are rebuked by Him. For whom the Lord lives He chastens. And scourges every son whom He receive. But if you are without chastening, of which all have become partakers, then you are illegitimate and not sons” (Heb 12:5-6). Christians are forgiven their sins, but God will teach us not to be disobedient by certain chastisement. \n"
-"If we do not fear God’s promise of chastisement, then we tend to be morally loose. If we fear that He will do what He says in His word, then we begin to take His commands seriously. This is a healthy motivation to learn what God expects of us as His children – this is where wisdom begins."
+"Jesus commanded his disciples to be fearless even when threatened with "
+"physical death for proclaiming the good news. At worst, the opposition can "
+"only bring about physical death, which is meaningless in comparison to Him "
+"would likely result in a death sentence from the state, but is was not to be "
+"feared, is was to be welcomed! \n"
+"God commands us to fear Him. Whomever you fear, you will obey. When people "
+"fear the authorities are watching or will find about their actions, they "
+"tend to obey to the laws. \n"
+"Likewise, Christians can become presumptuous because of God’s patience, "
+"deceiving themselves into believing that God will do nothing. They think He "
+"is too loving and forgiving to punish them. Satan deceived Eve into "
+"believing that God would do nothing if she disobeyed. When she believed the "
+"lie, she became vulnerable to disobedience. \n"
+"Proverbs 1:7 says: “The fear of the Lord is the beginning of knowledge, but "
+"fools despise wisdom and discipline.” The first lesson a believer should "
+"learn – the beginning of wisdom – is that it is a painful experience to "
+"disobey the Lord. The author of Hebrews wrote “My son, do not despise the "
+"chastening of the Lord. Nor be discouraged when you are rebuked by Him. For "
+"whom the Lord lives He chastens. And scourges every son whom He receive. But "
+"if you are without chastening, of which all have become partakers, then you "
+"are illegitimate and not sons” (Heb 12:5-6). Christians are forgiven their "
+"sins, but God will teach us not to be disobedient by certain chastisement. \n"
+"If we do not fear God’s promise of chastisement, then we tend to be morally "
+"loose. If we fear that He will do what He says in His word, then we begin to "
+"take His commands seriously. This is a healthy motivation to learn what God "
+"expects of us as His children – this is where wisdom begins."
 msgstr ""
 
 #: commandments_app.Commandment/title:76
@@ -3712,10 +4382,32 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:76
 msgid ""
-"Greed enters our lives camouflaged as innocent ambition to be the best, but the masquerade hides the desie to be better, wealthier, or famous – and to own more or better things – than anyone in our circle of friends. This quest for acceptance, respect, or honor is motivated by the belief that this is the way to find fulfillment and satisfaction in life. Greed usurps the place of God in our lives, yet is a poor substitute, however enticing. \n"
-"When Jesus asked about a man’s inheritance, He knew the man was preoccupied with getting his hands on the wealth that he thought he needed and was due to him. Jesus took the occasion to explain the vice that turns our hearts against the will and purpose of God. He gives two commands asking us to be alert against being deceived or blind sided. We are told to “continually be taking heed,” “perceiving with the mind,” and to “continually be keeping ourselves on guard,” or “be aware of” traps or vices of “greed” or covetousness – that is, the “constant desire or thirst to have more and more.” \n"
-"How do you know if greed has taken root in your heart? The first symptom is discontent with whatever you have and the willingness to sacrifice everything or anyone to acquire more. As soon as one item is acquired, you are already thinking of something else you need. \n"
-"The second symptom is the anger felt when someone or something impedes tour acquisition of what you believe is necessary for your happiness. When you believe you need a sizable bank account valance to feel secure about your future, then whenever a preacher mentions tithing or generosity, your emotions will flare up. Anger is a reaction to something or someone that interferes with what you think you need for security or success. Do you resent being asked for your help?"
+"Greed enters our lives camouflaged as innocent ambition to be the best, but "
+"the masquerade hides the desie to be better, wealthier, or famous – and to "
+"own more or better things – than anyone in our circle of friends. This quest "
+"for acceptance, respect, or honor is motivated by the belief that this is "
+"the way to find fulfillment and satisfaction in life. Greed usurps the place "
+"of God in our lives, yet is a poor substitute, however enticing. \n"
+"When Jesus asked about a man’s inheritance, He knew the man was preoccupied "
+"with getting his hands on the wealth that he thought he needed and was due "
+"to him. Jesus took the occasion to explain the vice that turns our hearts "
+"against the will and purpose of God. He gives two commands asking us to be "
+"alert against being deceived or blind sided. We are told to “continually be "
+"taking heed,” “perceiving with the mind,” and to “continually be keeping "
+"ourselves on guard,” or “be aware of” traps or vices of “greed” or "
+"covetousness – that is, the “constant desire or thirst to have more and "
+"more.” \n"
+"How do you know if greed has taken root in your heart? The first symptom is "
+"discontent with whatever you have and the willingness to sacrifice "
+"everything or anyone to acquire more. As soon as one item is acquired, you "
+"are already thinking of something else you need. \n"
+"The second symptom is the anger felt when someone or something impedes tour "
+"acquisition of what you believe is necessary for your happiness. When you "
+"believe you need a sizable bank account valance to feel secure about your "
+"future, then whenever a preacher mentions tithing or generosity, your "
+"emotions will flare up. Anger is a reaction to something or someone that "
+"interferes with what you think you need for security or success. Do you "
+"resent being asked for your help?"
 msgstr ""
 
 #: commandments_app.Commandment/title:77
@@ -3736,13 +4428,38 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:80
 msgid ""
-"In the story of the rich man and Lazarus, the rich man is suffering the pains of hell while pleading with Abraham to send someone to tell his five brothers about the reality of hell. He was convinced that if his brothers talked to someone sent back from the dead, they would believe. \n"
-"But Abraham responded, “They have the Old Testament prophets, obey them” This is the message of Abraham through Christ’s message to the world. If you want to know the reality of eternity, then learn well the revealed word of God and obey what you find there. If the rich man’s brothers would not respond to the major message of God is His word, then they would not listen to a messenger  even if he came from the grave. \n"
-"God is amazingly gracious with His creatures, but they have to choose. If they choose to live life without God, paying no attention to His word, then God will let them do so in this life and then forever live without Him forever. \n"
-"God’s primary means of communicating His will and hope for mankind is through His written word. It seems men want any other means to hear from God except a revealed written word. Jesus came to declare God’s will and then inspired His chosen disciples to record His will for all time. Now the only way we will ever know His will is to search it out in His written word. \n"
-"Second, He reveals the principle that it is not miraculous messengers or signs that will convert a soul. The brothers would be shocked or awestruck by the appearance of such resurrected souls with a message directly from hell, but this would have no life-changing power. They might be so awestruck that they would superficially worship God even more, but they would ultimately fail to yield to His commands. \n"
-"A follower must believe from the heart – that is, he must wants Jesus to be constant companion and His authority in this life. Miracles are only effective in convincing people that God is real, but they do not make a person want Jesus as a permanent part his life. \n"
-"Abraham in essence told the rich man, “No! This is not how God works with men.” The only way to know the truth that will free the sinner from his sins is through the written word of God."
+"In the story of the rich man and Lazarus, the rich man is suffering the "
+"pains of hell while pleading with Abraham to send someone to tell his five "
+"brothers about the reality of hell. He was convinced that if his brothers "
+"talked to someone sent back from the dead, they would believe. \n"
+"But Abraham responded, “They have the Old Testament prophets, obey them” "
+"This is the message of Abraham through Christ’s message to the world. If you "
+"want to know the reality of eternity, then learn well the revealed word of "
+"God and obey what you find there. If the rich man’s brothers would not "
+"respond to the major message of God is His word, then they would not listen "
+"to a messenger  even if he came from the grave. \n"
+"God is amazingly gracious with His creatures, but they have to choose. If "
+"they choose to live life without God, paying no attention to His word, then "
+"God will let them do so in this life and then forever live without Him "
+"forever. \n"
+"God’s primary means of communicating His will and hope for mankind is "
+"through His written word. It seems men want any other means to hear from God "
+"except a revealed written word. Jesus came to declare God’s will and then "
+"inspired His chosen disciples to record His will for all time. Now the only "
+"way we will ever know His will is to search it out in His written word. \n"
+"Second, He reveals the principle that it is not miraculous messengers or "
+"signs that will convert a soul. The brothers would be shocked or awestruck "
+"by the appearance of such resurrected souls with a message directly from "
+"hell, but this would have no life-changing power. They might be so awestruck "
+"that they would superficially worship God even more, but they would "
+"ultimately fail to yield to His commands. \n"
+"A follower must believe from the heart – that is, he must wants Jesus to be "
+"constant companion and His authority in this life. Miracles are only "
+"effective in convincing people that God is real, but they do not make a "
+"person want Jesus as a permanent part his life. \n"
+"Abraham in essence told the rich man, “No! This is not how God works with "
+"men.” The only way to know the truth that will free the sinner from his sins "
+"is through the written word of God."
 msgstr ""
 
 #: commandments_app.Commandment/title:81
@@ -3769,8 +4486,8 @@ msgstr ""
 
 #: commandments_app.Movie/description:1
 msgid ""
-"If there is one part of the Bible that has undergone more scrutiny and abuse"
-" than any other, it is the very beginning-GENESIS. Both from within and "
+"If there is one part of the Bible that has undergone more scrutiny and abuse "
+"than any other, it is the very beginning-GENESIS. Both from within and "
 "without the church, assaults on GENESIS continue to question the Creation "
 "and ultimately the Creator. So, what exactly happened at the \"Creation,\" "
 "at the \"Beginning?\""
@@ -3788,8 +4505,8 @@ msgid ""
 "challenged on the first day of philosophy by the dogmatic and argumentative "
 "professor Radisson. Radisson starts his lecture by informing the students "
 "that they must deny, in writing, that God exists, or otherwise expect an "
-"insufficient grade. While most students write the words \"God is dead\" on a"
-" paper, Josh faces a decision. He must choose between his faith and his "
+"insufficient grade. While most students write the words \"God is dead\" on a "
+"paper, Josh faces a decision. He must choose between his faith and his "
 "future."
 msgstr ""
 
@@ -3963,8 +4680,8 @@ msgstr ""
 #: commandments_app.ShortMovie/description:4
 msgid ""
 "Since January 18, 2011, Egypt has been in a state of civil and political "
-"unrest, but in the midst of the violence and uncertainty, God is moving in a"
-" BIG way."
+"unrest, but in the midst of the violence and uncertainty, God is moving in a "
+"BIG way."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:5
@@ -3977,8 +4694,8 @@ msgstr ""
 #: commandments_app.ShortMovie/description:6
 msgid ""
 "Jesus compared the kingdom of God to one of the smallest seeds on Earth and "
-"over 2000 years later, the truth of this teaching can be seen all across the"
-" globe."
+"over 2000 years later, the truth of this teaching can be seen all across the "
+"globe."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:8
@@ -3992,15 +4709,15 @@ msgstr ""
 #: commandments_app.ShortMovie/description:9
 msgid ""
 "Sarah enjoys relating with people, but when an encounter with a Deaf woman "
-"challenges her ability to connect, God redefines what it means for her to be"
-" a follower."
+"challenges her ability to connect, God redefines what it means for her to be "
+"a follower."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:10
 msgid ""
 "One man's life changed the course of history for billions of people across "
-"the globe. He is both revered and reviled, famed and feared and you know who"
-" he is without a single mention of his name."
+"the globe. He is both revered and reviled, famed and feared and you know who "
+"he is without a single mention of his name."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:11
@@ -4011,8 +4728,8 @@ msgstr ""
 
 #: commandments_app.ShortMovie/description:13
 msgid ""
-"What if God asked you to leave everything you know behind? Well, that’s what"
-" happens to Marc and what God does with his response radically changes how "
+"What if God asked you to leave everything you know behind? Well, that’s what "
+"happens to Marc and what God does with his response radically changes how "
 "residents of Sherbrooke, Québec see Jesus."
 msgstr ""
 
@@ -4024,22 +4741,22 @@ msgstr ""
 #: commandments_app.ShortMovie/description:15
 msgid ""
 "There is an emptiness inside each of us that cannot be filled by life’s "
-"pursuits or ignored by its distractions. However, beyond the emptiness there"
-" is a voice calling. Do you hear the voice? Will you follow the call?"
+"pursuits or ignored by its distractions. However, beyond the emptiness there "
+"is a voice calling. Do you hear the voice? Will you follow the call?"
 msgstr ""
 
 #: commandments_app.ShortMovie/description:16
 msgid ""
 "Over the span of a three and a half year wait, Peter and Erin realize that "
-"they are adopting for reasons much more personal than once thought. They are"
-" adopting, because they were adopted."
+"they are adopting for reasons much more personal than once thought. They are "
+"adopting, because they were adopted."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:17
 msgid ""
-"Filmed in six languages across five continents, this short film captures the"
-" faith-filled thoughts of children as they contemplate the many attributes "
-"of God."
+"Filmed in six languages across five continents, this short film captures the "
+"faith-filled thoughts of children as they contemplate the many attributes of "
+"God."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:18
@@ -4051,7 +4768,9 @@ msgstr ""
 #: commandments_app.ShortMovie/description:19
 msgid ""
 "\n"
-"Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with difficulty, but at the finish line awaits an imperishable reward that is given to those who persevere…Christ Himself."
+"Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with "
+"difficulty, but at the finish line awaits an imperishable reward that is "
+"given to those who persevere…Christ Himself."
 msgstr ""
 
 #: commandments_app.ShortMovie/description:20
@@ -4069,8 +4788,8 @@ msgstr ""
 
 #: commandments_app.Testimony/description:2
 msgid ""
-"Jason and Tracy were ecstatic to find out that they were expecting, but when"
-" the couple is told that their daughter is “incompatible with life”, they "
+"Jason and Tracy were ecstatic to find out that they were expecting, but when "
+"the couple is told that their daughter is “incompatible with life”, they "
 "begin a journey that will forever change how they view God’s love."
 msgstr ""
 
@@ -4109,25 +4828,25 @@ msgstr ""
 
 #: commandments_app.Testimony/description:8
 msgid ""
-"Anderson and Robson came to know the love and grace of Jesus in the midst of"
-" poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
+"Anderson and Robson came to know the love and grace of Jesus in the midst of "
+"poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
 "same love and grace in one of the most notorious favelas in Rio de Janeiro, "
 "The City of God."
 msgstr ""
 
 #: commandments_app.Testimony/description:9
 msgid ""
-"In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs,"
-" a normal home, a normal life. Then God called them out of the normal and "
+"In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs, "
+"a normal home, a normal life. Then God called them out of the normal and "
 "into His mission."
 msgstr ""
 
 #: commandments_app.Testimony/description:10
 msgid ""
-"\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered"
-" after being born without limbs.  Nick discovered God's miraculous plan for "
-"his life as a worldwide evangelist sharing the message of redemption through"
-" Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
+"\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered "
+"after being born without limbs.  Nick discovered God's miraculous plan for "
+"his life as a worldwide evangelist sharing the message of redemption through "
+"Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
 "preach to every single soul on the planet: 7 billion people!"
 msgstr ""
 
@@ -4135,8 +4854,8 @@ msgstr ""
 msgid ""
 "Where were you on March 11, 2011 when the Tohoku earthquake shook Japan? "
 "Yuji was at work, and with Tokyo’s power grid shut down, he journeyed on "
-"foot across the city to discover a message waiting for him that would change"
-" his life forever."
+"foot across the city to discover a message waiting for him that would change "
+"his life forever."
 msgstr ""
 
 #: commandments_app.Testimony/description:12
@@ -4148,24 +4867,24 @@ msgstr ""
 
 #: commandments_app.Testimony/description:13
 msgid ""
-"For years, Walt and Annie struggled with infertility, but in a single moment"
-" they realized that God was writing a beautiful story for them that was over"
-" 20 years in the making."
+"For years, Walt and Annie struggled with infertility, but in a single moment "
+"they realized that God was writing a beautiful story for them that was over "
+"20 years in the making."
 msgstr ""
 
 #: commandments_app.Testimony/description:14
 msgid ""
 "Do you struggle with depression? So did Yumiko. She hated herself and even "
-"dreamt of running in front of a train to end her life. But hope came her way"
-" in the last place she ever expected."
+"dreamt of running in front of a train to end her life. But hope came her way "
+"in the last place she ever expected."
 msgstr ""
 
 #: commandments_app.Testimony/description:15
 msgid ""
 "When Petra loses her mother at a young age, she sets off on a journey to "
-"find hope and healing for her loss. This decade-long search eventually leads"
-" her to discover that the answer she’s been looking for has been pursuing "
-"her all along."
+"find hope and healing for her loss. This decade-long search eventually leads "
+"her to discover that the answer she’s been looking for has been pursuing her "
+"all along."
 msgstr ""
 
 #: commandments_app.Testimony/description:16
@@ -4177,8 +4896,8 @@ msgstr ""
 
 #: commandments_app.Testimony/description:17
 msgid ""
-"This two minute short reveals God's desire for unity and how the Evangelical"
-" and Orthodox churches in Egypt have united together to exalt Christ as the "
+"This two minute short reveals God's desire for unity and how the Evangelical "
+"and Orthodox churches in Egypt have united together to exalt Christ as the "
 "Head of His Church."
 msgstr ""
 
@@ -4223,9 +4942,25 @@ msgstr ""
 #: commandments_app.Testimony/description:23
 msgid ""
 "Lore and Michael started their family with great hope for the future, but "
-"when their son’s life begins to spiral downward, they come face to face with"
-" what it truly means to trust in God."
+"when their son’s life begins to spiral downward, they come face to face with "
+"what it truly means to trust in God."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Your account doesn\\"
+#~ msgstr "Ihr Konto nicht \\"
+
+#, fuzzy
+#~ msgid ""
+#~ "Maybe you are wondering why we did not study all the commandments in the "
+#~ "whole New Testament? Well, the easiest reason why we didn\\"
+#~ msgstr ""
+#~ "Vielleicht fragen Sie sich, warum wir nicht in der ganzen Neuen Testament "
+#~ "alle Gebote studiert haben? Nun, der einfachste Grund, warum wir didn \\"
+
+#, fuzzy
+#~ msgid "If we don\\"
+#~ msgstr "Wenn wir don \\"
 
 #, fuzzy
 #~ msgid "Select Media Languages"

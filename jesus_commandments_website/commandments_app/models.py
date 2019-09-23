@@ -368,6 +368,7 @@ class Media(models.Model):
     url = URLOrRelativeURLField(default='#')
     language = models.CharField(max_length=8, choices=LANGUAGES, default='en')
     is_public = models.BooleanField(default=False)
+    unique_together = ['commandment', 'title', 'author', 'url', 'language']
 
     class Meta:
         abstract = True
@@ -433,6 +434,7 @@ class Question(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     text = models.TextField(default='')
+    unique_together = ['commandment', 'text']
 
     def __str__(self):
         return self.text

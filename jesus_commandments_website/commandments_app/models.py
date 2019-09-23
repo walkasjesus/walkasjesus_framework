@@ -337,7 +337,7 @@ class TertiaryBibleReference(AbstractBibleReference):
 
 class BibleReferences:
     def __init__(self):
-        self.bible = BibleFactory().create('hsv')
+        self.bible = None
         self._data = None
 
     def primary(self):

@@ -125,7 +125,7 @@ class Commandment(models.Model):
                                 default=CommandmentCategories.Salvation)
     quote = models.TextField(default=None, blank=True, null=True)
     quote_source = models.CharField(max_length=256, default=None, blank=True, null=True)
-    bible = BibleFactory().create('hsv')
+    bible = None
     languages = [translation.get_language()]
     objects = CommandmentManager()
 
@@ -253,7 +253,7 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    bible = BibleFactory().create('hsv')
+    bible = None
 
     class Meta:
         abstract = True

@@ -327,12 +327,16 @@ class PrimaryBibleReference(AbstractBibleReference):
 
 class SecondaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 
 class TertiaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 
 class BibleReferences:
@@ -368,10 +372,10 @@ class Media(models.Model):
     url = URLOrRelativeURLField(default='#')
     language = models.CharField(max_length=8, choices=LANGUAGES, default='en')
     is_public = models.BooleanField(default=False)
-    unique_together = ['commandment', 'title', 'author', 'url', 'language']
 
     class Meta:
         abstract = True
+        unique_together = ['commandment', 'title', 'author', 'url', 'language']
 
     def __str__(self):
         return f'Media at: {self.url}'
@@ -434,7 +438,9 @@ class Question(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     text = models.TextField(default='')
-    unique_together = ['commandment', 'text']
+
+    class Meta:
+        unique_together = ['commandment', 'text']
 
     def __str__(self):
         return self.text

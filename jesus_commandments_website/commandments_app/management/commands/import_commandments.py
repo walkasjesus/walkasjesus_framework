@@ -2,6 +2,7 @@ import logging
 import os
 
 from django.core.management import BaseCommand
+from django.db import IntegrityError
 from import_tool import CommandmentImporter
 
 from commandments_app.models import *
@@ -24,12 +25,13 @@ class Command(BaseCommand):
         model_reference.begin_verse = reference.start_verse
         model_reference.end_chapter = reference.end_chapter
         model_reference.end_verse = reference.end_verse
-        model_reference.save()
+
+        self._save(model_reference)
 
     def _add_question(self, commandment_id, question):
         question_model = Question(commandment_id=commandment_id)
         question_model.text = question
-        question_model.save()
+        self._save(question_model)
 
     def _add_media(self, commandment_id, media):
         media_type = media.type.lower().strip()
@@ -55,18 +57,17 @@ class Command(BaseCommand):
             logging.getLogger().warning(f'Type {media_type} not yet implemented in import command')
             return
 
-        print(f'Adding {media_type}: {media.title} - {media.author}')
         model_reference.title = media.title
         model_reference.description = media.description
         model_reference.language = media.language
         model_reference.url = media.link
         model_reference.author = media.author
         model_reference.is_public = media.is_public
-        model_reference.save()
+        self._save(model_reference)
 
     def _add_commandment(self, commandment):
         try:
-            model_commandment = Commandment(id=commandment.id)
+            model_commandment, is_new = Commandment.objects.get_or_create(id=commandment.id)
             model_commandment.title = commandment.title
             model_commandment.title_negative = commandment.title_negative
             model_commandment.devotional = commandment.devotional
@@ -75,7 +76,12 @@ class Command(BaseCommand):
             model_commandment.quote = commandment.quote
             model_commandment.quote_source = commandment.quote_source
             model_commandment.save()
-            print(f'Added commandment {model_commandment.id}')
+
+            if is_new:
+                print(f'Added commandment {model_commandment.id}')
+            else:
+                print(f'Updating commandment {model_commandment.id}')
+
             for item in commandment.primary_bible_references:
                 self._add_bible_ref(PrimaryBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.secondary_bible_references:
@@ -90,4 +96,11 @@ class Command(BaseCommand):
             print(ex)
             print(f'Failed to import {commandment.id}')
 
-
+    def _save(self, model_object):
+        try:
+            model_object.save()
+            print(f'Added {model_object}.')
+        except IntegrityError:
+            print(f'Skipped {model_object} as it already exists.')
+        except Exception as ex:
+            print(f'Failed inserting {model_object} with error {ex}.')

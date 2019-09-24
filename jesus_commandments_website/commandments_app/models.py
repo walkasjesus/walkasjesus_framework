@@ -125,7 +125,7 @@ class Commandment(models.Model):
                                 default=CommandmentCategories.Salvation)
     quote = models.TextField(default=None, blank=True, null=True)
     quote_source = models.CharField(max_length=256, default=None, blank=True, null=True)
-    bible = BibleFactory().create('hsv')
+    bible = None
     languages = [translation.get_language()]
     objects = CommandmentManager()
 
@@ -253,7 +253,7 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    bible = BibleFactory().create('hsv')
+    bible = None
 
     class Meta:
         abstract = True
@@ -328,14 +328,20 @@ class PrimaryBibleReference(AbstractBibleReference):
 class SecondaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
 
 class TertiaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
 
 class BibleReferences:
     def __init__(self):
-        self.bible = BibleFactory().create('hsv')
+        self.bible = None
         self._data = None
 
     def primary(self):
@@ -369,6 +375,7 @@ class Media(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = ['commandment', 'title', 'author', 'url', 'language']
 
     def __str__(self):
         return f'Media at: {self.url}'
@@ -431,6 +438,9 @@ class Question(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     text = models.TextField(default='')
+
+    class Meta:
+        unique_together = ['commandment', 'text']
 
     def __str__(self):
         return self.text

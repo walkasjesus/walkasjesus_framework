@@ -7,6 +7,8 @@ from commandments_app.models import Commandment, UserPreferences
 class DetailView(View):
     def get(self, request, commandment_id: int):
         commandment = get_object_or_404(Commandment, pk=commandment_id)
-        commandment.bible = UserPreferences(request.session).bible
+        selected_bible = UserPreferences(request.session).bible
+        commandment.bible = selected_bible
         commandment.languages = UserPreferences(request.session).languages
-        return render(request, 'commandments/detail.html', {'commandment': commandment})
+        return render(request, 'commandments/detail.html', {'commandment': commandment,
+                                                            'copyrights': selected_bible.copyright})

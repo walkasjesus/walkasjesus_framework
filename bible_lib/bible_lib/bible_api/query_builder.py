@@ -112,7 +112,7 @@ class QueryBuilder:
                                                    '7142879509583d59-03',
                                                    'ead7b4cc5007389c-01']
 
-        if bible_id in bibles_following_alternative_daniel_key:
+        if book == BibleBooks.Daniel and bible_id in bibles_following_alternative_daniel_key:
             return 'DAG'
 
         return mapping[book]

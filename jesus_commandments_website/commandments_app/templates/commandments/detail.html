@@ -193,7 +193,7 @@
                             {% for drawing in commandment.drawings %}
                                 <img src="{{ drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
                                 {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
-                                <p>Artist: {{ drawing.author }}</p>
+                                <p>{% trans 'Artist' %}: {{ drawing.author }}</p>
                             {% endfor %}
                         </div>
                     </div>
@@ -283,11 +283,11 @@
                                         {% if forloop.first %}
                                             <div class="carousel-item active">
                                                 <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
-                                                <p>Photographer: {{ picture.author }}</p>
+                                                <p>{% trans 'Photographer' %}: {{ picture.author }}</p>
                                         {% else %}
                                             <div class="carousel-item">
                                                 <img class="d-block w-100" src="{{ picture.url }}" alt="{{ picture.author }}">
-                                                <p>Photographer: {{ picture.author }}</p>
+                                                <p>{% trans 'Photographer' %}: {{ picture.author }}</p>
                                         {% endif %}
                                             </div>
                                         {% endfor %}                                                    
@@ -419,7 +419,7 @@
                         <div class="row justify-content-center align-items-center">
                             <div class="col-md-12 daily-verse pl-md-5 ftco-animate fadeInUp ftco-animated">
                                 <span class="subheading-quote"><p>"{{ commandment.quote }}"</p></span>
-                                <h4 class="h5 mt-4 font-weight-bold"><span>Quote by:</span> {{ commandment.quote_source }}</h4>
+                                <h4 class="h5 mt-4 font-weight-bold"><span>{% trans 'Quote by' %}:</span> {{ commandment.quote_source }}</h4>
                             </div>
                         </div>
                     </div>

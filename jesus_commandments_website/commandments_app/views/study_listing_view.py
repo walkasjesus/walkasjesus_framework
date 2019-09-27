@@ -10,4 +10,4 @@ class StudyListingView(View):
         selected_bible = UserPreferences(request.session).bible
         bible_references.bible = selected_bible
         return render(request, 'commandments/study_listing.html', {'bible_references': bible_references,
-                                                                   'copyrights': selected_bible.copyright})
+                                                                   'bible': selected_bible})

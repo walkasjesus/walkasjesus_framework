@@ -20,6 +20,7 @@ class HsvBible(Bible):
         self.name = 'Herziene Staten Vertaling'
         self.language = 'nl'
         self.formatter = text_formatter
+        self.copyright = 'All scripture quotations in this publication are from the Herziene Statenvertaling, © Stichting HSV 2010. This bible references are online available at www.herzienestatenvertaling.nl. We are very grateful to the creators of these translations for the online availability of Bible texts and search functionality.'
 
         # Do not load if already done by another instance
         if HsvBible._content is None:

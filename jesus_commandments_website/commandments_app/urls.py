@@ -3,6 +3,7 @@ from django.urls import path
 from commandments_app.views.admin.admin_persist_bible_cache import AdminPersistBibleCache
 from commandments_app.views.admin.admin_reset_bibles import AdminResetBibles
 from commandments_app.views.vision_view import VisionView
+from commandments_app.views.termsandconditions_view import TermsView
 from commandments_app.views.detail_view import DetailView
 from commandments_app.views.index_view import IndexView
 from commandments_app.views.listing_view import ListingView
@@ -18,6 +19,7 @@ urlpatterns = [
     path('listing', ListingView.as_view(), name='listing'),
     path('study_listing', StudyListingView.as_view(), name='study_listing'),
     path('vision', VisionView.as_view(), name='vision'),
+    path('termsandconditions', TermsView.as_view(), name='termsandconditions'),
     path('detail/<int:commandment_id>', DetailView.as_view(), name='detail'),
 
     path('admin/reset_bibles', AdminResetBibles.as_view(), name='admin_reset_bibles'),

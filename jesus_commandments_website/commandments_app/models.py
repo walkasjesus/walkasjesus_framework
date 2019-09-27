@@ -186,8 +186,9 @@ class Commandment(models.Model):
         return query.filter(language__in=self.languages, is_public=True)
 
     def _get_translated_bible_references(self, query_set):
-        [ref.set_bible(self.bible) for ref in query_set]
-        return query_set
+        sorted_query_set = sorted(query_set)
+        [ref.set_bible(self.bible) for ref in sorted_query_set]
+        return sorted_query_set
 
     def __str__(self):
         return self.title

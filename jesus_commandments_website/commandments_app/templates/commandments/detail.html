@@ -110,9 +110,9 @@
                     <input type="submit" class="button" value="{% trans 'Select languages' %}">
                 </form>
             </div>
-            <p><i>{% trans 'Each language has its own Media Types. By selecting multiple languages you can see multiple Media types for different languages (if available)' %}.</i></p>        
+            <p><i>{% blocktrans %}Would you like to search for <b>Media Types</b> that are created for a specific language? Choose your language here.  (if available){% endblocktrans %}</i></p>
         </div>
-              
+
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="row justify-content-center align-items-center">
@@ -172,7 +172,9 @@
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
                                 {% endfor %}
                                 </ul>
-                            {% endif %}   
+                            {% endif %}
+                            <br>
+                            <p><b><i>{{ copyrights }}</i></b></p>
                         </div>
                     </div>
                 </div>

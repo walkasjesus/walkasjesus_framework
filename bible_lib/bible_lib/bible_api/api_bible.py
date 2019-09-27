@@ -13,7 +13,7 @@ from bible_lib.verse import Verse
 
 class ApiBible(Bible):
     def __init__(self, bible_id=None, text_formatter: Formatter = PlainTextFormatter()):
-        self.id = bible_id
+        super().__init__(bible_id)
         self.client = CachedBibleApiClient()
         self.formatter = text_formatter
         self.query_builder = QueryBuilder()
@@ -36,7 +36,10 @@ class ApiBible(Bible):
             return 'Not found'
 
         try:
-            verses_html = json.loads(response)['data']['content']
+            json_content = json.loads(response)
+            verses_html = json_content['data']['content']
+            if not self.copyright:
+                self.copyright = json_content['data']['copyright']
         except Exception as ex:
             self.logger.warning(f'Failed to parse {verses_str} for bible {self.id}.')
             self.logger.warning(ex)

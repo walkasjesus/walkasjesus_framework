@@ -94,24 +94,24 @@
 <section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.url is not defined %}{{ commandment.background_drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% endif %}');">
 <div class="overlay"></div>
     <div class="container">
-        <div class="alert alert-info" role="alert">
-            <div class="multiselect">
-                <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                    <select id="multiselect" name="languages" multiple> <!--onchange="this.form.submit()"-->
-                        {% get_available_languages as LANGUAGES %}
-                        {% get_language_info_list for LANGUAGES as languages %}
-                        {% for language in languages %}
-                        <option value="{{ language.code }}">
-                            {{ language.name_local }} ({{ language.code }})
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <input type="submit" class="button" value="{% trans 'Select languages' %}">
-                </form>
-            </div>
-            <p><i>{% blocktrans %}Would you like to search for <b>Media Types</b> that are created for a specific language? Choose your language here.  (if available){% endblocktrans %}</i></p>
-        </div>
+<!--        <div class="alert alert-info" role="alert">-->
+<!--            <div class="multiselect">-->
+<!--                <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}-->
+<!--                    <input name="next" type="hidden" value="{{ request.get_full_path }}">-->
+<!--                    <select id="multiselect" name="languages" multiple> &lt;!&ndash;onchange="this.form.submit()"&ndash;&gt;-->
+<!--                        {% get_available_languages as LANGUAGES %}-->
+<!--                        {% get_language_info_list for LANGUAGES as languages %}-->
+<!--                        {% for language in languages %}-->
+<!--                        <option value="{{ language.code }}">-->
+<!--                            {{ language.name_local }} ({{ language.code }})-->
+<!--                        </option>-->
+<!--                        {% endfor %}-->
+<!--                    </select>-->
+<!--                    <input type="submit" class="button" value="{% trans 'Select languages' %}">-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <p><i>{% blocktrans %}Would you like to search for <b>Media Types</b> that are created for a specific language? Choose your language here.  (if available){% endblocktrans %}</i></p>-->
+<!--        </div>-->
 
         <div class="row justify-content-center">
             <div class="col-md-11">

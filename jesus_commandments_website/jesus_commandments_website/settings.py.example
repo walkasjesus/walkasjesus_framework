@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'froala_editor',
     'watermarker',
     'sorl.thumbnail',
+    'cookielaw',
 ]
 
 MIDDLEWARE = [

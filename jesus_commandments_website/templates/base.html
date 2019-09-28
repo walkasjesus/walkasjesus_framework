@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% load cookielaw_tags %}
 <html lang="en">
   {% cache cache_timeout head cache_on_language %}
   <head>
@@ -41,9 +42,12 @@
     <link rel="stylesheet" href="{% static 'css/select.css' %}">
     <!-- Study Listing page: Table -->
     <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+    <!-- Cookielaw -->
+    <link href="{% static 'cookielaw/css/cookielaw.css' %}" rel="stylesheet">
   </head>
   {% endcache %}
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    {% cookielaw_banner %}
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
@@ -169,8 +173,11 @@
   <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
   <script src="{% static 'js/scrollax.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <!-- Cookie law -->
+  <script src="{% static 'cookielaw/js/cookielaw.js' %}"></script>
+  <!-- Media Language Multiselect  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
-  <!-- Study Listing table -->  
+  <!-- Study Listing table -->
   <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
   <!-- Detailed commandments page: select media -->  
   <script type="text/javascript" src="{% static 'js/bootstrap-select.js' %}"></script>
@@ -223,6 +230,5 @@
   </script>
 
   {% endcache %}
-
   </body>
 </html>

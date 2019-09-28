@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-22 19:10+0000\n"
+"POT-Creation-Date: 2019-09-28 05:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,20 +31,20 @@ msgid "Signup"
 msgstr "S'inscrire"
 
 #: account_app/templates/account/index.html:7
-#: account_app/templates/account/login.html:11 templates/base.html:69
-#: templates/base.html:125
+#: account_app/templates/account/login.html:11 templates/base.html:73
+#: templates/base.html:129
 #, fuzzy
 msgid "Login"
 msgstr "S'identifier"
 
-#: account_app/templates/account/index.html:8 templates/base.html:66
-#: templates/base.html:123
+#: account_app/templates/account/index.html:8 templates/base.html:70
+#: templates/base.html:127
 #, fuzzy
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: account_app/templates/account/index.html:9 templates/base.html:65
-#: templates/base.html:122
+#: account_app/templates/account/index.html:9 templates/base.html:69
+#: templates/base.html:126
 #, fuzzy
 msgid "Profile"
 msgstr "Profil"
@@ -578,7 +578,7 @@ msgstr "Jude"
 msgid "Revelation"
 msgstr "Révélation"
 
-#: commandments_app/models.py:290
+#: commandments_app/models.py:291
 #, fuzzy
 msgid "Could not load text at the moment."
 msgstr "Impossible de charger le texte au moment."
@@ -634,14 +634,10 @@ msgid "Select languages"
 msgstr "sélectionnez langues"
 
 #: commandments_app/templates/commandments/detail.html:113
-#, fuzzy
 msgid ""
-"Each language has its own Media Types. By selecting multiple languages you "
-"can see multiple Media types for different languages (if available)"
+"Would you like to search for <b>Media Types</b> that are created for a "
+"specific language? Choose your language here.  (if available)"
 msgstr ""
-"Chaque langue a ses propres types de médias. En sélectionnant plusieurs "
-"langues, vous pouvez voir plusieurs types de médias pour différentes langues "
-"(le cas échéant)"
 
 #: commandments_app/templates/commandments/detail.html:138
 #, fuzzy
@@ -695,63 +691,81 @@ msgstr ""
 "exactement la même que la principale référence, à la fois concernant le même "
 "principe"
 
-#: commandments_app/templates/commandments/detail.html:190
+#: commandments_app/templates/commandments/detail.html:177
+#: commandments_app/templates/commandments/study_listing.html:150
+msgid "Bible verses copyright"
+msgstr ""
+
+#: commandments_app/templates/commandments/detail.html:192
 #, fuzzy
 msgid "Drawings"
 msgstr "Dessins"
 
-#: commandments_app/templates/commandments/detail.html:209
+#: commandments_app/templates/commandments/detail.html:196
+msgid "Artist"
+msgstr ""
+
+#: commandments_app/templates/commandments/detail.html:211
 #, fuzzy
 msgid "Short Movies"
 msgstr "courts métrages"
 
-#: commandments_app/templates/commandments/detail.html:230
+#: commandments_app/templates/commandments/detail.html:232
 #, fuzzy
 msgid "Songs"
 msgstr "Chansons"
 
-#: commandments_app/templates/commandments/detail.html:251
+#: commandments_app/templates/commandments/detail.html:253
 #, fuzzy
 msgid "Movies"
 msgstr "Films"
 
-#: commandments_app/templates/commandments/detail.html:272
+#: commandments_app/templates/commandments/detail.html:274
 #, fuzzy
 msgid "Pictures"
 msgstr "Des photos"
 
-#: commandments_app/templates/commandments/detail.html:316
+#: commandments_app/templates/commandments/detail.html:286
+#: commandments_app/templates/commandments/detail.html:290
+msgid "Photographer"
+msgstr ""
+
+#: commandments_app/templates/commandments/detail.html:318
 #, fuzzy
 msgid "Testimonies"
 msgstr "témoignages"
 
-#: commandments_app/templates/commandments/detail.html:337
+#: commandments_app/templates/commandments/detail.html:339
 #, fuzzy
 msgid "Blogs"
 msgstr "Les blogs"
 
-#: commandments_app/templates/commandments/detail.html:355
+#: commandments_app/templates/commandments/detail.html:357
 #, fuzzy
 msgid "Sermons"
 msgstr "sermons"
 
-#: commandments_app/templates/commandments/detail.html:376
+#: commandments_app/templates/commandments/detail.html:378
 #, fuzzy
 msgid "Books"
 msgstr "Livres"
 
-#: commandments_app/templates/commandments/detail.html:401
+#: commandments_app/templates/commandments/detail.html:403
 #, fuzzy
 msgid "Questions"
 msgstr "Des questions"
 
-#: commandments_app/templates/commandments/detail.html:402
+#: commandments_app/templates/commandments/detail.html:404
 #, fuzzy
 msgid "Share your hearts together by discussing the following questions:"
 msgstr "Partagez vos coeurs ensemble en discutant des questions suivantes:"
 
-#: commandments_app/templates/commandments/index.html:16 templates/base.html:8
-#: templates/base.html:50
+#: commandments_app/templates/commandments/detail.html:422
+msgid "Quote by"
+msgstr ""
+
+#: commandments_app/templates/commandments/index.html:16 templates/base.html:9
+#: templates/base.html:54
 #, fuzzy
 msgid "Jesus commandments"
 msgstr "commandements de Jésus"
@@ -862,14 +876,14 @@ msgstr "langues"
 
 #: commandments_app/templates/commandments/index.html:125
 #: commandments_app/templates/commandments/listing.html:13
-#: templates/base.html:97
+#: templates/base.html:101
 #, fuzzy
 msgid "If you love Me"
 msgstr "Si tu m'aimes"
 
 #: commandments_app/templates/commandments/index.html:125
 #: commandments_app/templates/commandments/listing.html:13
-#: templates/base.html:97
+#: templates/base.html:101
 #, fuzzy
 msgid "keep my commands"
 msgstr "garder mes commandes"
@@ -926,6 +940,71 @@ msgstr "Aucun commandements sont disponibles."
 #, fuzzy
 msgid "John 14:15"
 msgstr "John 14:15"
+
+#: commandments_app/templates/commandments/privacy.html:12
+#: commandments_app/templates/commandments/termsandconditions.html:12
+msgid "Using"
+msgstr ""
+
+#: commandments_app/templates/commandments/privacy.html:13
+#: templates/base.html:150
+msgid "Privacy Policy"
+msgstr ""
+
+#: commandments_app/templates/commandments/privacy.html:16
+msgid ""
+"\n"
+"\n"
+"                    <p>Jesus Commandments understands that users of the "
+"Jesus Commandments website value their privacy. This privacy statement is to "
+"inform users about the limited information collected by this website and why "
+"it is collected.</p>\n"
+"                    <p>This Privacy Notice is incorporated into and is "
+"subject to the Jesus Commandments <a href=\"/termsandconditions\">Terms and "
+"Conditions</a>.</p>\n"
+"\n"
+"                    <h3><strong>What We Track and Why</strong></h3>\n"
+"                    <b>Cookies and Log File Information</b>\n"
+"\n"
+"                    <p>The Jesus Commandments website will store \"cookies\" "
+"on your system to help improve your experience with the website. Many of "
+"these cookies relate to customizing your visit. For example, allowing you to "
+"set your language, culture and known languages. Most Web browsers "
+"automatically accept cookies, but these can be disabled by changing the "
+"preferences in your internet browser settings. If cookies are disabled "
+"however, your experience of the website and its services will be limited.</"
+"p>\n"
+"\n"
+"                    <p>The site also tracks which resources you visit and "
+"download. This is for the purpose of providing statistics back to the "
+"community and providing you with information on what you have visited. This "
+"information is kept entirely anonymous from the rest of the Jesus "
+"Commandments community: no other user will ever be told where you are "
+"visiting or what you are downloading. The Jesus Commandments team will never "
+"analyze your personal browsing habits – we will merely look at the "
+"aggregated statistical data (for example, the total number of people "
+"visiting a resource, or the number of people visiting this site from a given "
+"country, language or culture.)</p>\n"
+"\n"
+"                    <h3><strong>Registering with the website</strong></h3>\n"
+"\n"
+"                    <p>In order to post resources, join a community, rate "
+"resources or leave comments, you will be required to provide a log in. This "
+"is to prevent fraudulent activity by ensuring that such transactions are not "
+"anonymous. The information that we collect from user registration will never "
+"be used for marketing purposes unless you explicitly request subscription to "
+"a particular newsletter or periodical.</p>\n"
+"\n"
+"                    <p>We do not sell, rent or lease our user lists to third "
+"parties, or provide your user information to them in any way without "
+"explicit permission from you.</p>\n"
+"\n"
+"                    <p><i>For more information about our privacy practices, "
+"please contact us at: <a href=\"mailto:info@jesuscommandments.org"
+"\">info@jesuscommandments.org</a></i></p>\n"
+"\n"
+"                    "
+msgstr ""
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:10
 #, fuzzy
@@ -1297,13 +1376,54 @@ msgstr "Secondaire"
 msgid "Tertiary"
 msgstr "Tertiaire"
 
+#: commandments_app/templates/commandments/termsandconditions.html:13
+#: templates/base.html:150
+msgid "Terms and Conditions"
+msgstr ""
+
+#: commandments_app/templates/commandments/termsandconditions.html:16
+msgid ""
+"\n"
+"                    <h3><strong>General information</strong></h3>\n"
+"                    <p>Our goals with this site is to listen and obey to "
+"Jesus, explain His teachings, let the people get rooted and be fruitful in "
+"the world, to glorify our Father in heaven</p>\n"
+"                    <p>You are free to use any Jesus Commandments resource "
+"so long as it is not for profit or any other commercial purposes, the use is "
+"consistent with the Jesus Commandments values, <a href=\"/vision\">which may "
+"be found here</a>, and your use does not contravene any applicable law or "
+"regulation.</p>\n"
+"                    <p>This means you can:</p>\n"
+"                    <ul>\n"
+"                        <li>Duplicate resources for your own use and/or the "
+"use of your leaders, children, church or group.</li>\n"
+"                        <li>Distribute resources for your own use and/or the "
+"use of your leaders, children, church or group.</li>\n"
+"                    </ul>\n"
+"                    <p>You are not allowed to:</p>\n"
+"                    <ul>\n"
+"                        <li>Adjust or change any resources without our "
+"permission.</li>\n"
+"                        <li>Sell resources or incorporate them in any "
+"commercial offering.</li>\n"
+"                    </ul>\n"
+"                    <p>If you are aware of Jesus Commandments resources "
+"being sold, or have any questions please contact <a href=\"mailto:"
+"info@jesuscommandments.org\">info@jesuscommandments.org</a></p>\n"
+"                    <p>If you copy and/or distribute Jesus Commandments "
+"resources (whether by burning, sending, duplicating or whatever means) "
+"please make reference to <a href=\"/\">www.jesuscommandments.org</a> in "
+"order to let others know about the website and resources.</p>\n"
+"                    "
+msgstr ""
+
 #: commandments_app/templates/commandments/vision.html:13
 #, fuzzy
 msgid "The reason why"
 msgstr "La raison pour laquelle"
 
 #: commandments_app/templates/commandments/vision.html:14
-#: templates/base.html:59
+#: templates/base.html:63
 #, fuzzy
 msgid "Vision"
 msgstr "Vision"
@@ -1575,7 +1695,19 @@ msgstr ""
 "l'amélioration de ce site sur un des points ci-dessus, ou avez-vous des "
 "suggestions ou des corrections, nous \\"
 
-#: commandments_app/templates/commandments/vision.html:53
+#: commandments_app/templates/commandments/vision.html:51
+msgid "Statement of Faith"
+msgstr ""
+
+#: commandments_app/templates/commandments/vision.html:52
+msgid "The Jesus Commandments website's statement of faith, is that of the"
+msgstr ""
+
+#: commandments_app/templates/commandments/vision.html:52
+msgid "Lausanne Covenant"
+msgstr ""
+
+#: commandments_app/templates/commandments/vision.html:55
 #, fuzzy
 msgid ""
 "\"Now the God of peace, that brought again from the dead our Lord Jesus, "
@@ -1605,87 +1737,87 @@ msgstr "Impossible de modifier les langues de l'utilisateur"
 msgid "No languages selected"
 msgstr "Aucune langue sélectionnée"
 
-#: jesus_commandments_website/settings.py:148
+#: jesus_commandments_website/settings.py:149
 #, fuzzy
 msgid "English"
 msgstr "Anglais"
 
-#: jesus_commandments_website/settings.py:149
+#: jesus_commandments_website/settings.py:150
 #, fuzzy
 msgid "Dutch"
 msgstr "néerlandais"
 
-#: jesus_commandments_website/settings.py:150
+#: jesus_commandments_website/settings.py:151
 #, fuzzy
 msgid "German"
 msgstr "allemand"
 
-#: jesus_commandments_website/settings.py:151
+#: jesus_commandments_website/settings.py:152
 #, fuzzy
 msgid "French"
 msgstr "français"
 
-#: templates/base.html:52
+#: templates/base.html:56
 #, fuzzy
 msgid "Menu"
 msgstr "M e n u"
 
-#: templates/base.html:57
+#: templates/base.html:61
 #, fuzzy
 msgid "Home"
 msgstr "Accueil"
 
-#: templates/base.html:58
+#: templates/base.html:62
 #, fuzzy
 msgid "Commandments"
 msgstr "commandements"
 
-#: templates/base.html:60 templates/base.html:111
+#: templates/base.html:64 templates/base.html:115
 #, fuzzy
 msgid "Study them"
 msgstr "Étudiez les"
 
-#: templates/base.html:62 templates/base.html:130
+#: templates/base.html:66 templates/base.html:134
 #, fuzzy
 msgid "Admin Portal"
 msgstr "Portail d'administration"
 
-#: templates/base.html:68
+#: templates/base.html:72
 #, fuzzy
 msgid "Help improving"
 msgstr "Aide amélioration"
 
-#: templates/base.html:108
+#: templates/base.html:112
 #, fuzzy
 msgid "Site Navigation"
 msgstr "Navigation du site"
 
-#: templates/base.html:110
+#: templates/base.html:114
 #, fuzzy
 msgid "List of Commandments"
 msgstr "Liste des commandements"
 
-#: templates/base.html:112
+#: templates/base.html:116
 #, fuzzy
 msgid "Our Vision"
 msgstr "Notre vision"
 
-#: templates/base.html:118
+#: templates/base.html:122
 #, fuzzy
 msgid "Account"
 msgstr "Compte"
 
-#: templates/base.html:126
+#: templates/base.html:130
 #, fuzzy
 msgid "Register"
 msgstr "S'inscrire"
 
-#: templates/base.html:137
+#: templates/base.html:141
 #, fuzzy
 msgid "Contact us"
 msgstr "Contactez-nous"
 
-#: templates/base.html:139
+#: templates/base.html:143
 #, fuzzy
 msgid "Email: "
 msgstr "Email:"
@@ -3466,6 +3598,18 @@ msgstr ""
 msgid "Select object to moderate"
 msgstr ""
 
+#: venv/lib/python3.6/site-packages/tests/test_base.py:22
+msgid "COOKIE_INFO_HEADER"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/tests/test_base.py:23
+msgid "COOKIE_INFO_PARA"
+msgstr ""
+
+#: venv/lib/python3.6/site-packages/tests/test_base.py:24
+msgid "COOKIE_INFO_OK"
+msgstr ""
+
 #: venv/lib/python3.6/site-packages/url_or_relative_url_field/fields.py:9
 #: venv/venv_old2/lib/python3.6/site-packages/url_or_relative_url_field/fields.py:9
 msgid "URL or path"
@@ -3476,10 +3620,8 @@ msgstr ""
 msgid "Obsolete translation kept alive with Viniagrette"
 msgstr ""
 
-#: commandments_app.Blog/description:1 commandments_app.Book/description:1
-#: commandments_app.Drawing/description:1 commandments_app.Movie/description:4
-#: commandments_app.Picture/description:1 commandments_app.Sermon/description:1
-#: commandments_app.ShortMovie/description:7 commandments_app.Song/description:1
+#: commandments_app.Book/description:1 commandments_app.Picture/description:1
+#: commandments_app.Sermon/description:1 commandments_app.Song/description:1
 #: commandments_app.Testimony/description:1
 msgid "nan"
 msgstr ""
@@ -3515,1046 +3657,6 @@ msgstr ""
 msgid "Worship the Lord your God, and serve him only"
 msgstr ""
 
-#: commandments_app.Commandment/title:4
-msgid "Blessed are the poor in spirit, for theirs is the kingdom of heaven"
-msgstr ""
-
-#: commandments_app.Commandment/title:5
-msgid "Blessed are those who mourn, for they will be comforted"
-msgstr ""
-
-#: commandments_app.Commandment/title:6
-msgid "Blessed are the meek, for they will inherit the earth"
-msgstr ""
-
-#: commandments_app.Commandment/title:7
-msgid ""
-"Blessed are those who hunger and thirst for righteousness, for they will be "
-"filled"
-msgstr ""
-
-#: commandments_app.Commandment/title:8
-msgid "Blessed are the merciful, for they will be shown mercy"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:8
-msgid ""
-"The verse prompts us to imitate the characteristics of our God. If He is "
-"merciful, then we, as His children, are obligated to learn to be just as "
-"merciful by His grace and the empowerment of His Spirit. "
-msgstr ""
-
-#: commandments_app.Commandment/title:9
-msgid "Blessed are the pure in heart, for they will see God"
-msgstr ""
-
-#: commandments_app.Commandment/title:10
-msgid "Blessed are the peacemakers, for they will be called children of God"
-msgstr ""
-
-#: commandments_app.Commandment/title:11
-msgid ""
-"Blessed are those who are persecuted because of righteousness, for theirs is "
-"the kingdom of heaven"
-msgstr ""
-
-#: commandments_app.Commandment/title:12
-msgid "Rejoice, for a great reward is coming"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:12
-msgid ""
-"Jesus knew a day of rejoicing was coming for each of His disciples, so He "
-"asked them again to trust in His word. Jesus never spoke to His disciples "
-"about fame, popularity, or wealth. On the contrary, He told them that they "
-"would experience sorrow, weeping, losses, and suffering. We might not "
-"experience these things every day, but they will come to everyone someday, "
-"assuming we remain faithful and obedient to His word. \n"
-"The opportunity to suffer together with Jesus and the description of a "
-"promised reward of disproportionate size are sufficient to motivate "
-"faithfulness, even through the agony of persecution: “I consider that our "
-"present sufferings are not worthy to be compared to the glory that shall be "
-"revealed in us” (Rom 8:18). The eventual benefits are so great that we are "
-"to “continually rejoice”"
-msgstr ""
-
-#: commandments_app.Commandment/title:13
-msgid "Be salty and be at peace with each other"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:13
-msgid ""
-"Salt is an indispensable requirement for the body. Is is both a tasty "
-"condiment and a preservative for food. Jesus told his disciples, “You are "
-"the salt of the earth” (Mat 5:13). They were to be the life-sustaining "
-"element in a dying world that would attract people to the gospel, and they "
-"were to be a preservative in a rotting world of sin. \n"
-"Their salty impact on society would generate “peace with each other”. If the "
-"disciples had kept the salt fresh in themselves, they would not have been "
-"arguing about who would be the greatest in Christ’s kingdom (Mark 9:34). "
-"Each was lusting to be more important that the other (Mark 10:35-45). They "
-"were losing their saltiness. Soon the responsibility of world evangelism "
-"would be placed in their hands, so peace among them was vital (Col 3:15). To "
-"maintain their team spirit and bond of unity, Paul encouraged Christians to "
-"“let your conversation be always full of grace, seasoned with salt” (Col "
-"4:6). We are to keep each other submissive to His word."
-msgstr ""
-
-#: commandments_app.Commandment/title:14
-msgid "Let your light shine"
-msgstr ""
-
-#: commandments_app.Commandment/title:15
-msgid ""
-"Whoever practices and teaches these commands will be called great in the "
-"kingdom of heaven"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:15
-msgid "Do not set aside one of the least of these commands"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:15
-msgid ""
-"I am pleading against a widespread kind of preaching that is Bible-based but "
-"not Bible-saturated.” He gives two reasons why preachers must show the "
-"people where they are getting their points in Scripture: (1) only the word "
-"of God has authority, and (2) only the word of God awakens life. He "
-"concludes, after more than forty years of preparing and delivering sermons, "
-"“As for me, I have nothing of abiding worth to say to you. But God does."
-msgstr ""
-
-#: commandments_app.Commandment/title:16
-msgid "Be patient"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:16
-msgid "Do not be angry with a brother or sister"
-msgstr ""
-
-#: commandments_app.Commandment/title:17
-msgid "Reconcile with your brother as quickly as possible"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:17
-msgid "Let not the sun go down upon your wrath"
-msgstr ""
-
-#: commandments_app.Commandment/title:18
-msgid "Be loyal to your partner"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:18
-msgid "Do not look lustfully to a woman"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:18
-msgid ""
-"In the current culture almost half of the marrriages end up in a divorce. We "
-"always need to follow God’s principles in marriage to resolve conflicts and "
-"stay bonded together. By being loyal to each other, and faithful to God’s "
-"principles, you will have a strong marriage what cannot be broken."
-msgstr ""
-
-#: commandments_app.Commandment/title:19
-msgid ""
-"Blessed are those whose ways are blameless, who walk according to the law of "
-"the Lord"
-msgstr ""
-
-#: commandments_app.Commandment/title:20
-msgid "Overcome evil by doing good"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:20
-msgid "Do not resist an evil person"
-msgstr ""
-
-#: commandments_app.Commandment/title:21
-msgid "Share goods with the needy"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:21
-msgid "If anyone takes what belongs to you, do not demand it back"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:21
-msgid ""
-"The lesson in all of these texts is not restricted to one thing. When God "
-"providentially brings needy people into your life, your new spirit should "
-"respond with a generous, wise, and voluntary sharing of resources. But not "
-"only physically. We can also take this emotionally or mentally. If someone "
-"thirsts for water, give him the living water which Jesus is giving. If "
-"someone is spiritually naked (and very vulnerable), help him get dressed "
-"with the weapon gear from Ephesians 6. \n"
-"Be compassionate and generous with the people whom God will send on your "
-"paths. Generous believers become the models for the body of Christ and "
-"demonstrate the joy of giving. "
-msgstr ""
-
-#: commandments_app.Commandment/title:22
-msgid "Love your enemies and pray for persecutors"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:22
-msgid "Do not say, I’ll do to them as they have done to me"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:22
-msgid ""
-"This sevenfold description of our obligation to love others shows the "
-"characteristics of our geavenly Father. We are expected to reflect the "
-"character and attitudes of our God and Savior. Of course, this is possible "
-"only by the power of the Spirit as He manifests the presence of God. This is "
-"how He is glorified.\n"
-"Jesus begins by addressing “you who are listening.” They were all hearing, "
-"but not all were listening. First, you are to “continually be loving your "
-"enemies”. This is not an emotional live or a friendly love. It is agape "
-"love: a decision to sacrifice for the benefit of others regardless of your "
-"feelings toward them.\n"
-"Second, you are to “do good to those who hate you”, which amplifies how we "
-"are to love our enemies. Good means “excellent, appropriate [or] "
-"beneficial.”\n"
-"Third, God says, “bless those who curse you,”, which means to “speak well "
-"of” anyone who “curses” or speak poorly of you, seeking to damage you.\n"
-"Fourth, you are to “be continually praying for those who mistreat you”. You "
-"must forgive them and pray that God will clarify to them the gospel’s "
-"value. \n"
-"The fifth through seventh commands are not to retaliate (Luke 6:29a), to "
-"give freely (6:29b-30), and to treat others they way we would want to be "
-"treated (6:31). Jesus’s love is unique from the world’s (6:32-33). His "
-"followers stand out because they care for everyone.  "
-msgstr ""
-
-#: commandments_app.Commandment/title:23
-msgid "Be perfect then, just as your Father who is in heaven is perfect"
-msgstr ""
-
-#: commandments_app.Commandment/title:24
-msgid "He that humbleth himself shall be exalted"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:24
-msgid "For whosoever exalteth himself shall be abased"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:24
-msgid ""
-"It is amazing how unashamedly people will tell you how great they are. The "
-"wold’s wisdom is, “If no one beats your drum, beat it yourself.” But Jesus’s "
-"basic rule of wisdom was never to let honor be due to self-promotion. \n"
-"Jesus’s concept of honor, given to the humble, is far from the normal way of "
-"thinking. Some attempt to dive the appearance of humility, however false, to "
-"manipulate others. others misconstrue humility to mean criticizing yourself "
-"in public. True humility only compares itself to Jesus, and those who are "
-"truly humble recognize their personal sinfulness and hold a realistic view "
-"of their limitations and capabilities to serve others. A humble person is "
-"dedicated to making others successful, meeting their needs, and helping them "
-"become all they were designed to be. \n"
-"The more we benefit others, the higher our probability of being recognized "
-"in due time. Waiting to be honored by others pleases Lord and builds good "
-"relationships."
-msgstr ""
-
-#: commandments_app.Commandment/title:25
-msgid "Pray with Faith"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:25
-msgid ""
-"John quoted Jesus when he taught a similar promise as our text: “Therefore "
-"whatever you ask in My name, that I will do, that the Father may be "
-"glorified in the Son. If you ask anything in my name, I will do it” (John "
-"14:13).\n"
-"How much more encouragement do we need to pray for great things that will "
-"honor and glorify the Father through the Son? The Father knows how to help "
-"us glorify Christ before we ask, but He waits for us to be concerned enough "
-"to ask “It shall come to pass that before they call, I will answer. and "
-"while they are still speaking, I will hear” (Isa 65:24. By His response, "
-"everyone will recognize it was God’s doing. \n"
-"Don’t be misled into thinking that this promise is all about you. it is all "
-"about God. James clarifies how to pray, saying, “You want what you don’t "
-"have, so you scheme and kill to get it. You are jealous of what others have, "
-"but you can’t get it, so you fight and wage war to take it away from them. "
-"Yet you don’t have what you want because you don’t ask God for it. And even "
-"when you ask, you don’t get it because your motives are all wrong. You want "
-"only what will give you pleasure.” (James 4:2-3) \n"
-"Stop a moment and think of all the ways you could glorify God through your "
-"life and service. He primarily becomes evident to others by answering the "
-"prayers of His servants who want Him to be recognized as a powerful and "
-"prayer-answering God. If only impossible need do you have that would most "
-"glorify God if it were answered? Pray for His glory’s sake."
-msgstr ""
-
-#: commandments_app.Commandment/title:26
-msgid "Forgive one another"
-msgstr ""
-
-#: commandments_app.Commandment/title:27
-msgid "Fast regularly"
-msgstr ""
-
-#: commandments_app.Commandment/title:28
-msgid "Accumulate treasure in heaven"
-msgstr ""
-
-#: commandments_app.Commandment/title:29
-msgid "Pursue Christ’s kingdom priority"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:29
-msgid "Do not worry about your life"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:29
-msgid ""
-"One of the advantages of becoming a Christian is that you now have a purpose "
-"in life. Jesus called for a complete reorientation of life’s values, "
-"objectives, and purpose. \n"
-"Everyone needs to put bread on the table, but Jesus demands that His "
-"followers “not seek what you should eat or what you should drink, nor have "
-"an anxious mind.” (Luke 12:29). He then states, “For all these things the "
-"nations of the world seek after” (12:30). Jesus expects us to live with a "
-"different motivation and purpose, Neither survival nor comfort is to be our "
-"driving impulse. \n"
-"Luke introduces this command with “instead” to emphasize the opposite focus "
-"from the previous verse for the believer. Jesus said, “The Father knows that "
-"you need these things” (12:30). To begin with, can we trust Him? Can we rest "
-"securely in the awareness that He knows our needs? \n"
-"If we trust in Him, we are free to focus on His temporal and eternal "
-"purposes. He commands us to “be continually or habitually pursuing His "
-"kingdom.” The kingdom needs never end. \n"
-"This was an introduction to the Great Commission: “Go and make disciples of "
-"all nations” (Matt 28:19). Christ’s kingdom is extended by multiplying "
-"individual converts and leading them to surrender to the lordship of Christ "
-"on this earth. \n"
-"How obedient are you today in this task? What is more important: your job, "
-"home or business venture? What if His commitment to meet your needs were "
-"proportional to your commitment to Him? God does not promise riches, but He "
-"does promise to meet the needs of His servants who are reaching and building "
-"disciples in His kingdom. \n"
-"He must be King of your life as well as your Savior. His will must control "
-"your finances, work ethic, ambitions, relationships, thoughts, and daily "
-"plans. As Creator, He promises to take care of you if you are useful to His "
-"kingdom now."
-msgstr ""
-
-#: commandments_app.Commandment/title:30
-msgid "Rebuke your brother in a spirit of meekness"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:30
-msgid "Do not judge, or you too will be judged"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:30
-msgid ""
-"If a brother sins (that is disobays the commands in Scripture) he or she "
-"needs to be confronted directly and privately in a spirit of humility by "
-"another believer. The objective is to help restore the offender. Sin means "
-"“missing the mark”, or an offense against God Himself and His reputation. A "
-"brother should confront the disobedient believer as soon as possible. \n"
-"The word “show him his fault” means “to bring to light or expose”. The "
-"disobedient person may not be aware of the command that he has transgressed. "
-"If done privately, in a spirit of live and confidence, a change of heart is "
-"more likely, and a more intimate bond of brotherhood can result."
-msgstr ""
-
-#: commandments_app.Commandment/title:31
-msgid "Remove your own sins first"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:31
-msgid "Before judging others"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:31
-msgid ""
-"Individuals tend to minimize their own sins while maximizing those of "
-"others. Whenever you seek to warn someone else against pursuing a sinful "
-"behaviour, understand that the person you seek to help could easily see a "
-"weakness or failure in your own life as a beam or log while viewing his own "
-"sin as a splinter. \n"
-"This text is obviously a hyperbole – an exaggerated statement – intented to "
-"provide a vivid picture of the biblical teachings so we may apply it to our "
-"personal lives before we attempt to help others."
-msgstr ""
-
-#: commandments_app.Commandment/title:32
-msgid "Seek, and you shall find"
-msgstr ""
-
-#: commandments_app.Commandment/title:33
-msgid "Knock, and it will be opened for you"
-msgstr ""
-
-#: commandments_app.Commandment/title:34
-msgid "Treat others as you would like to be treated"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:34
-msgid ""
-"The “Golden rule” is not the gospel – that is, no one will go to heaven by "
-"following the Golden Rule or the Sermon on the Mount. These sermons are "
-"policies for living out the Christ life today. The teachings in this context "
-"focus on our attitudes. These are Christlike dispositions, not legal "
-"duties. \n"
-"Our command is similar to saying, “Love your neighbor”. The present-tense "
-"imperative means “to be continuously producing, [or] causing something to "
-"happen”, especially for the benefit of another person in this context. The "
-"Golden Rule has no restrictions, because love is not dependent on the "
-"response of the other person. \n"
-"Our actions toward others should not be determined by their reaction to us. "
-"Our objective is to reflect the attitude of God toward others. His patience, "
-"love, forgiveness, commitment, and care for sinners become our attitude at "
-"all times toward all people."
-msgstr ""
-
-#: commandments_app.Commandment/title:35
-msgid "Be careful that nobody misleads you"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:35
-msgid "Dear friends, do not believe every spirit"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:35
-msgid ""
-"An incorrect view of morality had led the Gentile Corinthians to allow "
-"perverse “sexual immorality” to remain unchallenged within their "
-"congregation. Paul said, this “is not good. Do you now know that a little "
-"leaven leavens the whole lump? Therefore purge out the old leaven, that you "
-"may be a new lump, since you truly are unleavened” (1 Cor 5:6-7).\n"
-"The true disciple is to be alert to the destructive influences of judgmental "
-"legalists and weak, politically correct deniers of biblical truth and "
-"morality. Both of these views teach a critical, retaliatory attitude towards "
-"anyone who opposes their traditions. New Testament instructions and command "
-"are ignored and their value minimized in favor of the legalistic traditions "
-"and politically correct power struggles of intimidating leaders. We are "
-"never to tolerate fear, threats, and intimidation among us."
-msgstr ""
-
-#: commandments_app.Commandment/title:36
-msgid "Listen to Jesus, understand and obey"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:36
-msgid ""
-"Jesus was not just teaching a subject matter. He was communicating truths "
-"about life and eternity. His information was urgent, but all too often his "
-"hearers only gave Him halfhearted attention. \n"
-"The first command is to “continually listen to me.”. This means not just "
-"hearing but also giving “special attention to hear with the ear of the "
-"mind” (Zodhiates. #191). The elements of the truth must be clear before the "
-"dots can be connected. \n"
-"The second command is to “understand” what He was saying. It means to “put "
-"it together, comprehend, assembling individual facts into an organized "
-"whole.” \n"
-"The third command is to “obey”. If you keep doing what you did, you will get "
-"what you did. But if you will give hearing to what Jesus is teaching, you "
-"will do something new.\n"
-"The scene Peter, James and John have witnessed is the only audible message "
-"from God the Father to us: “This is my one dear Son, in whom I take great "
-"delight. Listen to him!”, The purpose was to make sure His disciples took "
-"seriously everything He said and later would say through the Spirit’s "
-"inspiration to the apostles and prophets. \n"
-"Everyone becomes to the one to whom he listens! The most repeated command in "
-"the book of Revelation is this: “He who has an ear, let him hear what the "
-"Spirit says to the churches” (Rev 2:7). Nine times “hear” is a command in "
-"the Revelation. The aorist form of these verbs demands an immediate response "
-"to what is commanded."
-msgstr ""
-
-#: commandments_app.Commandment/title:37
-msgid "Be strong and courageous"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:37
-msgid ""
-"We are never to be afraid of anything that man can do to us, because we can "
-"never be separated from God. Whatever happens to a believer is part of His "
-"plan, so faithfulness is highly prized. If He marks the death of a tiny "
-"sparrow, how much more will He note the persecution or loss of one of His "
-"children? Stay true to Him. It will be worth it all."
-msgstr ""
-
-#: commandments_app.Commandment/title:38
-msgid "Follow Me"
-msgstr ""
-
-#: commandments_app.Commandment/title:39
-msgid "Be moved with inner compassion with the people around you"
-msgstr ""
-
-#: commandments_app.Commandment/title:40
-msgid "Pray for laborers, to sow and harvest"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:40
-msgid ""
-"Jesus concluded His ministry in Galilee, seeking disciples. Here we are "
-"given a glimpse into Jesus’s constant task of recruiting disciples and "
-"challenging them to give up their ambitions and follow Him. \n"
-"Though many (or most?) were focused on their own interests and walked away "
-"from Jesus’s challenge to them (Luke 9:57-61), He told them, “No one, having "
-"put his hand to the plow, and looking back is fit for the kingdom of "
-"God” (9:61). Half-hearted commitments never last. \n"
-"Do the unevangelized reserve a change to hear the gospel? “Certainly”, we "
-"respond, yet our real answer is betrayers by how little we pray for "
-"“workers” to go, by how little we care for people who have never heard, and "
-"how little we help those who are going. Be warned: as you pray for workers, "
-"you may be asking God to send you!"
-msgstr ""
-
-#: commandments_app.Commandment/title:41
-msgid "Proclaim the gospel of Jesus Christ to all nations"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:41
-msgid ""
-"In a mission conference, the banner across the front of the auditorium "
-"stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad "
-"of excuses for why we cannot go to preach the gospel. \n"
-"The resurrected Christ reiterated five times His final charge: “Go into to "
-"all the world.” Christ’s death on the cross was to be proclaimed around the "
-"world. There is no news more dramatic than this: “God made him who had no "
-"sin to be sin for us, so that in Him we might become the righteousness of "
-"God” (2 Cor 5:21). \n"
-"God asked the question: “Then I heard the voice of the Lord saying, ‘Whom "
-"shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He "
-"said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we "
-"could appreciate Isaiah’s courage, or was it a glimpse into the perpetual "
-"heavenly issue? God is asking, “Who cares about our agenda for telling the "
-"world about Jesus?” "
-msgstr ""
-
-#: commandments_app.Commandment/title:42
-msgid "Heal the sick, clean lepers, raise the dead, cast out demons."
-msgstr ""
-
-#: commandments_app.Commandment/title:43
-msgid "Be wise as serpants"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:43
-msgid "Do not throw your pearls to pigs"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:43
-msgid ""
-"Serpants are considered to be wise, that is shrewd, smart, cunning and "
-"cautious. Jesus was a master at turning the traps of the Jews into "
-"unanswerable dilemmas. He was never fooled into condemming Rome’s leaders or "
-"approving their corruption. He was always one step ahead of his accusers."
-msgstr ""
-
-#: commandments_app.Commandment/title:44
-msgid "Tell to people boldly, what Jesus says to you"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:44
-msgid "Do not be afraid of them"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:44
-msgid ""
-"Fear is a paralyzing emotuon impeding development in every area of life. "
-"Many Christians live privately, allowing only a few people to know the well, "
-"and their fear of criticism, rejection, or ridicule keeps them from boldly "
-"telling others about the most important relationship in their lives. \n"
-"\n"
-"We must openly and unashamedly tell to everyone we can about what God has "
-"taught us in private. This is contrary to tentomporary views of political "
-"correctness that tell us to avoid controversy at any cost for fear of "
-"offending someone."
-msgstr ""
-
-#: commandments_app.Commandment/title:45
-msgid "Love God above all"
-msgstr ""
-
-#: commandments_app.Commandment/title:46
-msgid "Deny yourself, take up a cross, and follow Jesus"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:46
-msgid ""
-"First, if you are going to follow Christ, you must decide once and for all "
-"not to pay attention to yourself, to give up self-interest, and, in effect, "
-"to go against your pride or profit. Ouch! When have you given up something "
-"for Christ? Paul wrote, “Such things that once were gains to me these have I "
-"counted loss for Christ” (Phil 3:7).\n"
-"Second, it was necessary for a disciple to “take up his cross.” The "
-"condemned man was forces to carry his own cross to his execution, as Jesus "
-"did. But what the convict did under obligation, the disciple of Christ does "
-"willingly. He willingly accepts the hurt, embarrassment, shame, and "
-"persecution that inevitably will be his lot if he remains loyal to Jesus.\n"
-"Third, he must “keep on continually following [Jesus]”. This means that as "
-"Jesus “suffered for us, leaving us an example, we should follow His "
-"steps” (1 Pet 2:21), especially by obeying His commands (John 15:14).\n"
-"These three actions indicate a true conversion and why the power and filling "
-"of the Spirit is indispensable."
-msgstr ""
-
-#: commandments_app.Commandment/title:47
-msgid "Receive him whom I will send"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:47
-msgid "It is a sin to despise one’s neighbor"
-msgstr ""
-
-#: commandments_app.Commandment/title:48
-msgid "Be generous in secret"
-msgstr ""
-
-#: commandments_app.Commandment/title:49
-msgid "Blessed is he who does not offend Me"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:49
-msgid ""
-"Who do you want as your worst enemy: the world or God? Unfortunately, "
-"everyone has to choose. If you love the world, it may treat you well "
-"temporarily, but it is a fickle and cruel taskmaster. However, such a "
-"compromise with the world makes God an enemy: “Whoever therefore wants to be "
-"a friend of the world makes himself an enemy of God” (James 4:4). But "
-"friendship with God inevitable provokes the wraith of the world system. \n"
-"Jesus was hated at His birth and throughout His ministry. The disciples had "
-"to accept inevitable persecution or walk away, just as the seed sown in "
-"“rocky places” (Matt 13:20) is the one “who hears the word and at once "
-"receives it with joy. But since he has no root, he lasts only a short time. "
-"When trouble or persecution comes because of the Word, he quickly falls "
-"away” (Matt 13:21). We must decide to follow Jesus knowing that it will not "
-"be a popular dicision."
-msgstr ""
-
-#: commandments_app.Commandment/title:50
-msgid "Come to Me, all who are tired and burdened, and I will give you rest"
-msgstr ""
-
-#: commandments_app.Commandment/title:51
-msgid "Take responsibility and learn from Jesus"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:51
-msgid ""
-"In the context of revealing the Father and granting rest to the one who "
-"comes to Jesus in trust, Jesus challenges his followers, “Take my yoke upon "
-"you and learn from Me”. The yoke, with regard to animals, means control and "
-"submission to your owner, but with humans, the imagery signifies slavery to "
-"Jesus and His will. \n"
-"In the Hebrew world, a student is under the yoke of his teacher, which means "
-"he submits to his teachings. This first phrase is then parallel to the "
-"second phrase: “and learn from Me”. The word learn means to become a "
-"“disciple or learner”. \n"
-"As we become like Him, we too become trustworthy, modeling the peace that "
-"only truth can bring to a soul. Let’s become, and make, disciples like Jesus."
-msgstr ""
-
-#: commandments_app.Commandment/title:52
-msgid "Calm words are a tree of life"
-msgstr ""
-
-#: commandments_app.Commandment/title:53
-msgid "Do the will of the Father"
-msgstr ""
-
-#: commandments_app.Commandment/title:54
-msgid ""
-"Give to the emperor what is from the emperor, and to God what is from God"
-msgstr ""
-
-#: commandments_app.Commandment/title:55
-msgid "Receive the Kingdom of God as a child"
-msgstr ""
-
-#: commandments_app.Commandment/title:56
-msgid "Let the children come to Me"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:56
-msgid ""
-"These children wanted to know Jesus personally. Jesus knew that the future "
-"of His church was in the hands of these little children. He also knew that "
-"the humble, open receptivity of these children was in stark contrast to the "
-"stubborn pride of the religious and intellectual people who let their "
-"education, pride, or sophistication overcome the simple faith needed to "
-"believe in Jesus. Anyone of any age who comes to Christ in faith with a "
-"willingness to trust whatever Jesus says has a warm welcome from Jesus now "
-"and later in His kingdom."
-msgstr ""
-
-#: commandments_app.Commandment/title:57
-msgid "Eliminate any cause of temptation"
-msgstr ""
-
-#: commandments_app.Commandment/title:58
-msgid "Be united"
-msgstr ""
-
-#: commandments_app.Commandment/title:59
-msgid "Honor your father and your mother"
-msgstr ""
-
-#: commandments_app.Commandment/title:60
-msgid "Love your neighbor as yourself"
-msgstr ""
-
-#: commandments_app.Commandment/title:61
-msgid "Become like a servant"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:61
-msgid ""
-"One of Jesus’s most remarkable teachings concerned His view of leadership. "
-"He marked a distinction between how the believer leads and how the unsaved "
-"world leads: in the world, some “lord it over,” or control by “authority,” "
-"but this was not the way His followers were to lead their families and "
-"ministries. \n"
-"Jesus did not say there would be no leaders in His new order, but he said "
-"they would lead from entirely different principles. The only way a person "
-"can be a leader is if someone is following him! The question is, why do "
-"people follow any leader? Is it out of fear or anger or public criticism? Is "
-"it the charisma, importance, wealth, or popularity of a leader that attracts "
-"others to blindly follow him? Or is it due to the selfless, caring acts and "
-"edifying commitment of a servant-leader who seeks what is best for his "
-"followers rather than himself?"
-msgstr ""
-
-#: commandments_app.Commandment/title:62
-msgid "Love the Lord your God with all your heart"
-msgstr ""
-
-#: commandments_app.Commandment/title:63
-msgid "Love the Lord your God with all your soul"
-msgstr ""
-
-#: commandments_app.Commandment/title:64
-msgid "Love the Lord your God with all your mind"
-msgstr ""
-
-#: commandments_app.Commandment/title:65
-msgid "Be ready for the coming of Jesus"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:65
-msgid ""
-"<p> In Luke 12:35-40, Jesus begins to gird up your loins and have the lamp "
-"burning. He then called on to be vigilant and ready for the arrival of the "
-"Son of Man.</p>\n"
-"\n"
-"<p>We hardly know the word loin today. A loincloth is a piece of clothing "
-"that consists only of a cotton cloth that is worn around the loins - the "
-"hips. The loins are the center of your body. The Hebrew expression \"the "
-"loins girded\" has more to do with a tunic, an undergarment. If something "
-"had to be done quickly, the tunic was tied around the loins with a leather "
-"belt. It was a starting position of someone who had to take action. In the "
-"East, both men and women wore long clothes that reached the feet. The rug "
-"was held up with the belt, so that the feet and legs had more freedom of "
-"movement. When girdling the loins, the long overcoat was taken up and put "
-"into the belt, or pulled up by the belt, when preparing to do work or "
-"travel. </p>\n"
-"\n"
-"<p>Someone who pulls up his long clothing and ties it around his loins with "
-"a belt, so he can move quickly. The Israelites had to be ready in the night "
-"of their departure from Egypt, the loins girded in order to be able to leave "
-"immediately. (Exodus 12:11). Elijah girded his loins to rush out for Ahab (1 "
-"Kings 18:46). We must also be ready to expect the arrival of the Son of Man "
-"at all times. </p>\n"
-"\n"
-"<p><i>\"Blessed are those slaves whom the Lord will find waking when he "
-"comes.\" (Luke 12:37) </i></p>"
-msgstr ""
-
-#: commandments_app.Commandment/title:66
-msgid "Use your talents to honor the Father"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:66
-msgid ""
-"There is no question that we are all unworthy of praise, but the word "
-"“undeserving” (Luke 17:10) means to be “useless, of no use or profit, or "
-"worthless.” Such a person is like the steward who received a talent of "
-"silver from his master, but was afraid to do anything with it and simply "
-"returned it to his master. There is no indication in the text that any oh "
-"the three stewards were told what to do with the wealth they had been given. "
-"The one who produced nothing more than what he was given was “useless” "
-"because he was unproductive. \n"
-"Employers become frustrated when they must tell their employees what to do "
-"every day, The better employee knows what needs to be done and uses his "
-"ingenuity, creativity, and skills to make the employer successful and "
-"accomplish his mission. Every employer dreams about this kind of employee. \n"
-"The classic illustration if this principle is the Great Commission. Jesus "
-"told the Twelve and other listeners to make sure the gospel is preached to "
-"every tongue, tribe, people, and ethnic people group on earth (Matt 24:14. "
-"28:19-20). He never said how it should be done or who should do it. He "
-"expects the profitable servant to figure it out so that He may reward the "
-"servant for his creative service. \n"
-"The judgment seat of Christ is all about discerning who is "
-"“good” (profitable, useful) and who is “bad” (worthless, cowardly) for the "
-"kingdom’s sake (2 Cor 5:10). It is not about who has been good or bad "
-"morally but about who has contributed to expanding the kingdom around the "
-"globe without having to be told how – just because they know it is their "
-"Savior’s desire. All the rewards of heaven are promised to this kind of "
-"obedient believer."
-msgstr ""
-
-#: commandments_app.Commandment/title:67
-msgid "Celebrate the Lord’s supper"
-msgstr ""
-
-#: commandments_app.Commandment/title:68
-msgid "Make disciples of all nations"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:68
-msgid ""
-"As Jesus departed the earth, He gave His five hundred disciples in Galilee "
-"this last command. It “means not only to learn, but to become attached to "
-"the teacher and be his follower in doctrine and conduct of life” (Strong’s "
-"Greek Lexicon). It is used once more in the New Testament in Acts 14:21, "
-"“when they had preached the gospel to that city and made many disciples,” "
-"which ties together “preached the gospel” with “make disciples” as their "
-"core ministry."
-msgstr ""
-
-#: commandments_app.Commandment/title:69
-msgid "Get baptized"
-msgstr ""
-
-#: commandments_app.Commandment/title:70
-msgid "Always keep in mind that Jesus is with us"
-msgstr ""
-
-#: commandments_app.Commandment/title:71
-msgid "Have faith in God"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:71
-msgid ""
-"Teaching moments are spontaneous opportunities to illustrate an important "
-"principle or truth. During a Jewish holiday, Jesus and Hid disciples had "
-"been walking back and forth from Bethany to Jerusalem. The previous morning, "
-"they walked past a fig tree that was barren of fruit. Strangely, He "
-"declared, “let no one eat fruit from you ever again”. He was setting up a "
-"future teaching moment. \n"
-"The next morning, walking back into Jerusalem, they passed this same fig "
-"tree, only now “the fig tree dried up from the roots”. Shocked, Peter "
-"exclaimed, “Rabbi, look! The fig tree which You cursed was withered away”, "
-"to which Jesus replied, “Have faith in God”. \n"
-"The disciples were to have an unwavering trust in the omnipotent God who can "
-"do anything that He wills to do for His own purposes. The key to an "
-"unconditional faith is to have a “no-matter-what” trust and an “anything-is-"
-"possible” kind of confidence in the God who cares. through He may seem "
-"silent at time, He is always present and can change things any time He "
-"wants. \n"
-"If you fully give you life over to God (Rom 12:1-2), then whatever God "
-"allows to happen in your life is OK. It belongs to Him. He can do with it "
-"whatever He wants, even if that means tragedies or miraculous interventions. "
-"Either one is OK, since now your life belongs to Jesus. He makes no "
-"mistakes. \n"
-"The one who learns to trust God fully knows He can be trusted with however "
-"He may decide to answer to his prayers. Jesus continues in the next verse, "
-"“For assuredly, I say to you, whoever says to this mountain, ‘Be removed and "
-"be cast into the sea,’ and does not doubt in his heart, but believes that "
-"those things he says will be done, he will have whatever he says.” \\n\n"
-"Jesus, by using hyperbole, illustrated the virtually limitless possibilities "
-"for the believer with faith who “does not doubt in his heart”. \n"
-"Earlier Jesus had said, “With men it is impossible, but not with God. for "
-"with God all things are possible” (Mark 10:27). As committed as you are to "
-"His word and purpose in life, you can count on His power to assist you to "
-"accomplish His will and purpose for your life. “Have faith…”"
-msgstr ""
-
-#: commandments_app.Commandment/title:72
-msgid "Love the Lord your God with all your strenght"
-msgstr ""
-
-#: commandments_app.Commandment/title:73
-msgid "Trust that the Spirit will guide you"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:73
-msgid "Do not worry about what to say"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:73
-msgid ""
-"Jesus gave His disciples instructions for how to respond to inevitable "
-"persecution. They were commanded to “stop worrying” (implying that they were "
-"worrying) and to “continuously say” what the Spirit brought to their minds "
-"at the time (John 14:26). What we have learned of His word will come back to "
-"our minds when we need it: “Now when they saw the boldness of Peter and "
-"John, … they marveled. And they realized that they had been with "
-"Jesus” (Acts 4:13)."
-msgstr ""
-
-#: commandments_app.Commandment/title:74
-msgid "Stay alert and pray not to fall into temptation"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:74
-msgid ""
-"One of the many attributes of Jesus was His ability to be ready for whatever "
-"happened. What seemed to hurt Him most was the selfishness or disinterest of "
-"His closest friends when He knew they would e tempted and fail Him. \n"
-"To the very end, Jesus was committed to training His disciples. He was "
-"telling them the secret of inner fortitude. Three times Jesus interrupted "
-"His prayers to check on His disciples who had lost interest and falles "
-"asleep. Each time, Jesus exhorted all three to “Stay awake”, or to stay "
-"alert for spiritual dangers, deceptions, or disillusionments. They were to "
-"“pray”, which expresses total dependence on the power and presence of God. \n"
-"The “spirit”, which is willing, must be strengthened through prayer to "
-"overcome the weakness of the self-interest of the flesh. "
-msgstr ""
-
-#: commandments_app.Commandment/title:75
-msgid "Fear Him"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:75
-msgid ""
-"Jesus commanded his disciples to be fearless even when threatened with "
-"physical death for proclaiming the good news. At worst, the opposition can "
-"only bring about physical death, which is meaningless in comparison to Him "
-"would likely result in a death sentence from the state, but is was not to be "
-"feared, is was to be welcomed! \n"
-"God commands us to fear Him. Whomever you fear, you will obey. When people "
-"fear the authorities are watching or will find about their actions, they "
-"tend to obey to the laws. \n"
-"Likewise, Christians can become presumptuous because of God’s patience, "
-"deceiving themselves into believing that God will do nothing. They think He "
-"is too loving and forgiving to punish them. Satan deceived Eve into "
-"believing that God would do nothing if she disobeyed. When she believed the "
-"lie, she became vulnerable to disobedience. \n"
-"Proverbs 1:7 says: “The fear of the Lord is the beginning of knowledge, but "
-"fools despise wisdom and discipline.” The first lesson a believer should "
-"learn – the beginning of wisdom – is that it is a painful experience to "
-"disobey the Lord. The author of Hebrews wrote “My son, do not despise the "
-"chastening of the Lord. Nor be discouraged when you are rebuked by Him. For "
-"whom the Lord lives He chastens. And scourges every son whom He receive. But "
-"if you are without chastening, of which all have become partakers, then you "
-"are illegitimate and not sons” (Heb 12:5-6). Christians are forgiven their "
-"sins, but God will teach us not to be disobedient by certain chastisement. \n"
-"If we do not fear God’s promise of chastisement, then we tend to be morally "
-"loose. If we fear that He will do what He says in His word, then we begin to "
-"take His commands seriously. This is a healthy motivation to learn what God "
-"expects of us as His children – this is where wisdom begins."
-msgstr ""
-
-#: commandments_app.Commandment/title:76
-msgid "Be content with what you have"
-msgstr ""
-
-#: commandments_app.Commandment/title_negative:76
-msgid "Be wary of greed"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:76
-msgid ""
-"Greed enters our lives camouflaged as innocent ambition to be the best, but "
-"the masquerade hides the desie to be better, wealthier, or famous – and to "
-"own more or better things – than anyone in our circle of friends. This quest "
-"for acceptance, respect, or honor is motivated by the belief that this is "
-"the way to find fulfillment and satisfaction in life. Greed usurps the place "
-"of God in our lives, yet is a poor substitute, however enticing. \n"
-"When Jesus asked about a man’s inheritance, He knew the man was preoccupied "
-"with getting his hands on the wealth that he thought he needed and was due "
-"to him. Jesus took the occasion to explain the vice that turns our hearts "
-"against the will and purpose of God. He gives two commands asking us to be "
-"alert against being deceived or blind sided. We are told to “continually be "
-"taking heed,” “perceiving with the mind,” and to “continually be keeping "
-"ourselves on guard,” or “be aware of” traps or vices of “greed” or "
-"covetousness – that is, the “constant desire or thirst to have more and "
-"more.” \n"
-"How do you know if greed has taken root in your heart? The first symptom is "
-"discontent with whatever you have and the willingness to sacrifice "
-"everything or anyone to acquire more. As soon as one item is acquired, you "
-"are already thinking of something else you need. \n"
-"The second symptom is the anger felt when someone or something impedes tour "
-"acquisition of what you believe is necessary for your happiness. When you "
-"believe you need a sizable bank account valance to feel secure about your "
-"future, then whenever a preacher mentions tithing or generosity, your "
-"emotions will flare up. Anger is a reaction to something or someone that "
-"interferes with what you think you need for security or success. Do you "
-"resent being asked for your help?"
-msgstr ""
-
-#: commandments_app.Commandment/title:77
-msgid "Fight to enter through the narrow gate"
-msgstr ""
-
-#: commandments_app.Commandment/title:78
-msgid "Look forward to the wedding of the Lamb"
-msgstr ""
-
-#: commandments_app.Commandment/title:79
-msgid "Find the lost sheep"
-msgstr ""
-
-#: commandments_app.Commandment/title:80
-msgid "Listen to God’s Word"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:80
-msgid ""
-"In the story of the rich man and Lazarus, the rich man is suffering the "
-"pains of hell while pleading with Abraham to send someone to tell his five "
-"brothers about the reality of hell. He was convinced that if his brothers "
-"talked to someone sent back from the dead, they would believe. \n"
-"But Abraham responded, “They have the Old Testament prophets, obey them” "
-"This is the message of Abraham through Christ’s message to the world. If you "
-"want to know the reality of eternity, then learn well the revealed word of "
-"God and obey what you find there. If the rich man’s brothers would not "
-"respond to the major message of God is His word, then they would not listen "
-"to a messenger  even if he came from the grave. \n"
-"God is amazingly gracious with His creatures, but they have to choose. If "
-"they choose to live life without God, paying no attention to His word, then "
-"God will let them do so in this life and then forever live without Him "
-"forever. \n"
-"God’s primary means of communicating His will and hope for mankind is "
-"through His written word. It seems men want any other means to hear from God "
-"except a revealed written word. Jesus came to declare God’s will and then "
-"inspired His chosen disciples to record His will for all time. Now the only "
-"way we will ever know His will is to search it out in His written word. \n"
-"Second, He reveals the principle that it is not miraculous messengers or "
-"signs that will convert a soul. The brothers would be shocked or awestruck "
-"by the appearance of such resurrected souls with a message directly from "
-"hell, but this would have no life-changing power. They might be so awestruck "
-"that they would superficially worship God even more, but they would "
-"ultimately fail to yield to His commands. \n"
-"A follower must believe from the heart – that is, he must wants Jesus to be "
-"constant companion and His authority in this life. Miracles are only "
-"effective in convincing people that God is real, but they do not make a "
-"person want Jesus as a permanent part his life. \n"
-"Abraham in essence told the rich man, “No! This is not how God works with "
-"men.” The only way to know the truth that will free the sinner from his sins "
-"is through the written word of God."
-msgstr ""
-
-#: commandments_app.Commandment/title:81
-msgid "Strengthen and encourage your brothers and sisters"
-msgstr ""
-
-#: commandments_app.Commandment/title:82
-msgid "Remain in Me"
-msgstr ""
-
-#: commandments_app.Commandment/devotional:82
-msgid ""
-"Please take a moment to read the blog below of John Piper who explains how "
-"to abide in Christ."
-msgstr ""
-
-#: commandments_app.Commandment/title:83
-msgid "We are called to glorify the Name of God in Christ Jesus!"
-msgstr ""
-
-#: commandments_app.Commandment/title:84
-msgid "Herd my sheep"
-msgstr ""
-
 #: commandments_app.Movie/description:1
 msgid ""
 "If there is one part of the Bible that has undergone more scrutiny and abuse "
@@ -4568,17 +3670,6 @@ msgstr ""
 msgid ""
 "A seasoned journalist chases down the biggest story in history. Is there "
 "credible evidence that Jesus of Nazareth really is the son of God?"
-msgstr ""
-
-#: commandments_app.Movie/description:3
-msgid ""
-"Contemporary freshman and devout Christian, Josh Wheaton, finds his faith "
-"challenged on the first day of philosophy by the dogmatic and argumentative "
-"professor Radisson. Radisson starts his lecture by informing the students "
-"that they must deny, in writing, that God exists, or otherwise expect an "
-"insufficient grade. While most students write the words \"God is dead\" on a "
-"paper, Josh faces a decision. He must choose between his faith and his "
-"future."
 msgstr ""
 
 #: commandments_app.Question/text:1
@@ -4601,421 +3692,14 @@ msgstr ""
 msgid "Tell each other how you recognize fruits in the others life"
 msgstr ""
 
-#: commandments_app.Question/text:5
-msgid ""
-"During the day, do you pay attention for people around you who need help?"
-msgstr ""
-
-#: commandments_app.Question/text:6
-msgid "When was the last time you were merciful?"
-msgstr ""
-
-#: commandments_app.Question/text:7
-msgid "Has sin corrupted your saltiness?"
-msgstr ""
-
-#: commandments_app.Question/text:8
-msgid "Has your self-interest made you disinterested in transforming others?"
-msgstr ""
-
-#: commandments_app.Question/text:9
-msgid "Can you be graciously confrontational?"
-msgstr ""
-
-#: commandments_app.Question/text:10
-msgid "When was the last time you were generous?"
-msgstr ""
-
-#: commandments_app.Question/text:11
-msgid "Do you really want to be a follower of Jesus?"
-msgstr ""
-
-#: commandments_app.Question/text:12
-msgid ""
-"Enemies are the people who God puts on your way which are hard for you to "
-"love. Who are enemies for you? "
-msgstr ""
-
-#: commandments_app.Question/text:13
-msgid "Ask others, what kind of sins do they see with you?"
-msgstr ""
-
-#: commandments_app.Question/text:14
-msgid "What sins do you want to get rid off?"
-msgstr ""
-
-#: commandments_app.Question/text:15
-msgid "What makes it difficult for you to listen, understand and obey?"
-msgstr ""
-
-#: commandments_app.Question/text:16
-msgid "Who cares about our agenda for telling the world about Jesus?"
-msgstr ""
-
-#: commandments_app.Question/text:17
-msgid "How can you be not commited to what your Savior is all about?"
-msgstr ""
-
-#: commandments_app.Question/text:18
-msgid "How bold is your witness?"
-msgstr ""
-
-#: commandments_app.Question/text:19
-msgid "Will you give up your life to follow Christ?"
-msgstr ""
-
-#: commandments_app.Question/text:20
-msgid "Who do you want as your worst enemy: the world or God?"
-msgstr ""
-
-#: commandments_app.Question/text:21
-msgid ""
-"Jesus  talks  much  about  the  Kingdom  of  God  in  His  ministry.  What "
-"is the Kingdom of God, and what does it mean to receive it?"
-msgstr ""
-
-#: commandments_app.Question/text:22
-msgid ""
-"What characteristics of children does Jesus want His disciples to recognize "
-"and emulate in receiving His Kingdom?"
-msgstr ""
-
-#: commandments_app.Question/text:23
-msgid ""
-"Why  is  receiving  Jesus  and  His  Kingdom  better  than  anything  this "
-"world has to offer?"
-msgstr ""
-
-#: commandments_app.Question/text:24
-msgid ""
-"What would it look like in your work, finances, relationships, and "
-"neighborhood to receive the Kingdom of God like a child? "
-msgstr ""
-
-#: commandments_app.Question/text:25
-msgid "What talents do you use to glorify the Father?"
-msgstr ""
-
-#: commandments_app.Question/text:26
-msgid "In what ways will you help making disciples?"
-msgstr ""
-
-#: commandments_app.Question/text:27
-msgid "Imagine yourself on trial for your faith"
-msgstr ""
-
-#: commandments_app.Question/text:28
-msgid "Have you experienced the presence of Christ in areas of testing?"
-msgstr ""
-
-#: commandments_app.Question/text:29
-msgid "Did you have the courage to be true to Him?"
-msgstr ""
-
-#: commandments_app.Question/text:30
-msgid ""
-"Do you recognize one of the symptoms for greed mentioned in the description?"
-msgstr ""
-
-#: commandments_app.Question/text:31
-msgid "Once you know what He says, can you trust it?"
-msgstr ""
-
-#: commandments_app.Question/text:32
-msgid ""
-"How much time do you take for reading His word and searching for His will?"
-msgstr ""
-
-#: commandments_app.ShortMovie/description:1
-msgid ""
-"Though the world is by plagued by suffering due to the realities of sin, "
-"death, and evil, God is calling us to seek refuge in the only place it can "
-"truly be found...His presence. A symbolic adaptation of Psalm 46."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:2
-msgid ""
-"This two minute short reveals the great need to reach people who have no "
-"access to the Gospel and how God's Spirit has been moving to reach the "
-"unengaged of Mali."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:3
-msgid ""
-"Kyle has it all figured out. He’s got the girls, the grades, and lives at "
-"the best party house on campus. But one fateful day, Kyle’s heart stops "
-"beating and he suddenly comes face to face with a dark truth that he’s "
-"ignored his entire life."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:4
-msgid ""
-"Since January 18, 2011, Egypt has been in a state of civil and political "
-"unrest, but in the midst of the violence and uncertainty, God is moving in a "
-"BIG way."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:5
-msgid ""
-"Inspired by the age-old question \"What is your life?\", this short film "
-"challenges the promises of the American dream and presents an alternative "
-"that offers so much more."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:6
-msgid ""
-"Jesus compared the kingdom of God to one of the smallest seeds on Earth and "
-"over 2000 years later, the truth of this teaching can be seen all across the "
-"globe."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:8
-msgid ""
-"We all suffer at the hands of other people. In Junko’s case, she was abused "
-"as a child and found herself isolated and in deep sorrow. Then, a gradual "
-"feeling of love grew in her heart and opened the door to a life that she "
-"never knew existed."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:9
-msgid ""
-"Sarah enjoys relating with people, but when an encounter with a Deaf woman "
-"challenges her ability to connect, God redefines what it means for her to be "
-"a follower."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:10
-msgid ""
-"One man's life changed the course of history for billions of people across "
-"the globe. He is both revered and reviled, famed and feared and you know who "
-"he is without a single mention of his name."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:11
-msgid ""
-"At the of age 70, Bettie Kaufmann has a conversation with God. Little does "
-"she know that this one interaction will eventually send her to jail."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:13
-msgid ""
-"What if God asked you to leave everything you know behind? Well, that’s what "
-"happens to Marc and what God does with his response radically changes how "
-"residents of Sherbrooke, Québec see Jesus."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:14
-msgid ""
-"Samuel loves Jesus and loves children, so God used him in a very big way."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:15
-msgid ""
-"There is an emptiness inside each of us that cannot be filled by life’s "
-"pursuits or ignored by its distractions. However, beyond the emptiness there "
-"is a voice calling. Do you hear the voice? Will you follow the call?"
-msgstr ""
-
-#: commandments_app.ShortMovie/description:16
-msgid ""
-"Over the span of a three and a half year wait, Peter and Erin realize that "
-"they are adopting for reasons much more personal than once thought. They are "
-"adopting, because they were adopted."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:17
-msgid ""
-"Filmed in six languages across five continents, this short film captures the "
-"faith-filled thoughts of children as they contemplate the many attributes of "
-"God."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:18
-msgid ""
-"Noah is homeless. Dwight and his family are his neighbors. Their friendship "
-"will challenge you to “love your neighbor as yourself”."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:19
-msgid ""
-"\n"
-"Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with "
-"difficulty, but at the finish line awaits an imperishable reward that is "
-"given to those who persevere…Christ Himself."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:20
-msgid ""
-"This is El Shaddai. She is an Ethiopian orphan who is being raised by her "
-"adopted Ethiopian parents to love Jesus and to sing about His Word. This is "
-"her act of worship."
-msgstr ""
-
-#: commandments_app.ShortMovie/description:21
-msgid ""
-"pre·em·i·nent | adj. Superior to or notable above all others; outstanding. "
-"(Based on Colossians 1: 15-23)"
-msgstr ""
-
-#: commandments_app.Testimony/description:2
-msgid ""
-"Jason and Tracy were ecstatic to find out that they were expecting, but when "
-"the couple is told that their daughter is “incompatible with life”, they "
-"begin a journey that will forever change how they view God’s love."
-msgstr ""
-
-#: commandments_app.Testimony/description:3
-msgid ""
-"While searching for direction during a sabbatical with his wife, Jay wrote "
-"three letters in the sand: WWH. God responded by sending them to one of the "
-"most dynamic cities in the world, Rio de Janeiro."
-msgstr ""
-
-#: commandments_app.Testimony/description:4
-msgid ""
-"Do you struggle in your marriage? Takashi and Naoko did. Their shame and "
-"brokenness left their marriage on the brink of total collapse. Then they "
-"found true love…not in each other, but in a person that would transform "
-"their family completely."
-msgstr ""
-
-#: commandments_app.Testimony/description:5
-msgid ""
-"At the age of 41, Cory starts having horrific nightmares of extreme abuse. "
-"Once he realizes that his dreams are actually repressed memories from his "
-"childhood, Cory begins a life-changing journey that will forever transform "
-"his relationship with God."
-msgstr ""
-
-#: commandments_app.Testimony/description:6
-msgid ""
-"A powerfull testimony of a woman, who’s been in the concentration camps by "
-"the nazis, and still learned to forgive"
-msgstr ""
-
-#: commandments_app.Testimony/description:7
-msgid "A powerfull testimony of a nl famous christian singer"
-msgstr ""
-
-#: commandments_app.Testimony/description:8
-msgid ""
-"Anderson and Robson came to know the love and grace of Jesus in the midst of "
-"poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
-"same love and grace in one of the most notorious favelas in Rio de Janeiro, "
-"The City of God."
-msgstr ""
-
-#: commandments_app.Testimony/description:9
-msgid ""
-"In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs, "
-"a normal home, a normal life. Then God called them out of the normal and "
-"into His mission."
-msgstr ""
-
-#: commandments_app.Testimony/description:10
-msgid ""
-"\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered "
-"after being born without limbs.  Nick discovered God's miraculous plan for "
-"his life as a worldwide evangelist sharing the message of redemption through "
-"Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
-"preach to every single soul on the planet: 7 billion people!"
-msgstr ""
-
-#: commandments_app.Testimony/description:11
-msgid ""
-"Where were you on March 11, 2011 when the Tohoku earthquake shook Japan? "
-"Yuji was at work, and with Tokyo’s power grid shut down, he journeyed on "
-"foot across the city to discover a message waiting for him that would change "
-"his life forever."
-msgstr ""
-
-#: commandments_app.Testimony/description:12
-msgid ""
-"When Nilton Cordeiro was young, he heard about the love and grace of Jesus "
-"Christ through an old hymn. This love and grace quickly captured his heart "
-"and would change his life forever."
-msgstr ""
-
-#: commandments_app.Testimony/description:13
-msgid ""
-"For years, Walt and Annie struggled with infertility, but in a single moment "
-"they realized that God was writing a beautiful story for them that was over "
-"20 years in the making."
-msgstr ""
-
-#: commandments_app.Testimony/description:14
-msgid ""
-"Do you struggle with depression? So did Yumiko. She hated herself and even "
-"dreamt of running in front of a train to end her life. But hope came her way "
-"in the last place she ever expected."
-msgstr ""
-
-#: commandments_app.Testimony/description:15
-msgid ""
-"When Petra loses her mother at a young age, she sets off on a journey to "
-"find hope and healing for her loss. This decade-long search eventually leads "
-"her to discover that the answer she’s been looking for has been pursuing her "
-"all along."
-msgstr ""
-
-#: commandments_app.Testimony/description:16
-msgid ""
-"When Crystal Clapp gave her life to Jesus Christ, everything changed. Her "
-"thoughts became His thoughts. Her will became His will. The old was gone "
-"and, soon enough, so was she."
-msgstr ""
-
-#: commandments_app.Testimony/description:17
-msgid ""
-"This two minute short reveals God's desire for unity and how the Evangelical "
-"and Orthodox churches in Egypt have united together to exalt Christ as the "
-"Head of His Church."
-msgstr ""
-
-#: commandments_app.Testimony/description:18
-msgid ""
-"Are you looking for joy in life? As a gifted performer, singing brought "
-"Atsushi joy. It also brought him to one of the most unlikely places: a "
-"Gospel Choir practice. It wasn’t long before the lyrics he sang opened his "
-"eyes to a joy greater than what music alone could provide."
-msgstr ""
-
-#: commandments_app.Testimony/description:19
-msgid ""
-"We all have unfulfilled dreams. For Ritsuko, it was finding fame, love, and "
-"acceptance. However, when this dream disappeared, a glimmer of hope arose "
-"that not only quenched her feelings of despair, but provided more love and "
-"acceptance than she could ever imagine."
-msgstr ""
-
-#: commandments_app.Testimony/description:20
-msgid ""
-"Touch Bin lived most of her life gripped by fear, pain, and hopelessness, "
-"but when God opened her eyes to the truth of Christ, she left the path of "
-"death and began a journey toward life."
-msgstr ""
-
-#: commandments_app.Testimony/description:21
-msgid ""
-"Josiah grew up in the Amazon completely convinced that he was luckiest kid "
-"on Earth, but when tragedy struck at the age of 13, God revealed to him a "
-"much greater identity."
-msgstr ""
-
-#: commandments_app.Testimony/description:22
-msgid ""
-"Nate & Ruth Reutter were only moments away from having their first child "
-"while serving as missionaries along the Amazon River in Brazil. Then "
-"everything changed...most dramatically their faith in Christ and His living "
-"Word."
-msgstr ""
-
-#: commandments_app.Testimony/description:23
-msgid ""
-"Lore and Michael started their family with great hope for the future, but "
-"when their son’s life begins to spiral downward, they come face to face with "
-"what it truly means to trust in God."
-msgstr ""
+#, fuzzy
+#~ msgid ""
+#~ "Each language has its own Media Types. By selecting multiple languages "
+#~ "you can see multiple Media types for different languages (if available)"
+#~ msgstr ""
+#~ "Chaque langue a ses propres types de médias. En sélectionnant plusieurs "
+#~ "langues, vous pouvez voir plusieurs types de médias pour différentes "
+#~ "langues (le cas échéant)"
 
 #, fuzzy
 #~ msgid "Your account doesn\\"

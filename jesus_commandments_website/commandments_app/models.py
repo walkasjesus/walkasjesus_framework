@@ -438,7 +438,7 @@ class File(models.Model):
 class Question(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    text = models.TextField(default='')
+    text = models.CharField(max_length=256, default=None, blank=True, null=True)
 
     class Meta:
         unique_together = ['commandment', 'text']

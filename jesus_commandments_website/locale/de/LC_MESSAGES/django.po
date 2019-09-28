@@ -74,10 +74,13 @@ msgid "Your username and password didn't match. Please try again."
 msgstr "Ihr Benutzername und Passwort didn \\"
 
 #: account_app/templates/account/login.html:23
+#, fuzzy
 msgid ""
-"Your account doesn't have access to this page. To proceed, please login with "
-"an account that has access."
+"Your account doesn't have access to this page. To proceed, please login with"
+" an account that has access."
 msgstr ""
+"Ihr Konto hat keinen Zugriff auf diese Seite. Um fortzufahren, melden Sie "
+"sich bitte mit einem Konto, das Zugriff hat."
 
 #: account_app/templates/account/login.html:26
 #, fuzzy
@@ -130,13 +133,15 @@ msgstr ""
 #: account_app/templates/registration/signup.html:20
 #, fuzzy
 msgid "Adding or correcting commandments along with their Bible references"
-msgstr "Das Hinzufügen oder Korrigieren Gebote zusammen mit ihren Bibelstellen"
+msgstr ""
+"Das Hinzufügen oder Korrigieren Gebote zusammen mit ihren Bibelstellen"
 
 #: account_app/templates/registration/signup.html:23
 #, fuzzy
 msgid ""
 "Adding media items (Movies, Books, Testimonies, Blogs, Songs, Pictures, "
-"Illustrations and Sermons) which are related to the corresponding commandment"
+"Illustrations and Sermons) which are related to the corresponding "
+"commandment"
 msgstr ""
 "Hinzufügen von Medienobjekten (Filme, Bücher, Zeugnisse, Blogs, Songs, "
 "Bilder, Illustrationen, Bilder und Predigten), die mit dem entsprechenden "
@@ -632,10 +637,13 @@ msgid "Select languages"
 msgstr "wählen Sprachen"
 
 #: commandments_app/templates/commandments/detail.html:113
+#, fuzzy
 msgid ""
 "Would you like to search for <b>Media Types</b> that are created for a "
 "specific language? Choose your language here.  (if available)"
 msgstr ""
+"Möchten Sie für <b> Medientypen suchen </ b>, die für eine bestimmte Sprache"
+" erstellt werden? Wählen Sie Ihre Sprache hier. (wenn verfügbar)"
 
 #: commandments_app/templates/commandments/detail.html:138
 #, fuzzy
@@ -670,7 +678,8 @@ msgid ""
 "the primary, but expand or explain the same principle"
 msgstr ""
 "Sekundäre Referenzen sind zusätzliche Referenzen, die nicht genau das "
-"gleiche wie die primären, sondern erweitern oder das gleiche Prinzip erklären"
+"gleiche wie die primären, sondern erweitern oder das gleiche Prinzip "
+"erklären"
 
 #: commandments_app/templates/commandments/detail.html:168
 #, fuzzy
@@ -689,8 +698,9 @@ msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:177
 #: commandments_app/templates/commandments/study_listing.html:150
+#, fuzzy
 msgid "Bible verses copyright"
-msgstr ""
+msgstr "Bibelvers Urheberrecht"
 
 #: commandments_app/templates/commandments/detail.html:192
 #, fuzzy
@@ -698,8 +708,9 @@ msgid "Drawings"
 msgstr "Zeichnungen"
 
 #: commandments_app/templates/commandments/detail.html:196
+#, fuzzy
 msgid "Artist"
-msgstr ""
+msgstr "Künstler"
 
 #: commandments_app/templates/commandments/detail.html:211
 #, fuzzy
@@ -723,8 +734,9 @@ msgstr "Bilder"
 
 #: commandments_app/templates/commandments/detail.html:286
 #: commandments_app/templates/commandments/detail.html:290
+#, fuzzy
 msgid "Photographer"
-msgstr ""
+msgstr "Fotograf"
 
 #: commandments_app/templates/commandments/detail.html:318
 #, fuzzy
@@ -757,8 +769,9 @@ msgid "Share your hearts together by discussing the following questions:"
 msgstr "Teilen Sie Ihre Herzen, die durch die folgenden Fragen diskutiert:"
 
 #: commandments_app/templates/commandments/detail.html:422
+#, fuzzy
 msgid "Quote by"
-msgstr ""
+msgstr "Zitat von"
 
 #: commandments_app/templates/commandments/index.html:16 templates/base.html:9
 #: templates/base.html:54
@@ -889,14 +902,15 @@ msgid ""
 "This website will help you in applying all commandments in your life. How? "
 "For each commandment, we collect as much as possible related"
 msgstr ""
-"Diese Website wird Ihnen helfen, alle Gebote in Ihrem Leben anzuwenden. Wie? "
-"Für jedes Gebot, sammeln wir so viel wie möglich verwandten"
+"Diese Website wird Ihnen helfen, alle Gebote in Ihrem Leben anzuwenden. Wie?"
+" Für jedes Gebot, sammeln wir so viel wie möglich verwandten"
 
 #: commandments_app/templates/commandments/index.html:127
 #: commandments_app/templates/commandments/listing.html:15
 #, fuzzy
 msgid ""
-"Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books"
+"Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and "
+"Books"
 msgstr ""
 "Bibel Referenzen, Zeichnungen, Filme, Songs, Blogs, Predigten, Bilder und "
 "Bücher"
@@ -913,15 +927,15 @@ msgstr "zu füttern Ihr Herz, Seele und Geist"
 msgid ""
 "To succeed in becoming a good disciple, we need to live out all of these "
 "commandments. The best way is to do this together. Take your time for each "
-"commandment to dive into the greatness of it, and discuss them in your Small "
-"Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one "
+"commandment to dive into the greatness of it, and discuss them in your Small"
+" Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one "
 "discipleship, to become followers in all of Jesus teachings."
 msgstr ""
 "Um erfolgreich zu sein in einen guten Schüler wird, müssen wir alle diese "
-"Gebote leben. Der beste Weg, dies gemeinsam zu tun. Nehmen Sie sich Zeit für "
-"jedes Gebot in der Größe es zu tauchen, und diskutieren sie in Ihrer Kleine "
-"Gruppen, Discipleship Gruppen, Mentoring, Ministerium Bereicherung oder One-"
-"on-One-Nachfolge, werden Anhänger in allen Jesus Lehren."
+"Gebote leben. Der beste Weg, dies gemeinsam zu tun. Nehmen Sie sich Zeit für"
+" jedes Gebot in der Größe es zu tauchen, und diskutieren sie in Ihrer Kleine"
+" Gruppen, Discipleship Gruppen, Mentoring, Ministerium Bereicherung oder "
+"One-on-One-Nachfolge, werden Anhänger in allen Jesus Lehren."
 
 #: commandments_app/templates/commandments/index.html:137
 #: commandments_app/templates/commandments/listing.html:25
@@ -936,68 +950,58 @@ msgstr "Johannes 14:15"
 
 #: commandments_app/templates/commandments/privacy.html:12
 #: commandments_app/templates/commandments/termsandconditions.html:12
+#, fuzzy
 msgid "Using"
-msgstr ""
+msgstr "Mit"
 
 #: commandments_app/templates/commandments/privacy.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Datenschutz-Bestimmungen"
 
 #: commandments_app/templates/commandments/privacy.html:16
+#, fuzzy
 msgid ""
 "\n"
 "\n"
-"                    <p>Jesus Commandments understands that users of the "
-"Jesus Commandments website value their privacy. This privacy statement is to "
-"inform users about the limited information collected by this website and why "
-"it is collected.</p>\n"
-"                    <p>This Privacy Notice is incorporated into and is "
-"subject to the Jesus Commandments <a href=\"/termsandconditions\">Terms and "
-"Conditions</a>.</p>\n"
+"                    <p>Jesus Commandments understands that users of the Jesus Commandments website value their privacy. This privacy statement is to inform users about the limited information collected by this website and why it is collected.</p>\n"
+"                    <p>This Privacy Notice is incorporated into and is subject to the Jesus Commandments <a href=\"/termsandconditions\">Terms and Conditions</a>.</p>\n"
 "\n"
 "                    <h3><strong>What We Track and Why</strong></h3>\n"
 "                    <b>Cookies and Log File Information</b>\n"
 "\n"
-"                    <p>The Jesus Commandments website will store \"cookies\" "
-"on your system to help improve your experience with the website. Many of "
-"these cookies relate to customizing your visit. For example, allowing you to "
-"set your language, culture and known languages. Most Web browsers "
-"automatically accept cookies, but these can be disabled by changing the "
-"preferences in your internet browser settings. If cookies are disabled "
-"however, your experience of the website and its services will be limited.</"
-"p>\n"
+"                    <p>The Jesus Commandments website will store \"cookies\" on your system to help improve your experience with the website. Many of these cookies relate to customizing your visit. For example, allowing you to set your language, culture and known languages. Most Web browsers automatically accept cookies, but these can be disabled by changing the preferences in your internet browser settings. If cookies are disabled however, your experience of the website and its services will be limited.</p>\n"
 "\n"
-"                    <p>The site also tracks which resources you visit and "
-"download. This is for the purpose of providing statistics back to the "
-"community and providing you with information on what you have visited. This "
-"information is kept entirely anonymous from the rest of the Jesus "
-"Commandments community: no other user will ever be told where you are "
-"visiting or what you are downloading. The Jesus Commandments team will never "
-"analyze your personal browsing habits – we will merely look at the "
-"aggregated statistical data (for example, the total number of people "
-"visiting a resource, or the number of people visiting this site from a given "
-"country, language or culture.)</p>\n"
+"                    <p>The site also tracks which resources you visit and download. This is for the purpose of providing statistics back to the community and providing you with information on what you have visited. This information is kept entirely anonymous from the rest of the Jesus Commandments community: no other user will ever be told where you are visiting or what you are downloading. The Jesus Commandments team will never analyze your personal browsing habits – we will merely look at the aggregated statistical data (for example, the total number of people visiting a resource, or the number of people visiting this site from a given country, language or culture.)</p>\n"
 "\n"
 "                    <h3><strong>Registering with the website</strong></h3>\n"
 "\n"
-"                    <p>In order to post resources, join a community, rate "
-"resources or leave comments, you will be required to provide a log in. This "
-"is to prevent fraudulent activity by ensuring that such transactions are not "
-"anonymous. The information that we collect from user registration will never "
-"be used for marketing purposes unless you explicitly request subscription to "
-"a particular newsletter or periodical.</p>\n"
+"                    <p>In order to post resources, join a community, rate resources or leave comments, you will be required to provide a log in. This is to prevent fraudulent activity by ensuring that such transactions are not anonymous. The information that we collect from user registration will never be used for marketing purposes unless you explicitly request subscription to a particular newsletter or periodical.</p>\n"
 "\n"
-"                    <p>We do not sell, rent or lease our user lists to third "
-"parties, or provide your user information to them in any way without "
-"explicit permission from you.</p>\n"
+"                    <p>We do not sell, rent or lease our user lists to third parties, or provide your user information to them in any way without explicit permission from you.</p>\n"
 "\n"
-"                    <p><i>For more information about our privacy practices, "
-"please contact us at: <a href=\"mailto:info@jesuscommandments.org"
-"\">info@jesuscommandments.org</a></i></p>\n"
+"                    <p><i>For more information about our privacy practices, please contact us at: <a href=\"mailto:info@jesuscommandments.org\">info@jesuscommandments.org</a></i></p>\n"
 "\n"
 "                    "
 msgstr ""
+"<P> Jesus Gebote versteht, dass die Nutzer der Jesus Gebote Webseite Wert ihrer Privatsphäre. Diese Datenschutzerklärung ist von dieser Website gesammelt Nutzer über die begrenzte Informationen zu informieren, und warum es gesammelt wird. </ P>\n"
+"                    <P> Diese Datenschutzerklärung wird aufgenommen in und unterliegt den Jesus Gebote <a href=\"/termsandconditions\"> Bedingungen </a>. </ P>\n"
+"\n"
+"                    <H3> <strong> Was wir verfolgen und warum </ strong> </ h3>\n"
+"                    <B> Cookies und Protokolldateiinformationen </ b>\n"
+"\n"
+"                    <P> Der Jesus Gebote Website speichert „Cookies“ auf Ihrem System, um Ihre Erfahrungen mit der Website zu verbessern. Viele dieser Cookies beziehen sich über Ihren Besuch auf Anpassen. Zum Beispiel, in dem Sie Ihre Sprache, Kultur und bekannte Sprachen einzustellen. Die meisten Web-Browser akzeptieren Cookies automatisch, aber diese können durch Ändern der Einstellungen in Ihrem Internet-Browser-Einstellungen deaktiviert. Wenn Cookies jedoch deaktiviert sind, Ihre Erfahrung der Website und ihre Dienste begrenzt sein wird. </ P>\n"
+"\n"
+"                    <P> Die Website verfolgt auch, welche Ressourcen Sie besuchen und Download. Dies ist für die Zwecke der Statistik zurück in die Gemeinschaft der Bereitstellung und den Sie Informationen darüber, was Sie besucht haben. Diese Informationen werden ausschließlich anonym aus dem Rest der Jesus Gebote Gemeinschaft gehalten: kein anderer Benutzer jemals gesagt werden, wo Sie besuchen oder was Sie herunterladen. Die Jesus Gebote Team wird niemals Ihre persönlichen Surfgewohnheiten analysieren - wir werden nur auf den aggregierten statistischen Daten sehen (zum Beispiel die Gesamtzahl der Menschen, eine Ressource zu besuchen, oder die Zahl der Menschen, diese Seite von einem bestimmten Land, Sprache oder Kultur zu besuchen ). </ p>\n"
+"\n"
+"                    <H3> <strong> Die Anmeldung bei der Website </ strong> </ h3>\n"
+"\n"
+"                    <P> Um Ressourcen zu veröffentlichen, an einer Gemeinschaft, Rate Ressourcen oder Kommentare zu hinterlassen, werden Sie in ein Protokoll zu schaffen, erforderlich. Dies ist betrügerische Aktivitäten zu verhindern, indem sichergestellt wird, dass diese Transaktionen nicht anonym sind. Die Informationen, die wir von der Benutzerregistrierung sammeln werden nie zu Marketingzwecken verwendet werden, wenn Sie nicht ausdrücklich Abonnement auf einen bestimmten Newsletter oder Zeitschrift anfordern. </ P>\n"
+"\n"
+"                    <P> Wir verkaufen nicht, mieten oder unsere Benutzerliste an Dritte verpachten, oder geben Sie Ihre Benutzerinformationen, um sie in irgendeiner Weise ohne ausdrückliche Genehmigung von Ihnen. </ P>\n"
+"\n"
+"                    <P> <i> Weitere Informationen zu unseren Datenschutzpraktiken, kontaktieren Sie uns bitte unter: <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ i> </ p>"
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:10
 #, fuzzy
@@ -1067,9 +1071,9 @@ msgstr "Mit dem Beispiel: „Liebe deinen Nächsten wie dich selbst“ (Mt 19.19
 #: commandments_app/templates/commandments/study_listing.html:26
 #, fuzzy
 msgid ""
-"A \"value\" is the way how a principle would pack out in a specific culture, "
-"time and place. If you have this, you need to derive the principle out of it "
-"by studying the context"
+"A \"value\" is the way how a principle would pack out in a specific culture,"
+" time and place. If you have this, you need to derive the principle out of "
+"it by studying the context"
 msgstr ""
 "Ein „Wert“ ist die Art und Weise, wie ein Prinzip in einer bestimmten "
 "Kultur, Zeit und Ort packen würde. Wenn Sie diese haben, müssen Sie das "
@@ -1083,8 +1087,8 @@ msgstr "Mit dem Beispiel: „Saluten sie mit einem heiligen Kuss“ (Röm 16,16)
 #: commandments_app/templates/commandments/study_listing.html:27
 #, fuzzy
 msgid ""
-"The principle is not kiss everybody, but to salute your brothers and sisters "
-"in an intimate way, based on your specific culture, time and place"
+"The principle is not kiss everybody, but to salute your brothers and sisters"
+" in an intimate way, based on your specific culture, time and place"
 msgstr ""
 "Das Prinzip ist nicht bei jedem Kuss, aber deine Brüder und Schwestern in "
 "intimer Weise zu begrüßen, auf der Grundlage Ihre spezifische Kultur, Zeit "
@@ -1146,8 +1150,8 @@ msgid ""
 "There are also some specific commandments which Jesus gave specifically to "
 "that person in that time, which will not directly apply for us today"
 msgstr ""
-"Es gibt auch einige spezifische Gebote, die Jesus speziell in dieser Zeit zu "
-"dieser Person gab, die heute für uns nicht direkt anwenden"
+"Es gibt auch einige spezifische Gebote, die Jesus speziell in dieser Zeit zu"
+" dieser Person gab, die heute für uns nicht direkt anwenden"
 
 #: commandments_app/templates/commandments/study_listing.html:35
 #, fuzzy
@@ -1156,8 +1160,8 @@ msgid ""
 "ye be entered into it, ye shall find a colt tied, whereon never man sat; "
 "loose him, and bring him.\" (Mark 11:2)"
 msgstr ""
-"Mit dem Beispiel: „Gehen Sie Ihren Weg in das Dorf, der vor euch, und sobald "
-"sie in sie eingegeben wird, werden sie ein Füllen angebunden finden, auf "
+"Mit dem Beispiel: „Gehen Sie Ihren Weg in das Dorf, der vor euch, und sobald"
+" sie in sie eingegeben wird, werden sie ein Füllen angebunden finden, auf "
 "denen nie einen Mann saß, verlieren ihn, und ihn bringen.“ (Mark 11: 2)"
 
 #: commandments_app/templates/commandments/study_listing.html:36
@@ -1168,16 +1172,16 @@ msgstr "Ist es ein „Verbot“ oder „Gebot“?"
 #: commandments_app/templates/commandments/study_listing.html:37
 #, fuzzy
 msgid ""
-"A prohibition is a negative commandment, something you should not do. To all "
-"prohibitions, there is an opposite commandment. In the unique commandments, "
-"we meantion only commandments, while in the references you will also find "
+"A prohibition is a negative commandment, something you should not do. To all"
+" prohibitions, there is an opposite commandment. In the unique commandments,"
+" we meantion only commandments, while in the references you will also find "
 "lots of the opposite prohibitions. So if you have a prohibition, derive the "
 "opposite commandment from it"
 msgstr ""
 "Ein Verbot ist ein negatives Gebot, etwas, was man nicht tun sollte. An "
 "allen Verbote gibt es ein entgegengesetztes Gebot. In den einzigartigen "
-"Geboten meantion wir nur Gebote, während in dem Verweisen Sie auch viele der "
-"gegenüberliegenden Verbote finden. Wenn Sie also ein Verbot haben, leitet "
+"Geboten meantion wir nur Gebote, während in dem Verweisen Sie auch viele der"
+" gegenüberliegenden Verbote finden. Wenn Sie also ein Verbot haben, leitet "
 "das Gegenteil Gebot von ihm"
 
 #: commandments_app/templates/commandments/study_listing.html:38
@@ -1185,8 +1189,8 @@ msgstr ""
 msgid ""
 "By example: \"That whosoever looketh on a woman to lust after her hath "
 "committed adultery with her already in his heart (Matthew 5:28). The "
-"prohibition is to not look with lust to another woman, the commandment is to "
-"stay loyal to your partner and keep your heart pure"
+"prohibition is to not look with lust to another woman, the commandment is to"
+" stay loyal to your partner and keep your heart pure"
 msgstr ""
 "Durch z. B. „Wer eine Frau ansieht, ihrer zu begehren, mit ihr bereits in "
 "seinem Herzen (Matthäus 5,28) Das Verbot Ehebruch begangen hat, ist nicht "
@@ -1212,8 +1216,9 @@ msgstr ""
 msgid ""
 "By example: \"Guard against self-deception, each of you. If someone among "
 "you thinks he is wise in this age, let him become foolish so that he can "
-"become wise (1 Cor 3:18). The progressive type here is to \"Guard continually"
-"\" and to \"become immediately foolish\" if you think you are wise"
+"become wise (1 Cor 3:18). The progressive type here is to \"Guard "
+"continually\" and to \"become immediately foolish\" if you think you are "
+"wise"
 msgstr ""
 "Mit dem Beispiel:.. „Schutz gegen Selbstbetrug, jeder von euch Wenn jemand "
 "unter euch denkt, dass er in diesem Alter klug ist, dann soll er dumm "
@@ -1239,7 +1244,8 @@ msgstr "In es mit seinem primären Bezug Bibel"
 #: commandments_app/templates/commandments/study_listing.html:48
 #, fuzzy
 msgid "Determine a short powerfull title which summarizes the commandment"
-msgstr "Bestimmen Sie einen kurzen leistungsfähigen Titel, der das Gebot fasst"
+msgstr ""
+"Bestimmen Sie einen kurzen leistungsfähigen Titel, der das Gebot fasst"
 
 #: commandments_app/templates/commandments/study_listing.html:49
 #, fuzzy
@@ -1249,8 +1255,8 @@ msgstr "Bestimmen Sie, in welchem ​​„Kategorie“ das Gebot fällt"
 #: commandments_app/templates/commandments/study_listing.html:52
 #, fuzzy
 msgid ""
-"If it is an allready existing, determine to which existing commandment(s) it "
-"should apply"
+"If it is an allready existing, determine to which existing commandment(s) it"
+" should apply"
 msgstr ""
 "Wenn es sich um eine bereits vorhandene ist, bestimmen, auf die bestehenden "
 "Gebote) sollte gelten"
@@ -1275,6 +1281,7 @@ msgstr ""
 "Referenzen, Alte und Neues Testament finden."
 
 #: commandments_app/templates/commandments/study_listing.html:63
+#, fuzzy
 msgid ""
 "Maybe you are wondering why we did not study all the commandments in the "
 "whole New Testament? Well, the easiest reason why we didn't, is because "
@@ -1284,6 +1291,13 @@ msgid ""
 "valueable and explaining or extending Jesus teachings, so maybe in the "
 "future we will add them to this website as well."
 msgstr ""
+"Vielleicht fragen Sie sich, warum wir nicht in der ganzen Neuen Testament "
+"alle Gebote studiert haben? Nun, der einfachste Grund, warum wir nicht getan"
+" haben, ist, weil Jesus befohlen war nicht die Gebote, die anderen Apostel "
+"sagen, sagte er ‚und lehrt sie, alles zu befolgen, was ich euch geboten "
+"habe‘ (Mt 28,20). Natürlich sind die anderen Buchstaben im NT immer noch "
+"wahr, wertvolle und zu erklären oder Jesus Lehren erstreckt, so vielleicht "
+"in der Zukunft wir sie auf dieser Website als auch hinzufügen."
 
 #: commandments_app/templates/commandments/study_listing.html:68
 #, fuzzy
@@ -1371,44 +1385,46 @@ msgstr "Tertiär"
 
 #: commandments_app/templates/commandments/termsandconditions.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Geschäftsbedingungen"
 
 #: commandments_app/templates/commandments/termsandconditions.html:16
+#, fuzzy
 msgid ""
 "\n"
 "                    <h3><strong>General information</strong></h3>\n"
-"                    <p>Our goals with this site is to listen and obey to "
-"Jesus, explain His teachings, let the people get rooted and be fruitful in "
-"the world, to glorify our Father in heaven</p>\n"
-"                    <p>You are free to use any Jesus Commandments resource "
-"so long as it is not for profit or any other commercial purposes, the use is "
-"consistent with the Jesus Commandments values, <a href=\"/vision\">which may "
-"be found here</a>, and your use does not contravene any applicable law or "
-"regulation.</p>\n"
+"                    <p>Our goals with this site is to listen and obey to Jesus, explain His teachings, let the people get rooted and be fruitful in the world, to glorify our Father in heaven</p>\n"
+"                    <p>You are free to use any Jesus Commandments resource so long as it is not for profit or any other commercial purposes, the use is consistent with the Jesus Commandments values, <a href=\"/vision\">which may be found here</a>, and your use does not contravene any applicable law or regulation.</p>\n"
 "                    <p>This means you can:</p>\n"
 "                    <ul>\n"
-"                        <li>Duplicate resources for your own use and/or the "
-"use of your leaders, children, church or group.</li>\n"
-"                        <li>Distribute resources for your own use and/or the "
-"use of your leaders, children, church or group.</li>\n"
+"                        <li>Duplicate resources for your own use and/or the use of your leaders, children, church or group.</li>\n"
+"                        <li>Distribute resources for your own use and/or the use of your leaders, children, church or group.</li>\n"
 "                    </ul>\n"
 "                    <p>You are not allowed to:</p>\n"
 "                    <ul>\n"
-"                        <li>Adjust or change any resources without our "
-"permission.</li>\n"
-"                        <li>Sell resources or incorporate them in any "
-"commercial offering.</li>\n"
+"                        <li>Adjust or change any resources without our permission.</li>\n"
+"                        <li>Sell resources or incorporate them in any commercial offering.</li>\n"
 "                    </ul>\n"
-"                    <p>If you are aware of Jesus Commandments resources "
-"being sold, or have any questions please contact <a href=\"mailto:"
-"info@jesuscommandments.org\">info@jesuscommandments.org</a></p>\n"
-"                    <p>If you copy and/or distribute Jesus Commandments "
-"resources (whether by burning, sending, duplicating or whatever means) "
-"please make reference to <a href=\"/\">www.jesuscommandments.org</a> in "
-"order to let others know about the website and resources.</p>\n"
+"                    <p>If you are aware of Jesus Commandments resources being sold, or have any questions please contact <a href=\"mailto:info@jesuscommandments.org\">info@jesuscommandments.org</a></p>\n"
+"                    <p>If you copy and/or distribute Jesus Commandments resources (whether by burning, sending, duplicating or whatever means) please make reference to <a href=\"/\">www.jesuscommandments.org</a> in order to let others know about the website and resources.</p>\n"
 "                    "
 msgstr ""
+"<H3> <strong> Allgemein </ strong> </ h3>\n"
+"                    <P> Unsere Ziele mit dieser Seite ist zu hören und die Menschen zu Jesus, erklären seine Lehren lassen gehorchen bekommen verwurzelt und in der Welt, fruchtbar zu unserem Vater im Himmel preisen </ p>\n"
+"                    <P> Sie sind frei, jeden Jesus Gebote Ressource zu verwenden, solange er nicht für Gewinn oder sonstige gewerbliche Zwecke ist der Einsatz steht im Einklang mit dem Jesus Gebote Werten, <a href=\"/vision\">, die hier möglicherweise gefunden </a>, und Ihre Nutzung verstößt nicht gegen geltendes Recht oder Vorschriften. </ p>\n"
+"                    <P> Das heißt, Sie können: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> Doppelte Ressourcen für den eigenen Gebrauch und / oder die Verwendung Ihrer Führer, Kinder, Kirche oder Gruppe. </ Li>\n"
+"                        <Li> Verteilen Ressourcen für den eigenen Gebrauch und / oder die Verwendung Ihrer Führer, Kinder, Kirche oder Gruppe. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> Sie sind nicht erlaubt: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> einstellen oder alle Ressourcen ändern, ohne unsere Erlaubnis. </ Li>\n"
+"                        <Li> Verkaufen Ressourcen oder in irgendeine kommerziellen Angebote übernehmen. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> Wenn Sie sind sich dessen bewusst Jesus Gebote Ressourcen verkauft werden, oder Fragen haben, wenden Sie sich bitte <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ p>\n"
+"                    <P> Wenn Sie kopieren und / oder Jesus Gebote Ressourcen verteilen (ob durch Verbrennen, Senden, Duplizieren oder was auch immer Mittel) bitte Bezug nehmen auf <a href=\"/\"> www.jesuscommandments.org </a> zu lassen, um andere wissen über die Website und Ressourcen. </ p>"
 
 #: commandments_app/templates/commandments/vision.html:13
 #, fuzzy
@@ -1442,33 +1458,33 @@ msgid ""
 "explaining in Matthew 13."
 msgstr ""
 "Die Welt braucht despirately Jesus! Nicht nur die Nicht-Christen, das "
-"Evangelium zu hören, sondern auch die Christen verwurzelt werden. Die Kirche "
-"wird Wordwide eine harte Zeit herauszufordern, wo nicht viele vorbereitet "
+"Evangelium zu hören, sondern auch die Christen verwurzelt werden. Die Kirche"
+" wird Wordwide eine harte Zeit herauszufordern, wo nicht viele vorbereitet "
 "werden. Die Menschen müssen in Christus verwurzeln und fruchtbar sein, wie "
 "die Parabel ist Jesus in Matthäus 13 zu erklären."
 
 #: commandments_app/templates/commandments/vision.html:19
 #, fuzzy
 msgid ""
-"\"Behold, a sower went forth to sow; 4 And when he sowed, some seeds fell by "
-"the way side, and the fowls came and devoured them up: 5 Some fell upon "
+"\"Behold, a sower went forth to sow; 4 And when he sowed, some seeds fell by"
+" the way side, and the fowls came and devoured them up: 5 Some fell upon "
 "stony places, where they had not much earth: and forthwith they sprung up, "
 "because they had no deepness of earth: 6 And when the sun was up, they were "
 "scorched; and because they had no root, they withered away. 7 And some fell "
 "among thorns; and the thorns sprung up, and choked them: 8 But other fell "
 "into good ground, and brought forth fruit, some an hundredfold, some "
-"sixtyfold, some thirtyfold. 9 Who hath ears to hear, let him hear."
-"\" (Matthew 13:4-9)"
+"sixtyfold, some thirtyfold. 9 Who hath ears to hear, let him hear.\" "
+"(Matthew 13:4-9)"
 msgstr ""
-"„Siehe, es ging ein Sämann aus, zu säen; 4 Und als er säte, einige Samen auf "
-"den Weg fiel, und die Vögel kamen und fraßen sie auf: 5 Etliches fiel auf "
-"felsigen Boden, wo es nicht viel Erde hatte und unverzüglich sie entstanden, "
-"weil sie keine tiefe Erde hatte: 6 und als die Sonne aufging, wurde es "
+"„Siehe, es ging ein Sämann aus, zu säen; 4 Und als er säte, einige Samen auf"
+" den Weg fiel, und die Vögel kamen und fraßen sie auf: 5 Etliches fiel auf "
+"felsigen Boden, wo es nicht viel Erde hatte und unverzüglich sie entstanden,"
+" weil sie keine tiefe Erde hatte: 6 und als die Sonne aufging, wurde es "
 "verbrannt, und weil es keine Wurzel hatte, verdorrte es 7 und einige unter "
 "die Dornen fiel, und die Dornen wuchsen auf und erstickten sie. : 8 Aber "
 "auch andere in guten Boden fiel und brachte Frucht, teils hundertfach, "
-"einige sechzigfältig, einige thirtyfold 9 Wer Ohren ihn hören „zu hören hat, "
-"der.. (Matthew 13: 4-9)"
+"einige sechzigfältig, einige thirtyfold 9 Wer Ohren ihn hören „zu hören hat,"
+" der.. (Matthew 13: 4-9)"
 
 #: commandments_app/templates/commandments/vision.html:20
 #, fuzzy
@@ -1486,22 +1502,22 @@ msgid ""
 "it; 21 Yet hath he not root in himself, but dureth for a while: for when "
 "tribulation or persecution ariseth because of the word, by and by he is "
 "offended. 22 He also that received seed among the thorns is he that heareth "
-"the word; and the care of this world, and the deceitfulness of riches, choke "
-"the word, and he becometh unfruitful. 23 But he that received seed into the "
-"good ground is he that heareth the word, and understandeth it; which also "
+"the word; and the care of this world, and the deceitfulness of riches, choke"
+" the word, and he becometh unfruitful. 23 But he that received seed into the"
+" good ground is he that heareth the word, and understandeth it; which also "
 "beareth fruit, and bringeth forth, some an hundredfold, some sixty, some "
 "thirty.\" (Matthew 13:18-23)"
 msgstr ""
 "„Hört ihr nun das Gleichnis vom Sämann. 19 Wenn jemand das Wort von dem "
 "Reich hört und nicht versteht, der Böse kommt und raubt das, was in sein "
-"Herz gesät. Das ist er die Samen erhalten durch . die Art und Weise Seite 20 "
-"aber er, der den Samen in den felsigen Boden erhalten, der ist es, der das "
+"Herz gesät. Das ist er die Samen erhalten durch . die Art und Weise Seite 20"
+" aber er, der den Samen in den felsigen Boden erhalten, der ist es, der das "
 "Wort hört und alsbald mit Freuden aufnimmt; 21 er hat aber Wurzel nicht in "
 "sich, sondern wendisch für eine Weile: wenn sich Trübsal oder . Verfolgung "
 "entsteht wegen des Wortes, nach und nach er beleidigt wird 22 er hat auch "
-"die Samen unter die Dornen erhalten ist es, der das Wort hört, und die Sorge "
-"der Welt und der Betrug des Reichtums ersticken das Wort, und er becometh . "
-"unfruchtbare 23 wer aber die Saat in den Boden gut erhalten ist, der das "
+"die Samen unter die Dornen erhalten ist es, der das Wort hört, und die Sorge"
+" der Welt und der Betrug des Reichtums ersticken das Wort, und er becometh ."
+" unfruchtbare 23 wer aber die Saat in den Boden gut erhalten ist, der das "
 "Wort hört und versteht es,. die Frucht auch gebiert, und bringt, einige "
 "hundertfach, die anderen sechzigfach, die dritten dreißig“ (Matthew 13: "
 "18-23)"
@@ -1528,11 +1544,15 @@ msgid "Be fruitful"
 msgstr "Seid fruchtbar"
 
 #: commandments_app/templates/commandments/vision.html:30
+#, fuzzy
 msgid ""
 "If we don't take this serious, we won't last long! And how do you get "
 "rooted? How will you become fruitful? Jesus gives the answer just before he "
 "leaves the earth to his Father in Heaven:"
 msgstr ""
+"Wenn wir diese ernst nicht nehmen, werden wir nicht lange dauern! Und wie zu"
+" tun bekommen Sie wurzelt? Wie werden Sie fruchtbar werden? Jesus gibt die "
+"Antwort, kurz bevor er die Erde zu seinem Vater im Himmel läßt:"
 
 #: commandments_app/templates/commandments/vision.html:31
 #, fuzzy
@@ -1557,15 +1577,16 @@ msgid ""
 "References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books to "
 "help you in your small group to apply all the commandments in your life."
 msgstr ""
-"Es ist eine sehr klare und kraftvolle Botschaft, Jesus alle Gläubigen bittet "
-"bewusst zu gehorchen, aber nicht nur in einigen Befehlen, oder nur der "
+"Es ist eine sehr klare und kraftvolle Botschaft, Jesus alle Gläubigen bittet"
+" bewusst zu gehorchen, aber nicht nur in einigen Befehlen, oder nur der "
 "größte Befehl, nein, in alle von ihnen! Gott ist allmächtig und kreativ in "
-"einer ultimative Art und Weise, und Er schaffte Milliarden von Menschen, die "
-"alle mit ihrer eigenen Einzigartigkeit und innen Kreativität. Sein Ziel ist "
-"es, dass ein bisschen von ihm ist durch dich ausgesetzt! Wir haben versucht, "
-"so viel wie möglich Gebot im Zusammenhang Bibel Referenzen, Zeichnungen, "
-"Filme, Songs zu sammeln, Blogs, Predigten, Bilder und Bücher, die Sie in "
-"Ihrer kleinen Gruppe zu helfen, alle Gebote in Ihrem Leben anzuwenden."
+"einer ultimative Art und Weise, und Er schaffte Milliarden von Menschen, die"
+" alle mit ihrer eigenen Einzigartigkeit und innen Kreativität. Sein Ziel ist"
+" es, dass ein bisschen von ihm ist durch dich ausgesetzt! Wir haben "
+"versucht, so viel wie möglich Gebot im Zusammenhang Bibel Referenzen, "
+"Zeichnungen, Filme, Songs zu sammeln, Blogs, Predigten, Bilder und Bücher, "
+"die Sie in Ihrer kleinen Gruppe zu helfen, alle Gebote in Ihrem Leben "
+"anzuwenden."
 
 #: commandments_app/templates/commandments/vision.html:34
 #, fuzzy
@@ -1593,13 +1614,13 @@ msgstr ""
 #: commandments_app/templates/commandments/vision.html:37
 #, fuzzy
 msgid ""
-"Whenever the word \"command\" is mentioned, it seems that people immediately "
-"put up their defenses and begin to argue why certain commands are "
-"unnecessary. Some say they do not want to be controlled by any \"commandment"
-"\"; rather, they want to be led by the Spirit. But is was the Spirit who "
-"gave all the commandments by inspiration. since they were all written down "
-"twenty to sixty years after Jesus ascended. We are expected to learn what He "
-"said and trust Him to give us the power to obey it."
+"Whenever the word \"command\" is mentioned, it seems that people immediately"
+" put up their defenses and begin to argue why certain commands are "
+"unnecessary. Some say they do not want to be controlled by any "
+"\"commandment\"; rather, they want to be led by the Spirit. But is was the "
+"Spirit who gave all the commandments by inspiration. since they were all "
+"written down twenty to sixty years after Jesus ascended. We are expected to "
+"learn what He said and trust Him to give us the power to obey it."
 msgstr ""
 "Jedes Mal, wenn das Wort „Befehl“ die Rede ist, so scheint es, dass die "
 "Menschen sofort ihre Verteidigung setzen und beginnen zu argumentieren, "
@@ -1617,8 +1638,8 @@ msgid ""
 "are all sinners, no amount of obedience or moral perfection can ever make "
 "any person acceptable to God, because one sin in a lifetime can condemn a "
 "person (James 2:10). Salvation and acceptance by God are only possible "
-"through His grace who offers to completely pay for all our sins by His death "
-"and His blood, shed on the cross of Calvary. When we trust in His payment "
+"through His grace who offers to completely pay for all our sins by His death"
+" and His blood, shed on the cross of Calvary. When we trust in His payment "
 "for our sin's results, we are rewarded with the gift of Christ's "
 "righteousness - that alone is what can make us acceptable (2 Cor 5:21)."
 msgstr ""
@@ -1635,8 +1656,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "We need to understand deeply, that we are loved and accepted as we are. And "
-"out of love towards God, because we are loved by Him, we will listen to Him, "
-"and obey Him in all His teachings."
+"out of love towards God, because we are loved by Him, we will listen to Him,"
+" and obey Him in all His teachings."
 msgstr ""
 "Wir müssen tief verstehen, dass wir geliebt und akzeptiert, wie wir sind. "
 "Und aus Liebe zu Gott, weil wir von ihm geliebt sind, werden wir auf ihn "
@@ -1653,8 +1674,8 @@ msgid ""
 "Get a complete list of all the unique commandments of Jesus, from a "
 "theological perspective"
 msgstr ""
-"Hier finden Sie eine vollständige Liste aller einzigartigen Gebote Jesu, aus "
-"einer theologischen Perspektive"
+"Hier finden Sie eine vollständige Liste aller einzigartigen Gebote Jesu, aus"
+" einer theologischen Perspektive"
 
 #: commandments_app/templates/commandments/vision.html:45
 #, fuzzy
@@ -1681,38 +1702,41 @@ msgstr "Tun Sie dies in so vielen Sprachen wie möglich"
 #, fuzzy
 msgid ""
 "We definately need your help! If you want to help improving this website on "
-"any of the above points, or do you have any suggestions or corrections, we'd "
-"like to hear from you. Please"
+"any of the above points, or do you have any suggestions or corrections, we'd"
+" like to hear from you. Please"
 msgstr ""
 "Wir brauchen auf jeden Fall Ihre Hilfe! Wenn Sie diese Website helfen "
 "wollen, die Verbesserung der auf eine der oben genannten Punkte, oder haben "
 "Sie Anregungen oder Korrekturen, wir \\"
 
 #: commandments_app/templates/commandments/vision.html:51
+#, fuzzy
 msgid "Statement of Faith"
-msgstr ""
+msgstr "Statement of Faith"
 
 #: commandments_app/templates/commandments/vision.html:52
+#, fuzzy
 msgid "The Jesus Commandments website's statement of faith, is that of the"
-msgstr ""
+msgstr "Die Aussage des Jesus Gebote Webseite des Glaubens, ist, dass die"
 
 #: commandments_app/templates/commandments/vision.html:52
+#, fuzzy
 msgid "Lausanne Covenant"
-msgstr ""
+msgstr "Lausanne Pakt"
 
 #: commandments_app/templates/commandments/vision.html:55
 #, fuzzy
 msgid ""
 "\"Now the God of peace, that brought again from the dead our Lord Jesus, "
 "that great shepherd of the sheep, through the blood of the everlasting "
-"covenant, Make you perfect in every good work to do his will, working in you "
-"that which is wellpleasing in his sight, through Jesus Christ; to whom be "
+"covenant, Make you perfect in every good work to do his will, working in you"
+" that which is wellpleasing in his sight, through Jesus Christ; to whom be "
 "glory for ever and ever. Amen.\" (Hebrews 13:20-21)"
 msgstr ""
 "„Der Gott des Friedens, der von den Toten unseres Herrn Jesus gebracht, der "
-"den großen Hirten der Schafe durch das Blut des ewigen Bundes, machen Sie in "
-"jedem guten Werk perfekt seinen Willen zu tun, in euch, was ist gefällig in "
-"seinen Augen, durch Jesus Christus, welchem ​​sei Ehre von Ewigkeit zu "
+"den großen Hirten der Schafe durch das Blut des ewigen Bundes, machen Sie in"
+" jedem guten Werk perfekt seinen Willen zu tun, in euch, was ist gefällig in"
+" seinen Augen, durch Jesus Christus, welchem ​​sei Ehre von Ewigkeit zu "
 "Ewigkeit! Amen. „. (Hebräer 13: 20-21)"
 
 #: commandments_app/views/user_preferences.py:17
@@ -1816,10 +1840,13 @@ msgid "Email: "
 msgstr "Email:"
 
 #: templates/bible.html:5
+#, fuzzy
 msgid ""
 "With this setting, all Bible references found on this website are displayed "
 "with the set translation"
 msgstr ""
+"Mit dieser Einstellung werden alle auf dieser Website Bibelstellen werden "
+"mit der eingestellten Übersetzung angezeigt"
 
 #: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
 #: venv/venv_old2/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
@@ -1903,8 +1930,8 @@ msgstr ""
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:246
 #, fuzzy
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
+" hyphens."
 msgstr ""
 "Geben Sie eine gültige ‚Slug‘, die aus Unicode Buchstaben, Zahlen, "
 "Unterstrichen oder Bindestriche."
@@ -1962,7 +1989,7 @@ msgstr ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:361
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:361
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at least %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1974,7 +2001,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:376
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:376
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at most %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1996,7 +2023,7 @@ msgstr "Geben Sie eine Nummer."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:397
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:397
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
@@ -2004,7 +2031,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:402
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:402
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
@@ -2012,7 +2039,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:407
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:407
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
 msgid_plural ""
@@ -2082,7 +2109,8 @@ msgstr "% (Model_name) s mit diesem% (FIELD_LABEL) s ist bereits vorhanden."
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
-"% (FIELD_LABEL) s muss% (date_field_label) s% (lookup_type) s eindeutig sein."
+"% (FIELD_LABEL) s muss% (date_field_label) s% (lookup_type) s eindeutig "
+"sein."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:128
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:128
@@ -2176,8 +2204,8 @@ msgstr "Datum (ohne Zeit)"
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1292
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
-"uuuuuu]][TZ] format."
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
 msgstr ""
 "'% (Wert) s' Wert hat ein ungültiges Format. Es muss in YYYY-MM-DD HH sein: "
 "MM [: ss [.uuuuuu]] [TZ] Format."
@@ -2186,11 +2214,11 @@ msgstr ""
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1296
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
+"'%(value)s' value has the correct format (YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
 msgstr ""
-"'% (Wert) s' Wert hat das richtige Format (YYYY-MM-DD HH: MM [: ss [."
-"uuuuuu]] [TZ]), aber es ist ein ungültiges Datum / Uhrzeit."
+"'% (Wert) s' Wert hat das richtige Format (YYYY-MM-DD HH: MM [: ss "
+"[.uuuuuu]] [TZ]), aber es ist ein ungültiges Datum / Uhrzeit."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1300
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1300
@@ -2214,8 +2242,8 @@ msgstr "Dezimalzahl"
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:1589
 #, fuzzy, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
-"uuuuuu] format."
+"'%(value)s' value has an invalid format. It must be in [DD] "
+"[HH:[MM:]]ss[.uuuuuu] format."
 msgstr ""
 "'% (Wert) s' Wert hat ein ungültiges Format. Es muss in [DD] sein [HH: "
 "[MM:]] ss [.uuuuuu] Format."
@@ -2313,8 +2341,8 @@ msgid ""
 "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
-"'% (Wert) s' Wert hat ein ungültiges Format. Es muss in HH sein: MM [: ss [."
-"uuuuuu]] Format."
+"'% (Wert) s' Wert hat ein ungültiges Format. Es muss in HH sein: MM [: ss "
+"[.uuuuuu]] Format."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2107
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2107
@@ -2323,8 +2351,8 @@ msgid ""
 "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
-"'% (Wert) s' Wert hat das richtige Format (HH: MM [: ss [.uuuuuu]]), aber es "
-"ist eine ungültige Zeit."
+"'% (Wert) s' Wert hat das richtige Format (HH: MM [: ss [.uuuuuu]]), aber es"
+" ist eine ungültige Zeit."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2110
 #: venv/venv_old2/lib/python3.6/site-packages/django/db/models/fields/__init__.py:2110
@@ -2405,7 +2433,8 @@ msgid "Many-to-many relationship"
 msgstr "Viele-zu-viele-Beziehung"
 
 #. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
+#. characters will prevent the default label_suffix to be appended to the
+#. label
 #: venv/lib/python3.6/site-packages/django/forms/boundfield.py:146
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/boundfield.py:146
 #, fuzzy
@@ -2480,8 +2509,9 @@ msgstr "Die eingereichten Datei ist leer."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:536
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:536
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+#, python-format, fuzzy
+msgid ""
+"Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
 "Ensure this filename has at most %(max)d characters (it has %(length)d)."
 msgstr[0] ""
@@ -2561,7 +2591,7 @@ msgstr "ManagementForm Daten fehlen oder manipuliert wurden"
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:338
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:338
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
 msgstr[0] ""
@@ -2569,7 +2599,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:345
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:345
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
 msgstr[0] ""
@@ -2628,7 +2658,8 @@ msgstr "Der Inline-Wert stimmen nicht überein die übergeordnete Instanz."
 #: venv/lib/python3.6/site-packages/django/forms/models.py:1158
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/models.py:1158
 #, fuzzy
-msgid "Select a valid choice. That choice is not one of the available choices."
+msgid ""
+"Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 "Wählen Sie eine gültige Wahl. Diese Wahl ist nicht eine der verfügbaren "
 "Optionen."
@@ -2695,7 +2726,7 @@ msgstr "ja Nein Vielleicht"
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:834
 #: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:817
 #: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:834
-#, python-format
+#, python-format, fuzzy
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
@@ -3074,110 +3105,126 @@ msgstr "November"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:34
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:34
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Dec."
-msgstr ""
+msgstr "Dezember"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:37
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:37
+#, fuzzy
 msgctxt "alt. month"
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:38
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:38
+#, fuzzy
 msgctxt "alt. month"
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:39
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:39
+#, fuzzy
 msgctxt "alt. month"
 msgid "March"
-msgstr ""
+msgstr "März"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:40
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:40
+#, fuzzy
 msgctxt "alt. month"
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:41
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:41
+#, fuzzy
 msgctxt "alt. month"
 msgid "May"
-msgstr ""
+msgstr "Kann"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:42
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:42
+#, fuzzy
 msgctxt "alt. month"
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:43
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:43
+#, fuzzy
 msgctxt "alt. month"
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:44
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:44
+#, fuzzy
 msgctxt "alt. month"
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:45
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:45
+#, fuzzy
 msgctxt "alt. month"
 msgid "September"
-msgstr ""
+msgstr "September"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:46
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:46
+#, fuzzy
 msgctxt "alt. month"
 msgid "October"
-msgstr ""
+msgstr "Oktober"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:47
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:47
+#, fuzzy
 msgctxt "alt. month"
 msgid "November"
-msgstr ""
+msgstr "November"
 
 #: venv/lib/python3.6/site-packages/django/utils/dates.py:48
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/dates.py:48
+#, fuzzy
 msgctxt "alt. month"
 msgid "December"
-msgstr ""
+msgstr "Dezember"
 
 #: venv/lib/python3.6/site-packages/django/utils/ipv6.py:8
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/ipv6.py:8
+#, fuzzy
 msgid "This is not a valid IPv6 address."
-msgstr ""
+msgstr "Dies ist keine gültige IPv6-Adresse."
 
 #: venv/lib/python3.6/site-packages/django/utils/text.py:67
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:67
-#, python-format
+#, python-format, fuzzy
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
-msgstr ""
+msgstr "% (TRUNCATED_TEXT) s ..."
 
 #: venv/lib/python3.6/site-packages/django/utils/text.py:233
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:233
+#, fuzzy
 msgid "or"
-msgstr ""
+msgstr "oder"
 
 #. Translators: This string is used as a separator between list elements
 #: venv/lib/python3.6/site-packages/django/utils/text.py:252
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:83
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/text.py:252
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:83
+#, fuzzy
 msgid ", "
-msgstr ""
+msgstr "."
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:9
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:9
-#, python-format
+#, python-format, fuzzy
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
@@ -3185,7 +3232,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:10
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:10
-#, python-format
+#, python-format, fuzzy
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
@@ -3193,7 +3240,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:11
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:11
-#, python-format
+#, python-format, fuzzy
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
@@ -3201,7 +3248,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:12
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:12
-#, python-format
+#, python-format, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
@@ -3209,7 +3256,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:13
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:13
-#, python-format
+#, python-format, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
@@ -3217,7 +3264,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:14
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:14
-#, python-format
+#, python-format, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
@@ -3225,70 +3272,99 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:72
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:72
+#, fuzzy
 msgid "0 minutes"
-msgstr ""
+msgstr "0 Minuten"
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:110
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:110
+#, fuzzy
 msgid "Forbidden"
-msgstr ""
+msgstr "verboten"
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:111
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:111
+#, fuzzy
 msgid "CSRF verification failed. Request aborted."
-msgstr ""
+msgstr "CSRF Überprüfung fehlgeschlagen. Anfrage abgebrochen."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:115
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:115
+#, fuzzy
 msgid ""
 "You are seeing this message because this HTTPS site requires a 'Referer "
 "header' to be sent by your Web browser, but none was sent. This header is "
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"Sie sehen diese Nachricht, da diese HTTPS-Site einen ‚Referer-Header‘ "
+"erfordert von Ihrem Web-Browser gesendet werden, aber keiner gesendet wurde."
+" Dieser Header wird aus Sicherheitsgründen erforderlich, um sicherzustellen,"
+" dass Ihr Browser durch Dritte ist nicht entführt."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:120
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:120
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable 'Referer' headers, please re-"
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
+"Wenn Sie Ihren Browser so konfiguriert haben, zu ‚Referer‘ Header zu "
+"deaktivieren, bitte wieder aktivieren, zumindest für diese Seite oder für "
+"HTTPS-Verbindungen oder für \"same-origin Wünsche."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:124
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:124
+#, fuzzy
 msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
-"CSRF protection requires the 'Referer' header to do strict referer checking. "
-"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
-"\" ...> for links to third-party sites."
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
+" including the 'Referrer-Policy: no-referrer' header, please remove them. "
+"The CSRF protection requires the 'Referer' header to do strict referer "
+"checking. If you're concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" ...> for links to third-party sites."
 msgstr ""
+"Wenn Sie das <meta name = \"Referrer\" content = \"no-Referrer\"> verwenden "
+"Tag oder einschließlich der 'Referrer--Politik: Nein-Referrer' Header, bitte"
+" entfernen. Der CSRF-Schutz erfordert den ‚Referer‘ Header strenge referer "
+"Prüfung zu tun. Wenn Sie über Privatsphäre besorgt sind, verwenden Sie "
+"Alternativen wie <a rel=\"noreferrer\" ...> für Links zu Websites Dritter."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:132
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:132
+#, fuzzy
 msgid ""
 "You are seeing this message because this site requires a CSRF cookie when "
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
+"Sie sehen diese Nachricht, weil diese Seite einen CSRF-Cookie erfordert, "
+"wenn Formulare einreichen. Dieses Cookie wird aus Sicherheitsgründen "
+"erforderlich, um sicherzustellen, dass Ihr Browser durch Dritte ist nicht "
+"entführt."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:137
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:137
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
+"Wenn Sie Ihren Browser Cookies deaktivieren konfiguriert haben, wenden Sie "
+"sich bitte wieder aktivieren, zumindest für diese Seite, oder für \"same-"
+"origin Wünsche."
 
 #: venv/lib/python3.6/site-packages/django/views/csrf.py:142
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/csrf.py:142
+#, fuzzy
 msgid "More information is available with DEBUG=True."
-msgstr ""
+msgstr "Weitere Informationen sind verfügbar mit DEBUG = True."
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:41
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:41
+#, fuzzy
 msgid "No year specified"
-msgstr ""
+msgstr "Kein Jahr angegeben"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:61
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:111
@@ -3296,121 +3372,142 @@ msgstr ""
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:61
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:111
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:208
+#, fuzzy
 msgid "Date out of range"
-msgstr ""
+msgstr "Datum außerhalb des Bereichs"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:90
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:90
+#, fuzzy
 msgid "No month specified"
-msgstr ""
+msgstr "Kein Monat angegeben"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:142
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:142
+#, fuzzy
 msgid "No day specified"
-msgstr ""
+msgstr "Kein Tag angegeben"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:188
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:188
+#, fuzzy
 msgid "No week specified"
-msgstr ""
+msgstr "Keine Woche angegeben"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:338
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:367
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:338
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:367
-#, python-format
+#, python-format, fuzzy
 msgid "No %(verbose_name_plural)s available"
-msgstr ""
+msgstr "Nein% (verbose_name_plural) verfügbar"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:589
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:589
-#, python-format
+#, python-format, fuzzy
 msgid ""
-"Future %(verbose_name_plural)s not available because %(class_name)s."
-"allow_future is False."
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
 msgstr ""
+"Zukunft% (verbose_name_plural) s nicht verfügbar, weil% (class_name) "
+"s.allow_future Falsch ist."
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:623
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/dates.py:623
-#, python-format
+#, python-format, fuzzy
 msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
 msgstr ""
+"Datum ungültig Zeichenfolge '% (datestr) s' bestimmte Format '% (Format) s'"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/detail.py:54
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/detail.py:54
-#, python-format
+#, python-format, fuzzy
 msgid "No %(verbose_name)s found matching the query"
-msgstr ""
+msgstr "Nein% (verbose_name) s Anpassung der Abfrage gefunden"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:67
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:67
+#, fuzzy
 msgid "Page is not 'last', nor can it be converted to an int."
 msgstr ""
+"Die Seite kann nicht ‚last‘, noch kann es in ein int umgewandelt werden."
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:72
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:72
-#, python-format
+#, python-format, fuzzy
 msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
+msgstr "Ungültige Seite (% (page_number) s):% (message) s"
 
 #: venv/lib/python3.6/site-packages/django/views/generic/list.py:154
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/generic/list.py:154
-#, python-format
+#, python-format, fuzzy
 msgid "Empty list and '%(class_name)s.allow_empty' is False."
-msgstr ""
+msgstr "Leere Liste und '% (class_name) s.allow_empty' ist falsch."
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:40
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:40
+#, fuzzy
 msgid "Directory indexes are not allowed here."
-msgstr ""
+msgstr "Directory-Indizes sind hier nicht erlaubt."
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:42
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:42
-#, python-format
+#, python-format, fuzzy
 msgid "\"%(path)s\" does not exist"
-msgstr ""
+msgstr "„% (Pfad) s“ existiert nicht"
 
 #: venv/lib/python3.6/site-packages/django/views/static.py:80
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/static.py:80
-#, python-format
+#, python-format, fuzzy
 msgid "Index of %(directory)s"
-msgstr ""
+msgstr "Index von% (Verzeichnis) s"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:6
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:6
+#, fuzzy
 msgid "Django: the Web framework for perfectionists with deadlines."
-msgstr ""
+msgstr "Django: der Web-Framework für Perfektionisten mit Terminen."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:345
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:345
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
 "target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
+"Ansicht <a target=\"_blank\" "
+"href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"rel=\"noopener\"> Release Notes </a> für Django% (version) s"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:367
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:367
+#, fuzzy
 msgid "The install worked successfully! Congratulations!"
-msgstr ""
+msgstr "Die erfolgreich gearbeitet installieren! Herzliche Glückwünsche!"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
-#, python-format
+#, python-format, fuzzy
 msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-"\">DEBUG=True</a> is in your settings file and you have not configured any "
-"URLs."
+"You are seeing this page because <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
+"and you have not configured any URLs."
 msgstr ""
+"Sie sehen diese Seite, weil <a target=\"_blank\" "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"rel=\"noopener\"> DEBUG = True </a> ist in der Einstellungsdatei und Sie "
+"haben keine URLs konfiguriert."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
+#, fuzzy
 msgid "Django Documentation"
-msgstr ""
+msgstr "Django Dokumentation"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
+#, fuzzy
 msgid "Topics, references, &amp; how-to's"
 msgstr ""
 
@@ -3563,9 +3660,9 @@ msgstr ""
 msgid ""
 "If you confess your sins, God is faithful and just to forgive us our sins, "
 "and to cleanse us from all unrighteousness. Then, turn your back to the "
-"world, and follow Jesus. How? Just start by applying all the commandments on "
-"this website in your life. Step by step, together with God. And if you know "
-"any other christians, take part on this journey together."
+"world, and follow Jesus. How? Just start by applying all the commandments on"
+" this website in your life. Step by step, together with God. And if you know"
+" any other christians, take part on this journey together."
 msgstr ""
 
 #: commandments_app.Commandment/title_negative:2
@@ -3574,12 +3671,8 @@ msgstr ""
 
 #: commandments_app.Commandment/devotional:2
 msgid ""
-"One important part of the commission that God gave Adam was to be fruitful. "
-"Throughout the Bible you see this assignment coming back time and time "
-"again. God gives the fruit and we can work the earth to be fruitful. \n"
-"Fruit is the result of the life source if the vine flowing into the "
-"branches. If we are bonded to the Vine of Christ by the Spirit, His word "
-"will bear fruit that will be inevitable in our lives."
+"One important part of the commission that God gave Adam was to be fruitful. Throughout the Bible you see this assignment coming back time and time again. God gives the fruit and we can work the earth to be fruitful. \n"
+"Fruit is the result of the life source if the vine flowing into the branches. If we are bonded to the Vine of Christ by the Spirit, His word will bear fruit that will be inevitable in our lives."
 msgstr ""
 
 #: commandments_app.Commandment/title:3
@@ -3588,8 +3681,8 @@ msgstr ""
 
 #: commandments_app.Movie/description:1
 msgid ""
-"If there is one part of the Bible that has undergone more scrutiny and abuse "
-"than any other, it is the very beginning-GENESIS. Both from within and "
+"If there is one part of the Bible that has undergone more scrutiny and abuse"
+" than any other, it is the very beginning-GENESIS. Both from within and "
 "without the church, assaults on GENESIS continue to question the Creation "
 "and ultimately the Creator. So, what exactly happened at the \"Creation,\" "
 "at the \"Beginning?\""
@@ -3623,8 +3716,8 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "Each language has its own Media Types. By selecting multiple languages "
-#~ "you can see multiple Media types for different languages (if available)"
+#~ "Each language has its own Media Types. By selecting multiple languages you "
+#~ "can see multiple Media types for different languages (if available)"
 #~ msgstr ""
 #~ "Jede Sprache hat ihre eigenen Medientypen. Durch die Auswahl mehrerer "
 #~ "Sprachen können Sie mehrere Medientypen für verschiedene Sprachen (falls "

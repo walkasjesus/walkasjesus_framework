@@ -75,10 +75,13 @@ msgid "Your username and password didn't match. Please try again."
 msgstr "Uw gebruikersnaam en wachtwoord heb \\"
 
 #: account_app/templates/account/login.html:23
+#, fuzzy
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with"
 " an account that has access."
 msgstr ""
+"Uw account heeft geen toegang tot deze pagina. Om verder te gaan, kunt u "
+"inloggen met een account die toegang heeft."
 
 #: account_app/templates/account/login.html:26
 #, fuzzy
@@ -634,10 +637,13 @@ msgid "Select languages"
 msgstr "select talen"
 
 #: commandments_app/templates/commandments/detail.html:113
+#, fuzzy
 msgid ""
 "Would you like to search for <b>Media Types</b> that are created for a "
 "specific language? Choose your language here.  (if available)"
 msgstr ""
+"Wilt u om te zoeken naar <b> Media Types </ b> die zijn gemaakt voor een "
+"bepaalde taal? Kies hier uw taal. (Indien beschikbaar)"
 
 #: commandments_app/templates/commandments/detail.html:138
 #, fuzzy
@@ -692,8 +698,9 @@ msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:177
 #: commandments_app/templates/commandments/study_listing.html:150
+#, fuzzy
 msgid "Bible verses copyright"
-msgstr ""
+msgstr "Bijbelverzen copyright"
 
 #: commandments_app/templates/commandments/detail.html:192
 #, fuzzy
@@ -701,8 +708,9 @@ msgid "Drawings"
 msgstr "tekeningen"
 
 #: commandments_app/templates/commandments/detail.html:196
+#, fuzzy
 msgid "Artist"
-msgstr ""
+msgstr "Artiest"
 
 #: commandments_app/templates/commandments/detail.html:211
 #, fuzzy
@@ -726,8 +734,9 @@ msgstr "Afbeeldingen"
 
 #: commandments_app/templates/commandments/detail.html:286
 #: commandments_app/templates/commandments/detail.html:290
+#, fuzzy
 msgid "Photographer"
-msgstr ""
+msgstr "Fotograaf"
 
 #: commandments_app/templates/commandments/detail.html:318
 #, fuzzy
@@ -760,8 +769,9 @@ msgid "Share your hearts together by discussing the following questions:"
 msgstr "Deel je harten samen met een bespreking van de volgende vragen:"
 
 #: commandments_app/templates/commandments/detail.html:422
+#, fuzzy
 msgid "Quote by"
-msgstr ""
+msgstr "citaat door"
 
 #: commandments_app/templates/commandments/index.html:16 templates/base.html:9
 #: templates/base.html:54
@@ -941,15 +951,18 @@ msgstr "Johannes 14:15"
 
 #: commandments_app/templates/commandments/privacy.html:12
 #: commandments_app/templates/commandments/termsandconditions.html:12
+#, fuzzy
 msgid "Using"
-msgstr ""
+msgstr "Gebruik makend van"
 
 #: commandments_app/templates/commandments/privacy.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privacybeleid"
 
 #: commandments_app/templates/commandments/privacy.html:16
+#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -973,6 +986,23 @@ msgid ""
 "\n"
 "                    "
 msgstr ""
+"<P> Jesus Geboden begrijpt dat de gebruikers van de Jezus Geboden website waarde hechten aan hun privacy. Deze privacy statement is om gebruikers te informeren over de beperkte informatie die door deze website worden verzameld en waarom het wordt verzameld. </ P>\n"
+"                    <P> Deze privacyverklaring maakt deel uit van en is onderworpen aan de Jezus Geboden <a href=\"/termsandconditions\"> Voorwaarden </a>. </ P>\n"
+"\n"
+"                    <H3> <strong> Wat wij Track en waarom </ strong> </ h3>\n"
+"                    <B> Cookies en logbestandsinformatie </ b>\n"
+"\n"
+"                    <P> The Jesus Geboden website zal \"cookies\" op te slaan op uw systeem te helpen verbeteren van uw ervaring met de website. Veel van deze cookies betrekking hebben op het aanpassen van uw bezoek. Bijvoorbeeld, zodat u uw taal, cultuur en bekende talen in te stellen. De meeste webbrowsers accepteren automatisch cookies, maar deze kan worden uitgeschakeld door het veranderen van de voorkeuren in uw internet browser-instellingen. Als cookies zijn uitgeschakeld zal echter uw ervaring van de website en haar diensten worden beperkt. </ P>\n"
+"\n"
+"                    <P> De site volgt ook welke middelen u bezoekt en download. Dit is voor het verstrekken van statistische gegevens terug aan de gemeenschap en u te voorzien van informatie over wat u hebt bezocht. Deze informatie is volledig anoniem uit de rest van de Jezus Geboden gemeenschap gehouden: geen enkele andere gebruiker zal ooit verteld waar u bezoekt of wat je aan het downloaden bent. The Jesus Geboden team zal nooit het analyseren van uw persoonlijke surfgedrag - we zullen alleen maar kijken naar de geaggregeerde statistische gegevens (bijvoorbeeld het totale aantal mensen een bezoek aan een bron, of het aantal mensen dat een bezoek aan deze site van een bepaald land, taal of cultuur .) </ p>\n"
+"\n"
+"                    <H3> <strong> Aanmelden bij de website </ strong> </ h3>\n"
+"\n"
+"                    <P> Om de middelen te plaatsen, lid worden van een community, snelheid middelen of commentaar achterlaten, zal u gevraagd worden om een ​​logboek bij te bieden. Dit is om frauduleuze activiteiten te voorkomen door ervoor te zorgen dat een dergelijke transactie is niet anoniem. De informatie die wij verzamelen van registratie gebruiker zal nooit worden gebruikt voor marketing doeleinden, tenzij u uitdrukkelijk vraagt ​​abonnement op een bepaalde nieuwsbrief of tijdschrift. </ P>\n"
+"\n"
+"                    <P> Wij verkopen, verhuren of leasen onze gebruikers nooit aan derden, of geef uw gebruiker informatie om hen op geen enkele manier, zonder uitdrukkelijke toestemming van jou. </ P>\n"
+"\n"
+"                    <P> <i> Voor meer informatie over ons privacybeleid, neem dan contact met ons op: <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ i> </ p>"
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:10
 #, fuzzy
@@ -1248,6 +1278,7 @@ msgstr ""
 "referenties terugvinden, zowel het Oude als het Nieuwe Testament."
 
 #: commandments_app/templates/commandments/study_listing.html:63
+#, fuzzy
 msgid ""
 "Maybe you are wondering why we did not study all the commandments in the "
 "whole New Testament? Well, the easiest reason why we didn't, is because "
@@ -1257,6 +1288,13 @@ msgid ""
 "valueable and explaining or extending Jesus teachings, so maybe in the "
 "future we will add them to this website as well."
 msgstr ""
+"Misschien vraag je je af waarom we niet alle geboden in het hele Nieuwe "
+"Testament heeft gestudeerd? Nou, de makkelijkste reden waarom we dat niet "
+"deden, is omdat Jezus bevolen geen rekening gehouden met de geboden die "
+"andere apostelen zeggen, Hij zei: 'leert hen onderhouden al wat Ik u bevolen"
+" heb' (Matteüs 28:20). Natuurlijk, de andere letters in het NT zijn nog "
+"steeds waar, waardevolle en uit te leggen of uit te breiden Jezus leringen, "
+"dus misschien in de toekomst zullen we ze toe te voegen aan deze website."
 
 #: commandments_app/templates/commandments/study_listing.html:68
 #, fuzzy
@@ -1344,10 +1382,12 @@ msgstr "Tertiair"
 
 #: commandments_app/templates/commandments/termsandconditions.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Voorwaarden"
 
 #: commandments_app/templates/commandments/termsandconditions.html:16
+#, fuzzy
 msgid ""
 "\n"
 "                    <h3><strong>General information</strong></h3>\n"
@@ -1367,6 +1407,21 @@ msgid ""
 "                    <p>If you copy and/or distribute Jesus Commandments resources (whether by burning, sending, duplicating or whatever means) please make reference to <a href=\"/\">www.jesuscommandments.org</a> in order to let others know about the website and resources.</p>\n"
 "                    "
 msgstr ""
+"<H3> <strong> Algemeen </ strong> </ h3>\n"
+"                    <P> Onze doelen met deze site is om te luisteren en te gehoorzamen aan Jezus, zijn leringen uit te leggen, laat de mensen krijgen geworteld en vruchtbaar zijn in de wereld, om onze Vader in de hemel verheerlijken </ p>\n"
+"                    <P> U bent vrij om het even welke Jezus Geboden bron zolang het is niet voor winst of andere commerciële doeleinden te gebruiken, het gebruik in overeenstemming is met de Jezus geboden waarden, <a href=\"/vision\"> die kan hier worden gevonden </a>, en uw gebruik niet in strijd met enige toepasselijke wet- of regelgeving. </ p>\n"
+"                    <P> Dit betekent dat u: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> Duplicate middelen voor eigen gebruik en / of het gebruik van uw leiders, kinderen, kerk of groep. </ Li>\n"
+"                        <Li> Verdeel de middelen voor eigen gebruik en / of het gebruik van uw leiders, kinderen, kerk of groep. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> U bent niet toegestaan ​​om: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> Aanpassen of enige middelen te wijzigen zonder onze toestemming. </ Li>\n"
+"                        <Li> Verkopen middelen of deze op te nemen in een commercieel aanbod. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> Als u zich bewust zijn van de middelen Jezus geboden worden verkocht, of vragen heeft kunt u contact opnemen met <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ p>\n"
+"                    <P> Als u kopieert en / of middelen Jesus Geboden verdelen (al dan niet door het verbranden, het verzenden, dupliceren of welke manier dan ook) kunt u verwijzen naar <a href=\"/\"> www.jesuscommandments.org </a> om te laten anderen weten over de website en middelen. </ p>"
 
 #: commandments_app/templates/commandments/vision.html:13
 #, fuzzy
@@ -1645,16 +1700,19 @@ msgstr ""
 "\\"
 
 #: commandments_app/templates/commandments/vision.html:51
+#, fuzzy
 msgid "Statement of Faith"
-msgstr ""
+msgstr "Geloofsbelijdenis"
 
 #: commandments_app/templates/commandments/vision.html:52
+#, fuzzy
 msgid "The Jesus Commandments website's statement of faith, is that of the"
-msgstr ""
+msgstr "verklaring van het geloof The Jesus Geboden website, is die van de"
 
 #: commandments_app/templates/commandments/vision.html:52
+#, fuzzy
 msgid "Lausanne Covenant"
-msgstr ""
+msgstr "Lausanne Covenant"
 
 #: commandments_app/templates/commandments/vision.html:55
 #, fuzzy
@@ -1772,10 +1830,13 @@ msgid "Email: "
 msgstr "E-mail:"
 
 #: templates/bible.html:5
+#, fuzzy
 msgid ""
 "With this setting, all Bible references found on this website are displayed "
 "with the set translation"
 msgstr ""
+"Met deze instelling worden alle Bijbel verwijzingen vinden op deze website "
+"weergegeven met de ingestelde vertaling"
 
 #: venv/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
 #: venv/venv_old2/lib/python3.6/site-packages/django/contrib/messages/apps.py:7
@@ -1915,7 +1976,7 @@ msgstr "Zorgen deze waarde groter dan of gelijk aan% (limit_value) s."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:361
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:361
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at least %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1927,7 +1988,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:376
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:376
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at most %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1949,7 +2010,7 @@ msgstr "Voer een getal."
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:397
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:397
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
@@ -1957,7 +2018,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:402
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:402
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
@@ -1965,7 +2026,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/core/validators.py:407
 #: venv/venv_old2/lib/python3.6/site-packages/django/core/validators.py:407
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
 msgid_plural ""
@@ -2434,7 +2495,7 @@ msgstr "Het ingediende dossier is leeg."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:536
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/fields.py:536
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
@@ -2517,7 +2578,7 @@ msgstr "ManagementForm data ontbreekt of is geknoeid"
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:338
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:338
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
 msgstr[0] ""
@@ -2525,7 +2586,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/forms/formsets.py:345
 #: venv/venv_old2/lib/python3.6/site-packages/django/forms/formsets.py:345
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
 msgstr[0] ""
@@ -2650,7 +2711,7 @@ msgstr "Ja! Nee! Misschien"
 #: venv/lib/python3.6/site-packages/django/template/defaultfilters.py:834
 #: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:817
 #: venv/venv_old2/lib/python3.6/site-packages/django/template/defaultfilters.py:834
-#, python-format
+#, python-format, fuzzy
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
@@ -3148,7 +3209,7 @@ msgstr ","
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:9
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:9
-#, python-format
+#, python-format, fuzzy
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
@@ -3156,7 +3217,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:10
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:10
-#, python-format
+#, python-format, fuzzy
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
@@ -3164,7 +3225,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:11
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:11
-#, python-format
+#, python-format, fuzzy
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
@@ -3172,7 +3233,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:12
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:12
-#, python-format
+#, python-format, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
@@ -3180,7 +3241,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:13
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:13
-#, python-format
+#, python-format, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
@@ -3188,7 +3249,7 @@ msgstr[1] ""
 
 #: venv/lib/python3.6/site-packages/django/utils/timesince.py:14
 #: venv/venv_old2/lib/python3.6/site-packages/django/utils/timesince.py:14
-#, python-format
+#, python-format, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
@@ -3409,21 +3470,27 @@ msgstr "De installatie met succes gewerkt! Gefeliciteerd!"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:368
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "You are seeing this page because <a "
 "href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
 "target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
 "and you have not configured any URLs."
 msgstr ""
+"U ziet deze pagina omdat <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\"> DEBUG = True </a> is in uw bestand "
+"instellingen en je hebt geen URL's geconfigureerd."
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:383
+#, fuzzy
 msgid "Django Documentation"
-msgstr ""
+msgstr "Django Documentatie"
 
 #: venv/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
 #: venv/venv_old2/lib/python3.6/site-packages/django/views/templates/default_urlconf.html:384
+#, fuzzy
 msgid "Topics, references, &amp; how-to's"
 msgstr ""
 

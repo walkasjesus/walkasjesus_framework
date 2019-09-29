@@ -6,7 +6,7 @@ _DATA_PATH = _ROOT_PATH / 'data'
 
 from .bibles import Bibles
 from .bible_books import BibleBooks
-from .config import API_KEY
+from .settings import BIBLE_API_KEY
 from .bible import Bible
 from .bible_factory import BibleFactory
 

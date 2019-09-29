@@ -6,8 +6,6 @@ import pycountry
 from bible_lib.bible_api.api_bible import ApiBible
 from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.bible_api.query_builder import QueryBuilder
-from bible_lib.bible_hsv.hsv_bible import HsvBible
-from bible_lib.performance_time_decorator import performance_time
 
 
 class Bibles(object):
@@ -33,7 +31,7 @@ class Bibles(object):
             return {}
 
         try:
-            bibles = {'hsv': HsvBible()}
+            bibles = {}
 
             for bible_entry in bible_entries:
                 bible = ApiBible()

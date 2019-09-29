@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-from bible_lib.config import API_KEY
+from bible_lib.settings import BIBLE_API_KEY
 from bible_lib.exceptions import *
 
 
@@ -14,7 +14,7 @@ class BibleApiClient:
         self.logger.info('GET {}'.format(url))
 
         try:
-            response = requests.get(url, headers={'api-key': API_KEY})
+            response = requests.get(url, headers={'api-key': BIBLE_API_KEY})
         except Exception as ex:
             self.logger.error(f'GET request for {url} failed.')
             self.logger.error(ex)

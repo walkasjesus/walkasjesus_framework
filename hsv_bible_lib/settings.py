@@ -1,0 +1,1 @@
+HSV_BIBLE_KEY = ''

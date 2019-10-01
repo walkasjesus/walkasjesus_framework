@@ -4,6 +4,7 @@
 {% load cache %}
 {% block content %}
 {% cache cache_timeout commandments_study_listing cache_on_bible %}
+<div class="container">
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">
@@ -151,5 +152,6 @@
         </div>
     </section>
 </section>
+</div>
 {% endcache %}
 {% endblock %}

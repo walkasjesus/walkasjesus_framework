@@ -4,29 +4,31 @@
 {% load cache %}
 {% block content %}
 {% cache cache_timeout commandments_listing cache_on_language %}
+<div class="container">
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
-<div class="ftco-section bg-light" id="sermons-section">
-    <div class="container">
-        <div class="row justify-content-center pb-5">
-            <div class="col-md-12 heading-section text-center ftco-animate">
-                <span class="subheading">{% trans 'John 14:15' %}</span>
-                <h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
-                <p>{% trans 'This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related' %}
-                <strong>{% trans 'Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books' %}</strong> {% trans 'to feed your heart, soul and mind' %}.</p>
-                <p>{% trans 'To succeed in becoming a good disciple, we need to live out all of these commandments. The best way is to do this together. Take your time for each commandment to dive into the greatness of it, and discuss them in your Small Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one discipleship, to become followers in all of Jesus teachings.' %} </p>
+    <div class="ftco-section bg-light" id="sermons-section">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">{% trans 'John 14:15' %}</span>
+                    <h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
+                    <p>{% trans 'This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related' %}
+                    <strong>{% trans 'Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books' %}</strong> {% trans 'to feed your heart, soul and mind' %}.</p>
+                    <p>{% trans 'To succeed in becoming a good disciple, we need to live out all of these commandments. The best way is to do this together. Take your time for each commandment to dive into the greatness of it, and discuss them in your Small Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one discipleship, to become followers in all of Jesus teachings.' %} </p>
+                </div>
+            </div>
+            <div class="row">
+                {% if commandments %}
+                    {% for commandment in commandments %}
+                        {% include "commandments/single_commandment_overview.html" %}
+                    {% endfor %}
+                {% else %}
+                    <p>{% trans 'No commandments are available.' %}</p>
+                {% endif %}
             </div>
         </div>
-        <div class="row">
-            {% if commandments %}
-                {% for commandment in commandments %}
-                    {% include "commandments/single_commandment_overview.html" %}
-                {% endfor %}
-            {% else %}
-                <p>{% trans 'No commandments are available.' %}</p>
-            {% endif %}
-        </div>
     </div>
-</div>
 </section>
+</div>
 {% endcache %}
 {% endblock %}

@@ -2,7 +2,7 @@ import json
 import logging
 import zipfile
 
-from bible_lib import settings, _DATA_PATH
+from bible_lib import settings
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.formatters.formatter import Formatter
@@ -27,7 +27,7 @@ class HsvBible(Bible):
 
     def _load(self):
         logging.getLogger().info('Loading HSV bible contents from disk')
-        with zipfile.ZipFile(_DATA_PATH / 'hsv_bible.zip', mode='r') as zip_file:
+        with zipfile.ZipFile(settings.HSV_BIBLE_PATH, mode='r') as zip_file:
             json_content = zip_file.read('hsv_bible.json', pwd=settings.HSV_BIBLE_KEY.encode()).decode('utf-8')
             return json.loads(json_content)
 

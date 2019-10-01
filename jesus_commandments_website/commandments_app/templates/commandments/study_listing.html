@@ -71,7 +71,30 @@
                     <p>{% trans "If you have any suggestions or corrections, we'd like to hear from you. Please" %} <a href="{% url 'account:signup' %}">{% trans 'register' %}</a> {% trans 'or just sent us a' %} <a href="mailto:info@jesuscommandments.org">{% trans 'email' %}</a>.</p>
                 </div>
             </div>
-        <div class="col-md-12">
+            <div class="btnBibleTranslationStudyPage">
+                    <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <div class="select" data-toggle="tooltip" data-placement="left" title="{% trans 'With this setting, all Bible references found on this website are displayed with the set translation' %}">
+                        <select name="bible_id" onchange="this.form.submit()">
+                            <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
+                            <option value="{{ user_preferences.bible.id }}" selected>
+                                {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
+                            </option>
+                            {% for bible in bible_translation.all_in_user_language %}
+                                {% if bible.id != user_preferences.bible.id %}
+                                <option value="{{ bible.id }}">
+                                    {{ bible.name }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                <br>
+
+            <div class="col-md-12">
                 
             <table id="dtBasicExample" class="table table-striped table-bordered table-sm w-auto" cellspacing="0" width="100%">
                 <thead>

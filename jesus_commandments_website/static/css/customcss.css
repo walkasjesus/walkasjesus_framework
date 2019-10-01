@@ -1,0 +1,13 @@
+/* Some custom css */
+
+.btnBibleTranslation {
+    float: right;
+    margin-right: 10px;
+    margin-top: 1px;
+}
+
+.btnBibleTranslationStudyPage {
+    float: left;
+    margin-left: 10px;
+    padding-bottom: 10px;
+}

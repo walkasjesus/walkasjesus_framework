@@ -44,6 +44,8 @@
     <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
     <!-- Cookielaw -->
     <link href="{% static 'cookielaw/css/cookielaw.css' %}" rel="stylesheet">
+    <!-- Customcss which needs presedence -->
+    <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
   </head>
   {% endcache %}
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
@@ -75,8 +77,6 @@
           </ul>
           <div class="language-select">
             <span>{% include "language.html" %}</span>
-            <span>{% include "bible.html" %}</span>
-            <span>{% include "media_language.html" %}</span>
           </div>
         </div>
       </div>

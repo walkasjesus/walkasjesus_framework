@@ -1,6 +1,6 @@
 from unittest import TestCase
 from bible_lib import BibleBooks
-from hsv_bible_lib.bible_hsv.hsv_bible import HsvBible
+from bible_lib.bible_hsv.hsv_bible import HsvBible
 
 
 class TestHsvBible(TestCase):

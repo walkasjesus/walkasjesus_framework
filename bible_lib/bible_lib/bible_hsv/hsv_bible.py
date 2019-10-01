@@ -2,14 +2,12 @@ import json
 import logging
 import zipfile
 
+from bible_lib import settings, _DATA_PATH
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.formatters.formatter import Formatter
 from bible_lib.formatters.plain_text_formatter import PlainTextFormatter
 from bible_lib.verse import Verse
-
-import settings
-from hsv_bible_lib import _DATA_PATH
 
 
 class HsvBible(Bible):

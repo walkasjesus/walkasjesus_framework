@@ -8,7 +8,7 @@ from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.bible_api.query_builder import QueryBuilder
 
 
-class Bibles(object):
+class ApiBibles(object):
     def __init__(self):
         self.client = CachedBibleApiClient()
         self.logger = logging.getLogger()

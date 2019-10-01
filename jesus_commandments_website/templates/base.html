@@ -181,51 +181,8 @@
   <script type="text/javascript" src="{% static 'js/bootstrap-select.js' %}"></script>
   <!-- Fair use script from bible api -->
   <script src="http://cdn.scripture.api.bible/fums/fumsv2.min.js"></script>
-
-  <!-- Tooltip showing/hiding speed -->
-  <script>
-      $(document).ready(function(){
-          // Showing and hiding tooltip with different speed
-          $(".select").tooltip({
-              delay: {show: 0, hide: 1000}
-          });
-      });
-  </script>
-  <!-- Study Listing arrows in table -->
-  <script>
-      $(document).ready(function () {
-      $('#dtBasicExample').DataTable();
-      $('.dataTables_length').addClass('bs-select');
-      });
-  </script>
-
-  <!-- Detailed commandments page: Smooth scrolling -->  
-  <script>
-  $(document).ready(function(){
-    // Add smooth scrolling to all links
-    $("a").on('click', function(event) {
-
-      // Make sure this.hash has a value before overriding default behavior
-      if (this.hash !== "") {
-        // Prevent default anchor click behavior
-        event.preventDefault();
-
-        // Store hash
-        var hash = this.hash;
-
-        // Using jQuery's animate() method to add smooth page scroll
-        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
-        $('html, body').animate({
-          scrollTop: $(hash).offset().top
-        }, 800, function(){
-
-          // Add hash (#) to URL when done scrolling (default click behavior)
-          window.location.hash = hash;
-        });
-      } // End if
-    });
-  });
-  </script>
+ 
+  <script src="{% static 'js/customjs.js' %}"></script>
 
   {% endcache %}
   </body>

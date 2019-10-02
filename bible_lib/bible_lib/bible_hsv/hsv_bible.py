@@ -2,7 +2,6 @@ import json
 import logging
 import zipfile
 
-from bible_lib import settings
 from bible_lib.bible import Bible
 from bible_lib.bible_books import BibleBooks
 from bible_lib.formatters.formatter import Formatter
@@ -14,12 +13,18 @@ class HsvBible(Bible):
     # share variable between HsvBible
     _content = None
 
-    def __init__(self, text_formatter: Formatter = PlainTextFormatter()):
-        self.id = 'hsv'
+    def __init__(self, password, file_path, text_formatter: Formatter = PlainTextFormatter()):
+        super(HsvBible, self).__init__('hsv')
         self.name = 'Herziene Staten Vertaling'
         self.language = 'nl'
         self.formatter = text_formatter
-        self.copyright = 'All scripture quotations in this publication are from the Herziene Statenvertaling, © Stichting HSV 2010. This bible references are online available at www.herzienestatenvertaling.nl. We are very grateful to the creators of these translations for the online availability of Bible texts and search functionality.'
+        self.copyright = 'All scripture quotations in this publication are from the Herziene Statenvertaling, ' \
+                         '© Stichting HSV 2010. This bible references are online available at ' \
+                         'www.herzienestatenvertaling.nl. We are very grateful to the creators of these translations ' \
+                         'for the online availability of Bible texts and search functionality. '
+
+        self.password = password
+        self.file_path = file_path
 
         # Do not load if already done by another instance
         if HsvBible._content is None:
@@ -27,8 +32,8 @@ class HsvBible(Bible):
 
     def _load(self):
         logging.getLogger().info('Loading HSV bible contents from disk')
-        with zipfile.ZipFile(settings.HSV_BIBLE_PATH, mode='r') as zip_file:
-            json_content = zip_file.read('hsv_bible.json', pwd=settings.HSV_BIBLE_KEY.encode()).decode('utf-8')
+        with zipfile.ZipFile(self.file_path, mode='r') as zip_file:
+            json_content = zip_file.read('hsv_bible.json', pwd=self.password.encode()).decode('utf-8')
             return json.loads(json_content)
 
     def verses(self,
@@ -56,7 +61,7 @@ class HsvBible(Bible):
 
         return self.formatter.flush()
 
-    def _get(self, book: BibleBooks, chapter: int, verse: int) -> bool:
+    def _get(self, book: BibleBooks, chapter: int, verse: int) -> str:
         return HsvBible._content[book.name][str(chapter)][str(verse)]
 
     def _contains(self, book: BibleBooks, chapter: int, verse: int) -> bool:

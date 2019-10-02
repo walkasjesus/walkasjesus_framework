@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
-from bible_lib import BibleFactory, Bibles, Bible
+from bible_lib import BibleFactory, Bible
 from django.conf import settings
 from django.conf.global_settings import LANGUAGES
 from django.db import models
@@ -194,6 +194,19 @@ class Commandment(models.Model):
         return self.title
 
 
+class Bibles:
+    def __init__(self):
+        self.factory = BibleFactory(settings.BIBLE_API_KEY,
+                                    settings.HSV_BIBLE_KEY,
+                                    settings.HSV_BIBLE_PATH)
+
+    def all(self):
+        return self.factory.all()
+
+    def create(self, bible_id: str):
+        return self.factory.create(bible_id)
+
+
 class UserPreferences:
     def __init__(self, session):
         self.session = session
@@ -201,12 +214,12 @@ class UserPreferences:
     @property
     def bible(self):
         if 'bible_id' in self.session:
-            return BibleFactory().create(self.session['bible_id'])
+            return Bibles().create(self.session['bible_id'])
 
         if self.language == 'nl':
-            return BibleFactory().create('hsv')
+            return Bibles().create('hsv')
 
-        return BibleFactory().create('de4e12af7f28f599-01')
+        return Bibles().create('de4e12af7f28f599-01')
 
     @bible.setter
     def bible(self, value):
@@ -232,10 +245,10 @@ class UserPreferences:
 
 
 class BibleTranslation:
-    bibles = Bibles()
+    bibles = Bibles().all()
 
     def all(self) -> [Bible]:
-        return self.bibles.list()
+        return self.bibles.values()
 
     def all_in_user_language(self) -> [Bible]:
         current_user_language = translation.get_language()

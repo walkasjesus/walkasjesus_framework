@@ -9,8 +9,9 @@ from bible_lib.bible_api.query_builder import QueryBuilder
 
 
 class ApiBibles(object):
-    def __init__(self):
-        self.client = CachedBibleApiClient()
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.client = CachedBibleApiClient(api_key)
         self.logger = logging.getLogger()
         self.query_builder = QueryBuilder()
 
@@ -34,7 +35,7 @@ class ApiBibles(object):
             bibles = {}
 
             for bible_entry in bible_entries:
-                bible = ApiBible()
+                bible = ApiBible(self.api_key)
                 bible.id = bible_entry['id']
                 bible.name = self.create_unique_name(bible_entry, bible_entries)
                 bible.language = self._get_language_code(bible_entry)

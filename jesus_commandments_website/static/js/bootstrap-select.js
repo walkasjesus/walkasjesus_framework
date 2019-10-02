@@ -2,6 +2,6 @@ $(document).ready(function() {
   $('#multiselect').multiselect({
     buttonWidth : '160px',
     includeSelectAllOption : true,
-		nonSelectedText: 'Select Media Language'
+		nonSelectedText: 'Select Resource Language'
   });
 });

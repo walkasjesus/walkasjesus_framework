@@ -9,6 +9,7 @@ from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext, gettext_lazy
 from froala_editor.fields import FroalaField
+from hsv_bible_lib import HsvBible
 from sorl.thumbnail import get_thumbnail
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
@@ -195,16 +196,27 @@ class Commandment(models.Model):
 
 
 class Bibles:
+    hsv_bible = None
+
     def __init__(self):
-        self.factory = BibleFactory(settings.BIBLE_API_KEY,
-                                    settings.HSV_BIBLE_KEY,
-                                    settings.HSV_BIBLE_PATH)
+        self.api_bible_factory = BibleFactory(settings.BIBLE_API_KEY)
+        if Bibles.hsv_bible is None:
+            try:
+                Bibles.hsv_bible = HsvBible(settings.HSV_BIBLE_KEY, settings.HSV_BIBLE_PATH)
+            except Exception as ex:
+                logging.getLogger().warning(f'Failed to initialize HsvBible. {ex}')
 
     def all(self):
-        return self.factory.all()
+        bibles = self.api_bible_factory.all()
+        bibles['hsv'] = Bibles.hsv_bible
 
-    def create(self, bible_id: str):
-        return self.factory.create(bible_id)
+        return bibles
+
+    def get(self, bible_id: str):
+        if bible_id not in self.all():
+            logging.getLogger().warning(f'Could not find bible with id {bible_id}')
+        else:
+            return self.all()[bible_id]
 
 
 class UserPreferences:
@@ -214,12 +226,12 @@ class UserPreferences:
     @property
     def bible(self):
         if 'bible_id' in self.session:
-            return Bibles().create(self.session['bible_id'])
+            return Bibles().get(self.session['bible_id'])
 
         if self.language == 'nl':
-            return Bibles().create('hsv')
+            return Bibles().get('hsv')
 
-        return Bibles().create('de4e12af7f28f599-01')
+        return Bibles().get('de4e12af7f28f599-01')
 
     @bible.setter
     def bible(self, value):

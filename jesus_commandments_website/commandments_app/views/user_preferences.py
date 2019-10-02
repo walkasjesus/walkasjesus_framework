@@ -10,7 +10,7 @@ from commandments_app.models import UserPreferences, Bibles
 class UserPreferencesBibleView(View):
     def post(self, request):
         if 'bible_id' in request.POST:
-            new_bible = Bibles().create(request.POST['bible_id'])
+            new_bible = Bibles().get(request.POST['bible_id'])
             UserPreferences(request.session).bible = new_bible
         else:
             messages.error(request, gettext('Failed to change the bible translation'))

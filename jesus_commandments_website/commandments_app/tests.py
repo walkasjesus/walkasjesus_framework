@@ -19,7 +19,7 @@ class TestBibleReference(TestCase):
 
 class UniqueModelConstraintsTestCase(TestCase):
     def setUp(self):
-        Commandment.objects.create(id=1)
+        Commandment.objects.get(id=1)
 
     def test_single_primary_bible_reference(self):
         """ Test to see that we can only have on primary reference """

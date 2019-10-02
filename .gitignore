@@ -20,3 +20,5 @@ jesus_commandments_website/account_app/management/commands/import_users.py
 
 # Compiled translation files
 *.mo
+hsv_bible_lib/hsv_bible_lib/tests/path
+hsv_bible_lib/hsv_bible_lib/tests/key

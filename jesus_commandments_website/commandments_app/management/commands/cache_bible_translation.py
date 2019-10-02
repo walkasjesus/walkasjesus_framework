@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     def load_bible_verses(self, bible_id: str):
         bible_references = BibleReferences()
-        bible_references.bible = Bibles().create(bible_id)
+        bible_references.bible = Bibles().get(bible_id)
 
         # Just retrieve the text of all references and it will automatically be cached by the bible_lib
         refs = list(bible_references.primary()) + list(bible_references.secondary()) + list(bible_references.tertiary())

@@ -8011,10 +8011,10 @@ a {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease;
-  color: #ffd615; }
+  color: #e2b900; }
   a:hover, a:focus {
     text-decoration: none;
-    color: #ffd615;
+    color: #534507;
     outline: none !important; }
 
 h1, h2, h3, h4, h5,

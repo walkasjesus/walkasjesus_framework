@@ -7,20 +7,36 @@
 {% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
+        {% if commandment.devotional %}
         <li>
             <a href="#devotional" class="ripple">
-                <i><img src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Devotional' %}" src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% endif %}
         <li>
             <a href="#biblereferences" class="ripple">
-                <i><img src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
-                <i><img src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Drawings' %}" src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if commandment.pictures %}
+        <li>
+            <a href="#pictures" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Pictures' %}" src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if commandment.questions %}
+        <li>
+            <a href="#questions" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Questions' %}" src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
@@ -34,56 +50,42 @@
         {% if commandment.songs %}
         <li>
             <a href="#songs" class="ripple">
-                <i><img src="{% static 'images/song.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Songs' %}" src="{% static 'images/song.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.movies %}
         <li>
             <a href="#movies" class="ripple">
-                <i><img src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
-            </a>
-        </li>
-        {% endif %}
-        {% if commandment.pictures %}
-        <li>
-            <a href="#pictures" class="ripple">
-                <i><img src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Movies' %}" src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.testimonies %}
         <li>
             <a href="#testimonies" class="ripple">
-                <i><img src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Testimonies' %}" src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.blogs %}
         <li>
             <a href="#blogs" class="ripple">
-                <i><img src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Blogs' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.sermons %}
         <li>
             <a href="#sermons" class="ripple">
-                <i><img src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Sermons' %}" src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.books %}
         <li>
             <a href="#books" class="ripple">
-                <i><img src="{% static 'images/book.png' %}" width="40px" alt=""></i>
-            </a>
-        </li>
-        {% endif %}
-        {% if commandment.questions %}
-        <li>
-            <a href="#questions" class="ripple">
-                <i><img src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Books' %}" src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}

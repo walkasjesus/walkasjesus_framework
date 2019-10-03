@@ -222,8 +222,8 @@ class UserPreferences:
         if 'languages' in self.session and self.session['languages'] is not None:
             return self.session['languages']
 
-        # If nothing is specified, default to user main language
-        return [self.language]
+        # If nothing is specified, default to user main language and english as many items are available in english.
+        return [self.language, 'en']
 
     @languages.setter
     def languages(self, value) -> []:

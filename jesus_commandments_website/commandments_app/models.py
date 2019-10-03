@@ -263,6 +263,20 @@ class AbstractBibleReference(models.Model):
         """ Set a bible to get the text in that bible translation."""
         self.bible = bible
 
+    def __str__(self):
+        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
+
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return book_chapter_verse
+
+        if self.begin_chapter == self.end_chapter and self.begin_verse == self.end_verse:
+            return book_chapter_verse
+
+        if self.begin_chapter == self.end_chapter and self.end_verse > self.begin_verse:
+            return f'{book_chapter_verse}-{self.end_verse}'
+
+        return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
+
     def text(self):
         """Get the verse text from the bible api."""
         if self.end_chapter == 0:
@@ -320,6 +334,22 @@ class AbstractBibleReference(models.Model):
             return True
 
         return False
+
+
+class BibleReference(AbstractBibleReference):
+    def __init__(self,
+                 bible: Bible,
+                 book: BibleBooks,
+                 begin_chapter: int,
+                 begin_verse: int,
+                 end_chapter: int = 0,
+                 end_verse: int = 0):
+        self.bible = bible
+        self.book = book.value
+        self.begin_chapter = begin_chapter
+        self.begin_verse = begin_verse
+        self.end_chapter = end_chapter
+        self.end_verse = end_verse
 
 
 class PrimaryBibleReference(AbstractBibleReference):

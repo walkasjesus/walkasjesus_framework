@@ -12,7 +12,7 @@ class UserPreferences:
         if 'bible_id' in self.session:
             return BibleTranslation().get(self.session['bible_id'])
 
-        if self.language == 'nl':
+        if self.language == 'nl' and BibleTranslation().contains('hsv'):
             return BibleTranslation().get('hsv')
 
         return BibleTranslation().get('de4e12af7f28f599-01')

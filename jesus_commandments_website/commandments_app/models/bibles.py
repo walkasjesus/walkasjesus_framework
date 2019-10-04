@@ -12,16 +12,24 @@ class CombinedBiblesFactory:
     hsv_bible = None
 
     def __init__(self):
+        try:
+            self.hsv_supported = (settings.HSV_BIBLE_KEY != '' and settings.HSV_BIBLE_PATH != '')
+        except:
+            self.hsv_supported = False
+
         self.api_bible_factory = BibleFactory(settings.BIBLE_API_KEY)
-        if CombinedBiblesFactory.hsv_bible is None:
+        if self.hsv_supported and CombinedBiblesFactory.hsv_bible is None:
             try:
-                CombinedBiblesFactory.hsv_bible = HsvBible(settings.HSV_BIBLE_KEY, settings.HSV_BIBLE_PATH)
+                hsv = HsvBible(settings.HSV_BIBLE_KEY, settings.HSV_BIBLE_PATH)
+                CombinedBiblesFactory.hsv_bible = hsv
             except Exception as ex:
                 logging.getLogger().warning(f'Failed to initialize HsvBible. {ex}')
 
     def all(self):
         bibles = self.api_bible_factory.all()
-        bibles['hsv'] = CombinedBiblesFactory.hsv_bible
+
+        if self.hsv_supported and CombinedBiblesFactory.hsv_bible is not None:
+            bibles['hsv'] = CombinedBiblesFactory.hsv_bible
 
         return bibles
 
@@ -57,3 +65,6 @@ class BibleTranslation:
     def get(self, bible_id: str):
         """" Get a specific bible translation given its unique id. """
         return CombinedBiblesFactory().get(bible_id)
+
+    def contains(self, bible_id: str):
+        return CombinedBiblesFactory().get(bible_id) is not None

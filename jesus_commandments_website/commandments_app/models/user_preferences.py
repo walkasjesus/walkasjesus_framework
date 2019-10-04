@@ -1,5 +1,6 @@
-from bible_lib import BibleFactory
 from django.utils import translation
+
+from commandments_app.models import BibleTranslation
 
 
 class UserPreferences:
@@ -9,12 +10,12 @@ class UserPreferences:
     @property
     def bible(self):
         if 'bible_id' in self.session:
-            return BibleFactory().create(self.session['bible_id'])
+            return BibleTranslation().get(self.session['bible_id'])
 
         if self.language == 'nl':
-            return BibleFactory().create('hsv')
+            return BibleTranslation().get('hsv')
 
-        return BibleFactory().create('de4e12af7f28f599-01')
+        return BibleTranslation().get('de4e12af7f28f599-01')
 
     @bible.setter
     def bible(self, value):

@@ -4,34 +4,11 @@
 {% load cache %}
 {% block content %}
 {% cache cache_timeout vision cache_on_language %}
-<div class="container">
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">
             <div class="row justify-content-center pb-5">
                 <div class="col-md-12 heading-section text-center ftco-animate">
-                    <div class="btnBibleTranslationStudyPage">
-                        <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
-                            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                            <div class="select" data-toggle="tooltip" data-placement="left" title="{% trans 'With this setting, all Bible references found on this website are displayed with the set translation' %}">
-                            <select name="bible_id" onchange="this.form.submit()">
-                                <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
-                                <option value="{{ user_preferences.bible.id }}" selected>
-                                    {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
-                                </option>
-                                {% for bible in bible_translation.all_in_user_language %}
-                                    {% if bible.id != user_preferences.bible.id %}
-                                    <option value="{{ bible.id }}">
-                                        {{ bible.name }}
-                                    </option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
-                    <br>        
                     <span class="subheading">{% trans 'The reason why' %}</span>
                     <h2 class="mb-4"><span>{% trans 'Vision' %}</span></h2>
                     <h5 class="mb-4"><span><i>{% trans '"Our goals with this site is to listen to and obey Jesus, explain His teachings, let the people get rooted and be fruitful in the world, to glorify our Father in heaven"' %}</i></span></h5>
@@ -84,6 +61,5 @@
         </div>
     </section>
 </section>
-</div>
 {% endcache %}
 {% endblock %}

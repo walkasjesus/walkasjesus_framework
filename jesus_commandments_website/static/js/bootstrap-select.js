@@ -4,5 +4,8 @@ $(document).ready(function() {
     includeSelectAllOption : true,
     nonSelectedText: 'Select Resource Language',
     buttonClass: "btnMultiSelect",
+    enableFiltering: true,
+    enableFullValueFiltering: true,
+    enableCaseInsensitiveFiltering: true
   });
 });

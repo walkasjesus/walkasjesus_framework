@@ -248,28 +248,16 @@
             </div>
             {% endif %}
             <div id="mediasettings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mediasettings">
-                <div class="alert alert-info" role="alert">
-                    <div class="our-services-text media-settings">
-                        <h4>{% trans 'Resource Settings' %}</h4>
-                        {% blocktrans %}Resources are helpful to discover the greatness of this commandment. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books.{% endblocktrans %}
-                        <br>
-                        <br>
-                            <div class="multiselect">
-                                <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
-                                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                    <select id="multiselect" name="languages" multiple class="btnSelectResourceType"> &lt;!&ndash;onchange="this.form.submit()"&ndash;&gt;
-                                        {% get_available_languages as LANGUAGES %}
-                                        {% get_language_info_list for LANGUAGES as languages %}
-                                        {% for language in languages %}
-                                        <option value="{{ language.code }}">
-                                            {{ language.name_local }} ({{ language.code }})
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                    <input type="submit" class="button" value="{% trans 'Apply languages' %}">
-                                </form>
+                <div class="alert alert-info alert-resource-settings" role="alert">
+                    <div class="our-services-text">
+                        <div class="resource-settings">
+                            <h4>{% trans 'Resource Language Settings' %}</h4>
+                            {% blocktrans %}Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
+
+                            <div class="btnResourceSettings">
+                                <span><a href="javascript:void(0);" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change resource language' %}</a></span>
                             </div>
-                            <p><i>{% blocktrans %}Would you like to search for <b>Resources</b> that are created for a <b>specific language</b>? Choose your language here. (if available){% endblocktrans %}</i></p>
+                        </div>                
                     </div>
                 </div>
             </div>

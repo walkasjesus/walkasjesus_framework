@@ -24,10 +24,6 @@
     margin-top: 5px;
 }
 
-.our-services-img {
-
-}
-
 .multiselect-container{
     width: 100%;
 }
@@ -48,6 +44,23 @@
     background: #ffd615;
 }
 
+.btnMultiSelect {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    background: #fff;
+    background-image: none;
+    border: 1px solid #000000;
+    opacity: 1.0;
+    padding: 2px;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 14px;
+    border-radius: .25em;
+}
+
 /* Detailed commandments page: boxes */
 .mb-60 {
     margin-bottom: 60px;
@@ -60,14 +73,50 @@
     transition: .3s;
     border-radius: 10px;
     position: relative;
+    padding: 15px;
 }
+
+.our-services-img {
+    margin-left: -52px;
+}
+
 .our-services-text {
-    padding-right: 10px;
+    padding: 15px;
+    margin-top: -70px;
 }
-.our-services-text {
-    overflow: hidden;
-    padding: 28px 0 25px;
+
+.resource-settings {
+    margin-top: 53px;
 }
+
+.alert-resource-settings {
+    height: 160px;
+    margin-bottom: 50px;
+}
+
+.btnResourceSettings {
+    position: absolute;
+    right: 12px; 
+    border: 1px solid #ffd615;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    color: rgb(88, 69, 57);
+    font-size: 12px;
+    text-transform: uppercase;
+    background: #ffd615;
+    letter-spacing: 3px;
+}
+.btnResourceSettings:hover{
+    background: transparent;
+}
+
+.btnResourceSettings a {
+    color: rgb(58, 51, 45);
+}
+
 .our-services-text h4 {
     color: #222222;
     font-size: 18px;

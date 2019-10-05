@@ -2,17 +2,6 @@
 .language-select {
     position: absolute;
     right: 12px; 
-    border: 1px solid #ffd615;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    color: rgb(88, 69, 57);
-    font-size: 12px;
-    text-transform: uppercase;
-    background: transparent;
-    letter-spacing: 3px;
   }
 
   .language-select:hover{

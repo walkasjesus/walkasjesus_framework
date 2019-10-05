@@ -61,6 +61,51 @@
     border-radius: .25em;
 }
 
+.bg-container {
+    background-image: url("/static/images/drawing_placeholder.png");
+    min-height: 900px; }
+  
+  /* .bg-container {
+    background-color: rgb(194, 194, 194);
+    min-height: 1153px; } */
+    
+  
+  .jclogo {
+    padding-right: 5px;
+  }
+  
+  .jclogo img {
+    width: 50px;
+  }
+  
+  .button {
+    border: 1px solid rgb(88, 69, 57) !important;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    color: rgb(88, 69, 57) !important;
+    padding: 10px;
+    font-size: 16px;
+    background: #e2b900 !important;
+    text-transform: uppercase, bold;
+    letter-spacing: 3px;
+  }
+  
+  .button:hover {
+    border: 1px solid #e2b900;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    padding: 10px;
+    cursor:pointer;
+    font-size: 16px;
+    text-transform: uppercase, bold;
+    background: transparent !important;
+    letter-spacing: 3px;
+    color: rgb(88, 69, 57) !important; }
+
 /* Detailed commandments page: boxes */
 .mb-60 {
     margin-bottom: 60px;

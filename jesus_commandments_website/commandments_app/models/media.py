@@ -3,7 +3,7 @@ from django.db import models
 from sorl.thumbnail import get_thumbnail
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
-from commandments_app.models import Commandment
+from commandments_app.models import Commandment, gettext_lazy
 from jesus_commandments_website.settings import MEDIA_URL
 
 
@@ -14,7 +14,10 @@ class Media(models.Model):
     description = models.TextField(default='')
     author = models.CharField(max_length=64, default='')
     url = URLOrRelativeURLField(default='#')
-    language = models.CharField(max_length=8, choices=LANGUAGES, default='en')
+    language_choices = [('any', gettext_lazy('Language independent')),
+                        ('unknown', gettext_lazy('Language unknown'))]
+    language_choices += LANGUAGES
+    language = models.CharField(max_length=8, choices=language_choices, default='en')
     is_public = models.BooleanField(default=False)
 
     class Meta:

@@ -26,7 +26,6 @@
   .select {
     position: relative;
     display: flex;
-    max-width: 20em;
     font-family: "Open Sans", Arial, sans-serif;
     text-transform: uppercase;
     font-size: 13px;

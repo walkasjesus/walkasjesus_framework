@@ -30,8 +30,6 @@
     <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
     <!-- Generic colorlib christian theme -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <!-- Detailed commandments page: boxes -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-snippet.css' %}">   
     <!-- Detailed commandments page: Navbar menu left -->  
     <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-menu.css' %}">   
     <!-- Detailed commandments page: Signup form -->  
@@ -154,6 +152,84 @@
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+<!-- Modal for language settings -->
+<div class="modal fade" id="changeLanguageModal" tabindex="-1" role="dialog" aria-labelledby="changeLanguageModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeLanguageModalLabel">{% trans 'Change languages / Bible translations' %}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="selectWrapper">
+        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+          <input name="next" type="hidden" value="{{ redirect_to }}">
+          {% trans 'Site language' %}: <div class="select">
+              <select class="drpSelectLanguage" name="language" onchange="this.form.submit()">
+                  {% get_current_language as LANGUAGE_CODE %}
+                  {% get_available_languages as LANGUAGES %}
+                  {% get_language_info_list for LANGUAGES as languages %}
+                  {% for language in languages %}
+                  <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                      {{ language.name_local }} ({{ language.code }})
+                  </option>
+                  {% endfor %}
+              </select>
+          </div>
+        </form> 
+          </div>
+        <div class="selectWrapper">
+          {% trans 'Bible translation' %}: 
+          <div class="btnBibleTranslation">
+          <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+              <input name="next" type="hidden" value="{{ request.get_full_path }}">
+              <div class="select" data-toggle="tooltip" data-placement="left" title="{% trans 'With this setting, all Bible references found on this website are displayed with the set translation' %}">
+              <select name="bible_id" onchange="this.form.submit()">
+                  <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
+                  <option value="{{ user_preferences.bible.id }}" selected>
+                      {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
+                  </option>
+                  {% for bible in bible_translation.all_in_user_language %}
+                      {% if bible.id != user_preferences.bible.id %}
+                      <option value="{{ bible.id }}">
+                          {{ bible.name }}
+                      </option>
+                      {% endif %}
+                  {% endfor %}
+              </select>
+              </div>
+          </form>
+        </div>
+        </div>
+        <br>
+        {% blocktrans %}Resources are helpful to discover the greatness of this commandment. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books.{% endblocktrans %}
+            <div class="multiselect">
+                <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <select id="multiselect" name="languages" multiple class="btnSelectResourceType"> &lt;!&ndash;onchange="this.form.submit()"&ndash;&gt;
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                        <option value="{{ language.code }}">
+                            {{ language.name_local }} ({{ language.code }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" class="button" value="{% trans 'Apply languages' %}">
+                </form>
+            </div>
+            <p><i>{% blocktrans %}Would you like to search for <b>Resources</b> that are created for a <b>specific language</b>? Choose your language here. (if available){% endblocktrans %}</i></p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   {% cache cache_timeout javascript %}
   <script src="{% static 'js/jquery.min.js' %}"></script>

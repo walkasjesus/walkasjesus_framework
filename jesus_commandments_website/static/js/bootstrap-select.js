@@ -1,7 +1,8 @@
 $(document).ready(function() {
   $('#multiselect').multiselect({
-    buttonWidth : '160px',
+    buttonWidth : '100%',
     includeSelectAllOption : true,
-		nonSelectedText: 'Select Resource Language'
+    nonSelectedText: 'Select Resource Language',
+    buttonClass: "btnMultiSelect",
   });
 });

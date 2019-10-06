@@ -93,7 +93,7 @@
     <div class="menu-bg"></div>
 </nav>
 
-<section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.url is not defined %}{{ commandment.background_drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% endif %}');">
+<section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.url is not defined %}{{ commandment.background_drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
 <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
@@ -252,8 +252,8 @@
                     <div class="our-services-text">
                         <div class="resource-settings">
                             <h4>{% trans 'Resource Language Settings' %}</h4>
-                            {% blocktrans %}Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
-
+                            {% blocktrans %}Below you will find all kinds of related resources to this commandment, to help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
+                            <p><i>{% blocktrans %}Do you know more good resources in your language which can be added to this list? Please <a href="mailto:info@jesuscommandments.org">contact us</a> so we can add it (or <a href="">register</a> and you can add it yourself!{% endblocktrans %}</i></p>
                             <div class="btnResourceSettings">
                                 <span><a href="javascript:void(0);" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change resource language' %}</a></span>
                             </div>

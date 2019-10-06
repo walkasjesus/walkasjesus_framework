@@ -130,18 +130,21 @@
     margin-top: -70px;
 }
 
+.mediasettings {
+    margin-bottom: 73px;
+}
+
 .resource-settings {
     margin-top: 53px;
 }
 
 .alert-resource-settings {
-    height: 160px;
-    margin-bottom: 50px;
+    margin-bottom: -14px;
+    padding-bottom: 30px;
 }
 
 .btnResourceSettings {
-    position: absolute;
-    right: 12px; 
+    float:right;  
     border: 1px solid #ffd615;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;

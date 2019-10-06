@@ -4,14 +4,14 @@ from unittest import TestCase, skip
 from bible_lib.bible_api.api_bible import ApiBible
 from bible_lib.bible_api.services import Services
 from bible_lib.bible_books import BibleBooks
-from bible_lib.bibles import Bibles
+from bible_lib.bible_api.api_bibles import ApiBibles
 from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 
 
 @skip('Only run module test manually as it connects to external API')
 class TestModule(TestCase):
     def test_list_bibles(self):
-        bibles = Bibles()
+        bibles = ApiBibles()
         bible_list = bibles.list()
         self.assertEqual(116, len(bible_list))
 

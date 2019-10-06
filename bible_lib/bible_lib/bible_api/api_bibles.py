@@ -6,13 +6,12 @@ import pycountry
 from bible_lib.bible_api.api_bible import ApiBible
 from bible_lib.bible_api.cached_bible_api_client import CachedBibleApiClient
 from bible_lib.bible_api.query_builder import QueryBuilder
-from bible_lib.bible_hsv.hsv_bible import HsvBible
-from bible_lib.performance_time_decorator import performance_time
 
 
-class Bibles(object):
-    def __init__(self):
-        self.client = CachedBibleApiClient()
+class ApiBibles(object):
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.client = CachedBibleApiClient(api_key)
         self.logger = logging.getLogger()
         self.query_builder = QueryBuilder()
 
@@ -33,10 +32,10 @@ class Bibles(object):
             return {}
 
         try:
-            bibles = {'hsv': HsvBible()}
+            bibles = {}
 
             for bible_entry in bible_entries:
-                bible = ApiBible()
+                bible = ApiBible(self.api_key)
                 bible.id = bible_entry['id']
                 bible.name = self.create_unique_name(bible_entry, bible_entries)
                 bible.language = self._get_language_code(bible_entry)

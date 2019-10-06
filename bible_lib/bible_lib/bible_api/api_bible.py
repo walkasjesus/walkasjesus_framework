@@ -12,9 +12,9 @@ from bible_lib.verse import Verse
 
 
 class ApiBible(Bible):
-    def __init__(self, bible_id=None, text_formatter: Formatter = PlainTextFormatter()):
+    def __init__(self, api_key: str, bible_id=None, text_formatter: Formatter = PlainTextFormatter()):
         super().__init__(bible_id)
-        self.client = CachedBibleApiClient()
+        self.client = CachedBibleApiClient(api_key)
         self.formatter = text_formatter
         self.query_builder = QueryBuilder()
         self.logger = logging.getLogger()
@@ -60,7 +60,7 @@ class ApiBible(Bible):
         current_chapter = start_chapter
 
         # Format when using content-type=text is like [1] text... [2] ... [1] ...
-        normalized_text = re.sub('\s+', ' ', verses_text).replace('\n', '')
+        normalized_text = re.sub(r'\s+', ' ', verses_text).replace('\n', '')
         split_verses = normalized_text.split('[')
 
         # extract verse number and texts

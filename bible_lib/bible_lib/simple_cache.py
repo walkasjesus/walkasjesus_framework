@@ -39,7 +39,7 @@ class SimpleCache:
     def load_state(self,):
         """" Load the cache content from disk. """
         if not self.cache_path.exists():
-            self.logger.warning(f'Could not find cache at {self.cache_path}')
+            self.logger.info(f'Could not find cache at {self.cache_path}')
             return
 
         with self.cache_path.open() as file:

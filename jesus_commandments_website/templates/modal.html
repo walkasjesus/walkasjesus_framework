@@ -15,7 +15,7 @@
                     <input name="next" type="hidden" value="{{ redirect_to }}">
                     <b>{% trans 'Site language' %}:</b>
                     <div class="select">
-                        <select class="drpSelectLanguage" name="language" onchange="this.form.submit()">
+                        <select class="drpSelectLanguage" name="language" >
                             {% get_current_language as LANGUAGE_CODE %}
                             {% get_available_languages as LANGUAGES %}
                             {% get_language_info_list for LANGUAGES as languages %}
@@ -34,7 +34,7 @@
                 <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <div class="select">
-                    <select name="bible_id" onchange="this.form.submit()">
+                    <select name="bible_id" class="drpBibleTranslation">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
                         <option value="{{ user_preferences.bible.id }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
@@ -55,9 +55,9 @@
             <div class="selectWrapper">
                 <b>{% trans 'Resource language' %}:</b> 
                 <div class="multiselect">
-                    <form action="{% url 'commandments:languages' %}" method="post">{% csrf_token %}
+                    <form action="{% url 'commandments:languages' %}" class="frmLanguages" method="post">{% csrf_token %}
                         <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                        <select id="multiselect" name="languages" multiple class="btnSelectResourceType"> &lt;!&ndash;onchange="this.form.submit()"&ndash;&gt;
+                        <select id="multiselect" name="languages" multiple class="btnSelectResourceType">
                             {% get_available_languages as LANGUAGES %}
                             {% get_language_info_list for LANGUAGES as languages %}
                             {% for language in languages %}
@@ -66,14 +66,14 @@
                             </option>
                             {% endfor %}
                         </select>
+                        <div class="modal-footer">
+                            <button class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
+                        </div>                  
                     </form>
                 </div>
                 <!-- {% blocktrans %}Would you like to search for <b>Resources</b> that are created for a <b>specific language</b>? Choose your language here. (if available){% endblocktrans %} -->
                 <p><i>{% blocktrans %}Within a commandment, you can find related resources to that commandment. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}</i></p>
             </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
         </div>
       </div>
     </div>

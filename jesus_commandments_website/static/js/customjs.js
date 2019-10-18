@@ -1,6 +1,9 @@
 $(document).ready(function(){
   
-  
+  if($.cookie('jc_bible_trans_settings')){
+    $('#changeLanguageModal').modal('show');
+    $.removeCookie('jc_bible_trans_settings');
+  }
   
   
   // ----- Detailed commandments page: Smooth scrolling BEGIN ------ \\  
@@ -51,4 +54,22 @@ $(document).ready(function(){
     // ----- Showing and hiding tooltip with different speed END ------ \\ 
 
 
+
+    $(document).on('change', '.drpSelectLanguage', function(event){
+      event.preventDefault();
+      $.cookie('jc_bible_trans_settings', true);
+      debugger;
+      this.form.submit();
+    });
+    $(document).on('change', '.drpBibleTranslation', function(event){
+      event.preventDefault();
+      $.cookie('jc_bible_trans_settings', true);
+      this.form.submit();
+    });
+
+    $(document).on('click', '.btnSaveLanguages', function(event){
+      event.preventDefault();
+      //$.cookie('jc_bible_trans_settings', true);
+      this.form.submit();
+    });
   });

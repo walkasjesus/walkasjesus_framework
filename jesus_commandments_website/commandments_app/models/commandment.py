@@ -78,7 +78,8 @@ class Commandment(models.Model):
         return self.question_set.all()
 
     def _filter_on_language(self, query):
-        return query.filter(language__in=self.languages, is_public=True)
+        filter_languages = ['any'] + self.languages
+        return query.filter(language__in=filter_languages, is_public=True)
 
     def _get_translated_bible_references(self, query_set):
         sorted_query_set = sorted(query_set)

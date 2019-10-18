@@ -1,6 +1,5 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from bible_lib import BibleFactory
 from bible_lib.bible_api.services import Services
 from django.core.management import BaseCommand
 
@@ -25,13 +24,13 @@ class Command(BaseCommand):
             return
 
         self.load_bible_verses(bible_id)
-        
+
         cache = Services().cache
         cache.store_state()
 
     def load_bible_verses(self, bible_id: str):
         bible_references = BibleReferences()
-        bible_references.bible = BibleFactory().create(bible_id)
+        bible_references.bible = BibleTranslation().get(bible_id)
 
         # Just retrieve the text of all references and it will automatically be cached by the bible_lib
         refs = list(bible_references.primary()) + list(bible_references.secondary()) + list(bible_references.tertiary())

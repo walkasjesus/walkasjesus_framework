@@ -1,7 +1,11 @@
 $(document).ready(function() {
   $('#multiselect').multiselect({
-    buttonWidth : '160px',
+    buttonWidth : '100%',
     includeSelectAllOption : true,
-		nonSelectedText: 'Select an Option'
+    nonSelectedText: 'Select Resource Language',
+    buttonClass: "btnMultiSelect",
+    enableFiltering: true,
+    enableFullValueFiltering: true,
+    enableCaseInsensitiveFiltering: true
   });
 });

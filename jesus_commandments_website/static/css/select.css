@@ -1,7 +1,12 @@
 /* Div Select */
 .language-select {
     position: absolute;
-    right: 12px; }
+    right: 12px; 
+  }
+
+  .language-select:hover{
+    background: #ffd615;
+}
 
 /* Reset Select */
   select {
@@ -26,10 +31,9 @@
   .select {
     position: relative;
     display: flex;
-    max-width: 20em;
     font-family: "Open Sans", Arial, sans-serif;
     text-transform: uppercase;
-    font-size: 13px;
+    font-size: 14px;
     color: #fff;
     height: 2em;
     line-height: 2;

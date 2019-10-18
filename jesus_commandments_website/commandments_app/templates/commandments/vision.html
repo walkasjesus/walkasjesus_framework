@@ -4,21 +4,20 @@
 {% load cache %}
 {% block content %}
 {% cache cache_timeout vision cache_on_language %}
-<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_3.jpg' %});">
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <section class="ftco-section bg-light">
         <div class="container">
             <div class="row justify-content-center pb-5">
                 <div class="col-md-12 heading-section text-center ftco-animate">
-
                     <span class="subheading">{% trans 'The reason why' %}</span>
                     <h2 class="mb-4"><span>{% trans 'Vision' %}</span></h2>
-                    <h5 class="mb-4"><span><i>{% trans '"Our goals with this site is to listen and obey to Jesus, explain His teachings, let the people get rooted and be fruitful in the world, to glorify our Father in heaven"' %}</i></span></h5>
+                    <h5 class="mb-4"><span><i>{% trans '"Our goals with this site is to listen to and obey Jesus, explain His teachings, let the people get rooted and be fruitful in the world, to glorify our Father in heaven"' %}</i></span></h5>
 
                     <div style="text-align: left;">
-                        <p><b>{% trans 'The world despirately needs Jesus! Not only the non-christians to hear the gospel, but also the christians to get rooted. The church wordwide is going to challenge a rough time where not many are prepared for. People need to become rooted in Christ and be fruitful, like the parabel Jesus is explaining in Matthew 13.' %}</b></p>
-                        <p><i>{% trans '"Behold, a sower went forth to sow; 4 And when he sowed, some seeds fell by the way side, and the fowls came and devoured them up: 5 Some fell upon stony places, where they had not much earth: and forthwith they sprung up, because they had no deepness of earth: 6 And when the sun was up, they were scorched; and because they had no root, they withered away. 7 And some fell among thorns; and the thorns sprung up, and choked them: 8 But other fell into good ground, and brought forth fruit, some an hundredfold, some sixtyfold, some thirtyfold. 9 Who hath ears to hear, let him hear." (Matthew 13:4-9)'%}</i></p>
+                        <p><b>{% trans 'The world despiritely needs Jesus! Not only the non-christians to hear the gospel, but also the Christians to get rooted. The church wordwide is going to challenge a rough time where not many are prepared for. People need to become rooted in Christ and be fruitful, like the parabel Jesus is explaining in Matthew 13.' %}</b></p>
+                        <p><i>"{{ matt_13_4_9.text }}" ({{ matt_13_4_9 }})</i></p>
                         <p>{% trans 'And Jesus explains the parabel:' %}</p>
-                        <p><i>{% trans '"Hear ye therefore the parable of the sower. 19 When any one heareth the word of the kingdom, and understandeth it not, then cometh the wicked one, and catcheth away that which was sown in his heart. This is he which received seed by the way side. 20 But he that received the seed into stony places, the same is he that heareth the word, and anon with joy receiveth it; 21 Yet hath he not root in himself, but dureth for a while: for when tribulation or persecution ariseth because of the word, by and by he is offended. 22 He also that received seed among the thorns is he that heareth the word; and the care of this world, and the deceitfulness of riches, choke the word, and he becometh unfruitful. 23 But he that received seed into the good ground is he that heareth the word, and understandeth it; which also beareth fruit, and bringeth forth, some an hundredfold, some sixty, some thirty." (Matthew 13:18-23)'%}</i></p>
+                        <p><i>"{{ matt_13_18_23.text }}" ({{ matt_13_18_23 }})</i></p>
                         <p>{% trans 'Jesus warns his followers from 3 perspectives:' %}
                         <ul>
                             <ol type="1">
@@ -28,31 +27,34 @@
                             </ol>
                         </ul>
                         <p>{% trans "If we don't take this serious, we won't last long! And how do you get rooted? How will you become fruitful? Jesus gives the answer just before he leaves the earth to his Father in Heaven:" %}</p>
-                        <p><i>{% trans '"Go therefore and make disciples of all the nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all things that I have commanded you (Matt 28:19-20)"' %}</i></p>
+                        <p><i>"{{ matt_28_19_20.text }}" ({{ matt_28_19_20 }})</i></p>
                         <p>{% trans 'It is a very clear and powerfull message, Jesus asks all believers to consciously obey, but not only in some commands, or only the greatest command, no, in all of them! God is allmighty and creative in an ultimate way, and He created billions of people, all with their own uniqueness and creativity inside. His goal is that a little bit of Him is exposed through you! We have tried to collect as much as possible commandment related Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books to help you in your small group to apply all the commandments in your life.' %}</p>
 
-                        <p>{% trans '245 million Christians experience high levels of persecution in the countries on the World Watch List. And worldwide, 1 in 9 Christians experience high levels of persecution.' %} <a href="https://www.opendoorsusa.org/christian-persecution/world-watch-list/" target="_blank" >{% trans 'Read more about christial persecution at Open Doors' %}</a></p>
+                        <p>{% trans '245 million Christians experience high levels of persecution in the countries on the World Watch List. And worldwide, 1 in 9 Christians experience high levels of persecution.' %} <a href="https://www.opendoorsusa.org/christian-persecution/world-watch-list/" target="_blank" >{% trans 'Read more about Christian persecution at Open Doors' %}</a></p>
 
                         <h5 class="mb-4"><span>{% trans 'You think focusing on the commandments is a step toward legalism?' %}</span></h5> 
-                        <p>{% trans 'Whenever the word "command" is mentioned, it seems that people immediately put up their defenses and begin to argue why certain commands are unnecessary. Some say they do not want to be controlled by any "commandment"; rather, they want to be led by the Spirit. But is was the Spirit who gave all the commandments by inspiration. since they were all written down twenty to sixty years after Jesus ascended. We are expected to learn what He said and trust Him to give us the power to obey it.' %}</p>
+                        <p>{% trans 'Whenever the word "command" is mentioned, it seems that people immediately put up their defenses and begin to argue why certain commands are unnecessary. Some say they do not want to be controlled by any "commandment"; rather, they want to be led by the Spirit. But is was the Spirit who gave all the commandments by inspiration, since they were all written down twenty to sixty years after Jesus ascended. We are expected to learn what He said and trust Him to give us the power to obey it.' %}</p>
                         <p>{% trans "It must be very clear, that the acceptance before God, cannot be gained. We are all sinners, no amount of obedience or moral perfection can ever make any person acceptable to God, because one sin in a lifetime can condemn a person (James 2:10). Salvation and acceptance by God are only possible through His grace who offers to completely pay for all our sins by His death and His blood, shed on the cross of Calvary. When we trust in His payment for our sin's results, we are rewarded with the gift of Christ's righteousness - that alone is what can make us acceptable (2 Cor 5:21)." %}</p>
                         <p><b>{% trans 'We need to understand deeply, that we are loved and accepted as we are. And out of love towards God, because we are loved by Him, we will listen to Him, and obey Him in all His teachings.' %}</b></p>
                         <br>
-                        <h5 class="mb-4"><span>{% trans 'How does this website helps in equiping the disciples?' %}</span></h5> 
+                        <h5 class="mb-4"><span>{% trans 'How does this website help in equiping the disciples?' %}</span></h5> 
                         <ul>
                             <ol type="1">
-                                <li>{% trans 'Get a complete list of all the unique commandments of Jesus, from a theological perspective' %}.</li>
-                                <li>{% trans 'Collect all the bible references which are related to the commandments' %}.</li>
+                                <li>{% trans 'See our list (supposed to be complete) of all the unique commandments of Jesus, from a theological perspective' %}.</li>
+                                <li>{% trans 'Collect all the biblereferences which are related to the commandments' %}.</li>
                                 <li>{% trans 'See media items like Drawings, Movies, Songs, Blogs, Testimonies, Sermons, Pictures and Books, which can help to dive into the greatness of the commandment and help in applying them in your life' %}.</li>
-                                <li>{% trans 'Do this in as many languages as we can' %}!</li>
+                                <li>{% trans 'We do this in as many languages as we can' %}!</li>
                             </ol>
                         </ul>        
-                        <p><b>{% trans "We definately need your help! If you want to help improving this website on any of the above points, or do you have any suggestions or corrections, we'd like to hear from you. Please" %} <a href="{% url 'account:signup' %}">{% trans 'register' %}</a> {% trans 'or just sent us a' %} <a href="mailto:info@jesuscommandments.org">{% trans 'email' %}</a>.</b></p>
+                        <p><b>{% trans "We defenately need your help! If you want to help improving this website on any of the above points or do you have any suggestions or corrections, we'd like to hear from you. Please" %} <a href="{% url 'account:signup' %}">{% trans 'register' %}</a> {% trans 'or just sent us an' %} <a href="mailto:info@jesuscommandments.org">{% trans 'email' %}</a>.</b></p>
                         <h5 class="mb-4"><span>{% trans 'Statement of Faith' %}</span></h5>
-                        <p>{% trans "The Jesus Commandments website's statement of faith, is that of the" %} <a href="http://www.lausanne.org/lausanne-1974/lausanne-covenant.html">{% trans 'Lausanne Covenant' %}</a></p>
+                        <p>{% trans "The Jesus Commandments websites statement of faith, is that of the" %} <a href="http://www.lausanne.org/lausanne-1974/lausanne-covenant.html">{% trans 'Lausanne Covenant' %}</a></p>
                         <br>
                         <br>
-                        <p><i>{% trans '"Now the God of peace, that brought again from the dead our Lord Jesus, that great shepherd of the sheep, through the blood of the everlasting covenant, Make you perfect in every good work to do his will, working in you that which is wellpleasing in his sight, through Jesus Christ; to whom be glory for ever and ever. Amen." (Hebrews 13:20-21)'%}</i></p>
+                        <p><i>"{{ heb_13_20_21.text }}" ({{ heb_13_20_21 }})</i></p>
+                        <br>
+                        <br>
+                        <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
                     </div>                    
                 </div>
             </div>

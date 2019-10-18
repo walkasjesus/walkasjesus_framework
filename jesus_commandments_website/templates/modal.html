@@ -1,0 +1,81 @@
+{% load i18n %}
+
+<div class="modal fade" id="changeLanguageModal" tabindex="-1" role="dialog" aria-labelledby="changeLanguageModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changeLanguageModalLabel">{% trans 'Change languages / Bible translations' %}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="selectWrapper">
+                <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ redirect_to }}">
+                    <b>{% trans 'Site language' %}:</b>
+                    <div class="select">
+                        <select class="drpSelectLanguage" name="language" >
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form> 
+            </div>
+            <div class="selectWrapper">
+                <b>{% trans 'Bible translation' %}:</b>
+                <div class="btnBibleTranslation">
+                <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <div class="select">
+                    <select name="bible_id" class="drpBibleTranslation">
+                        <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
+                        <option value="{{ user_preferences.bible.id }}" selected>
+                            {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
+                        </option>
+                        {% for bible in bible_translation.all_in_user_language %}
+                            {% if bible.id != user_preferences.bible.id %}
+                            <option value="{{ bible.id }}">
+                                {{ bible.name }}
+                            </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    </div>
+                </form>
+                </div>
+                <p><i>{% blocktrans %}With this setting, all Bible references found on this website are displayed with the configured Bible translation. All references are directly called from <a target="_blank" href="https://scripture.api.bible">https://scripture.api.bible</a>, provided by the American Bible Society.{% endblocktrans %}</i></p>
+            </div>
+            <div class="selectWrapper">
+                <b>{% trans 'Resource language' %}:</b> 
+                <div class="multiselect">
+                    <form action="{% url 'commandments:languages' %}" class="frmLanguages" method="post">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <select id="multiselect" name="languages" multiple class="btnSelectResourceType">
+                            {% get_available_languages as LANGUAGES %}
+                            {% get_language_info_list for LANGUAGES as languages %}
+                            {% for language in languages %}
+                            <option value="{{ language.code }}">
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="modal-footer">
+                            <button class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
+                        </div>                  
+                    </form>
+                </div>
+                <!-- {% blocktrans %}Would you like to search for <b>Resources</b> that are created for a <b>specific language</b>? Choose your language here. (if available){% endblocktrans %} -->
+                <p><i>{% blocktrans %}Within a commandment, you can find related resources to that commandment. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}</i></p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

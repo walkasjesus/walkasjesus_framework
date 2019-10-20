@@ -26,489 +26,620 @@ msgstr ""
 
 #: account_app/templates/account/index.html:6
 #: account_app/templates/registration/signup.html:10
+#, fuzzy
 msgid "Signup"
-msgstr ""
+msgstr "Aanmelden"
 
 #: account_app/templates/account/index.html:7
 #: account_app/templates/account/login.html:10 templates/base.html:73
 #: templates/base.html:129
+#, fuzzy
 msgid "Login"
-msgstr ""
+msgstr "Log in"
 
 #: account_app/templates/account/index.html:8 templates/base.html:70
 #: templates/base.html:127
+#, fuzzy
 msgid "Logout"
-msgstr ""
+msgstr "Uitloggen"
 
 #: account_app/templates/account/index.html:9 templates/base.html:69
 #: templates/base.html:126
+#, fuzzy
 msgid "Profile"
-msgstr ""
+msgstr "Profiel"
 
 #: account_app/templates/account/index.html:10
+#, fuzzy
 msgid "Change password"
-msgstr ""
+msgstr "Wachtwoord wijzigen"
 
 #: account_app/templates/account/login.html:9
+#, fuzzy
 msgid "Contribute"
-msgstr ""
+msgstr "Bijdragen"
 
 #: account_app/templates/account/login.html:11
+#, fuzzy
 msgid ""
 "Thank you for helping in teaching the words and commandments of Jesus all "
 "around the world!"
 msgstr ""
+"Dank voor het helpen in het onderwijzen van de woorden en geboden van Jezus "
+"over de hele wereld die je!"
 
 #: account_app/templates/account/login.html:15
+#, fuzzy
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
+"Uw gebruikersnaam en wachtwoord komen niet overeen. Probeer het opnieuw."
 
 #: account_app/templates/account/login.html:22
+#, fuzzy
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with"
 " an account that has access."
 msgstr ""
+"Uw account heeft geen toegang tot deze pagina. Om verder te gaan, kunt u "
+"inloggen met een account die toegang heeft."
 
 #: account_app/templates/account/login.html:25
+#, fuzzy
 msgid "Please login to see this page."
-msgstr ""
+msgstr "Log in om deze pagina te zien."
 
 #: account_app/templates/account/login.html:47
+#, fuzzy
 msgid "Not an account yet and want to contribute? Please register"
 msgstr ""
+"Nog geen account en willen een bijdrage leveren? Registreer alsjeblieft"
 
 #: account_app/templates/account/profile.html:10
+#, fuzzy
 msgid "My profile"
-msgstr ""
+msgstr "Mijn profiel"
 
 #: account_app/templates/account/profile.html:11
+#, fuzzy
 msgid "My Profile"
-msgstr ""
+msgstr "Mijn profiel"
 
 #: account_app/templates/account/profile.html:12
+#, fuzzy
 msgid "You can change your profile settings on this page."
-msgstr ""
+msgstr "U kunt uw profiel instellingen op deze pagina wijzigen."
 
 #: account_app/templates/registration/signup.html:11
+#, fuzzy
 msgid "Register for a new account"
-msgstr ""
+msgstr "Schrijf u in voor een nieuwe account"
 
 #: account_app/templates/registration/signup.html:12
+#, fuzzy
 msgid ""
 "The content of this website is made possible by contributors around the "
 "world. You can help improving by:"
 msgstr ""
+"De inhoud van deze website is mogelijk gemaakt door medewerkers over de hele"
+" wereld. U kunt helpen bij het verbeteren van:"
 
 #: account_app/templates/registration/signup.html:16
+#, fuzzy
 msgid ""
 "Translating to your language, since most translation is done automatically, "
 "corrections are very welcome!"
 msgstr ""
+"Vertalen naar je eigen taal, omdat de meeste vertaling automatisch wordt "
+"gedaan, correcties zijn van harte welkom!"
 
 #: account_app/templates/registration/signup.html:19
+#, fuzzy
 msgid "Adding or correcting commandments along with their Bible references"
-msgstr ""
+msgstr "Het toevoegen of corrigeren geboden samen met hun Bijbel referenties"
 
 #: account_app/templates/registration/signup.html:22
+#, fuzzy
 msgid ""
 "Adding media items (Movies, Books, Testimonies, Blogs, Songs, Pictures, "
 "Illustrations and Sermons) which are related to the corresponding "
 "commandment"
 msgstr ""
+"Het toevoegen van media-items (films, boeken, getuigenissen, Blogs, Songs, "
+"foto's en Preken) die gerelateerd zijn aan de overeenkomstige gebod"
 
 #: account_app/templates/registration/signup.html:29
+#, fuzzy
 msgid "Sign up"
-msgstr ""
+msgstr "Aanmelden"
 
 #: account_app/views.py:24
+#, fuzzy
 msgid ""
 "Thank you for your registration. We are validating your registration and "
 "will get in touch soon."
 msgstr ""
+"Dank u voor uw registratie. We zijn het valideren van uw registratie en zal "
+"binnenkort in contact te komen."
 
 #: account_app/views.py:37
+#, fuzzy
 msgid "Your profile was successfully updated!"
-msgstr ""
+msgstr "Je profiel is succesvol gewijzigd!"
 
 #: account_app/views.py:40 account_app/views.py:58
+#, fuzzy
 msgid "Please correct the error below."
-msgstr ""
+msgstr "Corrigeer de fout hieronder."
 
 #: account_app/views.py:55
+#, fuzzy
 msgid "Your password was successfully updated!"
-msgstr ""
+msgstr "Uw wachtwoord is succesvol gewijzigd!"
 
 #: commandments_app/models/bible_books.py:10
+#, fuzzy
 msgid "Genesis"
-msgstr ""
+msgstr "Genesis"
 
 #: commandments_app/models/bible_books.py:11
+#, fuzzy
 msgid "Exodus"
-msgstr ""
+msgstr "Exodus"
 
 #: commandments_app/models/bible_books.py:12
+#, fuzzy
 msgid "Leviticus"
-msgstr ""
+msgstr "Leviticus"
 
 #: commandments_app/models/bible_books.py:13
+#, fuzzy
 msgid "Numbers"
-msgstr ""
+msgstr "Numbers"
 
 #: commandments_app/models/bible_books.py:14
+#, fuzzy
 msgid "Deuteronomy"
-msgstr ""
+msgstr "Deuteronomium"
 
 #: commandments_app/models/bible_books.py:15
+#, fuzzy
 msgid "Joshua"
-msgstr ""
+msgstr "Joshua"
 
 #: commandments_app/models/bible_books.py:16
+#, fuzzy
 msgid "Judges"
-msgstr ""
+msgstr "Judges"
 
 #: commandments_app/models/bible_books.py:17
+#, fuzzy
 msgid "Ruth"
-msgstr ""
+msgstr "Ruth"
 
 #: commandments_app/models/bible_books.py:18
+#, fuzzy
 msgid "1 Samuel"
-msgstr ""
+msgstr "1 Samuel"
 
 #: commandments_app/models/bible_books.py:19
+#, fuzzy
 msgid "2 Samuel"
-msgstr ""
+msgstr "2 Samuel"
 
 #: commandments_app/models/bible_books.py:20
+#, fuzzy
 msgid "1 Kings"
-msgstr ""
+msgstr "1 Kings"
 
 #: commandments_app/models/bible_books.py:21
+#, fuzzy
 msgid "2 Kings"
-msgstr ""
+msgstr "2 Koningen"
 
 #: commandments_app/models/bible_books.py:22
+#, fuzzy
 msgid "1 Chronicles"
-msgstr ""
+msgstr "1 Kronieken"
 
 #: commandments_app/models/bible_books.py:23
+#, fuzzy
 msgid "2 Chronicles"
-msgstr ""
+msgstr "2 Chronicles"
 
 #: commandments_app/models/bible_books.py:24
+#, fuzzy
 msgid "Ezra"
-msgstr ""
+msgstr "Ezra"
 
 #: commandments_app/models/bible_books.py:25
+#, fuzzy
 msgid "Nehemiah"
-msgstr ""
+msgstr "Nehemia"
 
 #: commandments_app/models/bible_books.py:26
+#, fuzzy
 msgid "Esther"
-msgstr ""
+msgstr "Esther"
 
 #: commandments_app/models/bible_books.py:27
+#, fuzzy
 msgid "Job"
-msgstr ""
+msgstr "job"
 
 #: commandments_app/models/bible_books.py:28
+#, fuzzy
 msgid "Psalms"
-msgstr ""
+msgstr "Psalmen"
 
 #: commandments_app/models/bible_books.py:29
+#, fuzzy
 msgid "Proverbs"
-msgstr ""
+msgstr "Spreuken"
 
 #: commandments_app/models/bible_books.py:30
+#, fuzzy
 msgid "Ecclesiastes"
-msgstr ""
+msgstr "Prediker"
 
 #: commandments_app/models/bible_books.py:31
+#, fuzzy
 msgid "Song of Solomon"
-msgstr ""
+msgstr "Lied van Solomon"
 
 #: commandments_app/models/bible_books.py:32
+#, fuzzy
 msgid "Isaiah"
-msgstr ""
+msgstr "Isaiah"
 
 #: commandments_app/models/bible_books.py:33
+#, fuzzy
 msgid "Jeremiah"
-msgstr ""
+msgstr "Jeremiah"
 
 #: commandments_app/models/bible_books.py:34
+#, fuzzy
 msgid "Lamentations"
-msgstr ""
+msgstr "klaagliederen"
 
 #: commandments_app/models/bible_books.py:35
+#, fuzzy
 msgid "Ezekiel"
-msgstr ""
+msgstr "Ezekiel"
 
 #: commandments_app/models/bible_books.py:36
+#, fuzzy
 msgid "Daniel"
-msgstr ""
+msgstr "Daniel"
 
 #: commandments_app/models/bible_books.py:37
+#, fuzzy
 msgid "Hosea"
-msgstr ""
+msgstr "Hosea"
 
 #: commandments_app/models/bible_books.py:38
+#, fuzzy
 msgid "Joel"
-msgstr ""
+msgstr "Joel"
 
 #: commandments_app/models/bible_books.py:39
+#, fuzzy
 msgid "Amos"
-msgstr ""
+msgstr "Amos"
 
 #: commandments_app/models/bible_books.py:40
+#, fuzzy
 msgid "Obadiah"
-msgstr ""
+msgstr "Obadiah"
 
 #: commandments_app/models/bible_books.py:41
+#, fuzzy
 msgid "Jonah"
-msgstr ""
+msgstr "Jona"
 
 #: commandments_app/models/bible_books.py:42
+#, fuzzy
 msgid "Micah"
-msgstr ""
+msgstr "Micah"
 
 #: commandments_app/models/bible_books.py:43
+#, fuzzy
 msgid "Nahum"
-msgstr ""
+msgstr "Nahum"
 
 #: commandments_app/models/bible_books.py:44
+#, fuzzy
 msgid "Habakkuk"
-msgstr ""
+msgstr "Habakuk"
 
 #: commandments_app/models/bible_books.py:45
+#, fuzzy
 msgid "Zephaniah"
-msgstr ""
+msgstr "Zefanja"
 
 #: commandments_app/models/bible_books.py:46
+#, fuzzy
 msgid "Haggai"
-msgstr ""
+msgstr "Haggai"
 
 #: commandments_app/models/bible_books.py:47
+#, fuzzy
 msgid "Zechariah"
-msgstr ""
+msgstr "Zacharia"
 
 #: commandments_app/models/bible_books.py:48
+#, fuzzy
 msgid "Malachi"
-msgstr ""
+msgstr "Malachi"
 
 #: commandments_app/models/bible_books.py:49
+#, fuzzy
 msgid "Matthew"
-msgstr ""
+msgstr "Matthew"
 
 #: commandments_app/models/bible_books.py:50
+#, fuzzy
 msgid "Mark"
-msgstr ""
+msgstr "Mark"
 
 #: commandments_app/models/bible_books.py:51
+#, fuzzy
 msgid "Luke"
-msgstr ""
+msgstr "Luke"
 
 #: commandments_app/models/bible_books.py:52
+#, fuzzy
 msgid "John"
-msgstr ""
+msgstr "John"
 
 #: commandments_app/models/bible_books.py:53
+#, fuzzy
 msgid "Acts"
-msgstr ""
+msgstr "handelingen"
 
 #: commandments_app/models/bible_books.py:54
+#, fuzzy
 msgid "Romans"
-msgstr ""
+msgstr "Romans"
 
 #: commandments_app/models/bible_books.py:55
+#, fuzzy
 msgid "1 Corinthians"
-msgstr ""
+msgstr "1 Korintiërs"
 
 #: commandments_app/models/bible_books.py:56
+#, fuzzy
 msgid "2 Corinthians"
-msgstr ""
+msgstr "2 Corinthians"
 
 #: commandments_app/models/bible_books.py:57
+#, fuzzy
 msgid "Galatians"
-msgstr ""
+msgstr "Galaten"
 
 #: commandments_app/models/bible_books.py:58
+#, fuzzy
 msgid "Ephesians"
-msgstr ""
+msgstr "Efeziërs"
 
 #: commandments_app/models/bible_books.py:59
+#, fuzzy
 msgid "Philippians"
-msgstr ""
+msgstr "Filipijnen"
 
 #: commandments_app/models/bible_books.py:60
+#, fuzzy
 msgid "Colossians"
-msgstr ""
+msgstr "Kolossenzen"
 
 #: commandments_app/models/bible_books.py:61
+#, fuzzy
 msgid "1 Thessalonians"
-msgstr ""
+msgstr "1 Tessalonicenzen"
 
 #: commandments_app/models/bible_books.py:62
+#, fuzzy
 msgid "2 Thessalonians"
-msgstr ""
+msgstr "2 Tessalonicenzen"
 
 #: commandments_app/models/bible_books.py:63
+#, fuzzy
 msgid "1 Timothy"
-msgstr ""
+msgstr "1 Timothy"
 
 #: commandments_app/models/bible_books.py:64
+#, fuzzy
 msgid "2 Timothy"
-msgstr ""
+msgstr "2 Timothy"
 
 #: commandments_app/models/bible_books.py:65
+#, fuzzy
 msgid "Titus"
-msgstr ""
+msgstr "Titus"
 
 #: commandments_app/models/bible_books.py:66
+#, fuzzy
 msgid "Philemon"
-msgstr ""
+msgstr "Philemon"
 
 #: commandments_app/models/bible_books.py:67
+#, fuzzy
 msgid "Hebrews"
-msgstr ""
+msgstr "Hebreeën"
 
 #: commandments_app/models/bible_books.py:68
+#, fuzzy
 msgid "James"
-msgstr ""
+msgstr "James"
 
 #: commandments_app/models/bible_books.py:69
+#, fuzzy
 msgid "1 Peter"
-msgstr ""
+msgstr "1 Peter"
 
 #: commandments_app/models/bible_books.py:70
+#, fuzzy
 msgid "2 Peter"
-msgstr ""
+msgstr "2 Peter"
 
 #: commandments_app/models/bible_books.py:71
+#, fuzzy
 msgid "1 John"
-msgstr ""
+msgstr "1 John"
 
 #: commandments_app/models/bible_books.py:72
+#, fuzzy
 msgid "2 John"
-msgstr ""
+msgstr "2 John"
 
 #: commandments_app/models/bible_books.py:73
+#, fuzzy
 msgid "3 John"
-msgstr ""
+msgstr "3 John"
 
 #: commandments_app/models/bible_books.py:74
+#, fuzzy
 msgid "Jude"
-msgstr ""
+msgstr "jood"
 
 #: commandments_app/models/bible_books.py:75
+#, fuzzy
 msgid "Revelation"
-msgstr ""
+msgstr "Openbaring"
 
 #: commandments_app/models/bible_reference.py:66
+#, fuzzy
 msgid "Could not load text at the moment."
-msgstr ""
+msgstr "Kan tekst op dit moment niet worden geladen."
 
 #: commandments_app/models/commandment_categories.py:7
+#, fuzzy
 msgid "Salvation Commands"
-msgstr ""
+msgstr "Salvation Commando"
 
 #: commandments_app/models/commandment_categories.py:8
+#, fuzzy
 msgid "Discipleship Commands"
-msgstr ""
+msgstr "discipelschap Commando"
 
 #: commandments_app/models/commandment_categories.py:9
+#, fuzzy
 msgid "Worship Commands"
-msgstr ""
+msgstr "Worship Commando"
 
 #: commandments_app/models/commandment_categories.py:10
+#, fuzzy
 msgid "Blessings"
-msgstr ""
+msgstr "zegeningen"
 
 #: commandments_app/models/commandment_categories.py:11
+#, fuzzy
 msgid "Judgment Seat Commands"
-msgstr ""
+msgstr "Rechterstoel Commando"
 
 #: commandments_app/models/commandment_categories.py:12
+#, fuzzy
 msgid "Relationship Commands"
-msgstr ""
+msgstr "relatie Commando"
 
 #: commandments_app/models/commandment_categories.py:13
+#, fuzzy
 msgid "Marriage Commands"
-msgstr ""
+msgstr "huwelijk Commando"
 
 #: commandments_app/models/commandment_categories.py:14
+#, fuzzy
 msgid "Persecution Commands"
-msgstr ""
+msgstr "vervolging Commando"
 
 #: commandments_app/models/commandment_categories.py:15
+#, fuzzy
 msgid "Thinking Commands"
-msgstr ""
+msgstr "Denken Commando"
 
 #: commandments_app/models/commandment_categories.py:16
+#, fuzzy
 msgid "Prayer Commands"
-msgstr ""
+msgstr "Prayer Commando"
 
 #: commandments_app/models/commandment_categories.py:17
+#, fuzzy
 msgid "False Teachers Commands"
-msgstr ""
+msgstr "Valse Leraren Commando"
 
 #: commandments_app/models/commandment_categories.py:18
+#, fuzzy
 msgid "Witnessing Commands"
-msgstr ""
+msgstr "Getuigen Commando"
 
 #: commandments_app/models/commandment_categories.py:19
+#, fuzzy
 msgid "Greatest Commands"
-msgstr ""
+msgstr "Greatest Commands"
 
 #: commandments_app/models/commandment_categories.py:20
+#, fuzzy
 msgid "Finance Commands"
-msgstr ""
+msgstr "Finance Commando"
 
 #: commandments_app/models/commandment_categories.py:21
+#, fuzzy
 msgid "Holiness Commands"
-msgstr ""
+msgstr "heiligheid Commando"
 
 #: commandments_app/models/media.py:17
+#, fuzzy
 msgid "Language independent"
-msgstr ""
+msgstr "taalonafhankelijk"
 
 #: commandments_app/models/media.py:18
+#, fuzzy
 msgid "Language unknown"
-msgstr ""
+msgstr "taal onbekend"
 
 #: commandments_app/templates/admin/bible_admin.html:5
+#, fuzzy
 msgid "Bible cache management"
-msgstr ""
+msgstr "Bijbel cachebeheer"
 
 #: commandments_app/templates/admin/bible_admin.html:11
+#, fuzzy
 msgid "Clear bible list cache"
-msgstr ""
+msgstr "Clear bijbel lijst cache"
 
 #: commandments_app/templates/admin/bible_admin.html:14
+#, fuzzy
 msgid "Items in cache that are not saved to disk"
-msgstr ""
+msgstr "Items in de cache die niet worden opgeslagen op de harde schijf"
 
 #: commandments_app/templates/admin/bible_admin.html:19
+#, fuzzy
 msgid "Save bible cache to disk"
-msgstr ""
+msgstr "Sla bijbel cache op de harde schijf"
 
 #: commandments_app/templates/admin/bible_admin.html:25
+#, fuzzy
 msgid "Bibles available"
-msgstr ""
+msgstr "Bijbels beschikbaar"
 
 #: commandments_app/templates/admin/bible_admin.html:29
+#, fuzzy
 msgid "Bible"
-msgstr ""
+msgstr "Bijbel"
 
 #: commandments_app/templates/admin/bible_admin.html:30
+#, fuzzy
 msgid "Language"
-msgstr ""
+msgstr "Taal"
 
 #: commandments_app/templates/admin/bible_admin.html:31
+#, fuzzy
 msgid "Enabled"
-msgstr ""
+msgstr "Ingeschakeld"
 
 #: commandments_app/templates/admin/bible_admin.html:32
+#, fuzzy
 msgid "Percentage cached"
-msgstr ""
+msgstr "percentage cached"
 
 #: commandments_app/templates/commandments/detail.html:13
 #: commandments_app/templates/commandments/detail.html:19
@@ -521,265 +652,340 @@ msgstr ""
 #: commandments_app/templates/commandments/detail.html:74
 #: commandments_app/templates/commandments/detail.html:81
 #: commandments_app/templates/commandments/detail.html:88
+#, fuzzy
 msgid "Jump to:"
-msgstr ""
+msgstr "Spring naar:"
 
 #: commandments_app/templates/commandments/detail.html:13
 #: commandments_app/templates/commandments/detail.html:121
+#, fuzzy
 msgid "Devotional"
-msgstr ""
+msgstr "stichtelijk"
 
 #: commandments_app/templates/commandments/detail.html:19
+#, fuzzy
 msgid "Bible references"
-msgstr ""
+msgstr "Bijbelteksten"
 
 #: commandments_app/templates/commandments/detail.html:25
 #: commandments_app/templates/commandments/detail.html:175
+#, fuzzy
 msgid "Drawings"
-msgstr ""
+msgstr "tekeningen"
 
 #: commandments_app/templates/commandments/detail.html:32
 #: commandments_app/templates/commandments/detail.html:194
+#, fuzzy
 msgid "Pictures"
-msgstr ""
+msgstr "Afbeeldingen"
 
 #: commandments_app/templates/commandments/detail.html:39
 #: commandments_app/templates/commandments/detail.html:238
+#, fuzzy
 msgid "Questions"
-msgstr ""
+msgstr "vragen"
 
 #: commandments_app/templates/commandments/detail.html:53
 #: commandments_app/templates/commandments/detail.html:293
+#, fuzzy
 msgid "Songs"
-msgstr ""
+msgstr "songs"
 
 #: commandments_app/templates/commandments/detail.html:60
 #: commandments_app/templates/commandments/detail.html:314
+#, fuzzy
 msgid "Movies"
-msgstr ""
+msgstr "Films"
 
 #: commandments_app/templates/commandments/detail.html:67
 #: commandments_app/templates/commandments/detail.html:335
+#, fuzzy
 msgid "Testimonies"
-msgstr ""
+msgstr "getuigenissen"
 
 #: commandments_app/templates/commandments/detail.html:74
 #: commandments_app/templates/commandments/detail.html:356
+#, fuzzy
 msgid "Blogs"
-msgstr ""
+msgstr "blogs"
 
 #: commandments_app/templates/commandments/detail.html:81
 #: commandments_app/templates/commandments/detail.html:374
+#, fuzzy
 msgid "Sermons"
-msgstr ""
+msgstr "preken"
 
 #: commandments_app/templates/commandments/detail.html:88
 #: commandments_app/templates/commandments/detail.html:395
+#, fuzzy
 msgid "Books"
-msgstr ""
+msgstr "Boeken"
 
 #: commandments_app/templates/commandments/detail.html:136
+#, fuzzy
 msgid "Primary Bible Reference"
-msgstr ""
+msgstr "Primaire Bible Reference"
 
 #: commandments_app/templates/commandments/detail.html:137
 #: commandments_app/templates/commandments/study_listing.html:55
+#, fuzzy
 msgid ""
 "A Primary reference is the first found unique reference according to the "
 "words of Jesus, directly related to the commandment"
 msgstr ""
+"Een primaire referentie is de eerst gevonden unieke referentie volgens de "
+"woorden van Jesus, direct gerelateerd aan het bevel"
 
 #: commandments_app/templates/commandments/detail.html:142
+#, fuzzy
 msgid "Secondary Bible References"
-msgstr ""
+msgstr "Secundaire Bijbel Referenties"
 
 #: commandments_app/templates/commandments/detail.html:143
 #: commandments_app/templates/commandments/study_listing.html:56
+#, fuzzy
 msgid ""
 "Secondary references are extra references which are not exactly the same as "
 "the primary, but expand or explain the same principle"
 msgstr ""
+"Secundaire referenties zijn extra verwijzingen die niet zijn precies "
+"hetzelfde als de primaire, maar uit te breiden of hetzelfde principe uit te "
+"leggen"
 
 #: commandments_app/templates/commandments/detail.html:151
+#, fuzzy
 msgid "Tertiary Bible References"
-msgstr ""
+msgstr "Tertiaire Bijbel Referenties"
 
 #: commandments_app/templates/commandments/detail.html:152
 #: commandments_app/templates/commandments/study_listing.html:57
+#, fuzzy
 msgid ""
 "Tertiary references are extra, indirect references, or exactly the same as "
 "the primary reference, both relating to the same principle"
 msgstr ""
+"Tertiaire referenties zijn extra indirecte verwijzingen of precies gelijk "
+"aan de eerste referentie, zowel voor hetzelfde principe"
 
 #: commandments_app/templates/commandments/detail.html:160
 #: commandments_app/templates/commandments/study_listing.html:155
 #: commandments_app/templates/commandments/vision.html:57
+#, fuzzy
 msgid "Bible verses copyright"
-msgstr ""
+msgstr "Bijbelverzen copyright"
 
 #: commandments_app/templates/commandments/detail.html:179
+#, fuzzy
 msgid "Artist"
-msgstr ""
+msgstr "Artiest"
 
 #: commandments_app/templates/commandments/detail.html:206
 #: commandments_app/templates/commandments/detail.html:210
+#, fuzzy
 msgid "Photographer"
-msgstr ""
+msgstr "Fotograaf"
 
 #: commandments_app/templates/commandments/detail.html:239
+#, fuzzy
 msgid "Share your hearts together by discussing the following questions:"
-msgstr ""
+msgstr "Deel je harten samen met een bespreking van de volgende vragen:"
 
 #: commandments_app/templates/commandments/detail.html:254
+#, fuzzy
 msgid "Resource Language Settings"
-msgstr ""
+msgstr "Resource Taalinstellingen"
 
 #: commandments_app/templates/commandments/detail.html:255
+#, fuzzy
 msgid ""
 "Below you will find all kinds of related resources to this commandment, to "
 "help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, "
 "Songs, Blogs or Books. You can select multiple languages if you like to see "
 "those resources in more languages."
 msgstr ""
+"Hieronder vindt u allerlei gerelateerde middelen zullen vinden om dit gebod,"
+" om u te helpen groeien. Middelen kunnen worden Preken, Getuigenissen, "
+"Films, Shortmovies, Songs, blogs of Books. U kunt meerdere talen te "
+"selecteren als je wilt om deze middelen te zien in meer talen."
 
 #: commandments_app/templates/commandments/detail.html:256
+#, fuzzy
 msgid ""
 "Do you know more good resources in your language which can be added to this "
 "list? Please <a href=\"mailto:info@jesuscommandments.org\">contact us</a> so"
 " we can add it (or <a href=\"\">register</a> and you can add it yourself!"
 msgstr ""
+"Kent u meer goede middelen in uw taal die aan deze lijst kunnen worden "
+"toegevoegd? <a href=\"mailto:info@jesuscommandments.org\"> contact </a> met "
+"ons zodat we het (of <a href=\"\"> register </a> kan toevoegen en je kunt "
+"het zelf toe te voegen"
 
 #: commandments_app/templates/commandments/detail.html:258
+#, fuzzy
 msgid "Change resource language"
-msgstr ""
+msgstr "taalverandering resource"
 
 #: commandments_app/templates/commandments/detail.html:272
+#, fuzzy
 msgid "Short Movies"
-msgstr ""
+msgstr "Short Movies"
 
 #: commandments_app/templates/commandments/detail.html:419
+#, fuzzy
 msgid "Quote by"
-msgstr ""
+msgstr "citaat door"
 
 #: commandments_app/templates/commandments/index.html:16 templates/base.html:9
 #: templates/base.html:54
+#, fuzzy
 msgid "Jesus commandments"
-msgstr ""
+msgstr "Jezus geboden"
 
 #: commandments_app/templates/commandments/index.html:18
+#, fuzzy
 msgid "Following Jesus"
-msgstr ""
+msgstr "Naar aanleiding van Jesus"
 
 #: commandments_app/templates/commandments/index.html:18
+#, fuzzy
 msgid "#howto"
-msgstr ""
+msgstr "#hoe"
 
 #: commandments_app/templates/commandments/index.html:19
+#, fuzzy
 msgid "Jesus tought many different things. We help applying all"
 msgstr ""
+"Jezus leerde veel verschillende dingen. Wij helpen toepassing van alle"
 
 #: commandments_app/templates/commandments/index.html:19
+#, fuzzy
 msgid "unique commandments in your daily life"
-msgstr ""
+msgstr "unieke geboden in je dagelijkse leven"
 
 #: commandments_app/templates/commandments/index.html:20
 #: commandments_app/templates/commandments/index.html:38
 #: commandments_app/templates/commandments/index.html:56
+#, fuzzy
 msgid "Discover His commandments"
-msgstr ""
+msgstr "Ontdek Zijn geboden"
 
 #: commandments_app/templates/commandments/index.html:34
+#, fuzzy
 msgid "Matthew 28:19-20"
-msgstr ""
+msgstr "Mattheüs 28: 19-20"
 
 #: commandments_app/templates/commandments/index.html:36
+#, fuzzy
 msgid "Therefore go and"
-msgstr ""
+msgstr "Gaat dan henen,"
 
 #: commandments_app/templates/commandments/index.html:36
+#, fuzzy
 msgid "make Disciples"
-msgstr ""
+msgstr "maken Disciples"
 
 #: commandments_app/templates/commandments/index.html:36
+#, fuzzy
 msgid "of all nations"
-msgstr ""
+msgstr "van alle naties"
 
 #: commandments_app/templates/commandments/index.html:37
+#, fuzzy
 msgid "teaching them to"
-msgstr ""
+msgstr "lerende hen onderhouden"
 
 #: commandments_app/templates/commandments/index.html:37
+#, fuzzy
 msgid "obey everything"
-msgstr ""
+msgstr "gehoorzamen alles"
 
 #: commandments_app/templates/commandments/index.html:37
+#, fuzzy
 msgid "I have commanded you"
-msgstr ""
+msgstr "Ik u geboden"
 
 #: commandments_app/templates/commandments/index.html:52
+#, fuzzy
 msgid "True disciples"
-msgstr ""
+msgstr "ware discipelen"
 
 #: commandments_app/templates/commandments/index.html:54
+#, fuzzy
 msgid "If we"
-msgstr ""
+msgstr "Als wij"
 
 #: commandments_app/templates/commandments/index.html:54
+#, fuzzy
 msgid "reproduce the character"
-msgstr ""
+msgstr "reproduceren het karakter"
 
 #: commandments_app/templates/commandments/index.html:54
+#, fuzzy
 msgid "of Jesus Christ in disciples"
-msgstr ""
+msgstr "van Jezus Christus in discipelen"
 
 #: commandments_app/templates/commandments/index.html:55
+#, fuzzy
 msgid "than we are a good disciple"
-msgstr ""
+msgstr "dan zijn we een goede leerling"
 
 #: commandments_app/templates/commandments/index.html:79
+#, fuzzy
 msgid "Unique commandments"
-msgstr ""
+msgstr "unieke geboden"
 
 #: commandments_app/templates/commandments/index.html:90
+#, fuzzy
 msgid "Bible translations"
-msgstr ""
+msgstr "Bijbelvertalingen"
 
 #: commandments_app/templates/commandments/index.html:101
+#, fuzzy
 msgid "Languages"
-msgstr ""
+msgstr "talen"
 
 #: commandments_app/templates/commandments/index.html:125
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
+#, fuzzy
 msgid "If you love Me"
-msgstr ""
+msgstr "Als je van me houdt"
 
 #: commandments_app/templates/commandments/index.html:125
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
+#, fuzzy
 msgid "keep my commands"
-msgstr ""
+msgstr "houd mijn commando's"
 
 #: commandments_app/templates/commandments/index.html:126
 #: commandments_app/templates/commandments/listing.html:14
+#, fuzzy
 msgid ""
 "This website will help you in applying all commandments in your life. How? "
 "For each commandment, we collect as much as possible related"
 msgstr ""
+"Deze website zal u helpen bij het toepassen van alle geboden in je leven. "
+"Hoe? Voor elk gebod, we verzamelen zo veel mogelijk gerelateerde"
 
 #: commandments_app/templates/commandments/index.html:127
 #: commandments_app/templates/commandments/listing.html:15
+#, fuzzy
 msgid ""
 "Bible References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and "
 "Books"
 msgstr ""
+"Bijbel Referenties, tekeningen, films, muziek, blogs, Preken, foto's en "
+"boeken"
 
 #: commandments_app/templates/commandments/index.html:127
 #: commandments_app/templates/commandments/listing.html:15
+#, fuzzy
 msgid "to feed your heart, soul and mind"
-msgstr ""
+msgstr "naar je hart, ziel en geest te voeden"
 
 #: commandments_app/templates/commandments/index.html:128
+#, fuzzy
 msgid ""
 "To succeed in becoming a good disciple, we need to live out all of these "
 "commandments. The best way is to do this together. Take your time for each "
@@ -787,17 +993,25 @@ msgid ""
 " Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one "
 "discipleship, to become followers in all of Jesus teachings."
 msgstr ""
+"Om te slagen in om een ​​goede leerling, moeten we om te leven al deze "
+"geboden. De beste manier is om dit samen te doen. Neem de tijd voor elk "
+"gebod om te duiken in de grootheid van het, en bespreek ze in je kleine "
+"groepen, discipelschap groepen, Mentoring, Ministerie verrijking of One-on-"
+"one discipelschap, om volgelingen in alle van Jezus leer geworden."
 
 #: commandments_app/templates/commandments/index.html:137
 #: commandments_app/templates/commandments/listing.html:25
+#, fuzzy
 msgid "No commandments are available."
-msgstr ""
+msgstr "Geen geboden zijn beschikbaar."
 
 #: commandments_app/templates/commandments/listing.html:12
+#, fuzzy
 msgid "John 14:15"
-msgstr ""
+msgstr "Johannes 14:15"
 
 #: commandments_app/templates/commandments/listing.html:16
+#, fuzzy
 msgid ""
 "To succeed in becoming a good disciple, we need to live out all of these "
 "commandments. The best way is to do this together. Take your time for each "
@@ -805,18 +1019,26 @@ msgid ""
 "Groups, Discipleshipgroups, Mentoringships, Ministry enrichment or One-on-"
 "one discipleship, to become followers in all of Jesus' teachings."
 msgstr ""
+"Om te slagen in om een ​​goede leerling, moeten we om te leven al deze "
+"geboden. De beste manier is om dit samen te doen. Neem de tijd voor elk "
+"gebod om te duiken in de grootheid van het en bespreken ze in je kleine "
+"groepen, Discipleshipgroups, Mentoringships, Ministerie verrijking of One-"
+"on-one discipelschap, om volgelingen in alle leringen van Jezus te worden."
 
 #: commandments_app/templates/commandments/privacy.html:12
 #: commandments_app/templates/commandments/termsandconditions.html:12
+#, fuzzy
 msgid "Using"
-msgstr ""
+msgstr "Gebruik makend van"
 
 #: commandments_app/templates/commandments/privacy.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Privacybeleid"
 
 #: commandments_app/templates/commandments/privacy.html:16
+#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -840,122 +1062,190 @@ msgid ""
 "\n"
 "                    "
 msgstr ""
+"<P> Jesus Geboden begrijpt dat de gebruikers van de Jezus Geboden website waarde hechten aan hun privacy. Deze privacy statement is om gebruikers te informeren over de beperkte informatie die door deze website worden verzameld en waarom het wordt verzameld. </ P>\n"
+"                    <P> Deze privacyverklaring maakt deel uit van en is onderworpen aan de Jezus Geboden <a href=\"/termsandconditions\"> Voorwaarden </a>. </ P>\n"
+"\n"
+"                    <H3> <strong> Wat wij Track en waarom </ strong> </ h3>\n"
+"                    <B> Cookies en logbestandsinformatie </ b>\n"
+"\n"
+"                    <P> The Jesus Geboden website zal \"cookies\" op te slaan op uw systeem te helpen verbeteren van uw ervaring met de website. Veel van deze cookies betrekking hebben op het aanpassen van uw bezoek. Bijvoorbeeld, zodat u uw taal, cultuur en bekende talen in te stellen. De meeste webbrowsers accepteren automatisch cookies, maar deze kan worden uitgeschakeld door het veranderen van de voorkeuren in uw internet browser-instellingen. Als cookies zijn uitgeschakeld zal echter uw ervaring van de website en haar diensten worden beperkt. </ P>\n"
+"\n"
+"                    <P> De site volgt ook welke middelen u bezoekt en download. Dit is voor het verstrekken van statistische gegevens terug aan de gemeenschap en u te voorzien van informatie over wat u hebt bezocht. Deze informatie is volledig anoniem uit de rest van de Jezus Geboden gemeenschap gehouden: geen enkele andere gebruiker zal ooit verteld waar u bezoekt of wat je aan het downloaden bent. The Jesus Geboden team zal nooit het analyseren van uw persoonlijke surfgedrag - we zullen alleen maar kijken naar de geaggregeerde statistische gegevens (bijvoorbeeld het totale aantal mensen een bezoek aan een bron, of het aantal mensen dat een bezoek aan deze site van een bepaald land, taal of cultuur .) </ p>\n"
+"\n"
+"                    <H3> <strong> Aanmelden bij de website </ strong> </ h3>\n"
+"\n"
+"                    <P> Om de middelen te plaatsen, lid worden van een community, snelheid middelen of commentaar achterlaten, zal u gevraagd worden om een ​​logboek bij te bieden. Dit is om frauduleuze activiteiten te voorkomen door ervoor te zorgen dat een dergelijke transactie is niet anoniem. De informatie die wij verzamelen van registratie gebruiker zal nooit worden gebruikt voor marketing doeleinden, tenzij u uitdrukkelijk vraagt ​​abonnement op een bepaalde nieuwsbrief of tijdschrift. </ P>\n"
+"\n"
+"                    <P> Wij verkopen, verhuren of leasen onze gebruikers nooit aan derden, of geef uw gebruiker informatie om hen op geen enkele manier, zonder uitdrukkelijke toestemming van jou. </ P>\n"
+"\n"
+"                    <P> <i> Voor meer informatie over ons privacybeleid, neem dan contact met ons op: <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ i> </ p>"
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:10
+#, fuzzy
 msgid "Drawing in progress"
-msgstr ""
+msgstr "Tekenen in progress"
 
 #: commandments_app/templates/commandments/single_commandment_overview.html:13
+#, fuzzy
 msgid "Howto"
-msgstr ""
+msgstr "Hoe"
 
 #: commandments_app/templates/commandments/study_listing.html:13
+#, fuzzy
 msgid "How did we study them?"
-msgstr ""
+msgstr "Hoe hebben we ze te bestuderen?"
 
 #: commandments_app/templates/commandments/study_listing.html:13
+#, fuzzy
 msgid " Click here to see our approach"
-msgstr ""
+msgstr "Klik hier om onze aanpak te zien"
 
 #: commandments_app/templates/commandments/study_listing.html:18
+#, fuzzy
 msgid ""
 "Here are all the points we took in consideration while studying all the "
 "unique commandments"
 msgstr ""
+"Hier zijn alle punten die we in overweging terwijl het bestuderen van alle "
+"unieke geboden"
 
 #: commandments_app/templates/commandments/study_listing.html:20
+#, fuzzy
 msgid ""
 "Read everything Jesus said, starting with Matthew, then Mark, Luke and John"
 msgstr ""
+"Lees alles Jezus zei, te beginnen met Matthew, dan Marcus, Lucas en Johannes"
 
 #: commandments_app/templates/commandments/study_listing.html:21
+#, fuzzy
 msgid ""
 "Focus on all commandments Jesus gave, and be aware of the following "
 "differences:"
 msgstr ""
+"Focus op alle geboden die Jezus gaf, en zich bewust zijn van de volgende "
+"verschillen:"
 
 #: commandments_app/templates/commandments/study_listing.html:23
+#, fuzzy
 msgid "Is it a \"principle\" or a \"value\"?"
-msgstr ""
+msgstr "Is het een \"principe\" of een \"waarde\"?"
 
 #: commandments_app/templates/commandments/study_listing.html:24
+#, fuzzy
 msgid ""
 "A \"principle\" is generic which applies to all generations, no matter what "
 "culture, time or place"
 msgstr ""
+"A \"principe\" een soortnaam is die welke cultuur, tijd of plaats geldt voor"
+" alle generaties, ongeacht"
 
 #: commandments_app/templates/commandments/study_listing.html:25
+#, fuzzy
 msgid "By example: \"Love your neighbors as yourself\" (Matthew 19:19)"
-msgstr ""
+msgstr "Bij voorbeeld: \"Heb uw naaste als uzelf\" (Mattheüs 19:19)"
 
 #: commandments_app/templates/commandments/study_listing.html:26
+#, fuzzy
 msgid ""
 "A \"value\" is the way how a principle would pack out in a specific culture,"
 " time and place. If you have this, you need to derive the principle out of "
 "it by studying the context"
 msgstr ""
+"Een \"waarde\" is de manier hoe een principe uit zou pakken in een bepaalde "
+"cultuur, tijd en plaats. Als je dit hebt, moet je het principe af te leiden "
+"uit het door het bestuderen van de context"
 
 #: commandments_app/templates/commandments/study_listing.html:27
+#, fuzzy
 msgid "By example: \"Salute one another with an holy kiss\" (Rom 16:16)"
-msgstr ""
+msgstr "Bij voorbeeld: \"Groet elkander met een heilige kus\" (Rom 16:16)"
 
 #: commandments_app/templates/commandments/study_listing.html:27
+#, fuzzy
 msgid ""
 "The principle is not kiss everybody, but to salute your brothers and sisters"
 " in an intimate way, based on your specific culture, time and place"
 msgstr ""
+"Het principe is niet te kussen iedereen, maar om je broeders en zusters "
+"groeten in een intieme manier, op basis van uw specifieke cultuur, tijd en "
+"plaats"
 
 #: commandments_app/templates/commandments/study_listing.html:28
+#, fuzzy
 msgid "Is it \"literal\" or \"figurative\"?"
-msgstr ""
+msgstr "Is het \"letterlijk\" of \"figuurlijke\"?"
 
 #: commandments_app/templates/commandments/study_listing.html:29
+#, fuzzy
 msgid ""
 "A \"literal\" commandment is literally what Jesus is saying which you can "
 "directly obey and apply"
 msgstr ""
+"A \"letterlijk\" gebod is letterlijk wat Jezus zegt, die u direct kunt "
+"gehoorzamen en toe te passen"
 
 #: commandments_app/templates/commandments/study_listing.html:30
+#, fuzzy
 msgid ""
 "By example: \"Worship the Lord your God, and serve him only\" (Matthew 4:10)"
 msgstr ""
+"Bij voorbeeld: \"Aanbid de Heer, uw God, en Hem alleen dienen\" (Matteüs "
+"04:10)"
 
 #: commandments_app/templates/commandments/study_listing.html:31
+#, fuzzy
 msgid ""
 "A \"figurative\" commandment is descriptive or a parable (Usually a short "
 "fictitious story that illustrates a moral attitude or a religious principle)"
 msgstr ""
+"A \"figuurlijke\" gebod is beschrijvend of een gelijkenis (meestal een kort "
+"fictief verhaal dat een morele houding of een religieus principe "
+"illustreert)"
 
 #: commandments_app/templates/commandments/study_listing.html:32
+#, fuzzy
 msgid "By example: \"The parable of the Good Samaritan \" (Luke 10:29-37)"
 msgstr ""
+"Bij voorbeeld: \"De gelijkenis van de barmhartige Samaritaan\" (Lucas 10: "
+"29-37)"
 
 #: commandments_app/templates/commandments/study_listing.html:32
+#, fuzzy
 msgid "The principle is to be merciful to those who crosses your paths"
-msgstr ""
+msgstr "Het principe is barmhartig aan degenen te zijn die kruist je pad"
 
 #: commandments_app/templates/commandments/study_listing.html:33
+#, fuzzy
 msgid "Is it \"specific\" or a \"generic\"?"
-msgstr ""
+msgstr "Is het \"specifieke\" of een \"algemene\"?"
 
 #: commandments_app/templates/commandments/study_listing.html:34
+#, fuzzy
 msgid ""
 "There are also some specific commandments which Jesus gave specifically to "
 "that person in that time, which will not directly apply for us today"
 msgstr ""
+"Er zijn ook enkele specifieke geboden die Jezus specifiek gaf om die persoon"
+" in die tijd, die niet rechtstreeks van toepassing zal zijn voor ons vandaag"
 
 #: commandments_app/templates/commandments/study_listing.html:35
+#, fuzzy
 msgid ""
 "By example: \"Go your way into the village over against you: and as soon as "
 "ye be entered into it, ye shall find a colt tied, whereon never man sat; "
 "loose him, and bring him.\" (Mark 11:2)"
 msgstr ""
+"Bij voorbeeld: \"Gaat heen in het dorp tegen u over en terstond als gij in "
+"hetzelve komt, zult gij een veulen gebonden vinden, waarop geen mens gezeten"
+" heeft hem los te maken, en hem mee te nemen.\" (Mark 11: 2)"
 
 #: commandments_app/templates/commandments/study_listing.html:36
+#, fuzzy
 msgid "Is it a \"prohibition\" or \"commandment\"?"
-msgstr ""
+msgstr "Is het een \"verbod\" of \"gebod\"?"
 
 #: commandments_app/templates/commandments/study_listing.html:37
+#, fuzzy
 msgid ""
 "A prohibition is a negative commandment, something you should not do. To all"
 " prohibitions, there is an opposite commandment. In the unique commandments,"
@@ -963,26 +1253,41 @@ msgid ""
 "lots of the opposite prohibitions. So if you have a prohibition, derive the "
 "opposite commandment from it"
 msgstr ""
+"Een verbod is een negatief gebod, iets wat je niet moet doen. Om alle "
+"verboden, er een tegengestelde gebod. In de unieke geboden meantion we "
+"alleen geboden, terwijl in de referenties die u zal ook veel van het andere "
+"verboden zijn. Dus als je een verbod af te leiden het tegenovergestelde "
+"gebod daaruit"
 
 #: commandments_app/templates/commandments/study_listing.html:38
+#, fuzzy
 msgid ""
 "By example: \"That whosoever looketh on a woman to lust after her hath "
 "committed adultery with her already in his heart (Matthew 5:28). The "
 "prohibition is to not look with lust to another woman, the commandment is to"
 " stay loyal to your partner and keep your heart pure"
 msgstr ""
+"Bij voorbeeld:. \"Dat een iegelijk, die een vrouw aanziet om haar te begeren"
+" heeft overspel met haar in zijn hart reeds (Matteüs 05:28) Het verbod is om"
+" niet te kijken met lust naar een andere vrouw, het gebod is trouw aan te "
+"blijven uw partner en houd je hart zuiver"
 
 #: commandments_app/templates/commandments/study_listing.html:39
+#, fuzzy
 msgid "Should you \"continually\", or \"start\" doing it?"
-msgstr ""
+msgstr "Mocht u \"voortdurend\" of \"start\" te doen?"
 
 #: commandments_app/templates/commandments/study_listing.html:40
+#, fuzzy
 msgid ""
 "There is a difference in \"immediately start doing it\" or \"keep "
 "continually or habitually doing it\""
 msgstr ""
+"Er is een verschil in \"onmiddellijk beginnen te doen\" of \"houden "
+"voortdurend of haar gewone doen\""
 
 #: commandments_app/templates/commandments/study_listing.html:41
+#, fuzzy
 msgid ""
 "By example: \"Guard against self-deception, each of you. If someone among "
 "you thinks he is wise in this age, let him become foolish so that he can "
@@ -990,48 +1295,66 @@ msgid ""
 "continually\" and to \"become immediately foolish\" if you think you are "
 "wise"
 msgstr ""
+"Bij voorbeeld:.. \"Guard tegen zelfbedrog, ieder van u Als iemand onder u "
+"denkt dat hij wijs is in deze eeuw, laat hem dwaas worden, zodat hij wijs (1"
+" Kor 3,18) kan worden De progressieve soort hier is om \"Guard voortdurend\""
+" en \"te worden onmiddellijk dwaas\" als je denkt dat je verstandig bent"
 
 #: commandments_app/templates/commandments/study_listing.html:43
+#, fuzzy
 msgid "Is it a \"new\" or \"existing\" commandment?"
-msgstr ""
+msgstr "Is het een \"nieuwe\" of \"bestaande\" gebod?"
 
 #: commandments_app/templates/commandments/study_listing.html:44
+#, fuzzy
 msgid "If it is new:"
-msgstr ""
+msgstr "Als het nieuw is:"
 
 #: commandments_app/templates/commandments/study_listing.html:47
+#, fuzzy
 msgid "Add it with its primary bible reference"
-msgstr ""
+msgstr "Voeg het met zijn primaire Bijbelgedeelte"
 
 #: commandments_app/templates/commandments/study_listing.html:48
+#, fuzzy
 msgid "Determine a short powerfull title which summarizes the commandment"
-msgstr ""
+msgstr "Bepaal een korte krachtige titel die het gebod een samenvatting"
 
 #: commandments_app/templates/commandments/study_listing.html:49
+#, fuzzy
 msgid "Determine in which \"category\" the commandment falls"
-msgstr ""
+msgstr "Bepalen in welke \"category\" het gebod watervallen"
 
 #: commandments_app/templates/commandments/study_listing.html:52
+#, fuzzy
 msgid ""
 "If it is an allready existing, determine to which existing commandment(s) it"
 " should apply"
 msgstr ""
+"Als het een reeds bestaande, te bepalen welke bestaande geboden) is het van "
+"toepassing"
 
 #: commandments_app/templates/commandments/study_listing.html:54
+#, fuzzy
 msgid "Is it a \"primary\", \"secondary\" or \"tertiary\" reference?"
-msgstr ""
+msgstr "Is het een \"primaire\" \"secundaire\" of \"tertiaire\" referentie?"
 
 #: commandments_app/templates/commandments/study_listing.html:59
+#, fuzzy
 msgid "Are there more secondary and tertiary Bible references?"
-msgstr ""
+msgstr "Zijn er meer secundaire en tertiaire Bijbel referenties?"
 
 #: commandments_app/templates/commandments/study_listing.html:60
+#, fuzzy
 msgid ""
 "With each commandment, extend it with as many as you can find secondary and "
 "tertiary references, both Old and New Testament."
 msgstr ""
+"Met elke gebod, uit te breiden met zoveel als je secundaire en tertiaire "
+"referenties terugvinden, zowel het Oude als het Nieuwe Testament."
 
 #: commandments_app/templates/commandments/study_listing.html:63
+#, fuzzy
 msgid ""
 "Maybe you are wondering why we did not study all the commandments in the "
 "whole New Testament? Well, the easiest reason why we didn't, is because "
@@ -1041,85 +1364,113 @@ msgid ""
 "still true, valueable and explaining or extending Jesus' teachings, so maybe"
 " in the future we will add them to this website as well."
 msgstr ""
+"Misschien vraag je je af waarom we niet alle geboden in het hele Nieuwe "
+"Testament heeft gestudeerd? Nou, de makkelijkste reden waarom we dat niet "
+"deden, is omdat Jezus commandedments niet geboden, die andere apostelen "
+"zeggen heeft opgenomen. Hij zei dat 'leert hen onderhouden al wat Ik u "
+"bevolen heb' (Matteüs 28:20). Natuurlijk, de andere letters in het NT zijn "
+"nog steeds waar, waardevolle en uitleggen of uitbreiding van de leer van "
+"Jezus, dus misschien in de toekomst zullen we ze toe te voegen aan deze "
+"website."
 
 #: commandments_app/templates/commandments/study_listing.html:68
+#, fuzzy
 msgid "Study the commandments yourself"
-msgstr ""
+msgstr "Bestudeer de geboden zelf"
 
 #: commandments_app/templates/commandments/study_listing.html:69
+#, fuzzy
 msgid ""
 "In the following table you can see a list of all the commandments we found "
 "which Jesus tought us."
 msgstr ""
+"In de onderstaande tabel vindt u een overzicht van alle geboden we gevonden "
+"die Jezus ons leerde te zien."
 
 #: commandments_app/templates/commandments/study_listing.html:70
+#, fuzzy
 msgid ""
 "If you have any suggestions or corrections, we'd like to hear from you. "
 "Please"
 msgstr ""
+"Als u suggesties of correcties, willen we graag van u horen. alsjeblieft"
 
 #: commandments_app/templates/commandments/study_listing.html:70
 #: commandments_app/templates/commandments/vision.html:49
+#, fuzzy
 msgid "register"
-msgstr ""
+msgstr "registreren"
 
 #: commandments_app/templates/commandments/study_listing.html:70
 #: commandments_app/templates/commandments/vision.html:49
+#, fuzzy
 msgid "or just sent us an"
-msgstr ""
+msgstr "of gewoon stuurde ons een"
 
 #: commandments_app/templates/commandments/study_listing.html:70
 #: commandments_app/templates/commandments/vision.html:49
+#, fuzzy
 msgid "email"
-msgstr ""
+msgstr "e-mail"
 
 #: commandments_app/templates/commandments/study_listing.html:74
+#, fuzzy
 msgid "Change Bible Translation"
-msgstr ""
+msgstr "Change Bijbelvertaling"
 
 #: commandments_app/templates/commandments/study_listing.html:85
 #: commandments_app/templates/commandments/study_listing.html:141
+#, fuzzy
 msgid "Commandment Title"
-msgstr ""
+msgstr "gebod Titel"
 
 #: commandments_app/templates/commandments/study_listing.html:87
 #: commandments_app/templates/commandments/study_listing.html:143
+#, fuzzy
 msgid "Bible Reference"
-msgstr ""
+msgstr "Bible Reference"
 
 #: commandments_app/templates/commandments/study_listing.html:89
 #: commandments_app/templates/commandments/study_listing.html:145
+#, fuzzy
 msgid "Bible Reference Text"
-msgstr ""
+msgstr "Bible Reference Text"
 
 #: commandments_app/templates/commandments/study_listing.html:91
 #: commandments_app/templates/commandments/study_listing.html:147
+#, fuzzy
 msgid "Category"
-msgstr ""
+msgstr "Categorie"
 
 #: commandments_app/templates/commandments/study_listing.html:93
 #: commandments_app/templates/commandments/study_listing.html:149
+#, fuzzy
 msgid "Precedence"
-msgstr ""
+msgstr "Voorrang"
 
 #: commandments_app/templates/commandments/study_listing.html:106
+#, fuzzy
 msgid "Primary"
-msgstr ""
+msgstr "primair"
 
 #: commandments_app/templates/commandments/study_listing.html:119
+#, fuzzy
 msgid "Secondary"
-msgstr ""
+msgstr "Ondergeschikt"
 
 #: commandments_app/templates/commandments/study_listing.html:132
+#, fuzzy
 msgid "Tertiary"
-msgstr ""
+msgstr "Tertiair"
 
 #: commandments_app/templates/commandments/termsandconditions.html:13
 #: templates/base.html:150
+#, fuzzy
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Voorwaarden"
 
 #: commandments_app/templates/commandments/termsandconditions.html:16
+#, fuzzy
 msgid ""
 "\n"
 "                    <h3><strong>General information</strong></h3>\n"
@@ -1139,24 +1490,46 @@ msgid ""
 "                    <p>If you copy and/or distribute Jesus Commandments resources (whether by burning, sending, duplicating or whatever means) please make reference to <a href=\"/\">www.jesuscommandments.org</a> in order to let others know about the website and resources.</p>\n"
 "                    "
 msgstr ""
+"<H3> <strong> Algemeen </ strong> </ h3>\n"
+"                    <P> Onze doelen met deze site is om te luisteren en te gehoorzamen aan Jezus, zijn leringen uit te leggen, laat de mensen krijgen geworteld en vruchtbaar zijn in de wereld, om onze Vader in de hemel verheerlijken </ p>\n"
+"                    <P> U bent vrij om het even welke Jezus Geboden bron zolang het is niet voor winst of andere commerciële doeleinden te gebruiken, het gebruik in overeenstemming is met de Jezus geboden waarden, <a href=\"/vision\"> die kan hier worden gevonden </a>, en uw gebruik niet in strijd met enige toepasselijke wet- of regelgeving. </ p>\n"
+"                    <P> Dit betekent dat u: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> Duplicate middelen voor eigen gebruik en / of het gebruik van uw leiders, kinderen, kerk of groep. </ Li>\n"
+"                        <Li> Verdeel de middelen voor eigen gebruik en / of het gebruik van uw leiders, kinderen, kerk of groep. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> U bent niet toegestaan ​​om: </ p>\n"
+"                    <Ul>\n"
+"                        <Li> Aanpassen of enige middelen te wijzigen zonder onze toestemming. </ Li>\n"
+"                        <Li> Verkopen middelen of deze op te nemen in een commercieel aanbod. </ Li>\n"
+"                    </ Ul>\n"
+"                    <P> Als u zich bewust zijn van de middelen Jezus geboden worden verkocht, of vragen heeft kunt u contact opnemen met <a href=\"mailto:info@jesuscommandments.org\"> info@jesuscommandments.org </a> </ p>\n"
+"                    <P> Als u kopieert en / of middelen Jesus Geboden verdelen (al dan niet door het verbranden, het verzenden, dupliceren of welke manier dan ook) kunt u verwijzen naar <a href=\"/\"> www.jesuscommandments.org </a> om te laten anderen weten over de website en middelen. </ p>"
 
 #: commandments_app/templates/commandments/vision.html:12
+#, fuzzy
 msgid "The reason why"
-msgstr ""
+msgstr "De reden waarom"
 
 #: commandments_app/templates/commandments/vision.html:13
 #: templates/base.html:63
+#, fuzzy
 msgid "Vision"
-msgstr ""
+msgstr "Visie"
 
 #: commandments_app/templates/commandments/vision.html:14
+#, fuzzy
 msgid ""
 "\"Our goals with this site is to listen to and obey Jesus, explain His "
 "teachings, let the people get rooted and be fruitful in the world, to "
 "glorify our Father in heaven\""
 msgstr ""
+"\"Onze doelen met deze site is om naar te luisteren en gehoorzamen Jezus, "
+"zijn leringen uit te leggen, laat de mensen krijgen geworteld en vruchtbaar "
+"zijn in de wereld, om onze Vader te verheerlijken in de hemel\""
 
 #: commandments_app/templates/commandments/vision.html:17
+#, fuzzy
 msgid ""
 "The world despiritely needs Jesus! Not only the non-christians to hear the "
 "gospel, but also the Christians to get rooted. The church wordwide is going "
@@ -1164,22 +1537,31 @@ msgid ""
 "become rooted in Christ and be fruitful, like the parabel Jesus is "
 "explaining in Matthew 13."
 msgstr ""
+"De wereld despiritely moet Jesus! Niet alleen de niet-christenen om het "
+"evangelie te horen, maar ook de christenen te krijgen geworteld. De kerk "
+"wordwide gaat een moeilijke tijd waar niet veel worden voorbereid op te "
+"dagen. Mensen moeten geworteld zijn in Christus te worden en vruchtbaar "
+"zijn, zoals de parabel van Jezus is uit te leggen in Mattheüs 13."
 
 #: commandments_app/templates/commandments/vision.html:19
+#, fuzzy
 msgid "And Jesus explains the parabel:"
-msgstr ""
+msgstr "En Jezus legt de gelijkenis:"
 
 #: commandments_app/templates/commandments/vision.html:21
+#, fuzzy
 msgid "Jesus warns his followers from 3 perspectives:"
-msgstr ""
+msgstr "Jezus waarschuwt zijn volgelingen van 3 perspectieven:"
 
 #: commandments_app/templates/commandments/vision.html:24
+#, fuzzy
 msgid "Listen and understand"
-msgstr ""
+msgstr "Luisteren en begrijpen"
 
 #: commandments_app/templates/commandments/vision.html:25
+#, fuzzy
 msgid "Root deeply"
-msgstr ""
+msgstr "Root diep"
 
 #: commandments_app/templates/commandments/vision.html:26
 #: commandments_app.Commandment/title:2
@@ -1187,13 +1569,18 @@ msgid "Be fruitful"
 msgstr "Wees vruchtbaar"
 
 #: commandments_app/templates/commandments/vision.html:29
+#, fuzzy
 msgid ""
 "If we don't take this serious, we won't last long! And how do you get "
 "rooted? How will you become fruitful? Jesus gives the answer just before he "
 "leaves the earth to his Father in Heaven:"
 msgstr ""
+"Als we dit niet serieus nemen, zullen we niet lang! En hoe krijg je "
+"geworteld? Hoe gaat u vruchtbaar worden? Jezus geeft het antwoord net "
+"voordat hij de aarde verlaat om zijn Vader in de hemel:"
 
 #: commandments_app/templates/commandments/vision.html:31
+#, fuzzy
 msgid ""
 "It is a very clear and powerfull message, Jesus asks all believers to "
 "consciously obey, but not only in some commands, or only the greatest "
@@ -1204,23 +1591,40 @@ msgid ""
 "References, Drawings, Movies, Songs, Blogs, Sermons, Pictures and Books to "
 "help you in your small group to apply all the commandments in your life."
 msgstr ""
+"Het is een zeer duidelijke en krachtige boodschap, vraagt ​​Jezus alle "
+"gelovigen om bewust te gehoorzamen, maar niet alleen in een aantal "
+"opdrachten, of alleen de grootste opdracht, nee, in alle van hen! God is "
+"oppermachtig en creatief te zijn in een ultieme manier, en Hij miljarden "
+"mensen gemaakt, allemaal met hun eigen unieke karakter en creativiteit "
+"binnen. Zijn doel is dat een beetje van Hem wordt blootgesteld door u! We "
+"hebben geprobeerd om zoveel mogelijk gebod gerelateerde Bible References, "
+"tekeningen, films, muziek verzamelen, Blogs, Preken, foto's en boeken om u "
+"te helpen in uw kleine groep om alle geboden in je leven toe te passen."
 
 #: commandments_app/templates/commandments/vision.html:33
+#, fuzzy
 msgid ""
 "245 million Christians experience high levels of persecution in the "
 "countries on the World Watch List. And worldwide, 1 in 9 Christians "
 "experience high levels of persecution."
 msgstr ""
+"245 miljoen christenen ervaren een hoge mate van vervolging in de landen aan"
+" de World Watch List. En over de hele wereld, 1 in 9 christenen ervaren een "
+"hoge mate van vervolging."
 
 #: commandments_app/templates/commandments/vision.html:33
+#, fuzzy
 msgid "Read more about Christian persecution at Open Doors"
-msgstr ""
+msgstr "Lees meer over christenvervolging bij Open Doors"
 
 #: commandments_app/templates/commandments/vision.html:35
+#, fuzzy
 msgid "You think focusing on the commandments is a step toward legalism?"
 msgstr ""
+"Je denkt dat de nadruk op de geboden is een stap in de richting wetticisme?"
 
 #: commandments_app/templates/commandments/vision.html:36
+#, fuzzy
 msgid ""
 "Whenever the word \"command\" is mentioned, it seems that people immediately"
 " put up their defenses and begin to argue why certain commands are "
@@ -1230,8 +1634,17 @@ msgid ""
 "written down twenty to sixty years after Jesus ascended. We are expected to "
 "learn what He said and trust Him to give us the power to obey it."
 msgstr ""
+"Wanneer het woord \"command\" wordt genoemd, lijkt het erop dat mensen "
+"meteen hun verdediging en beginnen te argumenteren waarom bepaalde "
+"opdrachten zijn overbodig. Sommigen zeggen dat ze niet willen worden "
+"gecontroleerd door een \"gebod\"; Integendeel, ze willen geleid worden door "
+"de Geest. Maar het was de Geest die alle geboden door inspiratie gaven, "
+"omdat ze alle twintig opgeschreven werden tot zestig jaar nadat Jezus "
+"opgevaren. Van ons wordt verwacht om te leren wat Hij zei en het vertrouwen "
+"dat Hij ons de kracht om het te gehoorzamen."
 
 #: commandments_app/templates/commandments/vision.html:37
+#, fuzzy
 msgid ""
 "It must be very clear, that the acceptance before God, cannot be gained. We "
 "are all sinners, no amount of obedience or moral perfection can ever make "
@@ -1242,155 +1655,211 @@ msgid ""
 "for our sin's results, we are rewarded with the gift of Christ's "
 "righteousness - that alone is what can make us acceptable (2 Cor 5:21)."
 msgstr ""
+"Het moet heel duidelijk zijn, dat de aanvaarding voor God, kan niet worden "
+"bereikt. We zijn allemaal zondaars, geen bedrag van gehoorzaamheid of morele"
+" perfectie kan ooit een aanvaardbaar voor God persoon te maken, omdat een "
+"zonde in een leven van een persoon kan veroordelen (Jakobus 2:10). Salvation"
+" en aanvaarding door God is alleen mogelijk door Zijn genade die aanbiedt om"
+" volledig te betalen voor al onze zonden door Zijn dood en Zijn bloed "
+"vergoten aan het kruis van Golgotha. Als we vertrouwen in Zijn betaling voor"
+" de resultaten van onze zonde, zijn we beloond met de gave van de "
+"gerechtigheid van Christus - dat alleen al is wat ons aanvaardbaar is (2 Kor"
+" 5:21) kan maken."
 
 #: commandments_app/templates/commandments/vision.html:38
+#, fuzzy
 msgid ""
 "We need to understand deeply, that we are loved and accepted as we are. And "
 "out of love towards God, because we are loved by Him, we will listen to Him,"
 " and obey Him in all His teachings."
 msgstr ""
+"We moeten diep begrijpen, dat we geliefd en geaccepteerd als wij. En uit "
+"liefde tot God, omdat we geliefd door Hem, zullen we naar Hem luisteren en "
+"Hem gehoorzamen in al Zijn leer."
 
 #: commandments_app/templates/commandments/vision.html:40
+#, fuzzy
 msgid "How does this website help in equiping the disciples?"
-msgstr ""
+msgstr "Hoe werkt de website helpen bij de inrichting van de discipelen?"
 
 #: commandments_app/templates/commandments/vision.html:43
+#, fuzzy
 msgid ""
 "See our list (supposed to be complete) of all the unique commandments of "
 "Jesus, from a theological perspective"
 msgstr ""
+"Zie onze lijst (verondersteld compleet te zijn) van alle unieke geboden van "
+"Jezus, vanuit een theologisch perspectief"
 
 #: commandments_app/templates/commandments/vision.html:44
+#, fuzzy
 msgid "Collect all the biblereferences which are related to the commandments"
-msgstr ""
+msgstr "Verzamel alle biblereferences die gerelateerd zijn aan de geboden"
 
 #: commandments_app/templates/commandments/vision.html:45
+#, fuzzy
 msgid ""
 "See media items like Drawings, Movies, Songs, Blogs, Testimonies, Sermons, "
 "Pictures and Books, which can help to dive into the greatness of the "
 "commandment and help in applying them in your life"
 msgstr ""
+"Zie media items zoals tekeningen, films, muziek, blogs, getuigenissen, "
+"Preken, foto's en boeken, die kunnen helpen om te duiken in de grootheid van"
+" het gebod en te helpen bij de toepassing ervan in je leven"
 
 #: commandments_app/templates/commandments/vision.html:46
+#, fuzzy
 msgid "We do this in as many languages as we can"
-msgstr ""
+msgstr "We doen dit in zoveel talen als we kunnen"
 
 #: commandments_app/templates/commandments/vision.html:49
+#, fuzzy
 msgid ""
 "We defenately need your help! If you want to help improving this website on "
 "any of the above points or do you have any suggestions or corrections, we'd "
 "like to hear from you. Please"
 msgstr ""
+"We zijn zeker uw hulp nodig! Als u wilt helpen verbetering van deze website "
+"op een van de bovenstaande punten of heeft u suggesties of correcties, "
+"willen we graag van u horen. alsjeblieft"
 
 #: commandments_app/templates/commandments/vision.html:50
+#, fuzzy
 msgid "Statement of Faith"
-msgstr ""
+msgstr "Geloofsbelijdenis"
 
 #: commandments_app/templates/commandments/vision.html:51
+#, fuzzy
 msgid "The Jesus Commandments websites statement of faith, is that of the"
-msgstr ""
+msgstr "The Jesus Geboden websites verklaring van geloof, is dat van de"
 
 #: commandments_app/templates/commandments/vision.html:51
+#, fuzzy
 msgid "Lausanne Covenant"
-msgstr ""
+msgstr "Lausanne Covenant"
 
 #: commandments_app/views/user_preferences.py:16
+#, fuzzy
 msgid "Failed to change the bible translation"
-msgstr ""
+msgstr "Kan de bijbelvertaling veranderen"
 
 #: commandments_app/views/user_preferences.py:26
+#, fuzzy
 msgid "Failed to change the user languages"
-msgstr ""
+msgstr "Kan de gebruiker talen veranderen"
 
 #: commandments_app/views/user_preferences.py:34
+#, fuzzy
 msgid "No languages selected"
-msgstr ""
+msgstr "Geen talen geselecteerd"
 
 #: jesus_commandments_website/base_settings.py:100
+#, fuzzy
 msgid "English"
-msgstr ""
+msgstr "Engels"
 
 #: jesus_commandments_website/base_settings.py:101
+#, fuzzy
 msgid "Dutch"
-msgstr ""
+msgstr "Nederlands"
 
 #: jesus_commandments_website/base_settings.py:102
+#, fuzzy
 msgid "German"
-msgstr ""
+msgstr "Duitse"
 
 #: jesus_commandments_website/base_settings.py:103
+#, fuzzy
 msgid "French"
-msgstr ""
+msgstr "Frans"
 
 #: templates/base.html:56
+#, fuzzy
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: templates/base.html:61
+#, fuzzy
 msgid "Home"
-msgstr ""
+msgstr "Huis"
 
 #: templates/base.html:62
+#, fuzzy
 msgid "Commandments"
-msgstr ""
+msgstr "geboden"
 
 #: templates/base.html:64 templates/base.html:115
+#, fuzzy
 msgid "Study them"
-msgstr ""
+msgstr "Bestudeer ze"
 
 #: templates/base.html:66 templates/base.html:134
+#, fuzzy
 msgid "Admin Portal"
-msgstr ""
+msgstr "Admin Portal"
 
 #: templates/base.html:72
+#, fuzzy
 msgid "Help improving"
-msgstr ""
+msgstr "Help verbeteren"
 
 #: templates/base.html:77
+#, fuzzy
 msgid "Change language / Bible"
-msgstr ""
+msgstr "Wijzig taal / Bible"
 
 #: templates/base.html:112
+#, fuzzy
 msgid "Site Navigation"
-msgstr ""
+msgstr "Site Navigation"
 
 #: templates/base.html:114
+#, fuzzy
 msgid "List of Commandments"
-msgstr ""
+msgstr "Lijst van Geboden"
 
 #: templates/base.html:116
+#, fuzzy
 msgid "Our Vision"
-msgstr ""
+msgstr "Onze visie"
 
 #: templates/base.html:122
+#, fuzzy
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: templates/base.html:130
+#, fuzzy
 msgid "Register"
-msgstr ""
+msgstr "Registreren"
 
 #: templates/base.html:141
+#, fuzzy
 msgid "Contact us"
-msgstr ""
+msgstr "Neem contact op"
 
 #: templates/base.html:143
+#, fuzzy
 msgid "Email: "
-msgstr ""
+msgstr "E-mail:"
 
 #: templates/modal.html:7
+#, fuzzy
 msgid "Change languages / Bible translations"
-msgstr ""
+msgstr "Talen wijzigen / Bijbelvertalingen"
 
 #: templates/modal.html:16
+#, fuzzy
 msgid "Site language"
-msgstr ""
+msgstr "Site language"
 
 #: templates/modal.html:32
+#, fuzzy
 msgid "Bible translation"
-msgstr ""
+msgstr "Bijbelvertaling"
 
 #: templates/modal.html:53
+#, fuzzy
 msgid ""
 "With this setting, all Bible references found on this website are displayed "
 "with the configured Bible translation. All references are directly called "
@@ -1398,118 +1867,153 @@ msgid ""
 "href=\"https://scripture.api.bible\">https://scripture.api.bible</a>, "
 "provided by the American Bible Society."
 msgstr ""
+"Met deze instelling worden alle Bijbel verwijzingen vinden op deze website "
+"weergegeven met de geconfigureerde bijbelvertaling. Alle referenties worden "
+"rechtstreeks aangeroepen vanuit <a target=\"_blank\" "
+"href=\"https://scripture.api.bible\"> https://scripture.api.bible </a>, "
+"verstrekt door de American Bible Society."
 
 #: templates/modal.html:56
+#, fuzzy
 msgid "Resource language"
-msgstr ""
+msgstr "taalmiddel"
 
 #: templates/modal.html:74
+#, fuzzy
 msgid ""
 "Would you like to search for <b>Resources</b> that are created for a "
 "<b>specific language</b>? Choose your language here. (if available)"
 msgstr ""
+"Wilt u om te zoeken naar <b> Bronnen </ b> die zijn gemaakt voor een <b> "
+"specifieke taal </ b>? Kies hier uw taal. (Indien beschikbaar)"
 
 #: templates/modal.html:75
+#, fuzzy
 msgid ""
 "Within a commandment, you can find related resources to that commandment. "
 "Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or "
 "Books. You can select multiple languages if you like to see those resources "
 "in more languages."
 msgstr ""
+"Binnen een gebod, kunt u gerelateerde middelen te vinden om dat gebod. "
+"Middelen kunnen worden Preken, Getuigenissen, Films, Shortmovies, Songs, "
+"blogs of Books. U kunt meerdere talen te selecteren als je wilt om deze "
+"middelen te zien in meer talen."
 
 #: venv/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
+#, fuzzy
 msgid "Messages"
-msgstr ""
+msgstr "berichten"
 
 #: venv/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
+#, fuzzy
 msgid "Site Maps"
-msgstr ""
+msgstr "Kaarten Site"
 
 #: venv/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:9
+#, fuzzy
 msgid "Static Files"
-msgstr ""
+msgstr "statische bestanden"
 
 #: venv/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
+#, fuzzy
 msgid "Syndication"
-msgstr ""
+msgstr "syndication"
 
 #: venv/lib/python3.7/site-packages/django/core/paginator.py:45
+#, fuzzy
 msgid "That page number is not an integer"
-msgstr ""
+msgstr "Die pagina getal is geen geheel getal"
 
 #: venv/lib/python3.7/site-packages/django/core/paginator.py:47
+#, fuzzy
 msgid "That page number is less than 1"
-msgstr ""
+msgstr "Die pagina nummer is minder dan 1"
 
 #: venv/lib/python3.7/site-packages/django/core/paginator.py:52
+#, fuzzy
 msgid "That page contains no results"
-msgstr ""
+msgstr "Die pagina bevat geen resultaten"
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:31
+#, fuzzy
 msgid "Enter a valid value."
-msgstr ""
+msgstr "Voer een geldige waarde in."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:102
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:658
+#, fuzzy
 msgid "Enter a valid URL."
-msgstr ""
+msgstr "Voer een geldige URL."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:154
+#, fuzzy
 msgid "Enter a valid integer."
-msgstr ""
+msgstr "Voer een geldige integer."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:165
+#, fuzzy
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Voer een geldig e-mailadres."
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
 #: venv/lib/python3.7/site-packages/django/core/validators.py:239
+#, fuzzy
 msgid ""
 "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
 msgstr ""
+"Voer een geldig 'slak', bestaande uit letters, cijfers, onderstrepingstekens"
+" of koppeltekens."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:246
+#, fuzzy
 msgid ""
 "Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or"
 " hyphens."
 msgstr ""
+"Voer een geldig 'slak', bestaande uit Unicode letters, cijfers, "
+"onderstrepingstekens of koppeltekens."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:255
 #: venv/lib/python3.7/site-packages/django/core/validators.py:275
+#, fuzzy
 msgid "Enter a valid IPv4 address."
-msgstr ""
+msgstr "Voer een geldig IPv4-adres."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:260
 #: venv/lib/python3.7/site-packages/django/core/validators.py:276
+#, fuzzy
 msgid "Enter a valid IPv6 address."
-msgstr ""
+msgstr "Voer een geldig IPv6-adres."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:270
 #: venv/lib/python3.7/site-packages/django/core/validators.py:274
+#, fuzzy
 msgid "Enter a valid IPv4 or IPv6 address."
-msgstr ""
+msgstr "Voer een geldig IPv4- of IPv6-adres."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:304
+#, fuzzy
 msgid "Enter only digits separated by commas."
-msgstr ""
+msgstr "Voer alleen cijfers, gescheiden door komma's."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:310
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
+msgstr "Zorgen deze waarde% (limit_value) s (het% (show_value) s)."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:342
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Zorgen deze waarde is kleiner dan of gelijk aan% (limit_value) s."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:351
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
+msgstr "Zorgen deze waarde groter dan of gelijk aan% (limit_value) s."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:361
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at least %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1520,7 +2024,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:376
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this value has at most %(limit_value)d character (it has "
 "%(show_value)d)."
@@ -1533,25 +2037,26 @@ msgstr[1] ""
 #: venv/lib/python3.7/site-packages/django/core/validators.py:395
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:290
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:325
+#, fuzzy
 msgid "Enter a number."
-msgstr ""
+msgstr "Voer een getal."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:397
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:402
-#, python-format
+#, python-format, fuzzy
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:407
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
 msgid_plural ""
@@ -1560,331 +2065,391 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:469
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "File extension '%(extension)s' is not allowed. Allowed extensions are: "
 "'%(allowed_extensions)s'."
 msgstr ""
+"Bestandsextensie '% (uitbreiding) s' is niet toegestaan. Toegestane "
+"extensies zijn: '% (allowed_extensions) s'."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:521
+#, fuzzy
 msgid "Null characters are not allowed."
-msgstr ""
+msgstr "Null tekens zijn niet toegestaan."
 
 #: venv/lib/python3.7/site-packages/django/db/models/base.py:1162
 #: venv/lib/python3.7/site-packages/django/forms/models.py:756
+#, fuzzy
 msgid "and"
-msgstr ""
+msgstr "en"
 
 #: venv/lib/python3.7/site-packages/django/db/models/base.py:1164
-#, python-format
+#, python-format, fuzzy
 msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
+msgstr "% (MODEL_NAME) is dit% (field_labels) s bestaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
-#, python-format
+#, python-format, fuzzy
 msgid "Value %(value)r is not a valid choice."
-msgstr ""
+msgstr "% Value (value) r is geen geldige keuze."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:105
+#, fuzzy
 msgid "This field cannot be null."
-msgstr ""
+msgstr "Dit veld mag niet leeg zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:106
+#, fuzzy
 msgid "This field cannot be blank."
-msgstr ""
+msgstr "Dit veld kan niet leeg zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
-#, python-format
+#, python-format, fuzzy
 msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
+msgstr "% (MODEL_NAME) is dit% (FIELD_LABEL) s bestaat."
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:111
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
+"% (FIELD_LABEL) s moet uniek% (date_field_label) s% (lookup_type) s "
+"bedragen."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:128
-#, python-format
+#, python-format, fuzzy
 msgid "Field of type: %(field_type)s"
-msgstr ""
+msgstr "Veld type:% (field_type) s"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:901
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1768
+#, fuzzy
 msgid "Integer"
-msgstr ""
+msgstr "Geheel getal"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:905
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1766
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be an integer."
-msgstr ""
+msgstr "'% (Value) s' waarde moet een geheel getal zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:980
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1846
+#, fuzzy
 msgid "Big (8 byte) integer"
-msgstr ""
+msgstr "Big (8 byte) integer"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:992
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be either True or False."
-msgstr ""
+msgstr "'% (Waarde) s' waarde moet ofwel waar of onwaar zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:993
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be either True, False, or None."
-msgstr ""
+msgstr "value '% (waarde) s' moet ofwel True, False of None zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:995
+#, fuzzy
 msgid "Boolean (Either True or False)"
-msgstr ""
+msgstr "Boolean (waar of onwaar)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1036
-#, python-format
+#, python-format, fuzzy
 msgid "String (up to %(max_length)s)"
-msgstr ""
+msgstr "Reeks (maximaal% (max_length) s)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1100
+#, fuzzy
 msgid "Comma-separated integers"
-msgstr ""
+msgstr "Komma's gescheiden integers"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1149
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
 "format."
 msgstr ""
+"'% (Waarde) s' waarde heeft een ongeldige datumnotatie. Het moet in YYYY-MM-"
+"DD formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1151
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1294
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
 "date."
 msgstr ""
+"'% (Waarde) s' waarde heeft het juiste formaat (YYYY-MM-DD), maar het is een"
+" ongeldige datum."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1154
+#, fuzzy
 msgid "Date (without time)"
-msgstr ""
+msgstr "Date (zonder tijd)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1292
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ] format."
 msgstr ""
+"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in YYYY-MM-DD "
+"UU: MM [: ss [.uuuuuu]] [TZ] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1296
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
 msgstr ""
+"'% (Waarde) s' waarde heeft het juiste formaat (YYYY-MM-DD UU: MM [: ss "
+"[.uuuuuu]] [TZ]), maar het is een ongeldige datum / tijd."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1300
+#, fuzzy
 msgid "Date (with time)"
-msgstr ""
+msgstr "Date (tijd)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1448
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be a decimal number."
-msgstr ""
+msgstr "'% (Value) s' waarde moet een decimaal getal."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1450
+#, fuzzy
 msgid "Decimal number"
-msgstr ""
+msgstr "Decimaal getal"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1589
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has an invalid format. It must be in [DD] "
 "[HH:[MM:]]ss[.uuuuuu] format."
 msgstr ""
+"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in [DD] [UU: "
+"[MM:]] ss [.uuuuuu] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1592
+#, fuzzy
 msgid "Duration"
-msgstr ""
+msgstr "Looptijd"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1642
+#, fuzzy
 msgid "Email address"
-msgstr ""
+msgstr "E-mailadres"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1665
+#, fuzzy
 msgid "File path"
-msgstr ""
+msgstr "Bestandspad"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1731
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be a float."
-msgstr ""
+msgstr "'% (Value) s' waarde moet een float zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1733
+#, fuzzy
 msgid "Floating point number"
-msgstr ""
+msgstr "Kommagetal"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1862
+#, fuzzy
 msgid "IPv4 address"
-msgstr ""
+msgstr "IPv4-adres"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1893
+#, fuzzy
 msgid "IP address"
-msgstr ""
+msgstr "IP adres"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1973
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1974
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' value must be either None, True or False."
-msgstr ""
+msgstr "'% (Waarde) s' waarde moet ofwel None, waar of onwaar."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1976
+#, fuzzy
 msgid "Boolean (Either True, False or None)"
-msgstr ""
+msgstr "Boolean (Ofwel True, False of geen)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2011
+#, fuzzy
 msgid "Positive integer"
-msgstr ""
+msgstr "Positief integer"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2024
+#, fuzzy
 msgid "Positive small integer"
-msgstr ""
+msgstr "Positieve kleine integer"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2038
-#, python-format
+#, python-format, fuzzy
 msgid "Slug (up to %(max_length)s)"
-msgstr ""
+msgstr "Slug (tot% (max_length) s)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2070
+#, fuzzy
 msgid "Small integer"
-msgstr ""
+msgstr "kleine integer"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2077
+#, fuzzy
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2105
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
+"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in HH: MM [: ss"
+" [.uuuuuu]] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2107
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
+"'% (Waarde) s' waarde heeft het juiste formaat (HH: MM [: ss [.uuuuuu]]), "
+"maar het is een ongeldige tijd."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2110
+#, fuzzy
 msgid "Time"
-msgstr ""
+msgstr "Tijd"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2236
+#, fuzzy
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2258
+#, fuzzy
 msgid "Raw binary data"
-msgstr ""
+msgstr "Ruwe binaire data"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2308
-#, python-format
+#, python-format, fuzzy
 msgid "'%(value)s' is not a valid UUID."
-msgstr ""
+msgstr "'% (Value) s' is geen geldige UUID."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2310
+#, fuzzy
 msgid "Universally unique identifier"
-msgstr ""
+msgstr "Universele unieke identificatie"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/files.py:221
+#, fuzzy
 msgid "File"
-msgstr ""
+msgstr "het dossier"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/files.py:360
+#, fuzzy
 msgid "Image"
-msgstr ""
+msgstr "Beeld"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:778
-#, python-format
+#, python-format, fuzzy
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr ""
+msgstr "% (Model) s bijvoorbeeld met% (veld) s% (waarde) r bestaat niet."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:780
+#, fuzzy
 msgid "Foreign Key (type determined by related field)"
-msgstr ""
+msgstr "Foreign Key (type bepaald door gerelateerd veld)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1007
+#, fuzzy
 msgid "One-to-one relationship"
-msgstr ""
+msgstr "Eén-op-één relatie"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1057
-#, python-format
+#, python-format, fuzzy
 msgid "%(from)s-%(to)s relationship"
-msgstr ""
+msgstr "% (Van) s -% (to) en verhouding"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1058
-#, python-format
+#, python-format, fuzzy
 msgid "%(from)s-%(to)s relationships"
-msgstr ""
+msgstr "% (Van) s -% (to) en relaties"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1100
+#, fuzzy
 msgid "Many-to-many relationship"
-msgstr ""
+msgstr "Veel-op-veel-relatie"
 
 #. Translators: If found as last label character, these punctuation
 #. characters will prevent the default label_suffix to be appended to the
 #. label
 #: venv/lib/python3.7/site-packages/django/forms/boundfield.py:146
+#, fuzzy
 msgid ":?.!"
-msgstr ""
+msgstr ":?.!"
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:53
+#, fuzzy
 msgid "This field is required."
-msgstr ""
+msgstr "Dit veld is verplicht."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:245
+#, fuzzy
 msgid "Enter a whole number."
-msgstr ""
+msgstr "Voer een geheel getal."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:396
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:1126
+#, fuzzy
 msgid "Enter a valid date."
-msgstr ""
+msgstr "Voer een geldige datum."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:420
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:1127
+#, fuzzy
 msgid "Enter a valid time."
-msgstr ""
+msgstr "Voer een geldige tijd."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:442
+#, fuzzy
 msgid "Enter a valid date/time."
-msgstr ""
+msgstr "Voer een geldige datum / tijd."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:471
+#, fuzzy
 msgid "Enter a valid duration."
-msgstr ""
+msgstr "Voer een geldige duur."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:472
-#, python-brace-format
+#, python-brace-format, fuzzy
 msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
+msgstr "Het aantal dagen moet tussen {MIN_DAYS} en {MAX_DAYS}."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:532
+#, fuzzy
 msgid "No file was submitted. Check the encoding type on the form."
 msgstr ""
+"Geen bestand is ingediend. Controleer het type codering op het formulier."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:533
+#, fuzzy
 msgid "No file was submitted."
-msgstr ""
+msgstr "Geen bestand is ingediend."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:534
+#, fuzzy
 msgid "The submitted file is empty."
-msgstr ""
+msgstr "Het ingediende dossier is leeg."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:536
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
@@ -1893,60 +2458,73 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:539
+#, fuzzy
 msgid "Please either submit a file or check the clear checkbox, not both."
 msgstr ""
+"Gelieve ofwel een dossier in te dienen of kijk op de duidelijke checkbox, "
+"niet beide."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:600
 #: venv/lib/python3.7/site-packages/sorl/thumbnail/fields.py:45
+#, fuzzy
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Upload een geldige afbeelding. Het bestand dat je hebt geüpload was ofwel "
+"niet een afbeelding of een beschadigde afbeelding."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:762
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:852
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1270
-#, python-format
+#, python-format, fuzzy
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
+"Selecteer een geldige keuze. % (Waarde) s is niet een van de beschikbare "
+"keuzes."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:853
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:968
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1269
+#, fuzzy
 msgid "Enter a list of values."
-msgstr ""
+msgstr "Voer een lijst met waarden."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:969
+#, fuzzy
 msgid "Enter a complete value."
-msgstr ""
+msgstr "Voer een volledige waarde."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:1185
+#, fuzzy
 msgid "Enter a valid UUID."
-msgstr ""
+msgstr "Voer een geldige UUID."
 
 #. Translators: This is the default suffix added to form field labels
 #: venv/lib/python3.7/site-packages/django/forms/forms.py:86
+#, fuzzy
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: venv/lib/python3.7/site-packages/django/forms/forms.py:212
-#, python-format
+#, python-format, fuzzy
 msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
+msgstr "(Verborgen veld% (name) s)% (error) s"
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:91
+#, fuzzy
 msgid "ManagementForm data is missing or has been tampered with"
-msgstr ""
+msgstr "ManagementForm data ontbreekt of is geknoeid"
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:338
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or fewer forms."
 msgid_plural "Please submit %d or fewer forms."
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:345
-#, python-format
+#, python-format, fuzzy
 msgid "Please submit %d or more forms."
 msgid_plural "Please submit %d or more forms."
 msgstr[0] ""
@@ -1954,502 +2532,604 @@ msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:371
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:373
+#, fuzzy
 msgid "Order"
-msgstr ""
+msgstr "Bestellen"
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:375
+#, fuzzy
 msgid "Delete"
-msgstr ""
+msgstr "Verwijder"
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:751
-#, python-format
+#, python-format, fuzzy
 msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
+msgstr "Corrigeer de dubbele gegevens voor% (veld) s."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:755
-#, python-format
+#, python-format, fuzzy
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
+msgstr "Corrigeer de dubbele gegevens voor% (veld) s, die uniek moet zijn."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:761
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Please correct the duplicate data for %(field_name)s which must be unique "
 "for the %(lookup)s in %(date_field)s."
 msgstr ""
+"Corrigeer de dubbele gegevens voor% (field_name) s die uniek is voor de% "
+"(lookup) moet s in% (date_field) s."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:770
+#, fuzzy
 msgid "Please correct the duplicate values below."
-msgstr ""
+msgstr "Corrigeer onder de dubbele waarden."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1091
+#, fuzzy
 msgid "The inline value did not match the parent instance."
-msgstr ""
+msgstr "De inline waarde niet overeen met de bovenliggende instantie."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1158
+#, fuzzy
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
+"Selecteer een geldige keuze. Die keuze is niet een van de beschikbare "
+"keuzes."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1272
-#, python-format
+#, python-format, fuzzy
 msgid "\"%(pk)s\" is not a valid value."
-msgstr ""
+msgstr "\"% (Pk) s\" is geen geldige waarde."
 
 #: venv/lib/python3.7/site-packages/django/forms/utils.py:162
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
 "may be ambiguous or it may not exist."
 msgstr ""
+"% (Datetime) s kon niet worden uitgelegd tijdzone% (current_timezone) s; het"
+" kan dubbelzinnig zijn of het kan niet bestaan."
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:395
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "Doorzichtig"
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:396
+#, fuzzy
 msgid "Currently"
-msgstr ""
+msgstr "Momenteel"
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:397
+#, fuzzy
 msgid "Change"
-msgstr ""
+msgstr "Verandering"
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:711
+#, fuzzy
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:712
+#, fuzzy
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:713
+#, fuzzy
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:788
+#, fuzzy
 msgid "yes,no,maybe"
-msgstr ""
+msgstr "Ja! Nee! Misschien"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:817
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:834
-#, python-format
+#, python-format, fuzzy
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:836
-#, python-format
+#, python-format, fuzzy
 msgid "%s KB"
-msgstr ""
+msgstr "% S KB"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:838
-#, python-format
+#, python-format, fuzzy
 msgid "%s MB"
-msgstr ""
+msgstr "% S MB"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:840
-#, python-format
+#, python-format, fuzzy
 msgid "%s GB"
-msgstr ""
+msgstr "% S GB"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:842
-#, python-format
+#, python-format, fuzzy
 msgid "%s TB"
-msgstr ""
+msgstr "% S TB"
 
 #: venv/lib/python3.7/site-packages/django/template/defaultfilters.py:844
-#, python-format
+#, python-format, fuzzy
 msgid "%s PB"
-msgstr ""
+msgstr "% S PB"
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:62
+#, fuzzy
 msgid "p.m."
-msgstr ""
+msgstr "p.m."
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:63
+#, fuzzy
 msgid "a.m."
-msgstr ""
+msgstr "a.m."
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:68
+#, fuzzy
 msgid "PM"
-msgstr ""
+msgstr "P.M"
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:69
+#, fuzzy
 msgid "AM"
-msgstr ""
+msgstr "AM"
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:150
+#, fuzzy
 msgid "midnight"
-msgstr ""
+msgstr "middernacht"
 
 #: venv/lib/python3.7/site-packages/django/utils/dateformat.py:152
+#, fuzzy
 msgid "noon"
-msgstr ""
+msgstr "middag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#, fuzzy
 msgid "Monday"
-msgstr ""
+msgstr "maandag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#, fuzzy
 msgid "Tuesday"
-msgstr ""
+msgstr "dinsdag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#, fuzzy
 msgid "Wednesday"
-msgstr ""
+msgstr "woensdag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#, fuzzy
 msgid "Thursday"
-msgstr ""
+msgstr "donderdag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:6
+#, fuzzy
 msgid "Friday"
-msgstr ""
+msgstr "vrijdag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:7
+#, fuzzy
 msgid "Saturday"
-msgstr ""
+msgstr "zaterdag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:7
+#, fuzzy
 msgid "Sunday"
-msgstr ""
+msgstr "zondag"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
 msgid "Mon"
-msgstr ""
+msgstr "ma"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
 msgid "Tue"
-msgstr ""
+msgstr "Din"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
 msgid "Wed"
-msgstr ""
+msgstr "trouwen"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
 msgid "Thu"
-msgstr ""
+msgstr "Don"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
 msgid "Fri"
-msgstr ""
+msgstr "vr"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:11
+#, fuzzy
 msgid "Sat"
-msgstr ""
+msgstr "Za"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:11
+#, fuzzy
 msgid "Sun"
-msgstr ""
+msgstr "Zon"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "January"
-msgstr ""
+msgstr "januari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "February"
-msgstr ""
+msgstr "februari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "March"
-msgstr ""
+msgstr "maart"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "April"
-msgstr ""
+msgstr "april"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "May"
-msgstr ""
+msgstr "mei"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:14
+#, fuzzy
 msgid "June"
-msgstr ""
+msgstr "juni"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#, fuzzy
 msgid "July"
-msgstr ""
+msgstr "juli"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#, fuzzy
 msgid "August"
-msgstr ""
+msgstr "augustus"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#, fuzzy
 msgid "September"
-msgstr ""
+msgstr "september"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#, fuzzy
 msgid "October"
-msgstr ""
+msgstr "oktober"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:15
+#, fuzzy
 msgid "November"
-msgstr ""
+msgstr "november"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:16
+#, fuzzy
 msgid "December"
-msgstr ""
+msgstr "december"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "jan"
-msgstr ""
+msgstr "januari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "feb"
-msgstr ""
+msgstr "februari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "mar"
-msgstr ""
+msgstr "bederven"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "apr"
-msgstr ""
+msgstr "april"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "may"
-msgstr ""
+msgstr "mei"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
 msgid "jun"
-msgstr ""
+msgstr "juni"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "jul"
-msgstr ""
+msgstr "juli"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "aug"
-msgstr ""
+msgstr "augustus"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "sep"
-msgstr ""
+msgstr "september"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "oct"
-msgstr ""
+msgstr "oktober"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "nov"
-msgstr ""
+msgstr "november"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
 msgid "dec"
-msgstr ""
+msgstr "december"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:23
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Jan."
-msgstr ""
+msgstr "Januari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:24
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Feb."
-msgstr ""
+msgstr "Februari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:25
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "March"
-msgstr ""
+msgstr "maart"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:26
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "April"
-msgstr ""
+msgstr "april"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:27
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "May"
-msgstr ""
+msgstr "mei"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:28
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "June"
-msgstr ""
+msgstr "juni"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:29
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "July"
-msgstr ""
+msgstr "juli"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:30
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Aug."
-msgstr ""
+msgstr "Augustus"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:31
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Sept."
-msgstr ""
+msgstr "September"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:32
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Oct."
-msgstr ""
+msgstr "Oktober"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:33
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Nov."
-msgstr ""
+msgstr "November"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:34
+#, fuzzy
 msgctxt "abbrev. month"
 msgid "Dec."
-msgstr ""
+msgstr "December"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:37
+#, fuzzy
 msgctxt "alt. month"
 msgid "January"
-msgstr ""
+msgstr "januari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:38
+#, fuzzy
 msgctxt "alt. month"
 msgid "February"
-msgstr ""
+msgstr "februari"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:39
+#, fuzzy
 msgctxt "alt. month"
 msgid "March"
-msgstr ""
+msgstr "maart"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:40
+#, fuzzy
 msgctxt "alt. month"
 msgid "April"
-msgstr ""
+msgstr "april"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:41
+#, fuzzy
 msgctxt "alt. month"
 msgid "May"
-msgstr ""
+msgstr "mei"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:42
+#, fuzzy
 msgctxt "alt. month"
 msgid "June"
-msgstr ""
+msgstr "juni"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:43
+#, fuzzy
 msgctxt "alt. month"
 msgid "July"
-msgstr ""
+msgstr "juli"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:44
+#, fuzzy
 msgctxt "alt. month"
 msgid "August"
-msgstr ""
+msgstr "augustus"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:45
+#, fuzzy
 msgctxt "alt. month"
 msgid "September"
-msgstr ""
+msgstr "september"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:46
+#, fuzzy
 msgctxt "alt. month"
 msgid "October"
-msgstr ""
+msgstr "oktober"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:47
+#, fuzzy
 msgctxt "alt. month"
 msgid "November"
-msgstr ""
+msgstr "november"
 
 #: venv/lib/python3.7/site-packages/django/utils/dates.py:48
+#, fuzzy
 msgctxt "alt. month"
 msgid "December"
-msgstr ""
+msgstr "december"
 
 #: venv/lib/python3.7/site-packages/django/utils/ipv6.py:8
+#, fuzzy
 msgid "This is not a valid IPv6 address."
-msgstr ""
+msgstr "Dit is geen geldig IPv6-adres."
 
 #: venv/lib/python3.7/site-packages/django/utils/text.py:67
-#, python-format
+#, python-format, fuzzy
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
-msgstr ""
+msgstr "% (TRUNCATED_TEXT) s ..."
 
 #: venv/lib/python3.7/site-packages/django/utils/text.py:233
+#, fuzzy
 msgid "or"
-msgstr ""
+msgstr "of"
 
 #. Translators: This string is used as a separator between list elements
 #: venv/lib/python3.7/site-packages/django/utils/text.py:252
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:83
+#, fuzzy
 msgid ", "
-msgstr ""
+msgstr ","
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:9
-#, python-format
+#, python-format, fuzzy
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:10
-#, python-format
+#, python-format, fuzzy
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:11
-#, python-format
+#, python-format, fuzzy
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:12
-#, python-format
+#, python-format, fuzzy
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:13
-#, python-format
+#, python-format, fuzzy
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:14
-#, python-format
+#, python-format, fuzzy
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
 #: venv/lib/python3.7/site-packages/django/utils/timesince.py:72
+#, fuzzy
 msgid "0 minutes"
-msgstr ""
+msgstr "0 minuten"
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:110
+#, fuzzy
 msgid "Forbidden"
-msgstr ""
+msgstr "Verboden"
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:111
+#, fuzzy
 msgid "CSRF verification failed. Request aborted."
-msgstr ""
+msgstr "CSRF is mislukt. Verzoek afgebroken."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:115
+#, fuzzy
 msgid ""
 "You are seeing this message because this HTTPS site requires a 'Referer "
 "header' to be sent by your Web browser, but none was sent. This header is "
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"U ziet dit bericht omdat deze HTTPS site vereist een 'Referer header' te "
+"worden gestuurd door uw webbrowser, maar niemand werd gestuurd. Deze header "
+"is vereist om veiligheidsredenen, om ervoor te zorgen dat uw browser niet "
+"wordt gekaapt door derden."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:120
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable 'Referer' headers, please re-"
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
+"Als u uw browser uit te schakelen 'refer' headers hebt geconfigureerd, kunt "
+"u deze weer inschakelen, in ieder geval voor deze website, of voor HTTPS-"
+"verbindingen, of voor 'same-oorsprong' verzoeken."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:124
+#, fuzzy
 msgid ""
 "If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or"
 " including the 'Referrer-Policy: no-referrer' header, please remove them. "
@@ -2457,126 +3137,161 @@ msgid ""
 "checking. If you're concerned about privacy, use alternatives like <a "
 "rel=\"noreferrer\" ...> for links to third-party sites."
 msgstr ""
+"Als u gebruik maakt van de <meta name = \"referrer\" content = \"no-"
+"referrer\"> tag of met inbegrip van de 'Referrer-beleid: no-referrer' "
+"header, kunt u ze te verwijderen. De bescherming CSRF vereist de 'Referer' "
+"header aan strenge referer controle te doen. Als u zich zorgen over privacy "
+"hebt, gebruik dan alternatieven zoals <a rel=\"noreferrer\" ...> voor links "
+"naar sites van derden."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:132
+#, fuzzy
 msgid ""
 "You are seeing this message because this site requires a CSRF cookie when "
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
+"U ziet dit bericht omdat deze site vereist een CSRF koekje bij het indienen "
+"van formulieren. Deze cookie is nodig om veiligheidsredenen, om ervoor te "
+"zorgen dat uw browser niet wordt gekaapt door derden."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:137
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
+"Als u uw browser hebt ingesteld om cookies uit te schakelen, dan kunt u deze"
+" weer inschakelen, in ieder geval voor deze website, of voor 'same-"
+"oorsprong' verzoeken."
 
 #: venv/lib/python3.7/site-packages/django/views/csrf.py:142
+#, fuzzy
 msgid "More information is available with DEBUG=True."
-msgstr ""
+msgstr "Meer informatie is beschikbaar met DEBUG = True."
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:41
+#, fuzzy
 msgid "No year specified"
-msgstr ""
+msgstr "Geen jaar gespecificeerd"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:61
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:111
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:208
+#, fuzzy
 msgid "Date out of range"
-msgstr ""
+msgstr "Date buiten bereik"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:90
+#, fuzzy
 msgid "No month specified"
-msgstr ""
+msgstr "Geen maand gespecificeerd"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:142
+#, fuzzy
 msgid "No day specified"
-msgstr ""
+msgstr "Geen dag gespecificeerd"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:188
+#, fuzzy
 msgid "No week specified"
-msgstr ""
+msgstr "Geen week gespecificeerd"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:338
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:367
-#, python-format
+#, python-format, fuzzy
 msgid "No %(verbose_name_plural)s available"
-msgstr ""
+msgstr "Geen% (verbose_name_plural) s beschikbaar"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:589
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "Future %(verbose_name_plural)s not available because "
 "%(class_name)s.allow_future is False."
 msgstr ""
+"Future% (verbose_name_plural) is niet beschikbaar omdat% (class_name) "
+"s.allow_future is False."
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:623
-#, python-format
+#, python-format, fuzzy
 msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
-msgstr ""
+msgstr "Ongeldige datum string '% (datestr) s' gegeven format '% (format) s'"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/detail.py:54
-#, python-format
+#, python-format, fuzzy
 msgid "No %(verbose_name)s found matching the query"
-msgstr ""
+msgstr "Nr% (verbose_name) s gevonden met zoekopdracht"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:67
+#, fuzzy
 msgid "Page is not 'last', nor can it be converted to an int."
-msgstr ""
+msgstr "Pagina is niet 'laatste', noch kan het worden omgezet naar een int."
 
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:72
-#, python-format
+#, python-format, fuzzy
 msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
+msgstr "Ongeldige pagina (% (paginanummer) s):% (bericht) s"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:154
-#, python-format
+#, python-format, fuzzy
 msgid "Empty list and '%(class_name)s.allow_empty' is False."
-msgstr ""
+msgstr "Lege lijst en '% (class_name) s.allow_empty' is False."
 
 #: venv/lib/python3.7/site-packages/django/views/static.py:40
+#, fuzzy
 msgid "Directory indexes are not allowed here."
-msgstr ""
+msgstr "Directory indexen zijn hier niet toegestaan."
 
 #: venv/lib/python3.7/site-packages/django/views/static.py:42
-#, python-format
+#, python-format, fuzzy
 msgid "\"%(path)s\" does not exist"
-msgstr ""
+msgstr "\"% (Path) s\" bestaat niet"
 
 #: venv/lib/python3.7/site-packages/django/views/static.py:80
-#, python-format
+#, python-format, fuzzy
 msgid "Index of %(directory)s"
-msgstr ""
+msgstr "Index van% (directory) s"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:6
+#, fuzzy
 msgid "Django: the Web framework for perfectionists with deadlines."
-msgstr ""
+msgstr "Django: de Web kader voor perfectionisten met deadlines."
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:345
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
 "target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
+"Bekijk <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\"> release notes </a> voor Django% "
+"(version) s"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:367
+#, fuzzy
 msgid "The install worked successfully! Congratulations!"
-msgstr ""
+msgstr "De installatie met succes gewerkt! Gefeliciteerd!"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:368
-#, python-format
+#, python-format, fuzzy
 msgid ""
 "You are seeing this page because <a "
 "href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
 "target=\"_blank\" rel=\"noopener\">DEBUG=True</a> is in your settings file "
 "and you have not configured any URLs."
 msgstr ""
+"U ziet deze pagina omdat <a "
+"href=\"https://docs.djangoproject.com/en/%(version)s/ref/settings/#debug\" "
+"target=\"_blank\" rel=\"noopener\"> DEBUG = True </a> is in uw bestand "
+"instellingen en je hebt geen URL's geconfigureerd."
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:383
+#, fuzzy
 msgid "Django Documentation"
-msgstr ""
+msgstr "Django Documentatie"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:384
+#, fuzzy
 msgid "Topics, references, &amp; how-to's"
 msgstr ""
 

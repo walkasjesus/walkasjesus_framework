@@ -4645,238 +4645,331 @@ msgid ""
 msgstr ""
 
 #: commandments_app.Question/text:4
+#, fuzzy
 msgid "Do you recognize any fruits in your life?"
-msgstr ""
+msgstr "Reconnaissez-vous des fruits dans votre vie?"
 
 #: commandments_app.Question/text:5
+#, fuzzy
 msgid "Tell each other how you recognize their fruits"
-msgstr ""
+msgstr "Dites-lui à la façon dont vous reconnaissez leurs fruits"
 
 #: commandments_app.Question/text:6
+#, fuzzy
 msgid ""
 "During the day, do you pay attention for people around you who need help?"
 msgstr ""
+"Pendant la journée, payez-vous une attention pour les personnes autour de "
+"vous qui ont besoin d'aide?"
 
 #: commandments_app.Question/text:7
+#, fuzzy
 msgid "When was the last time you were merciful?"
-msgstr ""
+msgstr "À quand remonte la dernière fois que vous étiez miséricordieux?"
 
 #: commandments_app.Question/text:8
+#, fuzzy
 msgid "Ask others, what kind of sins do they see with you?"
-msgstr ""
+msgstr "Demandez aux autres, quel genre de péchés qu'ils ne voient avec vous?"
 
 #: commandments_app.Question/text:9
+#, fuzzy
 msgid "What sins do you want to get rid off?"
-msgstr ""
+msgstr "Quels péchés voulez-vous de se débarrasser?"
 
 #: commandments_app.Question/text:10
+#, fuzzy
 msgid "Pray for each other"
-msgstr ""
+msgstr "Priez les uns pour les autres"
 
 #: commandments_app.Question/text:11
+#, fuzzy
 msgid "Has sin corrupted your saltiness?"
-msgstr ""
+msgstr "Est-ce que le péché corrompu votre salure?"
 
 #: commandments_app.Question/text:12
+#, fuzzy
 msgid "Has your self-interest made you disinterested in transforming others?"
 msgstr ""
+"Votre intérêt vous fait désintéressée dans la transformation d'autres?"
 
 #: commandments_app.Question/text:13
+#, fuzzy
 msgid "Can you be graciously confrontational?"
-msgstr ""
+msgstr "Pouvez-vous être gracieusement conflictuel?"
 
 #: commandments_app.Question/text:14
+#, fuzzy
 msgid "Does your speaking suit your behavior?"
-msgstr ""
+msgstr "Est-ce que votre costume de parler de votre comportement?"
 
 #: commandments_app.Question/text:15
+#, fuzzy
 msgid "Is there a difference between your confession and your doing?"
-msgstr ""
+msgstr "Y at-il une différence entre votre confession et votre fait quoi?"
 
 #: commandments_app.Question/text:16
+#, fuzzy
 msgid "When was the last time you were generous?"
-msgstr ""
+msgstr "À quand remonte la dernière fois que vous étiez généreux?"
 
 #: commandments_app.Question/text:17
+#, fuzzy
 msgid "Do you really want to be a follower of Jesus?"
-msgstr ""
+msgstr "Voulez-vous vraiment être un disciple de Jésus?"
 
 #: commandments_app.Question/text:18
+#, fuzzy
 msgid ""
 "Enemies are the people who God puts on your way which are hard for you to "
 "love. Who are enemies for you? "
 msgstr ""
+"Les ennemis sont les gens qui Dieu met sur votre chemin qui est difficile "
+"pour vous d'aimer. Qui sont les ennemis pour vous?"
 
 #: commandments_app.Question/text:19
+#, fuzzy
 msgid "Do you have the idea that you are what God intended you to be?"
 msgstr ""
+"Avez-vous l'idée que vous êtes ce que Dieu vous aviez l'intention d'être?"
 
 #: commandments_app.Question/text:20
+#, fuzzy
 msgid "What would stop you from becoming the way you were meant to be?"
 msgstr ""
+"Qu'est-ce qui vous empêche de devenir la façon dont vous étiez censé être?"
 
 #: commandments_app.Question/text:21
+#, fuzzy
 msgid "What would happen if you were as God intended?"
-msgstr ""
+msgstr "Que se passerait-il si vous étiez comme Dieu l'a voulu?"
 
 #: commandments_app.Question/text:22
+#, fuzzy
 msgid ""
 "Are we willing to give up our rights for reconciliation out of love for "
 "Jesus, the Father and the other?"
 msgstr ""
+"Sommes-nous prêts à renoncer à nos droits pour la réconciliation par amour "
+"pour Jésus, le Père et l'autre?"
 
 #: commandments_app.Question/text:23
+#, fuzzy
 msgid ""
 "Are we willing to step into a conflict and be accountable for love for "
 "Jesus, the Father and the other and to ask forgiveness for all guilt in "
 "which we do or do not participate?"
 msgstr ""
+"Sommes-nous prêts à entrer dans un conflit et d'être responsable de l'amour "
+"pour Jésus, le Père et l'autre et de demander pardon pour toute culpabilité "
+"dans laquelle nous faisons ou ne participe pas?"
 
 #: commandments_app.Question/text:24
+#, fuzzy
 msgid ""
 "Are we prepared, out of love for Jesus, the Father and the other, to do what"
 " is necessary so that a relationship can be restored, to give satisfaction "
 "so that complete reconciliation becomes possible?"
 msgstr ""
+"Sommes-nous prêts, par amour pour Jésus, le Père et l'autre, de faire ce qui"
+" est nécessaire pour qu'une relation peut être restaurée, pour donner "
+"satisfaction afin que la réconciliation complète devient possible?"
 
 #: commandments_app.Question/text:25
+#, fuzzy
 msgid ""
 "Are we willing to forgive the other out of love for Jesus, the Father and "
 "the other, regardless of whether or not the other asks for forgiveness?"
 msgstr ""
+"Sommes-nous prêts à pardonner à l'autre par amour pour Jésus, le Père et "
+"l'autre, peu importe si oui ou non l'autre demande pardon?"
 
 #: commandments_app.Question/text:26
+#, fuzzy
 msgid "What makes it difficult for you to listen, understand and obey?"
-msgstr ""
+msgstr "Ce qui rend difficile pour vous d'écouter, comprendre et respecter?"
 
 #: commandments_app.Question/text:27
+#, fuzzy
 msgid "If you want to grow in applying your faith, what does that take?"
 msgstr ""
+"Si vous souhaitez développer dans l'application de votre foi, qu'est-ce que "
+"prendre?"
 
 #: commandments_app.Question/text:28
+#, fuzzy
 msgid "Once you know what He says, can you trust it?"
-msgstr ""
+msgstr "Une fois que vous savez ce qu'il dit, pouvez-vous faire confiance?"
 
 #: commandments_app.Question/text:29
+#, fuzzy
 msgid "What keeps people away from God's Truth?"
-msgstr ""
+msgstr "Ce qui empêche les gens loin de la vérité de Dieu?"
 
 #: commandments_app.Question/text:30
+#, fuzzy
 msgid "Who cares about our agenda for telling the world about Jesus?"
 msgstr ""
+"Qui se soucie de notre ordre du jour de dire au monde au sujet de Jésus?"
 
 #: commandments_app.Question/text:31
+#, fuzzy
 msgid "How can you be not commited to what your Savior is all about?"
 msgstr ""
+"Comment pouvez-vous pas engagé à ce que votre Sauveur est tout au sujet?"
 
 #: commandments_app.Question/text:32
+#, fuzzy
 msgid "How bold is your witness?"
-msgstr ""
+msgstr "Comment gras est votre témoin?"
 
 #: commandments_app.Question/text:33
+#, fuzzy
 msgid "Will you give up your life to follow Christ?"
-msgstr ""
+msgstr "Voulez-vous donner votre vie à suivre le Christ?"
 
 #: commandments_app.Question/text:34
+#, fuzzy
 msgid "Who do you want as your worst enemy: the world or God?"
-msgstr ""
+msgstr "Qui voulez-vous que votre pire ennemi: le monde ou Dieu?"
 
 #: commandments_app.Question/text:35
+#, fuzzy
 msgid ""
 "Jesus  talks  much  about  the  Kingdom  of  God  in  His  ministry.  What "
 "is the Kingdom of God, and what does it mean to receive it?"
 msgstr ""
+"Jésus parle beaucoup au sujet du Royaume de Dieu dans son ministère. Quel "
+"est le Royaume de Dieu, et qu'est-ce que cela signifie pour le recevoir?"
 
 #: commandments_app.Question/text:36
+#, fuzzy
 msgid ""
 "What characteristics of children does Jesus want His disciples to recognize "
 "and emulate in receiving His Kingdom?"
 msgstr ""
+"Quelles sont les caractéristiques des enfants que Jésus veut que ses "
+"disciples reconnaissent et émulent en recevant son royaume?"
 
 #: commandments_app.Question/text:37
+#, fuzzy
 msgid ""
 "Why  is  receiving  Jesus  and  His  Kingdom  better  than  anything  this "
 "world has to offer?"
 msgstr ""
+"Pourquoi recevoir Jésus et son royaume mieux que tout ce monde a à offrir?"
 
 #: commandments_app.Question/text:38
+#, fuzzy
 msgid ""
 "What would it look like in your work, finances, relationships, and "
 "neighborhood to receive the Kingdom of God like a child? "
 msgstr ""
+"Que faudrait-il ressembler dans votre travail, les finances, les relations, "
+"et le voisinage de recevoir le Royaume de Dieu comme un enfant?"
 
 #: commandments_app.Question/text:39
+#, fuzzy
 msgid "Do you truly love Jesus? If you did, how would you know?"
 msgstr ""
+"Est-ce que vous aimez vraiment Jésus? Si vous avez fait, comment savez-vous?"
 
 #: commandments_app.Question/text:40
+#, fuzzy
 msgid "What talents do you use to glorify the Father?"
-msgstr ""
+msgstr "Quels talents utilisez-vous pour glorifier le Père?"
 
 #: commandments_app.Question/text:41
+#, fuzzy
 msgid ""
 "Do you pray: Lord, will you bless what I have sown? Or: Lord, what do you "
 "want me to sow?"
 msgstr ""
+"Priez-vous: Seigneur, vous bénisse ce que j'ai semé? Ou: Seigneur, que veux-"
+"tu que je sème?"
 
 #: commandments_app.Question/text:42
+#, fuzzy
 msgid "What do you think is a disciple?"
-msgstr ""
+msgstr "Que pensez-vous est un disciple?"
 
 #: commandments_app.Question/text:43
+#, fuzzy
 msgid "Are you a disciple?"
-msgstr ""
+msgstr "Êtes-vous un disciple?"
 
 #: commandments_app.Question/text:44
+#, fuzzy
 msgid "What is discipleship about?"
-msgstr ""
+msgstr "Qu'est-ce à propos des disciples?"
 
 #: commandments_app.Question/text:45
+#, fuzzy
 msgid ""
 "Could you still be a disciple today? If so, how would that look like? If "
 "not, why not?"
 msgstr ""
+"Pourriez-vous être encore aujourd'hui disciple? Si oui, comment cela "
+"ressemblerait? Sinon, pourquoi pas?"
 
 #: commandments_app.Question/text:46
+#, fuzzy
 msgid "What do you think believe is all about?"
-msgstr ""
+msgstr "Que pensez-vous croire est tout au sujet?"
 
 #: commandments_app.Question/text:47
+#, fuzzy
 msgid "How do you know what somebody believes in?"
-msgstr ""
+msgstr "Comment savez-vous ce que quelqu'un croit en?"
 
 #: commandments_app.Question/text:48
+#, fuzzy
 msgid "Imagine yourself on trial for your faith"
-msgstr ""
+msgstr "Imaginez-vous à l'essai pour votre foi"
 
 #: commandments_app.Question/text:49
+#, fuzzy
 msgid "Have you experienced the presence of Christ in areas of testing?"
-msgstr ""
+msgstr "Avez-vous connu la présence du Christ dans les zones de test?"
 
 #: commandments_app.Question/text:50
+#, fuzzy
 msgid "Did you have the courage to be true to Him?"
-msgstr ""
+msgstr "Avez-vous eu le courage d'être fidèle à lui?"
 
 #: commandments_app.Question/text:52
+#, fuzzy
 msgid ""
 "Do you recognize one of the symptoms for greed mentioned in the description?"
 msgstr ""
+"Reconnaissez-vous l'un des symptômes de la cupidité mentionnés dans la "
+"description?"
 
 #: commandments_app.Question/text:53
+#, fuzzy
 msgid ""
 "Have you met someone like Jonathan, who visited you to encourage you to put "
 "your faith in God?"
 msgstr ""
+"Avez-vous rencontré quelqu'un comme Jonathan, qui vous visité pour vous "
+"encourager à mettre votre foi en Dieu?"
 
 #: commandments_app.Sermon/description:5
+#, fuzzy
 msgid ""
 "Do you truly love Jesus? If you did, how would you know? The Bible helps us "
 "navigate and even command our own emotions. In twelve minutes, John Piper "
 "asks four questions about what it means to love Jesus, and leads us, through"
 " the words of Jesus himself, to make Jesus our greatest Treasure."
 msgstr ""
+"Est-ce que vous aimez vraiment Jésus? Si vous avez fait, comment savez-vous?"
+" La Bible nous aide à naviguer et commandons même nos propres émotions. En "
+"douze minutes, John Piper pose quatre questions sur ce que signifie aimer "
+"Jésus, et nous conduit, à travers les paroles de Jésus lui-même, de faire de"
+" Jésus notre plus grand trésor."
 
 #: commandments_app.ShortMovie/description:1
+#, fuzzy
 msgid ""
 "This video illustrates Jesus' Parable of the Sower without the use of any "
 "language elements. It employs the latest, cutting edge animation techniques."
@@ -4884,192 +4977,307 @@ msgid ""
 "different ground. Experience the seeds growing and the challenges they face."
 " How will you respond to Jesus' message? "
 msgstr ""
+"Cette vidéo illustre la parabole de Jésus du semeur sans l'utilisation de "
+"tous les éléments de langage. Elle emploie la dernière, la coupe des "
+"techniques d'animation de pointe. La vidéo illustre bien les 4 cas des "
+"graines dispersées sur différents sol. Découvrez les graines en croissance "
+"et les défis auxquels ils sont confrontés. Comment allez-vous répondre au "
+"message de Jésus?"
 
 #: commandments_app.ShortMovie/description:3
+#, fuzzy
 msgid ""
 "Though the world is by plagued by suffering due to the realities of sin, "
 "death, and evil, God is calling us to seek refuge in the only place it can "
 "truly be found...His presence. A symbolic adaptation of Psalm 46."
 msgstr ""
+"Bien que le monde est en proie à la souffrance en raison des réalités du "
+"péché, la mort et le mal, Dieu nous appelle à chercher refuge dans le seul "
+"endroit où il peut vraiment être trouvé ... Sa présence. Une adaptation "
+"symbolique de Ps 46."
 
 #: commandments_app.ShortMovie/description:4
+#, fuzzy
 msgid ""
 "This two minute short reveals the great need to reach people who have no "
 "access to the Gospel and how God's Spirit has been moving to reach the "
 "unengaged of Mali."
 msgstr ""
+"Ce court deux minutes révèle le grand besoin de toucher les gens qui ont pas"
+" accès à l'Evangile et comment l'Esprit de Dieu a parcouru un chemin pour "
+"atteindre le désengagée du Mali."
 
 #: commandments_app.ShortMovie/description:5
+#, fuzzy
 msgid ""
 "Kyle has it all figured out. He’s got the girls, the grades, and lives at "
 "the best party house on campus. But one fateful day, Kyle’s heart stops "
 "beating and he suddenly comes face to face with a dark truth that he’s "
 "ignored his entire life."
 msgstr ""
+"Kyle a tout compris. Il a les filles, les notes et vit à la meilleure maison"
+" du parti sur le campus. Mais un jour fatidique, le cœur de Kyle cesse de "
+"battre et il vient tout à coup face à face avec une sombre vérité qu'il a "
+"ignoré toute sa vie."
 
 #: commandments_app.ShortMovie/description:6
+#, fuzzy
 msgid ""
 "Since January 18, 2011, Egypt has been in a state of civil and political "
 "unrest, but in the midst of the violence and uncertainty, God is moving in a"
 " BIG way."
 msgstr ""
+"Depuis le 18 Janvier 2011, l'Egypte a été dans un état de troubles civils et"
+" politiques, mais au milieu de la violence et de l'incertitude, Dieu se "
+"déplace d'une manière BIG."
 
 #: commandments_app.ShortMovie/description:7
+#, fuzzy
 msgid ""
 "Inspired by the age-old question \"What is your life?\", this short film "
 "challenges the promises of the American dream and presents an alternative "
 "that offers so much more."
 msgstr ""
+"Inspiré par la sempiternelle question « Quelle est votre vie? », Ce court-"
+"métrage remet en question les promesses du rêve américain et présente une "
+"alternative qui offre beaucoup plus."
 
 #: commandments_app.ShortMovie/description:8
+#, fuzzy
 msgid ""
 "Jesus compared the kingdom of God to one of the smallest seeds on Earth and "
 "over 2000 years later, the truth of this teaching can be seen all across the"
 " globe."
 msgstr ""
+"Jésus a comparé le royaume de Dieu à l'une des plus petites graines sur "
+"Terre et plus de 2000 ans plus tard, la vérité de cet enseignement peut être"
+" vu partout dans le monde."
 
 #: commandments_app.ShortMovie/description:10
+#, fuzzy
 msgid ""
 "We all suffer at the hands of other people. In Junko’s case, she was abused "
 "as a child and found herself isolated and in deep sorrow. Then, a gradual "
 "feeling of love grew in her heart and opened the door to a life that she "
 "never knew existed."
 msgstr ""
+"Nous souffrons tous aux mains d'autres personnes. Dans le cas de Junko, elle"
+" a été abusée comme un enfant et se trouva isolé et dans une profonde "
+"tristesse. Puis, un sentiment progressif de l'amour a grandi dans son cœur "
+"et a ouvert la porte à une vie qu'elle ignoriez l'existence."
 
 #: commandments_app.ShortMovie/description:11
+#, fuzzy
 msgid ""
 "Sarah enjoys relating with people, but when an encounter with a Deaf woman "
 "challenges her ability to connect, God redefines what it means for her to be"
 " a follower."
 msgstr ""
+"Sarah aime relative avec les gens, mais quand une rencontre avec une femme "
+"sourde remet en question sa capacité à se connecter, Dieu redéfinit ce que "
+"cela signifie pour elle d'être un suiveur."
 
 #: commandments_app.ShortMovie/description:12
+#, fuzzy
 msgid ""
 "One man's life changed the course of history for billions of people across "
 "the globe. He is both revered and reviled, famed and feared and you know who"
 " he is without a single mention of his name."
 msgstr ""
+"La vie d'un homme a changé le cours de l'histoire pour des milliards de "
+"personnes à travers le monde. Il est à la fois vénéré et injurié, célèbre et"
+" craint et vous savez qui il est sans une seule mention de son nom."
 
 #: commandments_app.ShortMovie/description:13
+#, fuzzy
 msgid ""
 "At the of age 70, Bettie Kaufmann has a conversation with God. Little does "
 "she know that this one interaction will eventually send her to jail."
 msgstr ""
+"A 70 ans, Bettie Kaufmann a une conversation avec Dieu. Peu elle sait que "
+"celui-ci l'interaction finira par lui envoyer en prison."
 
 #: commandments_app.ShortMovie/description:15
+#, fuzzy
 msgid ""
 "What if God asked you to leave everything you know behind? Well, that’s what"
 " happens to Marc and what God does with his response radically changes how "
 "residents of Sherbrooke, Québec see Jesus."
 msgstr ""
+"Et si Dieu vous a demandé de quitter tout ce que vous savez derrière? Eh "
+"bien, voilà ce qui arrive à Marc et ce que Dieu fait avec sa réponse change "
+"radicalement la façon dont les résidents de Sherbrooke, Québec voir Jésus."
 
 #: commandments_app.ShortMovie/description:16
+#, fuzzy
 msgid ""
 "Samuel loves Jesus and loves children, so God used him in a very big way."
 msgstr ""
+"Samuel aime Jésus et aime les enfants, si Dieu l'a utilisé d'une manière "
+"très grande."
 
 #: commandments_app.ShortMovie/description:18
+#, fuzzy
 msgid ""
 "There is an emptiness inside each of us that cannot be filled by life’s "
 "pursuits or ignored by its distractions. However, beyond the emptiness there"
 " is a voice calling. Do you hear the voice? Will you follow the call?"
 msgstr ""
+"Il y a un vide intérieur de chacun d'entre nous qui ne peut être comblé par "
+"les activités de la vie ou ignorée par ses distractions. Cependant, au-delà "
+"du vide il y a un appel vocal. Entendez-vous la voix? Suivrez-vous l'appel?"
 
 #: commandments_app.ShortMovie/description:19
+#, fuzzy
 msgid ""
 "Over the span of a three and a half year wait, Peter and Erin realize that "
 "they are adopting for reasons much more personal than once thought. They are"
 " adopting, because they were adopted."
 msgstr ""
+"Au cours de la durée de trois ans et demi d'attente, Peter et Erin se "
+"rendent compte qu'ils adoptent pour des raisons beaucoup plus personnelle "
+"que l'on pensait. Ils adoptent, parce qu'ils ont été adoptés."
 
 #: commandments_app.ShortMovie/description:20
+#, fuzzy
 msgid ""
 "Filmed in six languages across five continents, this short film captures the"
 " faith-filled thoughts of children as they contemplate the many attributes "
 "of God."
 msgstr ""
+"Tourné en six langues sur les cinq continents, ce court-métrage capture les "
+"pensées pleines de foi des enfants car ils contemplent les nombreux "
+"attributs de Dieu."
 
 #: commandments_app.ShortMovie/description:21
+#, fuzzy
 msgid ""
 "Noah is homeless. Dwight and his family are his neighbors. Their friendship "
 "will challenge you to “love your neighbor as yourself”."
 msgstr ""
+"Noah est sans-abri. Dwight et sa famille sont ses voisins. Leur amitié va "
+"vous mettre au défi de « aimeras ton prochain comme toi-même »."
 
 #: commandments_app.ShortMovie/description:22
+#, fuzzy
 msgid ""
 "This is El Shaddai. She is an Ethiopian orphan who is being raised by her "
 "adopted Ethiopian parents to love Jesus and to sing about His Word. This is "
 "her act of worship."
 msgstr ""
+"Ceci est El Shaddai. Elle est orpheline éthiopienne qui est élevé par ses "
+"parents éthiopiens adoptés à l'amour de Jésus et de chanter sa Parole. C'est"
+" son acte d'adoration."
 
 #: commandments_app.ShortMovie/description:23
+#, fuzzy
 msgid ""
 "\n"
 "Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with difficulty, but at the finish line awaits an imperishable reward that is given to those who persevere…Christ Himself."
 msgstr ""
+"La foi dans le Christ est une quête ... un combat ... une course. C'est un "
+"voyage chargé de la difficulté, mais à la ligne d'arrivée attend une "
+"récompense impérissable qui est donnée à ceux qui persévèrent ... Le Christ "
+"lui-même."
 
 #: commandments_app.ShortMovie/description:24
+#, fuzzy
 msgid ""
 "pre·em·i·nent | adj. Superior to or notable above all others; outstanding. "
 "(Based on Colossians 1: 15-23)"
 msgstr ""
+"pré · em · i · NENT | adj. Supérieur ou notable au-dessus de tous les "
+"autres; exceptionnel. (Basé sur Colossiens 1: 15-23)"
 
 #: commandments_app.Testimony/description:2
+#, fuzzy
 msgid ""
 "Jason and Tracy were ecstatic to find out that they were expecting, but when"
 " the couple is told that their daughter is “incompatible with life”, they "
 "begin a journey that will forever change how they view God’s love."
 msgstr ""
+"Jason et Tracy étaient ravis de savoir qu'ils attendaient, mais quand le "
+"couple est dit que leur fille est « incompatible avec la vie », ils "
+"commencent un voyage qui changera à jamais la façon dont ils voient l'amour "
+"de Dieu."
 
 #: commandments_app.Testimony/description:3
+#, fuzzy
 msgid ""
 "While searching for direction during a sabbatical with his wife, Jay wrote "
 "three letters in the sand: WWH. God responded by sending them to one of the "
 "most dynamic cities in the world, Rio de Janeiro."
 msgstr ""
+"Tout en recherchant la direction au cours d'une année sabbatique avec sa "
+"femme, Jay a écrit trois lettres dans le sable: WWH. Dieu a répondu en les "
+"envoyant à l'une des villes les plus dynamiques du monde, Rio de Janeiro."
 
 #: commandments_app.Testimony/description:4
+#, fuzzy
 msgid ""
 "Do you struggle in your marriage? Takashi and Naoko did. Their shame and "
 "brokenness left their marriage on the brink of total collapse. Then they "
 "found true love…not in each other, but in a person that would transform "
 "their family completely."
 msgstr ""
+"Luttez-vous dans votre mariage? Takashi fait et Naoko. Leur honte et "
+"brisement à leur mariage au bord de l'effondrement total. Ensuite, ils ont "
+"trouvé l'amour vrai ... pas dans l'autre, mais une personne qui "
+"transformerait complètement leur famille."
 
 #: commandments_app.Testimony/description:5
+#, fuzzy
 msgid ""
 "At the age of 41, Cory starts having horrific nightmares of extreme abuse. "
 "Once he realizes that his dreams are actually repressed memories from his "
 "childhood, Cory begins a life-changing journey that will forever transform "
 "his relationship with God."
 msgstr ""
+"A l'âge de 41 ans, Cory commence à avoir des cauchemars horribles de "
+"violence extrême. Une fois qu'il se rend compte que ses rêves sont "
+"effectivement réprimées souvenirs de son enfance, Cory commence un voyage "
+"qui change la vie qui transformera à jamais sa relation avec Dieu."
 
 #: commandments_app.Testimony/description:6
+#, fuzzy
 msgid ""
 "A powerfull testimony of a woman, who’s been in the concentration camps by "
 "the nazis, and still learned to forgive"
 msgstr ""
+"Un puissant témoignage d'une femme, qui a été dans les camps de "
+"concentration par les nazis, et encore appris à pardonner"
 
 #: commandments_app.Testimony/description:7
+#, fuzzy
 msgid "A powerfull testimony of a nl famous christian singer"
-msgstr ""
+msgstr "Un témoignage puissant d'un célèbre chanteur nl christian"
 
 #: commandments_app.Testimony/description:8
+#, fuzzy
 msgid ""
 "Anderson and Robson came to know the love and grace of Jesus in the midst of"
 " poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
 "same love and grace in one of the most notorious favelas in Rio de Janeiro, "
 "The City of God."
 msgstr ""
+"Anderson et Robson sont venus à connaître l'amour et la grâce de Jésus au "
+"milieu de la pauvreté, la violence et le péché. Maintenant transformé, ils "
+"sont devenus des balises de ce même amour et de la grâce dans l'une des "
+"favelas les plus célèbres de Rio de Janeiro, La Cité de Dieu."
 
 #: commandments_app.Testimony/description:9
+#, fuzzy
 msgid ""
 "In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs,"
 " a normal home, a normal life. Then God called them out of the normal and "
 "into His mission."
 msgstr ""
+"En 2001, Gary et Peggy iFFT vivaient à Bloomington, IL. Ils avaient un "
+"emploi normal, une maison normale, une vie normale. Dieu les appela de la "
+"normale et dans sa mission."
 
 #: commandments_app.Testimony/description:10
+#, fuzzy
 msgid ""
 "\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered"
 " after being born without limbs.  Nick discovered God's miraculous plan for "
@@ -5077,99 +5285,165 @@ msgid ""
 " Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
 "preach to every single soul on the planet: 7 billion people!"
 msgstr ""
+"« Pourquoi Dieu, je suis né de cette façon? » Telle est la question Nick "
+"Vujicic se demande après avoir été né sans membres. Nick a découvert un plan"
+" miraculeux de Dieu pour sa vie comme un évangéliste dans le monde entier "
+"partage le message de la rédemption par Jésus-Christ. Regardez et découvrez "
+"comment vous pouvez faire partie de l'objectif de Nick à prêcher à chaque "
+"âme sur la planète: 7 milliards de personnes!"
 
 #: commandments_app.Testimony/description:11
+#, fuzzy
 msgid ""
 "Where were you on March 11, 2011 when the Tohoku earthquake shook Japan? "
 "Yuji was at work, and with Tokyo’s power grid shut down, he journeyed on "
 "foot across the city to discover a message waiting for him that would change"
 " his life forever."
 msgstr ""
+"Où étiez-vous le 11 Mars 2011, quand le tremblement de terre de Tohoku "
+"secoué le Japon? Yuji était au travail, et avec le réseau électrique de "
+"Tokyo a fermé, il voyageait à pied à travers la ville pour découvrir un "
+"message en attente pour lui qui allait changer sa vie pour toujours."
 
 #: commandments_app.Testimony/description:12
+#, fuzzy
 msgid ""
 "When Nilton Cordeiro was young, he heard about the love and grace of Jesus "
 "Christ through an old hymn. This love and grace quickly captured his heart "
 "and would change his life forever."
 msgstr ""
+"Lorsque Nilton Cordeiro était jeune, il a entendu parler de l'amour et la "
+"grâce de Jésus-Christ par un vieux cantique. Cet amour et de grâce capturé "
+"rapidement son cœur et se changer pour toujours sa vie."
 
 #: commandments_app.Testimony/description:13
+#, fuzzy
 msgid ""
 "For years, Walt and Annie struggled with infertility, but in a single moment"
 " they realized that God was writing a beautiful story for them that was over"
 " 20 years in the making."
 msgstr ""
+"Pendant des années, Walt et Annie luttaient avec l'infertilité, mais dans un"
+" seul instant ils ont réalisé que Dieu écrit une belle histoire pour eux qui"
+" était de plus de 20 ans dans la fabrication."
 
 #: commandments_app.Testimony/description:14
+#, fuzzy
 msgid ""
 "Do you struggle with depression? So did Yumiko. She hated herself and even "
 "dreamt of running in front of a train to end her life. But hope came her way"
 " in the last place she ever expected."
 msgstr ""
+"Luttez-vous avec la dépression? Alors ne Yumiko. Elle se détestait et même "
+"rêvé de courir devant un train pour mettre fin à sa vie. Mais l'espoir est "
+"venu son chemin au dernier endroit où elle s'attendait."
 
 #: commandments_app.Testimony/description:15
+#, fuzzy
 msgid ""
 "When Petra loses her mother at a young age, she sets off on a journey to "
 "find hope and healing for her loss. This decade-long search eventually leads"
 " her to discover that the answer she’s been looking for has been pursuing "
 "her all along."
 msgstr ""
+"Lorsque Petra perd sa mère à un jeune âge, elle se lance dans un voyage pour"
+" trouver l'espoir et la guérison de sa perte. Cette recherche depuis dix ans"
+" par la suite l'amène à découvrir que la réponse qu'elle cherchait poursuit "
+"son tout le long."
 
 #: commandments_app.Testimony/description:16
+#, fuzzy
 msgid ""
 "When Crystal Clapp gave her life to Jesus Christ, everything changed. Her "
 "thoughts became His thoughts. Her will became His will. The old was gone "
 "and, soon enough, so was she."
 msgstr ""
+"Lorsque Crystal Clapp a donné sa vie à Jésus-Christ, tout a changé. Ses "
+"pensées devinrent ses pensées. Sa volonté est devenue sa volonté. Le vieux "
+"était parti et, assez vite, alors elle était."
 
 #: commandments_app.Testimony/description:17
+#, fuzzy
 msgid ""
 "This two minute short reveals God's desire for unity and how the Evangelical"
 " and Orthodox churches in Egypt have united together to exalt Christ as the "
 "Head of His Church."
 msgstr ""
+"Ce court deux minutes révèle le désir de Dieu pour l'unité et la façon dont "
+"les Eglises évangéliques et orthodoxes en Egypte se sont unis ensemble pour "
+"exalter Christ comme le chef de son Église."
 
 #: commandments_app.Testimony/description:18
+#, fuzzy
 msgid ""
 "Are you looking for joy in life? As a gifted performer, singing brought "
 "Atsushi joy. It also brought him to one of the most unlikely places: a "
 "Gospel Choir practice. It wasn’t long before the lyrics he sang opened his "
 "eyes to a joy greater than what music alone could provide."
 msgstr ""
+"Vous cherchez la joie dans la vie? En tant qu'interprète doué, le chant a "
+"apporté la joie Atsushi. Elle l'a également amené à l'un des endroits les "
+"plus improbables: une pratique Gospel Choir. Il ne fallut pas longtemps "
+"avant que les paroles qu'il chantait ouvert ses yeux à une joie plus grande "
+"que ce que la musique seule pouvait fournir."
 
 #: commandments_app.Testimony/description:19
+#, fuzzy
 msgid ""
 "We all have unfulfilled dreams. For Ritsuko, it was finding fame, love, and "
 "acceptance. However, when this dream disappeared, a glimmer of hope arose "
 "that not only quenched her feelings of despair, but provided more love and "
 "acceptance than she could ever imagine."
 msgstr ""
+"Nous avons tous des rêves inassouvis. Pour Ritsuko, il a été de trouver la "
+"gloire, l'amour et l'acceptation. Cependant, lorsque ce rêve a disparu, une "
+"lueur d'espoir a surgi que non seulement éteint ses sentiments de désespoir,"
+" mais a fourni plus d'amour et d'acceptation qu'elle ne pourrait jamais "
+"imaginer."
 
 #: commandments_app.Testimony/description:20
+#, fuzzy
 msgid ""
 "Touch Bin lived most of her life gripped by fear, pain, and hopelessness, "
 "but when God opened her eyes to the truth of Christ, she left the path of "
 "death and began a journey toward life."
 msgstr ""
+"Poubelle Touch Bin a vécu la majeure partie de sa vie dominé par la peur, la"
+" douleur et le désespoir, mais quand Dieu lui ouvrit les yeux sur la vérité "
+"du Christ, elle a quitté le chemin de la mort et a commencé un voyage vers "
+"la vie."
 
 #: commandments_app.Testimony/description:21
+#, fuzzy
 msgid ""
 "Josiah grew up in the Amazon completely convinced that he was luckiest kid "
 "on Earth, but when tragedy struck at the age of 13, God revealed to him a "
 "much greater identity."
 msgstr ""
+"Josiah a grandi dans l'Amazonie complètement convaincu qu'il était enfant le"
+" plus chanceux sur Terre, mais quand la tragédie a frappé à l'âge de 13 ans,"
+" Dieu lui a révélé une identité beaucoup plus."
 
 #: commandments_app.Testimony/description:22
+#, fuzzy
 msgid ""
 "Nate & Ruth Reutter were only moments away from having their first child "
 "while serving as missionaries along the Amazon River in Brazil. Then "
 "everything changed...most dramatically their faith in Christ and His living "
 "Word."
 msgstr ""
+"Nate & Ruth Reutter à quelques minutes de leur premier enfant tout en "
+"servant les missionnaires le long du fleuve Amazone au Brésil. Puis tout a "
+"changé ... plus radicalement leur foi en Christ et sa Parole vivante."
 
 #: commandments_app.Testimony/description:23
+#, fuzzy
 msgid ""
 "Lore and Michael started their family with great hope for the future, but "
 "when their son’s life begins to spiral downward, they come face to face with"
 " what it truly means to trust in God."
 msgstr ""
+"Lore et Michael ont commencé leur famille avec un grand espoir pour "
+"l'avenir, mais quand à face avec ce que cela signifie vraiment faire "
+"confiance en Dieu commence à spirale vers le bas la vie de leur fils, ils se"
+" retrouvent face."

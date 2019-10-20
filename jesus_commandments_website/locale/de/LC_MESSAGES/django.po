@@ -3307,44 +3307,54 @@ msgid "Topics, references, &amp; how-to's"
 msgstr ""
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:395
+#, fuzzy
 msgid "Tutorial: A Polling App"
-msgstr ""
+msgstr "Tutorial: Ein Polling App"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:396
+#, fuzzy
 msgid "Get started with Django"
-msgstr ""
+msgstr "Erste Schritte mit Django"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:407
+#, fuzzy
 msgid "Django Community"
-msgstr ""
+msgstr "Django Gemeinschaft"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:408
+#, fuzzy
 msgid "Connect, get help, or contribute"
-msgstr ""
+msgstr "Schließen Sie erhalten Hilfe, oder dazu beitragen,"
 
 #: venv/lib/python3.7/site-packages/froala_editor/views.py:30
+#, fuzzy
 msgid "You can only upload images."
-msgstr ""
+msgstr "Sie können nur Bilder hochladen."
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:22
+#, fuzzy
 msgid "COOKIE_INFO_HEADER"
-msgstr ""
+msgstr "COOKIE_INFO_HEADER"
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:23
+#, fuzzy
 msgid "COOKIE_INFO_PARA"
-msgstr ""
+msgstr "COOKIE_INFO_PARA"
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:24
+#, fuzzy
 msgid "COOKIE_INFO_OK"
-msgstr ""
+msgstr "COOKIE_INFO_OK"
 
 #: venv/lib/python3.7/site-packages/url_or_relative_url_field/fields.py:9
+#, fuzzy
 msgid "URL or path"
-msgstr ""
+msgstr "URL oder den Pfad"
 
 #: venv/lib/python3.7/site-packages/vinaigrette/management/commands/makemessages.py:147
+#, fuzzy
 msgid "Obsolete translation kept alive with Viniagrette"
-msgstr ""
+msgstr "Veraltete Übersetzung am Leben gehalten mit Vinaigrette"
 
 #: commandments_app.Blog/description:1 commandments_app.Book/description:1
 #: commandments_app.Drawing/description:1 commandments_app.Movie/description:4
@@ -3353,14 +3363,17 @@ msgstr ""
 #: commandments_app.ShortMovie/description:2
 #: commandments_app.Song/description:1
 #: commandments_app.Testimony/description:1
+#, fuzzy
 msgid "nan"
-msgstr ""
+msgstr "Oma"
 
 #: commandments_app.Blog/description:2
+#, fuzzy
 msgid "A six part study with John Piper"
-msgstr ""
+msgstr "Eine sechsteilige Studie mit John Piper"
 
 #: commandments_app.Blog/description:3 commandments_app.Sermon/description:4
+#, fuzzy
 msgid ""
 "Knowing how weak and sinful we are, how do we set about obeying the hundreds"
 " of commands in the Bible? We know we cannot obey in our strength, and yet "
@@ -3368,78 +3381,110 @@ msgid ""
 "means to be born again, and how it happens to someone. This is part 1 of the"
 " 6 part series titled, What Jesus Demands of the World. "
 msgstr ""
+"Zu wissen, wie schwach und sündig wir sind, wie wir zu gehorchen, die "
+"Hunderte von Befehlen in der Bibel festgelegt? Wir wissen, dass wir nicht in"
+" unserer Kraft gehorchen, und doch ist die Bibel erwartet, dass wir "
+"gehorchen. In 10 Minuten, erforscht John Piper, was es bedeutet, "
+"wiedergeboren zu werden, und wie es passiert mit jemandem. Dies ist Teil 1 "
+"der 6-teilige Serie betitelt, Was Jesus Forderungen der Welt."
 
 #: commandments_app.Commandment/title:1
+#, fuzzy
 msgid "Repent and believe the gospel"
-msgstr ""
+msgstr "Kehrt um, und glaubt an das Evangelium"
 
 #: commandments_app.Commandment/devotional:1
+#, fuzzy
 msgid ""
 "<p><b>If you confess your sins, God is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness. Then, turn your back to the world, and follow Jesus. How? Just start by applying all the commandments of Jesus in your life. Step by step, together with God. And if you know any other christians, take part on this journey together.</b></p>\n"
 "\n"
 "<p>When we read revelation 3: 14-22, Jesus is disgusted by the lukewarmness. If only you were hot or cold! In verse 19 Jesus calls out \"be diligent and repent.\" We must not only repent of our sins, but also of our old worldly life. Following Jesus goes so much further than just repenting your sins and then living for yourself. No, it's about applying all the commandments, all the calls that Jesus has made. Not out of legalism, but out of a heart longing to want nothing else but to glorify Him with all your life! </p>"
 msgstr ""
+"<P> <b> Wenn Sie Ihre Sünden bekennen, Gott ist treu und gerecht, uns die Sünden vergibt und uns von aller Ungerechtigkeit zu reinigen. Dann schalten Sie zurück in die Welt, und Jesus folgen. Wie? Starten Sie einfach durch alle Gebote Jesus in Ihrem Leben anwenden. Schritt für Schritt zusammen mit Gott. Und wenn Sie irgendwelche anderen christen wissen, zusammen Teil auf dieser Reise. </ B> </ p>\n"
+"\n"
+"<P> Wenn wir lesen Offenbarung 3: 14-22 wird Jesus von der Lauheit angewidert. Wenn nur Sie heiß oder kalt! In Vers 19 ruft Jesus out „fleißig und tue Buße.“ Wir müssen nicht nur unsere Sünden bereuen, sondern auch unser alten weltlichen Lebens. Jesus Nach geht so viel weiter als nur Ihre Sünden Buße zu tun und dann für sich selbst zu leben. Nein, es geht um alle Gebote Anwendung, alle Anrufe, die Jesus gemacht hat. Nicht aus der Gesetzlichkeit, sondern aus einem Herzen Sehnsucht nichts anderes, als zu wollen, ihn zu verherrlichen mit all Ihrem Leben! </ P>"
 
 #: commandments_app.Commandment/title_negative:2
+#, fuzzy
 msgid "He cuts off every branch in me that bears no fruit"
-msgstr ""
+msgstr "Er schneidet jeden Zweig an mir, die keine Frucht bringt"
 
 #: commandments_app.Commandment/devotional:2
+#, fuzzy
 msgid ""
 "<p>One important part of the commission that God gave Adam was to be fruitful. Throughout the Bible you see this assignment coming back time and time again. God gives the fruit and we can work the earth to be fruitful.</p>\n"
 "<p>Fruit is the result of the life source if the vine flowing into the branches. If we are bonded to the Vine of Christ by the Spirit, His word will bear fruit that will be inevitable in our lives.</p>"
 msgstr ""
+"<P> Ein wichtiger Teil der Kommission, der Gott gab Adam fruchtbar sein war. Überall in der Bibel sehen Sie diese Zuordnung wieder wieder und immer kommen. Gott gibt die Frucht, und wir können die Erde arbeiten, fruchtbar sein. </ P>\n"
+"<P> Obst ist das Ergebnis der Lebensquelle, wenn die Rebe in die Zweige fließt. Wenn wir an die Rebe Christi durch den Geist gebunden sind, wird sein Wort Früchte tragen, die in unserem Leben unvermeidlich sein wird. </ P>"
 
 #: commandments_app.Commandment/title:3
+#, fuzzy
 msgid "Worship the Lord your God, and serve Him only"
-msgstr ""
+msgstr "Betet den Herrn, deinen Gott, und ihm allein dienen"
 
 #: commandments_app.Commandment/title_negative:3
+#, fuzzy
 msgid "No servant can serve two masters"
-msgstr ""
+msgstr "Kein Knecht kann zwei Herren dienen"
 
 #: commandments_app.Commandment/title:4
+#, fuzzy
 msgid "Blessed are the poor in spirit, for theirs is the kingdom of heaven"
-msgstr ""
+msgstr "Selig sind die Armen im Geiste, denn ihrer ist das Himmelreich"
 
 #: commandments_app.Commandment/title_negative:4
+#, fuzzy
 msgid "Don’t rely on your own strenght"
-msgstr ""
+msgstr "Sie nicht auf Ihre eigene Kraft vertrauen"
 
 #: commandments_app.Commandment/title:5
+#, fuzzy
 msgid "Blessed are those who mourn, for they will be comforted"
-msgstr ""
+msgstr "Selig sind, die da Leid tragen, denn sie sollen getröstet werden"
 
 #: commandments_app.Commandment/title:6
+#, fuzzy
 msgid "Blessed are the meek, for they will inherit the earth"
-msgstr ""
+msgstr "Selig sind die Sanftmütigen, denn sie werden das Land erben"
 
 #: commandments_app.Commandment/title:7
+#, fuzzy
 msgid ""
 "Blessed are those who hunger and thirst for righteousness, for they will be "
 "filled"
 msgstr ""
+"diejenigen Selig sind, die hungern und dürsten nach der Gerechtigkeit; denn "
+"sie sollen satt werden"
 
 #: commandments_app.Commandment/title:8
+#, fuzzy
 msgid "Blessed are the merciful, for they will be shown mercy"
-msgstr ""
+msgstr "Selig sind die Barmherzigen, denn sie werden Erbarmen finden"
 
 #: commandments_app.Commandment/devotional:8
+#, fuzzy
 msgid ""
 "This verse prompts us to imitate the characteristics of our God. If He is "
 "merciful, then we, as His children, are obligated to learn to be just as "
 "merciful by His grace and the empowerment of His Spirit. "
 msgstr ""
+"Dieser Vers fordert uns die Eigenschaften unserer Gott nachzuahmen. Wenn er "
+"barmherzig ist, dann wir, als seine Kinder, sind verpflichtet, ebenso gnädig"
+" durch seine Gnade und die Ermächtigung seines Geistes zu sein, zu lernen."
 
 #: commandments_app.Commandment/title:9
+#, fuzzy
 msgid "Blessed are the pure in heart, for they will see God"
-msgstr ""
+msgstr "Selig sind, die reinen Herzens sind, denn sie werden Gott schauen"
 
 #: commandments_app.Commandment/title_negative:9
+#, fuzzy
 msgid "Go, and sin no more"
-msgstr ""
+msgstr "Geh und sündige nicht mehr"
 
 #: commandments_app.Commandment/devotional:9
+#, fuzzy
 msgid ""
 "<p><b>Everyone wants to be happy. But not everyone is willing to do what it takes to have a pure heart.</b></p>\n"
 "<p>Blessed people are happy people. Those who are pure in heart are happy because they don’t let any evil into their hearts that would make them unhappy.</p>\n"
@@ -3455,134 +3500,197 @@ msgid ""
 "\n"
 "<p>In all of life’s circumstances I have to make choices about how I react to other people, what I do with my free time, and what thoughts I allow to occupy my mind. Obeying God’s Word gives me a direction for my life and helps me make the right choices in all of the situations I meet.</p>"
 msgstr ""
+"<P> <b> Jeder will glücklich sein. Aber nicht jeder ist bereit zu tun, was es braucht, ein reines Herz zu haben. </ B> </ p>\n"
+"<P> Blessed Menschen sind glückliche Menschen. Diejenigen, die im Herzen rein sind glücklich, weil sie nicht Böse in ihr Herz lassen, die sie unglücklich machen würden. </ P>\n"
+"\n"
+"<P> Statt ein Herz zu haben, die voll von Verunreinigungen ist, Undankbarkeit, Unglauben und böse Vermutungen über andere, haben diese Leute rein, gut und sinnvolle Gedanken-Gedanken der Dankbarkeit und Gedanken darüber, wie sie andere ein Segen sein kann. Sie haben auch eine Firma, kompromisslos Widerstand in ihren Herzen zu irgendwelchen Gedanken von Egoismus, Unreinheit, Zweifel und Angst, das in kommen könnte versuchen. </ P>\n"
+"\n"
+"<H5> Wie werde ich ein reines Herz und halten es so? </ H5>\n"
+"<P> Sie zu hundert Menschen auf der Straße sprechen konnten und nicht eine einzige Person finden, das nicht glücklich sein will. Aber nicht jeder ist bereit zu tun, was es in Herzen rein zu sein braucht. ein reines heartHaving ein reines Herz bekommen bedeutet, dass Sie mit den sündigen oder unreinen Gedanken nicht einverstanden ist, die in dir kommen, aber Sie eher diese Gedanken leugnen und sie töten. Es bedeutet, dass Sie nicht betroffen sind oder durch die Sünde verdorbenen auf ... und es zu halten geschieht nicht durch Zufall. Um ein reines Herz Ich muß mein Leben, um mit Gott und Menschen zu setzen und um Vergebung zu bitten, wenn nötig. Aber Reinheit ist nicht dazu gedacht, es zu stoppen. </ P>\n"
+"\n"
+"<P> Es wird in Psalm geschrieben 119: 9: „Wie kann ein junger Mann seinen Weg rein halten? Durch die Beachtung nach deinem Wort.“Gottes Wort ist die Bedienungsanleitung für das Helfen ich mein Herz rein mein ganzes Leben lang zu halten. Es ist nicht leben ein reines Leben zu beginnen kompliziert. Für einen Start, denken Sie nur einen einfachen Vers nehmen und zu gehorchen, wie dieser Vers in 1. Thessalonicher 5,18 „In allem dankbar; dafür ist der Wille Gottes in Christus Jesus für dich.“</ p>\n"
+"\n"
+"<P> Denken Sie, wie glücklich ich in einem Monat sein wird, wenn ich in allem dankbar bin! Wie etwa ein Jahr später? 10 Jahre später? Stellen Sie sich das Ende eines langen Lebens mit einem reinen Herzen, das voller Dankbarkeit ist, wo ich angefangen habe heraus die richtigen Entscheidungen, während ich jung bin! </ P>\n"
+"\n"
+"<P> In allen Lebenslagen muss ich treffen Entscheidungen darüber, wie ich auf andere Menschen reagieren, was ich mit meiner Freizeit tun, und welche Gedanken lasse ich meine Gedanken besetzen. Gottes gehorchend Wort gibt mir eine Richtung für mein Leben und hilft mir, die richtigen Entscheidungen zu treffen in all den Situationen, die ich treffen. </ P>"
 
 #: commandments_app.Commandment/title:10
+#, fuzzy
 msgid "Blessed are the peacemakers, for they will be called children of God"
 msgstr ""
+"Selig sind, die Frieden stiften, denn sie werden Kinder Gottes genannt "
+"werden"
 
 #: commandments_app.Commandment/title:11
+#, fuzzy
 msgid ""
 "Blessed are those who are persecuted because of righteousness, for theirs is"
 " the kingdom of heaven"
 msgstr ""
+"Selig sind, die um der Gerechtigkeit willen verfolgt werden, denn ihrer ist "
+"das Himmelreich"
 
 #: commandments_app.Commandment/title:12
+#, fuzzy
 msgid "Rejoice, for a great reward is coming"
-msgstr ""
+msgstr "Freuen Sie sich, für eine große Belohnung kommt"
 
 #: commandments_app.Commandment/devotional:12
+#, fuzzy
 msgid ""
 "<p>Jesus knew a day of rejoicing was coming for each of His disciples, so He asked them again to trust in His word. Jesus never spoke to His disciples about fame, popularity, or wealth. On the contrary, He told them that they would experience sorrow, weeping, losses, and suffering. We might not experience these things every day, but they will come to everyone someday, assuming we remain faithful and obedient to His word. </p>\n"
 "\n"
 "<p>The opportunity to suffer together with Jesus and the description of a promised reward of disproportionate size are sufficient to motivate faithfulness, even through the agony of persecution: “I consider that our present sufferings are not worthy to be compared to the glory that shall be revealed in us” (Rom 8:18). The eventual benefits are so great that we are to “continually rejoice”</p>"
 msgstr ""
+"<P> wußte Jesus einen Tag der Freude wurde für jeden seine Jünger kommen, so wieder fragte er sich in seinem Wort zu vertrauen. Jesus sprach nie mit seinen Jüngern über Ruhm, Popularität, oder Reichtum. Im Gegenteil: Er sagte ihnen, dass sie Trauer, Weinen, Verluste erfahren würde, und das Leiden. Wir könnten diese Dinge nicht erleben jeden Tag, aber sie werden einen Tag zu jedem kommen, bleiben wir unter der Annahme, treu und gehorsam zu seinem Wort. </ P>\n"
+"\n"
+"<P> Die Gelegenheit zu leiden zusammen mit Jesus und der Beschreibung einer versprochenen Belohnung unverhältnismäßiger Größe ist ausreichend, um die Treue zu motivieren, auch durch die Qual der Verfolgung: „Ich denke, dass unsere gegenwärtigen Leiden im Vergleich zu nicht wert sind, auf den Ruhm, gilt, wird in uns“(Röm 8,18) ergibt. Die eventuellen Vorteile sind so groß, dass wir „freuen ständig“ zu </ p>"
 
 #: commandments_app.Commandment/title:13
+#, fuzzy
 msgid "Be salty and be at peace with each other"
-msgstr ""
+msgstr "Seien Sie salzig und in Frieden miteinander"
 
 #: commandments_app.Commandment/devotional:13
+#, fuzzy
 msgid ""
 "<p>Salt is an indispensable requirement for the body. It is both a tasty condiment and a preservative for food. Jesus told his disciples, “You are the salt of the earth” (Mat 5:13). They were to be the life-sustaining element in a dying world that would attract people to the gospel, and they were to be a preservative in a rotting world of sin.</p>\n"
 "\n"
 "<p>Their salty impact on society would generate “peace with each other”. If the disciples had kept the salt fresh in themselves, they would not have been arguing about who would be the greatest in Christ’s kingdom (Mark 9:34). Each was lusting to be more important that the other (Mark 10:35-45). They were losing their saltiness. Soon the responsibility of world evangelism would be placed in their hands, so peace among them was vital (Col 3:15). To maintain their team spirit and bond of unity, Paul encouraged Christians to “let your conversation be always full of grace, seasoned with salt” (Col 4:6). We are to keep each other submissive to His word.</p>"
 msgstr ""
+"<P> Das Salz ist eine unabdingbare Voraussetzung für den Körper. Es ist sowohl eine schmackhafte Würze und ein Konservierungsmittel für Lebensmittel. Jesus sagte zu seinen Jüngern: „Ihr seid das Salz der Erde“ (Mat 5,13). Sie waren das lebenserhaltende Element in einer sterbenden Welt zu sein, die Menschen für das Evangelium anziehen würde, und sie waren ein Konservierungsmittel in einer verrottenden Welt der Sünde sein. </ P>\n"
+"\n"
+"<P> Ihre salzigen Auswirkungen auf die Gesellschaft erzeugen würde „Frieden miteinander“. Wenn die Jünger das Salz frisch in sich gehalten hätte, hätten sie streiten wurden nicht darum, wer die größte in das Reich Christi wäre (Markus 09.34). Jeder war lüstern wichtiger zu sein, dass die andere (Markus 10: 35-45). Sie verloren ihre Salzigkeit. Bald wird die Verantwortung der Weltevangelisation würde in ihre Hände gelegt werden, so unter ihnen Frieden war von entscheidender Bedeutung (Kol 3,15). Um den Teamgeist und Band der Einheit aufrechtzuerhalten, Paul Christen ermutigt, „lassen Sie das Gespräch der Gnade immer voll sein, mit Salz gewürzt“ (Kol 4: 6). Wir sind einander unterwürfig zu sein Wort zu halten. </ P>"
 
 #: commandments_app.Commandment/title:14
+#, fuzzy
 msgid "Let your light shine"
-msgstr ""
+msgstr "Lass dein Licht scheinen"
 
 #: commandments_app.Commandment/title:15
+#, fuzzy
 msgid ""
 "Whoever practices and teaches these commands will be called great in the "
 "kingdom of heaven"
-msgstr ""
+msgstr "Wer und lehrt, diese Befehle wird groß sein im Himmelreich des"
 
 #: commandments_app.Commandment/title_negative:15
+#, fuzzy
 msgid "Do not set aside one of the least of these commands"
-msgstr ""
+msgstr "Setzen Sie nicht beiseite eine der am wenigsten dieser Befehle"
 
 #: commandments_app.Commandment/devotional:15
+#, fuzzy
 msgid ""
 "<p>I am pleading against a widespread kind of preaching that is Bible-based but not Bible-saturated. I give two reasons why preachers must show the people where they are getting their points in Scripture: (1) only the word of God has authority, and (2) only the word of God awakens life. After more than forty years of preparing and delivering sermons:</p>\n"
 "\n"
 "<p><b><i>“As for me, I have nothing of abiding worth to say to you. But God does.”</i></b></p>"
 msgstr ""
+"<P> ich gegen eine weit verbreitete Art bin plädieren, dass der Predigt ist die Bibel stützt, aber nicht die Bibel gesättigt. Ich gebe zwei Gründe, warum Prediger müssen die Menschen zeigen, wo sie ihre Punkte in der Schrift erhalten: (1) nur das Wort Gottes Autorität hat, und (2) nur das Wort Gott erweckt Leben. Nach mehr als 40 Jahren der Vorbereitung und Bereitstellung von Predigten: </ p>\n"
+"\n"
+"<P> <b> <i> „Was mich betrifft, ich habe nichts von bleibenden Wert zu Ihnen zu sagen. Aber Gott tut.“</ I> </ b> </ p>"
 
 #: commandments_app.Commandment/title:16
+#, fuzzy
 msgid "Be patient"
-msgstr ""
+msgstr "Sei geduldig"
 
 #: commandments_app.Commandment/title_negative:16
+#, fuzzy
 msgid "Do not be angry with a brother or sister"
-msgstr ""
+msgstr "Seien Sie nicht mit einem Bruder oder einer Schwester wütend"
 
 #: commandments_app.Commandment/title:17
+#, fuzzy
 msgid "Reconcile with your brother as quickly as possible"
-msgstr ""
+msgstr "mit Ihrem Bruder Einklang bringen, so schnell wie möglich"
 
 #: commandments_app.Commandment/title_negative:17
+#, fuzzy
 msgid "Let not the sun go down upon your wrath"
-msgstr ""
+msgstr "Lass die Sonne nicht untergehen über eurem Zorn"
 
 #: commandments_app.Commandment/title:18
+#, fuzzy
 msgid "Be loyal to your partner"
-msgstr ""
+msgstr "Seien Sie loyal zu Ihrem Partner"
 
 #: commandments_app.Commandment/title_negative:18
+#, fuzzy
 msgid "Do not look lustfully to a woman"
-msgstr ""
+msgstr "Schauen Sie nicht nur lüstern an eine Frau"
 
 #: commandments_app.Commandment/devotional:18
+#, fuzzy
 msgid ""
 "In the current culture almost half of the marrriages end up in a divorce. We"
 " always need to follow God’s principles in marriage to resolve conflicts and"
 " stay bonded together. By being loyal to each other, and faithful to God’s "
 "principles, you will have a strong marriage what cannot be broken."
 msgstr ""
+"In der aktuellen Kultur am Ende fast die Hälfte des marrriages in einer "
+"Scheidung auf. Wir brauchen immer Gott Prinzipien in der Ehe zu folgen, "
+"Konflikte zu lösen und miteinander verbunden bleiben. Indem sie sich treu "
+"und treu Gottes Prinzipien, haben Sie eine starke Ehe, was nicht gebrochen "
+"werden kann."
 
 #: commandments_app.Commandment/title:19
+#, fuzzy
 msgid ""
 "Blessed are those whose ways are blameless, who walk according to the law of"
 " the Lord"
 msgstr ""
+"Selig sind die, deren Wege sind untadelig, der nach dem Gesetz des Herrn "
+"gehen"
 
 #: commandments_app.Commandment/title_negative:19
+#, fuzzy
 msgid "Don’t act different from what you speak"
-msgstr ""
+msgstr "Sie handeln nicht anders aus, was Sie sprechen"
 
 #: commandments_app.Commandment/title:20
+#, fuzzy
 msgid "Overcome evil by doing good"
-msgstr ""
+msgstr "Besiege das Böse durch Gutes zu tun"
 
 #: commandments_app.Commandment/title_negative:20
+#, fuzzy
 msgid "Do not resist an evil person"
-msgstr ""
+msgstr "Verwenden Sie keine böse Person wider"
 
 #: commandments_app.Commandment/title:21
+#, fuzzy
 msgid "Share goods with the needy"
-msgstr ""
+msgstr "Teilen Waren mit den Bedürftigen"
 
 #: commandments_app.Commandment/title_negative:21
+#, fuzzy
 msgid "If anyone takes what belongs to you, do not demand it back"
-msgstr ""
+msgstr "Wenn jemand nimmt, was dir gehört, verlange es nicht zurück"
 
 #: commandments_app.Commandment/devotional:21
+#, fuzzy
 msgid ""
 "<p>The lesson in all of these texts is not restricted to one thing. When God providentially brings needy people into your life, your new spirit should respond with a generous, wise, and voluntary sharing of resources. But not only physically. We can also take this emotionally or mentally. If someone thirsts for water, give him the living water which Jesus is giving. If someone is spiritually naked (and very vulnerable), help him get dressed with the weapon gear from Ephesians 6.</p> \n"
 "\n"
 "<p>Be compassionate and generous with the people whom God will send on your paths. Generous believers become the models for the body of Christ and demonstrate the joy of giving.</p>"
 msgstr ""
+"<P> Die Lektion in all diesen Texten ist nicht auf eine Sache beschränkt. Wenn providentially Gott bedürftige Menschen in Ihr Leben bringt, Ihr neuen Geist sollte mit einer großzügigen, wiese und freiwillige gemeinsame Nutzung von Ressourcen antworten. Aber nicht nur körperlich. Wir können dies auch emotional nehmen oder geistig. Wenn jemand für Wasser dürstet, gib ihm das lebendige Wasser, das Jesus gibt. Wenn jemand geistig nackt (und sehr verletzlich) ist, hilft ihm mit der Waffe Gang von Epheser 6 anziehen. </ P>\n"
+"\n"
+"<P> Seien Sie barmherzig und großzügig mit den Menschen, die Gott auf dem Wege schicken. Großzügige Gläubigen werden die Modelle für den Leib Christi und zeigen die Freude des Gebens. </ P>"
 
 #: commandments_app.Commandment/title:22
+#, fuzzy
 msgid "Love your enemies and pray for persecutors"
-msgstr ""
+msgstr "Liebt eure Feinde und betet für Verfolgern"
 
 #: commandments_app.Commandment/title_negative:22
+#, fuzzy
 msgid "Do not say, I’ll do to them as they have done to me"
-msgstr ""
+msgstr "Sagen Sie nicht, ich werde sie tun, wie sie mit mir gemacht haben"
 
 #: commandments_app.Commandment/devotional:22
+#, fuzzy
 msgid ""
 "<p>This sevenfold description of our obligation to love others shows the characteristics of our heavenly Father. We are expected to reflect the character and attitudes of our God and Savior. Of course, this is possible only by the power of the Spirit as He manifests the presence of God. This is how He is glorified. Jesus begins by addressing “you who are listening.” They were all hearing, but not all were listening.</p>\n"
 "\n"
@@ -3594,32 +3702,51 @@ msgid ""
 "<li>The fifth through seventh commands are not to retaliate (Luke 6:29a), to give freely (6:29b-30), and to treat others they way we would want to be treated (6:31). Jesus’s love is unique from the world’s (6:32-33). His followers stand out because they care for everyone.</li>\n"
 "</ol>"
 msgstr ""
+"<P> Diese versiebenfacht Beschreibung unserer Verpflichtung, andere zu lieben zeigt die Eigenschaften unseres himmlischen Vaters. Wir erwarten den Charakter und Haltung unseres Gottes und Retters zu reflektieren. Natürlich ist dies nur möglich, durch die Kraft des Geistes, wie er die Gegenwart Gottes manifestiert. Dies ist, wie er ist verherrlicht. Jesus beginnt mit der Adressierung „Sie, die zuhören.“ Sie waren alle hören, aber nicht alle zuhörten. </ P>\n"
+"\n"
+"<Ol type = 1>\n"
+"<Li> Erstens sind Sie auf „ständig sein deine Feinde zu lieben“. Dies ist keine emotionale Live oder eine freundliche Liebe. Es ist Agape-Liebe: a. Entscheidung zugunsten von anderen unabhängig von Ihren Gefühlen auf sie zu opfern </ li>\n"
+"<Li> Zweitens sind Sie zu „denen Gutes tun, die euch hassen“, die verstärkt, wie wir unsere Feinde lieben sollen. Gut bedeutet „ausgezeichnet, angemessen [oder] von Vorteil.“ </ Li>\n"
+"<Li> Drittens, sagt Gott, „segnen, die dich verfluchen“, was bedeutet „sprechen auch von“ wer „Flüche“ oder sprechen schlecht von dir, suchen Sie nicht zu beschädigen. </ Li>\n"
+"<Li> Viertens, Sie sind „ständig für diejenigen beten, die Sie schlecht behandeln“. Sie müssen sie vergeben und beten, dass Gott ihnen den Evangeliums Wert klären. </ Li>\n"
+"<Li> Die fünfte bis siebte Befehle nicht vergelten (Lukas 6: 29a), geben frei (6: 29b-30), und andere zu behandeln, sie Art und Weise wollen wir (06.31) behandelt werden. Jesus Liebe ist einzigartig von der Welt (6: 32-33). Seine Anhänger stehen, weil sie für alle sorgen. </ Li>\n"
+"</ Ol>"
 
 #: commandments_app.Commandment/title:23
+#, fuzzy
 msgid "Be perfect then, just as your Father who is in heaven is perfect"
-msgstr ""
+msgstr "Seien Sie dann perfekt, so wie euer Vater im Himmel vollkommen ist"
 
 #: commandments_app.Commandment/title:24
+#, fuzzy
 msgid "He that humbleth himself shall be exalted"
-msgstr ""
+msgstr "Wer sich selbst erniedrigt, wird erhöht werden"
 
 #: commandments_app.Commandment/title_negative:24
+#, fuzzy
 msgid "For whosoever exalteth himself shall be abased"
-msgstr ""
+msgstr "Denn wer erhöht, der soll sich erniedrigte werden"
 
 #: commandments_app.Commandment/devotional:24
+#, fuzzy
 msgid ""
 "<p>It is amazing how unashamedly people will tell you how great they are. The wold’s wisdom is, “If no one beats your drum, beat it yourself.” But Jesus’s basic rule of wisdom was never to let honor be due to self-promotion. \n"
 "Jesus’s concept of honor, given to the humble, is far from the normal way of thinking. Some attempt to dive the appearance of humility, however false, to manipulate others. others misconstrue humility to mean criticizing yourself in public. True humility only compares itself to Jesus, and those who are truly humble recognize their personal sinfulness and hold a realistic view of their limitations and capabilities to serve others. A humble person is dedicated to making others successful, meeting their needs, and helping them become all they were designed to be.</p>\n"
 "\n"
 "<p>The more we benefit others, the higher our probability of being recognized in due time. Waiting to be honored by others pleases Lord and builds good relationships.</p>"
 msgstr ""
+"<P> Es ist erstaunlich, wie schamlos Leute werden Ihnen sagen, wie groß sie sind. Die Weisheit des Wold ist: „Wenn niemand Ihre Trommel schlägt, es selbst schlagen.“ Aber Jesus die Grundregel der Weisheit war nie Selbst Förderung aufgrund Ehre zu lassen.\n"
+"Jesus Begriff der Ehre, den Demütigen gegeben, ist bei weitem nicht die normale Art und Weise des Denkens. Einige versuchen, das Aussehen des Demut zu tauchen, aber falsch, an andere zu manipulieren. andere missdeuten Demut sich in der Öffentlichkeit zu verstehen, zu kritisieren. Wahre Demut vergleicht nur sich selbst zu Jesus, und diejenigen, die wirklich demütig sind erkennen ihre persönlichen Sündhaftigkeit und halten eine realistische Sicht auf ihre Grenzen und Möglichkeiten, anderen zu dienen. Ein bescheidener Mensch widmet sich der Herstellung von anderen erfolgreich, ihre Bedürfnisse und hilft ihnen, alle werden sie entworfen wurden zu sein. </ P>\n"
+"\n"
+"<P> Je mehr wir profitieren andere, desto höher ist unsere Wahrscheinlichkeit zu gegebener Zeit erkannt zu werden. Warten von anderen geehrt werden will Herr und baut gute Beziehungen. </ P>"
 
 #: commandments_app.Commandment/title:25
+#, fuzzy
 msgid "Pray with Faith"
-msgstr ""
+msgstr "Beten Sie mit Glauben"
 
 #: commandments_app.Commandment/devotional:25
+#, fuzzy
 msgid ""
 "<p>John quoted Jesus when he taught a similar promise as our text: “Therefore whatever you ask in My name, that I will do, that the Father may be glorified in the Son. If you ask anything in my name, I will do it” (John 14:13).\n"
 "How much more encouragement do we need to pray for great things that will honor and glorify the Father through the Son? The Father knows how to help us glorify Christ before we ask, but He waits for us to be concerned enough to ask “It shall come to pass that before they call, I will answer. and while they are still speaking, I will hear” (Isa 65:24. By His response, everyone will recognize it was God’s doing.</p>\n"
@@ -3628,28 +3755,40 @@ msgid ""
 "\n"
 "<p>Stop a moment and think of all the ways you could glorify God through your life and service. He primarily becomes evident to others by answering the prayers of His servants who want Him to be recognized as a powerful and prayer-answering God. If only impossible need do you have that would most glorify God if it were answered? Pray for His glory’s sake.</p>"
 msgstr ""
+"<P> John Jesus zitierte, als er ein ähnliches Versprechen wie unser Text gelehrt: „Darum, was sie in meinem Namen bitten, dass ich tun, damit der Vater im Sohn verherrlicht wird. Wenn Sie etwas in meinem Namen bittet, werde ich es tun“(Joh 14,13).\n"
+"Wie viel mehr Ermutigung brauchen wir für große Dinge zu beten, dass der Vater durch den Sohn ehren und preisen? Der Vater weiß, wie wir Christus helfen verherrlichen, bevor wir fragen, aber er wartet auf uns genug besorgt sein zu fragen: „Und es wird geschehen, dass passieren, bevor sie rufen, ich beantworten. und während sie noch reden, will ich hören“(Jes 65,24. Durch seine Antwort, jeder wird erkennen, es ist Gottes Tun war. </ p>\n"
+"\n"
+"<P> Nicht zu denken, die Irre geführt werden, dass dieses Versprechen alles über Sie. es ist alles über Gott. James stellt klar, wie zu beten und sagte: „Sie wollen, was Sie nicht haben, so dass Sie Schema und töten es zu bekommen. Sie sind neidisch auf, was andere haben, aber man kann es nicht bekommen, so dass Sie kämpfen und Krieg führen sie weg von ihnen zu nehmen. Aber Sie haben nicht, was Sie wollen, weil sie es nicht Gott fragen. Und selbst wenn man fragt, man bekommt es nicht, weil Ihre Motive alle falsch sind. . Sie wollen nur das, was Ihnen Freude geben“(Jakobus 4: 2-3) </ p>\n"
+"\n"
+"<P> Stop einen Moment und denke an all die Möglichkeiten, wie Sie Gott durch dein Leben und Dienst verherrlichen könnte. Er wird in erster Linie für andere offensichtlich durch die Gebete seines Dieners zu beantworten, die ihn will als Gott mächtig und Gebet beantworten erkannt werden. Wenn nur nicht Bedürfnis haben Sie, dass Gott würde die meisten verherrlichen, wenn sie beantwortet wurden? Bete für seine Herrlichkeit willen. </ P>"
 
 #: commandments_app.Commandment/title:26
+#, fuzzy
 msgid "Forgive one another"
-msgstr ""
+msgstr "Sie vergeben"
 
 #: commandments_app.Commandment/title:27
+#, fuzzy
 msgid "Fast regularly"
-msgstr ""
+msgstr "schnell regelmäßig"
 
 #: commandments_app.Commandment/title:28
+#, fuzzy
 msgid "Accumulate treasure in heaven"
-msgstr ""
+msgstr "Accumulate Schatz im Himmel"
 
 #: commandments_app.Commandment/title:29
+#, fuzzy
 msgid "Pursue Christ’s kingdom priority"
-msgstr ""
+msgstr "Verfolgen Christi Reich Priorität"
 
 #: commandments_app.Commandment/title_negative:29
+#, fuzzy
 msgid "Do not worry about your life"
-msgstr ""
+msgstr "Sie nicht über Ihr Leben Sorge"
 
 #: commandments_app.Commandment/devotional:29
+#, fuzzy
 msgid ""
 "<p>One of the advantages of becoming a Christian is that you now have a purpose in life. Jesus called for a complete reorientation of life’s values, objectives, and purpose. \n"
 "Everyone needs to put bread on the table, but Jesus demands that His followers “not seek what you should eat or what you should drink, nor have an anxious mind.” (Luke 12:29). He then states, “For all these things the nations of the world seek after” (12:30). Jesus expects us to live with a different motivation and purpose, Neither survival nor comfort is to be our driving impulse. </p>\n"
@@ -3663,31 +3802,51 @@ msgid ""
 "\n"
 "<p>He must be King of your life as well as your Savior. His will must control your finances, work ethic, ambitions, relationships, thoughts, and daily plans. As Creator, He promises to take care of you if you are useful to His kingdom now.</p>"
 msgstr ""
+"<P> Einer der Vorteile der Verwendung eines Christ zu werden, ist, dass Sie jetzt einen Sinn im Leben haben. Jesus forderte eine völlige Neuorientierung des Lebens Werte, Ziele und Zwecke.\n"
+"Jeder Mensch braucht Brot auf den Tisch zu legen, aber Jesus verlangt, dass seine Nachfolger „nicht suchen, was Sie essen sollten oder was sollte man trinken, noch haben einen besorgten Geist.“ (Lk 00.29). Er sagt dann: „Für all diese Dinge, die die Nationen der Welt suchen nach“ (12:30). Jesus erwartet, dass uns mit einer anderen Motivation und Zweck leben, weder das Überleben noch Komfort ist unser treibender Impuls zu sein. </ P>\n"
+"\n"
+"<P> Luke führt diesen Befehl mit „statt“ das Gegenteil Fokus aus dem vorherigen Verse für die Gläubigen zu betonen. Jesus sagte: „Der Vater weiß, dass es diese Dinge braucht“ (12:30). Um damit zu beginnen, können wir ihm vertrauen? Können wir sicher in dem Bewusstsein, dass Er kennt unsere Bedürfnisse Ruhe?\n"
+"Wenn wir auf ihn vertrauen, sind wir frei auf seinem zeitlichen und ewigen Zwecke zu konzentrieren. Er befiehlt uns, „ständig oder gewöhnlich sein Reich zu verfolgen.“ Das Reich muss nie enden. </ P>\n"
+"\n"
+"<P> Dies war eine Einführung in die große Kommission: „Gehet hin und machet zu Jüngern alle Völker“ (Mt 28,19). Christi Reich wird durch Multiplikation einzelne Konvertiten erweitert und führt sie auf die Herrschaft Christi auf dieser Erde zu übergeben. </ P>\n"
+"\n"
+"<P> Wie gehorsam sind Sie heute bei dieser Aufgabe? Was ist wichtiger: Ihre Arbeit, zu Hause oder Business-Venture? Was passiert, wenn sein Engagement Ihre Bedürfnisse waren proportional zu Ihrer Verpflichtung zu ihm zu begegnen? Gott verspricht nicht Reichtum, aber er verspricht, die Bedürfnisse seines Dieners zu treffen, erreichen und Gebäude Jünger in seinem Reich. </ P>\n"
+"\n"
+"<P> Er muss seinen König Ihres Lebens sowie Ihr Retter. Sein Wille müssen Ihre Finanzen kontrollieren, Arbeitsmoral, Ambitionen, Beziehungen, Gedanken und Tagespläne. Als Schöpfer, verspricht er sich um Sie zu nehmen, wenn Sie sich jetzt in sein Reich nützlich sind. </ P>"
 
 #: commandments_app.Commandment/title:30
+#, fuzzy
 msgid "Rebuke your brother in a spirit of meekness"
-msgstr ""
+msgstr "Schilt deinen Bruder im Geist der Sanftmut"
 
 #: commandments_app.Commandment/title_negative:30
+#, fuzzy
 msgid "Do not judge, or you too will be judged"
-msgstr ""
+msgstr "Richtet nicht, oder Sie werden zu beurteilen"
 
 #: commandments_app.Commandment/devotional:30
+#, fuzzy
 msgid ""
 "<p>If a brother sins (that is disobeys the commands in Scripture) he or she needs to be confronted directly and privately in a spirit of humility by another believer. The objective is to help restore the offender. Sin means “missing the mark”, or an offense against God Himself and His reputation. A brother should confront the disobedient believer as soon as possible. </p>\n"
 "\n"
 "<p>The word “show him his fault” means “to bring to light or expose”. The disobedient person may not be aware of the command that he has transgressed. If done privately, in a spirit of live and confidence, a change of heart is more likely, and a more intimate bond of brotherhood can result.</p>"
 msgstr ""
+"<P> Wenn ein Bruder sündigt (dh nicht gehorcht die Befehle in der Schrift) muss er oder sie direkt konfrontiert werden und privat in einem Geist der Demut von einem anderen Gläubiger. Das Ziel ist, zu helfen, die Täter wieder herzustellen. Sin bedeutet „fehlt die Markierung“ oder ein Vergehen gegen Gott selbst und seinen Ruf. Ein Bruder sollte die Ungehorsamen Gläubiger so bald wie möglich konfrontieren. </ P>\n"
+"\n"
+"<P> Das Wort „zeigt ihm seine Schuld“ bedeutet „ans Licht zu bringen oder aussetzen“. Der ungehorsame Person möglicherweise nicht bewusst sein, dem Befehl, den er gesündigt hat. Wenn privat getan, in einem Geist des Live-und Vertrauens, eine Veränderung des Herzens ist wahrscheinlicher, und eine innige Verbindung der Brüderlichkeit führen kann. </ P>"
 
 #: commandments_app.Commandment/title:31
+#, fuzzy
 msgid "Seek, and you shall find"
-msgstr ""
+msgstr "Suche und du wirst finden"
 
 #: commandments_app.Commandment/title:32
+#, fuzzy
 msgid "Knock, and it will be opened for you"
-msgstr ""
+msgstr "Klopfet an, so wird euch aufgetan"
 
 #: commandments_app.Commandment/devotional:32
+#, fuzzy
 msgid ""
 "<p>Who does not know the story of the prodigal son? The question is: do we know the Hebrew culture? The story has more meanings that we miss because we don't know the culture. Too bad right? For example, asking for the annoyance before the person died was like saying, \"Dad, you're dead to me.\" When after his wanderings and brasseries the son came home stinkingly unclean - because of the pigs - the father ran up to the son and embraced him. \"Terrible,\" the bystanders would have said. But probably for a different reason than you think. The reasons are:</p>\n"
 "<ul>\n"
@@ -3701,39 +3860,64 @@ msgid ""
 "</ol>\n"
 "<p>In summary: The father takes the son's shame and impurity, and the son receives the dignity, power of attorney and wealth from the father. Wow, what an image of God. And we haven't even mentioned the eldest son and the slaves in this parable.</p>"
 msgstr ""
+"<P> Wer kennt nicht die Geschichte vom verlorenen Sohn? Die Frage ist: können wir wissen, die hebräische Kultur? Die Geschichte hat mehr Bedeutung, die wir vermissen, weil wir die Kultur nicht kennen. Schade, nicht wahr? Zum Beispiel fragt, für den Ärger, bevor die Person wie zu sagen, gestorben war, „Dad, sie ist tot für mich.“ Als nach seiner Wanderung und Brasserien kam der Sohn nach Hause stinkingly unrein - wegen der Schweine - der Vater lief den Sohn und umarmte ihn. „Terrible“ die Umstehenden gesagt hätte. Aber wahrscheinlich aus einem anderen Grund als Sie denken. Die Gründe dafür sind: </ p>\n"
+"<Ul>\n"
+"<Li> hat ein Vater nicht laufen, denn er sein Gewand heben muss und seine Scham aufzudecken (Knöchel) </ li>\n"
+"<Li> Der Vater umarmt eine unreine Person und deshalb unrein und unwürdig wird. Was geschieht, ist, dass die Aufmerksamkeit von dem Sohn des Scham und Unreinheit des Vaters Scham, Unreinheit und Unwürdigkeit verschoben wird. </ Li>\n"
+"<Li> Der Vater dann gibt den Sohn den besten Kleid, Ring und Schuhe. Man könnte denken, nichts Besonderes. Nun, das sagt eine Menge in dieser Kultur. </ Li>\n"
+"<Ol type = \"1\">\n"
+"<Li> Das beste Gewand, die Würde des Vaters darstellt. </ Li>\n"
+"<Li> steht der Ring der Vollmacht des Vaters. </ Li>\n"
+"<Li> Die Schuhe für den Besitz des Vaters. </ Li>\n"
+"</ Ol>\n"
+"<P> Zusammengefasst: Der Vater nimmt die Scham Sohn und Unreinheit, und der Sohn erhält die Würde, Vollmacht und Reichtum vom Vater. Wow, was für ein Bild von Gott. Und wir haben nicht einmal erwähnt den ältesten Sohn und die Sklaven in diesem Gleichnis. </ P>"
 
 #: commandments_app.Commandment/title:33
+#, fuzzy
 msgid "Treat others as you would like to be treated"
-msgstr ""
+msgstr "Behandle andere, wie Sie möchten behandelt werden"
 
 #: commandments_app.Commandment/devotional:33
+#, fuzzy
 msgid ""
 "<p>The “Golden rule” is not the gospel – that is, no one will go to heaven by following the Golden Rule or the Sermon on the Mount. These sermons are policies for living out the Christ life today. The teachings in this context focus on our attitudes. These are Christlike dispositions, not legal duties. </p>\n"
 "\n"
 "<p>Our command is similar to saying, “Love your neighbor”. The present-tense imperative means “to be continuously producing, [or] causing something to happen”, especially for the benefit of another person in this context. The Golden Rule has no restrictions, because love is not dependent on the response of the other person. \n"
 "Our actions toward others should not be determined by their reaction to us. Our objective is to reflect the attitude of God toward others. His patience, love, forgiveness, commitment, and care for sinners become our attitude at all times toward all people.</p>"
 msgstr ""
+"<P> Die „Goldene Regel“ ist nicht das Evangelium - das heißt, niemand in dem Himmel, indem Sie die Goldene Regel oder die die Bergpredigt gehen. Diese Predigten sind Richtlinien für das Leben heute den Christus des Lebens aus. Die Lehren in diesem Zusammenhang konzentrieren sich auf unsere Haltung. Diese sind wie Christus Dispositionen, nicht gesetzliche Pflichten. </ P>\n"
+"\n"
+"<P> Unser Befehl ist ähnlich zu sagen: „Liebe deinen Nächsten“. Das Präsens Imperativ bedeutet „kontinuierlich zu produzieren, [oder] verursacht etwas passieren“, vor allem für den Nutzen einer anderen Person in diesem Zusammenhang. Die goldene Regel hat keine Einschränkungen, weil die Liebe auf die Antwort der anderen Person abhängig ist.\n"
+"Unsere Handlungen gegenüber anderen nicht durch ihre Reaktion auf uns bestimmt werden. Unser Ziel ist es, die Haltung von Gott gegenüber anderen zu reflektieren. Seine Geduld, Liebe, Vergebung, Engagement und Sorgfalt für die Sünder werden unsere Haltung zu allen Zeiten gegenüber allen Menschen. </ P>"
 
 #: commandments_app.Commandment/title:34
+#, fuzzy
 msgid "Be careful that nobody misleads you"
-msgstr ""
+msgstr "Achten Sie darauf, dass niemand verleitet Sie"
 
 #: commandments_app.Commandment/title_negative:34
+#, fuzzy
 msgid "Dear friends, do not believe every spirit"
-msgstr ""
+msgstr "Liebe Freunde, glauben nicht einem jeden Geist"
 
 #: commandments_app.Commandment/devotional:34
+#, fuzzy
 msgid ""
 "<p>An incorrect view of morality had led the Gentile Corinthians to allow perverse “sexual immorality” to remain unchallenged within their congregation. Paul said, this “is not good. Do you now know that a little leaven leavens the whole lump? Therefore purge out the old leaven, that you may be a new lump, since you truly are unleavened” (1 Cor 5:6-7).</p>\n"
 "\n"
 "<p>The true disciple is to be alert to the destructive influences of judgmental legalists and weak, politically correct deniers of biblical truth and morality. Both of these views teach a critical, retaliatory attitude towards anyone who opposes their traditions. New Testament instructions and command are ignored and their value minimized in favor of the legalistic traditions and politically correct power struggles of intimidating leaders. We are never to tolerate fear, threats, and intimidation among us.</p>"
 msgstr ""
+"<P> Eine falsche Ansicht der Moral hat den Gentile Corinthians führt pervers „Unzucht“ zu ermöglichen, innerhalb ihrer Gemeinde unangefochten zu bleiben. Paul sagte, das „nicht gut ist. Wissen Sie jetzt, dass ein wenig Sauerteig den ganzen Teig durchsäuert? Daher schafft den alten Sauerteig weg, damit ihr ein neuer Teig seid, wie ihr ja ungesäuert sind“(1 Kor 5, 6-7) </ p>.\n"
+"\n"
+"<P> Der wahre Jünger ist Benachrichtigung an den zerstörerischen Einflüssen von wertend Legalisten und schwach, politisch korrekt Leugner der biblischen Wahrheit und Moral zu sein. Beide Ansichten lehren eine kritische, Vergeltungs Haltung gegenüber jedermann, ihre Traditionen entgegensetzt. Neue Testament Anweisungen und Befehl ignoriert und ihr Wert für die legalistische Tradition und politisch korrekt Machtkämpfe einzuschüchtern Führer minimierte. Wir sind nie Angst zu tolerieren, Drohungen und Einschüchterung unter uns. </ P>"
 
 #: commandments_app.Commandment/title:35
+#, fuzzy
 msgid "Listen to Jesus, understand and obey"
-msgstr ""
+msgstr "Hören Sie zu Jesus, zu verstehen und gehorchen"
 
 #: commandments_app.Commandment/devotional:35
+#, fuzzy
 msgid ""
 "<p>Jesus was not just teaching a subject matter. He was communicating truths about life and eternity. His information was urgent, but all too often his hearers only gave Him halfhearted attention.</p>\n"
 "\n"
@@ -3748,12 +3932,26 @@ msgid ""
 "<p>The scene Peter, James and John have witnessed is the only audible message from God the Father to us: “This is my one dear Son, in whom I take great delight. Listen to him!”, The purpose was to make sure His disciples took seriously everything He said and later would say through the Spirit’s inspiration to the apostles and prophets. \n"
 "Everyone becomes to the one to whom he listens! The most repeated command in the book of Revelation is this: “He who has an ear, let him hear what the Spirit says to the churches” (Rev 2:7). Nine times “hear” is a command in the Revelation. The aorist form of these verbs demands an immediate response to what is commanded.</p>"
 msgstr ""
+"<P> Jesus war nicht nur einen Gegenstand zu unterrichten. Er war Wahrheiten über das Leben und die Ewigkeit in Verbindung steht. Seine Informationen dringend war, aber allzu oft seine Zuhörer gab ihm nur halbherzig Aufmerksamkeit. </ P>\n"
+"\n"
+"<Ol type = 1>\n"
+"<Li> Der erste Befehl ist, „mir immer wieder zu hören.“. Das bedeutet, nicht nur hören, sondern auch zu geben „besondere Aufmerksamkeit mit dem Ohr des Geistes zu hören“ (Zodhiates. # 191). Die Elemente der Wahrheit muss klar sein, bevor die Punkte verbunden werden können. </ Li>\n"
+"\n"
+"<Li> Der zweite Befehl ist zu „verstehen“, was er sagt. Es heißt, „es zusammen, begreifen, einzelne Tatsachen in ein organisiertes Ganzes zusammenbauen.“ </ Li>\n"
+"\n"
+"<Li> Der dritte Befehl ist zu „gehorchen“. Wenn Sie weiterhin tun, was Sie getan haben, werden Sie bekommen, was Sie getan haben. Aber wenn Sie hören geben, was Jesus lehrt, werden Sie etwas Neues tun. </ Li>\n"
+"</ Ol>\n"
+"\n"
+"<P> Die Szene Petrus, Jakobus und Johannes erlebt haben, ist die einzige hörbare Botschaft von Gott, der Vater zu uns: „Das ist mein ein lieber Sohn, an das ich große Freude nehmen. Hört auf ihn!“, War der Zweck sicher, seine Jünger zu machen ernst nahm alles, sagte er und später würde sagen, durch den Geist der Inspiration für die Apostel und Propheten.\n"
+"Jeder wird zu dem einen, dem er zuhört! Die wiederholte Befehl in das Buch der Offenbarung, ist dies: „Wer Ohren hat, der höre, was der Geist den Gemeinden sagt“ (Offenbarung 2: 7). Neunmal „hören“ ist ein Befehl in der Offenbarung. Die aorist Form dieser Verben verlangt eine sofortige Antwort auf das, was geboten wird. </ P>"
 
 #: commandments_app.Commandment/title:36
+#, fuzzy
 msgid "Be strong and courageous"
-msgstr ""
+msgstr "Sei stark und mutig"
 
 #: commandments_app.Commandment/devotional:36
+#, fuzzy
 msgid ""
 "We are never to be afraid of anything that man can do to us, because we can "
 "never be separated from God. Whatever happens to a believer is part of His "
@@ -3761,20 +3959,30 @@ msgid ""
 "sparrow, how much more will He note the persecution or loss of one of His "
 "children? Stay true to Him. It will be worth it all."
 msgstr ""
+"Wir sind nie Angst, etwas zu sein, dass der Mensch für uns tun kann, weil "
+"wir niemals von Gott getrennt werden. Was auch immer geschieht zu einem "
+"Gläubigen ist Teil seines Plans, so Treue wird hoch geschätzt. Wenn er den "
+"Tod eines kleinen Spatz markiert, wie viel mehr wird er beachten, die "
+"Verfolgung oder Verlust eines seiner Kinder? Bleiben Sie ihm treu. Es lohnt "
+"sich alles."
 
 #: commandments_app.Commandment/title:37
+#, fuzzy
 msgid "Follow Me"
-msgstr ""
+msgstr "Folge mir"
 
 #: commandments_app.Commandment/title:38
+#, fuzzy
 msgid "Be moved with inner compassion with the people around you"
-msgstr ""
+msgstr "Werden mit inneren Mitgefühl mit den Menschen um Sie herum bewegt"
 
 #: commandments_app.Commandment/title:39
+#, fuzzy
 msgid "Pray for laborers, to sow and harvest"
-msgstr ""
+msgstr "Bete für Arbeiter, zu säen und zu ernten"
 
 #: commandments_app.Commandment/devotional:39
+#, fuzzy
 msgid ""
 "<p>Jesus concluded His ministry in Galilee, seeking disciples. Here we are given a glimpse into Jesus’s constant task of recruiting disciples and challenging them to give up their ambitions and follow Him.</p>\n"
 "\n"
@@ -3782,12 +3990,19 @@ msgid ""
 "\n"
 "<p>Do the unevangelized reserve a change to hear the gospel? “Certainly”, we respond, yet our real answer is betrayers by how little we pray for “workers” to go, by how little we care for people who have never heard, and how little we help those who are going. Be warned: as you pray for workers, you may be asking God to send you!</p>"
 msgstr ""
+"<P> Jesus schloß seinen Dienst in Galiläa, sucht Jünger. Hier werden wir einen Blick in Jesus die ständige Aufgabe gegeben rekrutieren Schüler und herausfordernd sie ihre Ambitionen aufzugeben und ihm zu folgen. </ P>\n"
+"\n"
+"<P> Obwohl viele (oder die meisten?) Wurden auf ihre eigenen Interessen konzentriert und ging von Jesus Herausforderung weg zu ihnen (Lukas 9: 57-61) Er sagte ihnen: „Niemand, seine Hand an den Pflug gelegt hat und zurückzublicken ist fit für das Reich Gottes“(9:61). Halbherzige Verpflichtungen nie dauern. </ P>\n"
+"\n"
+"<P> Setzen Sie das evangelisierten Reserve eine Änderung, das Evangelium zu hören? „Sicher“, antworten wir, noch unsere wirkliche Antwort ist Verrätern, wie wenig wir beten für „Arbeiter“ zu gehen, wie wenig wir Pflege für Menschen, die noch nie gehört haben, und wie wenig wir helfen denen, die gehen werden. Seien Sie gewarnt: wie Sie für Arbeiter beten, können Sie Gott bitten, Sie zu senden </ p>"
 
 #: commandments_app.Commandment/title:40
+#, fuzzy
 msgid "Proclaim the gospel of Jesus Christ to all nations"
-msgstr ""
+msgstr "Verkündet das Evangelium von Jesus Christus zu allen Völkern"
 
 #: commandments_app.Commandment/devotional:40
+#, fuzzy
 msgid ""
 "<p>In a mission conference, the banner across the front of the auditorium stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad of excuses for why we cannot go to preach the gospel. </p>\n"
 "\n"
@@ -3795,51 +4010,74 @@ msgid ""
 "\n"
 "<p>God asked the question: “Then I heard the voice of the Lord saying, ‘Whom shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we could appreciate Isaiah’s courage, or was it a glimpse into the perpetual heavenly issue? God is asking, “Who cares about our agenda for telling the world about Jesus?” </p>"
 msgstr ""
+"<P> In einer Missionskonferenz, die Banner über die Vorderseite des Auditoriums erklärten: „Nehmen Sie nicht die‚Go‘aus dem Evangelium.“ Wir natürlich eine Vielzahl von Entschuldigungen für warum wir nicht gehen können, das Evangelium zu predigen. </ P>\n"
+"\n"
+"Seine letzte Ladung <p> Der auferstandene Christus fünfmal wiederholte: „Gehen Sie in der ganzen Welt“ Tod Christi am Kreuz war auf dem ganzen Welt verkündet werden. Es gibt keine Nachrichten dramatischer als das: „Gott hat ihn, der keine Sünde für uns zur Sünde sein mußte, so dass wir in ihm vielleicht die Gerechtigkeit Gottes“ (2 Kor 5,21). </ P>\n"
+"\n"
+"<P> Gott stellte die Frage: „Und ich hörte die Stimme des Herrn sagen:‚Wen soll ich senden? ? Und wer wird für uns gehen‘Und ich sagte:‚Hier I. ich ist Senden‘Er sagte:‚Gehe hin und sprich zu diesem Volk‘„(Jes 6: 8-9).. War dies geschrieben nur so können wir Jesajas Mut, oder war es ein Blick in die ewige himmlische Ausgabe schätzen? Gott fragt: „Wer über unsere Agenda kümmert sich die Welt über Jesus für erzählen?“ </ P>"
 
 #: commandments_app.Commandment/title:41
+#, fuzzy
 msgid "Heal the sick, clean lepers, raise the dead, cast out demons."
 msgstr ""
+"Heilt Kranke, reinigt Aussätzige, weckt Tote auf, Dämonen auszutreiben."
 
 #: commandments_app.Commandment/title:42
+#, fuzzy
 msgid "Be wise as serpants"
-msgstr ""
+msgstr "Seien Sie klug wie die Schlangen"
 
 #: commandments_app.Commandment/title_negative:42
+#, fuzzy
 msgid "Do not throw your pearls to pigs"
-msgstr ""
+msgstr "Werfen Sie Ihre Perlen nicht an Schweine"
 
 #: commandments_app.Commandment/devotional:42
+#, fuzzy
 msgid ""
 "Serpants are considered to be wise, that is shrewd, smart, cunning and "
 "cautious. Jesus was a master at turning the traps of the Jews into "
 "unanswerable dilemmas. He was never fooled into condemming Rome’s leaders or"
 " approving their corruption. He was always one step ahead of his accusers."
 msgstr ""
+"Serpants gilt als weise sein, das ist klug, intelligent, schlau und "
+"vorsichtig. Jesus war ein Meister in den Fallen der Juden in unanswerable "
+"Dilemmas drehen. Er war nie Führer in condemming Roms täuschen oder deren "
+"Korruption Genehmigung. Er war immer ein Schritt voraus zu sein Ankläger."
 
 #: commandments_app.Commandment/title:43
+#, fuzzy
 msgid "Tell to people boldly, what Jesus says to you"
-msgstr ""
+msgstr "Sagen Sie den Menschen kühn, was Ihnen Jesus sagt"
 
 #: commandments_app.Commandment/title_negative:43
+#, fuzzy
 msgid "Do not be afraid of them"
-msgstr ""
+msgstr "Haben Sie keine Angst vor ihnen"
 
 #: commandments_app.Commandment/devotional:43
+#, fuzzy
 msgid ""
 "<p>Fear is a paralyzing emotion impeding development in every area of life. Many Christians live privately, allowing only a few people to know the well, and their fear of criticism, rejection, or ridicule keeps them from boldly telling others about the most important relationship in their lives.</p> \n"
 "\n"
 "<p>We must openly and unashamedly tell to everyone we can about what God has taught us in private. This is contrary to contemporary views of political correctness that tell us to avoid controversy at any cost for fear of offending someone.</p>"
 msgstr ""
+"<P> Die Angst ist eine lähmende Gefühl Entwicklung in allen Bereichen des Lebens zu behindern. Viele Christen leben privat, so dass nur wenige Menschen, die gut kennen, und ihre Angst vor Kritik, Ablehnung oder Spott hält sie davon ab kühn andere über die wichtigste Beziehung in ihrem Leben zu erzählen. </ P>\n"
+"\n"
+"<P> Wir offen müssen und ohne Scham zu jedem sagen, wir können über das, was Gott uns in privaten gelehrt hat. Dies steht im Gegensatz zu zeitgenössischen Ansichten der politischen Korrektheit, die uns von jemandem zu beleidigen Kontroverse um jeden Preis aus Angst zu vermeiden sagen. </ P>"
 
 #: commandments_app.Commandment/title:44
+#, fuzzy
 msgid "Love God above all"
-msgstr ""
+msgstr "Liebe Gott über alles"
 
 #: commandments_app.Commandment/title:45
+#, fuzzy
 msgid "Deny yourself, take up a cross, and follow Jesus"
-msgstr ""
+msgstr "Verweigern Sie sich, nehmen Sie ein Kreuz auf, und folgen Sie Jesus"
 
 #: commandments_app.Commandment/devotional:45
+#, fuzzy
 msgid ""
 "<ol type=1>\n"
 "<li>First, if you are going to follow Christ, you must decide once and for all not to pay attention to yourself, to give up self-interest, and, in effect, to go against your pride or profit. Ouch! When have you given up something for Christ? Paul wrote, “Such things that once were gains to me these have I counted loss for Christ” (Phil 3:7).</li>\n"
@@ -3849,39 +4087,58 @@ msgid ""
 "\n"
 "<p>These three actions indicate a true conversion and why the power and filling of the Spirit is indispensable.</p>"
 msgstr ""
+"<Ol type = 1>\n"
+"<Li> Erstens, wenn Sie Christus folgen wollen, müssen Sie sich entscheiden, ein für alle Mal nicht die Aufmerksamkeit auf sich zu zahlen, Eigennutz aufgeben, und in der Tat gegen Ihren Stolz oder Gewinn zu gehen. Autsch! Wann haben Sie etwas für Christus aufgegeben? Paulus schrieb: „Solche Dinge, die einmal Gewinne zu mir waren, diese habe ich gezählt Verlust für Christus“ (Phil 3: 7). </ Li>\n"
+"<Li> Zweitens war es notwendig, dass ein Schüler „sein Kreuz auf sich zu nehmen.“ Der Verurteilte Kräfte war sein eigenes Kreuz zu seiner Hinrichtung zu tragen, wie Jesus es tat. Aber was der Verurteilte unter Verpflichtung hat, tut der Jünger Christi bereitwillig. Er nimmt gern die Schmerz, Scham, Scham und Verfolgung, die sein Schicksal unvermeidlich sein wird, wenn er an Jesus treu bleibt. </ Li>\n"
+"<Li> Drittens muss er „behalten ständig folgende [Jesus]“. Dies bedeutet, dass Jesus (1 Petr 2,21), vor allem durch gehorchen seine Gebote (Joh 15,14) „für uns gelitten und uns ein Beispiel gegeben, sollten wir seine Schritte folgen“. </ Li>\n"
+"</ Ol>\n"
+"\n"
+"<P> Diese drei Aktionen zeigen eine wahre Bekehrung und warum die Kraft und die Füllung des Geistes ist unverzichtbar. </ P>"
 
 #: commandments_app.Commandment/title:46
+#, fuzzy
 msgid "Receive him whom I will send"
-msgstr ""
+msgstr "Erhalten Sie ihn, den ich schicken"
 
 #: commandments_app.Commandment/title_negative:46
+#, fuzzy
 msgid "It is a sin to despise one’s neighbor"
-msgstr ""
+msgstr "Es ist eine Sünde, den Nächsten zu verachten"
 
 #: commandments_app.Commandment/title:47
+#, fuzzy
 msgid "Be generous in secret"
-msgstr ""
+msgstr "Seien Sie großzügig im Geheimen"
 
 #: commandments_app.Commandment/title:48
+#, fuzzy
 msgid "Blessed is he who does not offend Me"
-msgstr ""
+msgstr "Selig ist, wer mich nicht beleidigen"
 
 #: commandments_app.Commandment/devotional:48
+#, fuzzy
 msgid ""
 "<p>Who do you want as your worst enemy: the world or God? Unfortunately, everyone has to choose. If you love the world, it may treat you well temporarily, but it is a fickle and cruel taskmaster. However, such a compromise with the world makes God an enemy: “Whoever therefore wants to be a friend of the world makes himself an enemy of God” (James 4:4). But friendship with God inevitable provokes the wraith of the world system.</p>\n"
 "\n"
 "<p>Jesus was hated at His birth and throughout His ministry. The disciples had to accept inevitable persecution or walk away, just as the seed sown in “rocky places” (Matt 13:20) is the one “who hears the word and at once receives it with joy. But since he has no root, he lasts only a short time. When trouble or persecution comes because of the Word, he quickly falls away” (Matt 13:21). We must decide to follow Jesus knowing that it will not be a popular decision.</p>"
 msgstr ""
+"<P> Wen Sie als Ihr schlimmster Feind wollen: die Welt oder Gott? Leider hat jeder zu wählen. Wenn Sie die Welt lieben, kann es Sie auch vorübergehend behandeln, aber es ist ein launischer und grausam Zuchtmeister. Jedoch ist ein solcher Kompromiss mit der Welt macht Gott ein Feind: „Wer also ein Freund der Welt sein will, macht sich ein Feind Gottes“ (Jakobus 4: 4). Aber Freundschaft mit Gott unvermeidlich provoziert die Wraith des Weltsystems. </ P>\n"
+"\n"
+"<P> Jesus wurde bei seiner Geburt und während seines Wirkens gehaßt. Die Jünger hatten unvermeidlich Verfolgung oder gehen weg zu akzeptieren, so wie die Samen in „felsigen“ (Mt 13.20) gesät ist derjenige, „der das Wort hört und sofort erhält es mit Freude. Aber da er keine Wurzel hat, dauert er nur eine kurze Zeit. Wenn Probleme oder Verfolgung um des Wortes kommt, fällt er schnell weg“(Mt 13,21). Wir müssen entscheiden, Jesus zu folgen, zu wissen, dass es keine populäre Entscheidung sein. </ P>"
 
 #: commandments_app.Commandment/title:49
+#, fuzzy
 msgid "Come to Me, all who are tired and burdened, and I will give you rest"
 msgstr ""
+"Kommt her zu mir, alle, die müde und belastet, und ich werde euch Ruhe geben"
 
 #: commandments_app.Commandment/title:50
+#, fuzzy
 msgid "Take responsibility and learn from Jesus"
-msgstr ""
+msgstr "Verantwortung übernehmen und lernen Sie von Jesus"
 
 #: commandments_app.Commandment/devotional:50
+#, fuzzy
 msgid ""
 "<p>In the context of revealing the Father and granting rest to the one who comes to Jesus in trust, Jesus challenges his followers, “Take my yoke upon you and learn from Me”. The yoke, with regard to animals, means control and submission to your owner, but with humans, the imagery signifies slavery to Jesus and His will.</p>\n"
 "\n"
@@ -3889,29 +4146,40 @@ msgid ""
 "\n"
 "<p>As we become like Him, we too become trustworthy, modeling the peace that only truth can bring to a soul. Let’s become, and make, disciples like Jesus.</p>"
 msgstr ""
+"<P> Im Rahmen des Vaters offenbart und die Gewährung von Ruhe dem, der in Vertrauen zu Jesus kommt, fordert Jesus seine Nachfolger, „mein Joch auf euch nehmen und lernt von mir“. Das Joch, in Bezug auf Tiere, bedeutet die Kontrolle und Unterwerfung zu Ihrem Besitzer, sondern mit Menschen, die Bilder bedeuten Sklaverei zu Jesus und seinem Willen. </ P>\n"
+"\n"
+"<P> In der hebräischen Welt, ist ein Student unter dem Joch seines Lehrer, das bedeutet, dass er seine Lehre einreicht. Dieser erste Satz wird dann mit dem zweiten Satz parallel: „und lernt von mir“. Das Wort bedeutet lernen, einen „Schüler oder Lernenden“ zu werden. </ P>\n"
+"\n"
+"<P> Wenn wir ihn werden wie auch wir vertrauenswürdig geworden, den Frieden der Modellierung, die einzige Wahrheit zu einer Seele bringen kann. Lassen Sie uns werden, und machen, Jünger, wie Jesus. </ P>"
 
 #: commandments_app.Commandment/title:51
+#, fuzzy
 msgid "Calm words are a tree of life"
-msgstr ""
+msgstr "Calm Worte sind ein Baum des Lebens"
 
 #: commandments_app.Commandment/title:52
+#, fuzzy
 msgid "Do the will of the Father"
-msgstr ""
+msgstr "Haben den Willen des Vaters"
 
 #: commandments_app.Commandment/title:53
+#, fuzzy
 msgid ""
 "Give to the emperor what is from the emperor, and to God what is from God"
-msgstr ""
+msgstr "Gib dem Kaiser, was des Kaisers ist, und Gott, was von Gott"
 
 #: commandments_app.Commandment/title:54
+#, fuzzy
 msgid "Receive the Kingdom of God as a child"
-msgstr ""
+msgstr "Empfangen Sie das Reich Gottes als Kind"
 
 #: commandments_app.Commandment/title:55
+#, fuzzy
 msgid "Let the children come to Me"
-msgstr ""
+msgstr "Lassen Sie die Kinder zu mir kommen"
 
 #: commandments_app.Commandment/devotional:55
+#, fuzzy
 msgid ""
 "These children wanted to know Jesus personally. Jesus knew that the future "
 "of His church was in the hands of these little children. He also knew that "
@@ -3922,51 +4190,74 @@ msgid ""
 "willingness to trust whatever Jesus says has a warm welcome from Jesus now "
 "and later in His kingdom."
 msgstr ""
+"Diese Kinder wollten Jesus persönlich kennen. Jesus wusste, dass die Zukunft"
+" seiner Kirche in den Händen dieser kleinen Kinder war. Er wußte auch, dass "
+"die bescheidene, offene Empfänglichkeit dieser Kinder in krassem Gegensatz "
+"zu dem hartnäckigen Stolz der religiösen und intellektueller Menschen war, "
+"die ihre Ausbildung, Stolz lassen, oder Raffinesse des einfachen Glauben zu "
+"überwinden brauchte, an Jesus zu glauben. Jedermann jedes mögliche Alter, "
+"die im Glauben mit der Bereitschaft zu Christus kommt zu vertrauen, was "
+"Jesus sagt, hat ein herzliches Willkommen von Jesus jetzt und später in "
+"seinem Reich."
 
 #: commandments_app.Commandment/title:56
+#, fuzzy
 msgid "Eliminate any cause of temptation"
-msgstr ""
+msgstr "Beseitigen Sie die Ursache der Versuchung"
 
 #: commandments_app.Commandment/title:57
+#, fuzzy
 msgid "Be united"
-msgstr ""
+msgstr "Vereint sein"
 
 #: commandments_app.Commandment/title:58
+#, fuzzy
 msgid "Honor your father and your mother"
-msgstr ""
+msgstr "Ehre deinen Vater und deine Mutter"
 
 #: commandments_app.Commandment/title:59
+#, fuzzy
 msgid "Love your neighbor as yourself"
-msgstr ""
+msgstr "Liebe deinen Nächsten wie dich selbst"
 
 #: commandments_app.Commandment/title:60
+#, fuzzy
 msgid "Become like a servant"
-msgstr ""
+msgstr "Werden Sie wie ein Diener"
 
 #: commandments_app.Commandment/devotional:60
+#, fuzzy
 msgid ""
 "<p>One of Jesus’s most remarkable teachings concerned His view of leadership. He marked a distinction between how the believer leads and how the unsaved world leads: in the world, some “lord it over,” or control by “authority,” but this was not the way His followers were to lead their families and ministries.</p>\n"
 "\n"
 "<p>Jesus did not say there would be no leaders in His new order, but he said they would lead from entirely different principles. The only way a person can be a leader is if someone is following him! The question is, why do people follow any leader? Is it out of fear or anger or public criticism? Is it the charisma, importance, wealth, or popularity of a leader that attracts others to blindly follow him? Or is it due to the selfless, caring acts and edifying commitment of a servant-leader who seeks what is best for his followers rather than himself?</p>"
 msgstr ""
+"<P> Einer von Jesus bemerkenswertesten Lehren Seine Sicht der Führung besorgt. Er markiert einen Unterschied zwischen dem, wie der Gläubige führt und wie die nicht gespeicherten Welt führt: in der Welt, einige „Herr über“ oder Kontrolle durch „Autorität“, aber das war nicht die Art und Weise seine Nachfolger waren ihre Familien und Ministerien führen. </ p>\n"
+"\n"
+"<P> Jesus hat nicht gesagt, es gibt keine Führer in seiner neuen Ordnung sei, aber er sagte, dass sie aus ganz anderen Prinzipien führen würde. Der einzige Weg, eine Person, ein Führer sein kann, ist, wenn jemand ihn zu folgen! Die Frage ist, warum folgen Menschen jeden Führer? Ist es aus Angst oder Wut oder öffentlichen Kritik? Ist es das Charisma, Bedeutung, Reichtum oder Beliebtheit eines Führers, die andere zieht ihn blind folgen? Oder ist es auf Grund der selbstlos, wirkt sich sorgend und erbaulichen Engagement eines Dieners-Führer, der sucht, was für seine Anhänger am besten ist, anstatt sich selbst? </ P>"
 
 #: commandments_app.Commandment/title:61
+#, fuzzy
 msgid "Love the Lord your God with all your heart"
-msgstr ""
+msgstr "Liebe den Herrn, deinen Gott mit ganzem Herzen"
 
 #: commandments_app.Commandment/title:62
+#, fuzzy
 msgid "Love the Lord your God with all your soul"
-msgstr ""
+msgstr "Liebe den Herrn, deinen Gott, mit deiner ganzen Seele"
 
 #: commandments_app.Commandment/title:63
+#, fuzzy
 msgid "Love the Lord your God with all your mind"
-msgstr ""
+msgstr "Liebe den Herrn, deinen Gott mit deinem ganzen Verstand"
 
 #: commandments_app.Commandment/title:64
+#, fuzzy
 msgid "Be ready for the coming of Jesus"
-msgstr ""
+msgstr "Seien Sie bereit für das Kommen Jesu"
 
 #: commandments_app.Commandment/devotional:64
+#, fuzzy
 msgid ""
 "<p> In Luke 12:35-40, Jesus begins to gird up your loins and have the lamp burning. He then called on to be vigilant and ready for the arrival of the Son of Man.</p>\n"
 "\n"
@@ -3976,12 +4267,21 @@ msgid ""
 "\n"
 "<p><i>\"Blessed are those slaves whom the Lord will find waking when he comes.\" (Luke 12:37) </i></p>"
 msgstr ""
+"<P> In Lukas 12: 35-40, beginnt Jesus deine Lenden umgürtet und die Lampe brennen haben. Er rief dann auf, wachsam zu sein und bereit für die Ankunft des Sohns des Menschen. </ P>\n"
+"\n"
+"<P> Wir wissen kaum das Wort Lende heute. Ein Lendenschurz ist ein Kleidungsstück, das nur aus einem Baumwolltuch besteht, die um die Lenden getragen wird - die Hüften. Die Lenden sind das Zentrum des Körpers. Der hebräische Ausdruck „die Lenden umgürtet“ hat mehr mit einer Tunika zu tun, eine Unterwäsche. Wenn etwas getan werden musste schnell wurde die Tunika um die Lenden mit einem Ledergürtel gebunden. Es war eine Ausgangsposition von jemandem, der Maßnahmen ergreifen musste. Im Osten trugen Männer und Frauen lange Kleider, die die Füße erreicht. Der Teppich wurde mit dem Band gehalten, so dass die Füße und Beine mehr Bewegungsfreiheit hatten. Wenn die Lenden girdling wurde der lange Mantel aufgenommen und in das Band gelegt, oder durch das Band nach oben gezogen, wenn der Arbeit oder auf Reisen zu tun vorbereitet. </ P>\n"
+"\n"
+"<P> Jemand, der seine lange Kleidung zieht und bindet es um seine Lenden mit einem Gürtel, so kann er schnell bewegen. Die Israeliten bereit, in der Nacht der Abreise aus Ägypten sein mußten, umgürtet die Lenden, um sofort verlassen zu können. (Exodus 12,11). Elia umgürtet seine Lenden für Ahab zu eilen (1 Könige 18.46). Wir müssen auch bereit sein, die Ankunft des Sohns des Menschen zu allen Zeiten zu erwarten. </ P>\n"
+"\n"
+"<P> <i> „Selig sind die Sklaven, die der Herr Wach finden, wenn er kommt.“ (Lk 12.37) </ i> </ p>"
 
 #: commandments_app.Commandment/title:65
+#, fuzzy
 msgid "Use your talents to honor the Father"
-msgstr ""
+msgstr "Verwenden Sie Ihre Fähigkeiten, den Vater zu ehren"
 
 #: commandments_app.Commandment/devotional:65
+#, fuzzy
 msgid ""
 "<p>There is no question that we are all unworthy of praise, but the word “undeserving” (Luke 17:10) means to be “useless, of no use or profit, or worthless.” Such a person is like the steward who received a talent of silver from his master, but was afraid to do anything with it and simply returned it to his master. There is no indication in the text that any oh the three stewards were told what to do with the wealth they had been given. The one who produced nothing more than what he was given was “useless” because he was unproductive.</p>\n"
 "\n"
@@ -3991,16 +4291,26 @@ msgid ""
 "\n"
 "<p>The judgment seat of Christ is all about discerning who is “good” (profitable, useful) and who is “bad” (worthless, cowardly) for the kingdom’s sake (2 Cor 5:10). It is not about who has been good or bad morally but about who has contributed to expanding the kingdom around the globe without having to be told how – just because they know it is their Savior’s desire. All the rewards of heaven are promised to this kind of obedient believer.</p>"
 msgstr ""
+"<P> Es ist keine Frage, dass wir alle unwürdig des Lobes sind, aber das Wort „Unwürdigen“ (Lk 17,10) bedeutet „nutzlos, keinen Nutzen oder Gewinn oder wertlos“ zu sein. Eine solche Person wie der Verwalter ist die hat ein Talent Silber von seinem Meister, aber hatte Angst, mit ihm etwas zu tun und einfach kehrte er zu seinem Herrn. Es gibt keinen Hinweis in dem Text, der alle oh die drei Stewards wurden gesagt, was mit dem Vermögen zu tun, die ihnen gegeben worden waren. Derjenige, der nichts produziert mehr als das, was er gegeben war „nutzlos“, weil er unproduktiv war. </ P>\n"
+"\n"
+"<P> Die Arbeitgeber werden frustriert, wenn sie ihre Mitarbeiter sagen müssen, was jeden Tag zu tun, desto besser Mitarbeiter weiß, was getan werden muss, und nutzt seine Erfindungsgabe, Kreativität und Fähigkeiten der Arbeitgeber erfolgreich zu machen und seine Mission zu erfüllen. Jeder Arbeitgeber träumt von dieser Art des Mitarbeiters. </ P>\n"
+"\n"
+"<P> Die klassische Illustration, wenn dieses Prinzip die Große Kommission. Jesus sagte der Zwölf und andere Zuhörern um sicherzustellen, dass das Evangelium aller Zunge, Stamm, Volk gepredigt wird, und die ethnische Volksgruppe auf der Erde (Mt 24:14. 28: 19-20). Er sagte nie, wie es getan werden sollte oder wer sollte es tun. Er erwartet, dass der profitable Diener, es herauszufinden, so dass er den Diener für seinen kreativen Dienst belohnen kann. </ P>\n"
+"\n"
+"<P> Der Richterstuhl Christi ist alles über anspruchsvollen, die „gut“ (rentabel, nützlich) ist und wer „schlecht“ (wertlos, feige) im Interesse Reich (2 Kor 5,10). Es geht nicht darum, die moralisch gut oder schlecht war, aber über die rund um den Globus beigetragen hat, das Reich zu erweitern, ohne, wie gesagt zu haben - nur weil sie wissen, dass es ihren Heiland ist Wunsch. Alle Belohnungen des Himmels auf diese Art von gehorsam Gläubigen versprochen. </ P>"
 
 #: commandments_app.Commandment/title:66
+#, fuzzy
 msgid "Celebrate the Lord’s supper"
-msgstr ""
+msgstr "Feiern Sie das Abendmahl"
 
 #: commandments_app.Commandment/title:67
+#, fuzzy
 msgid "Make disciples of all nations"
-msgstr ""
+msgstr "Machet zu Jüngern alle Völker"
 
 #: commandments_app.Commandment/devotional:67
+#, fuzzy
 msgid ""
 "As Jesus departed the earth, He gave His five hundred disciples in Galilee "
 "this last command. It “means not only to learn, but to become attached to "
@@ -4010,20 +4320,31 @@ msgid ""
 "which ties together “preached the gospel” with “make disciples” as their "
 "core ministry."
 msgstr ""
+"Als Jesus die Erde verließ, gab er seine fünfhundert Jünger in Galiläa "
+"diesen letzten Befehl. Es „bedeutet nicht nur zu lernen, sondern an die "
+"Lehrer befestigt zu werden, und seinen Nachfolger in Lehre und Lebensführung"
+" sein“ (Strongs Greek Lexicon). Es wird verwendet, einmal mehr im Neuen "
+"Testament in der Apostelgeschichte 14.21, „wenn sie das Evangelium in dieser"
+" Stadt gepredigt hatten und machten viele Jünger“, die zusammen binden "
+"„predigte das Evangelium“ mit „zu Jüngern machen“, wie ihr Kern Ministerium."
 
 #: commandments_app.Commandment/title:68
+#, fuzzy
 msgid "Get baptized"
-msgstr ""
+msgstr "Lassen Sie sich taufen"
 
 #: commandments_app.Commandment/title:69
+#, fuzzy
 msgid "Always keep in mind that Jesus is with us"
-msgstr ""
+msgstr "Denken Sie immer daran, dass Jesus mit uns ist"
 
 #: commandments_app.Commandment/title:70
+#, fuzzy
 msgid "Have faith in God"
-msgstr ""
+msgstr "Habe Vertrauen in Gott"
 
 #: commandments_app.Commandment/devotional:70
+#, fuzzy
 msgid ""
 "<p>Teaching moments are spontaneous opportunities to illustrate an important principle or truth. During a Jewish holiday, Jesus and Hid disciples had been walking back and forth from Bethany to Jerusalem. The previous morning, they walked past a fig tree that was barren of fruit. Strangely, He declared, “let no one eat fruit from you ever again”. He was setting up a future teaching moment. \n"
 "The next morning, walking back into Jerusalem, they passed this same fig tree, only now “the fig tree dried up from the roots”. Shocked, Peter exclaimed, “Rabbi, look! The fig tree which You cursed was withered away”, to which Jesus replied, “Have faith in God”.</p>\n"
@@ -4038,20 +4359,36 @@ msgid ""
 "\n"
 "<p>Earlier Jesus had said, “With men it is impossible, but not with God. for with God all things are possible” (Mark 10:27). As committed as you are to His word and purpose in life, you can count on His power to assist you to accomplish His will and purpose for your life. “Have faith…”</p>"
 msgstr ""
+"<P> Lehr Momente sind spontane Gelegenheiten ein wichtiges Prinzip oder Wahrheit zu illustrieren. Während eines jüdischen Feiertag, Jesus und Hid Jünger waren hin und her von Bethanien nach Jerusalem zu Fuß. Der bisherige Morgen, sie gingen an einen Feigenbaum, der Frucht war unfruchtbar. Seltsamerweise erklärte er, „lassen Sie essen niemand Frucht von Ihnen immer wieder“. Er war die Einrichtung eines zukünftigen Lehr Moment auf.\n"
+"Am nächsten Morgen zurück in Jerusalem zu Fuß, gingen sie den gleichen Feigenbaum, nur jetzt „der Feigenbaum von den Wurzeln ausgetrocknet“. Schockiert, Peter rief: „Rabbi, schau! Der Feigenbaum, der Sie verflucht war verdorrt“, zu dem Jesus antwortete:‚Glauben an Gott‘. </ P>\n"
+"\n"
+"<P> Die Jünger waren ein unerschütterliches Vertrauen in den allmächtigen Gott haben, der alles tun kann, was er will für seine eigenen Zwecke zu tun. Der Schlüssel zu einem unbedingten Glauben ist ein „no-Frage-was“ Vertrauen zu haben und eine „alles-ist-möglich“ Art von Vertrauen in dem Gott, den sie interessiert. durch Er zur Zeit still zu sein scheint, ist er immer präsent und die Dinge können sich jederzeit ändern Er will. </ p>\n"
+"\n"
+"<P> Wenn Sie in vollem Umfang Ihnen das Leben geben über Gott (Röm 12, 1-2), dann alles, was Gott erlaubt geschieht in Ihrem Leben in Ordnung ist. Es gehört zu ihm. Er kann damit machen, was er will, auch wenn das bedeutet, Tragödien oder Wunder Interventionen. Entweder man ist in Ordnung, da jetzt Ihr Leben Jesus gehört. Er macht keine Fehler. </ P>\n"
+"\n"
+"<P> Derjenige, der lernt voll vertrauen Gott kennt, kann er mit vertraut werden jedoch Er kann beschließen, seine Gebete zu beantworten. Jesus setzt sich in den nächsten Vers: „Denn wahrlich, ich sage euch: Wer zu diesem Berge sagt:\" entfernt und ins Meer geworfen werden, und zweifelte nicht in seinem Herzen, glaubt aber, dass diese Dinge, die er sagt, wird sein done, wird er, was er sagt.“</ p>\n"
+"\n"
+"<P> Jesus, durch Übertreibungen mit, illustrierte die praktisch unbegrenzten Möglichkeiten für die Gläubigen mit Glauben, die „nicht in seinem Herzen zweifeln“. </ P>\n"
+"\n"
+"<P> Früher Jesus gesagt hatte: „Bei den Menschen ist es unmöglich, aber nicht bei Gott. denn bei Gott sind alle Dinge möglich“(Markus 10,27). Als engagierte, wie Sie zu seinem Wort und Sinn im Leben sind, können Sie auf seine Macht zählen Sie zu unterstützen, seinen Willen und Zweck für Ihr Leben zu erreichen. „Glauben hat ...“ </ p>"
 
 #: commandments_app.Commandment/title:71
+#, fuzzy
 msgid "Love the Lord your God with all your strenght"
-msgstr ""
+msgstr "Liebe den Herrn, deinen Gott mit aller Kraft"
 
 #: commandments_app.Commandment/title:72
+#, fuzzy
 msgid "Trust that the Spirit will guide you"
-msgstr ""
+msgstr "Vertrauen Sie, dass der Geist führt Sie"
 
 #: commandments_app.Commandment/title_negative:72
+#, fuzzy
 msgid "Do not worry about what to say"
-msgstr ""
+msgstr "Sie nicht darum kümmern, was zu sagen"
 
 #: commandments_app.Commandment/devotional:72
+#, fuzzy
 msgid ""
 "Jesus gave His disciples instructions for how to respond to inevitable "
 "persecution. They were commanded to “stop worrying” (implying that they were"
@@ -4061,24 +4398,39 @@ msgid ""
 "John, … they marveled. And they realized that they had been with Jesus” "
 "(Acts 4:13)."
 msgstr ""
+"Jesus gab seine Jüngern Anweisungen, wie unvermeidliche Verfolgung zu "
+"reagieren. Sie wurden befohlen, „aufhören, sich Sorgen“ (was bedeutet, dass "
+"sie sich Gedanken) und „ständig sagen“, was der Geist ihre Meinung zu der "
+"Zeit (Joh 14,26) gebracht. Was haben wir von seinem Wort gelernt haben, wird"
+" in unseren Köpfen zurückkommen, wenn wir sie brauchen: „Nun, wenn sie an "
+"die Freudigkeit des Petrus und Johannes sah, ... sie verwunderte. Und sie "
+"erkannten, dass sie mit Jesus“waren (Apg 4,13)."
 
 #: commandments_app.Commandment/title:73
+#, fuzzy
 msgid "Stay alert and pray not to fall into temptation"
-msgstr ""
+msgstr "Bleiben Sie wachsam und beten nicht in Versuchung fallen"
 
 #: commandments_app.Commandment/devotional:73
+#, fuzzy
 msgid ""
 "<p>One of the many attributes of Jesus was His ability to be ready for whatever happened. What seemed to hurt Him most was the selfishness or disinterest of His closest friends when He knew they would e tempted and fail Him. \n"
 "To the very end, Jesus was committed to training His disciples. He was telling them the secret of inner fortitude. Three times Jesus interrupted His prayers to check on His disciples who had lost interest and falls asleep. Each time, Jesus exhorted all three to “Stay awake”, or to stay alert for spiritual dangers, deceptions, or disillusionments. They were to “pray”, which expresses total dependence on the power and presence of God.</p>\n"
 "\n"
 "<p>The “spirit”, which is willing, must be strengthened through prayer to overcome the weakness of the self-interest of the flesh. </p>"
 msgstr ""
+"<P> Einer der viele Attribute von Jesus war seine Fähigkeit, bereit zu sein, was auch immer passiert ist. Was schien ihm am meisten weh zu tun war, den Egoismus oder Desinteresse seiner engsten Freunde, wenn er wusste, dass sie versucht, E und ihn scheitern.\n"
+"Zum Schluss wurde Jesus verpflichtet seine Jünger zu trainieren. Er war ihnen das Geheimnis der inneren Stärke zu erzählen. Dreimal Jesus unterbrach seine Gebete auf seine Jünger zu überprüfen, wer Interesse verloren hatte und schläft ein. Jedes Mal, ermahnte Jesus alle drei „wach zu bleiben“, oder für geistige Gefahren, Täuschungen, wachsam zu bleiben, oder Enttäuschungen. Sie waren zu „beten“, die auf die Kraft und Gegenwart Gottes totale Abhängigkeit zum Ausdruck bringt. </ P>\n"
+"\n"
+"<P> Der „Geist“, der bereit ist, muss durch das Gebet gestärkt werden, um die Schwäche der Eigennutz des Fleisches zu überwinden. </ P>"
 
 #: commandments_app.Commandment/title:74
+#, fuzzy
 msgid "Fear Him"
-msgstr ""
+msgstr "Ihn fürchten"
 
 #: commandments_app.Commandment/devotional:74
+#, fuzzy
 msgid ""
 "<p>Jesus commanded his disciples to be fearless even when threatened with physical death for proclaiming the good news. At worst, the opposition can only bring about physical death, which is meaningless in comparison to Him would likely result in a death sentence from the state, but is was not to be feared, is was to be welcomed! \n"
 "God commands us to fear Him. Whomever you fear, you will obey. When people fear the authorities are watching or will find about their actions, they tend to obey to the laws. \n"
@@ -4088,12 +4440,21 @@ msgid ""
 "\n"
 "<p>If we do not fear God’s promise of chastisement, then we tend to be morally loose. If we fear that He will do what He says in His word, then we begin to take His commands seriously. This is a healthy motivation to learn what God expects of us as His children – this is where wisdom begins.</p>"
 msgstr ""
+"<P> befahl Jesus seine Jünger zu sein, auch furchtlos, wenn es mit dem physischen Tod für verkünden die gute Nachricht bedroht. Im schlimmsten Fall kann die Opposition nur über die physischen Tod bringen, was im Vergleich zu ihm sinnlos ist in einem Todesurteil wahrscheinlich aus dem Zustand führen würde, ist aber nicht zu befürchten war, ist zu begrüßen werden!\n"
+"Gott befiehlt uns, ihn zu fürchten. Wen auch immer Sie fürchten, werden Sie gehorchen. Wenn die Leute die Behörden befürchten, beobachten oder über ihre Aktionen finden, neigen sie dazu, die Gesetze zu gehorchen.\n"
+"Ebenso können die Christen wegen Gottes Geduld anmaßend geworden, sich zu täuschen zu glauben, dass Gott nichts tun. Sie denken, er ist auch liebevoll und nachsichtig, sie zu bestrafen. Satan Eva verführte zu glauben, dass Gott nichts tun würde, wenn sie nicht gehorcht. Als sie die Lüge geglaubt, wurde sie anfällig für Ungehorsam. </ P>\n"
+"\n"
+"<P> Sprüche 1: 7 sagt: „Die Furcht des Herrn ist der Anfang der Erkenntnis, sondern Toren verachten Weisheit und Zucht.“ Die erste Lektion gläubig lernen sollte - der Anfang der Weisheit - ist, dass es eine schmerzhafte Erfahrung ist ungehorsam den Herrn. Der Autor von Hebräer schrieb „Mein Sohn, achte nicht gering die Züchtigung des Herrn. Ebenso wenig entmutigt werden, wenn man von ihm gestraft werden. Denn wen der Herr lebt Er züchtigt. Und geißelt jeden Sohn, den er erhalten. Seid ihr aber ohne Züchtigung, von denen alle teilhaftig geworden sind, dann sind Sie illegitim und nicht Söhne“(Hebr 12: 5-6). Christen sind ihre Sünden vergeben, aber Gott wird uns lehren, nicht durch bestimmte Züchtigung ungehorsam zu sein. </ P>\n"
+"\n"
+"<P> Wenn wir Gottes Versprechen der Züchtigung keine Angst, dann neigen wir moralisch locker sein. Wenn wir, dass er fürchtet wird tun, was in seinem Wort sagt er, dann beginnen wir seine Gebote ernst zu nehmen. Dies ist eine gesunde Motivation zu lernen, was Gott erwartet von uns als seine Kinder -. Das ist, wo Weisheit beginnt </ p>"
 
 #: commandments_app.Commandment/title:75
+#, fuzzy
 msgid "Listen to God’s Word"
-msgstr ""
+msgstr "Hören Sie das Wort Gottes"
 
 #: commandments_app.Commandment/devotional:75
+#, fuzzy
 msgid ""
 "<p>In the story of the rich man and Lazarus, the rich man is suffering the pains of hell while pleading with Abraham to send someone to tell his five brothers about the reality of hell. He was convinced that if his brothers talked to someone sent back from the dead, they would believe. \n"
 "But Abraham responded, “They have the Old Testament prophets, obey them” This is the message of Abraham through Christ’s message to the world. If you want to know the reality of eternity, then learn well the revealed word of God and obey what you find there. If the rich man’s brothers would not respond to the major message of God is His word, then they would not listen to a messenger  even if he came from the grave.</p>\n"
@@ -4106,16 +4467,29 @@ msgid ""
 "<p>A follower must believe from the heart – that is, he must wants Jesus to be constant companion and His authority in this life. Miracles are only effective in convincing people that God is real, but they do not make a person want Jesus as a permanent part his life. \n"
 "Abraham in essence told the rich man, “No! This is not how God works with men.” The only way to know the truth that will free the sinner from his sins is through the written word of God.</p>"
 msgstr ""
+"<P> In der Geschichte vom reichen Mann und dem armen Lazarus, ist der reiche Mann die Schmerzen der Hölle leiden, während sie mit Abraham flehend jemand zu schicken, um seine fünf Brüder über die Realität der Hölle zu erzählen. Er war davon überzeugt, dass, wenn seine Brüder mit jemandem gesprochen von den Toten zurück geschickt, würden sie glauben.\n"
+"Aber Abraham antwortete: „Sie sind die Propheten des Alten Testaments haben, gehorchen sie:“ Das ist die Botschaft von Abraham durch Christi Botschaft an die Welt. Wenn Sie die Realität der Ewigkeit wissen wollen, lernen dann auch das offenbarte Wort Gottes und gehorchen, was Sie dort finden. Wenn der Brüder des reichen Mannes würde nicht auf die Haupt Botschaft Gott reagieren Sein Wort ist, dann würden sie nicht zu einem Boten hören, auch wenn er aus dem Grab kam. </ P>\n"
+"\n"
+"<P> Gott ist erstaunlich gnädig mit seinen Geschöpfen, aber sie haben zu wählen. Wenn sie ohne Gott leben Leben zu wählen, keine Aufmerksamkeit auf sein Wort zu bezahlen, dann wird Gott läßt sie tun so in diesem Leben und dann für immer ohne ihn lebt für immer.\n"
+"Gottes primäre Mittel seines Willens und der Hoffnung für die Menschheit in Verbindung steht, ist durch sein geschriebenes Wort. Es scheint, wollen Männer jedes anderes Mittel von Gott außer ein enthüllt geschriebenen Wort zu hören. Jesus kam, um Gottes Willen zu erklären, und dann seine auserwählten Jünger inspiriert seinen Willen für alle Zeiten zu erfassen. Nun ist die einzige Art, wie wir jemals seinen Willen kennen, ist es in seinem geschriebenen Wort zu suchen. </ P>\n"
+"\n"
+"<P> Zweitens Er offenbart das Prinzip, dass es nicht ein Wunder Boten oder Zeichen, die eine Seele umwandelt. Die Brüder würden aus der Hölle direkt durch das Auftreten solcher auferstandenen Seelen mit einer Nachricht schockiert oder awestruck werden, was aber keine lebensverändernde Kraft haben würde. Sie könnten so awestruck sein, dass sie oberflächlich Gott anbeten würden noch mehr, aber sie würden letztlich scheitern an seine Befehle zu erhalten. </ P>\n"
+"\n"
+"<P> Ein Anhänger muss aus dem Herzen glauben - das heißt, er muss Jesus will ständigen Begleiter und seine Autorität in diesem Leben sein. Wunder sind nur wirksam in Menschen zu überzeugen, dass Gott real ist, aber sie nicht eine Person Jesus machen wollen als fester Bestandteil seines Lebens.\n"
+"Abraham im Wesentlichen sagte dem reichen Mann: „Nein! Dies ist nicht, wie Gott mit den Menschen funktioniert.“Der einzige Weg, die Wahrheit zu erkennen, dass der Sünder von seinen Sünden befreien ist durch das geschriebene Wort Gott. </ P>"
 
 #: commandments_app.Commandment/title:76
+#, fuzzy
 msgid "Be content with what you have"
-msgstr ""
+msgstr "Seien Sie zufrieden mit dem, was Sie haben"
 
 #: commandments_app.Commandment/title_negative:76
+#, fuzzy
 msgid "Be wary of greed"
-msgstr ""
+msgstr "Seien Sie vorsichtig bei Gier"
 
 #: commandments_app.Commandment/devotional:76
+#, fuzzy
 msgid ""
 "<p>Greed enters our lives camouflaged as innocent ambition to be the best, but the masquerade hides the desie to be better, wealthier, or famous – and to own more or better things – than anyone in our circle of friends. This quest for acceptance, respect, or honor is motivated by the belief that this is the way to find fulfillment and satisfaction in life. Greed usurps the place of God in our lives, yet is a poor substitute, however enticing.</p>\n"
 "\n"
@@ -4131,43 +4505,68 @@ msgid ""
 "\n"
 "<p>Do you resent being asked for your help?</p>"
 msgstr ""
+"<P> Gier tritt unser Leben als unschuldig Ehrgeiz getarnt das Beste zu sein, aber die Maskerade verbirgt die Desie besser, reicher oder berühmt zu sein - und mehr oder bessere Dinge zu besitzen - als jeder andere in unserem Freundeskreis. Dieses Streben nach Akzeptanz, Respekt und Ehre wird durch die Überzeugung motiviert, dass dies der Weg ist, Erfüllung und Zufriedenheit im Leben zu finden. Gier usurpiert den Platz Gottes in unserem Leben, und doch ist ein schlechter Ersatz, aber verlockend. </ P>\n"
+"\n"
+"<P> Als Jesus über die Vererbung eines Mannes fragte, wusste er, der Mann mit immer seine Hände auf den Reichtum beschäftigt war, dass er dachte, er brauchte, und war ihm gebührt. Jesus nahm die Gelegenheit, um die Laster zu erklären, dass unsere Herzen gegen den Willen und Zweck Gott verwandelt. Er gibt zwei Befehle uns zu fragen gegen wachsam zu sein, getäuscht zu werden oder blinde seitig. Man sagt sich „wird unter Beachtung ständig“ auf „mit dem Verstand wahrzunehmen“, und „sie auf dem Hut zu halten ständig sein“ oder „von“ Fallen oder Laster der „Gier bewusst sein“ oder Habgier - das heißt, die „ ständiger Wunsch oder Durst mehr und mehr zu haben.“</ p>\n"
+"\n"
+"<P> Wie wissen Sie, wenn Gier Wurzel in deinem Herzen genommen hat? </ P>\n"
+"<Ol type = 1>\n"
+"<Li>\n"
+"Das erste Symptom ist die Unzufriedenheit mit dem, was Sie haben und die Bereitschaft, alles oder jemand zu opfern mehr zu erwerben. Sobald ein Artikel erworben wird, denken Sie bereits an etwas, was Sie brauchen. </ Li>\n"
+"\n"
+"<Li> Das zweite Symptom ist der Zorn gefühlt, wenn jemand oder etwas Tour Erwerb von dem, was hindert Sie glauben, für Ihr Glück notwendig ist. Wenn Sie glauben, müssen Sie eine beträchtliche Bankkonto Volant über Ihre Zukunft sicher fühlen, dann, wenn ein Prediger tithing oder Großzügigkeit erwähnt, wird Ihre Gefühle aufflammen. Wut ist eine Reaktion auf etwas oder jemanden, der mit stört, was Sie denken, Sie brauchen für die Sicherheit oder den Erfolg. </ Li>\n"
+"</ Ol>\n"
+"\n"
+"<P> Haben Sie für Ihre Hilfe gefragt erneut versendet werden? </ P>"
 
 #: commandments_app.Commandment/title:77
+#, fuzzy
 msgid "Fight to enter through the narrow gate"
-msgstr ""
+msgstr "Kämpfen Sie sich durch das enge Tor einzutreten"
 
 #: commandments_app.Commandment/title:78
+#, fuzzy
 msgid "Look forward to the wedding of the Lamb"
-msgstr ""
+msgstr "Freuen Sie sich auf die Hochzeit des Lammes"
 
 #: commandments_app.Commandment/title:79
+#, fuzzy
 msgid "Find the lost sheep"
-msgstr ""
+msgstr "Finden Sie die verlorenen Schafe"
 
 #: commandments_app.Commandment/title:80
+#, fuzzy
 msgid "Strengthen and encourage your brothers and sisters"
-msgstr ""
+msgstr "Stärken und ermutigen, eure Brüder und Schwestern"
 
 #: commandments_app.Commandment/title:81
+#, fuzzy
 msgid ""
 "He that abideth in me, and I in him, the same bringeth forth much fruit"
-msgstr ""
+msgstr "Wer in mir bleibt und ich in ihm, der bringt viel Frucht"
 
 #: commandments_app.Commandment/devotional:81
+#, fuzzy
 msgid ""
 "Please take a moment to read the blog below of John Piper who explains how "
 "to abide in Christ."
 msgstr ""
+"Bitte nehmen Sie sich einen Moment Zeit, den Blog unter dem John Piper zu "
+"lesen, die erklären, wie in Christus zu bleiben."
 
 #: commandments_app.Commandment/title:82
+#, fuzzy
 msgid "We are called to glorify the Name of God in Christ Jesus!"
 msgstr ""
+"Wir sind aufgerufen, den Namen Gottes in Christus Jesus zu verherrlichen!"
 
 #: commandments_app.Commandment/title:83
+#, fuzzy
 msgid "Herd my sheep"
-msgstr ""
+msgstr "Herde meine Schafe"
 
 #: commandments_app.Movie/description:1
+#, fuzzy
 msgid ""
 "If there is one part of the Bible that has undergone more scrutiny and abuse"
 " than any other, it is the very beginning-GENESIS. Both from within and "
@@ -4175,14 +4574,24 @@ msgid ""
 "and ultimately the Creator. So, what exactly happened at the \"Creation,\" "
 "at the \"Beginning?\""
 msgstr ""
+"Wenn es einen Teil der Bibel ist, die mehr Kontrolle und Missbrauch als jede"
+" andere durchgemacht hat, ist es der Anfang-GENESIS. Sowohl von innen als "
+"auch außerhalb der Kirche, Angriffe auf GENESIS weiterhin die Schöpfung in "
+"Frage zu stellen und letztlich den Schöpfer. Also, was genau passiert ist an"
+" der „Schöpfung“ in dem „Anfang?“"
 
 #: commandments_app.Movie/description:2
+#, fuzzy
 msgid ""
 "A seasoned journalist chases down the biggest story in history. Is there "
 "credible evidence that Jesus of Nazareth really is the son of God?"
 msgstr ""
+"Ein erfahrener Journalist jagt die größte Story in die Geschichte "
+"eingegangen. Gibt es stichhaltige Beweise dafür, dass Jesus von Nazareth "
+"wirklich der Sohn Gottes ist?"
 
 #: commandments_app.Movie/description:3
+#, fuzzy
 msgid ""
 "Contemporary freshman and devout Christian, Josh Wheaton, finds his faith "
 "challenged on the first day of philosophy by the dogmatic and argumentative "
@@ -4192,256 +4601,358 @@ msgid ""
 " paper, Josh faces a decision. He must choose between his faith and his "
 "future."
 msgstr ""
+"Moderner Neuling und gläubiger Christ, Josh Wheaton, finden seinen Glauben "
+"am ersten Tag der Philosophie in Frage gestellt durch den dogmatischen und "
+"argumentativen Professor Radisson. Radisson beginnt seinen Vortrag mit den "
+"Studenten darüber informiert, dass sie müssen schriftlich leugnen, dass Gott"
+" existiert, oder sonst eine unzureichende Grad erwartet. Während die meisten"
+" Studenten die Worte „Gott ist tot“ auf einem Papier schreiben, Gesichter "
+"Josh eine Entscheidung. Er muss zwischen seinem Glauben und seiner Zukunft "
+"wählen."
 
 #: commandments_app.Question/text:1
+#, fuzzy
 msgid ""
 "With which other christians would you like to walk through all the "
 "commandments?"
-msgstr ""
+msgstr "Mit der anderen christen würden Sie alle wie die Gebote zu Fuß durch?"
 
 #: commandments_app.Question/text:2
+#, fuzzy
 msgid "Share your testimony!"
-msgstr ""
+msgstr "Geben Sie Zeugnis!"
 
 #: commandments_app.Question/text:3
+#, fuzzy
 msgid ""
 "Are you cold, lukewarm or hot? Do you have an earnestly desire to follow "
 "Jesus to glorify your Father in heaven with your whole life?"
 msgstr ""
+"Sind Sie kalt, lauwarm oder heiß? Haben Sie einen Wunsch zu ernsthaft folgen"
+" Jesus euer Vater im Himmel mit deinem ganzen Leben zu verherrlichen?"
 
 #: commandments_app.Question/text:4
+#, fuzzy
 msgid "Do you recognize any fruits in your life?"
-msgstr ""
+msgstr "Erkennen Sie alle Früchte in Ihrem Leben?"
 
 #: commandments_app.Question/text:5
+#, fuzzy
 msgid "Tell each other how you recognize their fruits"
-msgstr ""
+msgstr "Erzählt einander, wie Sie ihre Früchte erkennen"
 
 #: commandments_app.Question/text:6
+#, fuzzy
 msgid ""
 "During the day, do you pay attention for people around you who need help?"
 msgstr ""
+"Im Laufe des Tages, zahlen Sie die Aufmerksamkeit für die Menschen um Sie "
+"herum, die Hilfe brauchen?"
 
 #: commandments_app.Question/text:7
+#, fuzzy
 msgid "When was the last time you were merciful?"
-msgstr ""
+msgstr "Wann war das letzte Mal, wenn Sie barmherzig waren?"
 
 #: commandments_app.Question/text:8
+#, fuzzy
 msgid "Ask others, what kind of sins do they see with you?"
-msgstr ""
+msgstr "Bitten Sie andere, welche Art von Sünden tun sie mit Ihnen sehen?"
 
 #: commandments_app.Question/text:9
+#, fuzzy
 msgid "What sins do you want to get rid off?"
-msgstr ""
+msgstr "Welche Sünden wollen Sie loswerden weg zu bekommen?"
 
 #: commandments_app.Question/text:10
+#, fuzzy
 msgid "Pray for each other"
-msgstr ""
+msgstr "Betet für sie"
 
 #: commandments_app.Question/text:11
+#, fuzzy
 msgid "Has sin corrupted your saltiness?"
-msgstr ""
+msgstr "Hat sin Ihre Salzigkeit beschädigt?"
 
 #: commandments_app.Question/text:12
+#, fuzzy
 msgid "Has your self-interest made you disinterested in transforming others?"
 msgstr ""
+"Hat sich Ihr eigenes Interesse hat Sie bei der Umwandlung von anderen "
+"uneigennützig?"
 
 #: commandments_app.Question/text:13
+#, fuzzy
 msgid "Can you be graciously confrontational?"
-msgstr ""
+msgstr "Können Sie gnädig konfrontativ sein?"
 
 #: commandments_app.Question/text:14
+#, fuzzy
 msgid "Does your speaking suit your behavior?"
-msgstr ""
+msgstr "Hat Ihr Sprechen Anzug Ihr Verhalten?"
 
 #: commandments_app.Question/text:15
+#, fuzzy
 msgid "Is there a difference between your confession and your doing?"
-msgstr ""
+msgstr "Gibt es einen Unterschied zwischen Ihrem Geständnis und dein Werk?"
 
 #: commandments_app.Question/text:16
+#, fuzzy
 msgid "When was the last time you were generous?"
-msgstr ""
+msgstr "Wann war das letzte Mal, wenn Sie großzügig waren?"
 
 #: commandments_app.Question/text:17
+#, fuzzy
 msgid "Do you really want to be a follower of Jesus?"
-msgstr ""
+msgstr "Wollen Sie wirklich ein Nachfolger von Jesus sein?"
 
 #: commandments_app.Question/text:18
+#, fuzzy
 msgid ""
 "Enemies are the people who God puts on your way which are hard for you to "
 "love. Who are enemies for you? "
 msgstr ""
+"Feinde sind die Menschen, die Gott auf dem Weg legt, die schwer für dich zu "
+"lieben. Wer sind Feinde für Sie?"
 
 #: commandments_app.Question/text:19
+#, fuzzy
 msgid "Do you have the idea that you are what God intended you to be?"
-msgstr ""
+msgstr "Haben Sie die Idee, dass du bist, was Gott soll dir sein?"
 
 #: commandments_app.Question/text:20
+#, fuzzy
 msgid "What would stop you from becoming the way you were meant to be?"
-msgstr ""
+msgstr "Was würden Sie von immer die Art und Weise stoppen Sie gemeint waren?"
 
 #: commandments_app.Question/text:21
+#, fuzzy
 msgid "What would happen if you were as God intended?"
-msgstr ""
+msgstr "Was würde passieren, wenn Sie sich als Gott bestimmt waren?"
 
 #: commandments_app.Question/text:22
+#, fuzzy
 msgid ""
 "Are we willing to give up our rights for reconciliation out of love for "
 "Jesus, the Father and the other?"
 msgstr ""
+"Sind wir bereit, unsere Rechte für Versöhnung für Jesus aus Liebe zu geben, "
+"dem Vater und dem anderen?"
 
 #: commandments_app.Question/text:23
+#, fuzzy
 msgid ""
 "Are we willing to step into a conflict and be accountable for love for "
 "Jesus, the Father and the other and to ask forgiveness for all guilt in "
 "which we do or do not participate?"
 msgstr ""
+"Sind wir bereit, in einen Konflikt zu treten und für die Liebe zu Jesus, dem"
+" Vater und dem anderen und um Vergebung zu bitten für alle Schuld, in der "
+"wir tun oder nicht teilnehmen verantwortlich sein?"
 
 #: commandments_app.Question/text:24
+#, fuzzy
 msgid ""
 "Are we prepared, out of love for Jesus, the Father and the other, to do what"
 " is necessary so that a relationship can be restored, to give satisfaction "
 "so that complete reconciliation becomes possible?"
 msgstr ""
+"Sind wir bereit, aus Liebe zu Jesus, dem Vater und dem anderen, zu tun, was "
+"notwendig ist, damit eine Beziehung wieder hergestellt werden kann, die "
+"Zufriedenheit zu geben, so dass eine vollständige Versöhnung möglich?"
 
 #: commandments_app.Question/text:25
+#, fuzzy
 msgid ""
 "Are we willing to forgive the other out of love for Jesus, the Father and "
 "the other, regardless of whether or not the other asks for forgiveness?"
 msgstr ""
+"Sind wir bereit, die andere aus Liebe zu Jesus, dem Vater und die andere, "
+"unabhängig davon, ob die anderen um Vergebung bittet, zu vergeben?"
 
 #: commandments_app.Question/text:26
+#, fuzzy
 msgid "What makes it difficult for you to listen, understand and obey?"
-msgstr ""
+msgstr "Was macht es schwierig für Sie, zu hören, zu verstehen und gehorchen?"
 
 #: commandments_app.Question/text:27
+#, fuzzy
 msgid "If you want to grow in applying your faith, what does that take?"
 msgstr ""
+"Wenn Sie bei der Anwendung von Ihrem Glauben wachsen wollen, was braucht "
+"das?"
 
 #: commandments_app.Question/text:28
+#, fuzzy
 msgid "Once you know what He says, can you trust it?"
-msgstr ""
+msgstr "Sobald Sie wissen, was er sagt, können Sie ihm vertrauen?"
 
 #: commandments_app.Question/text:29
+#, fuzzy
 msgid "What keeps people away from God's Truth?"
-msgstr ""
+msgstr "Was hält die Menschen weg von Gottes Wahrheit?"
 
 #: commandments_app.Question/text:30
+#, fuzzy
 msgid "Who cares about our agenda for telling the world about Jesus?"
-msgstr ""
+msgstr "Wer kümmert sich um unsere Agenda für erzählen, die Welt über Jesus?"
 
 #: commandments_app.Question/text:31
+#, fuzzy
 msgid "How can you be not commited to what your Savior is all about?"
-msgstr ""
+msgstr "Wie kann man nicht begangen werden, was dein Heiland hier geht?"
 
 #: commandments_app.Question/text:32
+#, fuzzy
 msgid "How bold is your witness?"
-msgstr ""
+msgstr "Wie fett ist euer Zeugnis?"
 
 #: commandments_app.Question/text:33
+#, fuzzy
 msgid "Will you give up your life to follow Christ?"
-msgstr ""
+msgstr "Wollen Sie Ihr Leben aufgeben, Christus zu folgen?"
 
 #: commandments_app.Question/text:34
+#, fuzzy
 msgid "Who do you want as your worst enemy: the world or God?"
-msgstr ""
+msgstr "Wen möchten Sie als dein schlimmster Feind: die Welt oder Gott?"
 
 #: commandments_app.Question/text:35
+#, fuzzy
 msgid ""
 "Jesus  talks  much  about  the  Kingdom  of  God  in  His  ministry.  What "
 "is the Kingdom of God, and what does it mean to receive it?"
 msgstr ""
+"Jesus spricht viel über das Reich Gottes in seinem Ministerium. Was ist das "
+"Reich Gottes, und was bedeutet es, sie zu empfangen?"
 
 #: commandments_app.Question/text:36
+#, fuzzy
 msgid ""
 "What characteristics of children does Jesus want His disciples to recognize "
 "and emulate in receiving His Kingdom?"
 msgstr ""
+"Welche Eigenschaften von Kindern will Jesus seine Jünger in Empfang sein "
+"Reich zu erkennen und zu emulieren?"
 
 #: commandments_app.Question/text:37
+#, fuzzy
 msgid ""
 "Why  is  receiving  Jesus  and  His  Kingdom  better  than  anything  this "
 "world has to offer?"
 msgstr ""
+"Warum empfängt Jesus und sein Reich besser als alles, was diese Welt zu "
+"bieten hat?"
 
 #: commandments_app.Question/text:38
+#, fuzzy
 msgid ""
 "What would it look like in your work, finances, relationships, and "
 "neighborhood to receive the Kingdom of God like a child? "
 msgstr ""
+"Was würde es in Ihrer Arbeit, Finanzen, Beziehungen aussehen und Umgebung, "
+"das Reich Gottes wie ein Kind zu empfangen?"
 
 #: commandments_app.Question/text:39
+#, fuzzy
 msgid "Do you truly love Jesus? If you did, how would you know?"
-msgstr ""
+msgstr "Haben Sie wirklich Jesus lieben? Wenn ja, wie würden Sie wissen?"
 
 #: commandments_app.Question/text:40
+#, fuzzy
 msgid "What talents do you use to glorify the Father?"
-msgstr ""
+msgstr "Welche Talente nutzen Sie den Vater zu verherrlichen?"
 
 #: commandments_app.Question/text:41
+#, fuzzy
 msgid ""
 "Do you pray: Lord, will you bless what I have sown? Or: Lord, what do you "
 "want me to sow?"
 msgstr ""
+"Haben Sie beten: Herr, segne dich, was ich gesät haben? Oder: Herr, was "
+"willst du mich säen?"
 
 #: commandments_app.Question/text:42
+#, fuzzy
 msgid "What do you think is a disciple?"
-msgstr ""
+msgstr "Was denken Sie, ist ein Schüler?"
 
 #: commandments_app.Question/text:43
+#, fuzzy
 msgid "Are you a disciple?"
-msgstr ""
+msgstr "Sind Sie ein Schüler?"
 
 #: commandments_app.Question/text:44
+#, fuzzy
 msgid "What is discipleship about?"
-msgstr ""
+msgstr "Was ist discipleship über?"
 
 #: commandments_app.Question/text:45
+#, fuzzy
 msgid ""
 "Could you still be a disciple today? If so, how would that look like? If "
 "not, why not?"
 msgstr ""
+"Könnten Sie noch ein Schüler heute sein? Wenn ja, wie würde das aussehen? "
+"Wenn nicht, warum nicht?"
 
 #: commandments_app.Question/text:46
+#, fuzzy
 msgid "What do you think believe is all about?"
-msgstr ""
+msgstr "Was denken Sie glauben, hier geht?"
 
 #: commandments_app.Question/text:47
+#, fuzzy
 msgid "How do you know what somebody believes in?"
-msgstr ""
+msgstr "Woher wissen Sie, was in jemand glaubt?"
 
 #: commandments_app.Question/text:48
+#, fuzzy
 msgid "Imagine yourself on trial for your faith"
-msgstr ""
+msgstr "Stellen Sie sich vor Gericht für Ihren Glauben"
 
 #: commandments_app.Question/text:49
+#, fuzzy
 msgid "Have you experienced the presence of Christ in areas of testing?"
-msgstr ""
+msgstr "Haben Sie die Gegenwart Christi in Prüfbereiche erfahren?"
 
 #: commandments_app.Question/text:50
+#, fuzzy
 msgid "Did you have the courage to be true to Him?"
-msgstr ""
+msgstr "Haben Sie den Mut, ihn um wahr zu sein?"
 
 #: commandments_app.Question/text:52
+#, fuzzy
 msgid ""
 "Do you recognize one of the symptoms for greed mentioned in the description?"
 msgstr ""
+"Haben Sie eines der Symptome für Gier in der Beschreibung erwähnt erkennen?"
 
 #: commandments_app.Question/text:53
+#, fuzzy
 msgid ""
 "Have you met someone like Jonathan, who visited you to encourage you to put "
 "your faith in God?"
 msgstr ""
+"Kennen Sie jemanden wie Jonathan, die Sie besucht Sie zu ermutigen, Ihren "
+"Glauben an Gott zu setzen?"
 
 #: commandments_app.Sermon/description:5
+#, fuzzy
 msgid ""
 "Do you truly love Jesus? If you did, how would you know? The Bible helps us "
 "navigate and even command our own emotions. In twelve minutes, John Piper "
 "asks four questions about what it means to love Jesus, and leads us, through"
 " the words of Jesus himself, to make Jesus our greatest Treasure."
 msgstr ""
+"Haben Sie wirklich Jesus lieben? Wenn ja, wie würden Sie wissen? Die Bibel "
+"hilft uns navigieren und sogar unsere eigenen Emotionen beherrschen. In 12 "
+"Minuten, fragt John Piper vier Fragen über das, was es bedeutet, Jesus zu "
+"lieben, und führt uns durch die Worte von Jesus selbst, zu Jesus unserem "
+"größten Schatz zu machen."
 
 #: commandments_app.ShortMovie/description:1
+#, fuzzy
 msgid ""
 "This video illustrates Jesus' Parable of the Sower without the use of any "
 "language elements. It employs the latest, cutting edge animation techniques."
@@ -4449,192 +4960,311 @@ msgid ""
 "different ground. Experience the seeds growing and the challenges they face."
 " How will you respond to Jesus' message? "
 msgstr ""
+"Dieses Video zeigt Jesus' Gleichnis vom Sämann, ohne die Verwendung von "
+"irgendwelchen Sprachelementen. Es verwendet die neuesten, "
+"Kantenanimationstechniken zu schneiden. Das Video zeigt deutlich die vier "
+"Instanzen der Samen auf verschiedenen Boden verstreut. Erleben Sie die Samen"
+" wächst und die Herausforderungen, denen sie konfrontiert. Wie werden Sie "
+"auf die Botschaft Jesu reagieren?"
 
 #: commandments_app.ShortMovie/description:3
+#, fuzzy
 msgid ""
 "Though the world is by plagued by suffering due to the realities of sin, "
 "death, and evil, God is calling us to seek refuge in the only place it can "
 "truly be found...His presence. A symbolic adaptation of Psalm 46."
 msgstr ""
+"Obwohl die Welt von den Realitäten der Sünde, Tod geplagt wird durch Leiden "
+"wegen, und des Bösen, ruft Gott uns Zuflucht in dem einzigen Ort zu suchen, "
+"kann es wirklich ... Seine Gegenwart zu finden. Eine symbolische Anpassung "
+"von Psalm 46."
 
 #: commandments_app.ShortMovie/description:4
+#, fuzzy
 msgid ""
 "This two minute short reveals the great need to reach people who have no "
 "access to the Gospel and how God's Spirit has been moving to reach the "
 "unengaged of Mali."
 msgstr ""
+"Diese zweiminütigen Kurz zeigt den großen Bedarf, Menschen zu erreichen, die"
+" keinen Zugang zum Evangelium haben und wie Gottes Geist bewegt hat die "
+"unengaged von Mali zu erreichen."
 
 #: commandments_app.ShortMovie/description:5
+#, fuzzy
 msgid ""
 "Kyle has it all figured out. He’s got the girls, the grades, and lives at "
 "the best party house on campus. But one fateful day, Kyle’s heart stops "
 "beating and he suddenly comes face to face with a dark truth that he’s "
 "ignored his entire life."
 msgstr ""
+"Kyle hat es herausgefunden. Er hat die Mädchen haben, die Qualitäten und "
+"lebt am besten Party-Haus auf dem Campus. Aber ein verhängnisvoller Tag, "
+"Kyles Herz aufhört zu schlagen und er kommt plötzlich das Gesicht mit einer "
+"dunklen Wahrheit ins Gesicht, dass er sein ganzes Leben lang ignoriert wird."
 
 #: commandments_app.ShortMovie/description:6
+#, fuzzy
 msgid ""
 "Since January 18, 2011, Egypt has been in a state of civil and political "
 "unrest, but in the midst of the violence and uncertainty, God is moving in a"
 " BIG way."
 msgstr ""
+"Seit dem 18. Januar 2011 hat Ägypten in einem Zustand der bürgerlichen und "
+"politischer Unruhen, aber in der Mitte der Gewalt und Unsicherheit, ist Gott"
+" in einem großen Weg zu bewegen."
 
 #: commandments_app.ShortMovie/description:7
+#, fuzzy
 msgid ""
 "Inspired by the age-old question \"What is your life?\", this short film "
 "challenges the promises of the American dream and presents an alternative "
 "that offers so much more."
 msgstr ""
+"Angeregt durch die uralte Frage „Was ist Ihr Leben?“, Fordert dieser "
+"Kurzfilm die Versprechen des amerikanischen Traums und stellt eine "
+"Alternative, die so viel mehr bietet."
 
 #: commandments_app.ShortMovie/description:8
+#, fuzzy
 msgid ""
 "Jesus compared the kingdom of God to one of the smallest seeds on Earth and "
 "over 2000 years later, the truth of this teaching can be seen all across the"
 " globe."
 msgstr ""
+"Jesus verglich das Reich Gottes zu einer der kleinsten Samen auf der Erde "
+"und über 2000 Jahre später, kann die Wahrheit dieser Lehre in der ganzen "
+"Welt gesehen werden."
 
 #: commandments_app.ShortMovie/description:10
+#, fuzzy
 msgid ""
 "We all suffer at the hands of other people. In Junko’s case, she was abused "
 "as a child and found herself isolated and in deep sorrow. Then, a gradual "
 "feeling of love grew in her heart and opened the door to a life that she "
 "never knew existed."
 msgstr ""
+"Wir alle leiden an den Händen anderer Menschen. In Junko Fall wurde sie als "
+"Kind missbraucht und fand ich isoliert und in tiefer Trauer. Dann wuchs ein "
+"allmähliches Gefühl der Liebe in ihrem Herzen und öffnete die Tür zu einem "
+"Leben, das sie nie wußte, besteht."
 
 #: commandments_app.ShortMovie/description:11
+#, fuzzy
 msgid ""
 "Sarah enjoys relating with people, but when an encounter with a Deaf woman "
 "challenges her ability to connect, God redefines what it means for her to be"
 " a follower."
 msgstr ""
+"Sarah genießt mit Menschen, die nun aber, wenn eine Begegnung mit einer "
+"Gehörlosen Frau fordert ihre Fähigkeit, zu verbinden, definiert Gott, was es"
+" bedeutet für sie einen Anhänger zu sein."
 
 #: commandments_app.ShortMovie/description:12
+#, fuzzy
 msgid ""
 "One man's life changed the course of history for billions of people across "
 "the globe. He is both revered and reviled, famed and feared and you know who"
 " he is without a single mention of his name."
 msgstr ""
+"Ein Mann das Leben verändert den Lauf der Geschichte für Milliarden von "
+"Menschen auf der ganzen Welt. Er ist sowohl verehrt und geschmäht, berühmt "
+"und gefürchtet, und Sie wissen, wer er ohne eine einzige Erwähnung seines "
+"Namens ist."
 
 #: commandments_app.ShortMovie/description:13
+#, fuzzy
 msgid ""
 "At the of age 70, Bettie Kaufmann has a conversation with God. Little does "
 "she know that this one interaction will eventually send her to jail."
 msgstr ""
+"Bei den im Alter von 70, hat Bettie Kaufmann ein Gespräch mit Gott. Wenig "
+"weiß sie, dass dies eine Interaktion wird sie schließlich ins Gefängnis "
+"schicken."
 
 #: commandments_app.ShortMovie/description:15
+#, fuzzy
 msgid ""
 "What if God asked you to leave everything you know behind? Well, that’s what"
 " happens to Marc and what God does with his response radically changes how "
 "residents of Sherbrooke, Québec see Jesus."
 msgstr ""
+"Was passiert, wenn Gott alles, was Sie hinter wissen zu lassen, fragte? Nun,"
+" das ist, was Marc geschieht und was Gott tut mit seiner Antwort ändert sich"
+" radikal, wie die Bewohner von Sherbrooke, Québec Jesus sehen."
 
 #: commandments_app.ShortMovie/description:16
+#, fuzzy
 msgid ""
 "Samuel loves Jesus and loves children, so God used him in a very big way."
 msgstr ""
+"Samuel liebt Jesus und liebt Kinder, so Gott verwendete ihn in einem sehr "
+"großen Weg."
 
 #: commandments_app.ShortMovie/description:18
+#, fuzzy
 msgid ""
 "There is an emptiness inside each of us that cannot be filled by life’s "
 "pursuits or ignored by its distractions. However, beyond the emptiness there"
 " is a voice calling. Do you hear the voice? Will you follow the call?"
 msgstr ""
+"Es ist eine Leere in jedem von uns, die nicht durch seine Ablenkungen durch "
+"das Leben Beschäftigungen oder ignoriert gefüllt werden kann. Doch jenseits "
+"der Leere gibt es eine Stimme rufen. Haben Sie die Stimme hören? Werden Sie "
+"den Anruf folgen?"
 
 #: commandments_app.ShortMovie/description:19
+#, fuzzy
 msgid ""
 "Over the span of a three and a half year wait, Peter and Erin realize that "
 "they are adopting for reasons much more personal than once thought. They are"
 " adopting, because they were adopted."
 msgstr ""
+"Über den Zeitraum eines drei und ein halbes Jahr warten, Peter und Erin "
+"erkennen, dass sie aus Gründen viel persönlicher als einmal gedacht "
+"adoptieren. Sie sind die Annahme, weil sie angenommen wurden."
 
 #: commandments_app.ShortMovie/description:20
+#, fuzzy
 msgid ""
 "Filmed in six languages across five continents, this short film captures the"
 " faith-filled thoughts of children as they contemplate the many attributes "
 "of God."
 msgstr ""
+"Gefilmt in sechs Sprachen auf allen fünf Kontinenten, fängt dieser Kurzfilm "
+"die glaubensvolle Gedanken der Kinder, wie sie die vielen Eigenschaften "
+"Gottes betrachten."
 
 #: commandments_app.ShortMovie/description:21
+#, fuzzy
 msgid ""
 "Noah is homeless. Dwight and his family are his neighbors. Their friendship "
 "will challenge you to “love your neighbor as yourself”."
 msgstr ""
+"Noah ist obdachlos. Dwight und seine Familie sind seine Nachbarn. Ihre "
+"Freundschaft ist eine Herausforderung für Sie „Liebe deinen Nächsten wie "
+"dich selbst“."
 
 #: commandments_app.ShortMovie/description:22
+#, fuzzy
 msgid ""
 "This is El Shaddai. She is an Ethiopian orphan who is being raised by her "
 "adopted Ethiopian parents to love Jesus and to sing about His Word. This is "
 "her act of worship."
 msgstr ""
+"Dies ist El Shaddai. Sie ist eine äthiopische Waise, die von ihren "
+"angenommenen äthiopisch Eltern erzogen wird Jesus zu lieben und zu seinem "
+"Wort zu singen. Dies ist ihr Akt der Anbetung."
 
 #: commandments_app.ShortMovie/description:23
+#, fuzzy
 msgid ""
 "\n"
 "Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with difficulty, but at the finish line awaits an imperishable reward that is given to those who persevere…Christ Himself."
 msgstr ""
+"Der Glaube an Christus ist eine Verfolgung ... ein Kampf ... ein Rennen. Es "
+"ist eine Reise, beladen mit Schwierigkeiten, aber auf der Ziellinie erwartet"
+" einen unvergänglichen Lohn, die die gegeben, die durchhalten ... Christus "
+"selbst."
 
 #: commandments_app.ShortMovie/description:24
+#, fuzzy
 msgid ""
 "pre·em·i·nent | adj. Superior to or notable above all others; outstanding. "
 "(Based on Colossians 1: 15-23)"
 msgstr ""
+"pre · em · i · nent | adj. Superior oder bemerkenswert vor allem anderen; "
+"hervorragend. (Basierend auf Colossians 1: 15-23)"
 
 #: commandments_app.Testimony/description:2
+#, fuzzy
 msgid ""
 "Jason and Tracy were ecstatic to find out that they were expecting, but when"
 " the couple is told that their daughter is “incompatible with life”, they "
 "begin a journey that will forever change how they view God’s love."
 msgstr ""
+"Jason und Tracy war begeistert zu erfahren, dass sie erwarten, aber wenn das"
+" Paar wird gesagt, dass ihre Tochter „unvereinbar mit dem Leben“, sie "
+"beginnen, eine Reise, die für immer verändern wird, wie sie die Liebe Gottes"
+" sehen."
 
 #: commandments_app.Testimony/description:3
+#, fuzzy
 msgid ""
 "While searching for direction during a sabbatical with his wife, Jay wrote "
 "three letters in the sand: WWH. God responded by sending them to one of the "
 "most dynamic cities in the world, Rio de Janeiro."
 msgstr ""
+"Auf der Suche nach Richtung während eines Sabbaticals mit seiner Frau, Jay "
+"schrieb drei Buchstaben in den Sand: WWH. Gott antwortete, indem sie zu "
+"einer der dynamischsten Städte der Welt, Rio de Janeiro zu schicken."
 
 #: commandments_app.Testimony/description:4
+#, fuzzy
 msgid ""
 "Do you struggle in your marriage? Takashi and Naoko did. Their shame and "
 "brokenness left their marriage on the brink of total collapse. Then they "
 "found true love…not in each other, but in a person that would transform "
 "their family completely."
 msgstr ""
+"Haben Sie in Ihrer Ehe kämpfen? Takashi und Naoko tat. Ihre Scham und "
+"Gebrochen verließen ihre Ehe am Rande des totalen Zusammenbruchs. Dann "
+"fanden sie die wahre Liebe ... nicht in ihnen, aber in einer Person, die "
+"ihre Familie völlig verwandeln würde."
 
 #: commandments_app.Testimony/description:5
+#, fuzzy
 msgid ""
 "At the age of 41, Cory starts having horrific nightmares of extreme abuse. "
 "Once he realizes that his dreams are actually repressed memories from his "
 "childhood, Cory begins a life-changing journey that will forever transform "
 "his relationship with God."
 msgstr ""
+"Im Alter von 41, beginnt Cory schreckliche Alpträume extremen Missbrauch "
+"hat. Sobald er merkt, dass seine Träume Erinnerungen tatsächlich verdrängt "
+"werden aus seiner Kindheit beginnt Cory eine lebensverändernde Reise, die "
+"für immer seine Beziehung zu Gott verwandeln."
 
 #: commandments_app.Testimony/description:6
+#, fuzzy
 msgid ""
 "A powerfull testimony of a woman, who’s been in the concentration camps by "
 "the nazis, and still learned to forgive"
 msgstr ""
+"Ein leistungsfähiges Zeugnis einer Frau, die in den Konzentrationslagern der"
+" Nazis gewesen und lernte noch vergeben"
 
 #: commandments_app.Testimony/description:7
+#, fuzzy
 msgid "A powerfull testimony of a nl famous christian singer"
-msgstr ""
+msgstr "Ein leistungsfähiges Zeugnis eines nl berühmten Christian Singer"
 
 #: commandments_app.Testimony/description:8
+#, fuzzy
 msgid ""
 "Anderson and Robson came to know the love and grace of Jesus in the midst of"
 " poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
 "same love and grace in one of the most notorious favelas in Rio de Janeiro, "
 "The City of God."
 msgstr ""
+"Anderson und Robson kam die Liebe und die Gnade Jesu mitten in der Armut, "
+"Missbrauch und Sünde kennen. Jetzt verwandelt, haben sie Leuchtfeuer der "
+"gleichen Liebe und Gnade werden in einer der berüchtigtsten Favelas in Rio "
+"de Janeiro, die Stadt Gottes."
 
 #: commandments_app.Testimony/description:9
+#, fuzzy
 msgid ""
 "In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs,"
 " a normal home, a normal life. Then God called them out of the normal and "
 "into His mission."
 msgstr ""
+"Im Jahr 2001 lebten Gary und Peggy Ifft in Bloomington, IL. Sie hatten "
+"normale Jobs, ein normales Haus, ein normales Leben. Dann rief Gott sich aus"
+" dem normalen und in seine Mission."
 
 #: commandments_app.Testimony/description:10
+#, fuzzy
 msgid ""
 "\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered"
 " after being born without limbs.  Nick discovered God's miraculous plan for "
@@ -4642,99 +5272,165 @@ msgid ""
 " Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
 "preach to every single soul on the planet: 7 billion people!"
 msgstr ""
+"„Warum Gott, war ich so geboren?“ Das ist die Frage Nick Vujicic verwunderte"
+" sich ohne Gliedmaßen geboren. Nick entdeckte Wunder Plan Gottes für sein "
+"Leben als weltweit Evangelist die Botschaft der Erlösung durch Jesus "
+"Christus zu teilen. Beobachten Sie und entdecken Sie, wie Sie ein Teil von "
+"Nicks Ziel auf jede einzelne Seele auf dem Planeten zu predigen sein kann: 7"
+" Milliarden Menschen!"
 
 #: commandments_app.Testimony/description:11
+#, fuzzy
 msgid ""
 "Where were you on March 11, 2011 when the Tohoku earthquake shook Japan? "
 "Yuji was at work, and with Tokyo’s power grid shut down, he journeyed on "
 "foot across the city to discover a message waiting for him that would change"
 " his life forever."
 msgstr ""
+"Wo waren Sie am 11. März 2011, als das Tohoku Erdbeben Japan erschütterte? "
+"Yuji war bei der Arbeit, und mit Tokyo Stromnetz abgeschaltet, reiste er zu "
+"Fuß über die Stadt eine Nachricht für ihn warten, um zu entdecken, die sein "
+"Leben für immer verändern würden."
 
 #: commandments_app.Testimony/description:12
+#, fuzzy
 msgid ""
 "When Nilton Cordeiro was young, he heard about the love and grace of Jesus "
 "Christ through an old hymn. This love and grace quickly captured his heart "
 "and would change his life forever."
 msgstr ""
+"Wenn Nilton Cordeiro jung war, hörte er über die Liebe und Gnade Jesu "
+"Christi durch eine alte Hymne. Diese Liebe und Gnade gefangen schnell sein "
+"Herz und würde sein Leben für immer verändern."
 
 #: commandments_app.Testimony/description:13
+#, fuzzy
 msgid ""
 "For years, Walt and Annie struggled with infertility, but in a single moment"
 " they realized that God was writing a beautiful story for them that was over"
 " 20 years in the making."
 msgstr ""
+"Seit Jahren Walt und Annie kämpften mit Unfruchtbarkeit, aber in einem "
+"einzigen Augenblick erkannten sie, dass Gott eine schöne Geschichte für sich"
+" schreibt, die mehr als 20 Jahre in der Herstellung war."
 
 #: commandments_app.Testimony/description:14
+#, fuzzy
 msgid ""
 "Do you struggle with depression? So did Yumiko. She hated herself and even "
 "dreamt of running in front of a train to end her life. But hope came her way"
 " in the last place she ever expected."
 msgstr ""
+"Haben Sie mit Depressionen kämpfen? So tat Yumiko. Sie hasste sich selbst "
+"und sogar geträumt vor einem Zug laufen, ihr Leben zu beenden. Aber die "
+"Hoffnung kam ihren Weg in den letzten Platz, den sie jemals erwartet."
 
 #: commandments_app.Testimony/description:15
+#, fuzzy
 msgid ""
 "When Petra loses her mother at a young age, she sets off on a journey to "
 "find hope and healing for her loss. This decade-long search eventually leads"
 " her to discover that the answer she’s been looking for has been pursuing "
 "her all along."
 msgstr ""
+"Als Petra in jungen Jahren ihre Mutter verliert, macht sie sich auf eine "
+"Reise ab für ihren Verlust Hoffnung und Heilung zu finden. Diese "
+"jahrzehntelange Suche führt sie schließlich zu entdecken, dass die Antwort, "
+"die sie für ist gesucht, hat sie die ganze Zeit verfolgt."
 
 #: commandments_app.Testimony/description:16
+#, fuzzy
 msgid ""
 "When Crystal Clapp gave her life to Jesus Christ, everything changed. Her "
 "thoughts became His thoughts. Her will became His will. The old was gone "
 "and, soon enough, so was she."
 msgstr ""
+"Wenn Crystal Clapp ihr Leben Jesus Christus gab, änderte sich alles. Ihre "
+"Gedanken wurden seine Gedanken. Ihr Wille wurde sein Wille. Die alte war "
+"verschwunden und bald genug, so war sie."
 
 #: commandments_app.Testimony/description:17
+#, fuzzy
 msgid ""
 "This two minute short reveals God's desire for unity and how the Evangelical"
 " and Orthodox churches in Egypt have united together to exalt Christ as the "
 "Head of His Church."
 msgstr ""
+"Diese 2 Minuten kurz offenbart Gottes Wunsch nach Einheit und wie die "
+"evangelischen und orthodoxen Kirchen in Ägypten haben zusammen vereint "
+"Christus als das Haupt seiner Kirche zu erheben."
 
 #: commandments_app.Testimony/description:18
+#, fuzzy
 msgid ""
 "Are you looking for joy in life? As a gifted performer, singing brought "
 "Atsushi joy. It also brought him to one of the most unlikely places: a "
 "Gospel Choir practice. It wasn’t long before the lyrics he sang opened his "
 "eyes to a joy greater than what music alone could provide."
 msgstr ""
+"Suchen Sie Freude im Leben? Als begnadeter Darsteller brachte Gesang Atsushi"
+" Freude. Es brachte auch ihn zu einem der unwahrscheinlichsten Orten: ein "
+"Gospel Choir Praxis. Es dauerte nicht lange, bevor die Texte sang er seine "
+"Augen auf eine Freude geöffnet größer als das, was Musik allein bieten "
+"könnte."
 
 #: commandments_app.Testimony/description:19
+#, fuzzy
 msgid ""
 "We all have unfulfilled dreams. For Ritsuko, it was finding fame, love, and "
 "acceptance. However, when this dream disappeared, a glimmer of hope arose "
 "that not only quenched her feelings of despair, but provided more love and "
 "acceptance than she could ever imagine."
 msgstr ""
+"Wir alle haben unerfüllte Träume. Für Ritsuko, war es zu finden, Ruhm, Liebe"
+" und Akzeptanz. Wenn jedoch dieser Traum verschwunden, erhob sich ein "
+"Schimmer der Hoffnung, dass nicht nur ihre Gefühle der Verzweiflung "
+"abgeschreckt, aber vorausgesetzt, mehr Liebe und Akzeptanz, als sie jemals "
+"vorstellen konnte."
 
 #: commandments_app.Testimony/description:20
+#, fuzzy
 msgid ""
 "Touch Bin lived most of her life gripped by fear, pain, and hopelessness, "
 "but when God opened her eyes to the truth of Christ, she left the path of "
 "death and began a journey toward life."
 msgstr ""
+"Touch Bin lebte die meiste Zeit ihres Lebens ergriffen von Angst, Schmerz "
+"und Hoffnungslosigkeit, aber wenn Gott ihre Augen für die Wahrheit Christi "
+"geöffnet, verließ sie den Weg des Todes und begann eine Reise zum Leben."
 
 #: commandments_app.Testimony/description:21
+#, fuzzy
 msgid ""
 "Josiah grew up in the Amazon completely convinced that he was luckiest kid "
 "on Earth, but when tragedy struck at the age of 13, God revealed to him a "
 "much greater identity."
 msgstr ""
+"Josiah wuchs fest davon überzeugt, im Amazonas, dass er glücklichste Kind "
+"auf der Erde war, aber als Tragödie im Alter von 13 geschlagen, Gott "
+"offenbarte ihm eine viel größere Identität."
 
 #: commandments_app.Testimony/description:22
+#, fuzzy
 msgid ""
 "Nate & Ruth Reutter were only moments away from having their first child "
 "while serving as missionaries along the Amazon River in Brazil. Then "
 "everything changed...most dramatically their faith in Christ and His living "
 "Word."
 msgstr ""
+"Nate & Ruth Reutter war nur wenige Minuten von mit ihrem ersten Kind, "
+"während als Missionare entlang des Amazonas in Brasilien dient. Dann änderte"
+" sich alles ... am dramatischsten ihren Glauben an Christus und sein "
+"lebendiges Wort."
 
 #: commandments_app.Testimony/description:23
+#, fuzzy
 msgid ""
 "Lore and Michael started their family with great hope for the future, but "
 "when their son’s life begins to spiral downward, they come face to face with"
 " what it truly means to trust in God."
 msgstr ""
+"Lore und Michael begannen ihre Familie mit großer Hoffnung für die Zukunft, "
+"aber wenn das Leben ihres Sohns beginnt nach unten zu winden, sie kommen von"
+" Angesicht zu Angesicht mit, was es wirklich bedeutet, auf Gott zu "
+"vertrauen."

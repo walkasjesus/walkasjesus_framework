@@ -2000,17 +2000,17 @@ msgstr "Voer alleen cijfers, gescheiden door komma's."
 #: venv/lib/python3.7/site-packages/django/core/validators.py:310
 #, python-format, fuzzy
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr "Zorgen deze waarde% (limit_value) s (het% (show_value) s)."
+msgstr "Zorgen deze waarde%(limit_value)s (het%(show_value)s)."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:342
 #, python-format, fuzzy
 msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr "Zorgen deze waarde is kleiner dan of gelijk aan% (limit_value) s."
+msgstr "Zorgen deze waarde is kleiner dan of gelijk aan%(limit_value)s."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:351
 #, python-format, fuzzy
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr "Zorgen deze waarde groter dan of gelijk aan% (limit_value) s."
+msgstr "Zorgen deze waarde groter dan of gelijk aan%(limit_value)s."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:361
 #, python-format, fuzzy
@@ -2070,8 +2070,8 @@ msgid ""
 "File extension '%(extension)s' is not allowed. Allowed extensions are: "
 "'%(allowed_extensions)s'."
 msgstr ""
-"Bestandsextensie '% (uitbreiding) s' is niet toegestaan. Toegestane "
-"extensies zijn: '% (allowed_extensions) s'."
+"Bestandsextensie '%(uitbreiding)s' is niet toegestaan. Toegestane "
+"extensies zijn: '%(allowed_extensions)s'."
 
 #: venv/lib/python3.7/site-packages/django/core/validators.py:521
 #, fuzzy
@@ -2087,7 +2087,7 @@ msgstr "en"
 #: venv/lib/python3.7/site-packages/django/db/models/base.py:1164
 #, python-format, fuzzy
 msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr "% (MODEL_NAME) is dit% (field_labels) s bestaat."
+msgstr "% (MODEL_NAME) is dit%(field_labels)s bestaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
 #, python-format, fuzzy
@@ -2107,7 +2107,7 @@ msgstr "Dit veld kan niet leeg zijn."
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
 #, python-format, fuzzy
 msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "% (MODEL_NAME) is dit% (FIELD_LABEL) s bestaat."
+msgstr "% (MODEL_NAME) is dit%(field_label)s bestaat."
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
@@ -2116,13 +2116,13 @@ msgstr "% (MODEL_NAME) is dit% (FIELD_LABEL) s bestaat."
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
-"% (FIELD_LABEL) s moet uniek% (date_field_label) s% (lookup_type) s "
+"%(field_label)s moet uniek%(date_field_label)s%(lookup_type)s "
 "bedragen."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:128
 #, python-format, fuzzy
 msgid "Field of type: %(field_type)s"
-msgstr "Veld type:% (field_type) s"
+msgstr "Veld type:%(field_type)s"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:901
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1768
@@ -2134,7 +2134,7 @@ msgstr "Geheel getal"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1766
 #, python-format, fuzzy
 msgid "'%(value)s' value must be an integer."
-msgstr "'% (Value) s' waarde moet een geheel getal zijn."
+msgstr "'%(value)s' waarde moet een geheel getal zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:980
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1846
@@ -2145,12 +2145,12 @@ msgstr "Big (8 byte) integer"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:992
 #, python-format, fuzzy
 msgid "'%(value)s' value must be either True or False."
-msgstr "'% (Waarde) s' waarde moet ofwel waar of onwaar zijn."
+msgstr "'%(waarde)s' waarde moet ofwel waar of onwaar zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:993
 #, python-format, fuzzy
 msgid "'%(value)s' value must be either True, False, or None."
-msgstr "value '% (waarde) s' moet ofwel True, False of None zijn."
+msgstr "value '%(waarde)s' moet ofwel True, False of None zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:995
 #, fuzzy
@@ -2160,7 +2160,7 @@ msgstr "Boolean (waar of onwaar)"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1036
 #, python-format, fuzzy
 msgid "String (up to %(max_length)s)"
-msgstr "Reeks (maximaal% (max_length) s)"
+msgstr "Reeks (maximaal%(max_length)s)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1100
 #, fuzzy
@@ -2173,7 +2173,7 @@ msgid ""
 "'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
 "format."
 msgstr ""
-"'% (Waarde) s' waarde heeft een ongeldige datumnotatie. Het moet in YYYY-MM-"
+"'%(waarde)s' waarde heeft een ongeldige datumnotatie. Het moet in YYYY-MM-"
 "DD formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1151
@@ -2183,7 +2183,7 @@ msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
 "date."
 msgstr ""
-"'% (Waarde) s' waarde heeft het juiste formaat (YYYY-MM-DD), maar het is een"
+"'%(waarde)s' waarde heeft het juiste formaat (YYYY-MM-DD), maar het is een"
 " ongeldige datum."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1154
@@ -2197,7 +2197,7 @@ msgid ""
 "'%(value)s' value has an invalid format. It must be in YYYY-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ] format."
 msgstr ""
-"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in YYYY-MM-DD "
+"'%(waarde)s' waarde heeft een ongeldige indeling. Het moet in YYYY-MM-DD "
 "UU: MM [: ss [.uuuuuu]] [TZ] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1296
@@ -2206,7 +2206,7 @@ msgid ""
 "'%(value)s' value has the correct format (YYYY-MM-DD "
 "HH:MM[:ss[.uuuuuu]][TZ]) but it is an invalid date/time."
 msgstr ""
-"'% (Waarde) s' waarde heeft het juiste formaat (YYYY-MM-DD UU: MM [: ss "
+"'%(waarde)s' waarde heeft het juiste formaat (YYYY-MM-DD UU: MM [: ss "
 "[.uuuuuu]] [TZ]), maar het is een ongeldige datum / tijd."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1300
@@ -2217,7 +2217,7 @@ msgstr "Date (tijd)"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1448
 #, python-format, fuzzy
 msgid "'%(value)s' value must be a decimal number."
-msgstr "'% (Value) s' waarde moet een decimaal getal."
+msgstr "'%(value)s' waarde moet een decimaal getal."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1450
 #, fuzzy
@@ -2230,7 +2230,7 @@ msgid ""
 "'%(value)s' value has an invalid format. It must be in [DD] "
 "[HH:[MM:]]ss[.uuuuuu] format."
 msgstr ""
-"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in [DD] [UU: "
+"'%(waarde)s' waarde heeft een ongeldige indeling. Het moet in [DD] [UU: "
 "[MM:]] ss [.uuuuuu] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1592
@@ -2251,7 +2251,7 @@ msgstr "Bestandspad"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1731
 #, python-format, fuzzy
 msgid "'%(value)s' value must be a float."
-msgstr "'% (Value) s' waarde moet een float zijn."
+msgstr "'%(value)s' waarde moet een float zijn."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1733
 #, fuzzy
@@ -2272,7 +2272,7 @@ msgstr "IP adres"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1974
 #, python-format, fuzzy
 msgid "'%(value)s' value must be either None, True or False."
-msgstr "'% (Waarde) s' waarde moet ofwel None, waar of onwaar."
+msgstr "'%(waarde)s' waarde moet ofwel None, waar of onwaar."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1976
 #, fuzzy
@@ -2292,7 +2292,7 @@ msgstr "Positieve kleine integer"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2038
 #, python-format, fuzzy
 msgid "Slug (up to %(max_length)s)"
-msgstr "Slug (tot% (max_length) s)"
+msgstr "Slug (tot%(max_length)s)"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2070
 #, fuzzy
@@ -2310,7 +2310,7 @@ msgid ""
 "'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
-"'% (Waarde) s' waarde heeft een ongeldige indeling. Het moet in HH: MM [: ss"
+"'%(waarde)s' waarde heeft een ongeldige indeling. Het moet in HH: MM [: ss"
 " [.uuuuuu]] formaat."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2107
@@ -2319,7 +2319,7 @@ msgid ""
 "'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
-"'% (Waarde) s' waarde heeft het juiste formaat (HH: MM [: ss [.uuuuuu]]), "
+"'%(waarde)s' waarde heeft het juiste formaat (HH: MM [: ss [.uuuuuu]]), "
 "maar het is een ongeldige tijd."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2110
@@ -2340,7 +2340,7 @@ msgstr "Ruwe binaire data"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2308
 #, python-format, fuzzy
 msgid "'%(value)s' is not a valid UUID."
-msgstr "'% (Value) s' is geen geldige UUID."
+msgstr "'%(value)s' is geen geldige UUID."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2310
 #, fuzzy
@@ -2360,7 +2360,7 @@ msgstr "Beeld"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:778
 #, python-format, fuzzy
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr "% (Model) s bijvoorbeeld met% (veld) s% (waarde) r bestaat niet."
+msgstr "%(model)s bijvoorbeeld met%(veld)s% (waarde) r bestaat niet."
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:780
 #, fuzzy
@@ -2375,12 +2375,12 @@ msgstr "Eén-op-één relatie"
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1057
 #, python-format, fuzzy
 msgid "%(from)s-%(to)s relationship"
-msgstr "% (Van) s -% (to) en verhouding"
+msgstr "%(van)s -% (to) en verhouding"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1058
 #, python-format, fuzzy
 msgid "%(from)s-%(to)s relationships"
-msgstr "% (Van) s -% (to) en relaties"
+msgstr "%(van)s -% (to) en relaties"
 
 #: venv/lib/python3.7/site-packages/django/db/models/fields/related.py:1100
 #, fuzzy
@@ -2480,7 +2480,7 @@ msgstr ""
 #, python-format, fuzzy
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
-"Selecteer een geldige keuze. % (Waarde) s is niet een van de beschikbare "
+"Selecteer een geldige keuze. %(waarde)s is niet een van de beschikbare "
 "keuzes."
 
 #: venv/lib/python3.7/site-packages/django/forms/fields.py:853
@@ -2509,7 +2509,7 @@ msgstr ":"
 #: venv/lib/python3.7/site-packages/django/forms/forms.py:212
 #, python-format, fuzzy
 msgid "(Hidden field %(name)s) %(error)s"
-msgstr "(Verborgen veld% (name) s)% (error) s"
+msgstr "(Verborgen veld%(name)s)%(error)s"
 
 #: venv/lib/python3.7/site-packages/django/forms/formsets.py:91
 #, fuzzy
@@ -2544,12 +2544,12 @@ msgstr "Verwijder"
 #: venv/lib/python3.7/site-packages/django/forms/models.py:751
 #, python-format, fuzzy
 msgid "Please correct the duplicate data for %(field)s."
-msgstr "Corrigeer de dubbele gegevens voor% (veld) s."
+msgstr "Corrigeer de dubbele gegevens voor%(veld)s."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:755
 #, python-format, fuzzy
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr "Corrigeer de dubbele gegevens voor% (veld) s, die uniek moet zijn."
+msgstr "Corrigeer de dubbele gegevens voor%(veld)s, die uniek moet zijn."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:761
 #, python-format, fuzzy
@@ -2557,8 +2557,8 @@ msgid ""
 "Please correct the duplicate data for %(field_name)s which must be unique "
 "for the %(lookup)s in %(date_field)s."
 msgstr ""
-"Corrigeer de dubbele gegevens voor% (field_name) s die uniek is voor de% "
-"(lookup) moet s in% (date_field) s."
+"Corrigeer de dubbele gegevens voor%(field_name)s die uniek is voor de% "
+"(lookup) moet s in%(date_field)s."
 
 #: venv/lib/python3.7/site-packages/django/forms/models.py:770
 #, fuzzy
@@ -2581,7 +2581,7 @@ msgstr ""
 #: venv/lib/python3.7/site-packages/django/forms/models.py:1272
 #, python-format, fuzzy
 msgid "\"%(pk)s\" is not a valid value."
-msgstr "\"% (Pk) s\" is geen geldige waarde."
+msgstr "\"%(pk)s\" is geen geldige waarde."
 
 #: venv/lib/python3.7/site-packages/django/forms/utils.py:162
 #, python-format, fuzzy
@@ -2589,7 +2589,7 @@ msgid ""
 "%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
 "may be ambiguous or it may not exist."
 msgstr ""
-"% (Datetime) s kon niet worden uitgelegd tijdzone% (current_timezone) s; het"
+"%(datetime)s kon niet worden uitgelegd tijdzone%(current_timezone)s; het"
 " kan dubbelzinnig zijn of het kan niet bestaan."
 
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:395
@@ -3033,7 +3033,7 @@ msgstr "Dit is geen geldig IPv6-adres."
 #, python-format, fuzzy
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
-msgstr "% (TRUNCATED_TEXT) s ..."
+msgstr "%(truncated_text)s ..."
 
 #: venv/lib/python3.7/site-packages/django/utils/text.py:233
 #, fuzzy
@@ -3201,7 +3201,7 @@ msgstr "Geen week gespecificeerd"
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:367
 #, python-format, fuzzy
 msgid "No %(verbose_name_plural)s available"
-msgstr "Geen% (verbose_name_plural) s beschikbaar"
+msgstr "Geen%(verbose_name_plural)s beschikbaar"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:589
 #, python-format, fuzzy
@@ -3215,12 +3215,12 @@ msgstr ""
 #: venv/lib/python3.7/site-packages/django/views/generic/dates.py:623
 #, python-format, fuzzy
 msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
-msgstr "Ongeldige datum string '% (datestr) s' gegeven format '% (format) s'"
+msgstr "Ongeldige datum string '%(datestr)s' gegeven format '%(format)s'"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/detail.py:54
 #, python-format, fuzzy
 msgid "No %(verbose_name)s found matching the query"
-msgstr "Nr% (verbose_name) s gevonden met zoekopdracht"
+msgstr "Nr%(verbose_name)s gevonden met zoekopdracht"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:67
 #, fuzzy
@@ -3230,12 +3230,12 @@ msgstr "Pagina is niet 'laatste', noch kan het worden omgezet naar een int."
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:72
 #, python-format, fuzzy
 msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr "Ongeldige pagina (% (paginanummer) s):% (bericht) s"
+msgstr "Ongeldige pagina (%(paginanummer)s):%(bericht)s"
 
 #: venv/lib/python3.7/site-packages/django/views/generic/list.py:154
 #, python-format, fuzzy
 msgid "Empty list and '%(class_name)s.allow_empty' is False."
-msgstr "Lege lijst en '% (class_name) s.allow_empty' is False."
+msgstr "Lege lijst en '%(class_name)s.allow_empty' is False."
 
 #: venv/lib/python3.7/site-packages/django/views/static.py:40
 #, fuzzy
@@ -3245,12 +3245,12 @@ msgstr "Directory indexen zijn hier niet toegestaan."
 #: venv/lib/python3.7/site-packages/django/views/static.py:42
 #, python-format, fuzzy
 msgid "\"%(path)s\" does not exist"
-msgstr "\"% (Path) s\" bestaat niet"
+msgstr "\"%(path)s\" bestaat niet"
 
 #: venv/lib/python3.7/site-packages/django/views/static.py:80
 #, python-format, fuzzy
 msgid "Index of %(directory)s"
-msgstr "Index van% (directory) s"
+msgstr "Index van%(directory)s"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:6
 #, fuzzy

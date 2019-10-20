@@ -3296,44 +3296,54 @@ msgid "Topics, references, &amp; how-to's"
 msgstr ""
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:395
+#, fuzzy
 msgid "Tutorial: A Polling App"
-msgstr ""
+msgstr "Tutorial: Een Polling App"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:396
+#, fuzzy
 msgid "Get started with Django"
-msgstr ""
+msgstr "Aan de slag met Django"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:407
+#, fuzzy
 msgid "Django Community"
-msgstr ""
+msgstr "Django Community"
 
 #: venv/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:408
+#, fuzzy
 msgid "Connect, get help, or contribute"
-msgstr ""
+msgstr "Sluit, hulp te krijgen, of een bijdrage leveren"
 
 #: venv/lib/python3.7/site-packages/froala_editor/views.py:30
+#, fuzzy
 msgid "You can only upload images."
-msgstr ""
+msgstr "U kunt alleen afbeeldingen uploaden."
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:22
+#, fuzzy
 msgid "COOKIE_INFO_HEADER"
-msgstr ""
+msgstr "COOKIE_INFO_HEADER"
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:23
+#, fuzzy
 msgid "COOKIE_INFO_PARA"
-msgstr ""
+msgstr "COOKIE_INFO_PARA"
 
 #: venv/lib/python3.7/site-packages/tests/test_base.py:24
+#, fuzzy
 msgid "COOKIE_INFO_OK"
-msgstr ""
+msgstr "COOKIE_INFO_OK"
 
 #: venv/lib/python3.7/site-packages/url_or_relative_url_field/fields.py:9
+#, fuzzy
 msgid "URL or path"
-msgstr ""
+msgstr "URL of pad"
 
 #: venv/lib/python3.7/site-packages/vinaigrette/management/commands/makemessages.py:147
+#, fuzzy
 msgid "Obsolete translation kept alive with Viniagrette"
-msgstr ""
+msgstr "Verouderde vertaling in leven gehouden met Vinaigrette"
 
 #: commandments_app.Blog/description:1 commandments_app.Book/description:1
 #: commandments_app.Drawing/description:1 commandments_app.Movie/description:4
@@ -3342,14 +3352,17 @@ msgstr ""
 #: commandments_app.ShortMovie/description:2
 #: commandments_app.Song/description:1
 #: commandments_app.Testimony/description:1
+#, fuzzy
 msgid "nan"
-msgstr ""
+msgstr "nan"
 
 #: commandments_app.Blog/description:2
+#, fuzzy
 msgid "A six part study with John Piper"
-msgstr ""
+msgstr "Een zesdelige studie met John Piper"
 
 #: commandments_app.Blog/description:3 commandments_app.Sermon/description:4
+#, fuzzy
 msgid ""
 "Knowing how weak and sinful we are, how do we set about obeying the hundreds"
 " of commands in the Bible? We know we cannot obey in our strength, and yet "
@@ -3357,6 +3370,12 @@ msgid ""
 "means to be born again, and how it happens to someone. This is part 1 of the"
 " 6 part series titled, What Jesus Demands of the World. "
 msgstr ""
+"Weten hoe zwak en zondig we zijn, hoe kunnen we stellen over het gehoorzamen"
+" van de honderden opdrachten in de Bijbel? We weten dat we niet gehoorzamen "
+"in onze kracht, en toch de Bijbel ons verwacht om te gehoorzamen. In tien "
+"minuten, John Piper onderzoekt wat het betekent om wederom geboren wordt, en"
+" hoe het gebeurt aan iemand. Dit is deel 1 van de 6 delige serie getiteld "
+"Wat Jezus Eisen of the World."
 
 #: commandments_app.Commandment/title:1
 msgid "Repent and believe the gospel"
@@ -3373,8 +3392,9 @@ msgstr ""
 "<p>Wanneer we openbaring 3:14-22 lezen, dan walgt Jezus van de lauwheid. Was u maar heet of koud! Jezus roept in vers 19 op “wees dan ijverig en bekeer u”. We moeten ons niet alleen bekeren van onze zonden, maar ook echt van ons oude wereldse leven. Het volgen van Jezus gaat zoveel verder dan enkele bekering van je zonden en vervolgens voor jezelf leven. Nee, het gaat over het toepassen van alle geboden, alle oproepen, die Jezus heeft gedaan. Niet uit wetticisme, maar uit een hartsverlangen om niets anders te willen, behalve Hem te verheerlijken met heel jouw leven!</p>"
 
 #: commandments_app.Commandment/title_negative:2
+#, fuzzy
 msgid "He cuts off every branch in me that bears no fruit"
-msgstr ""
+msgstr "Hij snijdt elke rank die in Mij geen vrucht draagt"
 
 #: commandments_app.Commandment/devotional:2
 msgid ""
@@ -3389,8 +3409,9 @@ msgid "Worship the Lord your God, and serve Him only"
 msgstr "De Heere, uw God, zult u aanbidden en Hem alleen dienen."
 
 #: commandments_app.Commandment/title_negative:3
+#, fuzzy
 msgid "No servant can serve two masters"
-msgstr ""
+msgstr "Geen huisknecht kan twee heren dienen"
 
 #: commandments_app.Commandment/title:4
 msgid "Blessed are the poor in spirit, for theirs is the kingdom of heaven"
@@ -3398,8 +3419,9 @@ msgstr ""
 "Zalig zijn de armen van geest, want van hen is het koninkrijk der hemelen"
 
 #: commandments_app.Commandment/title_negative:4
+#, fuzzy
 msgid "Don’t rely on your own strenght"
-msgstr ""
+msgstr "Vertrouw niet op eigen kracht"
 
 #: commandments_app.Commandment/title:5
 msgid "Blessed are those who mourn, for they will be comforted"
@@ -3437,8 +3459,9 @@ msgid "Blessed are the pure in heart, for they will see God"
 msgstr "Zalig zijn de reinen van hart, want zij zullen God zien"
 
 #: commandments_app.Commandment/title_negative:9
+#, fuzzy
 msgid "Go, and sin no more"
-msgstr ""
+msgstr "Ga heen en zondig niet meer"
 
 #: commandments_app.Commandment/devotional:9
 msgid ""
@@ -3524,8 +3547,9 @@ msgstr ""
 "der hemelen"
 
 #: commandments_app.Commandment/title_negative:15
+#, fuzzy
 msgid "Do not set aside one of the least of these commands"
-msgstr ""
+msgstr "Niet gereserveerd een van de minst van deze commando's"
 
 #: commandments_app.Commandment/devotional:15
 msgid ""
@@ -3542,24 +3566,27 @@ msgid "Be patient"
 msgstr "Wees geduldig"
 
 #: commandments_app.Commandment/title_negative:16
+#, fuzzy
 msgid "Do not be angry with a brother or sister"
-msgstr ""
+msgstr "Wees niet boos op een broer of zus"
 
 #: commandments_app.Commandment/title:17
 msgid "Reconcile with your brother as quickly as possible"
 msgstr "Verzoen je zo snel mogelijk met je broeder"
 
 #: commandments_app.Commandment/title_negative:17
+#, fuzzy
 msgid "Let not the sun go down upon your wrath"
-msgstr ""
+msgstr "Laat de zon niet ondergaan over uw toorn"
 
 #: commandments_app.Commandment/title:18
 msgid "Be loyal to your partner"
 msgstr "Wees trouw aan je partner"
 
 #: commandments_app.Commandment/title_negative:18
+#, fuzzy
 msgid "Do not look lustfully to a woman"
-msgstr ""
+msgstr "Niet lustfully kijken naar een vrouw"
 
 #: commandments_app.Commandment/devotional:18
 msgid ""
@@ -3582,24 +3609,27 @@ msgstr ""
 "Welzalig zijn de oprechten van wandel, die in de wet van de HEERE gaan."
 
 #: commandments_app.Commandment/title_negative:19
+#, fuzzy
 msgid "Don’t act different from what you speak"
-msgstr ""
+msgstr "Niet anders dan wat je spreken handelen"
 
 #: commandments_app.Commandment/title:20
 msgid "Overcome evil by doing good"
 msgstr "Overwin het kwade door het goede te doen"
 
 #: commandments_app.Commandment/title_negative:20
+#, fuzzy
 msgid "Do not resist an evil person"
-msgstr ""
+msgstr "Heeft een kwaad niet te weerstaan,"
 
 #: commandments_app.Commandment/title:21
 msgid "Share goods with the needy"
 msgstr "Deel wat je hebt met hen die het nodig hebben"
 
 #: commandments_app.Commandment/title_negative:21
+#, fuzzy
 msgid "If anyone takes what belongs to you, do not demand it back"
-msgstr ""
+msgstr "Als iemand neemt wat van u is, doe het dan niet terug te eisen"
 
 #: commandments_app.Commandment/devotional:21
 msgid ""
@@ -3616,8 +3646,9 @@ msgid "Love your enemies and pray for persecutors"
 msgstr "Heb uw vijanden lief en bid voor hen die je vervolgen"
 
 #: commandments_app.Commandment/title_negative:22
+#, fuzzy
 msgid "Do not say, I’ll do to them as they have done to me"
-msgstr ""
+msgstr "Zeg niet, ik zal doen om hen als zij gedaan hebben om me"
 
 #: commandments_app.Commandment/devotional:22
 msgid ""
@@ -3651,8 +3682,9 @@ msgid "He that humbleth himself shall be exalted"
 msgstr "Wie zichzelf vernedert, zal verhoogd worden"
 
 #: commandments_app.Commandment/title_negative:24
+#, fuzzy
 msgid "For whosoever exalteth himself shall be abased"
-msgstr ""
+msgstr "Want wie zichzelf verhoogt, zal vernederd worden"
 
 #: commandments_app.Commandment/devotional:24
 msgid ""
@@ -3701,8 +3733,9 @@ msgid "Pursue Christ’s kingdom priority"
 msgstr "Zoek het Koninkrijk van God"
 
 #: commandments_app.Commandment/title_negative:29
+#, fuzzy
 msgid "Do not worry about your life"
-msgstr ""
+msgstr "Maak je geen zorgen over uw leven"
 
 #: commandments_app.Commandment/devotional:29
 msgid ""
@@ -3733,8 +3766,9 @@ msgid "Rebuke your brother in a spirit of meekness"
 msgstr "Wijs broeders terecht in een geest van zachtmoedigheid"
 
 #: commandments_app.Commandment/title_negative:30
+#, fuzzy
 msgid "Do not judge, or you too will be judged"
-msgstr ""
+msgstr "Oordeel niet, of je zal ook worden beoordeeld"
 
 #: commandments_app.Commandment/devotional:30
 msgid ""
@@ -3800,8 +3834,9 @@ msgid "Be careful that nobody misleads you"
 msgstr "Pas op dat niemand u misleidt"
 
 #: commandments_app.Commandment/title_negative:34
+#, fuzzy
 msgid "Dear friends, do not believe every spirit"
-msgstr ""
+msgstr "Beste vrienden, gelooft niet iedere geest"
 
 #: commandments_app.Commandment/devotional:34
 msgid ""
@@ -3914,8 +3949,9 @@ msgid "Be wise as serpants"
 msgstr "Wees bedachtzaam als de slangen"
 
 #: commandments_app.Commandment/title_negative:42
+#, fuzzy
 msgid "Do not throw your pearls to pigs"
-msgstr ""
+msgstr "Niet uw paarlen gooien naar varkens"
 
 #: commandments_app.Commandment/devotional:42
 msgid ""
@@ -3935,8 +3971,9 @@ msgid "Tell to people boldly, what Jesus says to you"
 msgstr "Vertel mensen stoutmoedig wat Jezus aan jouw zegt"
 
 #: commandments_app.Commandment/title_negative:43
+#, fuzzy
 msgid "Do not be afraid of them"
-msgstr ""
+msgstr "Wees niet bang van hen"
 
 #: commandments_app.Commandment/devotional:43
 msgid ""
@@ -3978,8 +4015,9 @@ msgid "Receive him whom I will send"
 msgstr "Ontvang hem die Ik zal zenden"
 
 #: commandments_app.Commandment/title_negative:46
+#, fuzzy
 msgid "It is a sin to despise one’s neighbor"
-msgstr ""
+msgstr "Het is een zonde om de naaste verachten"
 
 #: commandments_app.Commandment/title:47
 msgid "Be generous in secret"
@@ -4223,8 +4261,9 @@ msgid "Trust that the Spirit will guide you"
 msgstr "Vertrouw erop dat de Heilige Geest je zal leiden"
 
 #: commandments_app.Commandment/title_negative:72
+#, fuzzy
 msgid "Do not worry about what to say"
-msgstr ""
+msgstr "Maak je geen zorgen over wat te zeggen"
 
 #: commandments_app.Commandment/devotional:72
 msgid ""
@@ -4309,8 +4348,9 @@ msgid "Be content with what you have"
 msgstr "Wees tevreden met wat je hebt"
 
 #: commandments_app.Commandment/title_negative:76
+#, fuzzy
 msgid "Be wary of greed"
-msgstr ""
+msgstr "Wees op uw hoede van de hebzucht"
 
 #: commandments_app.Commandment/devotional:76
 msgid ""
@@ -4380,6 +4420,7 @@ msgid "Herd my sheep"
 msgstr "Hoed mijn schapen"
 
 #: commandments_app.Movie/description:1
+#, fuzzy
 msgid ""
 "If there is one part of the Bible that has undergone more scrutiny and abuse"
 " than any other, it is the very beginning-GENESIS. Both from within and "
@@ -4387,14 +4428,24 @@ msgid ""
 "and ultimately the Creator. So, what exactly happened at the \"Creation,\" "
 "at the \"Beginning?\""
 msgstr ""
+"Als er een deel van de Bijbel dat er meer controle en misbruik heeft "
+"ondergaan dan enig ander, het is het allereerste begin-GENESIS. Zowel van "
+"binnen en buiten de kerk, aanvallen op Genesis blijven de schepping en "
+"uiteindelijk de Schepper in twijfel. Dus, wat er precies gebeurde op de "
+"\"schepping\" bij de \"Begin?\""
 
 #: commandments_app.Movie/description:2
+#, fuzzy
 msgid ""
 "A seasoned journalist chases down the biggest story in history. Is there "
 "credible evidence that Jesus of Nazareth really is the son of God?"
 msgstr ""
+"Een doorgewinterde journalist achtervolgt door het grootste verhaal in de "
+"geschiedenis. Is er geloofwaardig bewijs dat Jezus van Nazareth is werkelijk"
+" de zoon van God?"
 
 #: commandments_app.Movie/description:3
+#, fuzzy
 msgid ""
 "Contemporary freshman and devout Christian, Josh Wheaton, finds his faith "
 "challenged on the first day of philosophy by the dogmatic and argumentative "
@@ -4404,256 +4455,360 @@ msgid ""
 " paper, Josh faces a decision. He must choose between his faith and his "
 "future."
 msgstr ""
+"Hedendaagse eerstejaars en vroom christen, Josh Wheaton, vindt zijn geloof "
+"uitgedaagd op de eerste dag van de filosofie door de dogmatische en "
+"argumentatieve professor Radisson. Radisson begint zijn lezing door het "
+"informeren van de studenten dat zij moeten ontkennen, schriftelijk, dat God "
+"bestaat, of anders zou verwachten een onvoldoende kwaliteit. Terwijl de "
+"meeste leerlingen schrijven de woorden \"God is dood\" op een papier, Josh "
+"geconfronteerd met een beslissing. Hij moet kiezen tussen zijn geloof en "
+"zijn toekomst."
 
 #: commandments_app.Question/text:1
+#, fuzzy
 msgid ""
 "With which other christians would you like to walk through all the "
 "commandments?"
-msgstr ""
+msgstr "Met welke andere christenen zou u willen lopen door alle geboden?"
 
 #: commandments_app.Question/text:2
+#, fuzzy
 msgid "Share your testimony!"
-msgstr ""
+msgstr "Deel je getuigenis!"
 
 #: commandments_app.Question/text:3
+#, fuzzy
 msgid ""
 "Are you cold, lukewarm or hot? Do you have an earnestly desire to follow "
 "Jesus to glorify your Father in heaven with your whole life?"
 msgstr ""
+"Heb je het koud, lauw of warm? Heeft u een oprecht verlangen om Jezus te "
+"volgen om uw Vader in de hemel verheerlijken met je hele leven?"
 
 #: commandments_app.Question/text:4
+#, fuzzy
 msgid "Do you recognize any fruits in your life?"
-msgstr ""
+msgstr "Heeft u geen vruchten in je leven herkennen?"
 
 #: commandments_app.Question/text:5
+#, fuzzy
 msgid "Tell each other how you recognize their fruits"
-msgstr ""
+msgstr "Vertel elkaar hoe je hun vruchten herkennen"
 
 #: commandments_app.Question/text:6
+#, fuzzy
 msgid ""
 "During the day, do you pay attention for people around you who need help?"
-msgstr ""
+msgstr "Gedurende de dag, let u voor mensen om je heen die hulp nodig?"
 
 #: commandments_app.Question/text:7
+#, fuzzy
 msgid "When was the last time you were merciful?"
-msgstr ""
+msgstr "Wanneer was de laatste keer dat je genadig was?"
 
 #: commandments_app.Question/text:8
+#, fuzzy
 msgid "Ask others, what kind of sins do they see with you?"
-msgstr ""
+msgstr "Vraag anderen, wat voor soort zonden zien zij met jou?"
 
 #: commandments_app.Question/text:9
+#, fuzzy
 msgid "What sins do you want to get rid off?"
-msgstr ""
+msgstr "Wat zonden wil je kwijt te raken?"
 
 #: commandments_app.Question/text:10
+#, fuzzy
 msgid "Pray for each other"
-msgstr ""
+msgstr "Bid voor elkaar"
 
 #: commandments_app.Question/text:11
+#, fuzzy
 msgid "Has sin corrupted your saltiness?"
-msgstr ""
+msgstr "Heeft de zonde bedorven je meer zout?"
 
 #: commandments_app.Question/text:12
+#, fuzzy
 msgid "Has your self-interest made you disinterested in transforming others?"
 msgstr ""
+"Is uw eigenbelang maakte je ongeïnteresseerd in het transformeren van "
+"anderen?"
 
 #: commandments_app.Question/text:13
+#, fuzzy
 msgid "Can you be graciously confrontational?"
-msgstr ""
+msgstr "Kun je genadig confronterend?"
 
 #: commandments_app.Question/text:14
+#, fuzzy
 msgid "Does your speaking suit your behavior?"
-msgstr ""
+msgstr "Heeft uw spreken pak je gedrag?"
 
 #: commandments_app.Question/text:15
+#, fuzzy
 msgid "Is there a difference between your confession and your doing?"
-msgstr ""
+msgstr "Is er een verschil tussen uw bekentenis en je doet?"
 
 #: commandments_app.Question/text:16
+#, fuzzy
 msgid "When was the last time you were generous?"
-msgstr ""
+msgstr "Wanneer was de laatste keer dat je vrijgevig waren?"
 
 #: commandments_app.Question/text:17
+#, fuzzy
 msgid "Do you really want to be a follower of Jesus?"
-msgstr ""
+msgstr "Wil je echt wilt een volgeling van Jezus te zijn?"
 
 #: commandments_app.Question/text:18
+#, fuzzy
 msgid ""
 "Enemies are the people who God puts on your way which are hard for you to "
 "love. Who are enemies for you? "
 msgstr ""
+"Vijanden zijn de mensen die God legt op uw weg, die moeilijk voor je om lief"
+" te zijn. Wie zijn vijanden voor u?"
 
 #: commandments_app.Question/text:19
+#, fuzzy
 msgid "Do you have the idea that you are what God intended you to be?"
-msgstr ""
+msgstr "Heeft u het idee dat je bent wat Gods bedoeling je te zijn?"
 
 #: commandments_app.Question/text:20
+#, fuzzy
 msgid "What would stop you from becoming the way you were meant to be?"
 msgstr ""
+"Wat zou je ervan weerhouden steeds de manier waarop je was bedoeld om te "
+"worden?"
 
 #: commandments_app.Question/text:21
+#, fuzzy
 msgid "What would happen if you were as God intended?"
-msgstr ""
+msgstr "Wat zou er gebeuren als je zoals God bedoeld?"
 
 #: commandments_app.Question/text:22
+#, fuzzy
 msgid ""
 "Are we willing to give up our rights for reconciliation out of love for "
 "Jesus, the Father and the other?"
 msgstr ""
+"Zijn we bereid op te geven onze rechten voor de verzoening uit liefde voor "
+"Jezus, de Vader en de andere?"
 
 #: commandments_app.Question/text:23
+#, fuzzy
 msgid ""
 "Are we willing to step into a conflict and be accountable for love for "
 "Jesus, the Father and the other and to ask forgiveness for all guilt in "
 "which we do or do not participate?"
 msgstr ""
+"Zijn we bereid om de stap naar een conflict en zijn verantwoordelijk voor de"
+" liefde voor Jezus, de Vader en de andere en om vergiffenis te vragen voor "
+"alle schuld waarin we wel of niet deel te nemen?"
 
 #: commandments_app.Question/text:24
+#, fuzzy
 msgid ""
 "Are we prepared, out of love for Jesus, the Father and the other, to do what"
 " is necessary so that a relationship can be restored, to give satisfaction "
 "so that complete reconciliation becomes possible?"
 msgstr ""
+"Zijn we bereid zijn, uit liefde voor Jezus, de Vader en de andere, om te "
+"doen wat nodig is, zodat een relatie kan worden hersteld, om voldoening te "
+"geven, zodat volledige verzoening mogelijk wordt?"
 
 #: commandments_app.Question/text:25
+#, fuzzy
 msgid ""
 "Are we willing to forgive the other out of love for Jesus, the Father and "
 "the other, regardless of whether or not the other asks for forgiveness?"
 msgstr ""
+"Zijn we bereid om de andere uit liefde voor Jezus, de Vader en de andere "
+"vergeven, ongeacht of het andere niet om vergeving vraagt?"
 
 #: commandments_app.Question/text:26
+#, fuzzy
 msgid "What makes it difficult for you to listen, understand and obey?"
 msgstr ""
+"Wat maakt het moeilijk voor u om te luisteren, te begrijpen en te "
+"gehoorzamen?"
 
 #: commandments_app.Question/text:27
+#, fuzzy
 msgid "If you want to grow in applying your faith, what does that take?"
 msgstr ""
+"Als je wilt groeien in de toepassing van uw geloof, wat betekent dat duren?"
 
 #: commandments_app.Question/text:28
+#, fuzzy
 msgid "Once you know what He says, can you trust it?"
-msgstr ""
+msgstr "Als je eenmaal weet wat Hij zegt, kun je het vertrouwen?"
 
 #: commandments_app.Question/text:29
+#, fuzzy
 msgid "What keeps people away from God's Truth?"
-msgstr ""
+msgstr "Wat houdt mensen weg van Gods Waarheid?"
 
 #: commandments_app.Question/text:30
+#, fuzzy
 msgid "Who cares about our agenda for telling the world about Jesus?"
-msgstr ""
+msgstr "Who cares over onze agenda voor de wereld over Jezus te vertellen?"
 
 #: commandments_app.Question/text:31
+#, fuzzy
 msgid "How can you be not commited to what your Savior is all about?"
-msgstr ""
+msgstr "Hoe kun je niet inzetten voor wat uw Verlosser is allemaal over?"
 
 #: commandments_app.Question/text:32
+#, fuzzy
 msgid "How bold is your witness?"
-msgstr ""
+msgstr "Hoe vet is jouw getuige?"
 
 #: commandments_app.Question/text:33
+#, fuzzy
 msgid "Will you give up your life to follow Christ?"
-msgstr ""
+msgstr "Geef je je leven om Christus te volgen?"
 
 #: commandments_app.Question/text:34
+#, fuzzy
 msgid "Who do you want as your worst enemy: the world or God?"
-msgstr ""
+msgstr "Wie wilt u als uw grootste vijand: de wereld of God?"
 
 #: commandments_app.Question/text:35
+#, fuzzy
 msgid ""
 "Jesus  talks  much  about  the  Kingdom  of  God  in  His  ministry.  What "
 "is the Kingdom of God, and what does it mean to receive it?"
 msgstr ""
+"Jezus praat veel over het Koninkrijk van God in Zijn bediening. Wat is het "
+"Koninkrijk van God, en wat betekent het om het te ontvangen?"
 
 #: commandments_app.Question/text:36
+#, fuzzy
 msgid ""
 "What characteristics of children does Jesus want His disciples to recognize "
 "and emulate in receiving His Kingdom?"
 msgstr ""
+"Welke kenmerken van kinderen wil Jezus Zijn discipelen te herkennen en na te"
+" bootsen in het ontvangen van Zijn Koninkrijk?"
 
 #: commandments_app.Question/text:37
+#, fuzzy
 msgid ""
 "Why  is  receiving  Jesus  and  His  Kingdom  better  than  anything  this "
 "world has to offer?"
 msgstr ""
+"Waarom is het ontvangen van Jezus en Zijn Koninkrijk beter dan alles wat "
+"deze wereld te bieden heeft?"
 
 #: commandments_app.Question/text:38
+#, fuzzy
 msgid ""
 "What would it look like in your work, finances, relationships, and "
 "neighborhood to receive the Kingdom of God like a child? "
 msgstr ""
+"Hoe zou het eruit in je werk, financiën, relaties en buurt om het Koninkrijk"
+" van God te ontvangen als een kind?"
 
 #: commandments_app.Question/text:39
+#, fuzzy
 msgid "Do you truly love Jesus? If you did, how would you know?"
-msgstr ""
+msgstr "Hou je echt van Jezus? Als je dat deed, hoe zou u weten?"
 
 #: commandments_app.Question/text:40
+#, fuzzy
 msgid "What talents do you use to glorify the Father?"
-msgstr ""
+msgstr "Welke talenten gebruikt u om de Vader te verheerlijken?"
 
 #: commandments_app.Question/text:41
+#, fuzzy
 msgid ""
 "Do you pray: Lord, will you bless what I have sown? Or: Lord, what do you "
 "want me to sow?"
 msgstr ""
+"Heeft u bidt: Heer, zal u zegenen wat ik heb gezaaid? Of: Heer, wat wil je "
+"dat ik om te zaaien?"
 
 #: commandments_app.Question/text:42
+#, fuzzy
 msgid "What do you think is a disciple?"
-msgstr ""
+msgstr "Wat denk je dat is een leerling?"
 
 #: commandments_app.Question/text:43
+#, fuzzy
 msgid "Are you a disciple?"
-msgstr ""
+msgstr "Bent u een leerling?"
 
 #: commandments_app.Question/text:44
+#, fuzzy
 msgid "What is discipleship about?"
-msgstr ""
+msgstr "Wat is discipelschap over?"
 
 #: commandments_app.Question/text:45
+#, fuzzy
 msgid ""
 "Could you still be a disciple today? If so, how would that look like? If "
 "not, why not?"
 msgstr ""
+"Kunt u nog steeds een discipel vandaag? Zo ja, hoe zou dat eruit? Zo neen, "
+"waarom niet?"
 
 #: commandments_app.Question/text:46
+#, fuzzy
 msgid "What do you think believe is all about?"
-msgstr ""
+msgstr "Wat denk je dat gelooft is allemaal over?"
 
 #: commandments_app.Question/text:47
+#, fuzzy
 msgid "How do you know what somebody believes in?"
-msgstr ""
+msgstr "Hoe weet u wat iemand gelooft in?"
 
 #: commandments_app.Question/text:48
+#, fuzzy
 msgid "Imagine yourself on trial for your faith"
-msgstr ""
+msgstr "Stel jezelf op de proef voor je geloof"
 
 #: commandments_app.Question/text:49
+#, fuzzy
 msgid "Have you experienced the presence of Christ in areas of testing?"
 msgstr ""
+"Hebt u de aanwezigheid van Christus in de gebieden van het testen ervaren?"
 
 #: commandments_app.Question/text:50
+#, fuzzy
 msgid "Did you have the courage to be true to Him?"
-msgstr ""
+msgstr "Heeft u de moed hebben om waar te zijn voor Hem?"
 
 #: commandments_app.Question/text:52
+#, fuzzy
 msgid ""
 "Do you recognize one of the symptoms for greed mentioned in the description?"
 msgstr ""
+"Heeft u een van de symptomen van hebzucht in de beschrijving genoemd "
+"herkennen?"
 
 #: commandments_app.Question/text:53
+#, fuzzy
 msgid ""
 "Have you met someone like Jonathan, who visited you to encourage you to put "
 "your faith in God?"
 msgstr ""
+"Ben je iemand als Jonathan, die een bezoek aan u om u aan te moedigen om uw "
+"geloof in God heeft ontmoet?"
 
 #: commandments_app.Sermon/description:5
+#, fuzzy
 msgid ""
 "Do you truly love Jesus? If you did, how would you know? The Bible helps us "
 "navigate and even command our own emotions. In twelve minutes, John Piper "
 "asks four questions about what it means to love Jesus, and leads us, through"
 " the words of Jesus himself, to make Jesus our greatest Treasure."
 msgstr ""
+"Hou je echt van Jezus? Als je dat deed, hoe zou u weten? De Bijbel helpt ons"
+" navigeren en zelfs commando onze eigen emoties. In twaalf minuten, John "
+"Piper vier vragen over wat het betekent om Jezus lief te hebben, en leidt "
+"ons, door de woorden van Jezus zelf, om Jezus, onze grootste schat te maken."
 
 #: commandments_app.ShortMovie/description:1
+#, fuzzy
 msgid ""
 "This video illustrates Jesus' Parable of the Sower without the use of any "
 "language elements. It employs the latest, cutting edge animation techniques."
@@ -4661,192 +4816,306 @@ msgid ""
 "different ground. Experience the seeds growing and the challenges they face."
 " How will you respond to Jesus' message? "
 msgstr ""
+"Deze video toont Jezus gelijkenis van de zaaier zonder het gebruik van elke "
+"taal elementen. Het gebruik van de nieuwste, cutting edge "
+"animatietechnieken. De video toont duidelijk de 4 gevallen van de zaden "
+"verspreid over verschillende grond. Ervaar de zaden groeit en de uitdagingen"
+" waarvoor zij staan. Hoe gaat u reageren op de boodschap van Jezus?"
 
 #: commandments_app.ShortMovie/description:3
+#, fuzzy
 msgid ""
 "Though the world is by plagued by suffering due to the realities of sin, "
 "death, and evil, God is calling us to seek refuge in the only place it can "
 "truly be found...His presence. A symbolic adaptation of Psalm 46."
 msgstr ""
+"Hoewel de wereld door wordt geteisterd door het lijden als gevolg van de "
+"realiteit van zonde, dood en kwaad, is God roept ons om hun toevlucht te "
+"zoeken in de enige plek waar het kan echt worden gevonden ... Zijn "
+"aanwezigheid. Een symbolische aanpassing van Psalm 46."
 
 #: commandments_app.ShortMovie/description:4
+#, fuzzy
 msgid ""
 "This two minute short reveals the great need to reach people who have no "
 "access to the Gospel and how God's Spirit has been moving to reach the "
 "unengaged of Mali."
 msgstr ""
+"Deze twee minuten korte onthult de grote behoefte aan mensen die geen "
+"toegang hebben tot het evangelie en hoe Gods Geest is op weg naar de "
+"unengaged van Mali te bereiken te bereiken."
 
 #: commandments_app.ShortMovie/description:5
+#, fuzzy
 msgid ""
 "Kyle has it all figured out. He’s got the girls, the grades, and lives at "
 "the best party house on campus. But one fateful day, Kyle’s heart stops "
 "beating and he suddenly comes face to face with a dark truth that he’s "
 "ignored his entire life."
 msgstr ""
+"Kyle heeft het allemaal bedacht. Hij heeft de meisjes, de rangen, en woont "
+"aan de beste partij huis op de campus. Maar op een noodlottige dag, Kyle's "
+"hart stopt met kloppen en hij komt plotseling oog in oog met een donkere "
+"waarheid dat hij negeerde zijn hele leven."
 
 #: commandments_app.ShortMovie/description:6
+#, fuzzy
 msgid ""
 "Since January 18, 2011, Egypt has been in a state of civil and political "
 "unrest, but in the midst of the violence and uncertainty, God is moving in a"
 " BIG way."
 msgstr ""
+"Sinds 18 januari 2011, heeft Egypte al in een staat van de burgerlijke en "
+"politieke onrust, maar in het midden van het geweld en onzekerheid, wordt "
+"God beweegt zich in een grote weg."
 
 #: commandments_app.ShortMovie/description:7
+#, fuzzy
 msgid ""
 "Inspired by the age-old question \"What is your life?\", this short film "
 "challenges the promises of the American dream and presents an alternative "
 "that offers so much more."
 msgstr ""
+"Geïnspireerd door de eeuwenoude vraag: \"Wat is uw leven?\", Deze korte film"
+" daagt de beloften van de Amerikaanse droom en presenteert een alternatief "
+"dat nog veel meer biedt."
 
 #: commandments_app.ShortMovie/description:8
+#, fuzzy
 msgid ""
 "Jesus compared the kingdom of God to one of the smallest seeds on Earth and "
 "over 2000 years later, the truth of this teaching can be seen all across the"
 " globe."
 msgstr ""
+"Jezus vergeleek het koninkrijk van God aan een van de kleinste zaden op "
+"aarde en meer dan 2000 jaar later, kan de waarheid van deze leer over de "
+"hele wereld te zien."
 
 #: commandments_app.ShortMovie/description:10
+#, fuzzy
 msgid ""
 "We all suffer at the hands of other people. In Junko’s case, she was abused "
 "as a child and found herself isolated and in deep sorrow. Then, a gradual "
 "feeling of love grew in her heart and opened the door to a life that she "
 "never knew existed."
 msgstr ""
+"We hebben allemaal te lijden in de handen van andere mensen. In het geval "
+"Junko, werd ze misbruikt als kind en vond zichzelf geïsoleerd en in diep "
+"verdriet. Dan, een geleidelijke gevoel van liefde groeide in haar hart en "
+"opende de deur naar een leven dat ze nooit wist dat ze bestonden."
 
 #: commandments_app.ShortMovie/description:11
+#, fuzzy
 msgid ""
 "Sarah enjoys relating with people, but when an encounter with a Deaf woman "
 "challenges her ability to connect, God redefines what it means for her to be"
 " a follower."
 msgstr ""
+"Sarah heeft in verband met mensen, maar wanneer een ontmoeting met een dove "
+"vrouw daagt haar vermogen om verbinding te maken, God herdefinieert wat het "
+"betekent voor haar om een ​​volgeling te zijn."
 
 #: commandments_app.ShortMovie/description:12
+#, fuzzy
 msgid ""
 "One man's life changed the course of history for billions of people across "
 "the globe. He is both revered and reviled, famed and feared and you know who"
 " he is without a single mention of his name."
 msgstr ""
+"Een man's leven veranderde de loop van de geschiedenis voor miljarden mensen"
+" over de hele wereld. Hij is zowel vereerd en verguisd, befaamde en "
+"gevreesde en je weet wie hij is zonder een enkele vermelding van zijn naam."
 
 #: commandments_app.ShortMovie/description:13
+#, fuzzy
 msgid ""
 "At the of age 70, Bettie Kaufmann has a conversation with God. Little does "
 "she know that this one interaction will eventually send her to jail."
 msgstr ""
+"Op de leeftijd van 70, Bettie Kaufmann heeft een gesprek met God. Ze weet "
+"niet dat deze interactie haar uiteindelijk zal sturen naar de gevangenis."
 
 #: commandments_app.ShortMovie/description:15
+#, fuzzy
 msgid ""
 "What if God asked you to leave everything you know behind? Well, that’s what"
 " happens to Marc and what God does with his response radically changes how "
 "residents of Sherbrooke, Québec see Jesus."
 msgstr ""
+"Wat als God u gevraagd om alles wat je weet achter te laten? Nou, dat is wat"
+" er gebeurt met Marc en wat God doet met zijn antwoord verandert radicaal "
+"hoe inwoners van Sherbrooke, Québec Jezus zien."
 
 #: commandments_app.ShortMovie/description:16
+#, fuzzy
 msgid ""
 "Samuel loves Jesus and loves children, so God used him in a very big way."
 msgstr ""
+"Samuel van Jezus houdt en houdt van kinderen, zodat God hem gebruikt in een "
+"zeer grote weg."
 
 #: commandments_app.ShortMovie/description:18
+#, fuzzy
 msgid ""
 "There is an emptiness inside each of us that cannot be filled by life’s "
 "pursuits or ignored by its distractions. However, beyond the emptiness there"
 " is a voice calling. Do you hear the voice? Will you follow the call?"
 msgstr ""
+"Er is een leegte in elk van ons, dat niet kan worden vervuld door de "
+"bezigheden van het leven of genegeerd door zijn afleiding. Echter, voorbij "
+"de leegte is er een stem roeping. Heeft u de stem te horen? Zal u het "
+"gesprek volgen?"
 
 #: commandments_app.ShortMovie/description:19
+#, fuzzy
 msgid ""
 "Over the span of a three and a half year wait, Peter and Erin realize that "
 "they are adopting for reasons much more personal than once thought. They are"
 " adopting, because they were adopted."
 msgstr ""
+"Meer dan de spanwijdte van een drie en een half jaar wachten, Peter en Erin "
+"beseffen dat ze tot vaststelling, voor redenen veel persoonlijker dan ooit "
+"gedacht. Ze zijn de aanneming, omdat ze werden goedgekeurd."
 
 #: commandments_app.ShortMovie/description:20
+#, fuzzy
 msgid ""
 "Filmed in six languages across five continents, this short film captures the"
 " faith-filled thoughts of children as they contemplate the many attributes "
 "of God."
 msgstr ""
+"Gefilmd in zes talen, verspreid over vijf continenten, deze korte film vangt"
+" de gelovige gedachten van kinderen als ze nadenken over de vele "
+"eigenschappen van God."
 
 #: commandments_app.ShortMovie/description:21
+#, fuzzy
 msgid ""
 "Noah is homeless. Dwight and his family are his neighbors. Their friendship "
 "will challenge you to “love your neighbor as yourself”."
 msgstr ""
+"Noah is dakloos. Dwight en zijn familie zijn zijn buren. Hun vriendschap zal"
+" je uitdagen om “heb uw naaste lief als uzelf”."
 
 #: commandments_app.ShortMovie/description:22
+#, fuzzy
 msgid ""
 "This is El Shaddai. She is an Ethiopian orphan who is being raised by her "
 "adopted Ethiopian parents to love Jesus and to sing about His Word. This is "
 "her act of worship."
 msgstr ""
+"Dit is El Shaddai. Ze is een Ethiopische wees die wordt door haar "
+"geadopteerde Ethiopische ouders wordt verhoogd tot Jezus te houden en te "
+"zingen over Zijn Woord. Dit is haar daad van aanbidding."
 
 #: commandments_app.ShortMovie/description:23
+#, fuzzy
 msgid ""
 "\n"
 "Faith in Christ is a pursuit…a fight…a race. It’s a journey laden with difficulty, but at the finish line awaits an imperishable reward that is given to those who persevere…Christ Himself."
 msgstr ""
+"Geloof in Christus is een achtervolging ... een strijd ... een race. Het is "
+"een reis beladen met moeite, maar bij de finish wacht een onvergankelijke "
+"beloning die wordt gegeven aan degenen die volharden ... Christus Zelf."
 
 #: commandments_app.ShortMovie/description:24
+#, fuzzy
 msgid ""
 "pre·em·i·nent | adj. Superior to or notable above all others; outstanding. "
 "(Based on Colossians 1: 15-23)"
 msgstr ""
+"pre · em · i · nent | adj. Superieur aan of opmerkelijke boven alle anderen;"
+" uitstekend. (Op basis van Kol 1: 15-23)"
 
 #: commandments_app.Testimony/description:2
+#, fuzzy
 msgid ""
 "Jason and Tracy were ecstatic to find out that they were expecting, but when"
 " the couple is told that their daughter is “incompatible with life”, they "
 "begin a journey that will forever change how they view God’s love."
 msgstr ""
+"Jason en Tracy waren dolenthousiast om te ontdekken dat ze verwachtten, maar"
+" als het paar wordt verteld dat hun dochter is “onverenigbaar met het "
+"leven”, beginnen ze een reis die voor altijd zal veranderen hoe ze de liefde"
+" van God te zien."
 
 #: commandments_app.Testimony/description:3
+#, fuzzy
 msgid ""
 "While searching for direction during a sabbatical with his wife, Jay wrote "
 "three letters in the sand: WWH. God responded by sending them to one of the "
 "most dynamic cities in the world, Rio de Janeiro."
 msgstr ""
+"Tijdens het zoeken naar richting tijdens een sabbatical met zijn vrouw, Jay "
+"schreef drie letters in het zand: WWH. God reageerde door ze naar een van de"
+" meest dynamische steden in de wereld, Rio de Janeiro."
 
 #: commandments_app.Testimony/description:4
+#, fuzzy
 msgid ""
 "Do you struggle in your marriage? Takashi and Naoko did. Their shame and "
 "brokenness left their marriage on the brink of total collapse. Then they "
 "found true love…not in each other, but in a person that would transform "
 "their family completely."
 msgstr ""
+"Heeft u moeite in je huwelijk? Takashi en Naoko deed. Hun schaamte en "
+"gebrokenheid lieten hun huwelijk op de rand van totale ineenstorting. Toen "
+"vonden ze de ware liefde ... niet in elkaar, maar in een persoon dat hun "
+"gezin compleet zou veranderen."
 
 #: commandments_app.Testimony/description:5
+#, fuzzy
 msgid ""
 "At the age of 41, Cory starts having horrific nightmares of extreme abuse. "
 "Once he realizes that his dreams are actually repressed memories from his "
 "childhood, Cory begins a life-changing journey that will forever transform "
 "his relationship with God."
 msgstr ""
+"Op de leeftijd van 41, Cory begint met verschrikkelijke nachtmerries van "
+"extreme misbruik. Zodra hij beseft dat zijn dromen eigenlijk verdrongen "
+"herinneringen uit zijn jeugd, begint Cory een levensveranderende reis die "
+"voor altijd zijn relatie met God zal transformeren."
 
 #: commandments_app.Testimony/description:6
+#, fuzzy
 msgid ""
 "A powerfull testimony of a woman, who’s been in the concentration camps by "
 "the nazis, and still learned to forgive"
 msgstr ""
+"Een krachtig getuigenis van een vrouw, die in de concentratiekampen is "
+"geweest door de nazi's, en nog steeds geleerd om te vergeven"
 
 #: commandments_app.Testimony/description:7
+#, fuzzy
 msgid "A powerfull testimony of a nl famous christian singer"
-msgstr ""
+msgstr "Een krachtig getuigenis van een nl bekende christelijke zanger"
 
 #: commandments_app.Testimony/description:8
+#, fuzzy
 msgid ""
 "Anderson and Robson came to know the love and grace of Jesus in the midst of"
 " poverty, abuse, and sin. Now transformed, they’ve become beacons of that "
 "same love and grace in one of the most notorious favelas in Rio de Janeiro, "
 "The City of God."
 msgstr ""
+"Anderson en Robson kwam tot de liefde en genade van Jezus kennen in het "
+"midden van armoede, misbruik, en zonde. Nu getransformeerd, hebben ze bakens"
+" van diezelfde liefde en genade te worden in één van de meest beruchte "
+"favela's in Rio de Janeiro, de stad van God."
 
 #: commandments_app.Testimony/description:9
+#, fuzzy
 msgid ""
 "In 2001, Gary and Peggy Ifft lived in Bloomington, IL. They had normal jobs,"
 " a normal home, a normal life. Then God called them out of the normal and "
 "into His mission."
 msgstr ""
+"In 2001, Gary en Peggy ifft woonde in Bloomington, IL. Ze hadden een normale"
+" baan, een normaal huis, een normaal leven. En God riep hen uit de normale "
+"en in Zijn missie."
 
 #: commandments_app.Testimony/description:10
+#, fuzzy
 msgid ""
 "\"Why God, was I born this way?\"  That's the question Nick Vujicic wondered"
 " after being born without limbs.  Nick discovered God's miraculous plan for "
@@ -4854,99 +5123,165 @@ msgid ""
 " Jesus Christ.  Watch and discover how you can be a part of Nick's goal to "
 "preach to every single soul on the planet: 7 billion people!"
 msgstr ""
+"\"Waarom God, ik ben geboren op deze manier?\" Dat is de vraag Nick Vujicic "
+"vroeg zich af na de geboorte zonder ledematen. Nick ontdekt Gods "
+"wonderbaarlijke plan voor zijn leven als een wereldwijd evangelist het delen"
+" van de boodschap van verlossing door Jezus Christus. Kijk en ontdek hoe je "
+"kunt een deel van het doel van Nick's te prediken om elke ziel op de "
+"planeet: 7 miljard mensen!"
 
 #: commandments_app.Testimony/description:11
+#, fuzzy
 msgid ""
 "Where were you on March 11, 2011 when the Tohoku earthquake shook Japan? "
 "Yuji was at work, and with Tokyo’s power grid shut down, he journeyed on "
 "foot across the city to discover a message waiting for him that would change"
 " his life forever."
 msgstr ""
+"Waar was je op 11 maart 2011 toen de aardbeving Tohoku schudde Japan? Yuji "
+"aan het werk was, en met de Tokyo elektriciteitsnet stilgelegd, reisde hij "
+"te voet door de stad om een ​​bericht op hem te wachten, dat zijn leven "
+"voorgoed zou veranderen ontdekken."
 
 #: commandments_app.Testimony/description:12
+#, fuzzy
 msgid ""
 "When Nilton Cordeiro was young, he heard about the love and grace of Jesus "
 "Christ through an old hymn. This love and grace quickly captured his heart "
 "and would change his life forever."
 msgstr ""
+"Wanneer Nilton Cordeiro jong was, hoorde hij over de liefde en de genade van"
+" Jezus Christus door middel van een oude lied. Deze liefde en genade snel "
+"gevangen zijn hart en zou zijn leven voorgoed veranderen."
 
 #: commandments_app.Testimony/description:13
+#, fuzzy
 msgid ""
 "For years, Walt and Annie struggled with infertility, but in a single moment"
 " they realized that God was writing a beautiful story for them that was over"
 " 20 years in the making."
 msgstr ""
+"Jarenlang Walt en Annie had moeite met onvruchtbaarheid, maar in een enkel "
+"moment realiseerden ze zich dat God aan het schrijven was een mooi verhaal "
+"voor hen die was meer dan 20 jaar in de maak."
 
 #: commandments_app.Testimony/description:14
+#, fuzzy
 msgid ""
 "Do you struggle with depression? So did Yumiko. She hated herself and even "
 "dreamt of running in front of a train to end her life. But hope came her way"
 " in the last place she ever expected."
 msgstr ""
+"Heeft u moeite met een depressie? Dus deed Yumiko. Ze haatte zichzelf en "
+"zelfs gedroomd van het runnen van in de voorkant van een trein om haar leven"
+" te beëindigen. Maar hoop kwam haar weg in de laatste plaats die ze ooit had"
+" verwacht."
 
 #: commandments_app.Testimony/description:15
+#, fuzzy
 msgid ""
 "When Petra loses her mother at a young age, she sets off on a journey to "
 "find hope and healing for her loss. This decade-long search eventually leads"
 " her to discover that the answer she’s been looking for has been pursuing "
 "her all along."
 msgstr ""
+"Toen Petra haar moeder verliest op jonge leeftijd, zet ze weg op een reis "
+"naar hoop en genezing voor haar verlies te vinden. Dit decennium-lange "
+"zoektocht leidt uiteindelijk tot haar om te ontdekken dat het antwoord dat "
+"ze op zoek naar is het nastreven van haar langs."
 
 #: commandments_app.Testimony/description:16
+#, fuzzy
 msgid ""
 "When Crystal Clapp gave her life to Jesus Christ, everything changed. Her "
 "thoughts became His thoughts. Her will became His will. The old was gone "
 "and, soon enough, so was she."
 msgstr ""
+"Bij Crystal Clapp gaf haar leven aan Jezus Christus, veranderde alles. Haar "
+"gedachten werd Zijn gedachten. Haar wil werd Zijn wil. De oude weg was en al"
+" snel genoeg, dus ze was."
 
 #: commandments_app.Testimony/description:17
+#, fuzzy
 msgid ""
 "This two minute short reveals God's desire for unity and how the Evangelical"
 " and Orthodox churches in Egypt have united together to exalt Christ as the "
 "Head of His Church."
 msgstr ""
+"Deze twee minuten korte openbaart Gods verlangen naar eenheid en hoe de "
+"evangelische en orthodoxe kerken in Egypte hebben samen met Christus "
+"verenigd te verheffen als het Hoofd van Zijn Kerk."
 
 #: commandments_app.Testimony/description:18
+#, fuzzy
 msgid ""
 "Are you looking for joy in life? As a gifted performer, singing brought "
 "Atsushi joy. It also brought him to one of the most unlikely places: a "
 "Gospel Choir practice. It wasn’t long before the lyrics he sang opened his "
 "eyes to a joy greater than what music alone could provide."
 msgstr ""
+"Bent u op zoek naar de vreugde in het leven? Als begenadigd performer, "
+"zingen bracht Atsushi vreugde. Het bracht hem ook tot een van de meest "
+"onwaarschijnlijke plaatsen: een Gospel Choir praktijk. Het duurde niet lang "
+"voordat de teksten zong hij zijn ogen geopend voor een vreugde groter dan "
+"welke muziek alleen zou kunnen bieden."
 
 #: commandments_app.Testimony/description:19
+#, fuzzy
 msgid ""
 "We all have unfulfilled dreams. For Ritsuko, it was finding fame, love, and "
 "acceptance. However, when this dream disappeared, a glimmer of hope arose "
 "that not only quenched her feelings of despair, but provided more love and "
 "acceptance than she could ever imagine."
 msgstr ""
+"We hebben allemaal onvervulde dromen. Voor Ritsuko, was het vinden van roem,"
+" liefde en acceptatie. Echter, wanneer deze droom verdween, een sprankje "
+"hoop is ontstaan ​​die niet alleen haar gevoelens van wanhoop geblust, maar "
+"op voorwaarde dat meer liefde en acceptatie dan ze ooit zou kunnen "
+"voorstellen."
 
 #: commandments_app.Testimony/description:20
+#, fuzzy
 msgid ""
 "Touch Bin lived most of her life gripped by fear, pain, and hopelessness, "
 "but when God opened her eyes to the truth of Christ, she left the path of "
 "death and began a journey toward life."
 msgstr ""
+"Touch Bin leefde het grootste deel van haar leven in de greep van angst, "
+"pijn en wanhoop, maar toen God haar ogen voor de waarheid van Christus "
+"opende, verliet ze het pad van de dood en begon met een reis naar het leven."
 
 #: commandments_app.Testimony/description:21
+#, fuzzy
 msgid ""
 "Josiah grew up in the Amazon completely convinced that he was luckiest kid "
 "on Earth, but when tragedy struck at the age of 13, God revealed to him a "
 "much greater identity."
 msgstr ""
+"Josiah opgegroeid in de Amazone volledig van overtuigd dat hij gelukkigste "
+"jongen op aarde was, maar toen de tragedie op de leeftijd van 13 geslagen, "
+"God om hem een ​​veel grotere identiteit onthuld."
 
 #: commandments_app.Testimony/description:22
+#, fuzzy
 msgid ""
 "Nate & Ruth Reutter were only moments away from having their first child "
 "while serving as missionaries along the Amazon River in Brazil. Then "
 "everything changed...most dramatically their faith in Christ and His living "
 "Word."
 msgstr ""
+"Nate & Ruth Reutter waren slechts een steenworp afstand van het hebben van "
+"hun eerste kind terwijl het dienen als zendelingen langs de rivier de "
+"Amazone in Brazilië. Toen veranderde alles ... meest dramatisch hun geloof "
+"in Christus en Zijn levende Woord."
 
 #: commandments_app.Testimony/description:23
+#, fuzzy
 msgid ""
 "Lore and Michael started their family with great hope for the future, but "
 "when their son’s life begins to spiral downward, they come face to face with"
 " what it truly means to trust in God."
 msgstr ""
+"Lore en Michael begonnen hun familie met een grote hoop voor de toekomst, "
+"maar als het leven van hun zoon begint te neerwaartse spiraal, komen ze oog "
+"in oog met wat het werkelijk betekent om vertrouwen in God."

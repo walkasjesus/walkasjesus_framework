@@ -24,6 +24,24 @@
     </div>
   </div>
 
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_heart.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Becoming like Him' %}</span>
+            </div>
+            <h1 class="mb-4">{% blocktrans %}Bringing people back to the <span>heart of Christ</span>{% endblocktrans %}</h1>
+            <p>{% trans 'For God so loved the world' %}...</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <div class="overlay"></div>
       <div class="container">
@@ -52,7 +70,7 @@
               <span>{% trans 'True disciples' %}</span>
             </div>
             <h1 class="mb-4">{% blocktrans %}If we <span>reproduce the character</span> of Jesus Christ in disciples{% endblocktrans %}</h1>
-            <p>{% trans 'than we are a good disciple' %}.</p>
+            <p>{% trans 'than we are a good disciple' %}</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
           </div>
         </div>

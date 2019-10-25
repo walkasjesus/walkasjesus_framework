@@ -8546,7 +8546,8 @@ h1, h2, h3, h4, h5,
         background: transparent;
         letter-spacing: 3px;
         background: #e2b900 !important;
-        color: rgb(88, 69, 57) !important; }
+        color: rgb(88, 69, 57) !important; 
+        opacity: 0.8; }
   .btn.btn-secondary {
     background: #033fff !important;
     border: 1px solid #033fff !important;
@@ -8810,7 +8811,8 @@ h1, h2, h3, h4, h5,
             display: block; } }
         .sermon-wrap .img .text-content .btn-custom:hover, .sermon-wrap .img .text-content .btn-custom:focus {
           background: #e2b900;
-          border: 1px solid #e2b900; }
+          border: 1px solid #e2b900;
+          opacity: 0.9; }
   .sermon-wrap .text h2 {
     font-size: 24px;
     font-weight: 400; }
@@ -9206,7 +9208,8 @@ textarea.form-control {
     border: 2px solid #fff !important; }
     .ftco-footer .ftco-footer-widget .btn-primary:hover {
       background: #fff;
-      border: 2px solid #fff !important; }
+      border: 2px solid #fff !important; 
+      opacity: 0.9;}
   .ftco-footer p {
     color: rgba(255, 255, 255, 0.7); }
   .ftco-footer a {

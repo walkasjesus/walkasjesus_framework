@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 19:20+0000\n"
+"POT-Creation-Date: 2019-10-25 06:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -860,81 +860,94 @@ msgstr ""
 #: commandments_app/templates/commandments/index.html:20
 #: commandments_app/templates/commandments/index.html:38
 #: commandments_app/templates/commandments/index.html:56
+#: commandments_app/templates/commandments/index.html:74
 #, fuzzy
 msgid "Discover His commandments"
 msgstr "Entdecken Sie seine Gebote"
 
 #: commandments_app/templates/commandments/index.html:34
+msgid "Becoming like Him"
+msgstr ""
+
+#: commandments_app/templates/commandments/index.html:36
+msgid "Bringing people back to the <span>heart of Christ</span>"
+msgstr ""
+
+#: commandments_app/templates/commandments/index.html:37
+msgid "For God so loved the world"
+msgstr ""
+
+#: commandments_app/templates/commandments/index.html:52
 #, fuzzy
 msgid "Matthew 28:19-20"
 msgstr "Matthäus 28: 19-20"
 
-#: commandments_app/templates/commandments/index.html:36
+#: commandments_app/templates/commandments/index.html:54
 #, fuzzy
 msgid "Therefore go and <span>make Disciples</span> of all nations"
 msgstr "Machet zu Jüngern alle Völker"
 
-#: commandments_app/templates/commandments/index.html:37
+#: commandments_app/templates/commandments/index.html:55
 msgid ""
 "teaching them to <span><strong>obey everything</strong></span> I have "
 "commanded you"
 msgstr ""
 
-#: commandments_app/templates/commandments/index.html:52
+#: commandments_app/templates/commandments/index.html:70
 #, fuzzy
 msgid "True disciples"
 msgstr "Ein wahrer Jünger"
 
-#: commandments_app/templates/commandments/index.html:54
+#: commandments_app/templates/commandments/index.html:72
 msgid "If we <span>reproduce the character</span> of Jesus Christ in disciples"
 msgstr ""
 
-#: commandments_app/templates/commandments/index.html:55
+#: commandments_app/templates/commandments/index.html:73
 #, fuzzy
 msgid "than we are a good disciple"
 msgstr "als wir sind ein guter Schüler"
 
-#: commandments_app/templates/commandments/index.html:79
+#: commandments_app/templates/commandments/index.html:97
 #, fuzzy
 msgid "Unique commandments"
 msgstr "einzigartige Gebote"
 
-#: commandments_app/templates/commandments/index.html:90
+#: commandments_app/templates/commandments/index.html:108
 #, fuzzy
 msgid "Bible translations"
 msgstr "Bibelübersetzungen"
 
-#: commandments_app/templates/commandments/index.html:101
+#: commandments_app/templates/commandments/index.html:119
 #, fuzzy
 msgid "Languages"
 msgstr "Sprachen"
 
-#: commandments_app/templates/commandments/index.html:112
+#: commandments_app/templates/commandments/index.html:130
 #, fuzzy
 msgid "Contributers"
 msgstr "Einen Beitrag leisten"
 
-#: commandments_app/templates/commandments/index.html:124
+#: commandments_app/templates/commandments/index.html:142
 #: commandments_app/templates/commandments/listing.html:12
 #, fuzzy
 msgid "John 14:15"
 msgstr "Johannes 14:15"
 
-#: commandments_app/templates/commandments/index.html:125
+#: commandments_app/templates/commandments/index.html:143
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
 #, fuzzy
 msgid "If you love Me"
 msgstr "Wenn du mich liebst"
 
-#: commandments_app/templates/commandments/index.html:125
+#: commandments_app/templates/commandments/index.html:143
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
 #, fuzzy
 msgid "keep my commands"
 msgstr "halten meine Befehle"
 
-#: commandments_app/templates/commandments/index.html:126
+#: commandments_app/templates/commandments/index.html:144
 #, fuzzy
 msgid ""
 "This website will help you in applying all commandments in your life. How? "
@@ -946,7 +959,7 @@ msgstr ""
 "Diese Website wird Ihnen helfen, alle Gebote in Ihrem Leben anzuwenden. Wie? "
 "Für jedes Gebot, sammeln wir so viel wie möglich verwandten"
 
-#: commandments_app/templates/commandments/index.html:128
+#: commandments_app/templates/commandments/index.html:146
 #: commandments_app/templates/commandments/listing.html:16
 #, fuzzy
 msgid ""
@@ -962,7 +975,7 @@ msgstr ""
 "Gruppen, Discipleship Gruppen, Mentoring, Ministerium Bereicherung oder One-"
 "on-One-Nachfolge, werden Anhänger in allen Jesus Lehren."
 
-#: commandments_app/templates/commandments/index.html:137
+#: commandments_app/templates/commandments/index.html:155
 #: commandments_app/templates/commandments/listing.html:25
 #, fuzzy
 msgid "No commandments are available."

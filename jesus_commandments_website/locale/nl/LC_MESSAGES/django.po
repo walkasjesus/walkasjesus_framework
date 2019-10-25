@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 19:20+0000\n"
+"POT-Creation-Date: 2019-10-25 06:14+0000\n"
 "PO-Revision-Date: 2019-10-25 06:02+0000\n"
 "Last-Translator: b'  <info@jesuscommandments.org>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -717,19 +717,31 @@ msgstr ""
 #: commandments_app/templates/commandments/index.html:20
 #: commandments_app/templates/commandments/index.html:38
 #: commandments_app/templates/commandments/index.html:56
+#: commandments_app/templates/commandments/index.html:74
 msgid "Discover His commandments"
 msgstr "Ontdek Zijn geboden"
 
 #: commandments_app/templates/commandments/index.html:34
+msgid "Becoming like Him"
+msgstr "Worden zoals Hij"
+
+#: commandments_app/templates/commandments/index.html:36
+msgid "Bringing people back to the <span>heart of Christ</span>"
+msgstr "Mensen terugbrengen bij het <span>hart van Jezus</span>"
+
+#: commandments_app/templates/commandments/index.html:37
+msgid "For God so loved the world"
+msgstr "Want God had de wereld zo lief"
+
+#: commandments_app/templates/commandments/index.html:52
 msgid "Matthew 28:19-20"
 msgstr "Mattheüs 28:19-20"
 
-#: commandments_app/templates/commandments/index.html:36
-#| msgid "Make disciples of all nations"
+#: commandments_app/templates/commandments/index.html:54
 msgid "Therefore go and <span>make Disciples</span> of all nations"
 msgstr "Ga dan heen, <span>maak discipelen</span> uit alle volken"
 
-#: commandments_app/templates/commandments/index.html:37
+#: commandments_app/templates/commandments/index.html:55
 msgid ""
 "teaching them to <span><strong>obey everything</strong></span> I have "
 "commanded you"
@@ -737,54 +749,54 @@ msgstr ""
 "hun lerend <span><strong>alles</strong></span> wat Ik u geboden heb, "
 "<span><strong>in acht te nemen</strong></span>"
 
-#: commandments_app/templates/commandments/index.html:52
+#: commandments_app/templates/commandments/index.html:70
 msgid "True disciples"
 msgstr "Ware discipelen"
 
-#: commandments_app/templates/commandments/index.html:54
+#: commandments_app/templates/commandments/index.html:72
 msgid ""
 "If we <span>reproduce the character</span> of Jesus Christ in disciples"
 msgstr ""
 "Als we het <span>karakter van Jezus reproduceren</span> in onze discipelen "
 
-#: commandments_app/templates/commandments/index.html:55
+#: commandments_app/templates/commandments/index.html:73
 msgid "than we are a good disciple"
 msgstr "dan zijn we een goede discipel"
 
-#: commandments_app/templates/commandments/index.html:79
+#: commandments_app/templates/commandments/index.html:97
 msgid "Unique commandments"
 msgstr "Unieke geboden"
 
-#: commandments_app/templates/commandments/index.html:90
+#: commandments_app/templates/commandments/index.html:108
 msgid "Bible translations"
 msgstr "Bijbelvertalingen"
 
-#: commandments_app/templates/commandments/index.html:101
+#: commandments_app/templates/commandments/index.html:119
 msgid "Languages"
 msgstr "Talen"
 
-#: commandments_app/templates/commandments/index.html:112
+#: commandments_app/templates/commandments/index.html:130
 msgid "Contributers"
 msgstr "Bijdragen"
 
-#: commandments_app/templates/commandments/index.html:124
+#: commandments_app/templates/commandments/index.html:142
 #: commandments_app/templates/commandments/listing.html:12
 msgid "John 14:15"
 msgstr "Johannes 14:15"
 
-#: commandments_app/templates/commandments/index.html:125
+#: commandments_app/templates/commandments/index.html:143
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
 msgid "If you love Me"
 msgstr "Als u Mij liefhebt"
 
-#: commandments_app/templates/commandments/index.html:125
+#: commandments_app/templates/commandments/index.html:143
 #: commandments_app/templates/commandments/listing.html:13
 #: templates/base.html:101
 msgid "keep my commands"
 msgstr "neem dan Mijn geboden in acht"
 
-#: commandments_app/templates/commandments/index.html:126
+#: commandments_app/templates/commandments/index.html:144
 msgid ""
 "This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related resources like \n"
 "            <strong>Bible references, drawings, movies, songs, blogs, sermons, pictures and books</strong> to feed your heart, soul and mind"
@@ -794,7 +806,7 @@ msgstr ""
 "zoals <strong>Bijbelteksten, illustraties, films, liederen, blogs, preken, "
 "foto's en boeken</strong> om je hart, ziel en verstand te voeden"
 
-#: commandments_app/templates/commandments/index.html:128
+#: commandments_app/templates/commandments/index.html:146
 #: commandments_app/templates/commandments/listing.html:16
 msgid ""
 "To succeed in becoming a good disciple, we need to live out all of these "
@@ -809,7 +821,7 @@ msgstr ""
 "discipelschap groepen, mentoring of één-op-één  discipelschap, om "
 "volgelingen in al Jezus geboden te worden."
 
-#: commandments_app/templates/commandments/index.html:137
+#: commandments_app/templates/commandments/index.html:155
 #: commandments_app/templates/commandments/listing.html:25
 msgid "No commandments are available."
 msgstr "Geen geboden beschikbaar."
@@ -2016,7 +2028,7 @@ msgstr "Beeld"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:778
 #, python-format
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr "%(model)s bijvoorbeeld met%(field)s %(value)r bestaat niet."
+msgstr "%(model)s bijvoorbeeld met %(field)s %(value)r bestaat niet."
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:780
 msgid "Foreign Key (type determined by related field)"
@@ -2029,12 +2041,12 @@ msgstr "Eén-op-één relatie"
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1057
 #, python-format
 msgid "%(from)s-%(to)s relationship"
-msgstr "%(from)s -% (to) en verhouding"
+msgstr "%(from)s-%(to)s verhouding"
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1058
 #, python-format
 msgid "%(from)s-%(to)s relationships"
-msgstr "%(from)s -% (to) en relaties"
+msgstr "%(from)s-%(to)s verhoudingen"
 
 #: venv/lib/python3.6/site-packages/django/db/models/fields/related.py:1100
 msgid "Many-to-many relationship"
@@ -2076,7 +2088,7 @@ msgstr "Voer een geldige duur."
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:472
 #, python-brace-format
 msgid "The number of days must be between {min_days} and {max_days}."
-msgstr "Het aantal dagen moet tussen {MIN_DAYS} en {MAX_DAYS}."
+msgstr "Het aantal dagen moet tussen de {min_days} en {max_days} liggen."
 
 #: venv/lib/python3.6/site-packages/django/forms/fields.py:532
 msgid "No file was submitted. Check the encoding type on the form."
@@ -2752,8 +2764,8 @@ msgid ""
 "Future %(verbose_name_plural)s not available because "
 "%(class_name)s.allow_future is False."
 msgstr ""
-"Future% (verbose_name_plural) is niet beschikbaar omdat% (class_name) "
-"s.allow_future is False."
+"Future %(verbose_name_plural)s is niet beschikbaar omdat "
+"%(class_name)s.allow_future Onwaar is."
 
 #: venv/lib/python3.6/site-packages/django/views/generic/dates.py:623
 #, python-format

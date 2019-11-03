@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.utils.translation import gettext
 
-from account_app.forms import UserForm
+from account_app.forms import SignUpForm
 
 
 def index(request):
@@ -14,7 +14,7 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -24,14 +24,14 @@ def signup(request):
             messages.success(request, gettext('Thank you for your registration. We are validating your registration and will get in touch soon.'))
             return redirect('/account/profile')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 
 @login_required
 def profile(request):
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
+        user_form = SignUpForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
             messages.success(request, gettext('Your profile was successfully updated!'))
@@ -39,7 +39,7 @@ def profile(request):
         else:
             messages.error(request, gettext('Please correct the error below.'))
     else:
-        user_form = UserForm(instance=request.user)
+        user_form = SignUpForm(instance=request.user)
     return render(request, 'account/profile.html', {
         'user_form': user_form
     })

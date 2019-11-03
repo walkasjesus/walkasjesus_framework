@@ -12,14 +12,14 @@ class CommandmentManager(models.Manager):
 
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
-    title_negative = models.CharField(max_length=256, default=None, blank=True, null=True)
-    devotional = FroalaField()
-    devotional_source = models.CharField(max_length=256, default=None, blank=True, null=True)
+    title_negative = models.CharField(max_length=256, default='', blank=True)
+    devotional = FroalaField(blank=True, null=True)
+    devotional_source = models.CharField(max_length=256, default='', blank=True, null=True)
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)
-    quote = models.TextField(default=None, blank=True, null=True)
-    quote_source = models.CharField(max_length=256, default=None, blank=True, null=True)
+    quote = models.TextField(default='', blank=True, null=True)
+    quote_source = models.CharField(max_length=256, default='', blank=True, null=True)
     bible = None
     languages = [translation.get_language()]
     objects = CommandmentManager()

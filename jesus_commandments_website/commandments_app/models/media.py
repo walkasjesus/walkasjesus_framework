@@ -10,8 +10,8 @@ from jesus_commandments_website.settings import MEDIA_URL
 class Media(models.Model):
     """" Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    title = models.CharField(max_length=128, default='')
-    description = models.TextField(default='')
+    title = models.CharField(max_length=128, default='', null=True, blank=True)
+    description = models.TextField(default='', null=True, blank=True)
     author = models.CharField(max_length=64, default='')
     url = URLOrRelativeURLField(default='#')
     language_choices = [('any', gettext_lazy('Language independent')),

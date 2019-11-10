@@ -31,18 +31,23 @@
                             <br>
                             <form class="p-12 p-md-12 contact-form" method="post" action="{% url 'account:login' %}">
                                 {% csrf_token %}
-                                <table>
+                                <table style="width: 100%;">
                                 <tr>
-                                    <td>{{ form.username.label_tag }}</td>
-                                    <td>{{ form.username }}</td>
+                                    <td style="width: 150px;">{{ form.username.label_tag }}</td>
+                                    <td style="width: 90%;">{{ form.username }}</td>
                                 </tr>
                                 <tr>
-                                    <td>{{ form.password.label_tag }}</td>
-                                    <td>{{ form.password }}</td>
+                                    <td style="width: 150px;">{{ form.password.label_tag }}</td>
+                                    <td style="width: 90%;">{{ form.password }}</td>
+                                </tr>
+                                <tr>
+                                <td></td>
+                                    <td>
+                                        <input style="width: 150px;" type="submit" value="login" class="button">
+                                    </td>
                                 </tr>
                                 </table>
 
-                                <input type="submit" value="login" class="button">
                                 <input type="hidden" name="next" value="{{ next }}">
                                 <p><a href="{% url 'account:signup' %}">{% trans 'Not an account yet and want to contribute? Please register' %}</a></p>
                             </form>

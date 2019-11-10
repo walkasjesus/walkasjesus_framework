@@ -23,8 +23,40 @@
                     
                     <form class="bg-light p-4 p-md-5 contact-form" method="post">
                         {% csrf_token %}
-                        {{ user_form.as_p }}
-                        <button type="submit" class="button">{% trans 'Save changes' %}</button>
+			<table width="100%">
+			    {% for field in user_form %}
+			    <tr>
+				<td width="100px">
+				<p>
+				    {% if field.name == 'agree_toc' %}
+					<a href="/termsandconditions" target="_blank" >{% trans 'I agree with the Terms and Conditions' %}</a>
+				    {% else %}
+					{{ field.label_tag }}
+				    {% endif %}
+				</td>
+				<td style="align: left;">
+				    {{ field }}
+
+				    {% if field.help_text %}
+					<small>{{ field.help_text }}</small>
+				    {% endif %}
+
+				    {% for error in field.errors %}
+				    <p style="color: red;">{{ error }}</p>
+				    {% endfor %}
+				</td>
+				</p>
+			    </tr>
+			    {% endfor %}
+			    <tr>
+				<td>
+				</td>
+				<td>
+				    <button type="submit" class="button">{% trans 'Save changes' %}</button>
+				</td>
+			    </tr>
+			</table>
+
                     </form>
                 </div>
             </div>

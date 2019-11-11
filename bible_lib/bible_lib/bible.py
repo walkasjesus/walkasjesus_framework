@@ -22,3 +22,14 @@ class Bible:
                end_chapter: int,
                end_verse: int) -> str:
         pass
+
+    def __key(self):
+        return self.id
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        if isinstance(other, Bible):
+            return self.__key() == other.__key()
+        return NotImplemented

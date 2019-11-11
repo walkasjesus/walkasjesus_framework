@@ -7,13 +7,14 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from commandments_app.models import BibleTranslation, BibleReferences
+from commandments_app.models.bibles import BibleTranslationMetaData
+from jesus_commandments_website import settings
 
 
 class AdminBibleView(View):
     @method_decorator(staff_member_required)
     def get(self, request):
         bibles = BibleTranslation().all()
-        enabled_bible_ids = [b.id for b in BibleTranslation().all_in_supported_languages()]
         cache = Services().cache
         cache_controller = CacheController(cache)
 
@@ -25,7 +26,19 @@ class AdminBibleView(View):
                 cached_count, total_count = self.bible_count_in_cache(bible, cache_controller)
 
             bible.percentage_cached = cached_count / max(total_count, 0.0001) * 100
-            bible.enabled = (bible.id in enabled_bible_ids)
+
+            # Because the translation are retrieved from a library, new one can appear dynamically.
+            if not BibleTranslationMetaData.objects.filter(bible_id=bible.id).exists():
+                meta_data = BibleTranslationMetaData()
+                meta_data.bible_id = bible.id
+                # Default enable only in supported languages
+                languages = [code for code, name in settings.LANGUAGES]
+                meta_data.is_enabled = bible.language in languages
+                meta_data.save()
+            else:
+                meta_data = BibleTranslationMetaData.objects.get(bible_id=bible.id)
+
+            bible.enabled = meta_data.is_enabled
 
         bibles.sort(key=lambda b: (b.enabled, b.percentage_cached), reverse=True)
 

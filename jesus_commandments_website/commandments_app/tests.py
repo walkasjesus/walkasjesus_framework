@@ -2,8 +2,49 @@ from django.db import IntegrityError
 from django.test import TestCase
 
 from bible_lib import BibleBooks
-from commandments_app.models import AbstractBibleReference, SecondaryBibleReference, Commandment
+from commandments_app.models import AbstractBibleReference, SecondaryBibleReference, Commandment, BibleTranslation
 from commandments_app.models import PrimaryBibleReference, BibleBooks
+from commandments_app.models.bibles import BibleTranslationMetaData
+
+
+class BibleTranslationTestCase(TestCase):
+    # Checking the exact number is not working because it can change over time.
+    # This just gives an indication.
+    approximate_bible_count = 100
+
+    def test_all(self):
+        all_bibles = BibleTranslation().all()
+        self.assertGreaterEqual(len(all_bibles), self.approximate_bible_count)
+
+    def test_all_in_supported_languages(self):
+        all_bibles = len(BibleTranslation().all())
+        all_in_supported_languages = len(BibleTranslation().all_in_supported_languages())
+        self.assertGreater(all_in_supported_languages, 10)
+        self.assertLess(all_in_supported_languages, all_bibles)
+
+    def test_all_enabled_with_no_explicit_disabled_ones(self):
+        all_bibles = len(BibleTranslation().all())
+        all_enabled = len(BibleTranslation().all_enabled())
+        self.assertEqual(all_enabled, all_bibles)
+
+    def test_all_enabled_with_disabled_one(self):
+        all_bibles = len(BibleTranslation().all())
+        self.assertGreaterEqual(all_bibles, self.approximate_bible_count)
+        self._disable('hsv')
+        all_enabled = len(BibleTranslation().all_enabled())
+        self.assertEqual(all_enabled, all_bibles-1)
+
+    def test_all_disabled(self):
+        before_count = len(BibleTranslation().all_disabled())
+        self._disable('hsv')
+        after_count = len(BibleTranslation().all_disabled())
+        self.assertEqual(before_count+1, after_count)
+
+    def _disable(self, bible_id: str):
+        meta_data = BibleTranslationMetaData()
+        meta_data.is_enabled = False
+        meta_data.bible_id = bible_id
+        meta_data.save()
 
 
 class TestBibleReference(TestCase):
@@ -19,10 +60,10 @@ class TestBibleReference(TestCase):
 
 class UniqueModelConstraintsTestCase(TestCase):
     def setUp(self):
-        Commandment.objects.get(id=1)
+        Commandment.objects.create(id=1)
 
     def test_single_primary_bible_reference(self):
-        """ Test to see that we can only have on primary reference """
+        """ Test to see that we can only have one primary reference """
         reference1 = PrimaryBibleReference(commandment_id=1)
         reference2 = PrimaryBibleReference(commandment_id=1)
 

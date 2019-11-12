@@ -47,7 +47,7 @@ class BibleTranslation:
 
     def all(self) -> [Bible]:
         """" Get all bible translations (including languages not supported this website). """
-        return BibleTranslation._all_bibles.values()
+        return list(BibleTranslation._all_bibles.values())
 
     def all_enabled(self) -> [Bible]:
         """ This will list all bibles that are not explicitly disabled,

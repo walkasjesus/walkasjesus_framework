@@ -43,14 +43,11 @@ class CombinedBiblesFactory:
 
 class BibleTranslation:
     """" Get a specific (set of) bible translation(s). """
-    _all_bibles = None
+    _all_bibles = CombinedBiblesFactory().all()
 
     def all(self) -> [Bible]:
         """" Get all bible translations (including languages not supported this website). """
-        if self._all_bibles is None:
-            _all_bibles = set(CombinedBiblesFactory().all().values())
-
-        return _all_bibles
+        return BibleTranslation._all_bibles.values()
 
     def all_enabled(self) -> [Bible]:
         """ This will list all bibles that are not explicitly disabled,
@@ -73,12 +70,15 @@ class BibleTranslation:
         languages = [code for code, name in settings.LANGUAGES]
         return [b for b in self.all_enabled() if b.language in languages]
 
+    def count(self):
+        return len(self.all_enabled())
+
     def get(self, bible_id: str):
         """" Get a specific bible translation given its unique id. """
-        return CombinedBiblesFactory().get(bible_id)
+        return BibleTranslation._all_bibles[bible_id]
 
     def contains(self, bible_id: str):
-        return CombinedBiblesFactory().get(bible_id) is not None
+        return bible_id in BibleTranslation._all_bibles
 
 
 class BibleTranslationMetaData(models.Model):

@@ -606,26 +606,26 @@ msgstr ""
 "woorden van Jezus, direct gerelateerd aan het gebod"
 
 #: commandments_app/templates/commandments/detail.html:142
-msgid "Secondary Bible References"
+msgid "Direct Bible References"
 msgstr "Secundaire Bijbelteksten"
 
 #: commandments_app/templates/commandments/detail.html:143
 #: commandments_app/templates/commandments/study_listing.html:56
 msgid ""
-"Secondary references are extra references which are not exactly the same as "
+"Direct references are extra references which are not exactly the same as "
 "the primary, but expand or explain the same principle"
 msgstr ""
 "Secundaire Bijbelteksten zijn extra verwijzingen die niet precies hetzelfde "
 "zijn als de primaire, maar hetzelfde principe uitbreiden of uitleggen"
 
 #: commandments_app/templates/commandments/detail.html:151
-msgid "Tertiary Bible References"
+msgid "Indirect Bible References"
 msgstr "Tertiaire Bijbel Referenties"
 
 #: commandments_app/templates/commandments/detail.html:152
 #: commandments_app/templates/commandments/study_listing.html:57
 msgid ""
-"Tertiary references are extra, indirect references, or exactly the same as "
+"Indirect references are extra, indirect references, or exactly the same as "
 "the primary reference, both relating to the same principle"
 msgstr ""
 "Tertiaire Bijbelteksten zijn extra indirecte verwijzingen of precies gelijk "
@@ -1112,17 +1112,17 @@ msgstr ""
 " is"
 
 #: commandments_app/templates/commandments/study_listing.html:54
-msgid "Is it a \"primary\", \"secondary\" or \"tertiary\" reference?"
+msgid "Is it a \"primary\", \"direct\" or \"indirect\" reference?"
 msgstr "Is het een \"primair\" \"secundaire\" of \"tertiaire\" Bijbeltekst?"
 
 #: commandments_app/templates/commandments/study_listing.html:59
-msgid "Are there more secondary and tertiary Bible references?"
+msgid "Are there more direct and indirect Bible references?"
 msgstr "Zijn er meer secundaire en tertiaire Bijbelteksten?"
 
 #: commandments_app/templates/commandments/study_listing.html:60
 msgid ""
-"With each commandment, extend it with as many as you can find secondary and "
-"tertiary references, both Old and New Testament."
+"With each commandment, extend it with as many as you can find direct and "
+"indirect references, both Old and New Testament."
 msgstr ""
 "Breidt elk gebod uit met zoveel mogelijk secundaire en tertiaire "
 "Bijbelteksten, zowel uit het Oude als het Nieuwe Testament."
@@ -1217,11 +1217,11 @@ msgid "Primary"
 msgstr "Primair"
 
 #: commandments_app/templates/commandments/study_listing.html:119
-msgid "Secondary"
+msgid "Direct"
 msgstr "Secundair"
 
 #: commandments_app/templates/commandments/study_listing.html:132
-msgid "Tertiary"
+msgid "Indirect"
 msgstr "Tertiair"
 
 #: commandments_app/templates/commandments/termsandconditions.html:13

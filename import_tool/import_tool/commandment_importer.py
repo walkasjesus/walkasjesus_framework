@@ -38,12 +38,12 @@ class CommandmentImporter(object):
             for index, row in group.iterrows():
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
-                    if row['precedence'].lower() == 'primary':
+                    if row['bible_ref_type'].lower() == 'primary':
                         commandment.primary_bible_references.append(reference)
-                    if row['precedence'].lower() == 'secondary':
-                        commandment.secondary_bible_references.append(reference)
-                    if row['precedence'].lower() == 'tertiary':
-                        commandment.tertiary_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'direct':
+                        commandment.direct_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'indirect':
+                        commandment.indirect_bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
 

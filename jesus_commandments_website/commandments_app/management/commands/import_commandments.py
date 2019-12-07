@@ -83,10 +83,10 @@ class Command(BaseCommand):
 
             for item in commandment.primary_bible_references:
                 self._add_bible_ref(PrimaryBibleReference(commandment_id=model_commandment.id), item)
-            for item in commandment.secondary_bible_references:
-                self._add_bible_ref(SecondaryBibleReference(commandment_id=model_commandment.id), item)
-            for item in commandment.tertiary_bible_references:
-                self._add_bible_ref(TertiaryBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.direct_bible_references:
+                self._add_bible_ref(DirectBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.indirect_bible_references:
+                self._add_bible_ref(IndirectBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.questions:
                 self._add_question(model_commandment.id, item)
             for item in commandment.media:

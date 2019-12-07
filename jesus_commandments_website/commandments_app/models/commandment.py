@@ -31,13 +31,13 @@ class Commandment(models.Model):
         reference.set_bible(self.bible)
         return reference
 
-    def secondary_bible_references(self):
-        """ Secondary references are extra references which are related te the same priciple. """
-        return self._get_translated_bible_references(self.secondarybiblereference_set.all())
+    def direct_bible_references(self):
+        """ Direct references are extra references which are related te the same priciple. """
+        return self._get_translated_bible_references(self.directbiblereference_set.all())
 
-    def tertiary_bible_references(self):
-        """ Tertiary references are extra, maybe indirect references, also relating to the same principle. """
-        return self._get_translated_bible_references(self.tertiarybiblereference_set.all())
+    def indirect_bible_references(self):
+        """ Indirect references are extra, maybe indirect references, also relating to the same principle. """
+        return self._get_translated_bible_references(self.indirectbiblereference_set.all())
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''

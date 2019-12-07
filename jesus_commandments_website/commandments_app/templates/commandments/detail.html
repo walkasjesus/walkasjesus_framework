@@ -138,20 +138,20 @@
                                 <ul>
                                     <li><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b></li>
                                 </ul>
-                            {% if commandment.secondary_bible_references %}
-                            <h4>{% trans 'Secondary Bible References' %}</h4>
-                            <p><i>{% trans 'Secondary references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p>
+                            {% if commandment.direct_bible_references %}
+                            <h4>{% trans 'Direct Bible References' %}</h4>
+                            <p><i>{% trans 'Direct references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p>
                                 <ul>
-                                {% for bible_reference in commandment.secondary_bible_references %}
+                                {% for bible_reference in commandment.direct_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}   
-                            {% if commandment.tertiary_bible_references %}
-                            <h4>{% trans 'Tertiary Bible References' %}</h4>
-                            <p><i>{% trans 'Tertiary references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p>
+                            {% if commandment.indirect_bible_references %}
+                            <h4>{% trans 'Indirect Bible References' %}</h4>
+                            <p><i>{% trans 'Indirect references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p>
                                 <ul>
-                                {% for bible_reference in commandment.tertiary_bible_references %}
+                                {% for bible_reference in commandment.indirect_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
                                 {% endfor %}
                                 </ul>

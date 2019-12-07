@@ -36,8 +36,8 @@ class AdminBibleView(View):
         bible_references = BibleReferences()
         bible_references.bible = bible
         cached_count_1, total_count_1 = self.count_in_cache(cache_controller, bible_references.primary())
-        cached_count_2, total_count_2 = self.count_in_cache(cache_controller, bible_references.secondary())
-        cached_count_3, total_count_3 = self.count_in_cache(cache_controller, bible_references.tertiary())
+        cached_count_2, total_count_2 = self.count_in_cache(cache_controller, bible_references.direct())
+        cached_count_3, total_count_3 = self.count_in_cache(cache_controller, bible_references.indirect())
         cached_count = cached_count_1 + cached_count_2 + cached_count_3
         total_count = total_count_1 + total_count_2 + total_count_3
         return cached_count, total_count

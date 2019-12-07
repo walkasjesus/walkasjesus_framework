@@ -51,13 +51,13 @@
                             </ul>
                             <li>{% trans 'If it is an allready existing, determine to which existing commandment(s) it should apply' %}'</li>
                                 <ul>
-                                    <b>{% trans 'Is it a "primary", "secondary" or "tertiary" reference?' %}</b>
+                                    <b>{% trans 'Is it a "primary", "direct" or "indirect" reference?' %}</b>
                                     <li><i>{% trans 'A Primary reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p></li>
-                                    <li><i>{% trans 'Secondary references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p></li>
-                                    <li><i>{% trans 'Tertiary references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p></li>
+                                    <li><i>{% trans 'Direct references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p></li>
+                                    <li><i>{% trans 'Indirect references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p></li>
                                 </ul>
-                            <b>{% trans 'Are there more secondary and tertiary Bible references?' %}</b>
-                            <li>{% trans 'With each commandment, extend it with as many as you can find secondary and tertiary references, both Old and New Testament.' %}</li>
+                            <b>{% trans 'Are there more direct and indirect Bible references?' %}</b>
+                            <li>{% trans 'With each commandment, extend it with as many as you can find direct and indirect references, both Old and New Testament.' %}</li>
                             </ul>
 
                             <p><i>{% trans "Maybe you are wondering why we did not study all the commandments in the whole New Testament? Well, the easiest reason why we didn't, is because Jesus commandedments didn't include the commandments which other apostles are saying. He said 'teaching them to observe all things that I have commanded you' (Matt 28:20). Of course, the other letters in the NT are still true, valueable and explaining or extending Jesus' teachings, so maybe in the future we will add them to this website as well." %}</i></p>
@@ -108,28 +108,28 @@
                         {% endfor %}
                         {% endif %}
 
-                        {% if bible_references.secondary %}
-                        {% for bible_reference in bible_references.secondary %}
+                        {% if bible_references.direct %}
+                        {% for bible_reference in bible_references.direct %}
                         <tr>
                             <th scope="row">{{ bible_reference.commandment.id }}</th>
                             <td>{{ bible_reference.commandment.title }}</td>
                             <td>{{ bible_reference }}</td>
                             <td>{{ bible_reference.text}}</td>
                             <td>{{ bible_reference.commandment.get_category_display }}</td>
-                            <td>{% trans 'Secondary' %}</td>
+                            <td>{% trans 'Direct' %}</td>
                         </tr>
                         {% endfor %}
                         {% endif %}
 
-                        {% if bible_references.tertiary %}
-                        {% for bible_reference in bible_references.tertiary %}
+                        {% if bible_references.indirect %}
+                        {% for bible_reference in bible_references.indirect %}
                         <tr>
                             <th scope="row">{{ bible_reference.commandment.id }}</th>
                             <td>{{ bible_reference.commandment.title }}</td>
                             <td>{{ bible_reference }}</td>
                             <td>{{ bible_reference.text  }}</td>
                             <td>{{ bible_reference.commandment.get_category_display }}</td>
-                            <td>{% trans 'Tertiary' %}</td>
+                            <td>{% trans 'Indirect' %}</td>
                         </tr>
                         {% endfor %}
                         {% endif %}

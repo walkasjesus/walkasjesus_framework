@@ -737,14 +737,14 @@ msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:142
 #, fuzzy
-msgid "Secondary Bible References"
+msgid "Direct Bible References"
 msgstr "Sekundäre Bibel Referenzen"
 
 #: commandments_app/templates/commandments/detail.html:143
 #: commandments_app/templates/commandments/study_listing.html:56
 #, fuzzy
 msgid ""
-"Secondary references are extra references which are not exactly the same as "
+"Direct references are extra references which are not exactly the same as "
 "the primary, but expand or explain the same principle"
 msgstr ""
 "Sekundäre Referenzen sind zusätzliche Referenzen, die nicht genau das "
@@ -752,14 +752,14 @@ msgstr ""
 
 #: commandments_app/templates/commandments/detail.html:151
 #, fuzzy
-msgid "Tertiary Bible References"
+msgid "Indirect Bible References"
 msgstr "Tertiäre Bibel Referenzen"
 
 #: commandments_app/templates/commandments/detail.html:152
 #: commandments_app/templates/commandments/study_listing.html:57
 #, fuzzy
 msgid ""
-"Tertiary references are extra, indirect references, or exactly the same as "
+"Indirect references are extra, indirect references, or exactly the same as "
 "the primary reference, both relating to the same principle"
 msgstr ""
 "Tertiäre Referenzen sind extra, indirekten Verweisen oder genau die gleiche "
@@ -1371,19 +1371,19 @@ msgstr ""
 
 #: commandments_app/templates/commandments/study_listing.html:54
 #, fuzzy
-msgid "Is it a \"primary\", \"secondary\" or \"tertiary\" reference?"
+msgid "Is it a \"primary\", \"direct\" or \"indirect\" reference?"
 msgstr "Ist es eine „primäre“, „sekundär“ bzw. „tertiär“ Referenz?"
 
 #: commandments_app/templates/commandments/study_listing.html:59
 #, fuzzy
-msgid "Are there more secondary and tertiary Bible references?"
+msgid "Are there more direct and indirect Bible references?"
 msgstr "Gibt es mehr sekundäre und tertiäre Bibelstellen?"
 
 #: commandments_app/templates/commandments/study_listing.html:60
 #, fuzzy
 msgid ""
-"With each commandment, extend it with as many as you can find secondary and "
-"tertiary references, both Old and New Testament."
+"With each commandment, extend it with as many as you can find direct and "
+"indirect references, both Old and New Testament."
 msgstr ""
 "Mit jedem Gebot, erweitern sie mit so vielen wie sekundären und tertiären "
 "Referenzen, Alte und Neues Testament finden."
@@ -1494,12 +1494,12 @@ msgstr "primär"
 
 #: commandments_app/templates/commandments/study_listing.html:119
 #, fuzzy
-msgid "Secondary"
+msgid "Direct"
 msgstr "Sekundär-"
 
 #: commandments_app/templates/commandments/study_listing.html:132
 #, fuzzy
-msgid "Tertiary"
+msgid "Indirect"
 msgstr "Tertiär"
 
 #: commandments_app/templates/commandments/termsandconditions.html:13

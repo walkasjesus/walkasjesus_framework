@@ -44,6 +44,12 @@ class CommandmentImporter(object):
                         commandment.direct_bible_references.append(reference)
                     if row['bible_ref_type'].lower() == 'indirect':
                         commandment.indirect_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'duplicate':
+                        commandment.duplicate_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'example':
+                        commandment.example_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'study':
+                        commandment.study_bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
 

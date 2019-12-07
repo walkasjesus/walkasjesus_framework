@@ -140,19 +140,46 @@
                                 </ul>
                             {% if commandment.direct_bible_references %}
                             <h4>{% trans 'Direct Bible References' %}</h4>
-                            <p><i>{% trans 'Direct references are extra references which are not exactly the same as the primary, but expand or explain the same principle' %}.</i></p>
+                            <p><i>{% trans 'Extra direct Bible references which expands or explain the same commandment' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
                                 {% endfor %}
                                 </ul>
-                            {% endif %}   
+                            {% endif %}
                             {% if commandment.indirect_bible_references %}
                             <h4>{% trans 'Indirect Bible References' %}</h4>
-                            <p><i>{% trans 'Indirect references are extra, indirect references, or exactly the same as the primary reference, both relating to the same principle' %}.</i></p>
+                            <p><i>{% trans 'Extra, more indirect Bible references, relating to the same commandment' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
                                     <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if commandment.example_bible_references %}
+                            <h4>{% trans 'Example Bible References' %}</h4>
+                            <p><i>{% trans 'In these Bible references you will find examples and testimonies how this commandment is being executed' %}.</i></p>
+                                <ul>
+                                {% for bible_reference in commandment.example_bible_references %}
+                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if commandment.duplicate_bible_references %}
+                            <h4>{% trans 'Duplicate Bible References' %}</h4>
+                            <p><i>{% trans 'Another Bible reference to more or less the same as the primary, direct or indirect, with not much new information, although it will confirm the same Bible references' %}:</i></p>
+                                <ul>
+                                {% for bible_reference in commandment.duplicate_bible_references %}
+                                    <li><b>{{ bible_reference }}</b></li>
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if commandment.study_bible_references %}
+                            <h4>{% trans 'Study Bible References' %}</h4>
+                            <p><i>{% trans 'Extra Bible references (most often larger parts of Bible books) which are good for extra study on this commandment' %}:</i></p>
+                                <ul>
+                                {% for bible_reference in commandment.study_bible_references %}
+                                    <li><b>{{ bible_reference }}</b></li>
                                 {% endfor %}
                                 </ul>
                             {% endif %}

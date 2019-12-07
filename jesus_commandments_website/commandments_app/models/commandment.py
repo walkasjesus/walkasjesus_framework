@@ -32,12 +32,27 @@ class Commandment(models.Model):
         return reference
 
     def direct_bible_references(self):
-        """ Direct references are extra references which are related te the same priciple. """
+        """ Extra direct Bible references which expands or explain the same commandment. """
         return self._get_translated_bible_references(self.directbiblereference_set.all())
 
     def indirect_bible_references(self):
-        """ Indirect references are extra, maybe indirect references, also relating to the same principle. """
+        """ Extra, more indirect Bible references, relating to the same commandment. """
         return self._get_translated_bible_references(self.indirectbiblereference_set.all())
+
+    def duplicate_bible_references(self):
+        """ Another Bible reference to more or less the same as the primary, direct or indirect, 
+        with not much new information, although it will confirm the same Bible references. """
+        return self._get_translated_bible_references(self.duplicatebiblereference_set.all())
+
+    def example_bible_references(self):
+        """ In these Bible references you will find examples and testimonies how this commandment  
+        is being executed. """
+        return self._get_translated_bible_references(self.examplebiblereference_set.all())
+
+    def study_bible_references(self):
+        """ Extra Bible references (most often larger parts of Bible books) which are good for 
+        extra study on this commandment. """
+        return self._get_translated_bible_references(self.studybiblereference_set.all())
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''

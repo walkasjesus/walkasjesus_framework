@@ -37,6 +37,21 @@ class IndirectBibleReferenceInline(admin.TabularInline):
     extra = 0
 
 
+class DuplicateBibleReferenceInline(admin.TabularInline):
+    model = DuplicateBibleReference
+    extra = 0
+
+
+class ExampleBibleReferenceInline(admin.TabularInline):
+    model = ExampleBibleReference
+    extra = 0
+
+
+class StudyBibleReferenceInline(admin.TabularInline):
+    model = StudyBibleReference
+    extra = 0
+
+
 class QuestionInline(admin.TabularInline):
     model = Question
     extra = 0

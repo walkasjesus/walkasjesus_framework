@@ -62,7 +62,8 @@ class Command(BaseCommand):
         model_reference.description = media.description
         model_reference.target_audience = media.target_audience
         model_reference.language = media.language
-        model_reference.url = media.link
+        model_reference.img_url = media.img_url
+        model_reference.url = media.url
         model_reference.author = media.author
         model_reference.is_public = media.is_public
         self._save(model_reference)

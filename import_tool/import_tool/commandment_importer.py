@@ -55,13 +55,14 @@ class CommandmentImporter(object):
 
             # Parse media
             for index, row in group.iterrows():
-                if isinstance(row['media_link'], str):
+                if isinstance(row['media_type'], str):
                     media = Media()
                     media.title = row['media_title']
                     media.description = row['media_description_en']
                     media.target_audience = row['media_target_audience']
                     media.language = row['media_lang']
-                    media.link = row['media_link']
+                    media.img_url = row['media_img_url']
+                    media.url = row['media_url']
                     media.type = row['media_type']
                     media.author = row['media_author']
                     media.is_public = str(row['media_public']).lower() == 'yes'

@@ -27,13 +27,28 @@ class PrimaryBibleReferencesInline(admin.TabularInline):
     extra = 0
 
 
-class SecondaryBibleReferenceInline(admin.TabularInline):
-    model = SecondaryBibleReference
+class DirectBibleReferenceInline(admin.TabularInline):
+    model = DirectBibleReference
     extra = 0
 
 
-class TertiaryBibleReferenceInline(admin.TabularInline):
-    model = TertiaryBibleReference
+class IndirectBibleReferenceInline(admin.TabularInline):
+    model = IndirectBibleReference
+    extra = 0
+
+
+class DuplicateBibleReferenceInline(admin.TabularInline):
+    model = DuplicateBibleReference
+    extra = 0
+
+
+class ExampleBibleReferenceInline(admin.TabularInline):
+    model = ExampleBibleReference
+    extra = 0
+
+
+class StudyBibleReferenceInline(admin.TabularInline):
+    model = StudyBibleReference
     extra = 0
 
 
@@ -49,6 +64,11 @@ class DrawingInline(admin.TabularInline):
 
 class SongInline(admin.TabularInline):
     model = Song
+    extra = 0
+
+
+class SuperbookInline(admin.TabularInline):
+    model = Superbook
     extra = 0
 
 
@@ -91,11 +111,12 @@ class CommandmentAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,
-        SecondaryBibleReferenceInline,
-        TertiaryBibleReferenceInline,
+        DirectBibleReferenceInline,
+        IndirectBibleReferenceInline,
         QuestionInline,
         DrawingInline,
         SongInline,
+        SuperbookInline,
         MovieInline,
         ShortMovieInline,
         SermonInline,

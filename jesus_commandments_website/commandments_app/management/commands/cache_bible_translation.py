@@ -33,7 +33,7 @@ class Command(BaseCommand):
         bible_references.bible = BibleTranslation().get(bible_id)
 
         # Just retrieve the text of all references and it will automatically be cached by the bible_lib
-        refs = list(bible_references.primary()) + list(bible_references.secondary()) + list(bible_references.tertiary())
+        refs = list(bible_references.primary()) + list(bible_references.direct()) + list(bible_references.indirect())
 
         with ThreadPoolExecutor(max_workers=16) as worker_pool:
             worker_pool.map(self.load_verse, refs)

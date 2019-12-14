@@ -2,12 +2,12 @@
 {% load i18n %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
-        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if commandment.background_drawing.url is not defined %}{{ commandment.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if commandment.background_drawing.img_url is not defined %}{{ commandment.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
             <div class="number-content">
                 <h3>{{ commandment.id }}</h3>
             </div>
             <div class="text-content p-4 text-center">
-                {% if commandment.background_drawing.url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
+                {% if commandment.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
                 <h3>{{ commandment.title }}</h3>
                 <p class="">
                     <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>

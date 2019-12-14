@@ -117,14 +117,35 @@ class PrimaryBibleReference(AbstractBibleReference):
     commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
 
 
-class SecondaryBibleReference(AbstractBibleReference):
+class DirectBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 
-class TertiaryBibleReference(AbstractBibleReference):
+class IndirectBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+
+class DuplicateBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+
+class ExampleBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+
+class StudyBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
 
     class Meta:

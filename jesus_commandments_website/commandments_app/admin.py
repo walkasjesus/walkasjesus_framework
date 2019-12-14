@@ -67,6 +67,11 @@ class SongInline(admin.TabularInline):
     extra = 0
 
 
+class SuperbookInline(admin.TabularInline):
+    model = Superbook
+    extra = 0
+
+
 class MovieInline(admin.TabularInline):
     model = Movie
     extra = 0
@@ -111,6 +116,7 @@ class CommandmentAdmin(admin.ModelAdmin):
         QuestionInline,
         DrawingInline,
         SongInline,
+        SuperbookInline,
         MovieInline,
         ShortMovieInline,
         SermonInline,

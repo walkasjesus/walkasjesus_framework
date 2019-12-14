@@ -68,6 +68,9 @@ class Commandment(models.Model):
     def songs(self):
         return self._filter_on_language(self.song_set)
 
+    def superbooks(self):
+        return [d for d in self.superbook_set.all() if d.is_public]
+
     def movies(self):
         return self._filter_on_language(self.movie_set)
 

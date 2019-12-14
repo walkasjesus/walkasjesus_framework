@@ -36,6 +36,8 @@ class Command(BaseCommand):
         media_type = media.type.lower().strip()
         if media_type == 'song':
             model_reference = Song(commandment_id=commandment_id)
+        elif media_type == 'superbook':
+            model_reference = Superbook(commandment_id=commandment_id)
         elif media_type == 'movie':
             model_reference = Movie(commandment_id=commandment_id)
         elif media_type == 'shortmovie':
@@ -58,6 +60,7 @@ class Command(BaseCommand):
 
         model_reference.title = media.title
         model_reference.description = media.description
+        model_reference.target_audience = media.target_audience
         model_reference.language = media.language
         model_reference.url = media.link
         model_reference.author = media.author

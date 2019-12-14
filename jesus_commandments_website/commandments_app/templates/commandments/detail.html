@@ -26,6 +26,13 @@
             </a>
         </li>
         {% endif %}
+        {% if commandment.superbooks %}
+        <li>
+            <a href="#superbook" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if commandment.pictures %}
         <li>
             <a href="#pictures" class="ripple">
@@ -204,6 +211,25 @@
                                 <img src="{{ drawing.url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
                                 {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
                                 <p>{% trans 'Artist' %}: {{ drawing.author }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if commandment.superbooks %}
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Superbook' %}</h4>
+                            {% for superbook in commandment.superbooks %}
+                                <img src="{{ superbook.url }}" alt="{{ superbook.author }} - {{ superbook.title }}" style="max-width:97%;max-height:97%;float: left;padding-right: 10px;">
+                                {% if superbook.description != "nan" %}<p style="margin-left: 10px;">{{ superbook.description }}</p>{% endif %}
+                                <p style="clear: left;">{% trans 'Watch on' %}: <a href="{{ superbook.author }}">{{ superbook.author }}</a></p>
                             {% endfor %}
                         </div>
                     </div>

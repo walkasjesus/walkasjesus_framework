@@ -26,13 +26,6 @@
             </a>
         </li>
         {% endif %}
-        {% if commandment.superbooks %}
-        <li>
-            <a href="#superbook" class="ripple">
-                <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
-            </a>
-        </li>
-        {% endif %}
         {% if commandment.pictures %}
         <li>
             <a href="#pictures" class="ripple">
@@ -44,6 +37,13 @@
         <li>
             <a href="#questions" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Questions' %}" src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if commandment.superbooks %}
+        <li>
+            <a href="#superbook" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
@@ -217,27 +217,6 @@
                 </div>
             </div>
             {% endif %}
-            {% if commandment.superbooks %}
-            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Superbook' %}</h4>
-                            {% for superbook in commandment.superbooks %}
-                                <a href="{{ superbook.url }}" target="_blank"><img src="{{ superbook.img_url }}" alt="{{ superbook.author }} - {{ superbook.title }}" style="max-width:97%;max-height:97%;float: left;padding-right: 30px;"></a>
-                                {% if superbook.description != "nan" %}<p>{{ superbook.description }}</p>{% endif %}
-                                <br>
-                                <p><b>{% trans 'Watch now on' %}: <a href="{{ superbook.url }}" target="_blank">{{ superbook.author }}</a></b></p>
-                                <p style="clear: left;"> </p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
             {% if commandment.pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -316,6 +295,27 @@
                     </div>
                 </div>
             </div>
+            {% if commandment.superbooks %}
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Superbook' %}</h4>
+                            {% for superbook in commandment.superbooks %}
+                                <a href="{{ superbook.url }}" target="_blank"><img src="{{ superbook.img_url }}" alt="{{ superbook.author }} - {{ superbook.title }}" style="max-width:97%;max-height:97%;float: left;padding-right: 30px;"></a>
+                                {% if superbook.description != "nan" %}<p>{{ superbook.description }}</p>{% endif %}
+                                <br>
+                                <p><b>{% trans 'Watch now on' %}: <a href="{{ superbook.url }}" target="_blank">{{ superbook.author }}</a></b></p>
+                                <p style="clear: left;"> </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             {% if commandment.short_movies %}
             <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">

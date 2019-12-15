@@ -30,13 +30,28 @@
         <th>{% trans 'Language' %}</th>
         <th>{% trans 'Enabled' %}</th>
         <th>{% trans 'Percentage cached' %}</th>
+        <th></th>
     </tr>
     {% for bible in bibles %}
     <tr>
         <td>{{ bible.name }}</td>
         <td>{{ bible.language }}</td>
         <td>{{ bible.enabled }}</td>
-        <td>{{ bible.percentage_cached|floatformat:0 }}</td>        
+        <td>{{ bible.percentage_cached|floatformat:0 }}</td>
+        <td>
+            <form action="{% url 'commandments:admin_enable_bible' %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <input name="bible_id" type="hidden" value="{{ bible.id }}">
+            {% if bible.enabled %}
+                <input name="enable" type="hidden" value="False">
+                <input type="submit" value="{% trans 'Disable' %}">
+            {% else %}
+                <input name="enable" type="hidden" value="True">
+                <input type="submit" value="{% trans 'Enable' %}">
+            {% endif %}
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>

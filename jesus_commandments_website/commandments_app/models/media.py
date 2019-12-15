@@ -12,8 +12,10 @@ class Media(models.Model):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     title = models.CharField(max_length=128, default='', null=True, blank=True)
     description = models.TextField(default='', null=True, blank=True)
+    target_audience = models.CharField(max_length=64, default='')
     author = models.CharField(max_length=64, default='')
-    url = URLOrRelativeURLField(default='#')
+    img_url = URLOrRelativeURLField(default='')
+    url = models.URLField(max_length=300)
     language_choices = [('any', gettext_lazy('Language independent')),
                         ('unknown', gettext_lazy('Language unknown'))]
     language_choices += LANGUAGES
@@ -22,17 +24,17 @@ class Media(models.Model):
 
     class Meta:
         abstract = True
-        unique_together = ['commandment', 'title', 'author', 'url', 'language']
+        unique_together = ['commandment', 'title', 'url', 'img_url', 'author', 'language', 'target_audience']
 
     def __str__(self):
-        return f'Media at: {self.url}'
+        return f'Media: {self.title} {self.author} {self.target_audience} {self.language} {self.img_url} {self.url}'
 
 
 class Drawing(Media):
     pass
 
     def thumbnail_url(self):
-        image_source_path = self.url
+        image_source_path = self.img_url
         # The thumbnail searches relative to the media directory so remove the leading media directory.
         if image_source_path.startswith(MEDIA_URL):
             image_source_path = image_source_path[len(MEDIA_URL):]
@@ -43,6 +45,19 @@ class Drawing(Media):
 
 class Song(Media):
     pass
+
+
+class Superbook(Media):
+    pass
+
+    def thumbnail_url(self):
+        image_source_path = self.img_url
+        # The thumbnail searches relative to the media directory so remove the leading media directory.
+        if image_source_path.startswith(MEDIA_URL):
+            image_source_path = image_source_path[len(MEDIA_URL):]
+
+        thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
+        return thumbnail.img_url
 
 
 class Movie(Media):
@@ -71,3 +86,4 @@ class Book(Media):
 
 class Blog(Media):
     pass
+

@@ -36,6 +36,8 @@ class Command(BaseCommand):
         media_type = media.type.lower().strip()
         if media_type == 'song':
             model_reference = Song(commandment_id=commandment_id)
+        elif media_type == 'superbook':
+            model_reference = Superbook(commandment_id=commandment_id)
         elif media_type == 'movie':
             model_reference = Movie(commandment_id=commandment_id)
         elif media_type == 'shortmovie':
@@ -58,8 +60,10 @@ class Command(BaseCommand):
 
         model_reference.title = media.title
         model_reference.description = media.description
+        model_reference.target_audience = media.target_audience
         model_reference.language = media.language
-        model_reference.url = media.link
+        model_reference.img_url = media.img_url
+        model_reference.url = media.url
         model_reference.author = media.author
         model_reference.is_public = media.is_public
         self._save(model_reference)
@@ -83,10 +87,16 @@ class Command(BaseCommand):
 
             for item in commandment.primary_bible_references:
                 self._add_bible_ref(PrimaryBibleReference(commandment_id=model_commandment.id), item)
-            for item in commandment.secondary_bible_references:
-                self._add_bible_ref(SecondaryBibleReference(commandment_id=model_commandment.id), item)
-            for item in commandment.tertiary_bible_references:
-                self._add_bible_ref(TertiaryBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.direct_bible_references:
+                self._add_bible_ref(DirectBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.indirect_bible_references:
+                self._add_bible_ref(IndirectBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.duplicate_bible_references:
+                self._add_bible_ref(DuplicateBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.example_bible_references:
+                self._add_bible_ref(ExampleBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.study_bible_references:
+                self._add_bible_ref(StudyBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.questions:
                 self._add_question(model_commandment.id, item)
             for item in commandment.media:

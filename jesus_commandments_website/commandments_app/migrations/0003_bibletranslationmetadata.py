@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandments_app', '0005_auto_20191103_1421'),
+        ('commandments_app', '0002_biblereference_blog_book_commandment_directbiblereference_drawing_duplicatebiblereference_examplebib'),
     ]
 
     operations = [

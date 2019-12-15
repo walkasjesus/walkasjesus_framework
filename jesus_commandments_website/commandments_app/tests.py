@@ -4,7 +4,7 @@ from django.test import TestCase
 from bible_lib import BibleBooks
 from commandments_app.models import AbstractBibleReference, DirectBibleReference, Commandment
 from commandments_app.models import PrimaryBibleReference, BibleBooks
-from commandments_app.models.bibles import BibleTranslationMetaData
+from commandments_app.models.bibles import BibleTranslationMetaData, BibleTranslation
 
 
 class BibleTranslationTestCase(TestCase):

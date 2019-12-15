@@ -44,11 +44,11 @@
             <input name="next" type="hidden" value="{{ request.get_full_path }}">
             <input name="bible_id" type="hidden" value="{{ bible.id }}">
             {% if bible.enabled %}
-                <input name="enable" type="hidden" value="True">
-                <input type="submit" value="{% trans 'Enable' %}">
-            {% else %}
                 <input name="enable" type="hidden" value="False">
                 <input type="submit" value="{% trans 'Disable' %}">
+            {% else %}
+                <input name="enable" type="hidden" value="True">
+                <input type="submit" value="{% trans 'Enable' %}">
             {% endif %}
             </form>
         </td>

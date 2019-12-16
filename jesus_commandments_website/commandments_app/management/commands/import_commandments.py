@@ -24,6 +24,9 @@ class Command(BaseCommand):
         model_reference.begin_verse = reference.start_verse
         model_reference.end_chapter = reference.end_chapter
         model_reference.end_verse = reference.end_verse
+        model_reference.positive_negative = reference.positive_negative
+        model_reference.literal_figurative = reference.literal_figurative
+        model_reference.origin = reference.origin
 
         self._save(model_reference)
 

@@ -10,9 +10,12 @@ class BibleReference:
         self.start_verse = 0
         self.end_chapter = 0
         self.end_verse = 0
+        self.origin = ''
+        self.literal_figurative = ''
+        self.positive_negative = ''
 
     @staticmethod
-    def create_from_string(verse_string : str):
+    def create_from_string(verse_string: str):
         reference = BibleReference()
 
         pattern = r'(.*) (\d+):(\d+)-?(\d+)?:?(\d+)?'

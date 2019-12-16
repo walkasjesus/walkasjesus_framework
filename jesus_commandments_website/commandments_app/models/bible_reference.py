@@ -15,6 +15,17 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
+    origin = models.CharField(max_length=32, default='other')
+    literal_figurative = models.CharField(max_length=32,
+                                          choices=[('literal', 'literal'),
+                                                   ('figurative', 'figurative'),
+                                                   ('both', 'both')],
+                                          default='positive')
+    positive_negative = models.CharField(max_length=32,
+                                         choices=[('positive', 'positive'),
+                                                  ('negative', 'negative'),
+                                                  ('both', 'both')],
+                                         default='positive')
     bible = None
 
     class Meta:

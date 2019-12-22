@@ -14,8 +14,8 @@ class Media(models.Model):
     description = models.TextField(default='', null=True, blank=True)
     target_audience = models.CharField(max_length=64, default='')
     author = models.CharField(max_length=64, default='')
-    img_url = URLOrRelativeURLField(default='')
-    url = models.URLField(max_length=300)
+    img_url = URLOrRelativeURLField(default='', null=True, blank=True)
+    url = models.URLField(max_length=300, null=True, blank=True)
     language_choices = [('any', gettext_lazy('Language independent')),
                         ('unknown', gettext_lazy('Language unknown'))]
     language_choices += LANGUAGES

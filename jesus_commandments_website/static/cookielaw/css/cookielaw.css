@@ -22,3 +22,19 @@
     width: 15px;
     height: 15px;
 }
+
+.cookie-content {
+    overflow: hidden;  
+}
+
+.cookie-text {
+    float: left;
+    width: 80%;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.cookie-buttons {
+    overflow: hidden;  
+    margin-top: 10px;
+}

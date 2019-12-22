@@ -1,0 +1,15 @@
+{% load i18n static %}
+<script src="{% static 'cookielaw/js/cookielaw.js' %}"></script>
+<div id="CookielawBanner">
+<div class="cookie-content">
+    <div class="cookie-text">
+        {% blocktrans %}
+        The Jesus Commandments website will store "cookies" on your system to help improve your experience with the website. Many of these cookies relate to customizing your visit. For example, allowing you to set your language(s), Bible translation and target audience. For more information see our <a href="/privacy">Privacy Policy</a>.
+        {% endblocktrans %}
+    </div>
+    <div class="cookie-buttons">
+         <a class="button" href="javascript:Cookielaw.createCookielawCookie();">{% trans "Ok, I agree" %}</a>
+    </div>
+    <div class="close-cookies"></div>
+</div>
+</div>

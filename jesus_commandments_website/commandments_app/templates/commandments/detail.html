@@ -150,7 +150,15 @@
                             <p><i>{% trans 'Extra direct Bible references which expands or explain the same commandment' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
-                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li style="list-style-image: url('/static/images/negative.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li style="list-style-image: url('/static/images/positive.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% else %}
+                                    <li style="list-style-image: url('/static/images/question.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
@@ -159,7 +167,15 @@
                             <p><i>{% trans 'Extra, more indirect Bible references, relating to the same commandment' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
-                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li style="list-style-image: url('/static/images/negative.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li style="list-style-image: url('/static/images/positive.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% else %}
+                                    <li style="list-style-image: url('/static/images/question.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
@@ -168,7 +184,15 @@
                             <p><i>{% trans 'In these Bible references you will find examples and testimonies how this commandment is being executed' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.example_bible_references %}
-                                    <li><b>{{ bible_reference }}</b> {{ bible_reference.text  }}</li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li style="list-style-image: url('/static/images/negative.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li style="list-style-image: url('/static/images/positive.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% else %}
+                                    <li style="list-style-image: url('/static/images/question.png');"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
@@ -177,7 +201,15 @@
                             <p><i>{% trans 'Another Bible reference to more or less the same as the primary, direct or indirect, with not much new information, although it will confirm the same Bible references' %}:</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.duplicate_bible_references %}
-                                    <li><b>{{ bible_reference }}</b></li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li style="list-style-image: url('/static/images/negative.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><b>{{ bible_reference }}</b>  <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li style="list-style-image: url('/static/images/positive.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% else %}
+                                    <li style="list-style-image: url('/static/images/question.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
@@ -186,12 +218,32 @@
                             <p><i>{% trans 'Extra Bible references (most often larger parts of Bible books) which are good for extra study on this commandment' %}:</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.study_bible_references %}
-                                    <li><b>{{ bible_reference }}</b></li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li style="list-style-image: url('/static/images/negative.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li style="list-style-image: url('/static/images/positive.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% else %}
+                                    <li style="list-style-image: url('/static/images/question.png');"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
                             <br>
+                            <h4>{% trans 'Legend' %}</h4>
                             <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
+                            <br>
+                                <ul style="font-size: 11pt;">
+                                    <li style="list-style-image: url('/static/images/negative.png');"><i>{% trans 'A related Bible reference to the commandment which is negative' %}</i></li>
+                                    <li style="list-style-image: url('/static/images/pos_neg.png');"><i>{% trans 'A related Bible reference to the commandment which is both positive and negative' %}</i></li>
+                                    <li style="list-style-image: url('/static/images/positive.png');"><i>{% trans 'A related Bible reference to the commandment which is positive' %}</i></li>
+                                    <li style="list-style-image: url('/static/images/question.png');"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
+                                    <li><b>{% trans 'Type "literal"' %}: </b><i>{% trans 'A "literal" Bible reference is meant literally what the author is saying which you can directly obey and apply' %}</i></li>
+                                    <li><b>{% trans 'Type "figurative"' %}: </b><i>{% trans 'A "figurative" Bible reference is descriptive or a parable (Usually a short fictitious story that illustrates a moral attitude or a religious principle)' %}</i></li>
+                                    <li><b>{% trans 'Type "both"' %}: </b><i>{% trans 'Both "literal" and "figurative" Bible reference' %}</i></li>
+                                    <li><b>{% trans 'Origin' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
+                                </ul>
                         </div>
                     </div>
                 </div>

@@ -151,13 +151,21 @@
                                 <li>CCN3: Not to blaspheme</li>
                             </ul>
 
-                            <div class="alert alert-info" role="alert" data-toggle="collapse" data-target="#collapseApproach" aria-expanded="false" aria-controls="collapseApproach">
-                                <p><i>{% trans 'Why the Old Testament commandments?' %} <a href=# class="alert-link">{% trans ' Click here to see why we related them to Jesus commandments' %}.</a></i></p>
+                            <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseApproach" aria-expanded="false" aria-controls="collapseApproach">
+                                <p><i>{% trans 'Why the Old Testament commandments? Click here to see why we related them to Jesus commandments' %}.</i></p>
                             </div>
 
                             <div class="collapse" id="collapseApproach">
-                                <div class="alert alert-info infobox">
+                                <div class="alert alert-warning infobox">
                                 {% blocktrans %}
+                                    <p>We do not say that the Old Testament commandments are mandatory for each Christian. We can learn how the apostles thought about this subject in Acts chapter 15. Paul and Barnabas went back to Jerusalem to talk about the law of Moses, if it still applies for Gentiles. Now, James, one of the eldest, concludes this in verse 19 and 20:</p>
+                                    <p><i>"Wherefore my sentence is, <strong>that we trouble not them</strong>, which from among the Gentiles are turned to God: But that we write unto them, that they abstain from pollutions of idols, and from fornication, and from things strangled, and from blood."</i></p>
+                                    <br>
+                                    <p>James (and all the elders agreed) gave 4 examples of the law of Moses. Notice 3 of them were related to food, which is probably to make sure there are no obstacles for Jews and Gentiles to have communion together. But the main thing you have to keep in mind that James speaks this to just converted Gentiles. You don't need to make it too difficult for just converted Gentiles! Although, if you want to endure the storms you will face in the future, you need to get rooted in Christ!</p>
+                                    <p>Jesus himself told in Matthew 5:17 <i>"Think not that I am come to destroy the law, or the prophets: I am not come to destroy, but to fulfil"</i>. Jesus came to fulfil the law. Since Jesus gave Himself as sacrifice for our sins (past, present and future), all the commandments regarding the sacrifices are fulfilled. He also fulfilled the rest of the commandments and showing us the heart behind the law. But that doesn't mean we don't need to apply those commandments to our lives. Jesus said <i>"Be ye therefore perfect, even as your Father which is in heaven is perfect." (Matt 5:48)</i>
+                                    <br>
+                                    <p><strong>We made this website, and overview of Jesus Commandments, to see how Jesus fulfilled many of the Old Testament laws, by showing the heart behind the laws. You can see all the related Bible verses and commandments we found. It are all precious gifts from God. Ready for us to unpack!</strong></p>
+                                    <br>
                                     <p>Psalms 112:1 says <b><i>"Praise ye the LORD. Blessed is the man that feareth the LORD, that delighteth greatly in His commandments"</i></b></p>
                                     <p>By the plain meaning of the verse "that feareth the LORD" refers to the negative commandments in our holy Torah (First 5 books of the Bible), while the phrase "delighteth greatly in His commandments" refers to the positive commandments in the Torah. The intent of is is that a person should watch himself and take care not to transgress the negative commandments and to carry out the positive commandments.</p>
                                     <p>Wherever the Torah says <i>me'od</i> ("very much" or "greatly"), it means to convey "without end or limit", something that will never terminate. The man "that delighteth greatly in His commandments" means one's infinite, boundless longing and yearning, after he ponders and considers the greatness of a mitzvah (a single commandment) itself, how far-reaching its effect is. Then even its reward is to be reckoned as nought and nothing compared with the great value of doing the mitzvah itself. So there is no end or limit to a person's longing to fulfill a mitzvah.</p>
@@ -172,8 +180,6 @@
                                 {% endblocktrans %}
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -279,16 +285,23 @@
                             <h4>{% trans 'Legend' %}</h4>
                             <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
                             <br>
-                                <ul style="font-size: 11pt;">
-                                    <li class="negative_list"><i>{% trans 'A related Bible reference to the commandment which is negative' %}</i></li>
-                                    <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the commandment which is both positive and negative' %}</i></li>
-                                    <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive' %}</i></li>
-                                    <li class="unknown_list"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
-                                    <li><b>{% trans 'Type "literal"' %}: </b><i>{% trans 'A "literal" Bible reference is meant literally what the author is saying which you can directly obey and apply' %}</i></li>
-                                    <li><b>{% trans 'Type "figurative"' %}: </b><i>{% trans 'A "figurative" Bible reference is descriptive or a parable (Usually a short fictitious story that illustrates a moral attitude or a religious principle)' %}</i></li>
-                                    <li><b>{% trans 'Type "both"' %}: </b><i>{% trans 'Both "literal" and "figurative" Bible reference' %}</i></li>
-                                    <li><b>{% trans 'Origin' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
-                                </ul>
+                            <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
+                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Types, Origin etc.' %}</i></p>
+                            </div>
+                            <div class="collapse" id="collapseLegend">
+                                <div class="alert alert-warning infobox">
+                                    <ul style="font-size: 11pt;">
+                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the commandment which is negative' %}</i></li>
+                                        <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the commandment which is both positive and negative' %}</i></li>
+                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive' %}</i></li>
+                                        <li class="unknown_list"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
+                                        <li><b>{% trans 'Type "literal"' %}: </b><i>{% trans 'A "literal" Bible reference is meant literally what the author is saying which you can directly obey and apply' %}</i></li>
+                                        <li><b>{% trans 'Type "figurative"' %}: </b><i>{% trans 'A "figurative" Bible reference is descriptive or a parable (Usually a short fictitious story that illustrates a moral attitude or a religious principle)' %}</i></li>
+                                        <li><b>{% trans 'Type "both"' %}: </b><i>{% trans 'Both "literal" and "figurative" Bible reference' %}</i></li>
+                                        <li><b>{% trans 'Origin' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -374,7 +387,6 @@
                 </div>
             </div>
             {% endif %}
-            {% if commandment.questions %}
             <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -385,15 +397,20 @@
                             <h4>{% trans 'Questions' %}</h4>
                             <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
-                                {% for question in commandment.questions %}
-                                <li>{{ question.text }}</li>
-                                {% endfor %}
-                            </ul>    
+                                {% if commandment.questions %}
+                                    {% for question in commandment.questions %}
+                                    <li>{{ question.text }}</li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>{% trans "Is there anything you don't understand within this commandment?" %}</li>
+                                    <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
+                                    <li>{% trans "How do you apply this commandment in your life or do you experience any boundaries?" %}</li>
+                                {% endif %}
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
             <div id="mediasettings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mediasettings">
                 <div class="alert alert-info alert-resource-settings" role="alert">
                     <div class="our-services-text">

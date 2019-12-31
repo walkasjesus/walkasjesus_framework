@@ -111,7 +111,7 @@
                     </div>        
                     <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
                         <span class="subheading">{{ commandment.title }}</span>
-                        <span class="subheading-negative"><p>{{ commandment.title_negative }}</p></span>
+<!--                        <span class="subheading-negative"><p>{{ commandment.title_negative }}</p></span>-->
                     </div>
                 </div>
             </div>
@@ -131,10 +131,13 @@
                                 <b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b>
                                 <p><i>{% trans 'This Primary Bible reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                             </ul>
-                            {% trans 'His negative commandments' %}:
-                            <ul class="negative_list negative_list_title">
-                                <li>{{ commandment.title_negative }}</li>
-                            </ul>
+                            {% if commandment.title_negative is defined %}
+                                {% trans 'His negative commandments' %}:
+                                <ul class="negative_list negative_list_title">
+                                    <li>{{ commandment.title_negative }}</li>
+                                </ul>
+                            {% endif %}
+
                             {% trans 'Commandment category'%}: {{ commandment.get_category_display }}<br>
                             <br>
                             <h4>{% trans 'Old Testament Commandment' %}</h4>
@@ -171,11 +174,11 @@
                                     <p>Wherever the Torah says <i>me'od</i> ("very much" or "greatly"), it means to convey "without end or limit", something that will never terminate. The man "that delighteth greatly in His commandments" means one's infinite, boundless longing and yearning, after he ponders and considers the greatness of a mitzvah (a single commandment) itself, how far-reaching its effect is. Then even its reward is to be reckoned as nought and nothing compared with the great value of doing the mitzvah itself. So there is no end or limit to a person's longing to fulfill a mitzvah.</p>
                                     <br>
                                     <p>In the Torah are 613 commandments (mitzvoth), according to Rambam (shortened name to Rabbi Moshe ben Maimon, of Maimonides. Lived ~1135-1204 AD). Most Jews agree upon this number of commandments.</p>
-                                    <p>Many of the mitzvoth from the Torah cannot be followed (yet) at this time because the Temple is not there at the moment (think of the commandments about the Temple, sacrifices, and some for priests and Levites) . In addition, the commandments for which Israel needs a theocratic government are also not applicable at this time. Other commandments (especially agricultural ones) are only applicable in the land of Israel (that is why an Israelite can best keep the Mitzvot in the land of Israel today). According to Rabbi Yisrael Meir haKohen (who is called the Chafetz Chayim), 77 positive and 194 negative mitzvoth can currently be exported outside of Israel. In the list we use the CC coding. This coding refers to the layout of the Chafetz Chayim;
+                                    <p>Many of the mitzvoth from the Torah cannot be followed (yet) at this time because the Temple is not there at the moment (think of the commandments about the Temple, sacrifices, and some for priests and Levites) . In addition, the commandments for which Israel needs a theocratic government are also not applicable at this time. Other commandments (especially agricultural ones) are only applicable in the land of Israel (that is why an Israelite can best keep the Mitzvot in the land of Israel today). According to Rabbi Yisrael Meir haKohen (who is called the Chafetz Chayim), 77 positive and 194 negative mitzvoth can currently be exported outside of Israel. In the list we use the CC coding. This coding refers to the layout of the Chafetz Chayim (From 'The Concise Book of Mitzvoth');
                                     <ul>
-                                    <li class="positive_list">CCA means a positive mitzwe (which can now also be carried out outside of Israel).</li>
-                                    <li class="negative_list">CCN is the negative mitzwe (which can now also be carried out outside of Israel).</li>
-                                    <li class="israel_list">CCI means that this mitzvah can only be performed in the State of Israel.</li>
+                                        <li class="positive_list">CCA means a positive mitzwe (which can now also be carried out outside of Israel).</li>
+                                        <li class="negative_list">CCN is the negative mitzwe (which can now also be carried out outside of Israel).</li>
+                                        <li class="israel_list">CCI means that this mitzvah can only be performed in the State of Israel.</li>
                                     </ul>
                                 {% endblocktrans %}
                                 </div>
@@ -194,7 +197,15 @@
                             <h4>{% trans 'Primary Bible Reference' %}</h4>
                             <p><i>{% trans 'A Primary reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                                 <ul>
-                                    <li><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b></li>
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li class="negative_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li class="pos_neg_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li class="positive_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
+                                    {% else %}
+                                    <li class="unknown_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
+                                    {% endif %}
                                 </ul>
                             {% if commandment.direct_bible_references %}
                             <h4>{% trans 'Direct Bible References' %}</h4>
@@ -202,13 +213,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -219,13 +230,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -236,13 +247,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.example_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -253,13 +264,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.duplicate_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b>  <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b>  <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -270,13 +281,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.study_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>(Type: '{{ bible_reference.literal_figurative }}'. Origin: '{{ bible_reference.origin }}' )</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -286,19 +297,22 @@
                             <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
                             <br>
                             <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
-                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Types, Origin etc.' %}</i></p>
+                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Author, Origin etc.' %}</i></p>
                             </div>
                             <div class="collapse" id="collapseLegend">
                                 <div class="alert alert-warning infobox">
                                     <ul style="font-size: 11pt;">
-                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the commandment which is negative' %}</i></li>
+                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the commandment which is negative, something you should not do' %}</i></li>
                                         <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the commandment which is both positive and negative' %}</i></li>
-                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive' %}</i></li>
+                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive, something you should do or learn from' %}</i></li>
                                         <li class="unknown_list"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
-                                        <li><b>{% trans 'Type "literal"' %}: </b><i>{% trans 'A "literal" Bible reference is meant literally what the author is saying which you can directly obey and apply' %}</i></li>
-                                        <li><b>{% trans 'Type "figurative"' %}: </b><i>{% trans 'A "figurative" Bible reference is descriptive or a parable (Usually a short fictitious story that illustrates a moral attitude or a religious principle)' %}</i></li>
-                                        <li><b>{% trans 'Type "both"' %}: </b><i>{% trans 'Both "literal" and "figurative" Bible reference' %}</i></li>
-                                        <li><b>{% trans 'Origin' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
+                                        <li><b>{% trans 'Author' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
+                                        <li><b>{% trans 'Origin' %}: </b><i>{% trans "The coding refers to the commandments layout of Rabbi Chafetz Chayim (From 'The Concise Book of Mitzvoth')" %}</i></li>
+                                        <ul>
+                                            <li class="positive_list">CCA means a positive mitzwe (which can now also be carried out outside of Israel).</li>
+                                            <li class="negative_list">CCN is the negative mitzwe (which can now also be carried out outside of Israel).</li>
+                                            <li class="israel_list">CCI means that this mitzvah can only be performed in the State of Israel.</li>
+                                        </ul>
                                     </ul>
                                 </div>
                             </div>

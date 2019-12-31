@@ -11,7 +11,7 @@ class BibleReference:
         self.end_chapter = 0
         self.end_verse = 0
         self.origin = ''
-        self.literal_figurative = ''
+        self.author = ''
         self.positive_negative = ''
 
     @staticmethod

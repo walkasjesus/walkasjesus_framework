@@ -39,7 +39,7 @@ class CommandmentImporter(object):
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
                     reference.origin = row['bible_ref_origin']
-                    reference.literal_figurative = row['bible_ref_literal_figurative']
+                    reference.author = row['bible_ref_author']
                     reference.positive_negative = row['bible_ref_positive_negative']
 
                     if row['bible_ref_type'].lower() == 'primary':

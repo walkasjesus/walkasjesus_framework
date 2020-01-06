@@ -123,15 +123,21 @@
                             <h3>{{ commandment.id }}</h3>
                         </div>
                         <div id="commandment_details" class="our-services-text">
-                            <h4>{% trans 'Jesus Commandment' %}</h4>
-                            {% trans 'His positive commandment' %}:
+                            <h4>{% trans 'Jesus Commandments' %}</h4>
+                            {% trans 'Primary unique commandment' %}:
+                            {% if commandment.primary_bible_reference.positive_negative == "negative" %}
+                            <ul class="negative_list negative_list_title">
+                            {% elif commandment.primary_bible_reference.positive_negative == "both" %}
+                            <ul class="pos_neg_list positive_list_title">
+                            {% else %}
                             <ul class="positive_list positive_list_title">
+                            {% endif %}
                                 <li>{{ commandment.title }}</li>
                                 <b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b>
                                 <p><i>{% trans 'This Primary Bible reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
                             </ul>
                             {% if commandment.title_negative is defined %}
-                                {% trans 'His negative commandments' %}:
+                                {% trans 'Negative commandments' %}:
                                 <ul class="negative_list negative_list_title">
                                     <li>{{ commandment.title_negative }}</li>
                                 </ul>
@@ -139,7 +145,7 @@
 
                             {% trans 'Commandment category'%}: {{ commandment.get_category_display }}<br>
                             <br>
-                            <h4>{% trans 'Old Testament Commandment' %}</h4>
+                            <h4>{% trans 'Old Testament Commandments' %}</h4>
 
                             {% trans 'Related positive commandments from the Torah' %}:
                             <ul class="positive_list">
@@ -193,19 +199,6 @@
                         <img src="{% static 'images/bible.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
-                            <h4>{% trans 'Primary Bible Reference' %}</h4>
-                            <p><i>{% trans 'A Primary reference is the first found unique reference according to the words of Jesus, directly related to the commandment' %}.</i></p>
-                                <ul>
-                                    {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
-                                    {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
-                                    {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
-                                    {% else %}
-                                    <li class="unknown_list"><b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}'</b></li>
-                                    {% endif %}
-                                </ul>
                             {% if commandment.direct_bible_references %}
                             <h4>{% trans 'Direct Bible References' %}</h4>
                             <p><i>{% trans 'Extra direct Bible references which expands or explain the same commandment' %}.</i></p>

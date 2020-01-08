@@ -66,7 +66,7 @@
 
                     <span class="subheading">{% trans 'Overview of Jesus Commandments' %}</span>
                     <h2 class="mb-4"><span>{% trans 'Study the commandments yourself' %}</span></h2>
-                    <p>{% trans 'In the following table you can see a list of all the commandments we found which Jesus tought us.' %}
+                    <p>{% trans 'In the following table you can see a list of all the Bible references we found, corresponding to all the commandments which Jesus taught us.' %}
                     <p>{% trans "If you have any suggestions or corrections, we'd like to hear from you. Please" %} <a href="{% url 'account:signup' %}">{% trans 'register' %}</a> {% trans 'or just sent us an' %} <a href="mailto:info@jesuscommandments.org">{% trans 'email' %}</a>.</p>
                 </div>
             </div>
@@ -76,22 +76,22 @@
             <br>
             <br>
             <div class="col-md-13">
-                
+
                 <table id="dtBasicExample" class="table table-striped table-bordered table-sm w-auto" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                        <th class="th-sm">#
-                        </th>
-                        <th class="th-sm">{% trans 'Commandment Title' %}
-                        </th>
-                        <th class="th-sm">{% trans 'Bible Reference' %}
-                        </th>
-                        <th class="th-sm">{% trans 'Bible Reference Text' %}
-                        </th>
-                        <th class="th-sm">{% trans 'Category' %}
-                        </th>
-                        <th class="th-sm">{% trans 'Precedence' %}
-                        </th>
+                            <th class="th-sm">#
+                            </th>
+                            <th class="th-sm">{% trans 'Positive / Negative' %}
+                            </th>
+                            <th class="th-sm">{% trans 'Author' %}
+                            </th>
+                            <th class="th-sm">{% trans 'Bible Reference' %}
+                            </th>
+                            <th class="th-sm">{% trans 'Bible Reference Text' %}
+                            </th>
+                            <th class="th-sm">{% trans 'Grouping' %}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,37 +99,71 @@
                         {% for bible_reference in bible_references.primary %}
                         <tr>
                             <th scope="row">{{ bible_reference.commandment.id }}</th>
-                            <td>{{ bible_reference.commandment.title }}</td>
-                            <td>{{ bible_reference}}</td>
-                            <td>{{ bible_reference.text}}</td>
-                            <td>{{ bible_reference.commandment.get_category_display }}</td>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
+                            <td>{{ bible_reference }}</td>
+                            <td>{{ bible_reference.text }}</td>
                             <td>{% trans 'Primary' %}</td>
                         </tr>
                         {% endfor %}
                         {% endif %}
-
                         {% if bible_references.direct %}
                         {% for bible_reference in bible_references.direct %}
                         <tr>
                             <th scope="row">{{ bible_reference.commandment.id }}</th>
-                            <td>{{ bible_reference.commandment.title }}</td>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
                             <td>{{ bible_reference }}</td>
-                            <td>{{ bible_reference.text}}</td>
-                            <td>{{ bible_reference.commandment.get_category_display }}</td>
+                            <td>{{ bible_reference.text }}</td>
                             <td>{% trans 'Direct' %}</td>
                         </tr>
                         {% endfor %}
                         {% endif %}
-
                         {% if bible_references.indirect %}
                         {% for bible_reference in bible_references.indirect %}
                         <tr>
                             <th scope="row">{{ bible_reference.commandment.id }}</th>
-                            <td>{{ bible_reference.commandment.title }}</td>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
                             <td>{{ bible_reference }}</td>
-                            <td>{{ bible_reference.text  }}</td>
-                            <td>{{ bible_reference.commandment.get_category_display }}</td>
+                            <td>{{ bible_reference.text }}</td>
                             <td>{% trans 'Indirect' %}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% if bible_references.example %}
+                        {% for bible_reference in bible_references.example %}
+                        <tr>
+                            <th scope="row">{{ bible_reference.commandment.id }}</th>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
+                            <td>{{ bible_reference }}</td>
+                            <td>{{ bible_reference.text }}</td>
+                            <td>{% trans 'Example' %}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% if bible_references.duplicate %}
+                        {% for bible_reference in bible_references.duplicate %}
+                        <tr>
+                            <th scope="row">{{ bible_reference.commandment.id }}</th>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
+                            <td>{{ bible_reference }}</td>
+                            <td>{{ bible_reference.text }}</td>
+                            <td>{% trans 'Duplicate' %}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% if bible_references.study %}
+                        {% for bible_reference in bible_references.study %}
+                        <tr>
+                            <th scope="row">{{ bible_reference.commandment.id }}</th>
+                            <td>{{ bible_reference.positive_negative }}</td>
+                            <td>{{ bible_reference.author }}</td>
+                            <td>{{ bible_reference }}</td>
+                            <td> - </td>
+                            <td>{% trans 'Study' %}</td>
                         </tr>
                         {% endfor %}
                         {% endif %}
@@ -138,15 +172,15 @@
                         <tr>
                             <th class="th-sm">#
                             </th>
-                            <th class="th-sm">{% trans 'Commandment Title' %}
+                            <th class="th-sm">{% trans 'Positive / Negative' %}
+                            </th>
+                            <th class="th-sm">{% trans 'Author' %}
                             </th>
                             <th class="th-sm">{% trans 'Bible Reference' %}
                             </th>
                             <th class="th-sm">{% trans 'Bible Reference Text' %}
                             </th>
-                            <th class="th-sm">{% trans 'Category' %}
-                            </th>
-                            <th class="th-sm">{% trans 'Precedence' %}
+                            <th class="th-sm">{% trans 'Grouping' %}
                             </th>
                         </tr>
                     </tfoot>

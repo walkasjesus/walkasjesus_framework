@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 10:23+0000\n"
-"PO-Revision-Date: 2020-01-11 09:16+0000\n"
+"POT-Creation-Date: 2020-01-11 10:58+0000\n"
+"PO-Revision-Date: 2020-01-11 11:02+0000\n"
 "Last-Translator: b'  <info@jesuscommandments.org>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -578,37 +578,37 @@ msgid "Questions"
 msgstr "Vragen"
 
 #: commandments_app/templates/commandments/detail.html:46
-#: commandments_app/templates/commandments/detail.html:398
+#: commandments_app/templates/commandments/detail.html:399
 msgid "Superbook"
 msgstr "Superbook"
 
 #: commandments_app/templates/commandments/detail.html:60
-#: commandments_app/templates/commandments/detail.html:440
+#: commandments_app/templates/commandments/detail.html:441
 msgid "Songs"
 msgstr "Liederen"
 
 #: commandments_app/templates/commandments/detail.html:67
-#: commandments_app/templates/commandments/detail.html:461
+#: commandments_app/templates/commandments/detail.html:462
 msgid "Movies"
 msgstr "Films"
 
 #: commandments_app/templates/commandments/detail.html:74
-#: commandments_app/templates/commandments/detail.html:482
+#: commandments_app/templates/commandments/detail.html:483
 msgid "Testimonies"
 msgstr "Getuigenissen"
 
 #: commandments_app/templates/commandments/detail.html:81
-#: commandments_app/templates/commandments/detail.html:503
+#: commandments_app/templates/commandments/detail.html:504
 msgid "Blogs"
 msgstr "Blogs"
 
 #: commandments_app/templates/commandments/detail.html:88
-#: commandments_app/templates/commandments/detail.html:521
+#: commandments_app/templates/commandments/detail.html:522
 msgid "Sermons"
 msgstr "Preken"
 
 #: commandments_app/templates/commandments/detail.html:95
-#: commandments_app/templates/commandments/detail.html:542
+#: commandments_app/templates/commandments/detail.html:543
 msgid "Books"
 msgstr "Boeken"
 
@@ -832,17 +832,17 @@ msgstr "Fotograaf"
 msgid "Share your hearts together by discussing the following questions:"
 msgstr "Deel je harten met elkaar door het bespreking van de volgende vragen:"
 
-#: commandments_app/templates/commandments/detail.html:367
+#: commandments_app/templates/commandments/detail.html:362
 msgid "Is there anything you don't understand within this commandment?"
-msgstr "Is er iets dat je niet binnen dit gebod begrijpen?"
+msgstr "Is er iets dat je niet binnen dit gebod begrijpt?"
 
-#: commandments_app/templates/commandments/detail.html:368
+#: commandments_app/templates/commandments/detail.html:363
 msgid "Wat appeals to you about all Bible references and resources?"
 msgstr ""
 "Wat spreekt je aan bij alle Bijbelteksten en middelen (Illustratie, Fimpjes,"
 " Foto's, Preken, etc)?"
 
-#: commandments_app/templates/commandments/detail.html:369
+#: commandments_app/templates/commandments/detail.html:364
 msgid ""
 "How do you apply this commandment in your life or do you experience any "
 "boundaries?"
@@ -850,11 +850,16 @@ msgstr ""
 "Hoe ga je dit gebod toepassen in je leven of ervaar je nog bepaalde "
 "blokkades?"
 
-#: commandments_app/templates/commandments/detail.html:380
+#: commandments_app/templates/commandments/detail.html:367
+#| msgid "Questions"
+msgid "Extra questions"
+msgstr "Extra vragen"
+
+#: commandments_app/templates/commandments/detail.html:381
 msgid "Resource Language Settings"
 msgstr "Taalinstellingen van de middelen"
 
-#: commandments_app/templates/commandments/detail.html:381
+#: commandments_app/templates/commandments/detail.html:382
 msgid ""
 "Below you will find all kinds of related resources to this commandment, to "
 "help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, "
@@ -866,7 +871,7 @@ msgstr ""
 "korte films, liederen, blogs of boeken. U kunt meerdere talen selecteren om "
 "deze middelen te zien in meer talen."
 
-#: commandments_app/templates/commandments/detail.html:382
+#: commandments_app/templates/commandments/detail.html:383
 msgid ""
 "Do you know more good resources in your language which can be added to this "
 "list? Please <a href=\"mailto:info@jesuscommandments.org\">contact us</a> so"
@@ -877,19 +882,19 @@ msgstr ""
 "ons op </a> of <a href=\"\"> registreer je </a> zodat je het zelf kunt "
 "toevoegen"
 
-#: commandments_app/templates/commandments/detail.html:384
+#: commandments_app/templates/commandments/detail.html:385
 msgid "Change resource language"
 msgstr "Wijzig taal voor middelen"
 
-#: commandments_app/templates/commandments/detail.html:403
+#: commandments_app/templates/commandments/detail.html:404
 msgid "Watch now on"
 msgstr "Kijk nu op"
 
-#: commandments_app/templates/commandments/detail.html:419
+#: commandments_app/templates/commandments/detail.html:420
 msgid "Short Movies"
 msgstr "Korte Filmpjes"
 
-#: commandments_app/templates/commandments/detail.html:566
+#: commandments_app/templates/commandments/detail.html:567
 msgid "Quote by"
 msgstr "Citaat door"
 
@@ -1543,6 +1548,8 @@ msgstr ""
 msgid ""
 "Loving God back requires obedience, but what are all of Jesus commandments?"
 msgstr ""
+"Het liefhebben van God vraagt gehoorzaamheid, maar wat zijn al Jezus "
+"geboden?"
 
 #: commandments_app/templates/commandments/vision.html:34
 msgid ""
@@ -1550,6 +1557,8 @@ msgid ""
 "commandments, you will at least find all the commandments which are "
 "displayed on this websites."
 msgstr ""
+"Wanneer je de evangeliën leest, schrijf dan alle unieke geboden op. Je zal "
+"op zijn minst alle geboden vinden die op deze website te vinden zijn."
 
 #: commandments_app/templates/commandments/vision.html:47
 msgid ""
@@ -3751,104 +3760,86 @@ msgid "When was the last time you were merciful?"
 msgstr "Wanneer was de laatste keer dat je iemand iets hebt vergeven?"
 
 #: commandments_app.Question/text:8
-#, fuzzy
 msgid "Ask others, what kind of sins do they see with you?"
-msgstr "Vraag anderen, wat voor soort zonden zien zij met jou?"
+msgstr "Vraag anderen, wat voor soort zonden zien zij bij jou?"
 
 #: commandments_app.Question/text:9
-#, fuzzy
 msgid "What sins do you want to get rid off?"
-msgstr "Wat zonden wilt u kwijt te raken?"
+msgstr "Welke zonden wil jij kwijtraken?"
 
 #: commandments_app.Question/text:10
-#, fuzzy
 msgid "Pray for each other"
 msgstr "Bid voor elkaar"
 
 #: commandments_app.Question/text:11
-#, fuzzy
 msgid "Has sin corrupted your saltiness?"
-msgstr "Heeft de zonde bedorven je meer zout?"
+msgstr "Heeft bepaalde zonden jouw \"zout zijn\" beinvloed?"
 
 #: commandments_app.Question/text:12
-#, fuzzy
 msgid "Has your self-interest made you disinterested in transforming others?"
 msgstr ""
-"Is uw eigenbelang deed je ongeïnteresseerd in het transformeren van anderen?"
+"Heeft jouw ik-gerichtheid ervoor gezorgt dat je niet meer geinteresseerd "
+"bent om anderen te helpen veranderen? "
 
 #: commandments_app.Question/text:13
-#, fuzzy
 msgid "Can you be graciously confrontational?"
-msgstr "Kun je genadig confronterend?"
+msgstr "Kun jij confronterend zijn vanuit genade?"
 
 #: commandments_app.Question/text:14
-#, fuzzy
 msgid "Does your speaking suit your behavior?"
-msgstr "Heeft uw speaking je gedrag?"
+msgstr "Komen je woorden overeen met je gedrag?"
 
 #: commandments_app.Question/text:15
-#, fuzzy
 msgid "Is there a difference between your confession and your doing?"
-msgstr "Is er een verschil tussen uw bekentenis en je aan het doen?"
+msgstr "Is er een verschil tussen je bekentenis wat je doet?"
 
 #: commandments_app.Question/text:16
-#, fuzzy
 msgid "When was the last time you were generous?"
-msgstr "Wanneer was de laatste keer dat je vrijgevig waren?"
+msgstr "Wanneer was de laatste keer dat je vrijgevig was?"
 
 #: commandments_app.Question/text:17
-#, fuzzy
 msgid "Do you really want to be a follower of Jesus?"
-msgstr "Wil je echt wilt een volgeling van Jezus te zijn?"
+msgstr "Wil je echt een volgeling van Jezus zijn?"
 
 #: commandments_app.Question/text:18
-#, fuzzy
 msgid ""
 "Enemies are the people who God puts on your way which are hard for you to "
 "love. Who are enemies for you? "
 msgstr ""
-"Vijanden zijn de mensen die God legt op de weg die moeilijk zijn voor u om "
-"de liefde. Wie zijn vijanden voor u?"
+"Vijanden zijn de mensen die God op je pad brengt waarbij het moeilijk is om "
+"ze lief te hebben. Wie zijn vijanden voor jouw?"
 
 #: commandments_app.Question/text:19
-#, fuzzy
 msgid "Do you have the idea that you are what God intended you to be?"
-msgstr "Heeft u het idee dat je bent wat Gods bedoeling je te zijn?"
+msgstr "Heb je het idee dat je bent zoals God je bedoelt heeft om te zijn?"
 
 #: commandments_app.Question/text:20
-#, fuzzy
 msgid "What would stop you from becoming the way you were meant to be?"
-msgstr ""
-"Wat zou je ervan weerhouden steeds de manier waarop je was bedoeld om te "
-"worden?"
+msgstr "Wat zou je ervan weerhouden om to worden zoals je bent bedoeld?"
 
 #: commandments_app.Question/text:21
-#, fuzzy
 msgid "What would happen if you were as God intended?"
-msgstr "Wat zou er gebeuren als je zoals God bedoeld?"
+msgstr "Wat zou er gebeuren als je zou zijn zoals God heeft bedoeld?"
 
 #: commandments_app.Question/text:22
-#, fuzzy
 msgid ""
 "Are we willing to give up our rights for reconciliation out of love for "
 "Jesus, the Father and the other?"
 msgstr ""
-"Zijn we bereid op te geven onze rechten voor de verzoening uit liefde voor "
+"Zijn we bereid om onze rechten op te geven voor verzoening uit liefde voor "
 "Jezus, de Vader en de andere?"
 
 #: commandments_app.Question/text:23
-#, fuzzy
 msgid ""
 "Are we willing to step into a conflict and be accountable for love for "
 "Jesus, the Father and the other and to ask forgiveness for all guilt in "
 "which we do or do not participate?"
 msgstr ""
-"Zijn we bereid om de stap naar een conflict en zijn verantwoordelijk voor de"
-" liefde voor Jezus, de Vader en de andere en om vergiffenis te vragen voor "
-"alle schuld waarin we wel of niet deel te nemen?"
+"Zijn we bereid om een conflict in te stappen en verantwoordelijkheid te "
+"nemen uit liefde voor Jezus, de Vader en de andere en om vergeving te vragen"
+" voor alle schuld waarin we wel of niet deel hebben genomen?"
 
 #: commandments_app.Question/text:24
-#, fuzzy
 msgid ""
 "Are we prepared, out of love for Jesus, the Father and the other, to do what"
 " is necessary so that a relationship can be restored, to give satisfaction "
@@ -3859,51 +3850,44 @@ msgstr ""
 "geven, zodat volledige verzoening mogelijk wordt?"
 
 #: commandments_app.Question/text:25
-#, fuzzy
 msgid ""
 "Are we willing to forgive the other out of love for Jesus, the Father and "
 "the other, regardless of whether or not the other asks for forgiveness?"
 msgstr ""
-"Zijn we bereid om de andere uit liefde voor Jezus, de Vader en de andere "
-"vergeven, ongeacht of het andere niet om vergeving vraagt?"
+"Zijn we bereid om de andere uit liefde voor Jezus, de Vader en de andere te "
+"vergeven, ongeacht de ander wel of niet om vergeving vraagt?"
 
 #: commandments_app.Question/text:26
-#, fuzzy
 msgid "Do you apply regular fasting in your life?"
-msgstr "Heeft u regelmatig vasten toe te passen in je leven?"
+msgstr "Vast jij regelmatig in je leven?"
 
 #: commandments_app.Question/text:27
-#, fuzzy
 msgid "What are your treasures?"
-msgstr "Wat zijn uw schatten?"
+msgstr "Wat zijn jouw schatten?"
 
 #: commandments_app.Question/text:28
-#, fuzzy
 msgid "What makes it difficult for you to listen, understand and obey?"
 msgstr ""
-"Wat maakt het moeilijk voor u om te luisteren, te begrijpen en te "
+"Wat maakt het moeilijk voorjouw om te luisteren, te begrijpen en te "
 "gehoorzamen?"
 
 #: commandments_app.Question/text:29
-#, fuzzy
 msgid "If you want to grow in applying your faith, what does that take?"
 msgstr ""
-"Als je wilt groeien in de toepassing van uw geloof, wat doet dat duren?"
+"Als je wilt groeien in de toepassing van je geloof, wat is daar voor nodig?"
 
 #: commandments_app.Question/text:30
-#, fuzzy
 msgid "Once you know what He says, can you trust it?"
-msgstr "Als je eenmaal weet wat Hij zegt, kun je het vertrouwen?"
+msgstr "Als je eenmaal weet wat Hij zegt, kun je daarin vertrouwen?"
 
 #: commandments_app.Question/text:31
-#, fuzzy
 msgid "What keeps people away from God's Truth?"
 msgstr "Wat houdt mensen weg van Gods Waarheid?"
 
 #: commandments_app.Question/text:32
-#, fuzzy
 msgid "Who cares about our agenda for telling the world about Jesus?"
-msgstr "Who cares over onze agenda voor de wereld over Jezus te vertellen?"
+msgstr ""
+"Wie maakt zich druk over onze agenda  om de wereld over Jezus te vertellen?"
 
 #: commandments_app.Question/text:33
 msgid ""

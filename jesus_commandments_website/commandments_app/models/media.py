@@ -12,7 +12,11 @@ class Media(models.Model):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
     title = models.CharField(max_length=128, default='', null=True, blank=True)
     description = models.TextField(default='', null=True, blank=True)
-    target_audience = models.CharField(max_length=64, default='')
+    target_audience = models.CharField(max_length=32,
+                                       choices=[('any', 'any'),
+                                                ('adults', 'adults'),
+                                                ('kids', 'kids')],
+                                       default='any')
     author = models.CharField(max_length=64, default='')
     img_url = URLOrRelativeURLField(default='', null=True, blank=True)
     url = models.URLField(max_length=300, null=True, blank=True)

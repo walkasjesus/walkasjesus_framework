@@ -6,7 +6,9 @@
 # msgstr "% (Model_name) s mit diesem% (FIELD_LABEL) s ist bereits vorhanden."
 
 
-# We need to change the '% (Model_name) s' to '%(model_name)s'
+# 1) We need to change the '% (Model_name) s' to '%(model_name)s'
+# 2) We need to change the '</ [A-Za-z]>' to '</[a-z]>'
+# 3) We need to change the '<[A-Z]>' to '<[a-z]>'
 #
 # This script will fix all these variables (works only when the same wrong pattern is used as in the example)
 #
@@ -16,10 +18,19 @@ declare -a locale_paths=$(find locale -name "django.po")
 
 for locale in ${locale_paths[@]}; do
 	echo "Start parsing file: $locale"
-	if sed -i -r "s/\% \(([a-zA-Z0-9_]+)\) s/\%(\L\1)s/g" $locale; then
-		echo "OK: Succesfully parsed file"
+	if sed -i -r "s/\% \(([a-zA-Z0-9_.]+)\) s/\%(\L\1)s/g" $locale; then
+		echo "OK: Succesfully fixed '% (Model_name) s' to '%(model_name)s'"
 	else
-		echo "ERROR: Something went wrong when parsing this file"
+		echo "ERROR: Something went wrong when fixing '% (Model_name) s' to '%(model_name)s'"
+	fi
+	if sed -i -r "s/<\/ ([A-Za-z])>/<\/\L\1>/g" $locale; then
+		echo "OK: Succesfully fixed '</ [A-Za-z]>' to '</[a-z]>'"
+	else
+		echo "ERROR: Something went wrong when fixing '</ [A-Za-z]>' to '</[a-z]>'"
+	fi
+	if sed -i -r "s/<([A-Z])>/<\L\1>/g" $locale; then
+		echo "OK: Succesfully fixed '<[A-Z]>' to '<[a-z]>'"
+	else
+		echo "ERROR: Something went wrong when fixing '<[A-Z]>' to '<[a-z]>'"
 	fi
 done
-

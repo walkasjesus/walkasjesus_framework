@@ -359,14 +359,15 @@
                             <h4>{% trans 'Questions' %}</h4>
                             <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
-                                {% if commandment.questions %}
-                                    {% for question in commandment.questions %}
-                                    <li>{{ question.text }}</li>
-                                    {% endfor %}
-                                {% else %}
                                     <li>{% trans "Is there anything you don't understand within this commandment?" %}</li>
                                     <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
                                     <li>{% trans "How do you apply this commandment in your life or do you experience any boundaries?" %}</li>
+                                {% if commandment.questions %}
+                                    <br>
+                                    {% trans 'Extra questions' %}:
+                                    {% for question in commandment.questions %}
+                                    <li>{{ question.text }}</li>
+                                    {% endfor %}
                                 {% endif %}
                             </ul>
                         </div>

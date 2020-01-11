@@ -100,7 +100,7 @@
     <div class="menu-bg"></div>
 </nav>
 
-<section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.img_url is not defined %}{{ commandment.background_drawing.img_url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
+<section class="ftco-daily-verse img" style="background-image: url('{% if commandment.background_drawing.img_url %}{{ commandment.background_drawing.img_url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
 <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-center">
@@ -136,7 +136,7 @@
                                 <b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b>
                                 <p><i>{% trans 'This Primary Bible reference is a unique Bible reference according to the words of Jesus, which best summarizes the commandment' %}.</i></p>
                             </ul>
-                            {% if commandment.title_negative is defined %}
+                            {% if commandment.title_negative %}
                                 {% trans 'Negative commandments' %}:
                                 <ul class="negative_list negative_list_title">
                                     <li>{{ commandment.title_negative }}</li>
@@ -161,13 +161,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -178,13 +178,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -195,13 +195,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.example_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -212,13 +212,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.duplicate_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b>  <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -229,13 +229,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.study_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin != "nan" %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -280,7 +280,7 @@
                         <div id="devotional" class="our-services-text">
                             <h4>{% trans 'Devotional' %}</h4>
                             <p>{{ commandment.devotional | safe  }}</p>
-                            {% if commandment.devotional_source is not defined %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
+                            {% if commandment.devotional_source %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
                         </div>
                     </div>
                 </div>
@@ -297,7 +297,7 @@
                             <h4>{% trans 'Drawings' %}</h4>
                             {% for drawing in commandment.drawings %}
                                 <img src="{{ drawing.img_url|watermark:'Watermark_JV,position=50%x50%,opacity=35' }}" alt="{{ drawing.author }} - {{ drawing.title }}" style="max-width:97%;max-height:97%;">
-                                {% if drawing.description != "nan" %}<p>{{ drawing.description }}</p>{% endif %}
+                                {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
                                 <p>{% trans 'Artist' %}: {{ drawing.author }}</p>
                             {% endfor %}
                         </div>
@@ -399,7 +399,7 @@
                             <h4>{% trans 'Superbook' %}</h4>
                             {% for superbook in commandment.superbooks %}
                                 <a href="{{ superbook.url }}" target="_blank"><img src="{{ superbook.img_url }}" alt="{{ superbook.author }} - {{ superbook.title }}" style="max-width:97%;max-height:97%;float: left;padding-right: 30px;"></a>
-                                {% if superbook.description != "nan" %}<p>{{ superbook.description }}</p>{% endif %}
+                                {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
                                 <br>
                                 <p><b>{% trans 'Watch now on' %}: <a href="{{ superbook.url }}" target="_blank">{{ superbook.author }}</a></b></p>
                                 <p style="clear: left;"> </p>
@@ -420,7 +420,7 @@
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in commandment.short_movies %}
                             <h5>{{ short_movie.title }}</h5>
-                            {% if short_movie.description != "nan" %}<p>{{ short_movie.description }}</p>{% endif %}
+                            {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -441,7 +441,7 @@
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in commandment.songs %}
                             <h5>{{ song.author }} - {{ song.title }}</h5>
-                            {% if song.description != "nan" %}<p>{{ song.description }}</p>{% endif %}
+                            {% if song.description %}<p>{{ song.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -462,7 +462,7 @@
                             <h4>{% trans 'Movies' %}</h4>
                             {% for movie in commandment.movies %}
                             <h5>{{ movie.title }}</h5>
-                            {% if movie.description != "nan" %}<p>{{ movie.description }}</p>{% endif %}
+                            {% if movie.description %}<p>{{ movie.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -483,7 +483,7 @@
                             <h4>{% trans 'Testimonies' %}</h4>
                             {% for testimony in commandment.testimonies %}
                             <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
-                            {% if testimony.description != "nan" %}<p>{{ testimony.description }}</p>{% endif %}
+                            {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -504,7 +504,7 @@
                             <h4>{% trans 'Blogs' %}</h4>
                             {% for blog in commandment.blogs %}
                             <h5><a href="{{ blog.url }}" target="_blank">{{ blog.author }} - {{ blog.title }}</a></h5>
-                            {% if blog.description != "nan" %}<p>{{ blog.description }}</p>{% endif %}
+                            {% if blog.description %}<p>{{ blog.description }}</p>{% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -522,7 +522,7 @@
                             <h4>{% trans 'Sermons' %}</h4>
                             {% for sermon in commandment.sermons %}
                             <h5>{{ sermon.author }} - {{ sermon.title }}</h5>
-                            {% if sermon.description != "nan" %}<p>{{ sermon.description }}</p>{% endif %}
+                            {% if sermon.description %}<p>{{ sermon.description }}</p>{% endif %}
                             <div class="video-iframe">
                                 <iframe src="{{ sermon.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                             </div>
@@ -548,7 +548,7 @@
                                     </br>
                                     </br>
                                     <h5 class="mt-0 font-weight-bold">{{ book.author }} - {{ book.title }}</h5>
-                                    {% if book.description != "nan" %}<p>{{ book.description }}</p>{% endif %}
+                                    {% if book.description %}<p>{{ book.description }}</p>{% endif %}
                                 </div>
                             </div>
                             {% endfor %}

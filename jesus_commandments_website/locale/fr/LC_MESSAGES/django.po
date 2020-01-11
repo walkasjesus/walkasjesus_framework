@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 10:24+0000\n"
+"POT-Creation-Date: 2020-01-11 10:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -706,43 +706,43 @@ msgid "Questions"
 msgstr "Des questions"
 
 #: commandments_app/templates/commandments/detail.html:46
-#: commandments_app/templates/commandments/detail.html:398
+#: commandments_app/templates/commandments/detail.html:399
 #, fuzzy
 msgid "Superbook"
 msgstr "Superbook"
 
 #: commandments_app/templates/commandments/detail.html:60
-#: commandments_app/templates/commandments/detail.html:440
+#: commandments_app/templates/commandments/detail.html:441
 #, fuzzy
 msgid "Songs"
 msgstr "Chansons"
 
 #: commandments_app/templates/commandments/detail.html:67
-#: commandments_app/templates/commandments/detail.html:461
+#: commandments_app/templates/commandments/detail.html:462
 #, fuzzy
 msgid "Movies"
 msgstr "Films"
 
 #: commandments_app/templates/commandments/detail.html:74
-#: commandments_app/templates/commandments/detail.html:482
+#: commandments_app/templates/commandments/detail.html:483
 #, fuzzy
 msgid "Testimonies"
 msgstr "témoignages"
 
 #: commandments_app/templates/commandments/detail.html:81
-#: commandments_app/templates/commandments/detail.html:503
+#: commandments_app/templates/commandments/detail.html:504
 #, fuzzy
 msgid "Blogs"
 msgstr "Les blogs"
 
 #: commandments_app/templates/commandments/detail.html:88
-#: commandments_app/templates/commandments/detail.html:521
+#: commandments_app/templates/commandments/detail.html:522
 #, fuzzy
 msgid "Sermons"
 msgstr "sermons"
 
 #: commandments_app/templates/commandments/detail.html:95
-#: commandments_app/templates/commandments/detail.html:542
+#: commandments_app/templates/commandments/detail.html:543
 #, fuzzy
 msgid "Books"
 msgstr "Livres"
@@ -996,18 +996,18 @@ msgstr "Photographe"
 msgid "Share your hearts together by discussing the following questions:"
 msgstr "Partagez vos coeurs ensemble en discutant des questions suivantes:"
 
-#: commandments_app/templates/commandments/detail.html:367
+#: commandments_app/templates/commandments/detail.html:362
 #, fuzzy
 msgid "Is there anything you don't understand within this commandment?"
 msgstr "Est-ce que vous ne comprenez pas dans ce commandement?"
 
-#: commandments_app/templates/commandments/detail.html:368
+#: commandments_app/templates/commandments/detail.html:363
 #, fuzzy
 msgid "Wat appeals to you about all Bible references and resources?"
 msgstr ""
 "Qu'est-ce qui vous attire toutes les références bibliques et des ressources?"
 
-#: commandments_app/templates/commandments/detail.html:369
+#: commandments_app/templates/commandments/detail.html:364
 #, fuzzy
 msgid ""
 "How do you apply this commandment in your life or do you experience any "
@@ -1016,12 +1016,17 @@ msgstr ""
 "Comment appliquez-vous ce commandement dans votre vie ou vous éprouvez des "
 "limites?"
 
-#: commandments_app/templates/commandments/detail.html:380
+#: commandments_app/templates/commandments/detail.html:367
+#, fuzzy
+msgid "Extra questions"
+msgstr "Des questions"
+
+#: commandments_app/templates/commandments/detail.html:381
 #, fuzzy
 msgid "Resource Language Settings"
 msgstr "Paramètres de langue ressources"
 
-#: commandments_app/templates/commandments/detail.html:381
+#: commandments_app/templates/commandments/detail.html:382
 #, fuzzy
 msgid ""
 "Below you will find all kinds of related resources to this commandment, to "
@@ -1035,7 +1040,7 @@ msgstr ""
 "Vous pouvez sélectionner plusieurs langues si vous voulez voir ces "
 "ressources dans d'autres langues."
 
-#: commandments_app/templates/commandments/detail.html:382
+#: commandments_app/templates/commandments/detail.html:383
 #, fuzzy
 msgid ""
 "Do you know more good resources in your language which can be added to this "
@@ -1047,22 +1052,22 @@ msgstr ""
 "s'il vous plaît contactez-nous </a> afin que nous puissions l'ajouter (ou <a "
 "href=\"\"> </a> enregistrer et vous pouvez ajouter vous-même!"
 
-#: commandments_app/templates/commandments/detail.html:384
+#: commandments_app/templates/commandments/detail.html:385
 #, fuzzy
 msgid "Change resource language"
 msgstr "Changer de langue des ressources"
 
-#: commandments_app/templates/commandments/detail.html:403
+#: commandments_app/templates/commandments/detail.html:404
 #, fuzzy
 msgid "Watch now on"
 msgstr "Regardez maintenant"
 
-#: commandments_app/templates/commandments/detail.html:419
+#: commandments_app/templates/commandments/detail.html:420
 #, fuzzy
 msgid "Short Movies"
 msgstr "courts métrages"
 
-#: commandments_app/templates/commandments/detail.html:566
+#: commandments_app/templates/commandments/detail.html:567
 #, fuzzy
 msgid "Quote by"
 msgstr "Citation de"

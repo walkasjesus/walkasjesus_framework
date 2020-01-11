@@ -2,7 +2,7 @@
 {% load i18n %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
-        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if commandment.background_drawing.img_url is not defined %}{{ commandment.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if commandment.background_drawing.img_url %}{{ commandment.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
             <div class="number-content">
                 <h3>{{ commandment.id }}</h3>
             </div>

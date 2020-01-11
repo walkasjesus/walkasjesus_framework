@@ -16,7 +16,7 @@ def first(data_frame, column):
 
 class CommandmentImporter(object):
     def load(self, file_path='../../../jesus_commandments_website/data/commandments.csv'):
-        df = pandas.read_csv(file_path, delimiter=';')
+        df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         commandments = []
 

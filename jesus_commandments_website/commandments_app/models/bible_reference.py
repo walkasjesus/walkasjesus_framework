@@ -15,7 +15,7 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    origin = models.CharField(max_length=32, default='')
+    origin = models.CharField(max_length=32, default='', null=True, blank=True)
     author = models.CharField(max_length=64, default='Undetermined')
     positive_negative = models.CharField(max_length=32,
                                          choices=[('positive', 'positive'),

@@ -136,7 +136,7 @@
                                 <b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b>
                                 <p><i>{% trans 'This Primary Bible reference is a unique Bible reference according to the words of Jesus, which best summarizes the commandment' %}.</i></p>
                             </ul>
-                            {% if commandment.title_negative is defined %}
+                            {% if commandment.title_negative %}
                                 {% trans 'Negative commandments' %}:
                                 <ul class="negative_list negative_list_title">
                                     <li>{{ commandment.title_negative }}</li>

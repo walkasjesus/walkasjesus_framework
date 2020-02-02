@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 10:58+0000\n"
+"POT-Creation-Date: 2020-02-02 11:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -595,12 +595,12 @@ msgstr "Commandes Finance"
 msgid "Holiness Commands"
 msgstr "sainteté Commandes"
 
-#: commandments_app/models/media.py:19
+#: commandments_app/models/media.py:23
 #, fuzzy
 msgid "Language independent"
 msgstr "langue indépendante"
 
-#: commandments_app/models/media.py:20
+#: commandments_app/models/media.py:24
 #, fuzzy
 msgid "Language unknown"
 msgstr "langue inconnue"
@@ -660,105 +660,105 @@ msgstr "Désactiver"
 msgid "Enable"
 msgstr "Activer"
 
-#: commandments_app/templates/commandments/detail.html:12
-#: commandments_app/templates/commandments/detail.html:18
-#: commandments_app/templates/commandments/detail.html:25
-#: commandments_app/templates/commandments/detail.html:32
-#: commandments_app/templates/commandments/detail.html:39
-#: commandments_app/templates/commandments/detail.html:46
-#: commandments_app/templates/commandments/detail.html:60
-#: commandments_app/templates/commandments/detail.html:67
-#: commandments_app/templates/commandments/detail.html:74
-#: commandments_app/templates/commandments/detail.html:81
-#: commandments_app/templates/commandments/detail.html:88
-#: commandments_app/templates/commandments/detail.html:95
+#: commandments_app/templates/commandments/detail.html:11
+#: commandments_app/templates/commandments/detail.html:17
+#: commandments_app/templates/commandments/detail.html:24
+#: commandments_app/templates/commandments/detail.html:31
+#: commandments_app/templates/commandments/detail.html:38
+#: commandments_app/templates/commandments/detail.html:45
+#: commandments_app/templates/commandments/detail.html:59
+#: commandments_app/templates/commandments/detail.html:66
+#: commandments_app/templates/commandments/detail.html:73
+#: commandments_app/templates/commandments/detail.html:80
+#: commandments_app/templates/commandments/detail.html:87
+#: commandments_app/templates/commandments/detail.html:94
 #, fuzzy
 msgid "Jump to:"
 msgstr "Sauter à:"
 
-#: commandments_app/templates/commandments/detail.html:12
+#: commandments_app/templates/commandments/detail.html:11
 #, fuzzy
 msgid "Bible references"
 msgstr "références bibliques"
 
-#: commandments_app/templates/commandments/detail.html:18
-#: commandments_app/templates/commandments/detail.html:281
+#: commandments_app/templates/commandments/detail.html:17
+#: commandments_app/templates/commandments/detail.html:280
 #, fuzzy
 msgid "Devotional"
 msgstr "religieux"
 
-#: commandments_app/templates/commandments/detail.html:25
-#: commandments_app/templates/commandments/detail.html:297
+#: commandments_app/templates/commandments/detail.html:24
+#: commandments_app/templates/commandments/detail.html:296
 #, fuzzy
 msgid "Drawings"
 msgstr "Dessins"
 
-#: commandments_app/templates/commandments/detail.html:32
-#: commandments_app/templates/commandments/detail.html:316
+#: commandments_app/templates/commandments/detail.html:31
+#: commandments_app/templates/commandments/detail.html:315
 #, fuzzy
 msgid "Pictures"
 msgstr "Des photos"
 
-#: commandments_app/templates/commandments/detail.html:39
-#: commandments_app/templates/commandments/detail.html:359
+#: commandments_app/templates/commandments/detail.html:38
+#: commandments_app/templates/commandments/detail.html:358
 #, fuzzy
 msgid "Questions"
 msgstr "Des questions"
 
-#: commandments_app/templates/commandments/detail.html:46
-#: commandments_app/templates/commandments/detail.html:399
+#: commandments_app/templates/commandments/detail.html:45
+#: commandments_app/templates/commandments/detail.html:398
 #, fuzzy
 msgid "Superbook"
 msgstr "Superbook"
 
-#: commandments_app/templates/commandments/detail.html:60
-#: commandments_app/templates/commandments/detail.html:441
+#: commandments_app/templates/commandments/detail.html:59
+#: commandments_app/templates/commandments/detail.html:440
 #, fuzzy
 msgid "Songs"
 msgstr "Chansons"
 
-#: commandments_app/templates/commandments/detail.html:67
-#: commandments_app/templates/commandments/detail.html:462
+#: commandments_app/templates/commandments/detail.html:66
+#: commandments_app/templates/commandments/detail.html:461
 #, fuzzy
 msgid "Movies"
 msgstr "Films"
 
-#: commandments_app/templates/commandments/detail.html:74
-#: commandments_app/templates/commandments/detail.html:483
+#: commandments_app/templates/commandments/detail.html:73
+#: commandments_app/templates/commandments/detail.html:482
 #, fuzzy
 msgid "Testimonies"
 msgstr "témoignages"
 
-#: commandments_app/templates/commandments/detail.html:81
-#: commandments_app/templates/commandments/detail.html:504
+#: commandments_app/templates/commandments/detail.html:80
+#: commandments_app/templates/commandments/detail.html:503
 #, fuzzy
 msgid "Blogs"
 msgstr "Les blogs"
 
-#: commandments_app/templates/commandments/detail.html:88
-#: commandments_app/templates/commandments/detail.html:522
+#: commandments_app/templates/commandments/detail.html:87
+#: commandments_app/templates/commandments/detail.html:521
 #, fuzzy
 msgid "Sermons"
 msgstr "sermons"
 
-#: commandments_app/templates/commandments/detail.html:95
-#: commandments_app/templates/commandments/detail.html:543
+#: commandments_app/templates/commandments/detail.html:94
+#: commandments_app/templates/commandments/detail.html:542
 #, fuzzy
 msgid "Books"
 msgstr "Livres"
 
-#: commandments_app/templates/commandments/detail.html:126
+#: commandments_app/templates/commandments/detail.html:125
 #: commandments_app/templates/commandments/index.html:16 templates/base.html:9
 #, fuzzy
 msgid "Jesus Commandments"
 msgstr "Commandements Jésus"
 
-#: commandments_app/templates/commandments/detail.html:127
+#: commandments_app/templates/commandments/detail.html:126
 #, fuzzy
 msgid "Primary unique commandment"
 msgstr "Principal commandement unique,"
 
-#: commandments_app/templates/commandments/detail.html:137
+#: commandments_app/templates/commandments/detail.html:136
 #: commandments_app/templates/commandments/study_listing.html:55
 #, fuzzy
 msgid ""
@@ -768,22 +768,22 @@ msgstr ""
 "Cette référence biblique primaire est le premier trouvé référence unique "
 "selon les paroles de Jésus, en relation directe avec le commandement"
 
-#: commandments_app/templates/commandments/detail.html:140
+#: commandments_app/templates/commandments/detail.html:139
 #, fuzzy
 msgid "Negative commandments"
 msgstr "commandements négatifs"
 
-#: commandments_app/templates/commandments/detail.html:146
+#: commandments_app/templates/commandments/detail.html:145
 #, fuzzy
 msgid "Commandment category"
 msgstr "catégorie Commandment"
 
-#: commandments_app/templates/commandments/detail.html:159
+#: commandments_app/templates/commandments/detail.html:158
 #, fuzzy
 msgid "Direct Bible References"
 msgstr "Bible directe Références"
 
-#: commandments_app/templates/commandments/detail.html:160
+#: commandments_app/templates/commandments/detail.html:159
 #: commandments_app/templates/commandments/study_listing.html:56
 #, fuzzy
 msgid ""
@@ -792,27 +792,27 @@ msgstr ""
 "Références bibliques supplémentaires directs qui Développe ou expliquent le "
 "même commandement"
 
-#: commandments_app/templates/commandments/detail.html:164
-#: commandments_app/templates/commandments/detail.html:166
-#: commandments_app/templates/commandments/detail.html:168
-#: commandments_app/templates/commandments/detail.html:170
-#: commandments_app/templates/commandments/detail.html:181
-#: commandments_app/templates/commandments/detail.html:183
-#: commandments_app/templates/commandments/detail.html:185
-#: commandments_app/templates/commandments/detail.html:187
-#: commandments_app/templates/commandments/detail.html:198
-#: commandments_app/templates/commandments/detail.html:200
-#: commandments_app/templates/commandments/detail.html:202
-#: commandments_app/templates/commandments/detail.html:204
-#: commandments_app/templates/commandments/detail.html:215
-#: commandments_app/templates/commandments/detail.html:217
-#: commandments_app/templates/commandments/detail.html:219
-#: commandments_app/templates/commandments/detail.html:221
-#: commandments_app/templates/commandments/detail.html:232
-#: commandments_app/templates/commandments/detail.html:234
-#: commandments_app/templates/commandments/detail.html:236
-#: commandments_app/templates/commandments/detail.html:238
-#: commandments_app/templates/commandments/detail.html:257
+#: commandments_app/templates/commandments/detail.html:163
+#: commandments_app/templates/commandments/detail.html:165
+#: commandments_app/templates/commandments/detail.html:167
+#: commandments_app/templates/commandments/detail.html:169
+#: commandments_app/templates/commandments/detail.html:180
+#: commandments_app/templates/commandments/detail.html:182
+#: commandments_app/templates/commandments/detail.html:184
+#: commandments_app/templates/commandments/detail.html:186
+#: commandments_app/templates/commandments/detail.html:197
+#: commandments_app/templates/commandments/detail.html:199
+#: commandments_app/templates/commandments/detail.html:201
+#: commandments_app/templates/commandments/detail.html:203
+#: commandments_app/templates/commandments/detail.html:214
+#: commandments_app/templates/commandments/detail.html:216
+#: commandments_app/templates/commandments/detail.html:218
+#: commandments_app/templates/commandments/detail.html:220
+#: commandments_app/templates/commandments/detail.html:231
+#: commandments_app/templates/commandments/detail.html:233
+#: commandments_app/templates/commandments/detail.html:235
+#: commandments_app/templates/commandments/detail.html:237
+#: commandments_app/templates/commandments/detail.html:256
 #: commandments_app/templates/commandments/study_listing.html:90
 #: commandments_app/templates/commandments/study_listing.html:180
 #: commandments_app/templates/commandments/vision.html:24
@@ -824,37 +824,37 @@ msgstr ""
 msgid "Author"
 msgstr "Auteur"
 
-#: commandments_app/templates/commandments/detail.html:164
-#: commandments_app/templates/commandments/detail.html:166
-#: commandments_app/templates/commandments/detail.html:168
-#: commandments_app/templates/commandments/detail.html:170
-#: commandments_app/templates/commandments/detail.html:181
-#: commandments_app/templates/commandments/detail.html:183
-#: commandments_app/templates/commandments/detail.html:185
-#: commandments_app/templates/commandments/detail.html:187
-#: commandments_app/templates/commandments/detail.html:198
-#: commandments_app/templates/commandments/detail.html:200
-#: commandments_app/templates/commandments/detail.html:202
-#: commandments_app/templates/commandments/detail.html:204
-#: commandments_app/templates/commandments/detail.html:215
-#: commandments_app/templates/commandments/detail.html:217
-#: commandments_app/templates/commandments/detail.html:219
-#: commandments_app/templates/commandments/detail.html:221
-#: commandments_app/templates/commandments/detail.html:232
-#: commandments_app/templates/commandments/detail.html:234
-#: commandments_app/templates/commandments/detail.html:236
-#: commandments_app/templates/commandments/detail.html:238
-#: commandments_app/templates/commandments/detail.html:258
+#: commandments_app/templates/commandments/detail.html:163
+#: commandments_app/templates/commandments/detail.html:165
+#: commandments_app/templates/commandments/detail.html:167
+#: commandments_app/templates/commandments/detail.html:169
+#: commandments_app/templates/commandments/detail.html:180
+#: commandments_app/templates/commandments/detail.html:182
+#: commandments_app/templates/commandments/detail.html:184
+#: commandments_app/templates/commandments/detail.html:186
+#: commandments_app/templates/commandments/detail.html:197
+#: commandments_app/templates/commandments/detail.html:199
+#: commandments_app/templates/commandments/detail.html:201
+#: commandments_app/templates/commandments/detail.html:203
+#: commandments_app/templates/commandments/detail.html:214
+#: commandments_app/templates/commandments/detail.html:216
+#: commandments_app/templates/commandments/detail.html:218
+#: commandments_app/templates/commandments/detail.html:220
+#: commandments_app/templates/commandments/detail.html:231
+#: commandments_app/templates/commandments/detail.html:233
+#: commandments_app/templates/commandments/detail.html:235
+#: commandments_app/templates/commandments/detail.html:237
+#: commandments_app/templates/commandments/detail.html:257
 #, fuzzy
 msgid "Origin"
 msgstr "Origine"
 
-#: commandments_app/templates/commandments/detail.html:176
+#: commandments_app/templates/commandments/detail.html:175
 #, fuzzy
 msgid "Indirect Bible References"
 msgstr "Bible indirecte Références"
 
-#: commandments_app/templates/commandments/detail.html:177
+#: commandments_app/templates/commandments/detail.html:176
 #: commandments_app/templates/commandments/study_listing.html:57
 #, fuzzy
 msgid "Extra, more indirect Bible references, relating to the same commandment"
@@ -862,12 +862,12 @@ msgstr ""
 "références bibliques supplémentaires, plus indirects, liés au même "
 "commandement"
 
-#: commandments_app/templates/commandments/detail.html:193
+#: commandments_app/templates/commandments/detail.html:192
 #, fuzzy
 msgid "Example Bible References"
 msgstr "Exemple Bible Références"
 
-#: commandments_app/templates/commandments/detail.html:194
+#: commandments_app/templates/commandments/detail.html:193
 #: commandments_app/templates/commandments/study_listing.html:58
 #, fuzzy
 msgid ""
@@ -877,12 +877,12 @@ msgstr ""
 "Dans ces références bibliques, vous trouverez des exemples et des "
 "témoignages comment ce commandement est en cours d'exécution"
 
-#: commandments_app/templates/commandments/detail.html:210
+#: commandments_app/templates/commandments/detail.html:209
 #, fuzzy
 msgid "Duplicate Bible References"
 msgstr "Bible en double Références"
 
-#: commandments_app/templates/commandments/detail.html:211
+#: commandments_app/templates/commandments/detail.html:210
 #: commandments_app/templates/commandments/study_listing.html:59
 #, fuzzy
 msgid ""
@@ -894,12 +894,12 @@ msgstr ""
 "primaire, direct ou indirect, avec pas beaucoup de nouvelles, même si elle "
 "confirmera les mêmes références bibliques"
 
-#: commandments_app/templates/commandments/detail.html:227
+#: commandments_app/templates/commandments/detail.html:226
 #, fuzzy
 msgid "Study Bible References"
 msgstr "Références Study Bible"
 
-#: commandments_app/templates/commandments/detail.html:228
+#: commandments_app/templates/commandments/detail.html:227
 #: commandments_app/templates/commandments/study_listing.html:60
 #, fuzzy
 msgid ""
@@ -910,19 +910,19 @@ msgstr ""
 "livres de la Bible) qui sont bonnes pour l'étude supplémentaire sur ce "
 "commandement"
 
-#: commandments_app/templates/commandments/detail.html:244
+#: commandments_app/templates/commandments/detail.html:243
 #, fuzzy
 msgid "Legend"
 msgstr "Légende"
 
-#: commandments_app/templates/commandments/detail.html:245
+#: commandments_app/templates/commandments/detail.html:244
 #: commandments_app/templates/commandments/study_listing.html:192
 #: commandments_app/templates/commandments/vision.html:87
 #, fuzzy
 msgid "Bible verses copyright"
 msgstr "Le droit d'auteur de la Bible"
 
-#: commandments_app/templates/commandments/detail.html:248
+#: commandments_app/templates/commandments/detail.html:247
 #, fuzzy
 msgid ""
 "Click here to see the explanation of the different symbols, Author, Origin "
@@ -931,7 +931,7 @@ msgstr ""
 "Cliquez ici pour voir l'explication des différents symboles, Auteur, "
 "origine, etc."
 
-#: commandments_app/templates/commandments/detail.html:253
+#: commandments_app/templates/commandments/detail.html:252
 #, fuzzy
 msgid ""
 "A related Bible reference to the commandment which is negative, something "
@@ -940,7 +940,7 @@ msgstr ""
 "Une Bible liée référence au commandement qui est négatif, quelque chose que "
 "vous ne devriez pas faire"
 
-#: commandments_app/templates/commandments/detail.html:254
+#: commandments_app/templates/commandments/detail.html:253
 #, fuzzy
 msgid ""
 "A related Bible reference to the commandment which is both positive and "
@@ -948,7 +948,7 @@ msgid ""
 msgstr ""
 "Une Bible liée référence au commandement qui est à la fois positif et négatif"
 
-#: commandments_app/templates/commandments/detail.html:255
+#: commandments_app/templates/commandments/detail.html:254
 #, fuzzy
 msgid ""
 "A related Bible reference to the commandment which is positive, something "
@@ -957,7 +957,7 @@ msgstr ""
 "Une Bible liée référence au commandement qui est positif, quelque chose que "
 "vous devriez faire ou apprendre"
 
-#: commandments_app/templates/commandments/detail.html:256
+#: commandments_app/templates/commandments/detail.html:255
 #, fuzzy
 msgid ""
 "A related Bible reference to the commandment which is not yet determined "
@@ -966,12 +966,12 @@ msgstr ""
 "Une Bible liée référence au commandement qui n'a pas encore été déterminé "
 "positif ou négatif"
 
-#: commandments_app/templates/commandments/detail.html:257
+#: commandments_app/templates/commandments/detail.html:256
 #, fuzzy
 msgid "Indicates the known author from this Bible reference"
 msgstr "Indique l'auteur connu de cette référence biblique"
 
-#: commandments_app/templates/commandments/detail.html:258
+#: commandments_app/templates/commandments/detail.html:257
 #, fuzzy
 msgid ""
 "The coding refers to the commandments layout of Rabbi Chafetz Chayim (From "
@@ -980,34 +980,34 @@ msgstr ""
 "Le codage se réfère aux commandements de Rabbi Chafetz layout Hayim (from "
 "'The Book of Concise Mitsvot')"
 
-#: commandments_app/templates/commandments/detail.html:301
+#: commandments_app/templates/commandments/detail.html:300
 #, fuzzy
 msgid "Artist"
 msgstr "Artiste"
 
-#: commandments_app/templates/commandments/detail.html:328
-#: commandments_app/templates/commandments/detail.html:332
+#: commandments_app/templates/commandments/detail.html:327
+#: commandments_app/templates/commandments/detail.html:331
 #, fuzzy
 msgid "Photographer"
 msgstr "Photographe"
 
-#: commandments_app/templates/commandments/detail.html:360
+#: commandments_app/templates/commandments/detail.html:359
 #, fuzzy
 msgid "Share your hearts together by discussing the following questions:"
 msgstr "Partagez vos coeurs ensemble en discutant des questions suivantes:"
 
-#: commandments_app/templates/commandments/detail.html:362
+#: commandments_app/templates/commandments/detail.html:361
 #, fuzzy
 msgid "Is there anything you don't understand within this commandment?"
 msgstr "Est-ce que vous ne comprenez pas dans ce commandement?"
 
-#: commandments_app/templates/commandments/detail.html:363
+#: commandments_app/templates/commandments/detail.html:362
 #, fuzzy
 msgid "Wat appeals to you about all Bible references and resources?"
 msgstr ""
 "Qu'est-ce qui vous attire toutes les références bibliques et des ressources?"
 
-#: commandments_app/templates/commandments/detail.html:364
+#: commandments_app/templates/commandments/detail.html:363
 #, fuzzy
 msgid ""
 "How do you apply this commandment in your life or do you experience any "
@@ -1016,17 +1016,17 @@ msgstr ""
 "Comment appliquez-vous ce commandement dans votre vie ou vous éprouvez des "
 "limites?"
 
-#: commandments_app/templates/commandments/detail.html:367
+#: commandments_app/templates/commandments/detail.html:366
 #, fuzzy
 msgid "Extra questions"
 msgstr "Des questions"
 
-#: commandments_app/templates/commandments/detail.html:381
+#: commandments_app/templates/commandments/detail.html:380
 #, fuzzy
 msgid "Resource Language Settings"
 msgstr "Paramètres de langue ressources"
 
-#: commandments_app/templates/commandments/detail.html:382
+#: commandments_app/templates/commandments/detail.html:381
 #, fuzzy
 msgid ""
 "Below you will find all kinds of related resources to this commandment, to "
@@ -1040,7 +1040,7 @@ msgstr ""
 "Vous pouvez sélectionner plusieurs langues si vous voulez voir ces "
 "ressources dans d'autres langues."
 
-#: commandments_app/templates/commandments/detail.html:383
+#: commandments_app/templates/commandments/detail.html:382
 #, fuzzy
 msgid ""
 "Do you know more good resources in your language which can be added to this "
@@ -1052,22 +1052,22 @@ msgstr ""
 "s'il vous plaît contactez-nous </a> afin que nous puissions l'ajouter (ou <a "
 "href=\"\"> </a> enregistrer et vous pouvez ajouter vous-même!"
 
-#: commandments_app/templates/commandments/detail.html:385
+#: commandments_app/templates/commandments/detail.html:384
 #, fuzzy
 msgid "Change resource language"
 msgstr "Changer de langue des ressources"
 
-#: commandments_app/templates/commandments/detail.html:404
+#: commandments_app/templates/commandments/detail.html:403
 #, fuzzy
 msgid "Watch now on"
 msgstr "Regardez maintenant"
 
-#: commandments_app/templates/commandments/detail.html:420
+#: commandments_app/templates/commandments/detail.html:419
 #, fuzzy
 msgid "Short Movies"
 msgstr "courts métrages"
 
-#: commandments_app/templates/commandments/detail.html:567
+#: commandments_app/templates/commandments/detail.html:566
 #, fuzzy
 msgid "Quote by"
 msgstr "Citation de"
@@ -1971,22 +1971,22 @@ msgstr "Impossible de modifier les langues de l'utilisateur"
 msgid "No languages selected"
 msgstr "Aucune langue sélectionnée"
 
-#: jesus_commandments_website/base_settings.py:100
+#: jesus_commandments_website/base_settings.py:99
 #, fuzzy
 msgid "English"
 msgstr "Anglais"
 
-#: jesus_commandments_website/base_settings.py:101
+#: jesus_commandments_website/base_settings.py:100
 #, fuzzy
 msgid "Dutch"
 msgstr "néerlandais"
 
-#: jesus_commandments_website/base_settings.py:102
+#: jesus_commandments_website/base_settings.py:101
 #, fuzzy
 msgid "German"
 msgstr "allemand"
 
-#: jesus_commandments_website/base_settings.py:103
+#: jesus_commandments_website/base_settings.py:102
 #, fuzzy
 msgid "French"
 msgstr "français"
@@ -3669,15 +3669,25 @@ msgstr ""
 
 #: commandments_app.Commandment/title:2
 #, fuzzy
+msgid "Get baptized"
+msgstr "Faites-vous baptiser"
+
+#: commandments_app.Commandment/title:3
+#, fuzzy
+msgid "Follow Me"
+msgstr "Suivez-moi"
+
+#: commandments_app.Commandment/title:4
+#, fuzzy
 msgid "Bring forth therefore fruits meet for repentance"
 msgstr "Produisez donc des fruits dignes de la repentance"
 
-#: commandments_app.Commandment/title_negative:2
+#: commandments_app.Commandment/title_negative:4
 #, fuzzy
 msgid "He cuts off every branch in me that bears no fruit"
 msgstr "Il coupe chaque branche en moi qui ne porte pas de fruit"
 
-#: commandments_app.Commandment/devotional:2
+#: commandments_app.Commandment/devotional:4
 #, fuzzy
 msgid ""
 "<p>One important part of the commission that God gave Adam was to be "
@@ -3696,37 +3706,98 @@ msgstr ""
 "les branches. Si nous sommes liés à la vigne du Christ par l'Esprit, sa "
 "parole portera ses fruits qui sera inévitable dans nos vies. </p>"
 
-#: commandments_app.Commandment/title:3
+#: commandments_app.Commandment/title:5
 #, fuzzy
 msgid "Worship the Lord your God, and Him only shalt thou serve"
 msgstr "Adoreras le Seigneur ton Dieu, et Lui seul tu le serviras"
 
-#: commandments_app.Commandment/title_negative:3
+#: commandments_app.Commandment/title_negative:5
 #, fuzzy
 msgid "No servant can serve two masters"
 msgstr "Nul serviteur ne peut servir deux maîtres"
 
-#: commandments_app.Commandment/title:4
+#: commandments_app.Commandment/title:6
+#, fuzzy
+msgid ""
+"Pray ye therefore the Lord of the harvest, that he will send forth labourers "
+"into his harvest"
+msgstr ""
+"Priez donc le Maître de la moisson, qu'il envoie des ouvriers dans sa moisson"
+
+#: commandments_app.Commandment/title:7
+#, fuzzy
+msgid "The sabbath was made for man"
+msgstr "Le sabbat a été fait pour l'homme"
+
+#: commandments_app.Commandment/title_negative:7
+#, fuzzy
+msgid "And not man for the sabbath"
+msgstr "Et non pas l'homme pour le sabbat"
+
+#: commandments_app.Commandment/title:8
+#, fuzzy
+msgid "Go ye into all the world, and preach the gospel to every creature"
+msgstr "Allez dans le monde, et prêchez l'Evangile à toute créature"
+
+#: commandments_app.Commandment/devotional:8
+#, fuzzy
+msgid ""
+"<p>In a mission conference, the banner across the front of the auditorium "
+"stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad "
+"of excuses for why we cannot go to preach the gospel. </p>\n"
+"\n"
+"<p>The resurrected Christ reiterated five times His final charge: “Go into "
+"to all the world.” Christ’s death on the cross was to be proclaimed around "
+"the world. There is no news more dramatic than this: “God made him who had "
+"no sin to be sin for us, so that in Him we might become the righteousness of "
+"God” (2 Cor 5:21). </p>\n"
+"\n"
+"<p>God asked the question: “Then I heard the voice of the Lord saying, ‘Whom "
+"shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He "
+"said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we "
+"could appreciate Isaiah’s courage, or was it a glimpse into the perpetual "
+"heavenly issue? God is asking, “Who cares about our agenda for telling the "
+"world about Jesus?” </p>"
+msgstr ""
+"<p> Dans une conférence de mission, la bannière à l'avant de l'auditorium a "
+"déclaré: « Ne prenez pas le « Go » de l'Evangile. » Nous trouvons "
+"naturellement une myriade d'excuses pour expliquer pourquoi nous ne pouvons "
+"pas aller prêcher l'Evangile. </p>\n"
+"\n"
+"<p> Le Christ ressuscité a répété cinq fois sa charge finale: « Allez dans à "
+"tout le monde. » La mort du Christ sur la croix devait être proclamé dans le "
+"monde entier. Il n'y a pas de nouvelles plus dramatique que ceci: « Dieu lui "
+"qui n'a pas connu le péché pour être péché pour nous, afin qu'en lui nous "
+"devenions justice de Dieu » (2 Cor 5:21). </p>\n"
+"\n"
+"<p> Dieu a posé la question: « Alors j'ai entendu la voix du Seigneur en "
+"disant: « Qui enverrai-je? Et qui ira pour nous » Et je dis: Me voici, "
+"envoie-moi» Il a dit: «Va et dis à ce peuple « (Esaïe 6: 8-9)!.. Est-ce "
+"écrit simplement pour que nous puissions apprécier le courage d'Isaïe, ou "
+"était-ce un aperçu de la question perpétuelle céleste? Dieu demande: « Qui "
+"se soucie de notre ordre du jour de dire au monde au sujet de Jésus? » </p>"
+
+#: commandments_app.Commandment/title:9
 #, fuzzy
 msgid "Blessed are the poor in spirit, for theirs is the kingdom of heaven"
 msgstr "Heureux les pauvres en esprit, car le leur est le royaume des cieux"
 
-#: commandments_app.Commandment/title_negative:4
+#: commandments_app.Commandment/title_negative:9
 #, fuzzy
 msgid "Don’t rely on your own strenght"
 msgstr "Ne comptez pas sur votre propre force"
 
-#: commandments_app.Commandment/title:5
+#: commandments_app.Commandment/title:10
 #, fuzzy
 msgid "Blessed are they that mourn: for they shall be comforted"
 msgstr "Heureux ceux qui pleurent: ils seront consolés"
 
-#: commandments_app.Commandment/title:6
+#: commandments_app.Commandment/title:11
 #, fuzzy
 msgid "Blessed are the meek: for they shall inherit the earth"
 msgstr "Heureux les débonnaires, car ils hériteront la terre!"
 
-#: commandments_app.Commandment/title:7
+#: commandments_app.Commandment/title:12
 #, fuzzy
 msgid ""
 "Blessed are they which do hunger and thirst after righteousness: for they "
@@ -3734,22 +3805,22 @@ msgid ""
 msgstr ""
 "Heureux ceux qui ont faim et soif de la justice, car ils seront rassasiés!"
 
-#: commandments_app.Commandment/title:8
+#: commandments_app.Commandment/title:13
 #, fuzzy
 msgid "Blessed are the merciful: for they shall obtain mercy"
 msgstr "Heureux les miséricordieux, car ils obtiendront miséricorde!"
 
-#: commandments_app.Commandment/title:9
+#: commandments_app.Commandment/title:14
 #, fuzzy
 msgid "Blessed are the pure in heart: for they shall see God"
 msgstr "Heureux les cœurs purs, car ils verront Dieu"
 
-#: commandments_app.Commandment/title_negative:9
+#: commandments_app.Commandment/title_negative:14
 #, fuzzy
 msgid "Go, and sin no more"
 msgstr "Va, et ne pèche plus"
 
-#: commandments_app.Commandment/devotional:9
+#: commandments_app.Commandment/devotional:14
 #, fuzzy
 msgid ""
 "<p><b>Everyone wants to be happy. But not everyone is willing to do what it "
@@ -3838,14 +3909,14 @@ msgstr ""
 "Obéir me donne une direction pour ma vie et me aide à faire les bons choix "
 "dans toutes les situations que je rencontre. </p>"
 
-#: commandments_app.Commandment/title:10
+#: commandments_app.Commandment/title:15
 #, fuzzy
 msgid ""
 "Blessed are the peacemakers: for they shall be called the children of God"
 msgstr ""
 "Heureux les artisans de paix, car ils seront appelés les enfants de Dieu"
 
-#: commandments_app.Commandment/title:11
+#: commandments_app.Commandment/title:16
 #, fuzzy
 msgid ""
 "Blessed are they which are persecuted for righteousness' sake: for theirs is "
@@ -3854,24 +3925,25 @@ msgstr ""
 "Heureux ceux qui sont persécutés à cause de la justice, car le leur est le "
 "royaume des cieux."
 
-#: commandments_app.Commandment/title:12
+#: commandments_app.Commandment/title:17
 #, fuzzy
 msgid "Rejoice, and be exceeding glad: for great is your reward in heaven"
 msgstr ""
 "Réjouissez-vous et être heureux de plus: pour votre récompense est grande "
 "dans le ciel"
 
-#: commandments_app.Commandment/title:13
+#: commandments_app.Commandment/title:18
 #, fuzzy
 msgid "Have salt in yourselves, and have peace one with another"
 msgstr "Ayez du sel en vous-mêmes, et en paix les uns avec les autres"
 
-#: commandments_app.Commandment/title:14
-#, fuzzy
-msgid "Let your light so shine before men"
-msgstr "Que votre lumière brille devant les hommes"
+#: commandments_app.Commandment/title:19
+msgid ""
+"Let your light so shine before men, that they may see your good works, and "
+"glorify your Father which is in heaven"
+msgstr ""
 
-#: commandments_app.Commandment/title:15
+#: commandments_app.Commandment/title:20
 #, fuzzy
 msgid ""
 "Whoever practices and teaches these commands will be called great in the "
@@ -3880,12 +3952,12 @@ msgstr ""
 "Celui qui pratique et enseigne ces commandes sera appelé grand dans le "
 "royaume des cieux"
 
-#: commandments_app.Commandment/title_negative:15
+#: commandments_app.Commandment/title_negative:20
 #, fuzzy
 msgid "Do not set aside one of the least of these commands"
 msgstr "Ne pas mettre de côté l'un des moins de ces commandes"
 
-#: commandments_app.Commandment/devotional:15
+#: commandments_app.Commandment/devotional:20
 #, fuzzy
 msgid ""
 "<p>I am pleading against a widespread kind of preaching that is Bible-based "
@@ -3907,44 +3979,33 @@ msgstr ""
 "<p> <b> <i> « Quant à moi, je n'ai rien de respecter la peine à vous dire. "
 "Mais Dieu fait. »</i> </b> </p>"
 
-#: commandments_app.Commandment/title:16
-#, fuzzy
-msgid "Be patient"
-msgstr "Sois patient"
-
-#: commandments_app.Commandment/title_negative:16
-#, fuzzy
+#: commandments_app.Commandment/title:21
 msgid ""
-"That whosoever is angry with his brother without a cause shall be in danger "
-"of the judgment: and whosoever shall say to his brother, Raca, shall be in "
-"danger of the council: but whosoever shall say, Thou fool, shall be in "
-"danger of hell fire."
+"Don’t be angry at your brother without a cause. If you will be, reconcile as "
+"quickly as possible"
 msgstr ""
-"Que quiconque se met en colère contre son frère sans cause, sera en danger "
-"du jugement: et celui qui dira à son frère, Raca, sera en danger du conseil "
-"mais celui qui lui dira Insensé, est en danger de l'enfer Feu."
 
-#: commandments_app.Commandment/title:17
-#, fuzzy
-msgid "Reconcile with your brother as quickly as possible"
-msgstr "Conciliable avec votre frère le plus rapidement possible"
-
-#: commandments_app.Commandment/title_negative:17
+#: commandments_app.Commandment/title_negative:21
 #, fuzzy
 msgid "Let not the sun go down upon your wrath"
 msgstr "Ne laissez pas le soleil se coucher sur votre colère"
 
-#: commandments_app.Commandment/title:18
+#: commandments_app.Commandment/title:22
+#, fuzzy
+msgid "Eliminate any cause of temptation"
+msgstr "Éliminer toute cause de la tentation"
+
+#: commandments_app.Commandment/title:23
 #, fuzzy
 msgid "Honor marriage"
 msgstr "mariage honneur"
 
-#: commandments_app.Commandment/title_negative:18
+#: commandments_app.Commandment/title_negative:23
 #, fuzzy
 msgid "Do not look lustfully to a woman"
 msgstr "Ne regardez pas lascivement à une femme"
 
-#: commandments_app.Commandment/devotional:18
+#: commandments_app.Commandment/devotional:23
 #, fuzzy
 msgid ""
 "In the current culture almost half of the marrriages end up in a divorce. We "
@@ -3958,38 +4019,38 @@ msgstr ""
 "fidèle à l'autre, et fidèle aux principes de Dieu, vous aurez un mariage "
 "solide ce qui ne peut être rompu."
 
-#: commandments_app.Commandment/title:19
+#: commandments_app.Commandment/title:24
 #, fuzzy
 msgid "Keep your word"
 msgstr "Gardez votre mot"
 
-#: commandments_app.Commandment/title_negative:19
+#: commandments_app.Commandment/title_negative:24
 #, fuzzy
 msgid "Don’t act different from what you speak"
 msgstr "Ne pas agir différent de ce que vous parlez"
 
-#: commandments_app.Commandment/title:20
+#: commandments_app.Commandment/title:25
 #, fuzzy
 msgid ""
 "Whosoever shall smite thee on thy right cheek, turn to him the other also"
 msgstr "Quiconque frappera toi sur ta joue droite, présente-lui aussi l'autre"
 
-#: commandments_app.Commandment/title_negative:20
+#: commandments_app.Commandment/title_negative:25
 #, fuzzy
 msgid "Do not resist evil"
 msgstr "Ne pas résister au mal"
 
-#: commandments_app.Commandment/title:21
+#: commandments_app.Commandment/title:26
 #, fuzzy
 msgid "Share goods with the needy"
 msgstr "produits d'actions avec les nécessiteux"
 
-#: commandments_app.Commandment/title_negative:21
+#: commandments_app.Commandment/title_negative:26
 #, fuzzy
 msgid "If anyone takes what belongs to you, do not demand it back"
 msgstr "Si quelqu'un prend ce qui vous appartient, ne demande pas de retour"
 
-#: commandments_app.Commandment/title:22
+#: commandments_app.Commandment/title:27
 #, fuzzy
 msgid ""
 "Love your enemies, bless them that curse you, do good to them that hate you, "
@@ -3999,34 +4060,39 @@ msgstr ""
 "qui vous haïssent, et priez pour ceux qui vous maltraitent utiliser, et vous "
 "persécutent"
 
-#: commandments_app.Commandment/title_negative:22
+#: commandments_app.Commandment/title_negative:27
 #, fuzzy
 msgid "Do not say, I’ll do to them as they have done to me"
 msgstr "Ne dites pas, je vais le faire pour eux comme ils l'ont fait pour moi"
 
-#: commandments_app.Commandment/title:23
+#: commandments_app.Commandment/title:28
 #, fuzzy
 msgid ""
 "Be ye therefore perfect, even as your Father which is in heaven is perfect"
 msgstr ""
 "Soyez parfaits donc, comme votre Père qui est dans les cieux est parfait"
 
-#: commandments_app.Commandment/title:24
+#: commandments_app.Commandment/title:29
 #, fuzzy
 msgid "He that humbleth himself shall be exalted"
 msgstr "Celui qui se humilie sera élevé"
 
-#: commandments_app.Commandment/title_negative:24
+#: commandments_app.Commandment/title_negative:29
 #, fuzzy
 msgid "For whosoever exalteth himself shall be abased"
 msgstr "Car quiconque s'élève sera culbutés"
 
-#: commandments_app.Commandment/title:25
+#: commandments_app.Commandment/title:30
+#, fuzzy
+msgid "Be generous (and fasten and pray) in secret"
+msgstr "Soyez généreux (et fixer et prier) en secret"
+
+#: commandments_app.Commandment/title:31
 #, fuzzy
 msgid "Pray in faith according to the wil of the Father"
 msgstr "Priez dans la foi selon la volonté du Père"
 
-#: commandments_app.Commandment/title:26
+#: commandments_app.Commandment/title:32
 #, fuzzy
 msgid ""
 "If ye forgive men their trespasses, your heavenly Father will also forgive "
@@ -4035,17 +4101,17 @@ msgstr ""
 "Si vous pardonnez aux hommes leurs offenses, votre Père céleste vous "
 "pardonnera aussi"
 
-#: commandments_app.Commandment/title:27
+#: commandments_app.Commandment/title:33
 #, fuzzy
 msgid "Fast regularly"
 msgstr "rapide régulièrement"
 
-#: commandments_app.Commandment/title:28
+#: commandments_app.Commandment/title:34
 #, fuzzy
 msgid "Lay up for yourselves treasures in heaven"
 msgstr "Amassez-vous des trésors dans le ciel"
 
-#: commandments_app.Commandment/title:29
+#: commandments_app.Commandment/title:35
 #, fuzzy
 msgid ""
 "Seek ye first the kingdom of God, and his righteousness; and all these "
@@ -4054,12 +4120,12 @@ msgstr ""
 "Cherchez d'abord le royaume de Dieu et sa justice; et à vous toutes ces "
 "choses sont ajoutés"
 
-#: commandments_app.Commandment/title_negative:29
+#: commandments_app.Commandment/title_negative:35
 #, fuzzy
 msgid "Do not worry about your life"
 msgstr "Ne vous inquiétez pas de votre vie"
 
-#: commandments_app.Commandment/title:30
+#: commandments_app.Commandment/title:36
 #, fuzzy
 msgid ""
 "First cast out the beam out of thine own eye; and then shalt thou see "
@@ -4068,22 +4134,22 @@ msgstr ""
 "Premièrement la poutre de ton oeil; et alors tu verras clair pour ôter la "
 "paille de l'œil de ton frère"
 
-#: commandments_app.Commandment/title_negative:30
+#: commandments_app.Commandment/title_negative:36
 #, fuzzy
 msgid "Do not judge, or you too will be judged"
 msgstr "Ne jugez pas, ou vous aussi serez jugés"
 
-#: commandments_app.Commandment/title:31
+#: commandments_app.Commandment/title:37
 #, fuzzy
 msgid "Seek, and ye shall find"
 msgstr "Cherchez et vous trouverez"
 
-#: commandments_app.Commandment/title:32
+#: commandments_app.Commandment/title:38
 #, fuzzy
 msgid "Knock, and it shall be opened unto you"
 msgstr "Frappez et il vous sera ouvert;"
 
-#: commandments_app.Commandment/devotional:32
+#: commandments_app.Commandment/devotional:38
 #, fuzzy
 msgid ""
 "<p>Who does not know the story of the prodigal son? The question is: do we "
@@ -4141,7 +4207,7 @@ msgstr ""
 "Dieu. Et on n'a même pas mentionné le fils aîné et les esclaves dans cette "
 "parabole. </p>"
 
-#: commandments_app.Commandment/title:33
+#: commandments_app.Commandment/title:39
 #, fuzzy
 msgid ""
 "Therefore all things whatsoever ye would that men should do to you, do ye "
@@ -4150,143 +4216,101 @@ msgstr ""
 "Ainsi, tout ce que vous voulez que les hommes fassent pour vous, faites-le "
 "de même pour les"
 
-#: commandments_app.Commandment/title:34
+#: commandments_app.Commandment/title:40
+#, fuzzy
+msgid "Strive to enter in at the strait gate"
+msgstr "S'efforcer d'entrer par la porte étroite"
+
+#: commandments_app.Commandment/title:41
 #, fuzzy
 msgid "Beware of false prophets"
 msgstr "Méfiez-vous des faux prophètes"
 
-#: commandments_app.Commandment/title_negative:34
+#: commandments_app.Commandment/title_negative:41
 #, fuzzy
 msgid "Dear friends, do not believe every spirit"
 msgstr "Chers amis, ne croient pas à tout esprit"
 
-#: commandments_app.Commandment/title:35
+#: commandments_app.Commandment/title:42
 #, fuzzy
 msgid "Listen to Jesus, understand and obey"
 msgstr "Écoutez Jésus, comprendre et respecter les consignes"
 
-#: commandments_app.Commandment/title:36
+#: commandments_app.Commandment/title:43
 #, fuzzy
 msgid "Be of good cheer"
 msgstr "Être de bonne humeur"
 
-#: commandments_app.Commandment/title_negative:36
+#: commandments_app.Commandment/title_negative:43
 #, fuzzy
 msgid "Be not afraid"
 msgstr "N'aie pas peur"
 
-#: commandments_app.Commandment/title:37
-#, fuzzy
-msgid "Follow Me"
-msgstr "Suivez-moi"
-
-#: commandments_app.Commandment/title:38
+#: commandments_app.Commandment/title:44
 #, fuzzy
 msgid "Be moved with inner compassion with the people around you"
 msgstr "Être ému de compassion intérieure avec les gens autour de vous"
 
-#: commandments_app.Commandment/title:39
-#, fuzzy
-msgid ""
-"Pray ye therefore the Lord of the harvest, that he will send forth labourers "
-"into his harvest"
-msgstr ""
-"Priez donc le Maître de la moisson, qu'il envoie des ouvriers dans sa moisson"
-
-#: commandments_app.Commandment/title:40
-#, fuzzy
-msgid "Go ye into all the world, and preach the gospel to every creature"
-msgstr "Allez dans le monde, et prêchez l'Evangile à toute créature"
-
-#: commandments_app.Commandment/devotional:40
-#, fuzzy
-msgid ""
-"<p>In a mission conference, the banner across the front of the auditorium "
-"stated, “Don’t take the ‘Go’ out of the Gospel.” We naturally find a myriad "
-"of excuses for why we cannot go to preach the gospel. </p>\n"
-"\n"
-"<p>The resurrected Christ reiterated five times His final charge: “Go into "
-"to all the world.” Christ’s death on the cross was to be proclaimed around "
-"the world. There is no news more dramatic than this: “God made him who had "
-"no sin to be sin for us, so that in Him we might become the righteousness of "
-"God” (2 Cor 5:21). </p>\n"
-"\n"
-"<p>God asked the question: “Then I heard the voice of the Lord saying, ‘Whom "
-"shall I send? And who will go for us?’ And I said, ‘Here am I. Send me!’ He "
-"said, ‘Go and tell this people’.” (Isa 6:8-9). Was this written merely so we "
-"could appreciate Isaiah’s courage, or was it a glimpse into the perpetual "
-"heavenly issue? God is asking, “Who cares about our agenda for telling the "
-"world about Jesus?” </p>"
-msgstr ""
-"<p> Dans une conférence de mission, la bannière à l'avant de l'auditorium a "
-"déclaré: « Ne prenez pas le « Go » de l'Evangile. » Nous trouvons "
-"naturellement une myriade d'excuses pour expliquer pourquoi nous ne pouvons "
-"pas aller prêcher l'Evangile. </p>\n"
-"\n"
-"<p> Le Christ ressuscité a répété cinq fois sa charge finale: « Allez dans à "
-"tout le monde. » La mort du Christ sur la croix devait être proclamé dans le "
-"monde entier. Il n'y a pas de nouvelles plus dramatique que ceci: « Dieu lui "
-"qui n'a pas connu le péché pour être péché pour nous, afin qu'en lui nous "
-"devenions justice de Dieu » (2 Cor 5:21). </p>\n"
-"\n"
-"<p> Dieu a posé la question: « Alors j'ai entendu la voix du Seigneur en "
-"disant: « Qui enverrai-je? Et qui ira pour nous » Et je dis: Me voici, "
-"envoie-moi» Il a dit: «Va et dis à ce peuple « (Esaïe 6: 8-9)!.. Est-ce "
-"écrit simplement pour que nous puissions apprécier le courage d'Isaïe, ou "
-"était-ce un aperçu de la question perpétuelle céleste? Dieu demande: « Qui "
-"se soucie de notre ordre du jour de dire au monde au sujet de Jésus? » </p>"
-
-#: commandments_app.Commandment/title:41
+#: commandments_app.Commandment/title:45
 #, fuzzy
 msgid "Be ye therefore wise as serpents, and harmless as doves"
 msgstr "Soyez donc prudents comme les serpents, et simples comme les colombes"
 
-#: commandments_app.Commandment/title_negative:41
+#: commandments_app.Commandment/title_negative:45
 #, fuzzy
 msgid "Do not throw your pearls to pigs"
 msgstr "Ne jetez pas vos perles aux cochons"
 
-#: commandments_app.Commandment/title:42
+#: commandments_app.Commandment/title:46
+#, fuzzy
+msgid "Fear him, which after he hath killed hath power to cast into hell"
+msgstr "peur de lui, qui, après avoir tué puissance a pour nous jeter en enfer"
+
+#: commandments_app.Commandment/title_negative:46
+#, fuzzy
+msgid ""
+"Be not afraid of them that kill the body, and after that have no more that "
+"they can do"
+msgstr ""
+"Ne craignez pas ceux qui tuent le corps, et après avoir plus que ce qu'ils "
+"peuvent faire"
+
+#: commandments_app.Commandment/title:47
 #, fuzzy
 msgid "Tell to people boldly, what Jesus says to you"
 msgstr "Parlez aux gens avec assurance, ce que Jésus vous dit:"
 
-#: commandments_app.Commandment/title_negative:42
+#: commandments_app.Commandment/title_negative:47
 #, fuzzy
 msgid "Do not be afraid of them"
 msgstr "Ne pas avoir peur d'eux"
 
-#: commandments_app.Commandment/title:43
+#: commandments_app.Commandment/title:48
 #, fuzzy
 msgid "Love God above all"
 msgstr "Aimez Dieu avant tout"
 
-#: commandments_app.Commandment/title:44
+#: commandments_app.Commandment/title:49
 #, fuzzy
 msgid "Deny yourself, take up a cross, and follow Jesus"
 msgstr "Deny-vous, prenez une croix et suivre Jésus"
 
-#: commandments_app.Commandment/title:45
+#: commandments_app.Commandment/title:50
 #, fuzzy
 msgid "Receive him whom I will send"
 msgstr "Recevez lui que je vous enverrai"
 
-#: commandments_app.Commandment/title_negative:45
+#: commandments_app.Commandment/title_negative:50
 #, fuzzy
 msgid "It is a sin to despise one’s neighbor"
 msgstr "Il est un péché de mépriser son prochain"
 
-#: commandments_app.Commandment/title:46
-#, fuzzy
-msgid "Be generous (and fasten and pray) in secret"
-msgstr "Soyez généreux (et fixer et prier) en secret"
-
-#: commandments_app.Commandment/title:47
+#: commandments_app.Commandment/title:51
 #, fuzzy
 msgid "Blessed is he who does not offend Me"
 msgstr "Béni soit celui qui ne porte pas moi"
 
-#: commandments_app.Commandment/title:48
+#: commandments_app.Commandment/title:52
 #, fuzzy
 msgid ""
 "Come unto me, all ye that labour and are heavy laden, and I will give you "
@@ -4295,7 +4319,7 @@ msgstr ""
 "Venez à moi, vous tous qui peinez et sont lourds chargés, et je vous "
 "donnerai du repos"
 
-#: commandments_app.Commandment/title:49
+#: commandments_app.Commandment/title:53
 #, fuzzy
 msgid ""
 "Take my yoke upon you, and learn of me; for I am meek and lowly in heart: "
@@ -4304,17 +4328,17 @@ msgstr ""
 "Prenez mon joug sur vous, et apprenez de moi; car je suis doux et humble de "
 "cœur, et vous trouverez du repos pour vos âmes"
 
-#: commandments_app.Commandment/title:50
+#: commandments_app.Commandment/title:54
 #, fuzzy
 msgid "Calm words are a tree of life"
 msgstr "mots calmes sont un arbre de vie"
 
-#: commandments_app.Commandment/title:51
+#: commandments_app.Commandment/title:55
 #, fuzzy
 msgid "Do the will of the Father"
 msgstr "Faire la volonté du Père"
 
-#: commandments_app.Commandment/title:52
+#: commandments_app.Commandment/title:56
 #, fuzzy
 msgid ""
 "Give to the emperor what is from the emperor, and to God what is from God"
@@ -4322,7 +4346,7 @@ msgstr ""
 "Faites un don à l'empereur ce qui est de l'empereur, et à Dieu ce qui est de "
 "Dieu"
 
-#: commandments_app.Commandment/title:53
+#: commandments_app.Commandment/title:57
 #, fuzzy
 msgid ""
 "Except ye be converted, and become as little children, ye shall not enter "
@@ -4331,17 +4355,12 @@ msgstr ""
 "Si vous ne vous convertissez et devenez comme les petits enfants, vous "
 "n'entrer dans le royaume des cieux"
 
-#: commandments_app.Commandment/title:54
+#: commandments_app.Commandment/title:58
 #, fuzzy
 msgid "Whoso shall receive one such little child in my name receiveth me"
 msgstr ", Si quelqu'un reçoit un tel enfant en mon nom de moi, reçoit"
 
-#: commandments_app.Commandment/title:55
-#, fuzzy
-msgid "Eliminate any cause of temptation"
-msgstr "Éliminer toute cause de la tentation"
-
-#: commandments_app.Commandment/title:56
+#: commandments_app.Commandment/title:59
 #, fuzzy
 msgid ""
 "Desire something in union on the earth, and it will fall to you from My "
@@ -4350,7 +4369,7 @@ msgstr ""
 "Désir quelque chose dans l'union sur la terre, et il tombera à vous de mon "
 "Père qui est dans les cieux"
 
-#: commandments_app.Commandment/devotional:56
+#: commandments_app.Commandment/devotional:59
 #, fuzzy
 msgid ""
 "<p>After Noah, mankind rebelled against God, following the example of satan, "
@@ -4403,43 +4422,73 @@ msgstr ""
 "que les nations peuvent découvrir ensemble ce que sa gloire est et le "
 "refléter (Eph 3,18) </p>."
 
-#: commandments_app.Commandment/title:57
+#: commandments_app.Commandment/title:60
+#, fuzzy
+msgid "Blessed are they that hear the word of God, and keep it"
+msgstr "Heureux ceux qui écoutent la parole de Dieu, et le garder"
+
+#: commandments_app.Commandment/title:61
+#, fuzzy
+msgid "Take heed, and beware of covetousness"
+msgstr "Prenez garde, et méfiez-vous de la convoitise"
+
+#: commandments_app.Commandment/title:62
+#, fuzzy
+msgid "Look forward to the wedding of the Lamb"
+msgstr "Réjouissez-vous le mariage de l'Agneau"
+
+#: commandments_app.Commandment/title:63
+#, fuzzy
+msgid "Find the lost sheep"
+msgstr "Trouvez les brebis perdues"
+
+#: commandments_app.Commandment/title:64
 #, fuzzy
 msgid "Honour thy father and thy mother"
 msgstr "Honore ton père et ta mère"
 
-#: commandments_app.Commandment/title:58
+#: commandments_app.Commandment/title:65
 #, fuzzy
 msgid "Love thy neighbour as thyself"
 msgstr "L'amour ton prochain comme toi-même"
 
-#: commandments_app.Commandment/title:59
+#: commandments_app.Commandment/title:66
 #, fuzzy
 msgid "Many that are first shall be last; and the last shall be first"
 msgstr ""
 "Plusieurs des premiers seront les derniers; et le dernier est le premier"
 
-#: commandments_app.Commandment/title:60
+#: commandments_app.Commandment/title:67
+#, fuzzy
+msgid "Have faith in God"
+msgstr "Ayez foi en Dieu"
+
+#: commandments_app.Commandment/title:68
 #, fuzzy
 msgid "Thou shalt love the Lord thy God with all thy heart"
 msgstr "Tu aimeras le Seigneur ton Dieu de tout ton coeur"
 
-#: commandments_app.Commandment/title:61
+#: commandments_app.Commandment/title:69
 #, fuzzy
 msgid "Thou shalt love the Lord thy God with all thy soul"
 msgstr "Tu aimeras le Seigneur ton Dieu de tout ton âme"
 
-#: commandments_app.Commandment/title:62
+#: commandments_app.Commandment/title:70
 #, fuzzy
 msgid "Thou shalt love the Lord thy God with all thy mind"
 msgstr "Tu aimeras le Seigneur ton Dieu de tout ton esprit"
 
-#: commandments_app.Commandment/title:63
+#: commandments_app.Commandment/title:71
+#, fuzzy
+msgid "Thou shalt love the Lord thy God with all thy strenght"
+msgstr "Tu aimeras le Seigneur, ton Dieu, avec toute la force de ton"
+
+#: commandments_app.Commandment/title:72
 #, fuzzy
 msgid "Watch therefore for the coming of Jesus"
 msgstr "Veillez donc à la venue de Jésus"
 
-#: commandments_app.Commandment/devotional:63
+#: commandments_app.Commandment/devotional:72
 #, fuzzy
 msgid ""
 "<p> In Luke 12:35-40, Jesus begins to gird up your loins and have the lamp "
@@ -4496,17 +4545,66 @@ msgstr ""
 "<p> <i> « Heureux ces serviteurs que le Seigneur trouvera le réveil quand il "
 "viendra. » (Luc 12:37) </i> </p>"
 
-#: commandments_app.Commandment/title:64
+#: commandments_app.Commandment/title:73
 #, fuzzy
 msgid "Use your talents to honor the Father"
 msgstr "Utilisez vos talents pour honorer le Père"
 
-#: commandments_app.Commandment/title:65
+#: commandments_app.Commandment/title:74
+#, fuzzy
+msgid "Trust that the Spirit will guide you"
+msgstr "Ayez confiance que l'Esprit vous guidera"
+
+#: commandments_app.Commandment/title_negative:74
+#, fuzzy
+msgid "Do not worry about what to say"
+msgstr "Ne vous inquiétez pas quoi dire"
+
+#: commandments_app.Commandment/title:75
 #, fuzzy
 msgid "Celebrate the Lord’s supper in remembrance of Me"
 msgstr "Célébrez le repas du Seigneur en souvenir de moi"
 
-#: commandments_app.Commandment/title:66
+#: commandments_app.Commandment/title:76
+#, fuzzy
+msgid "Strengthen thy brethren"
+msgstr "Quand tu seras converti, affermis tes frères"
+
+#: commandments_app.Commandment/title:77
+#, fuzzy
+msgid "He that abideth in me, and I in him, the same bringeth forth much fruit"
+msgstr "Celui qui demeure en moi, et moi en lui, même porte beaucoup de fruit"
+
+#: commandments_app.Commandment/title_negative:77
+#, fuzzy
+msgid "For without me ye can do nothing"
+msgstr "Car sans moi vous ne pouvez rien faire"
+
+#: commandments_app.Commandment/devotional:77
+#, fuzzy
+msgid ""
+"Please take a moment to read the blog below of John Piper who explains how "
+"to abide in Christ."
+msgstr ""
+"S'il vous plaît prendre un moment pour lire le blog ci-dessous de John Piper "
+"qui explique comment demeurer en Christ."
+
+#: commandments_app.Commandment/title:78
+#, fuzzy
+msgid "We are called to glorify the Name of God in Christ Jesus!"
+msgstr "Nous sommes appelés à glorifier le nom de Dieu en Jésus-Christ!"
+
+#: commandments_app.Commandment/title:79
+#, fuzzy
+msgid "Watch ye and pray, lest ye enter into temptation"
+msgstr "Montre-vous et priez, afin que vous ne tombiez pas en tentation"
+
+#: commandments_app.Commandment/title:80
+#, fuzzy
+msgid "Feed my sheep"
+msgstr "Pais mes brebis"
+
+#: commandments_app.Commandment/title:81
 #, fuzzy
 msgid ""
 "Go ye therefore, and teach all nations, baptizing them in the name of the "
@@ -4517,7 +4615,7 @@ msgstr ""
 "et du Fils, et du Saint-Esprit et enseignez-leur à observer tout ce que je "
 "vous ai commandé"
 
-#: commandments_app.Commandment/devotional:66
+#: commandments_app.Commandment/devotional:81
 #, fuzzy
 msgid ""
 "As Jesus departed the earth, He gave His five hundred disciples in Galilee "
@@ -4537,128 +4635,10 @@ msgstr ""
 "ensemble « a prêché l'Evangile » par « faire des disciples » comme leur "
 "ministère de base."
 
-#: commandments_app.Commandment/title:67
-#, fuzzy
-msgid "Get baptized"
-msgstr "Faites-vous baptiser"
-
-#: commandments_app.Commandment/title:68
+#: commandments_app.Commandment/title:82
 #, fuzzy
 msgid "And, lo, I am with you always, even unto the end of the world"
 msgstr "Et voici, je suis avec vous pour toujours jusqu'à la fin du monde"
-
-#: commandments_app.Commandment/title:69
-#, fuzzy
-msgid "The sabbath was made for man"
-msgstr "Le sabbat a été fait pour l'homme"
-
-#: commandments_app.Commandment/title_negative:69
-#, fuzzy
-msgid "And not man for the sabbath"
-msgstr "Et non pas l'homme pour le sabbat"
-
-#: commandments_app.Commandment/title:70
-#, fuzzy
-msgid "Have faith in God"
-msgstr "Ayez foi en Dieu"
-
-#: commandments_app.Commandment/title:71
-#, fuzzy
-msgid "Thou shalt love the Lord thy God with all thy strenght"
-msgstr "Tu aimeras le Seigneur, ton Dieu, avec toute la force de ton"
-
-#: commandments_app.Commandment/title:72
-#, fuzzy
-msgid "Trust that the Spirit will guide you"
-msgstr "Ayez confiance que l'Esprit vous guidera"
-
-#: commandments_app.Commandment/title_negative:72
-#, fuzzy
-msgid "Do not worry about what to say"
-msgstr "Ne vous inquiétez pas quoi dire"
-
-#: commandments_app.Commandment/title:73
-#, fuzzy
-msgid "Watch ye and pray, lest ye enter into temptation"
-msgstr "Montre-vous et priez, afin que vous ne tombiez pas en tentation"
-
-#: commandments_app.Commandment/title:74
-#, fuzzy
-msgid "Fear him, which after he hath killed hath power to cast into hell"
-msgstr "peur de lui, qui, après avoir tué puissance a pour nous jeter en enfer"
-
-#: commandments_app.Commandment/title_negative:74
-#, fuzzy
-msgid ""
-"Be not afraid of them that kill the body, and after that have no more that "
-"they can do"
-msgstr ""
-"Ne craignez pas ceux qui tuent le corps, et après avoir plus que ce qu'ils "
-"peuvent faire"
-
-#: commandments_app.Commandment/title:75
-#, fuzzy
-msgid "Blessed are they that hear the word of God, and keep it"
-msgstr "Heureux ceux qui écoutent la parole de Dieu, et le garder"
-
-#: commandments_app.Commandment/title:76
-#, fuzzy
-msgid "Take heed, and beware of covetousness"
-msgstr "Prenez garde, et méfiez-vous de la convoitise"
-
-#: commandments_app.Commandment/title:77
-#, fuzzy
-msgid "Strive to enter in at the strait gate"
-msgstr "S'efforcer d'entrer par la porte étroite"
-
-#: commandments_app.Commandment/title:78
-#, fuzzy
-msgid "Look forward to the wedding of the Lamb"
-msgstr "Réjouissez-vous le mariage de l'Agneau"
-
-#: commandments_app.Commandment/title:79
-#, fuzzy
-msgid "Find the lost sheep"
-msgstr "Trouvez les brebis perdues"
-
-#: commandments_app.Commandment/title:80
-#, fuzzy
-msgid "When thou art converted, strengthen thy brethren"
-msgstr "Quand tu seras converti, affermis tes frères"
-
-#: commandments_app.Commandment/title:81
-#, fuzzy
-msgid "He that abideth in me, and I in him, the same bringeth forth much fruit"
-msgstr "Celui qui demeure en moi, et moi en lui, même porte beaucoup de fruit"
-
-#: commandments_app.Commandment/title_negative:81
-#, fuzzy
-msgid "For without me ye can do nothing"
-msgstr "Car sans moi vous ne pouvez rien faire"
-
-#: commandments_app.Commandment/devotional:81
-#, fuzzy
-msgid ""
-"Please take a moment to read the blog below of John Piper who explains how "
-"to abide in Christ."
-msgstr ""
-"S'il vous plaît prendre un moment pour lire le blog ci-dessous de John Piper "
-"qui explique comment demeurer en Christ."
-
-#: commandments_app.Commandment/title:82
-#, fuzzy
-msgid "We are called to glorify the Name of God in Christ Jesus!"
-msgstr "Nous sommes appelés à glorifier le nom de Dieu en Jésus-Christ!"
-
-#: commandments_app.Commandment/title:83
-#, fuzzy
-msgid "Feed my sheep"
-msgstr "Pais mes brebis"
-
-#: commandments_app.Drawing/description:1 commandments_app.Picture/description:1
-#, fuzzy
-msgid "nan"
-msgstr "nan"
 
 #: commandments_app.Question/text:1
 #, fuzzy
@@ -4683,17 +4663,43 @@ msgstr ""
 "Êtes-vous le froid, tiède ou chaude? Avez-vous un désir sincèrement de "
 "suivre Jésus pour qu'ils glorifient votre Père dans le ciel avec votre vie?"
 
-#: commandments_app.Question/text:4
+#: commandments_app.Question/text:5
+#, fuzzy
+msgid "Did you already get baptized?"
+msgstr "Avez-vous déjà faire baptiser?"
+
+#: commandments_app.Question/text:6
+#, fuzzy
+msgid "Tell each other your testimony why you got baptized"
+msgstr "Dites-lui à votre témoignage pourquoi vous avez été baptisés"
+
+#: commandments_app.Question/text:9
 #, fuzzy
 msgid "Do you recognize any fruits in your life?"
 msgstr "Reconnaissez-vous des fruits dans votre vie?"
 
-#: commandments_app.Question/text:5
+#: commandments_app.Question/text:10
 #, fuzzy
 msgid "Tell each other how you recognize their fruits"
 msgstr "Dites-lui à la façon dont vous reconnaissez leurs fruits"
 
-#: commandments_app.Question/text:6
+#: commandments_app.Question/text:15
+#, fuzzy
+msgid "Who cares about our agenda for telling the world about Jesus?"
+msgstr ""
+"Qui se soucie de notre ordre du jour de dire au monde au sujet de Jésus?"
+
+#: commandments_app.Question/text:16
+#, fuzzy
+msgid ""
+"Paul tells his own testimony to defend himself. Have you also shared your "
+"testimony to others to explain the gospel? What was their reaction?"
+msgstr ""
+"Paul dit à son propre témoignage de se défendre. Avez-vous également partagé "
+"votre témoignage à d'autres pour expliquer l'Évangile? Quelle a été leur "
+"réaction?"
+
+#: commandments_app.Question/text:22
 #, fuzzy
 msgid ""
 "During the day, do you pay attention for people around you who need help?"
@@ -4701,62 +4707,62 @@ msgstr ""
 "Pendant la journée, vous faites attention pour les gens autour de vous qui "
 "ont besoin d'aide?"
 
-#: commandments_app.Question/text:7
+#: commandments_app.Question/text:23
 #, fuzzy
 msgid "When was the last time you were merciful?"
 msgstr "À quand remonte la dernière fois que vous étiez miséricordieux?"
 
-#: commandments_app.Question/text:8
+#: commandments_app.Question/text:25
 #, fuzzy
 msgid "Ask others, what kind of sins do they see with you?"
 msgstr "Demandez aux autres, quel genre de péchés qu'ils ne voient avec vous?"
 
-#: commandments_app.Question/text:9
+#: commandments_app.Question/text:26
 #, fuzzy
 msgid "What sins do you want to get rid off?"
 msgstr "Quels péchés voulez-vous pour se débarrasser?"
 
-#: commandments_app.Question/text:10
+#: commandments_app.Question/text:27
 #, fuzzy
 msgid "Pray for each other"
 msgstr "Priez les uns pour les autres"
 
-#: commandments_app.Question/text:11
+#: commandments_app.Question/text:32
 #, fuzzy
 msgid "Has sin corrupted your saltiness?"
 msgstr "Est-ce que le péché corrompu votre salure?"
 
-#: commandments_app.Question/text:12
+#: commandments_app.Question/text:33
 #, fuzzy
 msgid "Has your self-interest made you disinterested in transforming others?"
 msgstr "Votre intérêt vous a fait désintéressé à transformer d'autres?"
 
-#: commandments_app.Question/text:13
+#: commandments_app.Question/text:34
 #, fuzzy
 msgid "Can you be graciously confrontational?"
 msgstr "Pouvez-vous être gracieusement conflictuel?"
 
-#: commandments_app.Question/text:14
+#: commandments_app.Question/text:41
 #, fuzzy
 msgid "Does your speaking suit your behavior?"
 msgstr "Est-ce que votre costume parler votre comportement?"
 
-#: commandments_app.Question/text:15
+#: commandments_app.Question/text:42
 #, fuzzy
 msgid "Is there a difference between your confession and your doing?"
 msgstr "Y at-il une différence entre votre confession et que vous faites?"
 
-#: commandments_app.Question/text:16
+#: commandments_app.Question/text:45
 #, fuzzy
 msgid "When was the last time you were generous?"
 msgstr "À quand remonte la dernière fois que vous étiez généreux?"
 
-#: commandments_app.Question/text:17
+#: commandments_app.Question/text:47
 #, fuzzy
 msgid "Do you really want to be a follower of Jesus?"
 msgstr "Voulez-vous vraiment être un disciple de Jésus?"
 
-#: commandments_app.Question/text:18
+#: commandments_app.Question/text:49
 #, fuzzy
 msgid ""
 "Enemies are the people who God puts on your way which are hard for you to "
@@ -4765,24 +4771,24 @@ msgstr ""
 "Les ennemis sont les gens qui Dieu met sur votre chemin qui est difficile "
 "pour vous d'amour. Qui sont les ennemis pour vous?"
 
-#: commandments_app.Question/text:19
+#: commandments_app.Question/text:50
 #, fuzzy
 msgid "Do you have the idea that you are what God intended you to be?"
 msgstr ""
 "Avez-vous l'idée que vous êtes ce que Dieu vous aviez l'intention d'être?"
 
-#: commandments_app.Question/text:20
+#: commandments_app.Question/text:51
 #, fuzzy
 msgid "What would stop you from becoming the way you were meant to be?"
 msgstr ""
 "Qu'est-ce qui vous empêche de devenir la façon dont vous étiez censé être?"
 
-#: commandments_app.Question/text:21
+#: commandments_app.Question/text:52
 #, fuzzy
 msgid "What would happen if you were as God intended?"
 msgstr "Que se passerait-il si vous étiez comme Dieu l'a voulu?"
 
-#: commandments_app.Question/text:22
+#: commandments_app.Question/text:57
 #, fuzzy
 msgid ""
 "Are we willing to give up our rights for reconciliation out of love for "
@@ -4791,7 +4797,7 @@ msgstr ""
 "Sommes-nous prêts à renoncer à nos droits pour sortir de la réconciliation "
 "de l'amour pour Jésus, le Père et l'autre?"
 
-#: commandments_app.Question/text:23
+#: commandments_app.Question/text:58
 #, fuzzy
 msgid ""
 "Are we willing to step into a conflict and be accountable for love for "
@@ -4802,7 +4808,7 @@ msgstr ""
 "pour Jésus, le Père et l'autre et de demander pardon pour toute culpabilité "
 "dans laquelle nous faisons ou ne participe pas?"
 
-#: commandments_app.Question/text:24
+#: commandments_app.Question/text:59
 #, fuzzy
 msgid ""
 "Are we prepared, out of love for Jesus, the Father and the other, to do what "
@@ -4813,7 +4819,7 @@ msgstr ""
 "est nécessaire pour qu'une relation peut être restaurée, pour donner "
 "satisfaction afin que la réconciliation complète devient possible?"
 
-#: commandments_app.Question/text:25
+#: commandments_app.Question/text:60
 #, fuzzy
 msgid ""
 "Are we willing to forgive the other out of love for Jesus, the Father and "
@@ -4822,78 +4828,56 @@ msgstr ""
 "Sommes-nous prêts à pardonner à l'autre par amour pour Jésus, le Père et "
 "l'autre, peu importe si oui ou non l'autre demande pardon?"
 
-#: commandments_app.Question/text:26
+#: commandments_app.Question/text:62
 #, fuzzy
 msgid "Do you apply regular fasting in your life?"
 msgstr "Appliquez-vous le jeûne régulier dans votre vie?"
 
-#: commandments_app.Question/text:27
+#: commandments_app.Question/text:64
 #, fuzzy
 msgid "What are your treasures?"
 msgstr "Quels sont vos trésors?"
 
-#: commandments_app.Question/text:28
+#: commandments_app.Question/text:73
 #, fuzzy
 msgid "What makes it difficult for you to listen, understand and obey?"
 msgstr ""
 "Ce qui rend difficile pour vous d'écouter, comprendre et respecter les "
 "consignes?"
 
-#: commandments_app.Question/text:29
+#: commandments_app.Question/text:74
 #, fuzzy
 msgid "If you want to grow in applying your faith, what does that take?"
 msgstr ""
 "Si vous souhaitez développer dans l'application de votre foi, qu'est-ce que "
 "prendre?"
 
-#: commandments_app.Question/text:30
+#: commandments_app.Question/text:75
 #, fuzzy
 msgid "Once you know what He says, can you trust it?"
 msgstr "Une fois que vous savez ce qu'il dit, pouvez-vous faire confiance?"
 
-#: commandments_app.Question/text:31
+#: commandments_app.Question/text:76
 #, fuzzy
 msgid "What keeps people away from God's Truth?"
 msgstr "Ce qui empêche les gens loin de la vérité de Dieu?"
 
-#: commandments_app.Question/text:32
-#, fuzzy
-msgid "Who cares about our agenda for telling the world about Jesus?"
-msgstr ""
-"Qui se soucie de notre ordre du jour de dire au monde au sujet de Jésus?"
-
-#: commandments_app.Question/text:33
-#, fuzzy
-msgid ""
-"Paul tells his own testimony to defend himself. Have you also shared your "
-"testimony to others to explain the gospel? What was their reaction?"
-msgstr ""
-"Paul dit à son propre témoignage de se défendre. Avez-vous également partagé "
-"votre témoignage à d'autres pour expliquer l'Évangile? Quelle a été leur "
-"réaction?"
-
-#: commandments_app.Question/text:34
-#, fuzzy
-msgid "How can you be not commited to what your Savior is all about?"
-msgstr ""
-"Comment pouvez-vous pas engagé à ce qui est tout au sujet de votre Sauveur?"
-
-#: commandments_app.Question/text:35
+#: commandments_app.Question/text:82
 #, fuzzy
 msgid "How bold is your witness?"
 msgstr "Comment gras est votre témoin?"
 
-#: commandments_app.Question/text:36
+#: commandments_app.Question/text:85
 #, fuzzy
 msgid "Will you give up your life to follow Christ?"
 msgstr "Voulez-vous donner votre vie à suivre le Christ?"
 
-#: commandments_app.Question/text:37
+#: commandments_app.Question/text:88
 #, fuzzy
 msgid "Who do you want as your worst enemy: the world or God?"
 msgstr "Qui voulez-vous que votre pire ennemi: le monde ou Dieu?"
 
-#: commandments_app.Question/text:38
+#: commandments_app.Question/text:95
 #, fuzzy
 msgid ""
 "Jesus  talks  much  about  the  Kingdom  of  God  in  His  ministry.  What "
@@ -4902,7 +4886,7 @@ msgstr ""
 "Jésus parle beaucoup au sujet du Royaume de Dieu dans son ministère. Quel "
 "est le Royaume de Dieu, et qu'est-ce que cela signifie pour le recevoir?"
 
-#: commandments_app.Question/text:39
+#: commandments_app.Question/text:96
 #, fuzzy
 msgid ""
 "What characteristics of children does Jesus want His disciples to recognize "
@@ -4911,7 +4895,7 @@ msgstr ""
 "Quelles sont les caractéristiques des enfants que Jésus veut que ses "
 "disciples reconnaissent et Emuler à recevoir son royaume?"
 
-#: commandments_app.Question/text:40
+#: commandments_app.Question/text:97
 #, fuzzy
 msgid ""
 "Why  is  receiving  Jesus  and  His  Kingdom  better  than  anything  this "
@@ -4919,7 +4903,7 @@ msgid ""
 msgstr ""
 "Pourquoi recevoir Jésus et son royaume mieux que tout ce monde a à offrir?"
 
-#: commandments_app.Question/text:41
+#: commandments_app.Question/text:98
 #, fuzzy
 msgid ""
 "What would it look like in your work, finances, relationships, and "
@@ -4928,17 +4912,35 @@ msgstr ""
 "Que faudrait-il ressembler dans votre travail, les finances, les relations, "
 "et le voisinage de recevoir le Royaume de Dieu comme un enfant?"
 
-#: commandments_app.Question/text:42
+#: commandments_app.Question/text:104
+#, fuzzy
+msgid ""
+"Do you recognize one of the symptoms for greed mentioned in the description?"
+msgstr ""
+"Reconnaissez-vous l'un des symptômes de la cupidité mentionnés dans la "
+"description?"
+
+#: commandments_app.Question/text:111
+#, fuzzy
+msgid "What do you think believe is all about?"
+msgstr "Que pensez-vous croire est tout au sujet?"
+
+#: commandments_app.Question/text:112
+#, fuzzy
+msgid "How do you know what somebody believes in?"
+msgstr "Comment savez-vous ce que quelqu'un croit en?"
+
+#: commandments_app.Question/text:114
 #, fuzzy
 msgid "Do you truly love Jesus? If you did, how would you know?"
 msgstr "Aimez-vous vraiment Jésus? Si vous avez fait, comment savez-vous?"
 
-#: commandments_app.Question/text:43
+#: commandments_app.Question/text:120
 #, fuzzy
 msgid "What talents do you use to glorify the Father?"
 msgstr "Quels talents utilisez-vous pour glorifier le Père?"
 
-#: commandments_app.Question/text:44
+#: commandments_app.Question/text:121
 #, fuzzy
 msgid ""
 "Do you pray: Lord, will you bless what I have sown? Or: Lord, what do you "
@@ -4947,22 +4949,46 @@ msgstr ""
 "Priez-vous: Seigneur, vous bénisse ce que j'ai semé? Ou: Seigneur, que veux-"
 "tu que je sème?"
 
-#: commandments_app.Question/text:45
+#: commandments_app.Question/text:123
+#, fuzzy
+msgid "Imagine yourself on trial for your faith"
+msgstr "Imaginez-vous à l'essai pour votre foi"
+
+#: commandments_app.Question/text:126
+#, fuzzy
+msgid ""
+"Have you met someone like Jonathan, who visited you to encourage you to put "
+"your faith in God?"
+msgstr ""
+"Avez-vous rencontré quelqu'un comme Jonathan, qui vous visité pour vous "
+"encourager à mettre votre foi en Dieu?"
+
+#: commandments_app.Question/text:130
+#, fuzzy
+msgid "Have you experienced the presence of Christ in areas of testing?"
+msgstr "Avez-vous connu la présence du Christ dans les zones de test?"
+
+#: commandments_app.Question/text:131
+#, fuzzy
+msgid "Did you have the courage to be true to Him?"
+msgstr "Avez-vous eu le courage d'être fidèle à lui?"
+
+#: commandments_app.Question/text:134
 #, fuzzy
 msgid "What do you think is a disciple?"
 msgstr "Que pensez-vous est un disciple?"
 
-#: commandments_app.Question/text:46
+#: commandments_app.Question/text:135
 #, fuzzy
 msgid "Are you a disciple?"
 msgstr "Êtes-vous un disciple?"
 
-#: commandments_app.Question/text:47
+#: commandments_app.Question/text:136
 #, fuzzy
 msgid "What is discipleship about?"
 msgstr "Qu'est-ce à propos des disciples?"
 
-#: commandments_app.Question/text:48
+#: commandments_app.Question/text:137
 #, fuzzy
 msgid ""
 "Could you still be a disciple today? If so, how would that look like? If "
@@ -4971,57 +4997,38 @@ msgstr ""
 "Pourriez-vous être encore aujourd'hui disciple? Si oui, comment cela "
 "ressemblerait? Sinon, pourquoi pas?"
 
-#: commandments_app.Question/text:49
 #, fuzzy
-msgid "Did you already get baptized?"
-msgstr "Avez-vous déjà faire baptiser?"
+#~ msgid "Let your light so shine before men"
+#~ msgstr "Que votre lumière brille devant les hommes"
 
-#: commandments_app.Question/text:50
 #, fuzzy
-msgid "Tell each other your testimony why you got baptized"
-msgstr "Dites-lui à votre témoignage pourquoi vous avez été baptisés"
+#~ msgid "Be patient"
+#~ msgstr "Sois patient"
 
-#: commandments_app.Question/text:51
 #, fuzzy
-msgid "What do you think believe is all about?"
-msgstr "Que pensez-vous croire est tout au sujet?"
+#~ msgid ""
+#~ "That whosoever is angry with his brother without a cause shall be in "
+#~ "danger of the judgment: and whosoever shall say to his brother, Raca, "
+#~ "shall be in danger of the council: but whosoever shall say, Thou fool, "
+#~ "shall be in danger of hell fire."
+#~ msgstr ""
+#~ "Que quiconque se met en colère contre son frère sans cause, sera en "
+#~ "danger du jugement: et celui qui dira à son frère, Raca, sera en danger "
+#~ "du conseil mais celui qui lui dira Insensé, est en danger de l'enfer Feu."
 
-#: commandments_app.Question/text:52
 #, fuzzy
-msgid "How do you know what somebody believes in?"
-msgstr "Comment savez-vous ce que quelqu'un croit en?"
+#~ msgid "Reconcile with your brother as quickly as possible"
+#~ msgstr "Conciliable avec votre frère le plus rapidement possible"
 
-#: commandments_app.Question/text:53
 #, fuzzy
-msgid "Imagine yourself on trial for your faith"
-msgstr "Imaginez-vous à l'essai pour votre foi"
+#~ msgid "nan"
+#~ msgstr "nan"
 
-#: commandments_app.Question/text:54
 #, fuzzy
-msgid "Have you experienced the presence of Christ in areas of testing?"
-msgstr "Avez-vous connu la présence du Christ dans les zones de test?"
-
-#: commandments_app.Question/text:55
-#, fuzzy
-msgid "Did you have the courage to be true to Him?"
-msgstr "Avez-vous eu le courage d'être fidèle à lui?"
-
-#: commandments_app.Question/text:57
-#, fuzzy
-msgid ""
-"Do you recognize one of the symptoms for greed mentioned in the description?"
-msgstr ""
-"Reconnaissez-vous l'un des symptômes de la cupidité mentionnés dans la "
-"description?"
-
-#: commandments_app.Question/text:58
-#, fuzzy
-msgid ""
-"Have you met someone like Jonathan, who visited you to encourage you to put "
-"your faith in God?"
-msgstr ""
-"Avez-vous rencontré quelqu'un comme Jonathan, qui vous visité pour vous "
-"encourager à mettre votre foi en Dieu?"
+#~ msgid "How can you be not commited to what your Savior is all about?"
+#~ msgstr ""
+#~ "Comment pouvez-vous pas engagé à ce qui est tout au sujet de votre "
+#~ "Sauveur?"
 
 #, fuzzy
 #~ msgid "A six part study with John Piper"

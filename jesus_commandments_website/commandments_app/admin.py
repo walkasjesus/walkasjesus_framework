@@ -1,5 +1,9 @@
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.urls import path
+from reversion.admin import VersionAdmin
+from reversion.models import Revision
+from django.shortcuts import redirect
 
 from commandments_app.models import *
 from commandments_app.views.admin.admin_bible_view import AdminBibleView
@@ -107,7 +111,7 @@ class BookInline(admin.TabularInline):
     extra = 0
 
 
-class CommandmentAdmin(admin.ModelAdmin):
+class CommandmentAdmin(VersionAdmin):
     list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,
@@ -127,7 +131,12 @@ class CommandmentAdmin(admin.ModelAdmin):
     ]
 
 
+class LogEntryAdmin(admin.ModelAdmin):
+    model = LogEntry
+    extra = 0
+
+
 admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(File)
-
+admin.site.register(LogEntry, LogEntryAdmin)

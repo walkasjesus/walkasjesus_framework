@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'froala_editor',
     'sorl.thumbnail',
     'cookielaw',
+    'reversion',
 ]
 
 MIDDLEWARE = [

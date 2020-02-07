@@ -11,6 +11,7 @@ sorl-thumbnail>=12.5.0
 django-froala-editor>=3.0.5
 mysqlclient>=1.4.4
 django-cookie-law>=2.0.2
+django-reversion>=3.0.5
 
 # Tools
 -e ../import_tool

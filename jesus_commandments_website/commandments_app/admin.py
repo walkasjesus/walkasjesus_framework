@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.contrib.admin.models import LogEntry
-from django.urls import path
+from django.contrib.admin.models import LogEntry, DELETION
+from django.urls import path, reverse
+from django.utils.html import escape
 from reversion.admin import VersionAdmin
-from reversion.models import Revision
-from django.shortcuts import redirect
 
 from commandments_app.models import *
 from commandments_app.views.admin.admin_bible_view import AdminBibleView
@@ -132,8 +131,55 @@ class CommandmentAdmin(VersionAdmin):
 
 
 class LogEntryAdmin(admin.ModelAdmin):
-    model = LogEntry
-    extra = 0
+    date_hierarchy = 'action_time'
+
+    list_filter = [
+        'user',
+        'content_type',
+        'action_flag'
+    ]
+
+    search_fields = [
+        'object_repr',
+        'change_message'
+    ]
+
+    list_display = [
+        'action_time',
+        'user',
+        'content_type',
+        'long_change_message',
+        'action_flag_',
+        'change_message',
+    ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def action_flag_(self, obj):
+        flags = {
+            1: "Addition",
+            2: "Changed",
+            3: "Deleted",
+        }
+        return flags[obj.action_flag]
+
+    def long_change_message(self, obj):
+        if obj.action_flag == DELETION:
+            return escape(obj.object_repr)
+        else:
+            ct = obj.content_type
+            return f'ID-{obj.object_id}: {escape(obj.object_repr)}, {obj.get_change_message()}'
+
+    long_change_message.allow_tags = True
+    long_change_message.admin_order_field = 'object_repr'
+    long_change_message.short_description = u'object'
 
 
 admin.site.register(Bible, BibleAdmin)

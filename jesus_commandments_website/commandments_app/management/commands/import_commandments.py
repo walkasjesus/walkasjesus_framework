@@ -10,7 +10,7 @@ from jesus_commandments_website.settings import BASE_DIR
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        file_path = os.path.join(BASE_DIR, 'data', 'commandments.csv')
+        file_path = os.path.join(BASE_DIR, 'data', 'biblereferences', 'commandments.csv')
         importer = CommandmentImporter()
         commandments = importer.load(file_path)
 

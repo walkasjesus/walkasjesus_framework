@@ -175,7 +175,7 @@ class LogEntryAdmin(admin.ModelAdmin):
             return escape(obj.object_repr)
         else:
             ct = obj.content_type
-            return f'ID-{obj.object_id}: {escape(obj.object_repr)}, {obj.get_change_message()}'
+            return f'[{obj.object_id}] \'{escape(obj.object_repr[:40])}...\', {obj.get_change_message()}'
 
     long_change_message.allow_tags = True
     long_change_message.admin_order_field = 'object_repr'

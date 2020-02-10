@@ -6,3 +6,4 @@ else
 	echo "error: cannot find environment binary"
 fi
 python manage.py migrate
+python manage.py createinitialrevisions

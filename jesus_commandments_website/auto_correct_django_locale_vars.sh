@@ -14,7 +14,7 @@
 #
 # Known issue: Sometimes Google also translated the variable to a complete different word, in that case we can't fix this automatic
 
-declare -a locale_paths=$(find locale -name "django.po")
+declare -a locale_paths=$(find translations -name "django.po")
 
 for locale in ${locale_paths[@]}; do
 	echo "Start parsing file: $locale"

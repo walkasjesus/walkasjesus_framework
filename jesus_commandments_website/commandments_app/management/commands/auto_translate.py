@@ -14,5 +14,5 @@ class Command(BaseCommand):
 
         for language in languages:
             if language != 'en':
-                file_path = os.path.join(BASE_DIR, 'locale', language, 'LC_MESSAGES', 'django.po')
+                file_path = os.path.join(BASE_DIR, 'translations', 'locale', language, 'LC_MESSAGES', 'django.po')
                 translator.translate(file_path, 'en', language)

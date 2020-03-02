@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+from django.utils.translation import activate
 from pandas import DataFrame
 
 from commandments_app.models import *
@@ -37,21 +38,23 @@ class Command(BaseCommand):
             self.export_commandment(item)
 
     def export_commandment(self, obj: Commandment):
-        # language, what is default when running command?
-        # and how to get both nl and en for export?
-
+        activate('en')
         self.data_frame.at[self.last_row_index, 'step'] = obj.id
-        self.data_frame.at[self.last_row_index, 'category'] = ''
+        self.data_frame.at[self.last_row_index, 'category'] = obj.category
         self.data_frame.at[self.last_row_index, 'bible_trans_nl_trans_text'] = ''
-        self.data_frame.at[self.last_row_index, 'Principles'] = ''
-        self.data_frame.at[self.last_row_index, 'title_nl'] = ''
-        self.data_frame.at[self.last_row_index, 'title_en'] = ''
-        self.data_frame.at[self.last_row_index, 'title_ot_nl'] = ''
+        self.data_frame.at[self.last_row_index, 'title_en'] = obj.title
         self.data_frame.at[self.last_row_index, 'title_ot_en'] = ''
-        self.data_frame.at[self.last_row_index, 'title_negative_en'] = ''
+        self.data_frame.at[self.last_row_index, 'title_negative_en'] = obj.title_negative
         self.data_frame.at[self.last_row_index, 'quote'] = obj.quote
         self.data_frame.at[self.last_row_index, 'quote_source'] = obj.quote_source
         # self.data_frame.at[self.last_row_index, 'extra'] = ''
+        # self.data_frame.at[self.last_row_index, 'Principles'] = ''
+
+        # Get the dutch translation also as import contained english and dutch
+        activate('nl')
+        self.data_frame.at[self.last_row_index, 'title_nl'] = obj.title
+        self.data_frame.at[self.last_row_index, 'title_ot_nl'] = obj.title_negative
+        activate('en')
 
         self.last_row_index += 1
 
@@ -64,6 +67,7 @@ class Command(BaseCommand):
 
 
     def export_bible_reference(self, bible_ref, type) -> [str]:
+        self.data_frame.at[self.last_row_index, 'step'] = bible_ref.commandment.id
         self.data_frame.at[self.last_row_index, 'bible_ref'] = str(bible_ref)
         self.data_frame.at[self.last_row_index, 'bible_ref_positive_negative'] = bible_ref.positive_negative
         # self.data_frame.at[self.last_row_index, 'bible_ref_literal_figurative'] = bible_ref.

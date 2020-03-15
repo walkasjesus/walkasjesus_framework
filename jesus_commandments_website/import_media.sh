@@ -5,4 +5,7 @@ elif [[ -f ./venv/bin/activate ]]; then
 else
 	echo "error: cannot find environment binary"
 fi
-python manage.py import_commandments
+
+echo "INFO: Now importing Media Resources"
+
+python manage.py import_media

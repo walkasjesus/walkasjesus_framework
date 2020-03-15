@@ -99,8 +99,8 @@ USE_TZ = True
 LANGUAGES = [
     ('en', gettext_lazy('English')),  # First language is the default for modeltranslation
     ('nl', gettext_lazy('Dutch')),
-    ('de', gettext_lazy('German')),
-    ('fr', gettext_lazy('French')),
+#    ('de', gettext_lazy('German')),
+#    ('fr', gettext_lazy('French')),
 ]
 
 # Map django message level to Bootstrap alert, using the tag attribute
@@ -117,8 +117,8 @@ MESSAGE_TAGS = {
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_LANGUAGE_GROUPS = [
     'translators-nl',
-    'translators-de',
-    'translators-fr',
+#    'translators-de',
+#    'translators-fr',
 ]
 
 ROSETTA_MESSAGES_PER_PAGE = 25

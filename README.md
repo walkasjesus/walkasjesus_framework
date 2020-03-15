@@ -26,7 +26,7 @@ The following CSV's will be imported:
 
 * [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
   _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
-* [jesus_commandments_resources](https://github.com/jesuscommandments/jesus_commandments_resources)
+* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
   _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
 `./jesus_commandments_website/fill_database.sh`  
@@ -102,7 +102,7 @@ This repository contains IT Automation tools for [Ansible](https://docs.ansible.
 
 Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV. This CSV can be imported/exported with the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) and the [Jesus Commandments Server](https://github.com/jesuscommandments/jesus_commandments_server)
 
-### jesus_commandments_resources
+### jesus_commandments_media
 
 Repository for the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV. This CSV can be imported/exported with the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) and the [Jesus Commandments Server](https://github.com/jesuscommandments/jesus_commandments_server)
 

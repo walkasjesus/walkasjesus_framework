@@ -50,12 +50,6 @@ class Command(BaseCommand):
         # self.data_frame.at[self.last_row_index, 'extra'] = ''
         # self.data_frame.at[self.last_row_index, 'Principles'] = ''
 
-        # Get the dutch translation also as import contained english and dutch
-        activate('nl')
-        self.data_frame.at[self.last_row_index, 'title_nl'] = obj.title
-        self.data_frame.at[self.last_row_index, 'title_ot_nl'] = obj.title_negative
-        activate('en')
-
         self.last_row_index += 1
 
         self.export_bible_reference(obj.primary_bible_reference(), 'primary')
@@ -64,7 +58,6 @@ class Command(BaseCommand):
         [self.export_bible_reference(item, 'duplicate') for item in obj.duplicate_bible_references()]
         [self.export_bible_reference(item, 'example') for item in obj.example_bible_references()]
         [self.export_bible_reference(item, 'study') for item in obj.study_bible_references()]
-
 
     def export_bible_reference(self, bible_ref, type) -> [str]:
         self.data_frame.at[self.last_row_index, 'step'] = bible_ref.commandment.id

@@ -13,8 +13,6 @@ class CommandmentManager(models.Manager):
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
     title_negative = models.CharField(max_length=256, default='', blank=True)
-    devotional = FroalaField(blank=True, null=True)
-    devotional_source = models.CharField(max_length=256, default='', blank=True, null=True)
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.Salvation)

@@ -21,9 +21,6 @@ class Command(BaseCommand):
                    'title_ot_code',
                    'title_en',
                    'title_negative_en',
-                   'devotional_en',
-                   'devotional_nl',
-                   'devotional_source',
                    'questions',
                    'quote',
                    'quote_source',
@@ -64,8 +61,6 @@ class Command(BaseCommand):
         self.data_frame.at[self.last_row_index, 'title_negative_en'] = obj.title_negative
         self.data_frame.at[self.last_row_index, 'quote'] = obj.quote
         self.data_frame.at[self.last_row_index, 'quote_source'] = obj.quote_source
-        self.data_frame.at[self.last_row_index, 'devotional_en'] = obj.devotional
-        self.data_frame.at[self.last_row_index, 'devotional_source'] = obj.devotional_source
         self.last_row_index += 1
 
     def export_bible_reference(self, bible_ref, reference_type):

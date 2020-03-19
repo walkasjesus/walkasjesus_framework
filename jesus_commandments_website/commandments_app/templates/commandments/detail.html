@@ -11,13 +11,6 @@
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
-        {% if commandment.devotional %}
-        <li>
-            <a href="#devotional" class="ripple">
-                <i><img title="{% trans 'Jump to:' %} {% trans 'Devotional' %}" src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
-            </a>
-        </li>
-        {% endif %}
         {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
@@ -269,22 +262,6 @@
             </div>
             {% endcache %}
             {% cache cache_timeout commandments_detail_media cache_on_multi_language commandment.id %}
-            {% if commandment.devotional %}
-            <div id="devotional" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/devotional.png' %}" width="65px" alt="">
-                        </div>
-                        <div id="devotional" class="our-services-text">
-                            <h4>{% trans 'Devotional' %}</h4>
-                            <p>{{ commandment.devotional | safe  }}</p>
-                            {% if commandment.devotional_source %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
             {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -361,14 +338,15 @@
                                     <li>{% trans "Is there anything you don't understand within this commandment?" %}</li>
                                     <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
                                     <li>{% trans "How do you apply this commandment in your life or do you experience any boundaries?" %}</li>
+                            </ul>
                                 {% if commandment.questions %}
-                                    <br>
                                     {% trans 'Extra questions' %}:
+                            <ul>
                                     {% for question in commandment.questions %}
                                     <li>{{ question.text }}</li>
                                     {% endfor %}
-                                {% endif %}
                             </ul>
+                                {% endif %}
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+import csv
+
 from django.core.management import BaseCommand
 from pandas import DataFrame
 
@@ -66,15 +68,19 @@ class Command(BaseCommand):
         self.data_frame.at[self.last_row_index, 'quote_source'] = obj.quote_source
         self.last_row_index += 1
 
-    def export_bible_reference(self, bible_ref, reference_type):
+    def export_bible_reference(self, bible_ref: BibleReference, reference_type: str):
         self.data_frame.at[self.last_row_index, 'step'] = bible_ref.commandment.id
-        self.data_frame.at[self.last_row_index, 'bible_ref'] = str(bible_ref)
+        self.data_frame.at[self.last_row_index, 'bible_ref'] = bible_ref.short_name()
         self.data_frame.at[self.last_row_index, 'bible_ref_positive_negative'] = bible_ref.positive_negative
         self.data_frame.at[self.last_row_index, 'bible_ref_ot_nr'] = bible_ref.ot_nr
         self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_id'] = bible_ref.ot_rambam_id
         self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_title'] = bible_ref.ot_rambam_title
         self.data_frame.at[self.last_row_index, 'bible_ref_author'] = bible_ref.author
         self.data_frame.at[self.last_row_index, 'bible_ref_type'] = reference_type
+
+        # This is not necessary for the import,export but to be closer to the original format
+        self.data_frame.at[self.last_row_index, 'category'] = CommandmentCategories[bible_ref.commandment.category].value
+
         self.last_row_index += 1
 
     def export_questions(self, question):

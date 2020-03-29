@@ -25,7 +25,9 @@ class Command(BaseCommand):
         model_reference.end_chapter = reference.end_chapter
         model_reference.end_verse = reference.end_verse
         model_reference.positive_negative = reference.positive_negative
-        model_reference.origin = reference.origin
+        model_reference.ot_nr = reference.ot_nr
+        model_reference.ot_rambam_id = reference.ot_rambam_id
+        model_reference.ot_rambam_title = reference.ot_rambam_title
         model_reference.author = reference.author
 
         self._save(model_reference)
@@ -62,6 +64,8 @@ class Command(BaseCommand):
                 self._add_bible_ref(ExampleBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.study_bible_references:
                 self._add_bible_ref(StudyBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.otlaw_bible_references:
+                self._add_bible_ref(OTLawBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.questions:
                 self._add_question(model_commandment.id, item)
             for item in commandment.media:

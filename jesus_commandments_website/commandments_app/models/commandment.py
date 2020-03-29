@@ -52,6 +52,11 @@ class Commandment(models.Model):
         extra study on this commandment. """
         return self._get_translated_bible_references(self.studybiblereference_set.all())
 
+    def otlaw_bible_references(self):
+        """ Old Testament Law Bible references which will relate to OT Commandments (Jewish 
+        tradition teached that there are 613 commandments or mitzvot in the Torah) """
+        return self._get_translated_bible_references(self.otlawbiblereference_set.all())
+
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''
 

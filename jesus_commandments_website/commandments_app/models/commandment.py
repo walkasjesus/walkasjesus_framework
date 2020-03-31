@@ -15,7 +15,7 @@ class Commandment(models.Model):
     title_negative = models.CharField(max_length=256, default='', blank=True)
     category = models.CharField(max_length=32,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
-                                default=CommandmentCategories.Salvation)
+                                default=CommandmentCategories.firstcommandment)
     quote = models.TextField(default='', blank=True, null=True)
     quote_source = models.CharField(max_length=256, default='', blank=True, null=True)
     bible = None

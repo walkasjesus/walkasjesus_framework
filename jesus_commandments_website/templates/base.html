@@ -76,8 +76,13 @@
           <div>
             <p><a href="javascript:void(0);" class="btn btn-primary btn-outline-primary" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a></p>
           </div>
-          <div>
-            <a class="btn btn-primary btn-outline-primary btn-superbook" href="{% url 'commandments:index' %}"><img src="{% static 'images/gizmo.png' %}"></a>
+          <div class="btn btn-primary btn-outline-primary btn-superbook" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids site, you will find the same commandments with limited resources and Bible texts.' %}">
+            <div class="custom-control custom-checkbox image-checkbox">
+              <input type="checkbox" class="custom-control-input chk-kids-mode" id="chk-kids-mode-1">
+              <label class="custom-control-label" for="chk-kids-mode-1">
+                  <img src="/static/images/gizmo.png" alt="#" >
+              </label>
+            </div>
           </div>
         </div>
       </div>

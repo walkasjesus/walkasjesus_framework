@@ -4,8 +4,36 @@ $(document).ready(function(){
     $('#changeLanguageModal').modal('show');
     $.removeCookie('jc_bible_trans_settings');
   }
-  
-  
+    
+  if($.cookie('jc_kids_mode')){
+    $('.chk-kids-mode').prop('checked', true);
+    $('[data-targetaudience="kids"]').show();
+    $('[data-targetaudience="adults"]').hide();
+  }
+  else {
+    $('[data-targetaudience="kids"]').hide();
+    $('[data-targetaudience="adults"]').show();
+  }
+
+  $(document).on('change', '.chk-kids-mode', function(event){
+    // var checked = document.getElementById('chk-kids-mode-1').checked;
+    var checked = $(this).prop('checked');
+    if (checked){
+      $.cookie('jc_kids_mode', true, { expires: 365 });
+      $('[data-targetaudience="kids"]').slideDown();
+      $('[data-targetaudience="adults"]').slideUp();
+      $('.chk-kids-mode').prop('checked', true);
+    }
+    else {
+      $.removeCookie('jc_kids_mode');
+      $('[data-targetaudience="kids"]').slideUp();
+      $('[data-targetaudience="adults"]').slideDown();
+      $('.chk-kids-mode').prop('checked', false);
+    }
+  });
+
+
+
   // ----- Detailed commandments page: Smooth scrolling BEGIN ------ \\  
     // Add smooth scrolling to all links
     $("a").on('click', function(event) {
@@ -31,34 +59,24 @@ $(document).ready(function(){
     });
     // ----- Detailed commandments page: Smooth scrolling END ------ \\ 
 
-
-
-
-
-
     // ----- Study Listing arrows in table BEGIN ------ \\ 
     $('#dtBasicExample').DataTable();
       $('.dataTables_length').addClass('bs-select');
     // ----- Study Listing arrows in table END ------ \\ 
 
-
-
-
-
-
-
     // ----- Showing and hiding tooltip with different speed BEGIN ------ \\ 
-    $(".select").tooltip({
-        delay: {show: 0, hide: 1000}
-    });
+    // $(".select").tooltip({
+    //     delay: {show: 0, hide: 0}
+    // });
+
+    $(function () {
+      $('[data-toggle="kids-tooltip"]').tooltip({ trigger: "hover" })
+    })
     // ----- Showing and hiding tooltip with different speed END ------ \\ 
-
-
 
     $(document).on('change', '.drpSelectLanguage', function(event){
       event.preventDefault();
       $.cookie('jc_bible_trans_settings', true);
-      debugger;
       this.form.submit();
     });
     $(document).on('change', '.drpBibleTranslation', function(event){
@@ -72,4 +90,5 @@ $(document).ready(function(){
       //$.cookie('jc_bible_trans_settings', true);
       this.form.submit();
     });
+
   });

@@ -53,6 +53,8 @@ class CommandmentImporter(object):
                         commandment.study_bible_references.append(reference)
                     if row['bible_ref_type'].lower() == 'otlaw':
                         commandment.otlaw_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'wisdom':
+                        commandment.wisdom_bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
 

@@ -174,3 +174,10 @@ class OTLawBibleReference(AbstractBibleReference):
 
     class Meta:
         unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse', 'ot_nr' ,'ot_rambam_id', 'ot_rambam_title']
+
+
+class WisdomBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']

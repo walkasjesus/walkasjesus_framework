@@ -15,7 +15,9 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    origin = models.CharField(max_length=32, default='', null=True, blank=True)
+    ot_nr = models.CharField(max_length=3, default='', null=True, blank=True)
+    ot_rambam_id = models.CharField(max_length=32, default='', null=True, blank=True)
+    ot_rambam_title = models.CharField(max_length=128, default='', null=True, blank=True)
     author = models.CharField(max_length=64, default='Undetermined')
     positive_negative = models.CharField(max_length=32,
                                          choices=[('positive', 'positive'),
@@ -32,7 +34,15 @@ class AbstractBibleReference(models.Model):
         self.bible = bible
 
     def __str__(self):
-        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
+        """ Get the bible verse formatted in the current language with the full book name like: Handelingen 1:1-2"""
+        return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def short_name(self):
+        """ Get the bible verse with the untranslated abbreviation of the book, like: gen 1:1-2"""
+        return f'{BibleLibBibleBooks.abbreviation(BibleLibBibleBooks[self.book])} {self._str_chapter_verses()}'
+
+    def _str_chapter_verses(self):
+        book_chapter_verse = f'{self.begin_chapter}:{self.begin_verse}'
 
         if self.begin_chapter == 0 or self.end_verse == 0:
             return book_chapter_verse
@@ -157,3 +167,10 @@ class StudyBibleReference(AbstractBibleReference):
 
     class Meta:
         unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+
+class OTLawBibleReference(AbstractBibleReference):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse', 'ot_nr' ,'ot_rambam_id', 'ot_rambam_title']

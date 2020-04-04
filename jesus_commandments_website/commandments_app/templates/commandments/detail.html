@@ -6,18 +6,11 @@
 {% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
-        <li>
+        <li targetaudience="adults">
             <a href="#biblereferences" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
-        {% if commandment.devotional %}
-        <li>
-            <a href="#devotional" class="ripple">
-                <i><img title="{% trans 'Jump to:' %} {% trans 'Devotional' %}" src="{% static 'images/devotional.png' %}" width="40px" alt=""></i>
-            </a>
-        </li>
-        {% endif %}
         {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
@@ -40,7 +33,7 @@
         </li>
         {% endif %}
         {% if commandment.superbooks %}
-        <li>
+        <li targetaudience="kids">
             <a href="#superbook" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
             </a>
@@ -75,21 +68,21 @@
         </li>
         {% endif %}
         {% if commandment.blogs %}
-        <li>
+        <li targetaudience="adults">
             <a href="#blogs" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Blogs' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.sermons %}
-        <li>
+        <li targetaudience="adults">
             <a href="#sermons" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Sermons' %}" src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.books %}
-        <li>
+        <li targetaudience="adults">
             <a href="#books" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Books' %}" src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
@@ -147,7 +140,7 @@
                     </div>
                 </div>
             </div>
-            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="biblereferences" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -160,13 +153,13 @@
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -177,30 +170,61 @@
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if commandment.otlaw_bible_references %}
+                            <h4>{% trans 'OT Law Bible References' %}</h4>
+                            <p><i>{% trans 'Old Testament Law Bible references which will relate to OT Commandments (Jewish tradition teached that there are 613 commandments or mitzvot in the Torah)' %}.</i></p>
+                            <ul>
+                                {% for bible_reference in commandment.otlaw_bible_references %}
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'OT Law nr' %}: '{{ bible_reference.ot_nr }}'{% if bible_reference.ot_rambam_id %}, {% trans 'Rambam Title' %}: '{{ bible_reference.ot_rambam_title }}', {% trans 'Rambam Coding' %}: '{{ bible_reference.ot_rambam_id }}' {% endif %})</i></li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'OT Law nr' %}: '{{ bible_reference.ot_nr }}'{% if bible_reference.ot_rambam_id %}, {% trans 'Rambam Title' %}: '{{ bible_reference.ot_rambam_title }}', {% trans 'Rambam Coding' %}: '{{ bible_reference.ot_rambam_id }}' {% endif %})</i></li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'OT Law nr' %}: '{{ bible_reference.ot_nr }}'{% if bible_reference.ot_rambam_id %}, {% trans 'Rambam Title' %}: '{{ bible_reference.ot_rambam_title }}', {% trans 'Rambam Coding' %}: '{{ bible_reference.ot_rambam_id }}' {% endif %})</i></li>
+                                    {% else %}
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'OT Law nr' %}: '{{ bible_reference.ot_nr }}'{% if bible_reference.ot_rambam_id %}, {% trans 'Rambam Title' %}: '{{ bible_reference.ot_rambam_title }}', {% trans 'Rambam Coding' %}: '{{ bible_reference.ot_rambam_id }}' {% endif %})</i></li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
                             {% endif %}
                             {% if commandment.example_bible_references %}
                             <h4>{% trans 'Example Bible References' %}</h4>
-                            <p><i>{% trans 'In these Bible references you will find examples and testimonies how this commandment is being executed' %}.</i></p>
+                            <p><i>{% trans 'In these Bible references you will find examples and testimonies how this commandment was being executed' %}.</i></p>
+                            <br>
+                            <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.example_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -208,16 +232,30 @@
                             {% if commandment.duplicate_bible_references %}
                             <h4>{% trans 'Duplicate Bible References' %}</h4>
                             <p><i>{% trans 'Another Bible reference to more or less the same as the primary, direct or indirect, with not much new information, although it will confirm the same Bible references' %}:</i></p>
+                            <br>
+                            <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.duplicate_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% else %}
-                                    <li class="unknown_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -225,16 +263,30 @@
                             {% if commandment.study_bible_references %}
                             <h4>{% trans 'Study Bible References' %}</h4>
                             <p><i>{% trans 'Extra Bible references (most often larger parts of Bible books) which are good for extra study on this commandment' %}:</i></p>
+                            <br>
+                            <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.study_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="negative_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="pos_neg_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="positive_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% else %}
-                                    <li class="unknown_list">{{ bible_reference }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}'{% if bible_reference.origin %}, {% trans 'Origin' %}: '{{ bible_reference.origin }}' {% endif %})</i></li>
+                                    <li class="unknown_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
                                     {% endif %}
                                 {% endfor %}
                                 </ul>
@@ -244,7 +296,7 @@
                             <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
                             <br>
                             <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
-                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Author, Origin etc.' %}</i></p>
+                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Author, OT Law etc.' %}</i></p>
                             </div>
                             <div class="collapse" id="collapseLegend">
                                 <div class="alert alert-warning infobox">
@@ -254,13 +306,19 @@
                                         <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive, something you should do or learn from' %}</i></li>
                                         <li class="unknown_list"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
                                         <li><b>{% trans 'Author' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
-                                        <li><b>{% trans 'Origin' %}: </b><i>{% trans "The coding refers to the commandments layout of Rabbi Chafetz Chayim (From 'The Concise Book of Mitzvoth')" %}</i></li>
+                                        <li><b>{% trans 'OT Law nr' %}: </b><i>{% trans "Jewish tradition teached that there are 613 commandments or mitzvot in the Torah. We list the Number, based on a chronological order (Genesis, Exodus, Leviticus, Numeri, Deuteronomium)." %}</i></li>
+                                        <li><b>{% trans 'Rambam Title' %}: </b><i>{% trans "This is the commandment, as an interpretation of Rambam (commonly known as Maimonides)" %}</i></li>
+                                        <li><b>{% trans 'Rambam Coding' %}: </b><i>{% trans "The coding refers to the commandments layout of Rambam. Rabbi Chafetz Chayim wrote a book with all the commandments which can still be observed today. The book is called 'The Concise Book of Mitzvoth'" %}</i></li>
                                         <ul>
                                             <li class="positive_list">CCA means a positive mitzwe (which can now also be carried out outside of Israel).</li>
                                             <li class="negative_list">CCN is the negative mitzwe (which can now also be carried out outside of Israel).</li>
                                             <li class="israel_list">CCI means that this mitzvah can only be performed in the State of Israel.</li>
                                         </ul>
                                     </ul>
+                                    <p><b>{% trans 'Who came up with this "613 Mitzvot"?' %}</b></p>
+                                    {% blocktrans %}
+                                        Rabbi Moshe ben Maimon, His full name was Rabbi Moses Ben Maimon. His name formed the acronym as "The Rambam" was born on the 14th of Nisan 4895 (30th March 1135) and he died on the 20th of Tevet of 4965 (Dec. 13 1204). The Rambam was one of the most saught after individuals of his time. Not only as a Halachic authority, but also within the secular world of kings and sultans, for his vast knowledge of secular medecines was outstanding. When writting the Mishna Torah, Ramban reviewed the Torah's Mitzvot, and he itemized them. He seperated the positive and negative mitzvot, listed them, all 613, and discussed them.
+                                    {% endblocktrans %}
                                 </div>
                             </div>
                         </div>
@@ -269,22 +327,6 @@
             </div>
             {% endcache %}
             {% cache cache_timeout commandments_detail_media cache_on_multi_language commandment.id %}
-            {% if commandment.devotional %}
-            <div id="devotional" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/devotional.png' %}" width="65px" alt="">
-                        </div>
-                        <div id="devotional" class="our-services-text">
-                            <h4>{% trans 'Devotional' %}</h4>
-                            <p>{{ commandment.devotional | safe  }}</p>
-                            {% if commandment.devotional_source %}<p><i>{{ commandment.devotional_source }}</i></p>{% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
             {% if commandment.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -361,14 +403,15 @@
                                     <li>{% trans "Is there anything you don't understand within this commandment?" %}</li>
                                     <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
                                     <li>{% trans "How do you apply this commandment in your life or do you experience any boundaries?" %}</li>
-                                {% if commandment.questions %}
-                                    <br>
-                                    {% trans 'Extra questions' %}:
-                                    {% for question in commandment.questions %}
-                                    <li>{{ question.text }}</li>
-                                    {% endfor %}
-                                {% endif %}
                             </ul>
+                                {% if commandment.questions %}
+                                    {% trans 'Extra questions' %}:
+                                    <ul>
+                                    {% for question in commandment.questions %}
+                                        <li>{{ question.text }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
                         </div>
                     </div>
                 </div>
@@ -388,7 +431,7 @@
                 </div>
             </div>
             {% if commandment.superbooks %}
-            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="superbook" targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -418,10 +461,12 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in commandment.short_movies %}
-                            <h5>{{ short_movie.title }}</h5>
-                            {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
-                            <div class="video-iframe">
-                                <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            <div targetaudience="{{ short_movie.target_audience }}">
+                                <h5>{{ short_movie.title }}</h5>
+                                {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -439,10 +484,12 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in commandment.songs %}
-                            <h5>{{ song.author }} - {{ song.title }}</h5>
-                            {% if song.description %}<p>{{ song.description }}</p>{% endif %}
-                            <div class="video-iframe">
-                                <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            <div targetaudience="{{ song.target_audience }}">
+                                <h5>{{ song.author }} - {{ song.title }}</h5>
+                                {% if song.description %}<p>{{ song.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -460,10 +507,12 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
                             {% for movie in commandment.movies %}
-                            <h5>{{ movie.title }}</h5>
-                            {% if movie.description %}<p>{{ movie.description }}</p>{% endif %}
-                            <div class="video-iframe">
-                                <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            <div targetaudience="{{ movie.target_audience }}">
+                                <h5>{{ movie.title }}</h5>
+                                {% if movie.description %}<p>{{ movie.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -481,10 +530,12 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
                             {% for testimony in commandment.testimonies %}
-                            <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
-                            {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
-                            <div class="video-iframe">
-                                <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            <div targetaudience="{{ testimony.target_audience }}">
+                                <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                                {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -493,7 +544,7 @@
             </div>
             {% endif %}
             {% if commandment.blogs %}
-            <div id="blogs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="blogs" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -511,7 +562,7 @@
             </div>
             {% endif %}
             {% if commandment.sermons %}
-            <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="sermons" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -532,7 +583,7 @@
             </div>              
             {% endif %}
             {% if commandment.books %}
-            <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="books" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">

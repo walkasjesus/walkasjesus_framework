@@ -25,10 +25,6 @@ class CommandmentImporter(object):
             commandment.id = first(group, 'step')
             commandment.title = first(group, 'title_en')
             commandment.title_negative = first(group, 'title_negative_en')
-            commandment.title_nl = first(group, 'title_nl')
-            commandment.devotional = first(group, 'devotional_en')
-            commandment.devotional_nl = first(group, 'devotional_nl')
-            commandment.devotional_source = first(group, 'devotional_source')
             commandment.category = first(group, 'category')
             commandment.quote = first(group, 'quote')
             commandment.quote_source = first(group, 'quote_source')
@@ -37,7 +33,9 @@ class CommandmentImporter(object):
             for index, row in group.iterrows():
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
-                    reference.origin = row['bible_ref_origin']
+                    reference.ot_nr = row['bible_ref_ot_nr']
+                    reference.ot_rambam_id = row['bible_ref_ot_rambam_id']
+                    reference.ot_rambam_title = row['bible_ref_ot_rambam_title']
                     reference.author = row['bible_ref_author']
                     reference.positive_negative = row['bible_ref_positive_negative']
 
@@ -53,6 +51,8 @@ class CommandmentImporter(object):
                         commandment.example_bible_references.append(reference)
                     if row['bible_ref_type'].lower() == 'study':
                         commandment.study_bible_references.append(reference)
+                    if row['bible_ref_type'].lower() == 'otlaw':
+                        commandment.otlaw_bible_references.append(reference)
                 except Exception as ex:
                     print(f'Could not parse {row}')
 

@@ -12,7 +12,7 @@ class CommandmentManager(models.Manager):
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
     title_negative = models.CharField(max_length=256, default='', blank=True)
-    category = models.CharField(max_length=32,
+    category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
                                 default=CommandmentCategories.firstcommandment)
     quote = models.TextField(default='', blank=True, null=True)

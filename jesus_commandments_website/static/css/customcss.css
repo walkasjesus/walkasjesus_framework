@@ -302,7 +302,9 @@ p {
     height: 50px;
 }
 
-
+.btn-change-bible {
+    height: 50px;
+}
 
 .custom-control.image-checkbox {
     position: relative;

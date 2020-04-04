@@ -7,12 +7,12 @@ $(document).ready(function(){
     
   if($.cookie('jc_kids_mode')){
     $('.chk-kids-mode').prop('checked', true);
-    $('[data-targetaudience="kids"]').show();
-    $('[data-targetaudience="adults"]').hide();
+    $('[targetaudience="kids"]').show();
+    $('[targetaudience="adults"]').hide();
   }
   else {
-    $('[data-targetaudience="kids"]').hide();
-    $('[data-targetaudience="adults"]').show();
+    $('[targetaudience="kids"]').hide();
+    $('[targetaudience="adults"]').show();
   }
 
   $(document).on('change', '.chk-kids-mode', function(event){
@@ -20,14 +20,14 @@ $(document).ready(function(){
     var checked = $(this).prop('checked');
     if (checked){
       $.cookie('jc_kids_mode', true, { expires: 365 });
-      $('[data-targetaudience="kids"]').slideDown();
-      $('[data-targetaudience="adults"]').slideUp();
+      $('[targetaudience="kids"]').slideDown();
+      $('[targetaudience="adults"]').slideUp();
       $('.chk-kids-mode').prop('checked', true);
     }
     else {
       $.removeCookie('jc_kids_mode');
-      $('[data-targetaudience="kids"]').slideUp();
-      $('[data-targetaudience="adults"]').slideDown();
+      $('[targetaudience="kids"]').slideUp();
+      $('[targetaudience="adults"]').slideDown();
       $('.chk-kids-mode').prop('checked', false);
     }
   });

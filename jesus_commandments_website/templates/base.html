@@ -57,11 +57,11 @@
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav nav ml-auto">
+	        <ul class="navbar-nav nav">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'Commandments' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
+	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'All Commandments' %}</span></a></li>
+	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
+	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
             <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
             {% endif %}
@@ -69,12 +69,12 @@
 	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
 	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'Logout' %}</span></a></li>
             {% else %}
-            <li class="nav-item"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
+            <li class="nav-item" targetaudience="adults"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
             <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
             {% endif %}
           </ul>
           <div>
-            <p><a href="javascript:void(0);" class="btn btn-primary btn-outline-primary" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a></p>
+            <p><a href="javascript:void(0);" class="btn btn-primary btn-outline-primary btn-change-bible" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a></p>
           </div>
           <div class="btn btn-primary btn-outline-primary btn-superbook" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids site, you will find the same commandments with limited resources and Bible texts.' %}">
             <div class="custom-control custom-checkbox image-checkbox">

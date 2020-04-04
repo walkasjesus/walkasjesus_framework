@@ -6,7 +6,7 @@
 {% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
-        <li data-targetaudience="adults">
+        <li targetaudience="adults">
             <a href="#biblereferences" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
@@ -33,7 +33,7 @@
         </li>
         {% endif %}
         {% if commandment.superbooks %}
-        <li data-targetaudience="kids">
+        <li targetaudience="kids">
             <a href="#superbook" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
             </a>
@@ -68,21 +68,21 @@
         </li>
         {% endif %}
         {% if commandment.blogs %}
-        <li data-targetaudience="adults">
+        <li targetaudience="adults">
             <a href="#blogs" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Blogs' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.sermons %}
-        <li data-targetaudience="adults">
+        <li targetaudience="adults">
             <a href="#sermons" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Sermons' %}" src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if commandment.books %}
-        <li data-targetaudience="adults">
+        <li targetaudience="adults">
             <a href="#books" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Books' %}" src="{% static 'images/book.png' %}" width="40px" alt=""></i>
             </a>
@@ -140,7 +140,7 @@
                     </div>
                 </div>
             </div>
-            <div id="biblereferences" data-targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="biblereferences" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -431,7 +431,7 @@
                 </div>
             </div>
             {% if commandment.superbooks %}
-            <div id="superbook" data-targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="superbook" targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -461,7 +461,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in commandment.short_movies %}
-                            <div data-targetaudience="{{ short_movie.target_audience }}">
+                            <div targetaudience="{{ short_movie.target_audience }}">
                                 <h5>{{ short_movie.title }}</h5>
                                 {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -484,7 +484,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in commandment.songs %}
-                            <div data-targetaudience="{{ song.target_audience }}">
+                            <div targetaudience="{{ song.target_audience }}">
                                 <h5>{{ song.author }} - {{ song.title }}</h5>
                                 {% if song.description %}<p>{{ song.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -507,7 +507,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Movies' %}</h4>
                             {% for movie in commandment.movies %}
-                            <div data-targetaudience="{{ movie.target_audience }}">
+                            <div targetaudience="{{ movie.target_audience }}">
                                 <h5>{{ movie.title }}</h5>
                                 {% if movie.description %}<p>{{ movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -530,7 +530,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
                             {% for testimony in commandment.testimonies %}
-                            <div data-targetaudience="{{ testimony.target_audience }}">
+                            <div targetaudience="{{ testimony.target_audience }}">
                                 <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                                 {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -544,7 +544,7 @@
             </div>
             {% endif %}
             {% if commandment.blogs %}
-            <div id="blogs" data-targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="blogs" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -562,7 +562,7 @@
             </div>
             {% endif %}
             {% if commandment.sermons %}
-            <div id="sermons" data-targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="sermons" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -583,7 +583,7 @@
             </div>              
             {% endif %}
             {% if commandment.books %}
-            <div id="books" data-targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="books" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">

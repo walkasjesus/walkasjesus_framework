@@ -138,15 +138,21 @@
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
     <div class="row justify-content-center col-md-12">
-        <div class="sermon-wrap ftco-animate">
-            <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% static 'images/61_-_Love_the_Lord_your_God_with_all_your_heart.png' %}');">
-                <div class="text-content p-4 text-center">
-                    <h3>{% trans 'We love Him, because He first loved us' %}</h3>
-                    <span>{% trans '1 John 4:19' %}</span>
-                </div>
+      <div class="sermon-wrap ftco-animate" targetaudience="adults">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% static 'images/61_-_Love_the_Lord_your_God_with_all_your_heart.png' %}');">
+            <div class="text-content p-4 text-center">
+                <h3>{% trans 'We love Him, because He first loved us' %}</h3>
+                <span>{% trans '1 John 4:19' %}</span>
             </div>
         </div>
-    </div>
+      </div>
+      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="kids"> 
+        <h2>{% trans "Bring the Bible back to life in your child's heart" %}</h2>
+        <div class="video-iframe">
+            <iframe src="https://www.youtube.com/embed/kiDQI7Ymkwc" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+        </div>
+      </div>
+  </div>
     <div class="row justify-content-center pb-5">
           <div class="col-md-12 heading-section text-center ftco-animate">
             <span class="subheading">{% trans 'John 14:15' %}</span>

@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import translation
-from froala_editor.fields import FroalaField
 
 from commandments_app.models import CommandmentCategories
 

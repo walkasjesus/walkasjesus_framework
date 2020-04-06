@@ -115,8 +115,7 @@
                             <h3>{{ commandment.id }}</h3>
                         </div>
                         <div id="commandment_details" class="our-services-text">
-                            <h4>{% trans 'Jesus Commandments' %}</h4>
-                            {% trans 'Primary unique commandment' %}:
+                            <h4>{% trans 'Jesus His Commandment' %}</h4>
                             {% if commandment.primary_bible_reference.positive_negative == "negative" %}
                             <ul class="negative_list negative_list_title">
                             {% elif commandment.primary_bible_reference.positive_negative == "both" %}
@@ -136,6 +135,7 @@
                             {% endif %}
 
                             {% trans 'Commandment category'%}: {{ commandment.get_category_display }}<br>
+                            <p><i>{% trans 'All Jesus His Commandments can be grouped into the Ten Commandments from the Old Testament (Exodus 20).' %}</i></p>
                         </div>
                     </div>
                 </div>
@@ -205,6 +205,37 @@
                             <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.example_bible_references %}
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li class="negative_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li class="pos_neg_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li class="positive_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
+                                    {% else %}
+                                    <li class="unknown_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
+                                        <br>
+                                        <span class="collapse" id="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}">{{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></span>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if commandment.wisdom_bible_references %}
+                            <h4>{% trans 'Wisdom Bible References' %}</h4>
+                            <p><i>{% trans 'Wisdom Bible references will relate to one of the Wisdom Literare Books from the Old Testament' %}.</i></p>
+                            <br>
+                            <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
+                                <ul>
+                                {% for bible_reference in commandment.wisdom_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
                                     <li class="negative_list" data-toggle="collapse" data-target="#collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}" aria-expanded="false" aria-controls="collapse{{ bible_reference.begin_chapter }}{{ bible_reference.begin_verse }}{{ bible_reference.end_verse }}{{ bible_reference.end_chapter }}"><b><u>{{ bible_reference }}</u></b>
                                         <br>

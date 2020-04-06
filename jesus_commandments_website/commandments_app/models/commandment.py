@@ -56,6 +56,11 @@ class Commandment(models.Model):
         tradition teached that there are 613 commandments or mitzvot in the Torah) """
         return self._get_translated_bible_references(self.otlawbiblereference_set.all())
 
+    def wisdom_bible_references(self):
+        """ Wisdom Bible references will relate to one of the Wisdom Literare Books from the 
+        Old Testament """
+        return self._get_translated_bible_references(self.wisdombiblereference_set.all())
+
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''
 

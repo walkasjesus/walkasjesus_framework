@@ -58,6 +58,7 @@ class Command(BaseCommand):
         [self.export_bible_reference(item, 'example') for item in obj.example_bible_references()]
         [self.export_bible_reference(item, 'study') for item in obj.study_bible_references()]
         [self.export_bible_reference(item, 'otlaw') for item in obj.otlaw_bible_references()]
+        [self.export_bible_reference(item, 'wisdom') for item in obj.wisdom_bible_references()]
 
     def export_main_content(self, obj):
         self.data_frame.at[self.last_row_index, 'step'] = obj.id

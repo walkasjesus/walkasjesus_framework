@@ -60,6 +60,11 @@ class OTLawBibleReferenceInline(admin.TabularInline):
     extra = 0
 
 
+class WisdomBibleReferenceInline(admin.TabularInline):
+    model = WisdomBibleReference
+    extra = 0
+
+
 class QuestionInline(admin.TabularInline):
     model = Question
     extra = 0
@@ -125,6 +130,7 @@ class CommandmentAdmin(VersionAdmin):
         DuplicateBibleReferenceInline,
         StudyBibleReferenceInline,
         OTLawBibleReferenceInline,
+        WisdomBibleReferenceInline,
         QuestionInline,
         DrawingInline,
         SongInline,

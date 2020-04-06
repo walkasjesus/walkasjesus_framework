@@ -300,10 +300,14 @@ p {
     margin-left: 5px;
     margin-top: -15px;
     height: 50px;
+    margin-bottom: 5px;
 }
 
 .btn-change-bible {
+    margin-left: 5px;
+    margin-bottom: 5px;
     height: 50px;
+    width: 180px;
 }
 
 .custom-control.image-checkbox {

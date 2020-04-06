@@ -66,6 +66,8 @@ class Command(BaseCommand):
                 self._add_bible_ref(StudyBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.otlaw_bible_references:
                 self._add_bible_ref(OTLawBibleReference(commandment_id=model_commandment.id), item)
+            for item in commandment.wisdom_bible_references:
+                self._add_bible_ref(WisdomBibleReference(commandment_id=model_commandment.id), item)
             for item in commandment.questions:
                 self._add_question(model_commandment.id, item)
             for item in commandment.media:

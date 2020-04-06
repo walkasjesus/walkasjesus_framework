@@ -1,4 +1,4 @@
-from commandments_app.models import PrimaryBibleReference, DirectBibleReference, IndirectBibleReference, DuplicateBibleReference, ExampleBibleReference, StudyBibleReference, OTLawBibleReference
+from commandments_app.models import PrimaryBibleReference, DirectBibleReference, IndirectBibleReference, DuplicateBibleReference, ExampleBibleReference, StudyBibleReference, OTLawBibleReference, WisdomBibleReference
 
 
 class BibleReferences:
@@ -26,6 +26,9 @@ class BibleReferences:
 
     def otlaw(self):
         return self._query_references(OTLawBibleReference.objects.filter(commandment__gt=0))
+
+    def wisdom(self):
+        return self._query_references(WisdomBibleReference.objects.filter(commandment__gt=0))
 
     def _query_references(self, query):
         # This will reduce the amount of sql queries as we already know we also want the commandments

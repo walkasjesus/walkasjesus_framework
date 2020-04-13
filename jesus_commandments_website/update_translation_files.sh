@@ -12,9 +12,5 @@ python manage.py makemessages -l nl --ignore=venv
 #python manage.py makemessages -l fr --ignore=venv
 #python manage.py makemessages -l de --ignore=venv
 
-# Removed this deprecated feature since we dont import dutch translations from CSV anymore.
-# echo "Import dutch translation from the csv file"
-# python manage.py import_dutch_translation
-
 echo "Compiling the .po files. Run this also after changing the .po files."
 django-admin compilemessages

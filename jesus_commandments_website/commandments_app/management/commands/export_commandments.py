@@ -1,5 +1,3 @@
-import csv
-
 from django.core.management import BaseCommand
 from pandas import DataFrame
 
@@ -19,16 +17,11 @@ class Command(BaseCommand):
                    'bible_ref_author',
                    'bible_ref_type',
                    'category',
-                   'title_nl',
-                   'title_ot_nl',
-                   'title_ot_en',
-                   'title_ot_code',
                    'title_en',
                    'title_negative_en',
                    'questions',
                    'quote',
-                   'quote_source',
-                   ]
+                   'quote_source']
 
         self.data_frame = DataFrame(columns=columns)
         self.last_row_index = 0
@@ -78,13 +71,10 @@ class Command(BaseCommand):
         self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_title'] = bible_ref.ot_rambam_title
         self.data_frame.at[self.last_row_index, 'bible_ref_author'] = bible_ref.author
         self.data_frame.at[self.last_row_index, 'bible_ref_type'] = reference_type
-
-        # This is not necessary for the import,export but to be closer to the original format
-        self.data_frame.at[self.last_row_index, 'category'] = CommandmentCategories[bible_ref.commandment.category].value
-
         self.last_row_index += 1
 
     def export_questions(self, question):
-        self.data_frame.at[self.last_row_index, 'step'] = question.commandment.id
-        self.data_frame.at[self.last_row_index, 'questions'] = question
-        self.last_row_index += 1
+        if question.text != '':
+            self.data_frame.at[self.last_row_index, 'step'] = question.commandment.id
+            self.data_frame.at[self.last_row_index, 'questions'] = question.text
+            self.last_row_index += 1

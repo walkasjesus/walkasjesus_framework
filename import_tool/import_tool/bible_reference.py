@@ -10,7 +10,9 @@ class BibleReference:
         self.start_verse = 0
         self.end_chapter = 0
         self.end_verse = 0
-        self.origin = ''
+        self.ot_nr = ''
+        self.ot_rambam_id = ''
+        self.ot_rambam_title = ''
         self.author = ''
         self.positive_negative = ''
 

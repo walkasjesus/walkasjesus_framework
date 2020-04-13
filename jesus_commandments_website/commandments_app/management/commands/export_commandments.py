@@ -13,7 +13,9 @@ class Command(BaseCommand):
         columns = ['step',
                    'bible_ref',
                    'bible_ref_positive_negative',
-                   'bible_ref_origin',
+                   'bible_ref_ot_nr',
+                   'bible_ref_ot_rambam_id',
+                   'bible_ref_ot_rambam_title',
                    'bible_ref_author',
                    'bible_ref_type',
                    'category',
@@ -55,6 +57,8 @@ class Command(BaseCommand):
         [self.export_bible_reference(item, 'duplicate') for item in obj.duplicate_bible_references()]
         [self.export_bible_reference(item, 'example') for item in obj.example_bible_references()]
         [self.export_bible_reference(item, 'study') for item in obj.study_bible_references()]
+        [self.export_bible_reference(item, 'otlaw') for item in obj.otlaw_bible_references()]
+        [self.export_bible_reference(item, 'wisdom') for item in obj.wisdom_bible_references()]
 
     def export_main_content(self, obj):
         self.data_frame.at[self.last_row_index, 'step'] = obj.id
@@ -69,7 +73,9 @@ class Command(BaseCommand):
         self.data_frame.at[self.last_row_index, 'step'] = bible_ref.commandment.id
         self.data_frame.at[self.last_row_index, 'bible_ref'] = bible_ref.short_name()
         self.data_frame.at[self.last_row_index, 'bible_ref_positive_negative'] = bible_ref.positive_negative
-        self.data_frame.at[self.last_row_index, 'bible_ref_origin'] = bible_ref.origin
+        self.data_frame.at[self.last_row_index, 'bible_ref_ot_nr'] = bible_ref.ot_nr
+        self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_id'] = bible_ref.ot_rambam_id
+        self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_title'] = bible_ref.ot_rambam_title
         self.data_frame.at[self.last_row_index, 'bible_ref_author'] = bible_ref.author
         self.data_frame.at[self.last_row_index, 'bible_ref_type'] = reference_type
 

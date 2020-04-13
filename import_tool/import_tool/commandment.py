@@ -10,6 +10,8 @@ class Commandment:
         self.duplicate_bible_references = []
         self.example_bible_references = []
         self.study_bible_references = []
+        self.otlaw_bible_references = []
+        self.wisdom_bible_references = []
         self.media = []
         self.questions = []
         self.quote = ''

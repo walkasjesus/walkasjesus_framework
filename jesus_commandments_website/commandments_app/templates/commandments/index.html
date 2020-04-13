@@ -6,7 +6,25 @@
 {% block homebanner %}
 {% cache cache_timeout commandments_index_banner cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">
+  
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Becoming like Him' %}</span>
+            </div>
+            <h1 class="mb-4">{% blocktrans %}Bringing people back to the <span>heart of Christ</span>{% endblocktrans %}</h1>
+            <p>{% trans 'For God so loved the world' %}...</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -23,26 +41,25 @@
       </div>
     </div>
   </div>
-
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_heart.jpg' %});">
+  
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_3.png' %});">
     <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
         <div class="col-md-8 text-center ftco-animate mt-5">
           <div class="text">
             <div class="subheading">
-              <span>{% trans 'Becoming like Him' %}</span>
+              <span>{% trans 'Kids site' %}</span>
             </div>
-            <h1 class="mb-4">{% blocktrans %}Bringing people back to the <span>heart of Christ</span>{% endblocktrans %}</h1>
-            <p>{% trans 'For God so loved the world' %}...</p>
+            <h1 class="mb-4">{% blocktrans %}A special <span>childrens version</span> of this site to teach the commandments{% endblocktrans %}</h1>
+            <p>{% trans 'With links to Superbook animated Bible stories' %}</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_4.jpg' %});">
     <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -60,23 +77,6 @@
     </div>
   </div>
 
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_3.jpg' %});">
-    <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
-        <div class="col-md-8 text-center ftco-animate mt-5">
-          <div class="text">
-            <div class="subheading">
-              <span>{% trans 'True disciples' %}</span>
-            </div>
-            <h1 class="mb-4">{% blocktrans %}If we <span>reproduce the character</span> of Jesus Christ in disciples{% endblocktrans %}</h1>
-            <p>{% trans 'than we are a good disciple' %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 {% endcache %}
@@ -138,15 +138,21 @@
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
     <div class="row justify-content-center col-md-12">
-        <div class="sermon-wrap ftco-animate">
-            <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% static 'images/61_-_Love_the_Lord_your_God_with_all_your_heart.png' %}');">
-                <div class="text-content p-4 text-center">
-                    <h3>{% trans 'We love Him, because He first loved us' %}</h3>
-                    <span>{% trans '1 John 4:19' %}</span>
-                </div>
+      <div class="sermon-wrap ftco-animate" targetaudience="adults">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% static 'images/61_-_Love_the_Lord_your_God_with_all_your_heart.png' %}');">
+            <div class="text-content p-4 text-center">
+                <h3>{% trans 'We love Him, because He first loved us' %}</h3>
+                <span>{% trans '1 John 4:19' %}</span>
             </div>
         </div>
-    </div>
+      </div>
+      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="kids"> 
+        <h2>{% trans "Bring the Bible back to life in your child's heart" %}</h2>
+        <div class="video-iframe">
+            <iframe src="https://www.youtube.com/embed/kiDQI7Ymkwc" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+        </div>
+      </div>
+  </div>
     <div class="row justify-content-center pb-5">
           <div class="col-md-12 heading-section text-center ftco-animate">
             <span class="subheading">{% trans 'John 14:15' %}</span>

@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import translation
-from froala_editor.fields import FroalaField
 
 from commandments_app.models import CommandmentCategories
 
@@ -13,9 +12,9 @@ class CommandmentManager(models.Manager):
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
     title_negative = models.CharField(max_length=256, default='', blank=True)
-    category = models.CharField(max_length=32,
+    category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in CommandmentCategories],
-                                default=CommandmentCategories.Salvation)
+                                default=CommandmentCategories.firstcommandment)
     quote = models.TextField(default='', blank=True, null=True)
     quote_source = models.CharField(max_length=256, default='', blank=True, null=True)
     bible = None
@@ -51,6 +50,16 @@ class Commandment(models.Model):
         """ Extra Bible references (most often larger parts of Bible books) which are good for 
         extra study on this commandment. """
         return self._get_translated_bible_references(self.studybiblereference_set.all())
+
+    def otlaw_bible_references(self):
+        """ Old Testament Law Bible references which will relate to OT Commandments (Jewish 
+        tradition teached that there are 613 commandments or mitzvot in the Torah) """
+        return self._get_translated_bible_references(self.otlawbiblereference_set.all())
+
+    def wisdom_bible_references(self):
+        """ Wisdom Bible references will relate to one of the Wisdom Literare Books from the 
+        Old Testament """
+        return self._get_translated_bible_references(self.wisdombiblereference_set.all())
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''

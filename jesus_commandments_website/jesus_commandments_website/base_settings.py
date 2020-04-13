@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'url_or_relative_url_field',
-    'froala_editor',
     'sorl.thumbnail',
     'cookielaw',
     'reversion',

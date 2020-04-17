@@ -78,6 +78,26 @@
     width: 50px;
   }
   
+
+.logodiv {
+    position: relative;
+}
+
+.logodiv-subtitle {
+    position: absolute;
+    bottom: 3px;
+    right: 15px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #e2b900;
+    /* white-space: nowrap; */
+}
+
+.ftco-navbar-light.scrolled .logodiv-subtitle {
+    font-size: 9px;
+}
+
   .button {
     border: 1px solid rgb(88, 69, 57) !important;
     -webkit-border-radius: 5px;

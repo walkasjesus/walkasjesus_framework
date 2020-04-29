@@ -88,6 +88,6 @@ class Command(BaseCommand):
             model_object.save()
             print(f'Added {model_object}.')
         except IntegrityError:
-            print(f'Skipped {model_object} as it already exists.')
+            print(f'Skipped {str(model_object)} as it already exists.')
         except Exception as ex:
             print(f'Failed inserting {model_object} with error {ex}.')

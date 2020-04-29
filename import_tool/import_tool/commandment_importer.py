@@ -59,7 +59,7 @@ class CommandmentImporter(object):
                     print(f'Could not parse {row}')
 
             # Parse questions
-            commandment.questions += group['questions'].dropna().tolist()
+            commandment.questions += [q for q in group['questions'] if q != '']
 
             commandments.append(commandment)
 

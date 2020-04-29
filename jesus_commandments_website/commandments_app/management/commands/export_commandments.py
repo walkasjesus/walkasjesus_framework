@@ -54,27 +54,33 @@ class Command(BaseCommand):
         [self.export_bible_reference(item, 'wisdom') for item in obj.wisdom_bible_references()]
 
     def export_main_content(self, obj):
-        self.data_frame.at[self.last_row_index, 'step'] = obj.id
-        self.data_frame.at[self.last_row_index, 'category'] = CommandmentCategories[obj.category].value
-        self.data_frame.at[self.last_row_index, 'title_en'] = obj.title
-        self.data_frame.at[self.last_row_index, 'title_negative_en'] = obj.title_negative
-        self.data_frame.at[self.last_row_index, 'quote'] = obj.quote
-        self.data_frame.at[self.last_row_index, 'quote_source'] = obj.quote_source
-        self.last_row_index += 1
+        self.write_field('step', obj.id)
+        self.write_field('category', CommandmentCategories[obj.category].value)
+        self.write_field('title_en', obj.title)
+        self.write_field('title_negative_en', obj.title_negative)
+        self.write_field('quote', obj.quote)
+        self.write_field('quote_source', obj.quote_source)
+        self.start_new_row()
 
     def export_bible_reference(self, bible_ref: BibleReference, reference_type: str):
-        self.data_frame.at[self.last_row_index, 'step'] = bible_ref.commandment.id
-        self.data_frame.at[self.last_row_index, 'bible_ref'] = bible_ref.short_name()
-        self.data_frame.at[self.last_row_index, 'bible_ref_positive_negative'] = bible_ref.positive_negative
-        self.data_frame.at[self.last_row_index, 'bible_ref_ot_nr'] = bible_ref.ot_nr
-        self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_id'] = bible_ref.ot_rambam_id
-        self.data_frame.at[self.last_row_index, 'bible_ref_ot_rambam_title'] = bible_ref.ot_rambam_title
-        self.data_frame.at[self.last_row_index, 'bible_ref_author'] = bible_ref.author
-        self.data_frame.at[self.last_row_index, 'bible_ref_type'] = reference_type
-        self.last_row_index += 1
+        self.write_field('step', bible_ref.commandment.id)
+        self.write_field('bible_ref', bible_ref.short_name())
+        self.write_field('bible_ref_positive_negative', bible_ref.positive_negative)
+        self.write_field('bible_ref_ot_nr', bible_ref.ot_nr)
+        self.write_field('bible_ref_ot_rambam_id', bible_ref.ot_rambam_id)
+        self.write_field('bible_ref_ot_rambam_title', bible_ref.ot_rambam_title)
+        self.write_field('bible_ref_author', bible_ref.author)
+        self.write_field('bible_ref_type', reference_type)
+        self.start_new_row()
 
     def export_questions(self, question):
         if question.text != '':
-            self.data_frame.at[self.last_row_index, 'step'] = question.commandment.id
-            self.data_frame.at[self.last_row_index, 'questions'] = question.text
-            self.last_row_index += 1
+            self.write_field('step', question.commandment.id)
+            self.write_field('questions', question.text)
+            self.start_new_row()
+
+    def write_field(self, column_name, value):
+        self.data_frame.at[self.last_row_index, column_name] = value
+
+    def start_new_row(self):
+        self.last_row_index += 1

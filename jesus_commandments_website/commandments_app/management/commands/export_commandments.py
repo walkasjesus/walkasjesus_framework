@@ -6,8 +6,8 @@ from commandments_app.models import *
 
 class Command(BaseCommand):
     """ Export the commandments in the database to a csv file. """
-
     def __init__(self):
+        super().__init__()
         columns = ['step',
                    'bible_ref',
                    'bible_ref_positive_negative',

@@ -6,8 +6,8 @@ from commandments_app.models import *
 
 class Command(BaseCommand):
     """ Export the media in the database to a csv file. """
-
     def __init__(self):
+        super().__init__()
         columns = ['step',
                    'media_author',
                    'media_title',
@@ -46,14 +46,20 @@ class Command(BaseCommand):
         print(f'Written export to {destination_csv}')
 
     def export_media(self, media: Media, media_type: str):
-        self.data_frame.at[self.last_row_index, 'step'] = media.commandment.id
-        self.data_frame.at[self.last_row_index, 'media_author'] = media.author
-        self.data_frame.at[self.last_row_index, 'media_title'] = media.title
-        self.data_frame.at[self.last_row_index, 'media_description_en'] = media.description
-        self.data_frame.at[self.last_row_index, 'media_target_audience'] = media.author
-        self.data_frame.at[self.last_row_index, 'media_lang'] = media.language
-        self.data_frame.at[self.last_row_index, 'media_type'] = media_type
-        self.data_frame.at[self.last_row_index, 'media_public'] = 'yes' if media.is_public else 'no'
-        self.data_frame.at[self.last_row_index, 'media_img_url'] = media.img_url
-        self.data_frame.at[self.last_row_index, 'media_url'] = media.url
+        self.write_field('step', media.commandment.id)
+        self.write_field('media_author', media.author)
+        self.write_field('media_title', media.title)
+        self.write_field('media_description_en', media.description)
+        self.write_field('media_target_audience', media.target_audience)
+        self.write_field('media_lang', media.language)
+        self.write_field('media_type', media_type)
+        self.write_field('media_public', 'yes' if media.is_public else 'no')
+        self.write_field('media_img_url', media.img_url)
+        self.write_field('media_url', media.url)
+        self.start_new_row()
+
+    def write_field(self, column_name, value):
+        self.data_frame.at[self.last_row_index, column_name] = value
+
+    def start_new_row(self):
         self.last_row_index += 1

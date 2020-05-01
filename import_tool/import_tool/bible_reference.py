@@ -170,6 +170,7 @@ class BibleReference:
             'HEBR': BibleBooks.Hebrews,
             'JAC': BibleBooks.James,
             'JAK': BibleBooks.James,
+            'JAS': BibleBooks.James,
             '1 PET': BibleBooks.PeterFirstBook,
             '1PE': BibleBooks.PeterFirstBook,
             '1 PETR': BibleBooks.PeterFirstBook,

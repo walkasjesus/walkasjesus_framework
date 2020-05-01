@@ -6,6 +6,6 @@ else
 	echo "error: cannot find environment binary"
 fi
 
-echo "INFO: Now importing Commandments"
+echo "INFO: Now exporting Commandments"
 
-python manage.py import_commandments data/biblereferences/commandments.csv
+python manage.py export_media data/media/exported_media.csv

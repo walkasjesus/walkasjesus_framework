@@ -31,6 +31,8 @@ class CommandmentImporter(object):
 
             # Parse bible refs
             for index, row in group.iterrows():
+                if len(row['bible_ref']) == 0:
+                    continue
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
                     reference.ot_nr = row['bible_ref_ot_nr']
@@ -56,10 +58,10 @@ class CommandmentImporter(object):
                     if row['bible_ref_type'].lower() == 'wisdom':
                         commandment.wisdom_bible_references.append(reference)
                 except Exception as ex:
-                    print(f'Could not parse {row}')
+                    print(f'Could not parse {row} due to exception {ex}')
 
             # Parse questions
-            commandment.questions += group['questions'].dropna().tolist()
+            commandment.questions += [q for q in group['questions'] if q != '']
 
             commandments.append(commandment)
 

@@ -31,9 +31,8 @@ class CommandmentImporter(object):
 
             # Parse bible refs
             for index, row in group.iterrows():
-                if len(row[bible_ref]) == 0:
-                    break
-
+                if len(row['bible_ref']) == 0:
+                    continue
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
                     reference.ot_nr = row['bible_ref_ot_nr']

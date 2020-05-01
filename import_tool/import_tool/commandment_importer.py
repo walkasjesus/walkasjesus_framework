@@ -56,7 +56,7 @@ class CommandmentImporter(object):
                     if row['bible_ref_type'].lower() == 'wisdom':
                         commandment.wisdom_bible_references.append(reference)
                 except Exception as ex:
-                    print(f'Could not parse {row}')
+                    print(f'Could not parse {row} due to exception {ex}')
 
             # Parse questions
             commandment.questions += [q for q in group['questions'] if q != '']

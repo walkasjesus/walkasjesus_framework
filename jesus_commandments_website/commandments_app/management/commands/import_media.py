@@ -9,8 +9,15 @@ from jesus_commandments_website.settings import BASE_DIR
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument('source', type=str, help='The file name and path to read the data from.')
+
     def handle(self, *args, **options):
-        file_path = os.path.join(BASE_DIR, 'data', 'media', 'media.csv')
+        if 'source' in options:
+            file_path = options['source']
+        else:
+            file_path = os.path.join(BASE_DIR, 'data', 'media', 'media.csv')
+
         importer = MediaImporter()
         commandments = importer.load(file_path)
 

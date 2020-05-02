@@ -1,3 +1,7 @@
+#!/bin/bash
+#
+# This script will run some python tests
+
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 

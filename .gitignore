@@ -12,6 +12,7 @@ build
 bible_api_cache.json
 
 jesus_commandments_website/media
+jesus_commandments_website/log
 
 API_KEY.txt
 

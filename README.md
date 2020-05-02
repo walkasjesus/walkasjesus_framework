@@ -15,23 +15,27 @@ _This will install all configured applications from `./jesus_commandments_websit
 `./jesus_commandments_website/install.sh`
 
 2. Initialize database  
-_This will initialize a first database structure with all required tables_  
+_This will initialize a first database structure with all required tables, or update existing tables with the latest migrations to apply_  
 
 `./jesus_commandments_website/update_database.sh`
 
-3. Fill the database  
-_This will import all the CSV's into the database_  
-
-The following CSV's will be imported:
+3. Import all commandments into the database  
+_This will import the following commandments CSV into the database:_  
 
 * [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
   _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
+
+`./jesus_commandments_website/import_commandments.sh`  
+
+4. Import all media resources into the database  
+_This will import the following media CSV into the database:_  
+
 * [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
   _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
-`./jesus_commandments_website/fill_database.sh`  
+`./jesus_commandments_website/import_media.sh`  
 
-4. Create admin user  
+5. Create admin user  
 _This will create an admin user_  
 
 Copy an example file to create the admin user:
@@ -43,12 +47,28 @@ Then you need to configure your admin credentials in this file:
 Now run the script to create the admin in the database:   
 `./jesus_commandments_website/create_admin_user.sh`  
 
-5. Run the server
+6. Run the server
 _This will run the server on your local machine on port 8000_  
 
 `./jesus_commandments_website/run_server.sh`
 
-6. You can visit http://localhost:8000 to see the website on your local machine
+7. You can visit http://localhost:8000 to see the website on your local machine
+
+8. Export all commandments into the CSV  
+_This will export all commandments from the current database into the CSV:_  
+
+* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+  _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
+
+`./jesus_commandments_website/export_commandments.sh`  
+
+9. Export all media resources into the CSV  
+_This will export all media resources from the database into the CSV:_  
+
+* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
+  _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
+
+`./jesus_commandments_website/export_media.sh`  
 
 ## Development instructions
 

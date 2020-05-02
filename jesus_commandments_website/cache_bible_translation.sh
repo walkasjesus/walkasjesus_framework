@@ -1,11 +1,13 @@
 #!/bin/bash
+#
+# This script will cache all Bible translations which are called from api.bible
 
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 
 	source ./venv/bin/activate
 else
-	echo "error: cannot find environment binary"
+	echo "ERROR: cannot find environment binary"
 fi
 python manage.py list_bible_translations
 

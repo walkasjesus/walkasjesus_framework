@@ -1,8 +1,22 @@
 #!/bin/bash
 #
-# This script will import the following commandments CSV into the database
+# This script will import the following CSV's into the database
 #
-# CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+# There is made a separation between 'Commandments' and 'Media'.
+#
+# The 'Commandments' is a CSV with all:
+# - Jesus Commandments
+# - Bible references
+# - Questions
+# - Quotes
+# Commandments CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+#
+# The 'Media' is a CSV with all:
+# - Songs, Blogs, Movies, Drawings, Pictures, Superbook, etc.
+#   Based on their:
+# -- language
+# -- target audience
+# Media CSV source is stored in a git submodule with its origin from [data/media/media.csv](https://github.com/jesuscommandments/jesus_commandments_media)
 
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
@@ -38,7 +52,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		;;
 		*)
 		echo "Script usage: $(basename $0) [-d] [-q] [-f]" >&2
-		echo "   -d will DELETE the current database and IMPORT the upstream database!"
+		echo "   -d will DELETE the commandments and media resources from the current database and IMPORT the upstream CSV!"
 		echo "   -q will run this script quiet, without warnings!"
 		echo "   -f will force to update the import, even if the remote origin master branch is up-to-date"
 		exit 1
@@ -46,9 +60,9 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	esac
 	done
 	if [[ $(echo ${DELETE_DATABASE}) == "true" ]]; then
-		echo "You are about to DELETE the current database and IMPORT the upstream database"
+		echo "You are about to DELETE the commandments and media resources from the current database and IMPORT the upstream CSV"
 	else
-		echo "You will not delete the current database, this means that changes or deleted items won't be updated"
+		echo "WARNING: You will not delete the current database, this means that changes or deleted items won't be updated and that duplicate items can arise"
 	fi
 	if [[ $(echo ${QUIET}) == "false" ]]; then
 		read -p "Are you sure? " -n 1 -r
@@ -63,12 +77,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	eval $(ssh-agent)
 	ssh-add ${rsakey}
 
-	####################
-	### Commandments ###
-	####################
-	COMMANDMENTS_UPTODATE=false
-
 	# Check and get latest Master branch repository
+	COMMANDMENTS_UPTODATE=false
 	cd ${cur}/data/biblereferences
 	commandments_repository=git@github.com:jesuscommandments/jesus_commandments_biblereferences.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
@@ -85,12 +95,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		exit 1
 	fi
 
-	#############
-	### Media ###
-	#############
-	MEDIA_UPTODATE=false
-
 	# Check and get latest Master branch repository
+	MEDIA_UPTODATE=false
 	cd ${cur}/data/media
 	media_repository=git@github.com:jesuscommandments/jesus_commandments_media.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
@@ -107,24 +113,20 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		exit 1
 	fi
 
-	# Check if we have new changes. If not, we will not delete the database. You should do that manually.
 	cd ${cur}
-	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $MEDIA_UPTODATE) == "false" ]]; then
-		if [[ $(echo $DELETE_DATABASE) == "true" ]]; then
-			if mysqldump $database > /root/mysqldump_$database_$today.sql | tee -a ${log}; then
-				echo "INFO: Succesfully backuped $database to /root/mysqldump_${database}_${today}.sql" | tee -a ${log}
-				echo "Now dropping and creating new $database" | tee -a ${log}
-				mysql -e "drop database $database;"
-				mysql -e "create database $database;"
-				# We initialize a new database structure 
-				bash update_database.sh | tee -a ${log}
-			else
-				echo "ERROR: Mysqldump was not successful. Please investigate why. Now exiting." | tee -a ${log}
-				exit 1
-			fi
+	if [[ $(echo $DELETE_DATABASE) == "true" ]]; then
+		if mysqldump $database > /root/mysqldump_$database_$today.sql | tee -a ${log}; then
+			echo "INFO: Succesfully backuped $database to /root/mysqldump_${database}_${today}.sql" | tee -a ${log}
+			TABLES=$(mysql jcdatabase -e "show tables;" | grep commandments_app)
+			echo "Now deleting data from commandments_app tables" | tee -a ${log}
+			IFS=$'\n'
+			for table in ${TABLES}; do
+				mysql $database -e "SET FOREIGN_KEY_CHECKS = 0; DELETE FROM $table; SET FOREIGN_KEY_CHECKS = 1"
+			done
+		else
+			echo "ERROR: Mysqldump was not successful. Please investigate why. Now exiting." | tee -a ${log}
+			exit 1
 		fi
-	else
-		echo "INFO: You chose to DELETE the database while the remote master repositories are still up-to-date. You should do this manually." | tee -a ${log}
 	fi
 
 	# Import the Commandments CSV

@@ -9,13 +9,15 @@
 # - Bible references
 # - Questions
 # - Quotes
-# This CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+# Commandments CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
 #
 # The 'Media' is a CSV with all:
 # - Songs, Blogs, Movies, Drawings, Pictures, Superbook, etc.
 #   Based on their:
 # -- language
 # -- target audience
+# Media CSV source is stored in a git submodule with its origin from [data/media/media.csv](https://github.com/jesuscommandments/jesus_commandments_media)
+
 
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
@@ -28,15 +30,17 @@ fi
 # If Linux based servers. This is the preferred Operating System.
 if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	today=$(date +%Y%m%d)
+	time=$(date +%H%M)
 	start=$(date '+%Y-%m-%d %H:%M:%S')
 	now_epoch=$(date +%s)
 	cur=$(dirname "$(realpath $0)")
 	log=log/commandments.${today}.log
 	last_import=$(grep 'Start importing Commandments' log/commandments.*.log | tail -1 | grep -Eo '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}')
 	rsakey=/home/jesuscommandments/.ssh/id_rsa
-	
+	branch=${today}_${time}
+
 	# Get Changelog information from last import date until now
-	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' INTO OUTFILE '/tmp/changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
+	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' INTO OUTFILE '/tmp/changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 	mysql jcdatabase -e "select id,username,first_name,last_name,email from auth_user INTO OUTFILE '/tmp/users_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 
 	# Replace user_id to human readable name
@@ -71,7 +75,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Export Commandments from Database to CSV
 	cd ${cur}/data/biblereferences
-	git checkout -b ${today}
+	time=$(date +%H%M%S)
+	git checkout -b ${branch}
 	cd ${cur}
 	echo "INFO: ${start} - Start exporting Commandments" | tee -a ${log}
 	python manage.py export_commandments data/biblereferences/commandments.csv | tee -a ${log}
@@ -88,8 +93,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	fi
 	git add commandments.csv
 	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
-	git push -u origin ${today}
-	hub pull-request -h ${today} -F - <<MSG
+	git push -u origin ${branch}
+	hub pull-request -h ${branch} -F - <<MSG
 ${title}
 
 ${message_subtitle}
@@ -99,7 +104,7 @@ MSG
 
 	# Cleanup local git branch
 	git checkout master
-	git branch -d ${today}
+	git branch -d ${branch}
 
 	#############
 	### Media ###
@@ -107,7 +112,8 @@ MSG
 
 	# Export Media from Database to CSV
 	cd ${cur}/data/media
-	git checkout -b ${today}
+	time=$(date +%H%M%S)
+	git checkout -b ${branch}
 	cd ${cur}
 	echo "INFO: ${start} - Start exporting Media Resources" | tee -a ${log}
 	python manage.py export_media data/media/media.csv | tee -a ${log}
@@ -124,8 +130,8 @@ MSG
 	fi
 	git add media.csv
 	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
-	git push -u origin ${today}
-	hub pull-request -h ${today} -F - <<MSG2
+	git push -u origin ${branch}
+	hub pull-request -h ${branch} -F - <<MSG2
 ${title}
 
 ${message_subtitle}
@@ -135,7 +141,7 @@ MSG2
 
 	# Cleanup local git branch
 	git checkout master
-	git branch -d ${today}
+	git branch -d ${branch}
 
 	# Kill SSH agent
 	pkill ssh-agent

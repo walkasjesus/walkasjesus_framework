@@ -15,7 +15,7 @@ fi
 # If Linux based servers. This is the preferred Operating System.
 if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	today=$(date +%Y%m%d)
-	start=$(date)
+	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/translation.${today}.log
 	
 	echo "INFO: ${start} - Start translating files" | tee -a ${log}
@@ -27,7 +27,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	echo "Compiling the .po files. Run this also after changing the .po files." | tee -a ${log}
 	django-admin compilemessages | tee -a ${log}
 
-	end=$(date)
+	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended translating files" | tee -a ${log}
 
 # Other Operating Systems like Windows

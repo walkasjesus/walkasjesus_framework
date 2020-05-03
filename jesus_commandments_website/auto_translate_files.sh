@@ -15,7 +15,7 @@ fi
 # If Linux based servers. This is the preferred Operating System.
 if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	today=$(date +%Y%m%d)
-	start=$(date)
+	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/translation.${today}.log
 	
 	echo "INFO: ${start} - Start Auto Translating Files" | tee -a ${log}
@@ -33,7 +33,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	echo "" | tee -a ${log}
 	echo "To fix most of the vars run this script: auto_correct_django_locale_vars.sh" | tee -a ${log}
 
-	end=$(date)
+	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended Auto Translating Files" | tee -a ${log}
 
 # Other Operating Systems like Windows

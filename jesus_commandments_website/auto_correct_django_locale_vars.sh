@@ -16,7 +16,7 @@
 # Find more info on [jesus_commandments_translations/README.md](https://github.com/jesuscommandments/jesus_commandments_translations/blob/master/README.md)
 
 today=$(date +%Y%m%d)
-start=$(date)
+start=$(date '+%Y-%m-%d %H:%M:%S')
 log=log/translation.${today}.log
 
 echo "INFO: ${start} - Start Auto correct Django locale vars" | tee -a ${log}
@@ -42,5 +42,5 @@ for locale in ${locale_paths[@]}; do
 	fi
 done
 
-end=$(date)
+end=$(date '+%Y-%m-%d %H:%M:%S')
 echo "INFO: ${end} - Ended Auto correct Django locale vars" | tee -a ${log}

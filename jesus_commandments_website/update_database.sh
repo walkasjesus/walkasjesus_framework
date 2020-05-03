@@ -13,13 +13,13 @@ fi
 # If Linux based servers. This is the preferred Operating System.
 if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	today=$(date +%Y%m%d)
-	start=$(date)
+	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/install.${today}.log
 
 	echo "INFO: ${start} - Start updating Database" | tee -a ${log}
 	python manage.py migrate | tee -a ${log}
 	python manage.py createinitialrevisions | tee -a ${log}
-	end=$(date)
+	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended updating Database" | tee -a ${log}
 
 # Other Operating Systems like Windows

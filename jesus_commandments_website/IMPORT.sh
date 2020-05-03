@@ -85,17 +85,6 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		exit 1
 	fi
 
-	# Import the CSV
-	cd ${cur}
-	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
-		echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
-		python manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
-		end=$(date '+%Y-%m-%d %H:%M:%S')
-		echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
-	else
-		echo "INFO: - Commandments allready up-to-date. Skipping import." | tee -a ${log}
-	fi
-
 	#############
 	### Media ###
 	#############
@@ -118,12 +107,43 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		exit 1
 	fi
 
-	# Import the CSV
+	# Check if we have new changes. If not, we will not delete the database. You should do that manually.
+	cd ${cur}
+	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $MEDIA_UPTODATE) == "false" ]]; then
+		if [[ $(echo $DELETE_DATABASE) == "true" ]]; then
+			if mysqldump $database > /root/mysqldump_$database_$today.sql | tee -a ${log}; then
+				echo "INFO: Succesfully backuped $database to /root/mysqldump_${database}_${today}.sql" | tee -a ${log}
+				echo "Now dropping and creating new $database" | tee -a ${log}
+				mysql -e "drop database $database;"
+				mysql -e "create database $database;"
+				# We initialize a new database structure 
+				bash update_database.sh | tee -a ${log}
+			else
+				echo "ERROR: Mysqldump was not successful. Please investigate why. Now exiting." | tee -a ${log}
+				exit 1
+			fi
+		fi
+	else
+		echo "INFO: You chose to DELETE the database while the remote master repositories are still up-to-date. You should do this manually." | tee -a ${log}
+	fi
+
+	# Import the Commandments CSV
+	cd ${cur}
+	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
+		echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
+		python manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
+		end=$(date '+%Y-%m-%d %H:%M:%S')
+		echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
+	else
+		echo "INFO: - Commandments allready up-to-date. Skipping import." | tee -a ${log}
+	fi
+
+	# Import the Media CSV
 	cd ${cur}
 	if [[ $(echo $MEDIA_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Media Resources" | tee -a ${log}
 		python manage.py import_media data/media/media.csv | tee -a ${log}
-		end=$(date)
+		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Media Resources" | tee -a ${log}
 	else
 		echo "INFO: - Media Resources allready up-to-date. Skipping import." | tee -a ${log}

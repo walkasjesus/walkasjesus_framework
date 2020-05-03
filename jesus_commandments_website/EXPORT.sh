@@ -48,11 +48,12 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		lastname=$(echo $line | awk -F ";" '{print $4}')
 		email=$(echo $line | awk -F ";" '{print $5}')
 
-		if [[ -z ${firstname} ]] || [[ -z ${lastname} ]] || [[ -z ${email} ]]; then
-			sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/changes_${now_epoch}.csv
+		if [[ -n ${firstname} || -n ${lastname} || -n ${email} ]]; then
+				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/changes_${now_epoch}.csv
 		else
-			sed -i "s/^${id};/${username};/" /tmp/changes_${now_epoch}.csv
+				sed -i "s/^${id};/${username};/" /tmp/changes_${now_epoch}.csv
 		fi
+
 	done
 
 	# Information used for commit messages
@@ -71,12 +72,20 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	# Export Commandments from Database to CSV
 	cd ${cur}/data/biblereferences
 	git checkout -b ${today}
+	cd ${cur}
 	echo "INFO: ${start} - Start exporting Commandments" | tee -a ${log}
 	python manage.py export_commandments data/biblereferences/commandments.csv | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended exporting Commandments" | tee -a ${log}
 
 	# Git commit Commandments and create a pull request 
+	cd ${cur}/data/biblereferences
+	commandments_repository=git@github.com:jesuscommandments/jesus_commandments_biblereferences.git
+	current_repository=$(git remote -v | grep push | awk '{print $2}')
+	if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
+		git remote remove origin
+		git remote add origin ${commandments_repository}
+	fi
 	git add commandments.csv
 	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
 	git push -u origin ${today}
@@ -88,6 +97,10 @@ ${message_subtitle}
 ${submessage}
 MSG
 
+	# Cleanup local git branch
+	git checkout master
+	git branch -d ${today}
+
 	#############
 	### Media ###
 	#############
@@ -95,12 +108,20 @@ MSG
 	# Export Media from Database to CSV
 	cd ${cur}/data/media
 	git checkout -b ${today}
+	cd ${cur}
 	echo "INFO: ${start} - Start exporting Media Resources" | tee -a ${log}
 	python manage.py export_media data/media/media.csv | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended exporting Media Resources" | tee -a ${log}
 
 	# Git commit Media and create a pull request 
+	cd ${cur}/data/media
+	media_repository=git@github.com:jesuscommandments/jesus_commandments_media.git
+	current_repository=$(git remote -v | grep push | awk '{print $2}')
+	if [[ $(echo ${current_repository}) != "${media_repository}" ]]; then
+		git remote remove origin
+		git remote add origin ${media_repository}
+	fi
 	git add media.csv
 	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
 	git push -u origin ${today}
@@ -111,6 +132,10 @@ ${message_subtitle}
 
 ${submessage}
 MSG2
+
+	# Cleanup local git branch
+	git checkout master
+	git branch -d ${today}
 
 	# Kill SSH agent
 	pkill ssh-agent

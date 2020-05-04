@@ -121,3 +121,7 @@ ROSETTA_LANGUAGE_GROUPS = [
 ]
 
 ROSETTA_MESSAGES_PER_PAGE = 25
+
+# Maximum number of GET/POST parameters that will be read before a
+# SuspiciousOperation (TooManyFieldsSent) is raised.
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500

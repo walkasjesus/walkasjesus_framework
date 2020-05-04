@@ -493,7 +493,7 @@
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in commandment.short_movies %}
                             <div targetaudience="{{ short_movie.target_audience }}">
-                                <h5>{{ short_movie.title }}</h5>
+                                <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
                                 {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
                                     <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>

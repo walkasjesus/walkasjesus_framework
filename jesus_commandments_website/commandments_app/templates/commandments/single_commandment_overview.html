@@ -7,7 +7,7 @@
                 <h3>{{ commandment.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% if commandment.found_superbook.title %}<img src="{% static 'images/superbook.png' %}" alt="">{% endif %}
+                {% if commandment.found_superbook.title %}<img targetaudience="kids" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
                 {% if commandment.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}

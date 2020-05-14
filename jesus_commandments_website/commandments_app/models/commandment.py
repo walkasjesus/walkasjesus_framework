@@ -8,6 +8,8 @@ class CommandmentManager(models.Manager):
     def with_background(self):
         return (c for c in Commandment.objects.all().prefetch_related('drawing_set') if c.background_drawing())
 
+    def with_superbook(self):
+        return (c for c in Commandment.objects.all().prefetch_related('superbook_set') if c.found_superbook())
 
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
@@ -66,6 +68,9 @@ class Commandment(models.Model):
 
     def background_song(self):
         return self.songs()[0] if self.songs() else ''
+
+    def found_superbook(self):
+        return self.superbooks()[0] if self.superbooks() else ''
 
     def drawings(self):
         # This is actually faster than filter in in the query,

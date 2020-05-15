@@ -54,14 +54,9 @@ class Song(Media):
 class Superbook(Media):
     pass
 
-    def thumbnail_url(self):
-        image_source_path = self.img_url
-        # The thumbnail searches relative to the media directory so remove the leading media directory.
-        if image_source_path.startswith(MEDIA_URL):
-            image_source_path = image_source_path[len(MEDIA_URL):]
 
-        thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
-        return thumbnail.img_url
+class Henkieshow(Media):
+    pass
 
 
 class Movie(Media):

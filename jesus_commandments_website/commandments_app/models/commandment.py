@@ -70,6 +70,9 @@ class Commandment(models.Model):
     def found_superbook(self):
         return self.superbooks()[0] if self.superbooks() else ''
 
+    def found_henkieshow(self):
+        return self.henkieshows()[0] if self.henkieshows() else ''
+
     def drawings(self):
         # This is actually faster than filter in in the query,
         # as prefetch_related can be used if we do all() instead of filter()
@@ -80,6 +83,12 @@ class Commandment(models.Model):
 
     def superbooks(self):
         return [d for d in self.superbook_set.all() if d.is_public]
+
+    def henkieshows(self):
+        cur_language = translation.get_language()
+        # Since henkieshow is only available in the Dutch language, we only show this resource in Dutch
+        if 'nl' in cur_language:
+            return [d for d in self.henkieshow_set.all() if d.is_public]
 
     def movies(self):
         return self._filter_on_language(self.movie_set)

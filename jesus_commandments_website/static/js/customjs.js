@@ -3,8 +3,7 @@ $(document).ready(function(){
   if($.cookie('jc_bible_trans_settings')){
     $('#changeLanguageModal').modal('show');
     $.removeCookie('jc_bible_trans_settings');
-  }
-    
+  }  
   if($.cookie('jc_kids_mode')){
     $('.chk-kids-mode').prop('checked', true);
     $('[targetaudience="kids"]').show();

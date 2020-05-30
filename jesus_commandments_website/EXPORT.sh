@@ -40,7 +40,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	branch=${today}_${time}
 
 	# Get Changelog information from last import date until now
-	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' INTO OUTFILE '/tmp/changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
+	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment LIKE '%Media%' INTO OUTFILE '/tmp/media_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
+	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment NOT LIKE '%Media%' INTO OUTFILE '/tmp/commandments_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 	mysql jcdatabase -e "select id,username,first_name,last_name,email from auth_user INTO OUTFILE '/tmp/users_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 
 	# Replace user_id to human readable name
@@ -53,9 +54,11 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		email=$(echo $line | awk -F ";" '{print $5}')
 
 		if [[ -n ${firstname} || -n ${lastname} || -n ${email} ]]; then
-				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/changes_${now_epoch}.csv
+				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/media_changes_${now_epoch}.csv
+				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/commandments_changes_${now_epoch}.csv
 		else
-				sed -i "s/^${id};/${username};/" /tmp/changes_${now_epoch}.csv
+				sed -i "s/^${id};/${username};/" /tmp/media_changes_${now_epoch}.csv
+				sed -i "s/^${id};/${username};/" /tmp/commandments_changes_${now_epoch}.csv
 		fi
 
 	done
@@ -63,7 +66,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	# Information used for commit messages
 	title=$(echo "Changes from ${last_import} until ${today}")
 	message_subtitle=$(echo "A summary of all the changes made: (name;changes)")
-	submessage=$(cat /tmp/changes_${now_epoch}.csv)
+	commandments_submessage=$(cat /tmp/commandments_changes_${now_epoch}.csv)
+	media_submessage=$(cat /tmp/media_changes_${now_epoch}.csv)
 
 	# Setup SSH agent to connect to Github
 	eval $(ssh-agent)
@@ -92,14 +96,14 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		git remote add origin ${commandments_repository}
 	fi
 	git add commandments.csv
-	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
+	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${commandments_submessage}"
 	git push -u origin ${branch}
 	hub pull-request -h ${branch} -F - <<MSG
 ${title}
 
 ${message_subtitle}
 
-${submessage}
+${commandments_submessage}
 MSG
 
 	# Cleanup local git branch
@@ -129,14 +133,14 @@ MSG
 		git remote add origin ${media_repository}
 	fi
 	git add media.csv
-	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${submessage}"
+	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${media_submessage}"
 	git push -u origin ${branch}
 	hub pull-request -h ${branch} -F - <<MSG2
 ${title}
 
 ${message_subtitle}
 
-${submessage}
+${media_submessage}
 MSG2
 
 	# Cleanup local git branch

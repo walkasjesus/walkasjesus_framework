@@ -370,16 +370,22 @@ p {
     display: block;
   }
 
-  /* Commandment overview */
+/* Commandment overview */
 
-  .commandment-media-items {
-    bottom: 16px;
-    position: absolute;
-    right: 16px;
-  }
+.commandment-media-items {
+bottom: 16px;
+position: absolute;
+right: 16px;
+}
 
-  .commandment-media-items img {
-    width: 40px;
-    height: 40px;
-    opacity: .7;
-  }
+.commandment-media-items img {
+width: 40px;
+height: 40px;
+opacity: .8;
+}
+
+/* Frontpage media resources */
+
+.media-image {
+    height: 160px;
+}

@@ -39,6 +39,13 @@
             </a>
         </li>
         {% endif %}
+        {% if commandment.henkieshows %}
+        <li targetaudience="kids">
+            <a href="#henkieshow" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'De Henkie Show' %}" src="{% static 'images/henkieshow.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if commandment.short_movies %}
         <li>
             <a href="#short_movies" class="ripple">
@@ -475,6 +482,29 @@
                                 {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
                                 <br>
                                 <p><b>{% trans 'Watch now on' %}: <a href="{{ superbook.url }}" target="_blank">{{ superbook.author }}</a></b></p>
+                                <p style="clear: left;"> </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if commandment.henkieshows %}
+            <div id="henkieshow" henkieshow="true" targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/henkieshow.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'De Henkie Show' %}</h4>
+                            {% for henkieshow in commandment.henkieshows %}
+                                <h5>{{ henkieshow.title }}</h5>
+                                {% if henkieshow.description %}<p>{{ henkieshow.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ henkieshow.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                                <p><b><a href="{{ henkieshow.img_url }}" target="_blank">{% trans 'Discover more creative methods of this Bible story on The Henkie Show' %}</a></b></p>
                                 <p style="clear: left;"> </p>
                             {% endfor %}
                         </div>

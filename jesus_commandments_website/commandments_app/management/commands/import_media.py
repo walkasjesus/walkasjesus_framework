@@ -31,6 +31,8 @@ class Command(BaseCommand):
             model_reference = Song(commandment_id=commandment_id)
         elif media_type == 'superbook':
             model_reference = Superbook(commandment_id=commandment_id)
+        elif media_type == 'henkieshow':
+            model_reference = Henkieshow(commandment_id=commandment_id)
         elif media_type == 'movie':
             model_reference = Movie(commandment_id=commandment_id)
         elif media_type == 'shortmovie':

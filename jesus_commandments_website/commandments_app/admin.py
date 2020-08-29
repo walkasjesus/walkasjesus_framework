@@ -85,6 +85,11 @@ class SuperbookInline(admin.TabularInline):
     extra = 0
 
 
+class HenkieshowInline(admin.TabularInline):
+    model = Henkieshow
+    extra = 0
+
+
 class MovieInline(admin.TabularInline):
     model = Movie
     extra = 0
@@ -135,6 +140,7 @@ class CommandmentAdmin(VersionAdmin):
         DrawingInline,
         SongInline,
         SuperbookInline,
+        HenkieshowInline,
         MovieInline,
         ShortMovieInline,
         SermonInline,

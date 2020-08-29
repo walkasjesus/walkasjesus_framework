@@ -33,6 +33,7 @@ class Command(BaseCommand):
         for commandment in commandments:
             [self.export_media(item, 'song') for item in commandment.song_set.all()]
             [self.export_media(item, 'superbook') for item in commandment.superbook_set.all()]
+            [self.export_media(item, 'henkieshow') for item in commandment.henkieshow_set.all()]
             [self.export_media(item, 'movie') for item in commandment.movie_set.all()]
             [self.export_media(item, 'shortmovie') for item in commandment.shortmovie_set.all()]
             [self.export_media(item, 'drawing') for item in commandment.drawing_set.all()]

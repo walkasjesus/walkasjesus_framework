@@ -369,3 +369,23 @@ p {
   .form-group-image-checkbox.is-invalid .invalid-feedback {
     display: block;
   }
+
+/* Commandment overview */
+
+.commandment-media-items {
+bottom: 16px;
+position: absolute;
+right: 16px;
+}
+
+.commandment-media-items img {
+width: 40px;
+height: 40px;
+opacity: .8;
+}
+
+/* Frontpage media resources */
+
+.media-image {
+    height: 160px;
+}

@@ -41,7 +41,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Get Changelog information from last import date until now
 	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment LIKE '%Media%' INTO OUTFILE '/tmp/media_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
-	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment NOT LIKE '%Media%' INTO OUTFILE '/tmp/commandments_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
+	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment NOT LIKE '%Media%' and user_id is NOT NULL INTO OUTFILE '/tmp/commandments_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 	mysql jcdatabase -e "select id,username,first_name,last_name,email from auth_user INTO OUTFILE '/tmp/users_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
 
 	# Replace user_id to human readable name

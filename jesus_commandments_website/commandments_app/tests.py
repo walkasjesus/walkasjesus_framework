@@ -30,13 +30,13 @@ class BibleTranslationTestCase(TestCase):
     def test_all_enabled_with_disabled_one(self):
         all_bibles = len(BibleTranslation().all())
         self.assertGreaterEqual(all_bibles, self.approximate_bible_count)
-        self._disable('hsv')
+        self._disable('de4e12af7f28f599-01')
         all_enabled = len(BibleTranslation().all_enabled())
         self.assertEqual(all_enabled, all_bibles-1)
 
     def test_all_disabled(self):
         before_count = len(BibleTranslation().all_disabled())
-        self._disable('hsv')
+        self._disable('de4e12af7f28f599-01')
         after_count = len(BibleTranslation().all_disabled())
         self.assertEqual(before_count+1, after_count)
 

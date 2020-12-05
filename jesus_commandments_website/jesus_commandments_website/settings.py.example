@@ -111,5 +111,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 BIBLE_API_KEY = ''  # The API key to scripture.api.bible
-HSV_BIBLE_KEY = ''  # The key for the HSV bible
-HSV_BIBLE_PATH = r''  # The path to the HSV bible texts
+DEFAULT_BIBLE_ANY_LANGUAGE = 'de4e12af7f28f599-01'
+DEFAULT_BIBLE_PER_LANGUAGE = {
+    'nl': 'de4e12af7f28f599-01'
+}

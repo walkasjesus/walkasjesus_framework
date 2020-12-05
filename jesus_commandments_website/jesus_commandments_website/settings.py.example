@@ -113,5 +113,7 @@ SECURE_HSTS_PRELOAD = True
 BIBLE_API_KEY = ''  # The API key to scripture.api.bible
 DEFAULT_BIBLE_ANY_LANGUAGE = 'de4e12af7f28f599-01'
 DEFAULT_BIBLE_PER_LANGUAGE = {
-    'nl': 'de4e12af7f28f599-01'
+    'en': 'de4e12af7f28f599-01', # King James (Authorised) Version
+    'nl': '87f620660790371b-01', # Herziene Statenvertaling
 }
+

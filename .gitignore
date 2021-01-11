@@ -19,6 +19,9 @@ API_KEY.txt
 jesus_commandments_website/jesus_commandments_website/settings.py
 jesus_commandments_website/account_app/management/commands/import_users.py
 
+# Exclude specific Google Analytics gtag.js for specific country
+jesus_commandments_website/static/js/gtag.js
+
 # Compiled translation files
 *.mo
 hsv_bible_lib/hsv_bible_lib/tests/path

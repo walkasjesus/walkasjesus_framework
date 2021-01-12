@@ -19,26 +19,20 @@ _This will initialize a first database structure with all required tables, or up
 
 `./jesus_commandments_website/update_database.sh`
 
-3. Import all commandments into the database  
-_This will import the following commandments CSV into the database:_  
+3. Import all commandments and media files into the database  
+_This will import the following commandments and media CSV into the database:_  
 
-* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)  
   _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
-
-`./jesus_commandments_website/import_commandments.sh`  
-
-4. Import all media resources into the database  
-_This will import the following media CSV into the database:_  
-
-* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
+* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)  
   _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
-`./jesus_commandments_website/import_media.sh`  
+`./jesus_commandments_website/IMPORT.sh`  
 
-5. Create admin user  
+4. Create admin user  
 _This will create an admin user_  
 
-Copy an example file to create the admin user:
+Copy an example file to create the admin user:  
 `cp ./jesus_commandments_website/account_app/management/commands/import_users.py.example ./jesus_commandments_website/account_app/management/commands/import_users.py`  
 
 Then you need to configure your admin credentials in this file:  
@@ -47,28 +41,22 @@ Then you need to configure your admin credentials in this file:
 Now run the script to create the admin in the database:   
 `./jesus_commandments_website/create_admin_user.sh`  
 
-6. Run the server
+5. Run the server  
 _This will run the server on your local machine on port 8000_  
 
 `./jesus_commandments_website/run_server.sh`
 
-7. You can visit http://localhost:8000 to see the website on your local machine
+6. You can visit http://localhost:8000 to see the website on your local machine
 
-8. Export all commandments into the CSV  
-_This will export all commandments from the current database into the CSV:_  
+7. Export all commandments into the CSV  
+_This will export all commandments and media files from the current database into the CSV:_  
 
-* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)  
   _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
-
-`./jesus_commandments_website/export_commandments.sh`  
-
-9. Export all media resources into the CSV  
-_This will export all media resources from the database into the CSV:_  
-
-* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
+* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)  
   _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
-`./jesus_commandments_website/export_media.sh`  
+`./jesus_commandments_website/EXPORT.sh`  
 
 ## Development instructions
 
@@ -78,7 +66,7 @@ The following extra information might be helpfull when helping to improve this a
 
 The following scripts can be used:
 
-This script can be used to generate all translation files with all the content together from the CSV's and the framework.
+This script can be used to generate all translation files with all the content together from the CSV's and the framework.  
 `./jesus_commandments_website/update_translation_files.sh`  
 
 Auto translate all static files into the other configured languages (in settings.py)  

@@ -5,6 +5,7 @@ dist
 build
 *.pyc
 *.egg-info
+*.vscode
 
 *.sqlite3
 *.sqlite3-journal

@@ -17,15 +17,27 @@ else
 	echo "ERROR: cannot find environment binary"
 fi
 
+if $(which pip > /dev/null 2>&1); then
+	pip=$(which pip)
+elif (which pip3 > /dev/null 2>&1); then
+	pip=$(which pip3)
+else
+	echo "ERROR: pip or pip3 not found"
+	exit 1
+fi
+
 # If Linux based servers. This is the preferred Operating System.
 if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	today=$(date +%Y%m%d)
 	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/install.${today}.log
+	if [[ ! -d log ]]; then
+		mkdir log
+	fi
 	
 	echo "INFO: ${start} - Start installing requirements" | tee -a ${log}
 	# Install all used libraries
-	pip install -r requirements.txt | tee -a ${log}
+	${pip} install -r requirements.txt | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended installing requirements" | tee -a ${log}
 

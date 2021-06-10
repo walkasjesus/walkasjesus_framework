@@ -1,0 +1,9 @@
+[submodule "jesus_commandments_website/data/biblereferences"]
+	path = jesus_commandments_website/data/biblereferences
+	url = git@github.com:walkasjesus/walkasjesus_biblereferences.git
+[submodule "jesus_commandments_website/data/media"]
+	path = jesus_commandments_website/data/media
+	url = git@github.com:walkasjesus/walkasjesus_media.git
+[submodule "jesus_commandments_website/translations"]
+	path = jesus_commandments_website/translations
+	url = git@github.com:walkasjesus/walkasjesus_translations.git

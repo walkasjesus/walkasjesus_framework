@@ -1,6 +1,6 @@
-# jesus_commandments_framework
+# walkasjesus_framework
 
-This repository is the heart of the application which will show all the different components of the Jesus Commandments Application in a fancy Python Framework [Django](https://www.djangoproject.com/)
+This repository is the heart of the application which will show all the different components of the Walk as Jesus Application in a fancy Python Framework [Django](https://www.djangoproject.com/)
 
 ## Installation steps to run the application
 
@@ -22,16 +22,16 @@ _This will initialize a first database structure with all required tables, or up
 3. Import all commandments into the database  
 _This will import the following commandments CSV into the database:_  
 
-* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
-  _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
+* [walkasjesus_biblereferences](https://github.com/walkasjesus/walkasjesus_biblereferences)
+  _Repository for the Walk as Jesus Framework where all the commandments with all their related Bible References are stored in a CSV_  
 
 `./jesus_commandments_website/import_commandments.sh`  
 
 4. Import all media resources into the database  
 _This will import the following media CSV into the database:_  
 
-* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
-  _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
+* [walkasjesus_media](https://github.com/walkasjesus/walkasjesus_media)
+  _Repository for the Walk as Jesus Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
 `./jesus_commandments_website/import_media.sh`  
 
@@ -57,16 +57,16 @@ _This will run the server on your local machine on port 8000_
 8. Export all commandments into the CSV  
 _This will export all commandments from the current database into the CSV:_  
 
-* [jesus_commandments_biblereferences](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
-  _Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV_  
+* [walkasjesus_biblereferences](https://github.com/walkasjesus/walkasjesus_biblereferences)
+  _Repository for the Walk as Jesus Framework where all the commandments with all their related Bible References are stored in a CSV_  
 
 `./jesus_commandments_website/export_commandments.sh`  
 
 9. Export all media resources into the CSV  
 _This will export all media resources from the database into the CSV:_  
 
-* [jesus_commandments_media](https://github.com/jesuscommandments/jesus_commandments_media)
-  _Repository for the Jesus Commandments Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
+* [walkasjesus_media](https://github.com/walkasjesus/walkasjesus_media)
+  _Repository for the Walk as Jesus Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
 `./jesus_commandments_website/export_media.sh`  
 
@@ -114,18 +114,18 @@ When database structure is changed in code, you can run this script to automatic
 
 The following projects are related to this repository.
 
-### jesus_commandments_server
+### walkasjesus_server
 
-This repository contains IT Automation tools for [Ansible](https://docs.ansible.com/ansible/latest/index.html) to install & configure all the server components which are required to serve the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework)
+This repository contains IT Automation tools for [Ansible](https://docs.ansible.com/ansible/latest/index.html) to install & configure all the server components which are required to serve the [Walk as Jesus Framework](https://github.com/walkasjesus/walkasjesus_framework)
 
-### jesus_commandments_biblereferences
+### walkasjesus_biblereferences
 
-Repository for the Jesus Commandments Framework where all the commandments with all their related Bible References are stored in a CSV. This CSV can be imported/exported with the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) and the [Jesus Commandments Server](https://github.com/jesuscommandments/jesus_commandments_server)
+Repository for the Walk as Jesus Framework where all the commandments with all their related Bible References are stored in a CSV. This CSV can be imported/exported with the [Walk as Jesus Framework](https://github.com/walkasjesus/walkasjesus_framework) and the [Walk as Jesus Server](https://github.com/walkasjesus/walkasjesus_server)
 
-### jesus_commandments_media
+### walkasjesus_media
 
-Repository for the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV. This CSV can be imported/exported with the [Jesus Commandments Framework](https://github.com/jesuscommandments/jesus_commandments_framework) and the [Jesus Commandments Server](https://github.com/jesuscommandments/jesus_commandments_server)
+Repository for the [Walk as Jesus Framework](https://github.com/walkasjesus/walkasjesus_framework) where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV. This CSV can be imported/exported with the [Walk as Jesus Framework](https://github.com/walkasjesus/walkasjesus_framework) and the [Walk as Jesus Server](https://github.com/walkasjesus/walkasjesus_server)
 
-### jesus_commandments_translations
+### walkasjesus_translations
 
 This repository contains all translation files from English to other languages. We use Google translate to make a first automated translation. The next step for the translator is to review all translated items and acknowledge them through the admin panel of the website.

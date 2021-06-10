@@ -13,7 +13,7 @@
 #
 # Known issue: Sometimes Google also translated the variable to a complete different word, in that case we can't fix this automatic
 #
-# Find more info on [jesus_commandments_translations/README.md](https://github.com/jesuscommandments/jesus_commandments_translations/blob/master/README.md)
+# Find more info on [walkasjesus_translations/README.md](https://github.com/walkasjesus/walkasjesus_translations/blob/master/README.md)
 
 today=$(date +%Y%m%d)
 start=$(date '+%Y-%m-%d %H:%M:%S')

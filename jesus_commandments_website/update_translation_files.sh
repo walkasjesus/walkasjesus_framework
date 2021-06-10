@@ -2,7 +2,7 @@
 #
 # This script can be used to generate all translation files with all the content together from the CSV's and the framework.
 #
-# Find more info on [jesus_commandments_translations/README.md](https://github.com/jesuscommandments/jesus_commandments_translations/blob/master/README.md)
+# Find more info on [walkasjesus_translations/README.md](https://github.com/walkasjesus/walkasjesus_translations/blob/master/README.md)
 
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate

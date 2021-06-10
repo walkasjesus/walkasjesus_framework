@@ -5,18 +5,18 @@
 # There is made a separation between 'Commandments' and 'Media'.
 #
 # The 'Commandments' is a CSV with all:
-# - Jesus Commandments
+# - Walk as Jesus
 # - Bible references
 # - Questions
 # - Quotes
-# Commandments CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/jesuscommandments/jesus_commandments_biblereferences)
+# Commandments CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/walkasjesus/walkasjesus_biblereferences)
 #
 # The 'Media' is a CSV with all:
 # - Songs, Blogs, Movies, Drawings, Pictures, Superbook, etc.
 #   Based on their:
 # -- language
 # -- target audience
-# Media CSV source is stored in a git submodule with its origin from [data/media/media.csv](https://github.com/jesuscommandments/jesus_commandments_media)
+# Media CSV source is stored in a git submodule with its origin from [data/media/media.csv](https://github.com/walkasjesus/walkasjesus_media)
 
 
 if [[ -f ./venv/Scripts/activate ]]; then
@@ -36,7 +36,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	cur=$(dirname "$(realpath $0)")
 	log=log/commandments.${today}.log
 	last_import=$(grep 'Start importing Commandments' log/commandments.*.log | tail -1 | grep -Eo '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}')
-	rsakey=/home/jesuscommandments/.ssh/id_rsa
+	rsakey=/home/walkasjesus/.ssh/id_rsa
 	branch=${today}_${time}
 
 	# Get Changelog information from last import date until now
@@ -89,7 +89,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Git commit Commandments and create a pull request 
 	cd ${cur}/data/biblereferences
-	commandments_repository=git@github.com:jesuscommandments/jesus_commandments_biblereferences.git
+	commandments_repository=git@github.com:walkasjesus/walkasjesus_biblereferences.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
 	if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
 		git remote remove origin
@@ -126,7 +126,7 @@ MSG
 
 	# Git commit Media and create a pull request 
 	cd ${cur}/data/media
-	media_repository=git@github.com:jesuscommandments/jesus_commandments_media.git
+	media_repository=git@github.com:walkasjesus/walkasjesus_media.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
 	if [[ $(echo ${current_repository}) != "${media_repository}" ]]; then
 		git remote remove origin

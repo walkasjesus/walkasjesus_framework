@@ -24,4 +24,5 @@ class VisionView(View):
                                                             'mat_13_18_23': mat_13_18_23,
                                                             'mat_28_18_20': mat_28_18_20,
                                                             'heb_13_20_21': heb_13_20_21,
+                                                            'commandments_total': Commandment.objects.count(),
                                                             'bible': selected_bible})

@@ -11,4 +11,5 @@ class DetailView(View):
         commandment.bible = selected_bible
         commandment.languages = UserPreferences(request.session).languages
         return render(request, 'commandments/detail.html', {'commandment': commandment,
+                                                            'commandments_total': Commandment.objects.count(),
                                                             'bible': selected_bible})

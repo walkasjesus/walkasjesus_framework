@@ -36,7 +36,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	log=log/commandments.${today}.log
 	cur=$(dirname "$(realpath $0)")
 	database=jcdatabase
-	rsakey=/home/walkasjesus/.ssh/id_rsa
+	rsakey=/home/jesuscommandments/.ssh/id_rsa
 
 	# Parse some options
 	while getopts 'dqf' OPTION; do

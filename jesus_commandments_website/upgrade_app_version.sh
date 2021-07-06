@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This script will release the Jesus Commandments framework under a new version and starts a new development version
+# This script will release the Walk as Jesus framework under a new version and starts a new development version
 
 echo "Current version is set to: " 
 python setup.py --version

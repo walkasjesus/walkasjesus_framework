@@ -8,3 +8,4 @@ class ListingView(View):
     def get(self, request):
         commandments_ordered = Commandment.objects.order_by('id').all().prefetch_related('drawing_set')
         return render(request, 'commandments/listing.html', {'commandments': commandments_ordered})
+

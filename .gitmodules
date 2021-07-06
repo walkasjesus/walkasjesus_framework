@@ -1,12 +1,9 @@
 [submodule "jesus_commandments_website/data/biblereferences"]
 	path = jesus_commandments_website/data/biblereferences
-	url = https://github.com/jesuscommandments/jesus_commandments_biblereferences
-[submodule "jesus_commandments_website/data/resources"]
-	path = jesus_commandments_website/data/resources
-	url = https://github.com/jesuscommandments/jesus_commandments_media
-[submodule "jesus_commandments_website/translations"]
-	path = jesus_commandments_website/translations
-	url = https://github.com/jesuscommandments/jesus_commandments_translations
+	url = git@github.com:walkasjesus/walkasjesus_biblereferences.git
 [submodule "jesus_commandments_website/data/media"]
 	path = jesus_commandments_website/data/media
-	url = https://github.com/jesuscommandments/jesus_commandments_media
+	url = git@github.com:walkasjesus/walkasjesus_media.git
+[submodule "jesus_commandments_website/translations"]
+	path = jesus_commandments_website/translations
+	url = git@github.com:walkasjesus/walkasjesus_translations.git

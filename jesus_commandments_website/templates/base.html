@@ -6,7 +6,7 @@
 <html lang="en">
   {% cache cache_timeout head cache_on_language %}
   <head>
-    <title>{% trans 'Jesus Commandments - learn it - live it - give it' %}</title>
+    <title>{% trans 'Walk as Jesus - learn it - live it - give it' %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
     <meta charset="utf-8">
@@ -52,7 +52,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
         <div class="logodiv">
-        <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="jclogo"><img src="{% static 'images/jc_icon.png' %}"></span>{% trans 'Jesus Commandments' %}</a>
+        <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="jclogo"><img src="{% static 'images/jc_icon.png' %}"></span>{% trans 'Walk as Jesus' %}</a>
           <div class="logodiv-subtitle">
             {% trans "Learn it - Live it - Give it" %}
           </div>
@@ -64,7 +64,7 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav">
 	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
-	          <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans 'All Commandments' %}</span></a></li>
+		  <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
 	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
 	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
@@ -113,10 +113,9 @@
             <div class="ftco-footer-widget mb-4">
               <h2 class="ftco-heading-2 logo"><span>{% trans 'If you love Me' %}</span> {% trans 'keep my commands' %}</h2>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="https://twitter.com/JCommandments"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="https://www.facebook.com/jesus.commandments.144"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="https://www.instagram.com/jesuscommandments/"><span class="icon-instagram"></span></a></li>
-                <li class="ftco-animate"><a href="https://github.com/jesuscommandments"><span class="fab fa-github"></span></a></li>
+                <li class="ftco-animate"><a href="https://twitter.com/WalkasJesus"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/walkasjesus/"><span class="icon-instagram"></span></a></li>
+                <li class="ftco-animate"><a href="https://github.com/walkasjesus"><span class="fab fa-github"></span></a></li>
               </ul>
             </div>
           </div>
@@ -124,7 +123,7 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">{% trans 'Site Navigation' %}</h2>
               <ul class="list-unstyled">
-                <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'List of Commandments' %}</a></li>
+		      <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans '77 Steps' %}</a></li>
                 <li><a href="{% url 'commandments:study_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Study them' %}</a></li>
                 <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Our Vision' %}</a></li>
               </ul>
@@ -153,7 +152,7 @@
              <div class="ftco-footer-widget mb-4">
               <h2 class="ftco-heading-2">{% trans 'Contact us' %}</h2>
               <div class="opening-hours">
-              	<p>{% trans 'Email: ' %}<span class="mb-3">info@jesuscommandments.org</span></p>
+              	<p>{% trans 'Email: ' %}<span class="mb-3">info@walkasjesus.org</span></p>
               </div>
             </div>
           </div>

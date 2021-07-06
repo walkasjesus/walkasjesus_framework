@@ -16,9 +16,9 @@
             <div class="subheading">
               <span>{% trans 'Becoming like Him' %}</span>
             </div>
-            <h1 class="mb-4">{% blocktrans %}Bringing people back to the <span>heart of Christ</span>{% endblocktrans %}</h1>
-            <p>{% trans 'For God so loved the world' %}...</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+	    <h1 class="mb-4">{% trans 'First Grace' %}<span>{% trans 'then obedience' %}</span></h1>
+            <p>{% trans 'Bringing people back to the heart of Christ' %}...</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
@@ -33,9 +33,9 @@
             <div class="subheading">
               <span>{% trans 'Jesus Commandments' %}</span>
             </div>
-            <h1 class="mb-4"><span>{% trans 'Following Jesus' %}</span> {% trans '#howto' %}</h1>
+            <h1 class="mb-4"><span>{% trans 'Walk as Jesus' %}</span> {% trans '#howto' %}</h1>
             <p>{% blocktrans %}Jesus tought many different things. We help applying all <strong class="number" data-number="{{ commandments_total }}">{{ commandments_total }}</strong> unique commandments in your daily life{% endblocktrans %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
@@ -51,9 +51,9 @@
             <div class="subheading">
               <span>{% trans 'Kids site' %}</span>
             </div>
-            <h1 class="mb-4">{% blocktrans %}A special <span>childrens version</span> of this site to teach the commandments{% endblocktrans %}</h1>
+	    <h1 class="mb-4">{% trans 'A special' %} <span>{% trans 'childrens version' %}</span> {% trans 'of this site to teach how Jesus walked' %}</h1>
             <p>{% trans 'With links to Superbook animated Bible stories' %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
             </div>
             <h1 class="mb-4">{% blocktrans %}Therefore go and <span>make Disciples</span> of all nations{% endblocktrans %}</h1>
             <p>{% blocktrans %}teaching them to <span><strong>obey everything</strong></span> I have commanded you{% endblocktrans %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover His commandments' %}</a></p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
@@ -157,9 +157,9 @@
           <div class="col-md-12 heading-section text-center ftco-animate">
             <span class="subheading">{% trans 'John 14:15' %}</span>
             <h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
-            <p>{% blocktrans %}This website will help you in applying all commandments in your life. How? For each commandment, we collect as much as possible related resources like 
-            <strong>Bible references, drawings, movies, songs, blogs, sermons, pictures and books</strong> to feed your heart, soul and mind{% endblocktrans %}.</p>
-            <p>{% trans 'To succeed in becoming a good disciple, we need to live out all of these commandments. The best way is to do this together. Take your time for each commandment to dive into the greatness of it, and discuss them in your Small Groups, Discipleship Groups, Mentoring, Ministry enrichment or One-on-one discipleship, to become followers in all of Jesus teachings.' %} </p>
+                    <p>{% blocktrans %}When you have discovered who Jesus is and what He has done, you really want nothing more than to follow Him and dedicate your life to Him. But how do you give hands and feet in following Jesus? We present you 77 unique steps which Jesus taught throughout his ministry which we find in the four gospels. We encourage you to come together with other followers of Jesus and help each other by talking about how you can apply these steps into your life. For each step you will find all kind of related bible verses, movies, songs, illustrations and lots more resources.{% endblocktrans %}</p>
+		    <p><strong>{% trans 'Are you ready to discover the first step?' %}</strong></p>
+	    
         </div>
     </div>
   <div class="row">
@@ -177,7 +177,7 @@
               <div class="row justify-content-center align-items-center">
                   <div class="col-md-12 daily-verse pl-md-5 ftco-animate fadeInUp ftco-animated">
                       <div class="background-quote">
-                        <span>"{% trans 'Jesus commandments are not steps towards legalism, but precious gifts, ready for you to unpack' %}!"</span>
+                        <span>"{% trans 'Are you ready to walk as Jesus walked? Step by step...' %}"</span>
                       </div>
                   </div>
               </div>

@@ -2,7 +2,7 @@
 #
 # This script can be used to Auto translate all static files into the other configured languages (in settings.py)  
 #
-# Find more info on [jesus_commandments_translations/README.md](https://github.com/jesuscommandments/jesus_commandments_translations/blob/master/README.md)
+# Find more info on [walkasjesus_translations/README.md](https://github.com/walkasjesus/walkasjesus_translations/blob/master/README.md)
 
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate

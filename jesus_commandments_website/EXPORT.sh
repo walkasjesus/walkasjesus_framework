@@ -36,7 +36,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	cur=$(dirname "$(realpath $0)")
 	log=log/commandments.${today}.log
 	last_import=$(grep 'Start importing Commandments' log/commandments.*.log | tail -1 | grep -Eo '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}')
-	rsakey=/home/walkasjesus/.ssh/id_rsa
+	rsakey=/home/jesuscommandments/.ssh/id_rsa
 	branch=${today}_${time}
 
 	# Get Changelog information from last import date until now

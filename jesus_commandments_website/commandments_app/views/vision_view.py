@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views import View
 
-from commandments_app.models import BibleReference, BibleBooks, UserPreferences
+from commandments_app.models import BibleReference, UserPreferences
+from bible_lib.bible_books import BibleBooks
 
 
 class VisionView(View):

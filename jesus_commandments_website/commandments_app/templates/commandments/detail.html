@@ -132,7 +132,7 @@
                             {% endif %}
                                 <li>{{ commandment.title }}</li>
                                 <b>{{ commandment.primary_bible_reference }} {{ commandment.primary_bible_reference.text  }}</b>
-                                <p><i>{% trans 'This Primary Bible reference is a unique Bible reference according to the words of Jesus, which best summarizes the commandment' %}.</i></p>
+                                <p><i>{% trans 'This Primary Bible reference is a unique Bible reference according to the words of Jesus, which best summarizes this step' %}.</i></p>
                             </ul>
                             {% if commandment.title_negative %}
                                 {% trans 'Negative commandments' %}:
@@ -142,7 +142,7 @@
                             {% endif %}
 
                             {% trans 'Commandment category'%}: {{ commandment.get_category_display }}<br>
-                            <p><i>{% trans 'All Jesus His Commandments can be grouped into the Ten Commandments from the Old Testament (Exodus 20).' %}</i></p>
+                            <p><i>{% trans 'All Jesus His steps can be grouped into the Ten Commandments from the Old Testament (Exodus 20).' %}</i></p>
                         </div>
                     </div>
                 </div>
@@ -156,7 +156,7 @@
                         <div class="our-services-text">
                             {% if commandment.direct_bible_references %}
                             <h4>{% trans 'Direct Bible References' %}</h4>
-                            <p><i>{% trans 'Extra direct Bible references which expands or explain the same commandment' %}.</i></p>
+                            <p><i>{% trans 'Extra direct Bible references which expands or explain the same step' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.direct_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
@@ -173,7 +173,7 @@
                             {% endif %}
                             {% if commandment.indirect_bible_references %}
                             <h4>{% trans 'Indirect Bible References' %}</h4>
-                            <p><i>{% trans 'Extra, more indirect Bible references, relating to the same commandment' %}.</i></p>
+                            <p><i>{% trans 'Extra, more indirect Bible references, relating to the same step' %}.</i></p>
                                 <ul>
                                 {% for bible_reference in commandment.indirect_bible_references %}
                                     {% if bible_reference.positive_negative == "negative" %}
@@ -207,7 +207,7 @@
                             {% endif %}
                             {% if commandment.example_bible_references %}
                             <h4>{% trans 'Example Bible References' %}</h4>
-                            <p><i>{% trans 'In these Bible references you will find examples and testimonies how this commandment was being executed' %}.</i></p>
+                            <p><i>{% trans 'In these Bible references you will find examples and testimonies how this step was being executed' %}.</i></p>
                             <br>
                             <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
@@ -300,7 +300,7 @@
                             {% endif %}
                             {% if commandment.study_bible_references %}
                             <h4>{% trans 'Study Bible References' %}</h4>
-                            <p><i>{% trans 'Extra Bible references (most often larger parts of Bible books) which are good for extra study on this commandment' %}:</i></p>
+                            <p><i>{% trans 'Extra Bible references (most often larger parts of Bible books) which are good for extra study on this step' %}:</i></p>
                             <br>
                             <p><i>{% trans 'Please click on the Bible Reference to show its corresponding text.' %}</i></p>
                                 <ul>
@@ -339,10 +339,10 @@
                             <div class="collapse" id="collapseLegend">
                                 <div class="alert alert-warning infobox">
                                     <ul style="font-size: 11pt;">
-                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the commandment which is negative, something you should not do' %}</i></li>
-                                        <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the commandment which is both positive and negative' %}</i></li>
-                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the commandment which is positive, something you should do or learn from' %}</i></li>
-                                        <li class="unknown_list"><i>{% trans 'A related Bible reference to the commandment which is not yet determined positive or negative' %}</i></li>
+                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the step which is negative, something you should not do' %}</i></li>
+                                        <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the step which is both positive and negative' %}</i></li>
+                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the step which is positive, something you should do or learn from' %}</i></li>
+                                        <li class="unknown_list"><i>{% trans 'A related Bible reference to the step which is not yet determined positive or negative' %}</i></li>
                                         <li><b>{% trans 'Author' %}: </b><i>{% trans 'Indicates the known author from this Bible reference' %}</i></li>
                                         <li><b>{% trans 'OT Law nr' %}: </b><i>{% trans "Jewish tradition teached that there are 613 commandments or mitzvot in the Torah. We list the Number, based on a chronological order (Genesis, Exodus, Leviticus, Numeri, Deuteronomium)." %}</i></li>
                                         <li><b>{% trans 'Rambam Title' %}: </b><i>{% trans "This is the commandment, as an interpretation of Rambam (commonly known as Maimonides)" %}</i></li>
@@ -438,9 +438,9 @@
                             <h4>{% trans 'Questions' %}</h4>
                             <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
                             <ul>
-                                    <li>{% trans "Is there anything you don't understand within this commandment?" %}</li>
+                                    <li>{% trans "Is there anything you don't understand within this step?" %}</li>
                                     <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
-                                    <li>{% trans "How do you apply this commandment in your life or do you experience any boundaries?" %}</li>
+                                    <li>{% trans "How do you apply this step in your life or do you experience any boundaries?" %}</li>
                             </ul>
                                 {% if commandment.questions %}
                                     {% trans 'Extra questions' %}:
@@ -459,7 +459,7 @@
                     <div class="our-services-text">
                         <div class="resource-settings">
                             <h4>{% trans 'Resource Language Settings' %}</h4>
-                            {% blocktrans %}Below you will find all kinds of related resources to this commandment, to help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
+                            {% blocktrans %}Below you will find all kinds of related resources to this step, to help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
                             <p><i>{% blocktrans %}Do you know more good resources in your language which can be added to this list? Please <a href="mailto:info@walkasjesus.org">contact us</a> so we can add it (or <a href="">register</a> and you can add it yourself!{% endblocktrans %}</i></p>
                             <div class="btnResourceSettings">
                                 <span><a href="javascript:void(0);" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change resource language' %}</a></span>

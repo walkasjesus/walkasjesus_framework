@@ -7,7 +7,7 @@
 {% cache cache_timeout commandments_index_banner cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">
   
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_4.jpg' %});">
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -16,15 +16,15 @@
             <div class="subheading">
               <span>{% trans 'Becoming like Him' %}</span>
             </div>
-	    <h1 class="mb-4">{% trans 'First Grace' %}<span>{% trans 'then obedience' %}</span></h1>
-            <p>{% trans 'Bringing people back to the heart of Christ' %}...</p>
+            <h1 class="mb-4"><span>{% trans '77 steps on' %}</span> {% trans 'how to walk as Jesus' %}</h1>
+            <p>{% blocktrans %}Jesus tought many different things. We help applying all 77 steps in your daily life{% endblocktrans %}</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -33,8 +33,8 @@
             <div class="subheading">
               <span>{% trans 'Jesus Commandments' %}</span>
             </div>
-            <h1 class="mb-4"><span>{% trans 'Walk as Jesus' %}</span> {% trans '#howto' %}</h1>
-            <p>{% blocktrans %}Jesus tought many different things. We help applying all <strong class="number" data-number="{{ commandments_total }}">{{ commandments_total }}</strong> unique commandments in your daily life{% endblocktrans %}</p>
+      	    <h1 class="mb-4">{% trans 'First Grace' %}<span> {% trans 'then obedience' %}</span></h1>
+            <p>{% trans 'Bringing people back to the heart of Christ' %}...</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
@@ -59,7 +59,7 @@
       </div>
     </div>
   </div>
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_4.jpg' %});">
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -91,10 +91,10 @@
             <div class="block-18 text-center py-5">
               <div class="text">
                 <div class="icon d-flex justify-content-center align-items-center">
-          <img src="{% static 'images/list.png' %}" width="80px" alt="">
+                  <a href="{% url 'commandments:listing' %}"><img src="{% static 'images/list.png' %}" width="80px" alt=""></a>
                 </div>
-                <strong class="number" data-number="{{ commandments_total }}">0</strong>
-                <span>{% trans 'Unique commandments' %}</span>
+                <a href="{% url 'commandments:listing' %}"><strong class="number" data-number="{{ commandments_total }}">0</strong></a>
+                <span><a href="{% url 'commandments:listing' %}">{% trans 'Unique steps' %}</a></span>
               </div>
             </div>
           </div>
@@ -155,8 +155,9 @@
   </div>
     <div class="row justify-content-center pb-5">
           <div class="col-md-12 heading-section text-center ftco-animate">
-            <span class="subheading">{% trans 'John 14:15' %}</span>
-            <h2 class="mb-4"><span>{% trans 'If you love Me' %},</span> {% trans 'keep my commands' %}</h2>
+
+            <span class="subheading">{% trans '1 John 2:6' %}</span>
+            <h2 class="mb-4"><span>{% trans 'He who says he abides in Him ought himself also' %},</span> {% trans 'to walk just as He walked' %}</h2>
                     <p>{% blocktrans %}When you have discovered who Jesus is and what He has done, you really want nothing more than to follow Him and dedicate your life to Him. But how do you give hands and feet in following Jesus? We present you 77 unique steps which Jesus taught throughout his ministry which we find in the four gospels. We encourage you to come together with other followers of Jesus and help each other by talking about how you can apply these steps into your life. For each step you will find all kind of related bible verses, movies, songs, illustrations and lots more resources.{% endblocktrans %}</p>
 		    <p><strong>{% trans 'Are you ready to discover the first step?' %}</strong></p>
 	    

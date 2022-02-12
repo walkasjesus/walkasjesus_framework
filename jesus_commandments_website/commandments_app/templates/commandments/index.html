@@ -16,7 +16,8 @@
             <div class="subheading">
               <span>{% trans 'Becoming like Him' %}</span>
             </div>
-            <h1 class="mb-4"><span>{% trans '77 steps' %}</span> {% trans 'How to walk as Jesus' %}</h1>
+            <h1 class="mb-4">{% trans 'Walk as Jesus' %}</h1>
+            <h1 class="mb-4">{% trans 'in 77 steps' %}</h1>
             <p>{% blocktrans %}Jesus tought many different things. We help applying all 77 steps in your daily life{% endblocktrans %}</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
@@ -138,12 +139,10 @@
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
     <div class="row justify-content-center col-md-12">
-      <div class="sermon-wrap ftco-animate" targetaudience="adults">
-        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% static 'images/61_-_Love_the_Lord_your_God_with_all_your_heart.png' %}');">
-            <div class="text-content p-4 text-center">
-                <h3>{% trans 'We love Him, because He first loved us' %}</h3>
-                <span>{% trans '1 John 4:19' %}</span>
-            </div>
+      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="adults"> 
+        <h2>{% trans "Intro video 'Walk as Jesus'" %}</h2>
+        <div class="video-iframe">
+            <iframe src="https://www.youtube.com/embed/2kvGjkOZ_nI" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
         </div>
       </div>
       <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="kids"> 

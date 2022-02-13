@@ -31,6 +31,16 @@ $(document).ready(function(){
     }
   });
 
+  const introVid = $("#WaJ-intro-video");
+  if(introVid.length){
+    const lang = $.cookie('django_language');
+    if(lang === 'nl'){
+      introVid.attr('src', 'https://www.youtube.com/embed/eTc08O8qEm0');
+    } else {
+      introVid.attr('src', '');
+    }
+  }
+
 
 
   // ----- Detailed commandments page: Smooth scrolling BEGIN ------ \\  

@@ -96,6 +96,9 @@ class Commandment(models.Model):
     def short_movies(self):
         return self._filter_on_language(self.shortmovie_set)
 
+    def waj_video(self):
+        return self._filter_on_language(self.wajvideo_set)
+
     def sermons(self):
         return self._filter_on_language(self.sermon_set)
 

@@ -36,6 +36,7 @@ class Command(BaseCommand):
             [self.export_media(item, 'henkieshow') for item in commandment.henkieshow_set.all()]
             [self.export_media(item, 'movie') for item in commandment.movie_set.all()]
             [self.export_media(item, 'shortmovie') for item in commandment.shortmovie_set.all()]
+            [self.export_media(item, 'wajvideo') for item in commandment.wajvideo_set.all()]
             [self.export_media(item, 'drawing') for item in commandment.drawing_set.all()]
             [self.export_media(item, 'testimony') for item in commandment.testimony_set.all()]
             [self.export_media(item, 'blog') for item in commandment.blog_set.all()]

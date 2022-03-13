@@ -67,6 +67,10 @@ class ShortMovie(Media):
     pass
 
 
+class WaJVideo(Media):
+    pass
+
+
 class Sermon(Media):
     pass
 

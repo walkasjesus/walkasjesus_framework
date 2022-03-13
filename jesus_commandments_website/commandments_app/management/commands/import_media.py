@@ -37,6 +37,8 @@ class Command(BaseCommand):
             model_reference = Movie(commandment_id=commandment_id)
         elif media_type == 'shortmovie':
             model_reference = ShortMovie(commandment_id=commandment_id)
+        elif media_type == 'wajvideo':
+            model_reference = WaJVideo(commandment_id=commandment_id)
         elif media_type == 'drawing':
             model_reference = Drawing(commandment_id=commandment_id)
         elif media_type == 'testimony':

@@ -100,6 +100,11 @@ class ShortMovieInline(admin.TabularInline):
     extra = 0
 
 
+class WaJVideoInline(admin.TabularInline):
+    model = WaJVideo
+    extra = 0
+
+
 class SermonInline(admin.TabularInline):
     model = Sermon
     extra = 0
@@ -143,6 +148,7 @@ class CommandmentAdmin(VersionAdmin):
         HenkieshowInline,
         MovieInline,
         ShortMovieInline,
+        WaJVideoInline,
         SermonInline,
         PictureInline,
         TestimonyInline,

@@ -11,6 +11,13 @@
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
             </a>
         </li>
+        {% if commandment.waj_video %}
+        <li>
+            <a href="#waj_video" class="ripple">
+                <i><img src="{% static 'images/wajvideo.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if commandment.drawings %}
         <li>
             <a href="#drawings" class="ripple">
@@ -147,6 +154,31 @@
                     </div>
                 </div>
             </div>
+
+            {% if commandment.waj_video %}
+            <div id="waj_video" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/wajvideo.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Walk as Jesus motivational video' %}</h4>
+                            {% for waj_video in commandment.waj_video %}
+                            <div targetaudience="{{ waj_video.target_audience }}">
+                                <h5>{{ waj_video.author }} - {{ waj_video.title }}</h5>
+                                {% if waj_video.description %}<p>{{ waj_video.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ waj_video.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div id="biblereferences" targetaudience="adults" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">

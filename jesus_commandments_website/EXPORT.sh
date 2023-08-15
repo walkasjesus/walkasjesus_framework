@@ -83,7 +83,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	git checkout -b ${branch}
 	cd ${cur}
 	echo "INFO: ${start} - Start exporting Commandments" | tee -a ${log}
-	python manage.py export_commandments data/biblereferences/commandments.csv | tee -a ${log}
+	python3 manage.py export_commandments data/biblereferences/commandments.csv | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended exporting Commandments" | tee -a ${log}
 
@@ -120,7 +120,7 @@ MSG
 	git checkout -b ${branch}
 	cd ${cur}
 	echo "INFO: ${start} - Start exporting Media Resources" | tee -a ${log}
-	python manage.py export_media data/media/media.csv | tee -a ${log}
+	python3 manage.py export_media data/media/media.csv | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended exporting Media Resources" | tee -a ${log}
 
@@ -152,10 +152,10 @@ MSG2
 
 else
 	echo "INFO: Start exporting Commandments"
-	python manage.py export_commandments data/biblereferences/commandments.csv
+	python3 manage.py export_commandments data/biblereferences/commandments.csv
 	echo "INFO: Ended exporting Commandments"
 
 	echo "INFO: Start exporting Media Resources"
-	python manage.py export_media data/media/media.csv
+	python3 manage.py export_media data/media/media.csv
 	echo "INFO: Ended exporting Media Resources"
 fi

@@ -17,15 +17,15 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	log=log/install.${today}.log
 
 	echo "INFO: ${start} - Start updating Database" | tee -a ${log}
-	python manage.py migrate | tee -a ${log}
-	python manage.py createinitialrevisions | tee -a ${log}
+	python3 manage.py migrate | tee -a ${log}
+	python3 manage.py createinitialrevisions | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended updating Database" | tee -a ${log}
 
 # Other Operating Systems like Windows
 else
 	echo "INFO: Start updating Database"
-	python manage.py migrate
-	python manage.py createinitialrevisions
+	python3 manage.py migrate
+	python3 manage.py createinitialrevisions
 	echo "INFO: Ended updating Database"
 fi

@@ -2,11 +2,11 @@
 #
 # This script will install all configured applications from `./jesus_commandments_website/requirements.txt` in a virtual environment
 #
-# Program was created in python 3.7
+# Program was created in python3 3.7
 
-# Create a virtual environment using the currently installed python version (should be python 3 for this program)
+# Create a virtual environment using the currently installed python3 version (should be python3 3 for this program)
 #rm -r ./venv
-python -m venv ./venv
+python3 -m venv ./venv
 
 # Activate the environment so we are running pip in the virtual environment
 if [[ -f ./venv/Scripts/activate ]]; then

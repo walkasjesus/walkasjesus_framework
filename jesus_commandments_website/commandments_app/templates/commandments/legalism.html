@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load cache %}
+{% block content %}
+{% cache cache_timeout vision cache_on_language %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">{% trans 'A new set of rules?!' %}</span>
+                    <h2 class="mb-4"><span>{% trans 'Questions about the law and Jesus commandments' %}</span></h2>
+                    <h5 class="mb-4"><span><i>{% trans '"In a series of 22 videos we will dive into the Bible and see what Jesus and the Apostles taught about the law"' %}</i></span></h5>
+                </div>
+                <div class="col-md-12 heading-section ftco-animate">
+                    <p>
+                    {% blocktrans %}
+                    You may recognize it: apparent contradictions in the Bible. There are many biblical verses that seem to say one thing at one time and the opposite at another. Especially when it comes to interpreting the law. It is often taught that Jesus fulfilled the law and that we no longer have to do the law. It would be completely abolished for us Christians. Don't we now have the Holy Spirit to tell us what is right and what is wrong? Why then does Jesus say that the law has not been abolished (Mt 5:17-20)? Why does Paul remain a zealot for the law when it has been replaced by grace? Why does Paul still offer sacrifices after 20 years of conversion? Why do other apostles such as John and James speak so highly of the law? In other words, what have we missed as Christians, as a result of which we have lost the love for the Torah?
+                    {% endblocktrans %}
+                    </p>
+
+                    <p><i>"{{ mat_5_17_20.text }}" ({{ mat_5_17_20 }})</i></p>
+
+                    <p>
+                    {% blocktrans %}    
+                    If you are also stimulated by these questions, I would like to invite you to watch the series of 22 videos that I have been intensively working on over the past 4 years. It was a huge job, but it certainly gave me a lot of new insights! Especially by putting on a more 'Jewish lens' in order to be able to look at many texts differently. If you are not interested in the content but would like to hear my testimony to get to know me better, the last video of this series (#12) shows my entire process of how I came to believe what I preach.
+                    {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="col-md-12 heading-section ftco-animate">
+                        <h4 class="mb-4"><span><i>{% trans 'Overview' %}</i></span></h4>
+                        <a href=#video1>{% trans '#1 - Apparent Contradictions About the Law - Introduction' %}</a></br>
+                        <a href=#video2>{% trans '#2 - What are Jesus commandments? - Matthew 28:18-20' %}</a></br>
+                        <a href=#video3>{% trans '#3 - Meaning: Jesus has fulfilled the law - Matthew 5-7' %}</a></br>
+                        <a href=#video4>{% trans '#4 - How can you love Jesus? - John 13-15' %}</a></br>
+                        <a href=#video5>{% trans '#5 - Has the new covenant already been fully fulfilled? - Jeremiah 31' %}</a></br>
+                        <a href=#video6>{% trans '#6 - Freedom or Lawlessness? - Ephesians 2:8-10' %}</a></br>
+                        <a href=#video7a>{% trans '#7a - Do we by faith make void the law? - Romans 1-4' %}</a></br>
+                        <a href=#video7b>{% trans '#7b - Not under law but under grace - Romans 5-7' %}</a></br>
+                        <a href=#video7c>{% trans '#7c - The law of God and the law of sin - Romans 7-8' %}</a></br>
+                        <a href=#video7d>{% trans '#7d - Christ the end of the law - Romans 9-10' %}</a></br>
+                        <a href=#video7e>{% trans '#7e - Are there differences between Jews and Gentiles? - Rom 11-12' %}</a></br>
+                        <a href=#video7f>{% trans '#7f - Boundaries.. - Rom 11-12' %}</a></br>
+                        <a href=#video8a>{% trans '#8a - Died by the Law to the Law - Galatians 1-2' %}</a></br>
+                        <a href=#video8b>{% trans '#8b - The Law as Our Tutor TO Christ - Galatians 3' %}</a></br>
+                        <a href=#video8c>{% trans '#8c - So fulfill the law of Christ - Galatians 4-6' %}</a></br>
+                        <a href=#video9>{% trans '#9 - For Jews a Jew, for Greeks a Greek?! - 1 Cor 7-9' %}</a></br>
+                        <a href=#video10>{% trans '#10 - 4/613 laws for the Gentiles? - Acts 15' %}</a></br>
+                        <a href=#video11a>{% trans '#11a - The Exaltation Of The Lord Jesus Above The Law - Hebrews 1-6' %}</a></br>
+                        <a href=#video11b>{% trans '#11b - The old covenant vs. the new covenant? - Hebrews 7-8' %}</a></br>
+                        <a href=#video11c>{% trans '#11c - The Lord Jesus as the Finisher of our Faith - Hebrews 9-13' %}</a></br>
+                        <a href=#video12>{% trans '#12 - My Story - Testimony' %}</a></br>
+
+                <div class="col-md-12 heading-section ftco-animate" id='video1'>
+                    <h3>{% trans "#1 - Apparent Contradictions About the Law - Introduction" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/d2EQJlmugTw" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-md-12 heading-section ftco-animate" id='video2'>
+                    <h3>{% trans "#2 - What are Jesus commandments? - Matthew 28:18-20" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/wMPZQQDqZ0g" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-md-12 heading-section ftco-animate" id='video3'>
+                    <h3>{% trans "#3 Meaning: Jesus has fulfilled the law - Matthew 5-7" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/lmz1n-3cXDA" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-md-12 heading-section ftco-animate" id='video4'>
+                    <h3>{% trans "#4 How can you love Jesus? - John 13-15" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/vNEX9IgIQmE" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate"id='video5'>
+                    <h3>{% trans "#5 Has the new covenant already been fully fulfilled? - Jeremiah 31" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/ZS3eC69g9vQ" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video6'>
+                    <h3>{% trans "#6 Freedom or Lawlessness? - Ephesians 2:8-10" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/tkSz0zsniR4" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7a'>
+                    <h3>{% trans "#7a Do we by faith make void the law? - Romans 1-4" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/BLottIzfYQs" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7b'>
+                    <h3>{% trans "#7b Not under law but under grace - Romans 5-7" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/tHB1DOXykaU" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7c'>
+                    <h3>{% trans "#7c The law of God and the law of sin - Romans 7-8" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/P1uSjedd0fI" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7d'>
+                    <h3>{% trans "#7d Christ the end of the law - Romans 9-10" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/HThlqdwntcY" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7e'>
+                    <h3>{% trans "#7e Are there differences between Jews and Gentiles? - Rom 11-12" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/6yTjP6JI3Cg" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video7f'>
+                    <h3>{% trans "#7f Boundaries... - Rom 13-16" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/R8QRl44vREo" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video8a'>
+                    <h3>{% trans "#8a Died by the Law to the Law - Galatians 1-2" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/sJPbmjDo0o8" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video8b'>
+                    <h3>{% trans "#8b The Law as Our Tutor TO Christ - Galatians 3" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/PWqeSMnKRcM" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video8c'>
+                    <h3>{% trans "#8c So fulfill the law of Christ - Galatians 4-6" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/FkYVXiRmfX8" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video9'>
+                    <h3>{% trans "#9 For Jews a Jew, for Greeks a Greek?! - 1 Cor 7-9" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/Z8fTXifqxP4" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video10'>
+                    <h3>{% trans "#10 4/613 laws for the Gentiles? - Acts 15" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/x2FGSPOrW8U" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video11a'>
+                    <h3>{% trans "#11a The Exaltation Of The Lord Jesus Above The Law - Hebrews 1-6" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/8MHBZX3kne0" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video11b'>
+                    <h3>{% trans "#11b The old covenant vs. the new covenant? - Hebrews 7-8" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/GWSURYMcZqo" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video11c'>
+                    <h3>{% trans "#11c The Lord Jesus as the Finisher of our Faith - Hebrews 9-13" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/kVEiS9x6d9o" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-12 heading-section ftco-animate" id='video12'>
+                    <h3>{% trans "#12 - My Story - Testimony" %}</h3>
+                    <div class="video-iframe">
+                        <iframe src="https://www.youtube.com/embed/wbZfFFJVuA4" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                    </div>
+                  </div>                  
+
+            </div>
+        </div>
+    </section>
+</section>
+{% endcache %}
+{% endblock %}
+

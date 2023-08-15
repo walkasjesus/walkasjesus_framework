@@ -133,7 +133,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	cd ${cur}
 	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
-		python manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
+		python3 manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
 	else
@@ -144,7 +144,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	cd ${cur}
 	if [[ $(echo $MEDIA_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Media Resources" | tee -a ${log}
-		python manage.py import_media data/media/media.csv | tee -a ${log}
+		python3 manage.py import_media data/media/media.csv | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Media Resources" | tee -a ${log}
 	else
@@ -154,10 +154,10 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 # Other Operating Systems like Windows
 else
 	echo "INFO: Start importing Commandments"
-	python manage.py import_commandments data/biblereferences/commandments.csv
+	python3 manage.py import_commandments data/biblereferences/commandments.csv
 	echo "INFO: Ended importing Commandments"
 
 	echo "INFO: Start importing Media Resources"
-	python manage.py import_media data/media/media.csv
+	python3 manage.py import_media data/media/media.csv
 	echo "INFO: Ended importing Media Resources"
 fi

@@ -21,7 +21,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	echo "INFO: ${start} - Start Auto Translating Files" | tee -a ${log}
 
 	echo "Translating files." | tee -a ${log}
-	python manage.py auto_translate | tee -a ${log}
+	python3 manage.py auto_translate | tee -a ${log}
 	echo "Compiling the .po files. Run this also after changing the .po files." | tee -a ${log}
 	django-admin compilemessages | tee -a ${log}
 	echo "
@@ -40,7 +40,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 else
 	echo "INFO: Start Auto Translating Files"
 	echo "Translating files."
-	python manage.py auto_translate
+	python3 manage.py auto_translate
 	echo "Compiling the .po files. Run this also after changing the .po files."
 	django-admin compilemessages
 	echo "

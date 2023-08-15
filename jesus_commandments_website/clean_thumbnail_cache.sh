@@ -17,12 +17,12 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	log=log/install.${today}.log
 
 	echo "INFO: ${start} - Start cleaning Thumbnail caches" | tee -a ${log}
-	python manage.py thumbnail cleanup | tee -a ${log}
+	python3 manage.py thumbnail cleanup | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended cleaning Thumbnail caches" | tee -a ${log}
 # Other Operating Systems like Windows
 else
 	echo "INFO: Start cleaning Thumbnail caches"
-	python manage.py thumbnail cleanup
+	python3 manage.py thumbnail cleanup
 	echo "INFO: Ended cleaning Thumbnail caches"
 fi

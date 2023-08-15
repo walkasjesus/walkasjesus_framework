@@ -21,4 +21,4 @@ elif [[ -f ./venv/bin/activate ]]; then
 else
 	echo "error: cannot find environment binary"
 fi
-python manage.py import_users
+python3 manage.py import_users

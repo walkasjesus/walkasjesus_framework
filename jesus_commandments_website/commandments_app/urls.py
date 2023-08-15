@@ -4,6 +4,7 @@ from commandments_app.views.admin.admin_enable_bible import AdminEnableBible
 from commandments_app.views.admin.admin_persist_bible_cache import AdminPersistBibleCache
 from commandments_app.views.admin.admin_reset_bibles import AdminResetBibles
 from commandments_app.views.vision_view import VisionView
+from commandments_app.views.legalism_view import LegalismView
 from commandments_app.views.termsandconditions_view import TermsView
 from commandments_app.views.privacy_view import PrivacyView
 from commandments_app.views.detail_view import DetailView
@@ -21,6 +22,7 @@ urlpatterns = [
     path('listing', ListingView.as_view(), name='listing'),
     path('study_listing', StudyListingView.as_view(), name='study_listing'),
     path('vision', VisionView.as_view(), name='vision'),
+    path('legalism', LegalismView.as_view(), name='legalism'),
     path('termsandconditions', TermsView.as_view(), name='termsandconditions'),
     path('privacy', PrivacyView.as_view(), name='privacy'),
     path('detail/<int:commandment_id>', DetailView.as_view(), name='detail'),

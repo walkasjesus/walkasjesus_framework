@@ -20,9 +20,9 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	
 	echo "INFO: ${start} - Start translating files" | tee -a ${log}
 	echo "Adding new texts to the .po files." | tee -a ${log}
-	python manage.py makemessages -l nl --ignore=venv | tee -a ${log}
-	#python manage.py makemessages -l fr --ignore=venv | tee -a ${log}
-	#python manage.py makemessages -l de --ignore=venv | tee -a ${log}
+	python3 manage.py makemessages -l nl --ignore=venv | tee -a ${log}
+	#python3 manage.py makemessages -l fr --ignore=venv | tee -a ${log}
+	#python3 manage.py makemessages -l de --ignore=venv | tee -a ${log}
 
 	echo "Compiling the .po files. Run this also after changing the .po files." | tee -a ${log}
 	django-admin compilemessages | tee -a ${log}
@@ -34,9 +34,9 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 else
 	echo "INFO: Start translating files"
 	echo "Adding new texts to the .po files."
-	python manage.py makemessages -l nl --ignore=venv
-	#python manage.py makemessages -l fr --ignore=venv
-	#python manage.py makemessages -l de --ignore=venv
+	python3 manage.py makemessages -l nl --ignore=venv
+	#python3 manage.py makemessages -l fr --ignore=venv
+	#python3 manage.py makemessages -l de --ignore=venv
 
 	echo "Compiling the .po files. Run this also after changing the .po files."
 	django-admin compilemessages

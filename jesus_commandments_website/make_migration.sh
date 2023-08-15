@@ -17,14 +17,14 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	log=log/install.${today}.log
 
 	echo "INFO: ${start} - Start making migration scripts" | tee -a ${log}
-	python manage.py makemigrations | tee -a ${log}
+	python3 manage.py makemigrations | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended making migration scripts" | tee -a ${log}
 
 # Other Operating Systems like Windows
 else
 	echo "INFO: Start making migration scripts"
-	python manage.py makemigrations
+	python3 manage.py makemigrations
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: Ended making migration scripts"
 fi

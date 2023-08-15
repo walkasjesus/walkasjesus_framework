@@ -3,7 +3,7 @@
 # This script will release the Walk as Jesus framework under a new version and starts a new development version
 
 echo "Current version is set to: " 
-python setup.py --version
+python3 setup.py --version
 echo "Please provide a version, following x.x.x as (major).(minor).(patch)" 
 echo "Major: A non backwards compatible change" 
 echo "Minor: A backwards compatible change, introducing new features" 

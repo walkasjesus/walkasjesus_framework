@@ -1,7 +1,22 @@
-from enum import Enum
+from enum import Enum, EnumMeta
 
 
-class BibleBooks(Enum):
+class EnumWithSpaces(EnumMeta):
+    """
+    This is a workaround for the following issue:
+    You can look up a python enum by value like this:
+    my_enum['enum_value'],
+    however it turns out it does not work if the value contains spaces!
+    Ths metaclass is made to have a workaround for this issue.
+    """
+    def __getitem__(cls, key):
+        for member in cls.__members__.values():
+            if member.value.replace("_", " ") == key:
+                return member
+        raise KeyError(f"No member named '{key}' in {cls.__name__}")
+
+
+class BibleBooks(Enum, metaclass=EnumWithSpaces):
     Genesis = 'Genesis'
     Exodus = 'Exodus'
     Leviticus = 'Leviticus'
@@ -18,11 +33,11 @@ class BibleBooks(Enum):
     ChroniclesSecondBook = '2 Chronicles'
     Ezra = 'Ezra'
     Nehemiah = 'Nehemiah'
-    Tobit = 'Tobit',
-    Judith = 'Judith',
+    Tobit = 'Tobit'
+    Judith = 'Judith'
     Esther = 'Esther'
-    Wisdom = 'Wisdom',
-    Sirach = 'Sirach',
+    Wisdom = 'Wisdom'
+    Sirach = 'Sirach'
     Job = 'Job'
     Psalms = 'Psalms'
     Proverbs = 'Proverbs'

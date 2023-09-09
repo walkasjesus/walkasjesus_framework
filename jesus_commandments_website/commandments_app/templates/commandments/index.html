@@ -85,57 +85,6 @@
 
 {% block content %}
 {% cache cache_timeout commandments_index cache_on_language %}
-<section class="ftco-counter" id="section-counter">
-      <div class="container-fluid px-0">
-        <div class="row no-gutters">
-          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 text-center py-5">
-              <div class="text">
-                <div class="icon d-flex justify-content-center align-items-center">
-                  <a href="{% url 'commandments:listing' %}"><img src="{% static 'images/list.png' %}" width="80px" alt=""></a>
-                </div>
-                <a href="{% url 'commandments:listing' %}"><strong class="number" data-number="{{ commandments_total }}">0</strong></a>
-                <span><a style="color:rgba(0, 0, 0, 0.7)" href="{% url 'commandments:listing' %}">{% trans 'Unique steps' %}</a></span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 text-center py-5">
-              <div class="text">
-                <div class="icon d-flex justify-content-center align-items-center">
-          <img src="{% static 'images/bible.png' %}" width="80px" alt="">
-        </div>
-                <strong class="number" data-number="{{ bibles.count }}">0</strong>
-                <span>{% trans 'Bible translations' %}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 text-center py-5">
-              <div class="text">
-                <div class="icon d-flex justify-content-center align-items-center">
-          <img src="{% static 'images/languages.png' %}" width="80px" alt="">
-        </div>
-                <strong class="number" data-number="{{ languages_total }}">0</strong>
-                <span>{% trans 'Languages' %}</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18 text-center py-5">
-              <div class="text">
-                <div class="icon d-flex justify-content-center align-items-center">
-          <img src="{% static 'images/people.png' %}" width="80px" alt="">
-        </div>
-                <strong class="number" data-number="{{ users_total }}">0</strong>
-                <span>{% trans 'Contributers' %}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
     <div class="row justify-content-center col-md-12">
@@ -187,5 +136,58 @@
 
 </div>
 </section>
+
+<section class="ftco-counter" id="section-counter">
+  <div class="container-fluid px-0">
+    <div class="row no-gutters">
+      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+        <div class="block-18 text-center py-5">
+          <div class="text">
+            <div class="icon d-flex justify-content-center align-items-center">
+              <a href="{% url 'commandments:listing' %}"><img src="{% static 'images/list.png' %}" width="80px" alt=""></a>
+            </div>
+            <a href="{% url 'commandments:listing' %}"><strong class="number" data-number="{{ commandments_total }}">0</strong></a>
+            <span><a style="color:rgba(0, 0, 0, 0.7)" href="{% url 'commandments:listing' %}">{% trans 'Unique steps' %}</a></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+        <div class="block-18 text-center py-5">
+          <div class="text">
+            <div class="icon d-flex justify-content-center align-items-center">
+      <img src="{% static 'images/bible.png' %}" width="80px" alt="">
+    </div>
+            <strong class="number" data-number="{{ bibles.count }}">0</strong>
+            <span>{% trans 'Bible translations' %}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+        <div class="block-18 text-center py-5">
+          <div class="text">
+            <div class="icon d-flex justify-content-center align-items-center">
+      <img src="{% static 'images/languages.png' %}" width="80px" alt="">
+    </div>
+            <strong class="number" data-number="{{ languages_total }}">0</strong>
+            <span>{% trans 'Languages' %}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
+        <div class="block-18 text-center py-5">
+          <div class="text">
+            <div class="icon d-flex justify-content-center align-items-center">
+      <img src="{% static 'images/people.png' %}" width="80px" alt="">
+    </div>
+            <strong class="number" data-number="{{ users_total }}">0</strong>
+            <span>{% trans 'Contributers' %}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endcache %}
 {% endblock %}
+

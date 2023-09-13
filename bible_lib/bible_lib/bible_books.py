@@ -11,7 +11,8 @@ class EnumWithSpaces(EnumMeta):
     """
     def __getitem__(cls, key):
         for member in cls.__members__.values():
-            if member.value.replace("_", " ") == key:
+            # Match on value name or value text, so both SamuelFirstBook and '1 Samuel' work
+            if member.value.replace("_", " ") == key or member.name == key:
                 return member
         raise KeyError(f"No member named '{key}' in {cls.__name__}")
 

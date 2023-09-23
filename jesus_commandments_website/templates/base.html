@@ -67,7 +67,6 @@
 		  <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
 	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
 	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>{% trans 'Legalism?!' %}</span></a></li>
-	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:study_listing' %}" class="nav-link"><span>{% trans 'Study them' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
             <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
             {% endif %}
@@ -125,7 +124,6 @@
               <h2 class="ftco-heading-2">{% trans 'Site Navigation' %}</h2>
               <ul class="list-unstyled">
 		      <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans '77 Steps' %}</a></li>
-                <li><a href="{% url 'commandments:study_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Study them' %}</a></li>
                 <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Our Vision' %}</a></li>
                 <li><a href="{% url 'commandments:legalism' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Legalism?!' %}</a></li>
               </ul>

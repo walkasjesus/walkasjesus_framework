@@ -10,7 +10,6 @@ from commandments_app.views.privacy_view import PrivacyView
 from commandments_app.views.detail_view import DetailView
 from commandments_app.views.index_view import IndexView
 from commandments_app.views.listing_view import ListingView
-from commandments_app.views.study_listing_view import StudyListingView
 from commandments_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView
 
 app_name = 'commandments'
@@ -20,7 +19,6 @@ urlpatterns = [
     path('bible', UserPreferencesBibleView.as_view(), name='bible'),
     path('languages', UserPreferencesLanguagesView.as_view(), name='languages'),
     path('listing', ListingView.as_view(), name='listing'),
-    path('study_listing', StudyListingView.as_view(), name='study_listing'),
     path('vision', VisionView.as_view(), name='vision'),
     path('legalism', LegalismView.as_view(), name='legalism'),
     path('termsandconditions', TermsView.as_view(), name='termsandconditions'),

@@ -2,6 +2,8 @@ from .bible_books import *
 from .bibles import BibleTranslation
 from .commandment_categories import *
 from .commandment import *
+from .lesson_categories import *
+from .lesson import *
 from .bible_reference import *
 from .bible_references import *
 from .file import *

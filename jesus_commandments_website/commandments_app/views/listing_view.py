@@ -12,4 +12,4 @@ class ListingView(View):
 class ListingLessonView(View):
     def get(self, request):
         lessons_ordered = Lesson.objects.order_by('id').all().prefetch_related('drawing_set')
-        return render(request, 'lessons/listing.html', {'lessons': lessons_ordered})
+        return render(request, 'lessons/lesson_listing.html', {'lessons': lessons_ordered})

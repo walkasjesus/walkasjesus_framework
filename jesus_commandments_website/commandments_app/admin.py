@@ -157,6 +157,20 @@ class CommandmentAdmin(VersionAdmin):
     ]
 
 
+class LessonAdmin(VersionAdmin):
+    list_display = ['id', 'title', 'primary_bible_reference']
+    inlines = [
+        PrimaryBibleReferencesInline,
+        DrawingInline,
+        SongInline,
+        SuperbookInline,
+        HenkieshowInline,
+        ShortMovieInline,
+        PictureInline,
+        TestimonyInline,
+    ]
+
+
 class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 
@@ -211,5 +225,6 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
+admin.site.register(Lesson, LessonAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)

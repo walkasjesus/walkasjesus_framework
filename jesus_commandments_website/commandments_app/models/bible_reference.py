@@ -4,7 +4,7 @@ from bible_lib import Bible, BibleBooks as BibleLibBibleBooks
 from django.db import models
 from django.utils.translation import gettext
 
-from commandments_app.models import BibleBooks, Commandment
+from commandments_app.models import BibleBooks, Commandment, Lesson
 
 
 class AbstractBibleReference(models.Model):
@@ -132,13 +132,15 @@ class BibleReference(AbstractBibleReference):
 
 class PrimaryBibleReference(AbstractBibleReference):
     commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
+    lesson = models.OneToOneField(Lesson, on_delete=models.CASCADE)
 
 
 class DirectBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+        unique_together = ['commandment', 'lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 
 class IndirectBibleReference(AbstractBibleReference):

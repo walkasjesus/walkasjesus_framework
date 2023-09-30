@@ -11,7 +11,7 @@ class LessonManager(models.Manager):
 
 class Lesson(models.Model):
     title = models.CharField(max_length=256)
-    """The lesson is about these Bible books"""
+    """The lesson is about these Bible books, this can be text only"""
     biblebooks = models.CharField(max_length=256)
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],

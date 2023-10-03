@@ -1,3 +1,5 @@
+import logging
+
 from bible_lib import BibleFactory, Bible
 from django.db import models
 from django.utils import translation
@@ -40,7 +42,11 @@ class BibleTranslation:
 
     def get(self, bible_id: str):
         """" Get a specific bible translation given its unique id. """
-        return BibleTranslation._all_bibles[bible_id]
+        if bible_id not in BibleTranslation._all_bibles:
+            logging.getLogger().warning(f'Failed to retrieve bible with id {bible_id}.')
+            return Bible("no bible found")
+        else:
+            return BibleTranslation._all_bibles[bible_id]
 
     def contains(self, bible_id: str):
         return bible_id in BibleTranslation._all_bibles

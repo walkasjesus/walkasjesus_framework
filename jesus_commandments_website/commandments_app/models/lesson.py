@@ -33,8 +33,9 @@ class Lesson(models.Model):
     def primary_bible_reference(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
         directly related to the commandment. """
-        reference = self.primarybiblereference
-        reference.set_bible(self.bible)
+        reference = self.primarybiblereference_set.first()
+        if reference:
+            reference.set_bible(self.bible)
         return reference
 
     def direct_bible_references(self):

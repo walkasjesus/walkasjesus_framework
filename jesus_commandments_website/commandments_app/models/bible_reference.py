@@ -138,13 +138,13 @@ class BibleReference(AbstractBibleReference):
 
 
 class PrimaryBibleReference(AbstractBibleReference):
-    commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
-    lesson = models.OneToOneField(Lesson, on_delete=models.CASCADE)
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
 
 class DirectBibleReference(AbstractBibleReference):
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
     class Meta:
         unique_together = ['commandment', 'lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']

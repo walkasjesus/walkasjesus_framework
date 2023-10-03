@@ -6,6 +6,12 @@ from commandments_app.models import CommandmentCategories
 
 class CommandmentManager(models.Manager):
     def with_background(self):
+        """
+        Allow to use Commandment.objects.with_background(),
+        this is the same as Commandment.objects.all(),
+        but it preloads the drawings therefor reducing the number of queries
+        (at least it reduces queries if we do need the drawings)
+        """
         return (c for c in Commandment.objects.all().prefetch_related('drawing_set') if c.background_drawing())
 
 

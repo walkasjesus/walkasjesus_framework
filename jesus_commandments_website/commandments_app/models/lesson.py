@@ -6,12 +6,22 @@ from commandments_app.models import LessonCategories
 
 class LessonManager(models.Manager):
     def with_background(self):
+        """
+        Allow to use Lesson.objects.with_background(),
+        this is the same as Lesson.objects.all(),
+        but it preloads the drawings therefor reducing the number of queries
+        (at least it reduces queries if we do need the drawings)
+        """
         return (c for c in Lesson.objects.all().prefetch_related('drawing_set') if c.background_drawing())
 
 
 class Lesson(models.Model):
-    title = models.CharField(max_length=256)
-    """The lesson is about these Bible books, this can be text only"""
+    """
+    A lesson is a bit similar to a commandment,
+    a lesson can cover a commandment, but this is not a requirement.
+    """
+    title = models.CharField(max_length=256, help_text="The title of the lesson")
+    # The lesson is about these Bible books, this can be text only
     biblebooks = models.CharField(max_length=256)
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],

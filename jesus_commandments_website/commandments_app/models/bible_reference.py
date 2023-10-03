@@ -8,9 +8,16 @@ from commandments_app.models import BibleBooks, Commandment, Lesson
 
 
 class AbstractBibleReference(models.Model):
+    """
+    The abstract model of a bible reference.
+    We store different types of bible references,
+    but they share a lot of fields,
+    the fields that are shared are in this model.
+    """
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
-                            default=BibleBooks.Genesis)
+                            default=BibleBooks.Genesis,
+                            help_text="The bible book like Genesis, Exodus, etc.")
     begin_chapter = models.IntegerField(default=1)
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)

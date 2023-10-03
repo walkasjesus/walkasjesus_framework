@@ -2,9 +2,13 @@ from commandments_app.models import PrimaryBibleReference, DirectBibleReference,
 
 
 class BibleReferences:
+    """
+    This class allows for easy selection of lists of bible references,
+    bible references are classified into different types.
+    """
     def __init__(self):
+        # The bible to use on the references that are returned
         self.bible = None
-        self._data = None
 
     def primary(self):
         return self._query_references(PrimaryBibleReference.objects.filter(commandment__gt=0))

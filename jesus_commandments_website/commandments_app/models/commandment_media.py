@@ -3,14 +3,13 @@ from django.db import models
 from sorl.thumbnail import get_thumbnail
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
-from commandments_app.models import Commandment, Lesson, gettext_lazy
+from commandments_app.models import Commandment, gettext_lazy
 from jesus_commandments_website.settings import MEDIA_URL
 
 
 class Media(models.Model):
     """ Abstract base class for other media models. """
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None)
     title = models.CharField(max_length=128, default='', null=True, blank=True)
     description = models.TextField(default='', null=True, blank=True)
     target_audience = models.CharField(max_length=32,

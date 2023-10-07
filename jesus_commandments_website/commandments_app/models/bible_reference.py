@@ -6,7 +6,6 @@ from django.utils.translation import gettext
 
 from commandments_app.models import BibleBooks, Commandment, Lesson
 
-
 class AbstractBibleReference(models.Model):
     """
     The abstract model of a bible reference.
@@ -22,15 +21,16 @@ class AbstractBibleReference(models.Model):
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    ot_nr = models.CharField(max_length=3, default='', null=True, blank=True)
-    ot_rambam_id = models.CharField(max_length=32, default='', null=True, blank=True)
-    ot_rambam_title = models.CharField(max_length=128, default='', null=True, blank=True)
     author = models.CharField(max_length=64, default='Undetermined')
     positive_negative = models.CharField(max_length=32,
                                          choices=[('positive', 'positive'),
                                                   ('negative', 'negative'),
                                                   ('both', 'both')],
-                                         default='positive')
+                                         default='positive',
+                                         help_text="Is this Bible text positive (encouraging), negative (discouraging) or both?")
+    ot_nr = models.CharField(max_length=3, default='', null=True, blank=True)
+    ot_rambam_id = models.CharField(max_length=32, default='', null=True, blank=True)
+    ot_rambam_title = models.CharField(max_length=128, default='', null=True, blank=True)
     bible = None
 
     class Meta:
@@ -136,18 +136,27 @@ class BibleReference(AbstractBibleReference):
         self.end_chapter = end_chapter
         self.end_verse = end_verse
 
+class PrimaryLessonBibleReference(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='primary_lesson_bible_references')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+class DirectLessonBibleReference(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='direct_lesson_bible_references')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 class PrimaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
 
 class DirectBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
     class Meta:
-        unique_together = ['commandment', 'lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+        unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 
 class IndirectBibleReference(AbstractBibleReference):

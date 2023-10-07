@@ -5,6 +5,9 @@ from django.utils.html import escape
 from reversion.admin import VersionAdmin
 
 from commandments_app.models import *
+from commandments_app.models.commandment_question import Question
+from commandments_app.models.lesson_question import LessonQuestion
+from commandments_app.models.lesson_media import *
 from commandments_app.views.admin.admin_bible_view import AdminBibleView
 
 
@@ -148,20 +151,64 @@ class CommandmentAdmin(VersionAdmin):
         BookInline,
     ]
 
+class PrimaryLessonBibleReferencesInline(admin.TabularInline):
+    model = PrimaryLessonBibleReference
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author')
+
+class DirectLessonBibleReferenceInline(admin.TabularInline):
+    model = DirectLessonBibleReference
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author')
+
+class LessonDrawingInline(admin.TabularInline):
+    model = LessonDrawing
+    extra = 0
+
+
+class LessonSongInline(admin.TabularInline):
+    model = LessonSong
+    extra = 0
+
+class LessonSuperbookInline(admin.TabularInline):
+    model = LessonSuperbook
+    extra = 0
+
+class LessonHenkieshowInline(admin.TabularInline):
+    model = LessonHenkieshow
+    extra = 0
+
+class LessonShortMovieInline(admin.TabularInline):
+    model = LessonShortMovie
+    extra = 0
+
+class LessonPictureInline(admin.TabularInline):
+    model = LessonPicture
+    extra = 0
+
+class LessonTestimonyInline(admin.TabularInline):
+    model = LessonTestimony
+    extra = 0
+
+class LessonQuestionInline(admin.TabularInline):
+    model = LessonQuestion
+    extra = 0
 
 class LessonAdmin(VersionAdmin):
     list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [
-        PrimaryBibleReferencesInline,
-        DirectBibleReferenceInline,
-        QuestionInline,
-        DrawingInline,
-        SongInline,
-        SuperbookInline,
-        HenkieshowInline,
-        ShortMovieInline,
-        PictureInline,
-        TestimonyInline,
+        PrimaryLessonBibleReferencesInline,
+        DirectLessonBibleReferenceInline,
+        LessonQuestionInline,
+        LessonDrawingInline,
+        LessonSongInline,
+        LessonSuperbookInline,
+        LessonHenkieshowInline,
+        LessonShortMovieInline,
+        LessonPictureInline,
+        LessonTestimonyInline,
     ]
 
 

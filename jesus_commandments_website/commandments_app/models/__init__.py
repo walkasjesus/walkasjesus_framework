@@ -7,7 +7,8 @@ from .lesson import *
 from .bible_reference import *
 from .bible_references import *
 from .file import *
-from .media import *
+from .commandment_media import *
 from .user_preferences import *
-from .question import *
+from .lesson_question import *
+from .commandment_question import *
 from .redirect import *

@@ -1,6 +1,6 @@
 import os
 
-from django.core.management import BaseLesson
+from django.core.management import BaseCommand
 from django.db import IntegrityError
 from import_tool import LessonImporter
 
@@ -8,7 +8,7 @@ from commandments_app.models import *
 from jesus_commandments_website.settings import BASE_DIR
 
 
-class Lesson(BaseLesson):
+class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('source', type=str, help='The file name and path to read the data from.')
 
@@ -43,7 +43,7 @@ class Lesson(BaseLesson):
         try:
             model_lesson, is_new = lesson.objects.get_or_create(id=lesson.id)
             model_lesson.title = lesson.title
-            model_lesson.category = lessonCategories(lesson.category).name
+            model_lesson.category = LessonCategories(lesson.category).name
             model_lesson.save()
 
             if is_new:
@@ -52,9 +52,9 @@ class Lesson(BaseLesson):
                 print(f'Updating lesson {model_lesson.id}')
 
             for item in lesson.primary_bible_references:
-                self._add_bible_ref(PrimaryBibleReference(lesson_id=model_lesson.id), item)
+                self._add_bible_ref(PrimaryLessonBibleReference(lesson_id=model_lesson.id), item)
             for item in lesson.direct_bible_references:
-                self._add_bible_ref(DirectBibleReference(lesson_id=model_lesson.id), item)
+                self._add_bible_ref(DirectLessonBibleReference(lesson_id=model_lesson.id), item)
             for item in lesson.questions:
                 self._add_question(model_lesson.id, item)
             for item in lesson.media:

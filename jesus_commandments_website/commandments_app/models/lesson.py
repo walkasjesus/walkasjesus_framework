@@ -12,10 +12,10 @@ class Lesson(models.Model):
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)
+    bible_section = models.CharField(max_length=128, default='', blank=True, help_text="The bible books which covers the lesson")
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()
-
     def primary_bible_reference(self):
         reference = self.primary_lesson_bible_references.first()
         if reference:

@@ -14,7 +14,7 @@ def first(data_frame, column):
 
 
 class LessonImporter(object):
-    def load(self, file_path='../../../jesus_commandments_website/data/biblereferences/commandments.csv'):
+    def load(self, file_path='../../../jesus_commandments_website/data/biblereferences/lessons.csv'):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         lessons = []
@@ -24,6 +24,7 @@ class LessonImporter(object):
             lesson = Lesson()
             lesson.id = first(group, 'lesson')
             lesson.title = first(group, 'title_en')
+            lesson.bible_section = first(group, 'bible_section')
             lesson.category = first(group, 'category')
 
             # Parse bible refs
@@ -32,7 +33,6 @@ class LessonImporter(object):
                     continue
                 try:
                     reference = BibleReference.create_from_string(row['bible_ref'])
-                    reference.positive_negative = row['bible_ref_positive_negative']
 
                     if row['bible_ref_type'].lower() == 'primary':
                         lesson.primary_lesson_bible_references.append(reference)

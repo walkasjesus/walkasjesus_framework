@@ -14,7 +14,7 @@ def first(data_frame, column):
     return cleaned_column.iloc[0]
 
 
-class MediaLessonImporter(object):
+class LessonMediaImporter(object):
     def load(self, file_path='../../../jesus_commandments_website/data/media/media_lessons.csv'):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 

@@ -13,6 +13,7 @@ class DetailView(View):
         return render(request, 'commandments/detail.html', {'commandment': commandment,
                                                             'bible': selected_bible})
 
+
 class DetailLessonView(View):
     def get(self, request, lesson_id: int):
         lesson = get_object_or_404(Lesson, pk=lesson_id)

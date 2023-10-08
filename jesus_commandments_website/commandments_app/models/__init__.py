@@ -8,6 +8,7 @@ from .bible_reference import *
 from .bible_references import *
 from .file import *
 from .commandment_media import *
+from .lesson_media import *
 from .user_preferences import *
 from .lesson_question import *
 from .commandment_question import *

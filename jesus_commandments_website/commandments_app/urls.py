@@ -9,7 +9,8 @@ from commandments_app.views.termsandconditions_view import TermsView
 from commandments_app.views.privacy_view import PrivacyView
 from commandments_app.views.detail_view import DetailView, DetailLessonView
 from commandments_app.views.index_view import IndexView
-from commandments_app.views.listing_view import ListingView, ListingLessonView
+from commandments_app.views.listing_view import ListingView
+from commandments_app.views.listing_lesson_view import ListingLessonView
 from commandments_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView
 
 app_name = 'commandments'

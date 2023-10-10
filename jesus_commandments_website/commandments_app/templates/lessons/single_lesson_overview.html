@@ -2,20 +2,17 @@
 {% load i18n %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
-        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if lesson.background_drawing.img_url %}{{ lesson.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
-            <div class="number-content">
-                <h3>{{ lesson.id }}</h3>
-            </div>
+        <div class="img d-flex align-items-top justify-content-center" style="background-image: url('{% if lesson.background_drawing.img_url %}{{ lesson.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
             <div class="commandment-media-items">
                 {% if lesson.found_superbook.title %}<img targetaudience="kids" title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
                 {% if lesson.found_henkieshow.title %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
                 {% if lesson.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
-                <h3>{{ lesson.title }}</h3>
-                <p class="">
-                    <a href="{% url 'commandments:lessondetail' lesson.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Lesson' %} {{ lesson.id }}</a>
+                <p>
+                    <a href="{% url 'commandments:lessondetail' lesson.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> <strong>{% trans 'Lesson' %} {{ lesson.id }} - {{ lesson.bible_section }}</strong></a>
                 </p>
+                <h3>{{ lesson.title }}</h3>
             </div>
         </div>
     </div>

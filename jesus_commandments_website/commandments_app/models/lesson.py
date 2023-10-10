@@ -5,7 +5,7 @@ from commandments_app.models import LessonCategories
 
 class LessonManager(models.Manager):
     def with_background(self):
-        return (c for c in Lesson.objects.all().prefetch_related('drawing_set') if c.background_drawing())
+        return (c for c in Lesson.objects.all().prefetch_related('lessondrawing_set') if c.background_drawing())
 
 class Lesson(models.Model):
     title = models.CharField(max_length=256, help_text="The title of the lesson")
@@ -38,30 +38,30 @@ class Lesson(models.Model):
         return self.henkieshows()[0] if self.henkieshows() else ''
 
     def drawings(self):
-        return [d for d in self.drawing_set.all() if d.is_public]
+        return [d for d in self.lessondrawing_set.all() if d.is_public]
 
     def songs(self):
-        return self._filter_on_language(self.song_set)
+        return self._filter_on_language(self.lessonsong_set)
 
     def superbooks(self):
-        return [d for d in self.superbook_set.all() if d.is_public]
+        return [d for d in self.lessonsuperbook_set.all() if d.is_public]
 
     def henkieshows(self):
         cur_language = translation.get_language()
         if 'nl' in cur_language:
-            return [d for d in self.henkieshow_set.all() if d.is_public]
+            return [d for d in self.lessonhenkieshow_set.all() if d.is_public]
 
     def short_movies(self):
-        return self._filter_on_language(self.shortmovie_set)
+        return self._filter_on_language(self.lessonshortmovie_set)
 
     def pictures(self):
-        return self.picture_set.filter(is_public=True)
+        return self.lessonpicture_set.filter(is_public=True)
 
     def testimonies(self):
-        return self._filter_on_language(self.testimony_set)
+        return self._filter_on_language(self.lessontestimony_set)
 
     def questions(self):
-        return self.question_set.all()
+        return self.lessonquestion_set.all()
 
     def _filter_on_language(self, query):
         filter_languages = ['any'] + self.languages

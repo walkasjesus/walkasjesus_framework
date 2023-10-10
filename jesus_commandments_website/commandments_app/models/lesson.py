@@ -60,7 +60,7 @@ class Lesson(models.Model):
     def testimonies(self):
         return self._filter_on_language(self.lessontestimony_set)
 
-    def questions(self):
+    def lessonquestions(self):
         return self.lessonquestion_set.all()
 
     def _filter_on_language(self, query):

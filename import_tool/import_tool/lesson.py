@@ -7,4 +7,4 @@ class Lesson:
         self.direct_lesson_bible_references = []
         self.media = []
         self.bible_section = ''
-        self.questions = []
+        self.lessonquestions = []

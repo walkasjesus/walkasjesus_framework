@@ -8486,7 +8486,7 @@ h1, h2, h3, h4, h5,
   font-size: 70px;
   font-weight: normal;
   color: #fff;
-  font-family: "Great Vibes", cursive; }
+  font-family: "mufanpfs"; }
   .slider-text .bread span {
     color: #e2b900; }
 
@@ -8780,7 +8780,7 @@ h1, h2, h3, h4, h5,
         position: absolute;
         left: 16px;
         opacity: 0.2;
-        font-family: "Great Vibes", cursive;
+        font-family: "mufanpfs";
         color: #000000; }
         .sermon-wrap .img .number-content h3 {
           text-align: center;
@@ -8794,7 +8794,7 @@ h1, h2, h3, h4, h5,
         border-radius: 5px;
         background-color: white;
         opacity: 0.6;
-        font-family: "Great Vibes", cursive;
+        font-family: "mufanpfs";
         color: #000000; }
       .sermon-wrap .img .text-content .btn-custom {
         border: 1px solid rgba(255, 255, 255, 0.4);
@@ -9000,20 +9000,31 @@ h1, h2, h3, h4, h5,
   overflow: hidden;
   z-index: 0; }
   .daily-verse .subheading {
-    font-family: "Great Vibes", cursive;
+    font-family: "mufanpfs";
     display: inline-block;
-    font-size: 40px;
+    font-size: 55px;
     color: #fff;
     padding-left: 20px;
-    margin-bottom: 15px; }
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-align: center; }
     .daily-verse .subheading-quote p {
-      font-family: "Great Vibes", cursive;
+      font-family: "mufanpfs";
       font-size: 35px;
       color: #e2b900;
       padding-right: 20px;
       line-height: 1.5;
       margin-bottom: 20px; }
-  .daily-verse h3 {
+      .daily-verse .subheading_lesson{
+        font-family: "mufanpfs";
+        display: inline-block;
+        font-size: 55px;
+        color: #fff;
+        padding-left: 20px;
+        margin-bottom: 15px;
+        margin-top: 30px;
+        text-align: center; }
+      .daily-verse h3 {
     font-family: "Lora", Georgia, serif;
     font-style: italic;
     color: #e2b900;
@@ -9215,7 +9226,7 @@ textarea.form-control {
     font-weight: 400;
     color: #000000; }
     .ftco-footer .ftco-heading-2.logo {
-      font-family: "Great Vibes", cursive;
+      font-family: "mufanpfs";
       font-size: 30px; }
       .ftco-footer .ftco-heading-2.logo span {
         color: #e2b900; }

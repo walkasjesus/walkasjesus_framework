@@ -27,7 +27,7 @@
             </a>
         </li>
         {% endif %}
-        {% if lesson.questions %}
+        {% if lesson.lessonquestions %}
         <li>
             <a href="#questions" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Questions' %}" src="{% static 'images/questions.png' %}" width="40px" alt=""></i>
@@ -89,11 +89,11 @@
             <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
-                        <div class="our-services-img lesson_id">
+                        <div class="our-services-img commandment_id">
                             <h3>{{ lesson.id }}</h3>
                         </div>
                         <div id="bible_lesson_details" class="our-services-text">
-                            <h4>{% trans 'Childrens Bible Lessons' %}</h4>
+                            <h4>{% trans 'Lesson' %} {{ lesson.id }}</h4>
                             {% if lesson.primary_bible_reference.positive_negative == "negative" %}
                             <ul class="negative_list negative_list_title">
                             {% elif lesson.primary_bible_reference.positive_negative == "both" %}
@@ -109,35 +109,6 @@
                 </div>
             </div>
 
-            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/bible.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            {% if lesson.direct_bible_references %}
-                            <h4>{% trans 'Direct Bible References' %}</h4>
-                            <p><i>{% trans 'Extra direct Bible references which expands or explain the same lesson' %}.</i></p>
-                                <ul>
-                                {% for bible_reference in lesson.direct_bible_references %}
-                                    {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
-                                    {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
-                                    {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
-                                    {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }} <i>({% trans 'Author' %}: '{{ bible_reference.author }}')</i></li>
-                                    {% endif %}
-                                {% endfor %}
-                                </ul>
-                            {% endif %}
-                            <br>
-                        </div>
-                    </div>
-                </div>
-            </div>
             {% endcache %}
             {% cache cache_timeout lessons_detail_media cache_on_multi_language lesson.id %}
             {% if lesson.drawings %}
@@ -158,6 +129,61 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
+            <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/questions.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Questions' %}</h4>
+                            <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
+                            <ul>
+                                    <li>{% trans "Is there anything you don't understand within this lesson?" %}</li>
+                                    <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
+                                    <li>{% trans "How do you apply this step in your life or do you experience any boundaries?" %}</li>
+                            </ul>
+                                {% if lesson.questions %}
+                                    {% trans 'Extra questions' %}:
+                                    <ul>
+                                    {% for question in lesson.childrensquestion %}
+                                        <li>{{ question.text }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if lesson.direct_bible_references %}
+            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/bible.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Direct Bible References' %}</h4>
+                            <p><i>{% trans 'Extra direct Bible references which expands or explain the same lesson' %}.</i></p>
+                                <ul>
+                                {% for bible_reference in lesson.direct_bible_references %}
+                                    {% if bible_reference.positive_negative == "negative" %}
+                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                    {% elif bible_reference.positive_negative == "both" %}
+                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                    {% elif bible_reference.positive_negative == "positive" %}
+                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                    {% else %}
+                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             {% if lesson.pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -203,32 +229,6 @@
                 </div>
             </div>
             {% endif %}
-            <div id="questions" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/questions.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Questions' %}</h4>
-                            <h5>{% trans 'Share your hearts together by discussing the following questions:' %}</h5>
-                            <ul>
-                                    <li>{% trans "Is there anything you don't understand within this lesson?" %}</li>
-                                    <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
-                                    <li>{% trans "How do you apply this step in your life or do you experience any boundaries?" %}</li>
-                            </ul>
-                                {% if lesson.questions %}
-                                    {% trans 'Extra questions' %}:
-                                    <ul>
-                                    {% for question in lesson.childrensquestion %}
-                                        <li>{{ question.text }}</li>
-                                    {% endfor %}
-                                    </ul>
-                                {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="mediasettings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mediasettings">
                 <div class="alert alert-info alert-resource-settings" role="alert">
                     <div class="our-services-text">

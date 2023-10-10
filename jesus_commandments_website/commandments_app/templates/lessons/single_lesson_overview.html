@@ -14,7 +14,7 @@
                 {% if lesson.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
                 <h3>{{ lesson.title }}</h3>
                 <p class="">
-                    <a href="{% url 'commandments:lessondetail' lesson.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
+                    <a href="{% url 'commandments:lessondetail' lesson.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Lesson' %} {{ lesson.id }}</a>
                 </p>
             </div>
         </div>

@@ -1,5 +1,12 @@
 /* Some custom css */
 
+@font-face {
+    font-family: 'mufanpfs';
+    src: url('../fonts/mufanpfs/mufanpfs.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
 .btnBibleTranslation {
     width: 100%;
 }
@@ -264,7 +271,7 @@ p {
 }
 
 .background-quote span {
-    font-family: "Great Vibes", cursive;
+    font-family: "mufanpfs";
     font-size: 27px;
 }
 
@@ -308,7 +315,7 @@ p {
 
 .commandment_id h3 {
     font-size: 30pt;
-    font-family: "Great Vibes";
+    font-family: "mufanpfs";
     font-weight: bold;
     margin-left: -5px;
     text-align: center;

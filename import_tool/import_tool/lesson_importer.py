@@ -39,6 +39,7 @@ class LessonImporter(object):
                     if row['bible_ref_type'].lower() == 'direct':
                         lesson.direct_lesson_bible_references.append(reference)
                 except Exception as ex:
+                    raise ex
                     print(f'Could not parse {row} due to exception {ex}')
 
             # Parse questions

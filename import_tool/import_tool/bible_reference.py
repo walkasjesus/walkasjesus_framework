@@ -23,6 +23,10 @@ class BibleReference:
         pattern = r'(.*) (\d+):(\d+)-?(\d+)?:?(\d+)?'
         # translate things like 1 Joh 2:1-3
         match = re.match(pattern, verse_string)
+
+        if match is None:
+            raise Exception(f"Failed to parse {verse_string} with pattern {pattern}")
+
         groups = match.groups()
 
         reference.book = BibleReference.parse_book(groups[0])
@@ -193,4 +197,7 @@ class BibleReference:
             'REV': BibleBooks.Revelation,
         }
 
+        if book_normalized not in mapping:
+            raise KeyError(f"Could not find {book_normalized} in BibleBooks")
+        
         return mapping[book_normalized]

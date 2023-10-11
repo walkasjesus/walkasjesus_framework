@@ -42,7 +42,7 @@ class LessonImporter(object):
                     print(f'Could not parse {row} due to exception {ex}')
 
             # Parse questions
-            lesson.questions += [q for q in group['questions'] if q != '']
+            lesson.lessonquestions += [q for q in group['questions'] if q != '']
 
             lessons.append(lesson)
 

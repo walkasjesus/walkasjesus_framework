@@ -8,12 +8,12 @@ class LessonManager(models.Manager):
         return (c for c in Lesson.objects.all().prefetch_related('lessondrawing_set') if c.background_drawing())
 
 class Lesson(models.Model):
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
     title = models.CharField(max_length=256, help_text="The title of the lesson")
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)
     bible_section = models.CharField(max_length=128, default='', blank=True, help_text="The bible books which covers the lesson")
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()
@@ -38,11 +38,21 @@ class Lesson(models.Model):
     def found_henkieshow(self):
         return self.henkieshows()[0] if self.henkieshows() else ''
 
-    def drawings(self):
-        return [d for d in self.lessondrawing_set.all() if d.is_public]
+    def drawings(self, include_commandment_media=True):
+        lesson_media = [d for d in self.lessondrawing_set.all() if d.is_public]
 
-    def songs(self):
-        return self._filter_on_language(self.lessonsong_set)
+        if include_commandment_media and self.commandment:
+            return lesson_media + self.commandment.drawings()
+        else:
+            return lesson_media
+
+    def songs(self, include_commandment_media=True):
+        lesson_media = self._filter_on_language(self.lessonsong_set)
+
+        if include_commandment_media and self.commandment:
+            return list(lesson_media) + list(self.commandment.songs())
+        else:
+            return list(lesson_media)
 
     def superbooks(self, include_commandment_media=True):
         lesson_media = [d for d in self.lessonsuperbook_set.all() if d.is_public]
@@ -52,19 +62,39 @@ class Lesson(models.Model):
         else:
             return lesson_media
 
-    def henkieshows(self):
+    def henkieshows(self, include_commandment_media=True):
         cur_language = translation.get_language()
         if 'nl' in cur_language:
-            return [d for d in self.lessonhenkieshow_set.all() if d.is_public]
+            lesson_media = [d for d in self.lessonhenkieshow_set.all() if d.is_public]
 
-    def short_movies(self):
-        return self._filter_on_language(self.lessonshortmovie_set)
+            if include_commandment_media and self.commandment:
+                return lesson_media + self.commandment.henkieshows()
+            else:
+                return lesson_media
 
-    def pictures(self):
-        return self.lessonpicture_set.filter(is_public=True)
+    def short_movies(self, include_commandment_media=True):
+        lesson_media = self._filter_on_language(self.lessonshortmovie_set)
 
-    def testimonies(self):
-        return self._filter_on_language(self.lessontestimony_set)
+        if include_commandment_media and self.commandment:
+            return list(lesson_media) + list(self.commandment.short_movies())
+        else:
+            return list(lesson_media)
+
+    def pictures(self, include_commandment_media=True):
+        lesson_media = self.lessonpicture_set.filter(is_public=True)
+
+        if include_commandment_media and self.commandment:
+            return list(lesson_media) + list(self.commandment.pictures())
+        else:
+            return list(lesson_media)
+
+    def testimonies(self, include_commandment_media=True):
+        lesson_media = self._filter_on_language(self.lessontestimony_set)
+
+        if include_commandment_media and self.commandment:
+            return list(lesson_media) + list(self.commandment.testimonies())
+        else:
+            return list(lesson_media)
 
     def lessonquestions(self):
         return self.lessonquestion_set.all()

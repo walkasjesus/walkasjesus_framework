@@ -1,13 +1,14 @@
 from django.db import models
 from django.utils import translation
 
-from commandments_app.models import LessonCategories
+from commandments_app.models import Commandment, LessonCategories
 
 class LessonManager(models.Manager):
     def with_background(self):
         return (c for c in Lesson.objects.all().prefetch_related('lessondrawing_set') if c.background_drawing())
 
 class Lesson(models.Model):
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
     title = models.CharField(max_length=256, help_text="The title of the lesson")
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
@@ -43,8 +44,13 @@ class Lesson(models.Model):
     def songs(self):
         return self._filter_on_language(self.lessonsong_set)
 
-    def superbooks(self):
-        return [d for d in self.lessonsuperbook_set.all() if d.is_public]
+    def superbooks(self, include_commandment_media=True):
+        lesson_media = [d for d in self.lessonsuperbook_set.all() if d.is_public]
+
+        if include_commandment_media and self.commandment:
+            return lesson_media + self.commandment.superbooks()
+        else:
+            return lesson_media
 
     def henkieshows(self):
         cur_language = translation.get_language()

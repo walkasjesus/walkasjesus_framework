@@ -2,6 +2,7 @@ import pandas
 
 from import_tool.bible_reference import BibleReference
 from import_tool.lesson import Lesson
+from import_tool.commandment import Commandment
 
 
 def first(data_frame, column):
@@ -18,6 +19,13 @@ class LessonImporter(object):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         lessons = []
+        commandments_map = {}  # Create a mapping of related_step to Commandment id
+
+        # Query the Commandment model to create the mapping
+        commandments = Commandment.objects.all()
+        for commandment in commandments:
+            commandments_map[commandment.related_step] = commandment.id
+
 
         # Handle each lesson
         for name, group in df.groupby(['lesson']):
@@ -26,6 +34,10 @@ class LessonImporter(object):
             lesson.title = first(group, 'title_en')
             lesson.bible_section = first(group, 'bible_section')
             lesson.category = first(group, 'category')
+            related_step = first(group, 'related_step')
+
+            # Set the related_commandment_id based on the mapping
+            lesson.related_commandment_id = commandments_map.get(related_step, None)
 
             # Parse bible refs
             for index, row in group.iterrows():

@@ -4,7 +4,7 @@ from django.core.management import BaseCommand
 from django.db import IntegrityError
 from import_tool import LessonImporter
 
-from commandments_app.models import *
+from commandments_app.models import Lesson, LessonCategories, PrimaryLessonBibleReference, Commandment
 from jesus_commandments_website.settings import BASE_DIR
 
 
@@ -51,10 +51,22 @@ class Command(BaseCommand):
             else:
                 print(f'Updating lesson {model_lesson.id}')
 
+            # Set the related commandment based on the related_step
+            related_step = lesson.related_step
+            if related_step:
+                try:
+                    related_commandment = Commandment.objects.get(related_step=related_step)
+                    model_lesson.commandment = related_commandment
+                except Commandment.DoesNotExist:
+                    print(f'Related commandment with related_step {related_step} not found.')
+                except Exception as ex:
+                    print(f'Failed to set related commandment for lesson {lesson.id} with error: {ex}')
+
+            # Save the Lesson object
+            model_lesson.save()
+
             for item in lesson.primary_lesson_bible_references:
                 self._add_bible_ref(PrimaryLessonBibleReference(lesson_id=model_lesson.id), item)
-            for item in lesson.direct_lesson_bible_references:
-                self._add_bible_ref(DirectLessonBibleReference(lesson_id=model_lesson.id), item)
             for item in lesson.lessonquestions:
                 self._add_question(model_lesson.id, item)
             for item in lesson.media:

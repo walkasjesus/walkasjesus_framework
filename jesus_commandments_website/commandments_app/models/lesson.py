@@ -17,14 +17,24 @@ class Lesson(models.Model):
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()
-    def primary_bible_reference(self):
-        reference = self.primary_lesson_bible_references.first()
-        if reference:
-            reference.set_bible(self.bible)
-        return reference
 
-    def direct_bible_references(self):
-        return self._get_translated_bible_references(self.direct_lesson_bible_references.all())
+    def primary_bible_reference(self, include_commandment_reference=True):
+        lesson_reference = self.primary_lesson_bible_references.first()
+
+        if include_commandment_reference and self.commandment:
+            return self.commandment.primary_bible_reference()
+        else:
+            return lesson_reference
+
+    def direct_bible_references(self, include_commandment_reference=True):
+        lesson_references = self._get_translated_bible_references(self.direct_lesson_bible_references.all())
+
+        if include_commandment_reference and self.commandment:
+            commandment_references = self.commandment.direct_bible_references()
+        else:
+            commandment_references = []
+
+        return lesson_references + commandment_references
 
     def background_drawing(self):
         return self.drawings()[0] if self.drawings() else ''

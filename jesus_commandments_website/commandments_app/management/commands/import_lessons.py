@@ -51,17 +51,6 @@ class Command(BaseCommand):
             else:
                 print(f'Updating lesson {model_lesson.id}')
 
-            # Set the related commandment based on the related_step
-            related_step = lesson.related_step
-            if related_step:
-                try:
-                    related_commandment = Commandment.objects.get(related_step=related_step)
-                    model_lesson.commandment = related_commandment
-                except Commandment.DoesNotExist:
-                    print(f'Related commandment with related_step {related_step} not found.')
-                except Exception as ex:
-                    print(f'Failed to set related commandment for lesson {lesson.id} with error: {ex}')
-
             # Save the Lesson object
             model_lesson.save()
 

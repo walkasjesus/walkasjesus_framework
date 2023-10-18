@@ -2,6 +2,7 @@ import pandas
 
 from import_tool.bible_reference import BibleReference
 from import_tool.lesson import Lesson
+from commandments_app.models import Commandment
 
 
 def first(data_frame, column):
@@ -28,6 +29,17 @@ class LessonImporter(object):
             lesson.lesson_bible_section = []
             lesson.primary_lesson_bible_references = []
             lesson.direct_lesson_bible_references = []
+
+            # Parse 'related_step' column
+            related_step = first(group, 'related_step')
+            if related_step:
+                try:
+                    # Look up the related commandment based on the 'related_step' value
+                    related_commandment = Commandment.objects.get(id=int(related_step))
+                    lesson.commandment = related_commandment  # Set the related commandment in the existing field
+                    print(f"Related commandment {related_step} found for lesson {lesson.id}")
+                except Commandment.DoesNotExist:
+                    print(f"Related commandment with ID {related_step} not found for lesson {lesson.id}")
 
             # Parse bible refs
             for index, row in group.iterrows():

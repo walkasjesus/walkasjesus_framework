@@ -44,6 +44,7 @@ class Command(BaseCommand):
             model_lesson, is_new = Lesson.objects.get_or_create(id=lesson.id)
             model_lesson.title = lesson.title
             model_lesson.category = LessonCategories[lesson.category].name
+            model_lesson.commandment = lesson.commandment
             model_lesson.save()
 
             if is_new:

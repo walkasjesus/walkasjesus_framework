@@ -8,3 +8,4 @@ class Lesson:
         self.media = []
         self.lesson_bible_section = []
         self.lessonquestions = []
+        self.commandment = None

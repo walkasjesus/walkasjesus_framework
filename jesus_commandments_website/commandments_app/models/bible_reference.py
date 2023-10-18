@@ -48,6 +48,17 @@ class AbstractBibleReference(models.Model):
         """ Get the bible verse with the untranslated abbreviation of the book, like: gen 1:1-2"""
         return f'{BibleLibBibleBooks.abbreviation(BibleLibBibleBooks[self.book])} {self._str_chapter_verses()}'
 
+    def short_name_chapter(self):
+        book_chapter = f'{self.get_book_display()}'
+
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return book_chapter
+
+        if self.begin_chapter == self.end_chapter:
+            return f'{book_chapter} {self.begin_chapter}'
+
+        return f'{book_chapter} {self.begin_chapter}-{self.end_chapter}'
+
     def _str_chapter_verses(self):
         book_chapter_verse = f'{self.begin_chapter}:{self.begin_verse}'
 

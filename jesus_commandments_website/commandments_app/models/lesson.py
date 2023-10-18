@@ -12,11 +12,13 @@ class Lesson(models.Model):
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)
-    bible_section = models.CharField(max_length=128, default='', blank=True, help_text="The bible books which covers the lesson")
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()
+
+    def bible_section(self):
+        return self.lesson_bible_section.first()
 
     def primary_bible_reference(self, include_commandment_reference=True):
         lesson_reference = self.primary_lesson_bible_references.first()

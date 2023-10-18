@@ -148,6 +148,12 @@ class DirectLessonBibleReference(AbstractBibleReference):
     class Meta:
         unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
+class LessonBibleSection(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='lesson_bible_section')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
 class PrimaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
 

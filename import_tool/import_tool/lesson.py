@@ -6,7 +6,7 @@ class Lesson:
         self.primary_lesson_bible_references = []
         self.direct_lesson_bible_references = []
         self.media = []
-        self.bible_section = ''
+        self.lesson_bible_section = []
         self.related_step = ''
         self.lessonquestions = []
-        self.related_commandment_id = None
+        # self.related_commandment_id = None

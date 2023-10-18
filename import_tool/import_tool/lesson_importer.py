@@ -2,7 +2,7 @@ import pandas
 
 from import_tool.bible_reference import BibleReference
 from import_tool.lesson import Lesson
-from import_tool.commandment import Commandment
+# from commandments_app.models import Commandment
 
 
 def first(data_frame, column):
@@ -19,25 +19,26 @@ class LessonImporter(object):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         lessons = []
-        commandments_map = {}  # Create a mapping of related_step to Commandment id
-
-        # Query the Commandment model to create the mapping
-        commandments = Commandment.objects.all()
-        for commandment in commandments:
-            commandments_map[commandment.related_step] = commandment.id
-
+        # commandments_map = {}  # Create a mapping of related_step to Commandment id
+        #
+        # # Query the Commandment model to create the mapping
+        # commandments = Commandment.objects.all()
+        # for commandment in commandments:
+        #     commandments_map[commandment.related_step] = commandment.id
 
         # Handle each lesson
         for name, group in df.groupby(['lesson']):
             lesson = Lesson()
             lesson.id = first(group, 'lesson')
             lesson.title = first(group, 'title_en')
-            lesson.bible_section = first(group, 'bible_section')
             lesson.category = first(group, 'category')
-            related_step = first(group, 'related_step')
-
-            # Set the related_commandment_id based on the mapping
-            lesson.related_commandment_id = commandments_map.get(related_step, None)
+            lesson.lesson_bible_section = []
+            lesson.primary_lesson_bible_references = []
+            lesson.direct_lesson_bible_references = []
+            # related_step = first(group, 'related_step')
+            #
+            # # Set the related_commandment_id based on the mapping
+            # lesson.related_commandment_id = commandments_map.get(related_step, None)
 
             # Parse bible refs
             for index, row in group.iterrows():
@@ -50,6 +51,18 @@ class LessonImporter(object):
                         lesson.primary_lesson_bible_references.append(reference)
                     if row['bible_ref_type'].lower() == 'direct':
                         lesson.direct_lesson_bible_references.append(reference)
+                except Exception as ex:
+                    raise ex
+                    print(f'Could not parse {row} due to exception {ex}')
+
+            # Parse bible_section
+            for index, row in group.iterrows():
+                if len(row['bible_section']) == 0:
+                    continue
+                try:
+                    reference = BibleReference.create_from_string(row['bible_section'])
+                    lesson.lesson_bible_section.append(reference)
+
                 except Exception as ex:
                     raise ex
                     print(f'Could not parse {row} due to exception {ex}')

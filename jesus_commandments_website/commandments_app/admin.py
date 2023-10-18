@@ -163,6 +163,12 @@ class DirectLessonBibleReferenceInline(admin.TabularInline):
     "We don't use these fields within lessons"
     exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author')
 
+class LessonBibleSectionInLine(admin.TabularInline):
+    model = LessonBibleSection
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author', 'positive_negative')
+
 class LessonDrawingInline(admin.TabularInline):
     model = LessonDrawing
     extra = 0
@@ -197,8 +203,9 @@ class LessonQuestionInline(admin.TabularInline):
     extra = 0
 
 class LessonAdmin(VersionAdmin):
-    list_display = ['id', 'title', 'primary_bible_reference', 'category']
+    list_display = ['id', 'title', 'bible_section', 'primary_bible_reference']
     inlines = [
+        LessonBibleSectionInLine,
         PrimaryLessonBibleReferencesInline,
         DirectLessonBibleReferenceInline,
         LessonQuestionInline,

@@ -136,6 +136,10 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		python3 manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
+		echo "INFO: ${start} - Start importing Lessons" | tee -a ${log}
+		python3 manage.py import_lessons data/biblereferences/lessons.csv | tee -a ${log}
+		end=$(date '+%Y-%m-%d %H:%M:%S')
+		echo "INFO: ${end} - Ended importing Lessons" | tee -a ${log}
 	else
 		echo "INFO: - Commandments allready up-to-date. Skipping import." | tee -a ${log}
 	fi
@@ -156,6 +160,9 @@ else
 	echo "INFO: Start importing Commandments"
 	python3 manage.py import_commandments data/biblereferences/commandments.csv
 	echo "INFO: Ended importing Commandments"
+	echo "INFO: Start importing Lessons"
+	python3 manage.py import_lessons data/biblereferences/lessons.csv
+	echo "INFO: Ended importing Lessons"
 
 	echo "INFO: Start importing Media Resources"
 	python3 manage.py import_media data/media/media.csv

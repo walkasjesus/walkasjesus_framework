@@ -4,7 +4,7 @@ from django.core.management import BaseCommand
 from django.db import IntegrityError
 from import_tool import LessonImporter
 
-from commandments_app.models import Lesson, LessonCategories, PrimaryLessonBibleReference, Commandment, LessonBibleSection
+from commandments_app.models import Lesson, LessonCategories, PrimaryLessonBibleReference, LessonBibleSection, LessonQuestion
 from jesus_commandments_website.settings import BASE_DIR
 
 
@@ -35,7 +35,7 @@ class Command(BaseCommand):
         self._save(model_reference)
 
     def _add_question(self, lesson_id, question):
-        question_model = Question(lesson_id=lesson_id)
+        question_model = LessonQuestion(lesson_id=lesson_id)
         question_model.text = question
         self._save(question_model)
 

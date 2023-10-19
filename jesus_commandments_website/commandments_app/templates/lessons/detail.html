@@ -144,12 +144,12 @@
                             <ul>
                                     <li>{% trans "Is there anything you don't understand within this lesson?" %}</li>
                                     <li>{% trans "Wat appeals to you about all Bible references and resources?" %}</li>
-                                    <li>{% trans "How do you apply this step in your life or do you experience any boundaries?" %}</li>
+                                    <li>{% trans "How do you apply this truth in your life or do you experience any boundaries?" %}</li>
                             </ul>
-                                {% if lesson.questions %}
+                                {% if lesson.lessonquestions %}
                                     {% trans 'Extra questions' %}:
                                     <ul>
-                                    {% for question in lesson.childrensquestion %}
+                                    {% for question in lesson.lessonquestions %}
                                         <li>{{ question.text }}</li>
                                     {% endfor %}
                                     </ul>

@@ -168,24 +168,41 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Direct Bible References' %}</h4>
                             <p><i>{% trans 'Extra direct Bible references which expands or explain the same lesson' %}.</i></p>
-                                <ul>
-                                {% for bible_reference in lesson.direct_bible_references %}
-                                    {% if bible_reference.positive_negative == "negative" %}
-                                    <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
-                                    {% elif bible_reference.positive_negative == "both" %}
-                                    <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
-                                    {% elif bible_reference.positive_negative == "positive" %}
-                                    <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
-                                    {% else %}
-                                    <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
-                                    {% endif %}
-                                {% endfor %}
-                                </ul>
-                                <br>
+                            <ul>
+                            {% for bible_reference in lesson.direct_bible_references %}
+                                {% if bible_reference.positive_negative == "negative" %}
+                                <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                {% elif bible_reference.positive_negative == "both" %}
+                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                {% elif bible_reference.positive_negative == "positive" %}
+                                <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                {% else %}
+                                <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                            <br>
+                            <br>
+                            <h4>{% trans 'Legend' %}</h4>
+                            <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
+                            <br>
+                            <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
+                                <p><i>{% trans 'Click here to see the explanation of the different symbols' %}</i></p>
+                            </div>
+                            <div class="collapse" id="collapseLegend">
+                                <div class="alert alert-warning infobox">
+                                    <ul style="font-size: 11pt;">
+                                        <li class="negative_list"><i>{% trans 'A related Bible reference to the lesson which is negative, something you should not do' %}</i></li>
+                                        <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the lesson which is both positive and negative' %}</i></li>
+                                        <li class="positive_list"><i>{% trans 'A related Bible reference to the lesson which is positive, something you should do or learn from' %}</i></li>
+                                        <li class="unknown_list"><i>{% trans 'A related Bible reference to the lesson which is not yet determined positive or negative' %}</i></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             {% endif %}
             {% if lesson.pictures %}
             <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">

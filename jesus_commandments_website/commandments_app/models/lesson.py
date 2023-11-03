@@ -22,7 +22,9 @@ class Lesson(models.Model):
 
     def primary_bible_reference(self, include_commandment_reference=True):
         lesson_reference = self.primary_lesson_bible_references.first()
-
+        if lesson_reference:
+            lesson_reference.set_bible(self.bible)
+       
         if include_commandment_reference and self.commandment:
             return self.commandment.primary_bible_reference()
         else:

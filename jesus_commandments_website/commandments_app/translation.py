@@ -7,7 +7,11 @@ def register_translations(app_config):
         'Drawing': ['description'],
         'Picture': ['description'],
         'Question': ['text'],
-     }
+        'Lesson': ['title'],
+        'LessonDrawing': ['description'],
+        'LessonPicture': ['description'],
+        'LessonQuestion': ['text'],
+    }
 
     # Register fields to translate
     for model, fields in translatable_model_fields.items():

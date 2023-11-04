@@ -26,6 +26,7 @@ class Lesson(models.Model):
             lesson_reference.set_bible(self.bible)
        
         if include_commandment_reference and self.commandment:
+            self.commandment.bible = self.bible
             return self.commandment.primary_bible_reference()
         else:
             return lesson_reference

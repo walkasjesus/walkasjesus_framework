@@ -4,7 +4,7 @@ from django.core.management import BaseCommand
 from django.db import IntegrityError
 from import_tool import LessonImporter
 
-from commandments_app.models import Lesson, LessonCategories, PrimaryLessonBibleReference, LessonBibleSection, LessonQuestion
+from commandments_app.models import Lesson, LessonCategories, PrimaryLessonBibleReference, DirectLessonBibleReference, LessonBibleSection, LessonQuestion
 from jesus_commandments_website.settings import BASE_DIR
 
 
@@ -57,6 +57,8 @@ class Command(BaseCommand):
 
             for item in lesson.primary_lesson_bible_references:
                 self._add_bible_ref(PrimaryLessonBibleReference(lesson_id=model_lesson.id), item)
+            for item in lesson.direct_lesson_bible_references:
+                self._add_bible_ref(DirectLessonBibleReference(lesson_id=model_lesson.id), item)
             for item in lesson.lesson_bible_section:
                 self._add_bible_ref(LessonBibleSection(lesson_id=model_lesson.id), item)
             for item in lesson.lessonquestions:

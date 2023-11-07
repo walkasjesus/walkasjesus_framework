@@ -93,7 +93,11 @@
                             <h3>{{ lesson.id }}</h3>
                         </div>
                         <div id="bible_lesson_details" class="our-services-text">
-                            <h4>{% trans 'Lesson' %} {{ lesson.id }} - {{ lesson.bible_section.short_name_chapter }}</h4>
+                            <h4>{% trans 'Lesson' %} {{ lesson.id }} -
+                                {% for bible_section in lesson.bible_section %}
+                                    {{ bible_section.short_name_chapter }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </h4>
 
                             {% if lesson.primary_bible_reference.positive_negative == "negative" %}
                             <ul class="negative_list negative_list_title">

@@ -18,7 +18,7 @@ class Lesson(models.Model):
     objects = LessonManager()
 
     def bible_section(self):
-        return self.lesson_bible_section.first()
+        return self._get_translated_bible_references(self.lesson_bible_section.all())
 
     def primary_bible_reference(self, include_commandment_reference=True):
         lesson_reference = self.primary_lesson_bible_references.first()

@@ -5,27 +5,302 @@
 {% block content %}
 {% cache cache_timeout lessons_listing cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <!-- Header section -->
     <div class="ftco-section bg-light" id="sermons-section">
         <div class="container">
             <div class="row justify-content-center pb-5">
                 <div class="col-md-12 heading-section text-center ftco-animate">
-                    <span class="subheading">{% trans 'Build the foundations for your children' %}</span>
-                    <h2 class="mb-4"><span>{% trans 'Discover this new Childrens Bible method to help your children learn, live and give to walk as Jesus walked' %}</span></h2>
-                    <h5>{% blocktrans %}Have you ever considered what you want to learn to the children during the whole school period? We have looked at this carefully and came to 3 things which are very important:{% endblocktrans %}</h5>
-                    <p>{% blocktrans %}- The broad outline of the stories throughout the Bible: a loving God who desires a relationship with us humans.{% endblocktrans %}</p>
-                    <p>{% blocktrans %}- The principles that we can 'imprint', so that those become the principles on which they can build their lives.{% endblocktrans %}</p>
-                    <p>{% blocktrans %}- Building healthy relationships with other children.{% endblocktrans %}</p>
-                    <br>
-        		    <p>{% trans 'On this website you will find 77 lessons for the old testament and 44 lessons for the new testament. Each lesson comes with a beautifull story from the childrens Bible' %} <strong><a target="_blank" href="https://www.bol.com/nl/nl/p/gods-grote-plan/9300000098330070/?bltgh=oLm29wxv5GPI-tIfMGVFJw.2_14.15.ProductTitle">{% trans 'Gods Grote Plan (Currently only available in dutch)' %}</a></strong>. {% trans 'For each lesson you will find related media items such as songs, questions to talk about, superbooks or more. For more information please contact us.' %}</p>
+                    <span class="subheading">{% trans "Build the foundations for your children" %}</span>
+                    <h2 class="mb-4"><span>{% trans "Embark on an Exciting Journey with Our Children's Bible Lessons" %}</span></h2>
+                    <p class="lead"><strong>{% trans "Have you ever wondered how to instill strong values, faith, and the Bible stories in your children?" %}
+                    </br>
+                    {% trans "Our unique approach emphasizes the following 3 goals:" %}
+                    </strong>
+                    </p>
                 </div>
             </div>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mt-4 ftco-animate">
+                    <div class="card profile-card-5">
+                        <div class="card-img-block">
+                            <img class="card-img-top" src="{% static 'images/principles.png' %}" alt="Principles">
+                        </div>
+                        <div class="card-body pt-0 text-center">
+                            <p class="lead"><em>"{% trans "Imprinting foundational principles to guide them through life's journey." %}"</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4 ftco-animate">
+                    <div class="card profile-card-5">
+                        <div class="card-img-block">
+                            <img class="card-img-top" src="{% static 'images/GodsGrotePlan.jpg' %}" alt="Gods Grote Plan">
+                        </div>
+                        <div class="card-body pt-0 text-center">
+                            <br>
+                            <p class="lead"><em>"{% trans "Unveiling the grand tapestry of Bible stories: a loving God seeking a relationship with humanity." %}"</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-4 ftco-animate">
+                    <div class="card profile-card-5">
+                        <div class="card-img-block">
+                            <img class="card-img-top" src="{% static 'images/relations.png' %}" alt="Relations">
+                        </div>
+                        <div class="card-body pt-0 text-center">
+                            <p class="lead"><em>"{% trans "Cultivating wholesome relationships with other children." %}"</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-12 text-center mt-4 ftco-animate"> <!-- Add the mt-4 class for margin-top -->
+                    <p class="lead" style="margin-bottom: 0;">{% trans "Explore 77 lessons from the Old Testament and 44 lessons from the New Testament on our website. Each lesson is accompanied by captivating stories from the Children's Bible" %}
+                    <strong><a target="_blank" href="https://www.bol.com/nl/nl/p/gods-grote-plan/9300000098330070/?bltgh=oLm29wxv5GPI-tIfMGVFJw.2_14.15.ProductTitle"> {% trans "Gods Grote Plan (Currently only available in Dutch)" %}</a></strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lessons Section -->
+    <div class="ftco-section bg-light" id="lessons-section">
+        <div class="container">
             <div class="row">
                 {% if lessons %}
                     {% for lesson in lessons %}
                         {% include "lessons/single_lesson_overview.html" %}
+                        {% if forloop.counter == 9 %}
+                            <!-- Insert "Games to Memorize the Steps with Drawings" section here -->
+                            <div class="col-md-12 heading-section text-center ftco-animate">
+                                <h3>{% trans "Games to Memorize the Steps with Drawings" %}</h3>
+                            </div>
+                            <div class="col-md-6 ftco-animate">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{% trans "Steps Memory" %}</h5>
+                                        <p class="card-text">
+                                            {% trans "Turn cards over and match illustrations with corresponding Bible verses." %}
+                                            <br>
+                                            <a href="javascript:void(0);" class="collapse-link" data-toggle="collapse" data-target="#collapseMemory" aria-expanded="false" aria-controls="collapseMemory">
+                                                {% trans 'Click for more information' %}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapseMemory">
+                                <div class="alert alert-info infobox">
+                                    {% blocktrans %}
+                                    <strong>Steps Memory</strong>
+                                    <br>
+                                    <br>
+                                    Supplies:
+                                    <ul>
+                                        <li>24 A6-sized steps with illustrations and Bible verses on the front. The back is blank.</li>
+                                        <li>A4-sized steps with illustrations and Bible verses on the front. The back has the title of the step.</li>
+                                    </ul>
+                                    <br>
+                                    Preparation:
+                                    <ul>
+                                        <li>Form teams in pairs or groups.</li>
+                                        <li>Place a set of 24 A6 steps with their backs up in random order on a table or on the floor. This forms the "Memory" part of the game.</li>
+                                    </ul>
+                                    <br>
+                                    Task:
+                                    <ul>
+                                        <li>Let the children play in teams or pairs against each other.</li>
+                                        <li>Players take turns flipping two cards from the "Memory" section, trying to find a matching set of an A4 card and an A6 card.</li>
+                                        <li>If a player finds a matching set, they show both cards to the group and identify the Bible verse and illustration.</li>
+                                        <li>For an extra point, they can also try to guess the corresponding title of the step to be learned.</li>
+                                        <li>If the cards do not form a set, they are flipped back with the back facing up, and the next player takes a turn.</li>
+                                        <li>The game continues until all matching sets are found.</li>
+                                        <li>The team or player with the most correct sets and titles wins the game.</li>
+                                    </ul>
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 ftco-animate">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{% trans "Searching Steps" %}</h5>
+                                        <p class="card-text">
+                                            {% trans "Hide cards with Bible verses and illustrations for children to find." %}
+                                            <br>
+                                            <a href="javascript:void(0);" class="collapse-link" data-toggle="collapse" data-target="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
+                                                {% trans 'Click for more information' %}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapseSearch">
+                                <div class="alert alert-info infobox">
+                                    {% blocktrans %}
+                                    <strong>Searching Steps</strong>
+                                    <br>
+                                    <br>
+                                    Supplies:
+                                    <ul>
+                                        <li>A6-sized steps with illustrations and Bible verses on the front. The back is blank.</li>
+                                    </ul>
+                                    <br>
+                                    Task:
+                                    <ul>
+                                        <li>Divide the children into teams.</li>
+                                        <li>Let one team hide the A6 cards, making sure to count how many cards they hide.</li>
+                                        <li>Allow the other team to search for the cards in the hidden area, optionally setting a time limit.</li>
+                                        <li>Once a team finds a card, they must identify the corresponding step.</li>
+                                        <li>The team earns 1 point for correctly naming the step and 1 point for finding the step.</li>
+                                        <li>If a team doesn't know the step, the other team can guess and, if correct, earn 1 point.</li>
+                                        <li>When all cards are found or time is up, switch roles, and the team with the most points at the end wins.</li>
+                                    </ul>
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+
+                            <!-- Guess the Step -->
+                            <div class="col-md-6 ftco-animate">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{% trans "Guess the Step" %}</h5>
+                                        <p class="card-text">
+                                            {% trans "Guess which step matches a displayed drawing." %}
+                                            <br>
+                                            <a href="javascript:void(0);" class="collapse-link" data-toggle="collapse" data-target="#collapseGuess" aria-expanded="false" aria-controls="collapseGuess">
+                                                {% trans 'Click for more information' %}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapseGuess">
+                                <div class="alert alert-info infobox">
+                                    {% blocktrans %}
+                                    <strong>Guess the Step</strong>
+                                    <br>
+                                    <br>
+                                    Supplies:
+                                    <ul>
+                                        <li>A4-sized steps with illustrations and Bible verses on the front. The back has the title of the step.</li>
+                                        <li>A6-sized steps with illustrations and Bible verses on the front. The back is blank.</li>
+                                    </ul>
+                                    <br>
+                                    Preparation:
+                                    <ul>
+                                        <li>Place the large steps on the ground with the title facing up.</li>
+                                        <li>Prepare small steps (A6 size) that correspond to the large steps.</li>
+                                    </ul>
+                                    <br>
+                                    Task:
+                                    <ul>
+                                        <li>Have a child take turns showing a step, covering the Bible verse.</li>
+                                        <li>They must guess which title matches the displayed drawing. They earn a point if correct.</li>
+                                        <li>To make the game more challenging, children can also try to guess the corresponding Bible verse for an extra point.</li>
+                                        <li>The team with the most points wins.</li>
+                                    </ul>
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+
+                            <!-- Step Choice Challenge -->
+                            <div class="col-md-6 ftco-animate">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{% trans "Step Choice Challenge" %}</h5>
+                                        <p class="card-text">
+                                            {% trans "Choose a drawing and provide hints, make a drawing, or use a 'forbidden word' to convey the step's meaning." %}
+                                            <br>
+                                            <a href="javascript:void(0);" class="collapse-link" data-toggle="collapse" data-target="#collapseChoice" aria-expanded="false" aria-controls="collapseChoice">
+                                                {% trans 'Click for more information' %}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapseChoice">
+                                <div class="alert alert-info infobox">
+                                    {% blocktrans %}
+                                    <strong>Steps Choice Challenge</strong>
+                                    <br>
+                                    <br>
+                                    Supplies:
+                                    <ul>
+                                        <li>Various steps printed with illustrations and Bible verses on the front. The back has the title of the step.</li>
+                                    </ul>
+                                    <br>
+                                    Preparation:
+                                    <ul>
+                                        <li>Form two teams.</li>
+                                        <li>Keep a stopwatch handy.</li>
+                                    </ul>
+                                    <br>
+                                    Task:
+                                    <ul>
+                                        <li>Give one small drawing to a child within a team so that no one can see the drawing.</li>
+                                        <li>The child receiving the drawing can choose how they want to convey the step to their team (you can also roll a die).</li>
+                                        <li>Acting: They can act out the step by making movements.</li>
+                                        <li>Drawing: They can try to draw the step without using words.</li>
+                                        <li>Forbidden Word: They can describe the step without using specific keywords from the step's title.</li>
+                                        <li>The team has 30 seconds to guess the step and name the corresponding title.</li>
+                                        <li>If the team manages to guess both the drawing and the step within 15 seconds, they earn 3 points.</li>
+                                        <li>If the team manages to guess both the drawing and the step between 15 and 30 seconds, they earn 2 points.</li>
+                                        <li>If the team can't guess the step within 30 seconds, the other team has the chance to guess and earn points.</li>
+                                        <li>The other team can try to guess the title of the step, but they can't see the drawing.</li>
+                                    </ul>
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+
+                            <!-- Step Theater -->
+                            <div class="col-md-6 ftco-animate">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{% trans "Step Theater" %}</h5>
+                                        <p class="card-text">
+                                            {% trans "Act out a short story or play to convey the meaning of each step." %}
+                                            <br>
+                                            <a href="javascript:void(0);" class="collapse-link" data-toggle="collapse" data-target="#collapseTheater" aria-expanded="false" aria-controls="collapseTheater">
+                                                {% trans 'Click for more information' %}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="collapse" id="collapseTheater">
+                                <div class="alert alert-info infobox">
+                                    {% blocktrans %}
+                                    <strong>Steps Theater</strong>
+                                    <br>
+                                    <br>
+                                    Preparation:
+                                    <ul>
+                                        <li>Divide the children into pairs and give each pair a step (or show it via the website).</li>
+                                    </ul>
+                                    <br>
+                                    Task:
+                                    <ul>
+                                        <li>Have each pair come up with a short mini-story or play that depicts the meaning of the step.</li>
+                                        <li>The children in the pair can divide the roles and try to convey the message of the step in a creative and understandable way.</li>
+                                        <li>After the pairs have prepared their play, they present it to the rest of the children in the group.</li>
+                                        <li>After watching the play, the other children must guess which step is being portrayed.</li>
+                                        <li>The team that correctly guesses the step earns points.</li>
+                                    </ul>
+                                    {% endblocktrans %}
+                                </div>
+                            </div>
+                            <!-- Close the row for games -->
+                            </div>
+                            <!-- Start a new row for Lesson 10 -->
+                            <div class="row">
+                        {% endif %}
                     {% endfor %}
                 {% else %}
-                    <p>{% trans 'No lessons are available.' %}</p>
+                    <p>{% trans "No lessons are available." %}</p>
                 {% endif %}
             </div>
         </div>

@@ -70,12 +70,7 @@ class Lesson(models.Model):
             return list(lesson_media)
 
     def superbooks(self, include_commandment_media=True):
-        lesson_media = [d for d in self.lessonsuperbook_set.all() if d.is_public]
-
-        if include_commandment_media and self.commandment:
-            return lesson_media + self.commandment.superbooks()
-        else:
-            return lesson_media
+        return [d for d in self.lessonsuperbook_set.all() if d.is_public]
 
     def henkieshows(self, include_commandment_media=True):
         cur_language = translation.get_language()

@@ -272,16 +272,19 @@
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
-                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                            <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Superbook' %}</h4>
                             {% for superbook in lesson.superbooks %}
-                                <a href="{{ superbook.url }}" target="_blank"><img src="{{ superbook.img_url }}" alt="{{ superbook.author }} - {{ superbook.title }}" style="max-width:97%;max-height:97%;float: left;padding-right: 30px;"></a>
-                                {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
-                                <br>
-                                <p><b>{% trans 'Watch now on' %}: <a href="{{ superbook.url }}" target="_blank">{{ superbook.author }}</a></b></p>
-                                <p style="clear: left;"> </p>
+                                <div targetaudience="{{ superbook.target_audience }}">
+                                    <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
+                                    {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ superbook.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                    <p><b><a href="{{ superbook.img_url }}" target="_blank">{% trans 'Discover more about this Superbook' %}</a></b></p>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>

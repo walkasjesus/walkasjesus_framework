@@ -22,3 +22,8 @@ sentry-sdk>=1.29.2
 
 # Debug and Development
 django-debug-toolbar
+
+# Used to communicatie with youtube
+requests
+google-api-python-client
+oauth2client

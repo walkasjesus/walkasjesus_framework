@@ -4,9 +4,11 @@ from commandments_app.lib.ordered_enum import OrderedEnum
 
 
 class BibleBooks(OrderedEnum):
-    """" This is a copy of the enum in bible_lib,
+    """
+    This is a copy of the enum in bible_lib,
     but I did not know how to tag it for translation
-    without making a copy. """
+    without making a copy.
+    """
     Genesis = gettext_lazy('Genesis')
     Exodus = gettext_lazy('Exodus')
     Leviticus = gettext_lazy('Leviticus')

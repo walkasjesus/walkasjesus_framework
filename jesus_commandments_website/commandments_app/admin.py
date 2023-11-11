@@ -5,6 +5,9 @@ from django.utils.html import escape
 from reversion.admin import VersionAdmin
 
 from commandments_app.models import *
+from commandments_app.models.commandment_question import Question
+from commandments_app.models.lesson_question import LessonQuestion
+from commandments_app.models.lesson_media import *
 from commandments_app.views.admin.admin_bible_view import AdminBibleView
 
 
@@ -29,11 +32,9 @@ class PrimaryBibleReferencesInline(admin.TabularInline):
     model = PrimaryBibleReference
     extra = 0
 
-
 class DirectBibleReferenceInline(admin.TabularInline):
     model = DirectBibleReference
     extra = 0
-
 
 class IndirectBibleReferenceInline(admin.TabularInline):
     model = IndirectBibleReference
@@ -53,7 +54,6 @@ class ExampleBibleReferenceInline(admin.TabularInline):
 class StudyBibleReferenceInline(admin.TabularInline):
     model = StudyBibleReference
     extra = 0
-
 
 class OTLawBibleReferenceInline(admin.TabularInline):
     model = OTLawBibleReference
@@ -79,16 +79,13 @@ class SongInline(admin.TabularInline):
     model = Song
     extra = 0
 
-
 class SuperbookInline(admin.TabularInline):
     model = Superbook
     extra = 0
 
-
 class HenkieshowInline(admin.TabularInline):
     model = Henkieshow
     extra = 0
-
 
 class MovieInline(admin.TabularInline):
     model = Movie
@@ -114,11 +111,9 @@ class PictureInline(admin.TabularInline):
     model = Picture
     extra = 0
 
-
 class TestimonyInline(admin.TabularInline):
     model = Testimony
     extra = 0
-
 
 class BlogInline(admin.TabularInline):
     model = Blog
@@ -154,6 +149,73 @@ class CommandmentAdmin(VersionAdmin):
         TestimonyInline,
         BlogInline,
         BookInline,
+    ]
+
+class PrimaryLessonBibleReferencesInline(admin.TabularInline):
+    model = PrimaryLessonBibleReference
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author')
+
+class DirectLessonBibleReferenceInline(admin.TabularInline):
+    model = DirectLessonBibleReference
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author')
+
+class LessonBibleSectionInLine(admin.TabularInline):
+    model = LessonBibleSection
+    extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('ot_nr', 'ot_rambam_id', 'ot_rambam_title', 'author', 'positive_negative')
+
+class LessonDrawingInline(admin.TabularInline):
+    model = LessonDrawing
+    extra = 0
+
+
+class LessonSongInline(admin.TabularInline):
+    model = LessonSong
+    extra = 0
+
+class LessonSuperbookInline(admin.TabularInline):
+    model = LessonSuperbook
+    extra = 0
+
+class LessonHenkieshowInline(admin.TabularInline):
+    model = LessonHenkieshow
+    extra = 0
+
+class LessonShortMovieInline(admin.TabularInline):
+    model = LessonShortMovie
+    extra = 0
+
+class LessonPictureInline(admin.TabularInline):
+    model = LessonPicture
+    extra = 0
+
+class LessonTestimonyInline(admin.TabularInline):
+    model = LessonTestimony
+    extra = 0
+
+class LessonQuestionInline(admin.TabularInline):
+    model = LessonQuestion
+    extra = 0
+
+class LessonAdmin(VersionAdmin):
+    list_display = ['id', 'title', 'bible_section', 'primary_bible_reference']
+    inlines = [
+        LessonBibleSectionInLine,
+        PrimaryLessonBibleReferencesInline,
+        DirectLessonBibleReferenceInline,
+        LessonQuestionInline,
+        LessonDrawingInline,
+        LessonSongInline,
+        LessonSuperbookInline,
+        LessonHenkieshowInline,
+        LessonShortMovieInline,
+        LessonPictureInline,
+        LessonTestimonyInline,
     ]
 
 
@@ -211,5 +273,6 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
+admin.site.register(Lesson, LessonAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)

@@ -4,26 +4,33 @@ from bible_lib import Bible, BibleBooks as BibleLibBibleBooks
 from django.db import models
 from django.utils.translation import gettext
 
-from commandments_app.models import BibleBooks, Commandment
-
+from commandments_app.models import BibleBooks, Commandment, Lesson
 
 class AbstractBibleReference(models.Model):
+    """
+    The abstract model of a bible reference.
+    We store different types of bible references,
+    but they share a lot of fields,
+    the fields that are shared are in this model.
+    """
     book = models.CharField(max_length=32,
                             choices=[(tag.name, tag.value) for tag in BibleBooks],
-                            default=BibleBooks.Genesis)
+                            default=BibleBooks.Genesis,
+                            help_text="The bible book like Genesis, Exodus, etc.")
     begin_chapter = models.IntegerField(default=1)
     begin_verse = models.IntegerField(default=1)
     end_chapter = models.IntegerField(default=0)
     end_verse = models.IntegerField(default=0)
-    ot_nr = models.CharField(max_length=3, default='', null=True, blank=True)
-    ot_rambam_id = models.CharField(max_length=32, default='', null=True, blank=True)
-    ot_rambam_title = models.CharField(max_length=128, default='', null=True, blank=True)
     author = models.CharField(max_length=64, default='Undetermined')
     positive_negative = models.CharField(max_length=32,
                                          choices=[('positive', 'positive'),
                                                   ('negative', 'negative'),
                                                   ('both', 'both')],
-                                         default='positive')
+                                         default='positive',
+                                         help_text="Is this Bible text positive (encouraging), negative (discouraging) or both?")
+    ot_nr = models.CharField(max_length=3, default='', null=True, blank=True)
+    ot_rambam_id = models.CharField(max_length=32, default='', null=True, blank=True)
+    ot_rambam_title = models.CharField(max_length=128, default='', null=True, blank=True)
     bible = None
 
     class Meta:
@@ -40,6 +47,17 @@ class AbstractBibleReference(models.Model):
     def short_name(self):
         """ Get the bible verse with the untranslated abbreviation of the book, like: gen 1:1-2"""
         return f'{BibleLibBibleBooks.abbreviation(BibleLibBibleBooks[self.book])} {self._str_chapter_verses()}'
+
+    def short_name_chapter(self):
+        book_chapter = f'{self.get_book_display()}'
+
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return book_chapter
+
+        if self.begin_chapter == self.end_chapter:
+            return f'{book_chapter} {self.begin_chapter}'
+
+        return f'{book_chapter} {self.begin_chapter}-{self.end_chapter}'
 
     def _str_chapter_verses(self):
         book_chapter_verse = f'{self.begin_chapter}:{self.begin_verse}'
@@ -129,13 +147,30 @@ class BibleReference(AbstractBibleReference):
         self.end_chapter = end_chapter
         self.end_verse = end_verse
 
+class PrimaryLessonBibleReference(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='primary_lesson_bible_references')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+class DirectLessonBibleReference(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='direct_lesson_bible_references')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+class LessonBibleSection(AbstractBibleReference):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True, default=None, related_name='lesson_bible_section')
+
+    class Meta:
+        unique_together = ['lesson', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
 
 class PrimaryBibleReference(AbstractBibleReference):
-    commandment = models.OneToOneField(Commandment, on_delete=models.CASCADE)
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
 
 class DirectBibleReference(AbstractBibleReference):
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE)
+    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
     class Meta:
         unique_together = ['commandment', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']

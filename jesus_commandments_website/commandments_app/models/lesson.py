@@ -75,7 +75,6 @@ class Lesson(models.Model):
         lesson_songs = self._filter_on_language(self.lessonsong_set)
 
         if self.commandment:
-            commandment_songs = []
             commandment_songs = self.commandment.songs().filter(target_audience__in=['any', 'kids'])
             return list(lesson_songs) + list(commandment_songs)
         else:

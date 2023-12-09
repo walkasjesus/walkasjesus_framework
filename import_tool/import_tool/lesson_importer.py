@@ -25,10 +25,13 @@ class LessonImporter(object):
             lesson = Lesson()
             lesson.id = first(group, 'lesson')
             lesson.title = first(group, 'title_en')
+            lesson.story = first(group, 'story_en')
             lesson.category = first(group, 'category')
+            lesson.category = first(group, 'activities')
             lesson.lesson_bible_section = []
             lesson.primary_lesson_bible_references = []
             lesson.direct_lesson_bible_references = []
+            lesson.related_step_description = first(group, 'related_step_description_en')
 
             # Parse 'related_step' column
             related_step = first(group, 'related_step')

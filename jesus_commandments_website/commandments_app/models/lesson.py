@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import translation
+from ckeditor.fields import RichTextField
 
 from commandments_app.models import Commandment, LessonCategories
 
@@ -8,16 +9,22 @@ class LessonManager(models.Manager):
         return (c for c in Lesson.objects.all().prefetch_related('lessondrawing_set') if c.background_drawing())
 
 class Lesson(models.Model):
-    title = models.CharField(max_length=256, help_text="The title of the lesson")
+    title = models.CharField(max_length=256, help_text="The step of the lesson which will be learned")
+    story = models.CharField(max_length=256, help_text="The title of the lesson from the Childrens Bible", null=True, blank=True, default=None)
+    activities = RichTextField(help_text="Beschrijf bij de les horende actititeiten, verwerkingsopdrachten of een leuke sketch. Wees creatief!", null=True, blank=True, default=None)
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)
-    commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    commandment = models.ForeignKey(Commandment, help_text="If there is a connection to a commandment/step with this lesson, connect it here", on_delete=models.CASCADE, null=True, blank=True, default=None)
+    related_step_description = models.CharField(max_length=512, help_text="A description why this step is related to the Lesson from the Childrens Bible", null=True, blank=True, default=None)
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()
 
     def bible_section(self):
+        """
+        The rough Bible section of the lesson from the Childrens Bible which this lesson is mainly about
+        """
         return self._get_translated_bible_references(self.lesson_bible_section.all())
 
     def primary_bible_reference(self, include_commandment_reference=True):
@@ -53,23 +60,30 @@ class Lesson(models.Model):
     def found_henkieshow(self):
         return self.henkieshows()[0] if self.henkieshows() else ''
 
-    def drawings(self, include_commandment_media=True):
-        lesson_media = [d for d in self.lessondrawing_set.all() if d.is_public]
+    def drawings(self):
+        lesson_drawings = [d for d in self.lessondrawing_set.all() if d.is_public]
 
-        if include_commandment_media and self.commandment:
-            return lesson_media + self.commandment.drawings()
+        if self.commandment:
+            commandment_drawings = []
+            commandment_drawings = self.commandment.drawings()
+            return list(lesson_drawings) + list(commandment_drawings)
         else:
-            return lesson_media
+            return list(lesson_drawings)
 
-    def songs(self, include_commandment_media=True):
-        lesson_media = self._filter_on_language(self.lessonsong_set)
 
-        if include_commandment_media and self.commandment:
-            return list(lesson_media) + list(self.commandment.songs())
+    def songs(self):
+        lesson_songs = self._filter_on_language(self.lessonsong_set)
+
+        if self.commandment:
+            commandment_songs = []
+            commandment_songs = self.commandment.songs().filter(target_audience__in=['any', 'kids'])
+            return list(lesson_songs) + list(commandment_songs)
         else:
-            return list(lesson_media)
+            return list(lesson_songs)
 
-    def superbooks(self, include_commandment_media=True):
+
+    def superbooks(self):
+        """We only want to display the superbooks of the lesson, since the superbooks of the commandment are chosen based on subject, while the lesson has more focus on the Bible story"""
         return [d for d in self.lessonsuperbook_set.all() if d.is_public]
 
     def henkieshows(self, include_commandment_media=True):
@@ -82,29 +96,36 @@ class Lesson(models.Model):
             else:
                 return lesson_media
 
-    def short_movies(self, include_commandment_media=True):
-        lesson_media = self._filter_on_language(self.lessonshortmovie_set)
+    def short_movies(self):
+        lesson_short_movies = self._filter_on_language(self.lessonshortmovie_set)
 
-        if include_commandment_media and self.commandment:
-            return list(lesson_media) + list(self.commandment.short_movies())
+        if self.commandment:
+            commandment_short_movies = []
+            commandment_short_movies = self.commandment.short_movies().filter(target_audience__in=['any', 'kids'])
+            return list(lesson_short_movies) + list(commandment_short_movies)
         else:
-            return list(lesson_media)
+            return list(lesson_short_movies)
 
-    def pictures(self, include_commandment_media=True):
-        lesson_media = self.lessonpicture_set.filter(is_public=True)
 
-        if include_commandment_media and self.commandment:
-            return list(lesson_media) + list(self.commandment.pictures())
+    def pictures(self):
+        lesson_pictures = self.lessonpicture_set.filter(is_public=True)
+
+        if self.commandment:
+            commandment_pictures = []
+            commandment_pictures = self.commandment.pictures().filter(target_audience__in=['any', 'kids'])
+            return list(lesson_pictures) + list(commandment_pictures)
         else:
-            return list(lesson_media)
+            return list(lesson_pictures)
 
-    def testimonies(self, include_commandment_media=True):
-        lesson_media = self._filter_on_language(self.lessontestimony_set)
+    def testimonies(self):
+        lesson_testimonies = self._filter_on_language(self.lessontestimony_set)
 
-        if include_commandment_media and self.commandment:
-            return list(lesson_media) + list(self.commandment.testimonies())
+        if self.commandment:
+            commandment_testimonies = []
+            commandment_testimonies = self.commandment.testimonies().filter(target_audience__in=['any', 'kids'])
+            return list(lesson_testimonies) + list(commandment_testimonies)
         else:
-            return list(lesson_media)
+            return list(lesson_testimonies)
 
     def lessonquestions(self):
         return self.lessonquestion_set.all()

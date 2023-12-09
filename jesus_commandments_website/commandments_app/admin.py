@@ -126,6 +126,9 @@ class BookInline(admin.TabularInline):
 
 
 class CommandmentAdmin(VersionAdmin):
+    class Meta:
+        verbose_name_plural = 'Step'
+
     list_display = ['id', 'title', 'primary_bible_reference', 'category']
     inlines = [
         PrimaryBibleReferencesInline,

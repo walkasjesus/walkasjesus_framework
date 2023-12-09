@@ -13,6 +13,13 @@
             </a>
         </li>
         {% endif %}
+        {% if lesson.activities %}
+        <li>
+            <a href="#activities" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Activities' %}" src="{% static 'images/activities.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if lesson.drawings %}
         <li>
             <a href="#drawings" class="ripple">
@@ -35,14 +42,14 @@
         </li>
         {% endif %}
         {% if lesson.superbooks %}
-        <li targetaudience="kids">
+        <li>
             <a href="#superbook" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
         {% if lesson.henkieshows %}
-        <li targetaudience="kids">
+        <li>
             <a href="#henkieshow" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'De Henkie Show' %}" src="{% static 'images/henkieshow.png' %}" width="40px" alt=""></i>
             </a>
@@ -96,25 +103,41 @@
                             <h4>{% trans 'Lesson' %} {{ lesson.id }} -
                                 {% for bible_section in lesson.bible_section %}
                                     {{ bible_section.short_name_chapter }}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
+                                {% endfor %} - {{ lesson.story }}
                             </h4>
 
-                            {% if lesson.primary_bible_reference.positive_negative == "negative" %}
-                            <ul class="negative_list negative_list_title">
-                            {% elif lesson.primary_bible_reference.positive_negative == "both" %}
-                            <ul class="pos_neg_list positive_list_title">
+                            {% if lesson.commandment %}
+                                <p><i>{% trans "This lesson we will learn the following 'step' which can be learned to the children to remember as truth for their lives" %}</i></p><br>
+                                <b>{% trans 'Related Step text to learn'%}:</b> {{ lesson.title }}<br>
+                                {% if lesson.related_step_description %}
+                                <b>{% trans 'Related Step description' %}:</b> {{ lesson.related_step_description }}<br>
+                                {% endif %}
+                                <b>{% trans 'Related Step Bible text'%}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
                             {% else %}
-                            <ul class="positive_list positive_list_title">
+                                <b>{% trans 'Lesson text to learn'%}:</b> {{ lesson.title }}<br>
+                                <b>{% trans 'Related Bible text'%}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
                             {% endif %}
-                                <li>{{ lesson.title }}</li>
-                                <b>{{ lesson.primary_bible_reference }} {{ lesson.primary_bible_reference.text  }}</b>
-                            </ul>
-
-                            {% trans 'Lesson category'%}: {{ lesson.get_category_display }}<br>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {% if lesson.activities %}
+            <div id="activities" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/activities.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Activities' %}</h4>
+                            <p><i>{% trans "Here are some ideas for activities you can do with the children to process this lesson in a creative way" %}</i></p><br>
+                            {{ lesson.activities | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
 
             {% endcache %}
             {% cache cache_timeout lessons_detail_media cache_on_multi_language lesson.id %}
@@ -268,7 +291,7 @@
                 </div>
             </div>
             {% if lesson.superbooks %}
-            <div id="superbook" targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -277,7 +300,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Superbook' %}</h4>
                             {% for superbook in lesson.superbooks %}
-                                <div targetaudience="{{ superbook.target_audience }}">
+                                <div>
                                     <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
                                     {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
                                     <div class="video-iframe">
@@ -291,7 +314,7 @@
             </div>
             {% endif %}
             {% if lesson.henkieshows %}
-            <div id="henkieshow" henkieshow="true" targetaudience="kids" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="henkieshow" henkieshow="true" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -323,7 +346,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Short Movies' %}</h4>
                             {% for short_movie in lesson.short_movies %}
-                            <div targetaudience="{{ short_movie.target_audience }}">
+                            <div>
                                 <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
                                 {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -346,7 +369,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Songs' %}</h4>
                             {% for song in lesson.songs %}
-                            <div targetaudience="{{ song.target_audience }}">
+                            <div>
                                 <h5>{{ song.author }} - {{ song.title }}</h5>
                                 {% if song.description %}<p>{{ song.description }}</p>{% endif %}
                                 <div class="video-iframe">
@@ -369,7 +392,7 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Testimonies' %}</h4>
                             {% for testimony in lesson.testimonies %}
-                            <div targetaudience="{{ testimony.target_audience }}">
+                            <div>
                                 <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                                 {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
                                 <div class="video-iframe">

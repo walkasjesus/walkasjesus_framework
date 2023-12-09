@@ -33,7 +33,21 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'cookielaw',
     'reversion',
+    'ckeditor',
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            ['Format', 'Bold', 'Italic', 'Underline', 'Strike'],  # Text formatting options
+            ['Link', 'Unlink'],  # Link-related options
+            ['NumberedList', 'BulletedList', 'Blockquote'],  # Lists and blockquote
+            ['RemoveFormat'],  # Remove formatting option
+            ['Source'],  # Source code view
+        ],
+        'height': 200,  # Set an appropriate height for the editor
+    },
+}
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',

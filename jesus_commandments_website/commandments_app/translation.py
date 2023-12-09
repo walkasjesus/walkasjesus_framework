@@ -7,7 +7,7 @@ def register_translations(app_config):
         'Drawing': ['description'],
         'Picture': ['description'],
         'Question': ['text'],
-        'Lesson': ['title'],
+        'Lesson': ['title', 'related_step_description', 'story', 'activities'],
         'LessonDrawing': ['description'],
         'LessonPicture': ['description'],
         'LessonQuestion': ['text'],

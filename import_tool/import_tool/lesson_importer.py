@@ -27,7 +27,7 @@ class LessonImporter(object):
             lesson.title = first(group, 'title_en')
             lesson.story = first(group, 'story_en')
             lesson.category = first(group, 'category')
-            lesson.category = first(group, 'activities')
+            lesson.activities = first(group, 'activities')
             lesson.lesson_bible_section = []
             lesson.primary_lesson_bible_references = []
             lesson.direct_lesson_bible_references = []

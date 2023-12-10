@@ -113,14 +113,14 @@
 
                             {% if lesson.commandment %}
                                 <p><i>{% trans "This lesson we will learn the following 'step' which can be learned to the children to remember as truth for their lives" %}</i></p><br>
-                                <b>{% trans 'Related Step text to learn'%}:</b> {{ lesson.title }}<br>
+                                <b>{% trans 'Related Step text to learn' %}:</b> {{ lesson.title }}<br>
                                 {% if lesson.related_step_description %}
                                 <b>{% trans 'Related Step description' %}:</b> {{ lesson.related_step_description }}<br>
                                 {% endif %}
-                                <b>{% trans 'Related Step Bible text'%}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Related Step Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
                             {% else %}
-                                <b>{% trans 'Lesson text to learn'%}:</b> {{ lesson.title }}<br>
-                                <b>{% trans 'Related Bible text'%}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Lesson text to learn' %}:</b> {{ lesson.title }}<br>
+                                <b>{% trans 'Related Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
                             {% endif %}
                         </div>
                     </div>

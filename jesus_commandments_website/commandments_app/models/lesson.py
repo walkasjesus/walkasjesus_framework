@@ -1,3 +1,5 @@
+from itertools import count
+
 from django.db import models
 from django.utils import translation
 from ckeditor.fields import RichTextField
@@ -60,6 +62,15 @@ class Lesson(models.Model):
     def found_henkieshow(self):
         return self.henkieshows()[0] if self.henkieshows() else ''
 
+    def found_song(self):
+        return self.songs()[0] if self.songs() else ''
+
+    def found_short_movie(self):
+        return self.short_movies()[0] if self.short_movies() else ''
+
+    def found_testimony(self):
+        return self.testimonies()[0] if self.testimonies() else ''
+
     def drawings(self):
         lesson_drawings = [d for d in self.lessondrawing_set.all() if d.is_public]
 
@@ -119,6 +130,7 @@ class Lesson(models.Model):
 
     def testimonies(self):
         lesson_testimonies = self._filter_on_language(self.lessontestimony_set)
+
 
         if self.commandment:
             commandment_testimonies = []

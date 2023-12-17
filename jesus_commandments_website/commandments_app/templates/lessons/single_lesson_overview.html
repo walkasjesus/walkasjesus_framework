@@ -10,9 +10,10 @@
                 {% if lesson.found_superbook.title %}<img title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
                 {% if lesson.found_henkieshow.title %}<img title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
                 {% if lesson.activities %}<img title="{% trans 'Activities Found' %}" src="{% static 'images/activities.png' %}" alt="">{% endif %}
-                {% if lesson.songs %}<img title="{% trans 'Songs Found' %}" src="{% static 'images/song.png' %}" alt="">{% endif %}
-                {% if lesson.short_movies %}<img title="{% trans 'Short Movies Found' %}" src="{% static 'images/shortmovie.png' %}" alt="">{% endif %}
-                {% if lesson.testimonies %}<img title="{% trans 'Testimonies Found' %}" src="{% static 'images/testimony.png' %}" alt="">{% endif %}
+                {% if lesson.found_song.title %}<img title="{% trans 'Songs Found' %}" src="{% static 'images/song.png' %}" alt="">{% endif %}
+                {% if lesson.found_short_movie.title %}<img title="{% trans 'Short Movies Found' %}" src="{% static 'images/shortmovie.png' %}" alt="">{% endif %}
+                {% if lesson.found_testimony.title %}<img title="{% trans 'Testimonies Found' %}" src="{% static 'images/testimony.png' %}" alt="">{% endif %}
+                {% if lesson.commandment %}<img title="{% trans 'Related Step Found' %}" src="{% static 'images/games.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
                 {% if lesson.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}

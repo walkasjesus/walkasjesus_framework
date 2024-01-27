@@ -180,18 +180,26 @@ class LessonDrawingInline(admin.TabularInline):
 class LessonSongInline(admin.TabularInline):
     model = LessonSong
     extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('img_url',)
 
 class LessonSuperbookInline(admin.TabularInline):
     model = LessonSuperbook
     extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('img_url',)
 
 class LessonHenkieshowInline(admin.TabularInline):
     model = LessonHenkieshow
     extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('img_url',)
 
 class LessonShortMovieInline(admin.TabularInline):
     model = LessonShortMovie
     extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('img_url',)
 
 class LessonPictureInline(admin.TabularInline):
     model = LessonPicture
@@ -200,6 +208,8 @@ class LessonPictureInline(admin.TabularInline):
 class LessonTestimonyInline(admin.TabularInline):
     model = LessonTestimony
     extra = 0
+    "We don't use these fields within lessons"
+    exclude = ('img_url',)
 
 class LessonQuestionInline(admin.TabularInline):
     model = LessonQuestion
@@ -208,17 +218,17 @@ class LessonQuestionInline(admin.TabularInline):
 class LessonAdmin(VersionAdmin):
     list_display = ['id', 'title', 'bible_section', 'primary_bible_reference']
     inlines = [
-        LessonBibleSectionInLine,
-        PrimaryLessonBibleReferencesInline,
-        DirectLessonBibleReferenceInline,
         LessonQuestionInline,
-        LessonDrawingInline,
         LessonSongInline,
         LessonSuperbookInline,
         LessonHenkieshowInline,
         LessonShortMovieInline,
         LessonPictureInline,
         LessonTestimonyInline,
+        LessonDrawingInline,
+        LessonBibleSectionInLine,
+        PrimaryLessonBibleReferencesInline,
+        DirectLessonBibleReferenceInline,
     ]
 
 

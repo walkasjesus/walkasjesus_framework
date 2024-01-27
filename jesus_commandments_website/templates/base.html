@@ -75,7 +75,6 @@
 	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
 	          <li class="nav-item"><a href="{% url 'account:logout' %}" class="nav-link"><span>{% trans 'Logout' %}</span></a></li>
             {% else %}
-            <li class="nav-item" targetaudience="adults"><a href="{% url 'account:signup' %}" class="nav-link"><span>{% trans 'Help improving' %}</span></a></li>
             <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
             {% endif %}
           </ul>

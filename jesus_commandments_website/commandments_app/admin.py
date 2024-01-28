@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry, DELETION
-from django.forms import TextInput, Textarea
 from django.urls import path, reverse
 from django.utils.html import escape
 from reversion.admin import VersionAdmin
@@ -127,11 +126,6 @@ class BookInline(admin.TabularInline):
 
 
 class CommandmentAdmin(VersionAdmin):
-    formfield_overrides = {
-        models.CharField: {'widget': TextInput(attrs={'size': '20'})},
-        models.TextField: {'widget': Textarea(attrs={'rows': 4, 'cols': 40})},
-    }
-
     class Meta:
         verbose_name_plural = 'Step'
 

@@ -171,6 +171,123 @@
 
             {% endcache %}
             {% cache cache_timeout lessons_detail_media cache_on_multi_language lesson.id %}
+
+            {% if lesson.superbooks %}
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Superbook' %}</h4>
+                            {% for superbook in lesson.superbooks %}
+                                <div>
+                                    <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
+                                    {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ superbook.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if lesson.henkieshows %}
+            <div id="henkieshow" henkieshow="true" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/henkieshow.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'De Henkie Show' %}</h4>
+                            {% for henkieshow in lesson.henkieshows %}
+                                <h5>{{ henkieshow.title }}</h5>
+                                {% if henkieshow.description %}<p>{{ henkieshow.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ henkieshow.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                                <p><b><a href="{{ henkieshow.img_url }}" target="_blank">{% trans 'Discover more creative methods of this Bible story on The Henkie Show' %}</a></b></p>
+                                <p style="clear: left;"> </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if lesson.short_movies %}
+            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/shortmovie.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Short Movies' %}</h4>
+                            {% for short_movie in lesson.short_movies %}
+                            <div>
+                                <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
+                                {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if lesson.songs %}
+            <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/song.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Songs' %}</h4>
+                            {% for song in lesson.songs %}
+                            <div>
+                                <h5>{{ song.author }} - {{ song.title }}</h5>
+                                {% if song.description %}<p>{{ song.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if lesson.testimonies %}
+            <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/testimony.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Testimonies' %}</h4>
+                            {% for testimony in lesson.testimonies %}
+                            <div>
+                                <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
+                                {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
+                                <div class="video-iframe">
+                                    <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             {% if lesson.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -294,122 +411,6 @@
                     </div>
                 </div>
             </div>
-            {% if lesson.superbooks %}
-            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                            <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Superbook' %}</h4>
-                            {% for superbook in lesson.superbooks %}
-                                <div>
-                                    <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
-                                    {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
-                                    <div class="video-iframe">
-                                        <iframe src="{{ superbook.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if lesson.henkieshows %}
-            <div id="henkieshow" henkieshow="true" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/henkieshow.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'De Henkie Show' %}</h4>
-                            {% for henkieshow in lesson.henkieshows %}
-                                <h5>{{ henkieshow.title }}</h5>
-                                {% if henkieshow.description %}<p>{{ henkieshow.description }}</p>{% endif %}
-                                <div class="video-iframe">
-                                    <iframe src="{{ henkieshow.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                </div>
-                                <p><b><a href="{{ henkieshow.img_url }}" target="_blank">{% trans 'Discover more creative methods of this Bible story on The Henkie Show' %}</a></b></p>
-                                <p style="clear: left;"> </p>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if lesson.short_movies %}
-            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/shortmovie.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Short Movies' %}</h4>
-                            {% for short_movie in lesson.short_movies %}
-                            <div>
-                                <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
-                                {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
-                                <div class="video-iframe">
-                                    <iframe src="{{ short_movie.url }}" frameborder="0" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if lesson.songs %}
-            <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/song.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Songs' %}</h4>
-                            {% for song in lesson.songs %}
-                            <div>
-                                <h5>{{ song.author }} - {{ song.title }}</h5>
-                                {% if song.description %}<p>{{ song.description }}</p>{% endif %}
-                                <div class="video-iframe">
-                                    <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            {% if lesson.testimonies %}
-            <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="our-services-wrapper mb-60">
-                    <div class="services-inner">
-                        <div class="our-services-img">
-                        <img src="{% static 'images/testimony.png' %}" width="65px" alt="">
-                        </div>
-                        <div class="our-services-text">
-                            <h4>{% trans 'Testimonies' %}</h4>
-                            {% for testimony in lesson.testimonies %}
-                            <div>
-                                <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
-                                {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
-                                <div class="video-iframe">
-                                    <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
             <div id="games" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">

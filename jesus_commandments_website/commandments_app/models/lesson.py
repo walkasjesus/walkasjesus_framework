@@ -11,14 +11,14 @@ class LessonManager(models.Manager):
         return (c for c in Lesson.objects.all().prefetch_related('lessondrawing_set') if c.background_drawing())
 
 class Lesson(models.Model):
-    title = models.CharField(max_length=256, help_text="The step of the lesson which will be learned")
-    story = models.CharField(max_length=256, help_text="The title of the lesson from the Childrens Bible", null=True, blank=True, default=None)
+    title = models.CharField(max_length=256, help_text="De bijbehorende titel van de te leren 'stap'")
+    story = models.CharField(max_length=256, help_text="De titel van de les uit de Kinderbijbel", null=True, blank=True, default=None)
     activities = RichTextField(help_text="Beschrijf bij de les horende actititeiten, verwerkingsopdrachten of een leuke sketch. Wees creatief!", null=True, blank=True, default=None)
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)
-    commandment = models.ForeignKey(Commandment, help_text="If there is a connection to a commandment/step with this lesson, connect it here", on_delete=models.CASCADE, null=True, blank=True, default=None)
-    related_step_description = models.CharField(max_length=512, help_text="A description why this step is related to the Lesson from the Childrens Bible", null=True, blank=True, default=None)
+    commandment = models.ForeignKey(Commandment, help_text="Als er een connectie is tussen een les en een stap, verbind deze hier", on_delete=models.CASCADE, null=True, blank=True, default=None)
+    related_step_description = models.CharField(max_length=512, help_text="Een beschrijving waarom deze les een relatie heeft met deze stap", null=True, blank=True, default=None)
     bible = None
     languages = [translation.get_language()]
     objects = LessonManager()

@@ -1,7 +1,6 @@
 from django.utils import translation
 
 from commandments_app.models import BibleTranslation
-from jesus_commandments_website import settings
 
 
 class UserPreferences:
@@ -13,8 +12,10 @@ class UserPreferences:
         if 'bible_id' in self.session:
             return BibleTranslation().get(self.session['bible_id'])
 
-        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
-        return BibleTranslation().get(default_bible)
+        if self.language == 'nl' and BibleTranslation().contains('hsv'):
+            return BibleTranslation().get('hsv')
+
+        return BibleTranslation().get('de4e12af7f28f599-01')
 
     @bible.setter
     def bible(self, value):

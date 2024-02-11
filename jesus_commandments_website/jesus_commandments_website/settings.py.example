@@ -119,3 +119,5 @@ DEFAULT_BIBLE_PER_LANGUAGE = {
     'nl': '87f620660790371b-01', # Herziene Statenvertaling
 }
 
+HSV_BIBLE_KEY = ''  # The key for the HSV bible
+HSV_BIBLE_PATH = r''  # The path to the HSV bible texts

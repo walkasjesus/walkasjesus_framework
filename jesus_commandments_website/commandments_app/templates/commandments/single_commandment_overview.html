@@ -7,8 +7,15 @@
                 <h3>{{ commandment.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% if commandment.found_superbook.title %}<img targetaudience="kids" title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
-                {% if commandment.found_henkieshow.title %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
+                {% if commandment.found_superbook %}<img targetaudience="kids" title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
+                {% if commandment.found_henkieshow %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
+                {% if commandment.found_song %}<img title="{% trans 'Songs Found' %}" src="{% static 'images/song.png' %}" alt="">{% endif %}
+                {% if commandment.found_short_movie %}<img title="{% trans 'Short Movies Found' %}" src="{% static 'images/shortmovie.png' %}" alt="">{% endif %}
+                {% if commandment.movies %}<img title="{% trans 'Movies Found' %}" src="{% static 'images/movie.png' %}" alt="">{% endif %}
+                {% if commandment.testimonies %}<img title="{% trans 'Testimonies Found' %}" src="{% static 'images/testimony.png' %}" alt="">{% endif %}
+                {% if commandment.blogs %}<img targetaudience="adults" title="{% trans 'Blogs Found' %}" src="{% static 'images/blog.png' %}" alt="">{% endif %}
+                {% if commandment.sermons %}<img targetaudience="adults" title="{% trans 'Sermons Found' %}" src="{% static 'images/sermon.png' %}" alt="">{% endif %}
+                {% if commandment.books %}<img targetaudience="adults" title="{% trans 'Books Found' %}" src="{% static 'images/book.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
                 {% if commandment.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}

@@ -74,11 +74,57 @@ class Commandment(models.Model):
     def background_song(self):
         return self.songs()[0] if self.songs() else ''
 
+    def found_song(self):
+        """
+        Get the first found song associated with this commandment.
+        Returns None if the title of the URL of the media item is not set.
+        """
+        songs = self.songs()
+        if songs:
+            for song in songs:
+                if song.url:
+                    print(f"Found song:", song.title)
+                    return song.title
+        # print (f"No song found")
+        return None
+
+    def found_short_movie(self):
+        """
+        Get the first found short movie associated with this commandment.
+        Returns None if the title of the URL of the media item is not set.
+        """
+        short_movies = self.short_movies()
+        if short_movies:
+            for short_movie in short_movies:
+                if short_movie.title:
+                    print(f"Found short_movie: ", short_movie.title)
+                    return short_movie.title
+        # print (f"No short movie found")
+        return None
+
     def found_superbook(self):
-        return self.superbooks()[0] if self.superbooks() else ''
+        """
+        Get the first found Superbook associated with this commandment.
+        Returns None if the title of the URL of the media item is not set.
+        """
+        superbooks = self.superbooks()
+        if superbooks:
+            for superbook in superbooks:
+                if superbook.title:
+                    return superbook.title
+        return None
 
     def found_henkieshow(self):
-        return self.henkieshows()[0] if self.henkieshows() else ''
+        """
+        Get the first found Henkieshow associated with this commandment.
+        Returns None if the title of the URL of the media item is not set.
+        """
+        henkieshows = self.henkieshows()
+        if henkieshows:
+            for henkieshow in henkieshows:
+                if henkieshow.title:
+                    return henkieshow.title
+        return None
 
     def drawings(self):
         # This is actually faster than filter in in the query,

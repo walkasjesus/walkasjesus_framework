@@ -5,6 +5,7 @@ Pillow>=10.0.0
 django-vinaigrette>=2.0.1
 django-rosetta>=0.9.9
 -e ../bible_lib
+-e ../hsv_bible_lib
 django-url-or-relative-url-field>=0.2.0
 sorl-thumbnail>=12.9.0
 mysqlclient>=2.1.0

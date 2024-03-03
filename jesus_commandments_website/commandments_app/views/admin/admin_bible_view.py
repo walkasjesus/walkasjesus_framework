@@ -19,7 +19,11 @@ class AdminBibleView(View):
         cache_controller = CacheController(cache)
 
         for bible in bibles:
-            cached_count, total_count = self.bible_count_in_cache(bible, cache_controller)
+            if bible.id == 'hsv':
+                cached_count = 1
+                total_count = 1
+            else:
+                cached_count, total_count = self.bible_count_in_cache(bible, cache_controller)
 
             bible.percentage_cached = cached_count / max(total_count, 0.0001) * 100
 

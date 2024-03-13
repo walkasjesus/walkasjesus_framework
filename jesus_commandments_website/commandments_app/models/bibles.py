@@ -1,50 +1,16 @@
 import logging
 
-from django.db import models
 from bible_lib import BibleFactory, Bible
-from django.utils import translation
-from hsv_bible_lib import HsvBible
 from django.db import models
+from django.utils import translation
+
 from jesus_commandments_website import settings
-
-
-class CombinedBiblesFactory:
-    """" Used to combine all bibles from multiple libraries. """
-    hsv_bible = None
-
-    def __init__(self):
-        try:
-            self.hsv_supported = (settings.HSV_BIBLE_KEY != '' and settings.HSV_BIBLE_PATH != '')
-        except:
-            self.hsv_supported = False
-
-        self.api_bible_factory = BibleFactory(settings.BIBLE_API_KEY)
-        if self.hsv_supported and CombinedBiblesFactory.hsv_bible is None:
-            try:
-                hsv = HsvBible(settings.HSV_BIBLE_KEY, settings.HSV_BIBLE_PATH)
-                CombinedBiblesFactory.hsv_bible = hsv
-            except Exception as ex:
-                logging.getLogger().warning(f'Failed to initialize HsvBible. {ex}')
-
-    def all(self):
-        bibles = self.api_bible_factory.all()
-
-        if self.hsv_supported and CombinedBiblesFactory.hsv_bible is not None:
-            bibles['hsv'] = CombinedBiblesFactory.hsv_bible
-
-        return bibles
-
-    def get(self, bible_id: str):
-        """" Get a specific bible translation given its unique id. """
-        if bible_id not in self.all():
-            logging.getLogger().warning(f'Could not find bible with id {bible_id}')
-        else:
-            return self.all()[bible_id]
 
 
 class BibleTranslation:
     """" Get a specific (set of) bible translation(s). """
-    _all_bibles = CombinedBiblesFactory().all()
+    _bible_factory = BibleFactory(settings.BIBLE_API_KEY)
+    _all_bibles = _bible_factory.all()
 
     def all(self) -> [Bible]:
         """" Get all bible translations (including languages not supported this website). """
@@ -57,8 +23,7 @@ class BibleTranslation:
 
     def all_disabled(self) -> [Bible]:
         """ This will return all bibles that are explicitly disabled. """
-        # return [BibleTranslation._bible_factory.create(m.bible_id) # Once HSV can be accessed over the API, use this line instead of the next.
-        return [CombinedBiblesFactory().get(m.bible_id)
+        return [BibleTranslation._bible_factory.create(m.bible_id)
                 for m in BibleTranslationMetaData.objects.all()
                 if m.is_enabled is False]
 

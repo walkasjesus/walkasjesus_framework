@@ -1,46 +1,50 @@
-from gettext import gettext
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.views import View
-from django.conf import settings
-from commandments_app.models import UserPreferences, BibleTranslation
+from django.utils import translation
+from commandments_app.models import BibleTranslation
+from jesus_commandments_website import settings
 
-class UserPreferencesBibleView(View):
-    def post(self, request):
-        bible_id = request.POST.get('bible_id')
-        if bible_id:
-            try:
-                new_bible = BibleTranslation().get(bible_id)
-                
-                # Check if the selected Bible is in the disabled list
-                if bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
-                    messages.error(request, gettext('The selected Bible translation is currently disabled.'))
-                else:
-                    UserPreferences(request.session).bible = new_bible
-                    messages.success(request, gettext('Bible translation changed successfully.'))
-            except BibleTranslation.DoesNotExist:
-                messages.error(request, gettext('Bible translation not found.'))
-        else:
-            messages.error(request, gettext('Failed to change the Bible translation.'))
+class UserPreferences:
+    def __init__(self, session):
+        self.session = session
 
-        return HttpResponseRedirect(request.POST.get('next', '/'))
+    @property
+    def bible(self):
+        # Check if a translation ID is stored in the session
+        if 'bible_id' in self.session:
+            bible_id = self.session['bible_id']
+            if bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+                return BibleTranslation().get(bible_id)
 
+        # Fallback to default Bible translation
+        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        
+        # Ensure the default Bible is not disabled
+        if default_bible not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            return BibleTranslation().get(default_bible)
 
-class UserPreferencesLanguagesView(View):
-    def post(self, request):
-        redirect = HttpResponseRedirect(request.POST.get('next', '/'))
+        # Handle the case where the default Bible is disabled
+        fallback_bible = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+        return BibleTranslation().get(fallback_bible)
 
-        if 'languages' not in request.POST:
-            messages.error(request, gettext('Failed to change the user languages'))
-            return redirect
+    @bible.setter
+    def bible(self, value):
+        if value.id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            self.session['bible_id'] = value.id
 
-        selected_languages = request.POST.getlist('languages')
+    @property
+    def language(self):
+        return translation.get_language()
 
-        if selected_languages:
-            UserPreferences(request.session).languages = selected_languages
-            messages.success(request, gettext('Languages updated successfully.'))
-        else:
-            messages.error(request, gettext('No languages selected'))
+    @property
+    def languages(self):
+        """ A user can select multiple languages (so more media is shown for example)"""
+        if 'languages' in self.session and self.session['languages'] is not None:
+            return self.session['languages']
 
-        return redirect
+        # If nothing is specified, default to user main language and english as many items are available in english.
+        return [self.language, 'en']
+
+    @languages.setter
+    def languages(self, value) -> []:
+        # Sort so when using in comparison or cache key [en, nl] is the same cache as [nl, en]
+        self.session['languages'] = sorted(value)
 

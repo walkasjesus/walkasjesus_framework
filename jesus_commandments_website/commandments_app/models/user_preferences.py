@@ -1,6 +1,7 @@
 from django.utils import translation
 
 from commandments_app.models import BibleTranslation
+from jesus_commandments_website import settings
 
 
 class UserPreferences:
@@ -9,17 +10,27 @@ class UserPreferences:
 
     @property
     def bible(self):
+        # Check if a translation ID is stored in the session
         if 'bible_id' in self.session:
-            return BibleTranslation().get(self.session['bible_id'])
+            bible_id = self.session['bible_id']
+            if bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+                return BibleTranslation().get(bible_id)
 
-        if self.language == 'nl' and BibleTranslation().contains('hsv'):
-            return BibleTranslation().get('hsv')
+        # Fallback to default Bible translation
+        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        # Ensure the default Bible is not disabled
+        if default_bible not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            return BibleTranslation().get(default_bible)
 
-        return BibleTranslation().get('de4e12af7f28f599-01')
+        # Handle the case where the default Bible is disabled
+        fallback_bible = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+        return BibleTranslation().get(fallback_bible)
 
     @bible.setter
     def bible(self, value):
-        self.session['bible_id'] = value.id
+        if value.id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            self.session['bible_id'] = value.id
+
 
     @property
     def language(self):
@@ -38,3 +49,4 @@ class UserPreferences:
     def languages(self, value) -> []:
         # Sort so when using in comparison or cache key [en, nl] is the same cache as [nl, en]
         self.session['languages'] = sorted(value)
+

@@ -112,6 +112,10 @@ SECURE_HSTS_PRELOAD = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+DISABLED_BIBLE_TRANSLATIONS = [
+    '39d55004bcd11d2f-01'  # Statenvertaling Jongbloed-editie
+]
+
 BIBLE_API_KEY = ''  # The API key to scripture.api.bible
 DEFAULT_BIBLE_ANY_LANGUAGE = 'de4e12af7f28f599-01'
 DEFAULT_BIBLE_PER_LANGUAGE = {

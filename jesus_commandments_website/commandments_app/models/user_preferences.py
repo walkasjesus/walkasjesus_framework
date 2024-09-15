@@ -16,6 +16,7 @@ class UserPreferences:
             if bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
                 return BibleTranslation().get(bible_id)
 
+<<<<<<< HEAD
         # Fallback to default Bible translation
         default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
         # Ensure the default Bible is not disabled
@@ -25,6 +26,10 @@ class UserPreferences:
         # Handle the case where the default Bible is disabled
         fallback_bible = settings.DEFAULT_BIBLE_ANY_LANGUAGE
         return BibleTranslation().get(fallback_bible)
+=======
+        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        return BibleTranslation().get(default_bible)
+>>>>>>> 869e54825843f434f1f30a0a8e82a1a1018e4800
 
     @bible.setter
     def bible(self, value):

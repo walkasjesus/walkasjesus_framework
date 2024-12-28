@@ -36,8 +36,11 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	fi
 	
 	echo "INFO: ${start} - Start installing requirements" | tee -a ${log}
+	# Upgrade pip to the latest version
+	${pip} install --upgrade pip
+
 	# Install all used libraries
-	${pip} install -r requirements.txt | tee -a ${log}
+	${pip} install --upgrade -r requirements.txt | tee -a ${log}
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended installing requirements" | tee -a ${log}
 

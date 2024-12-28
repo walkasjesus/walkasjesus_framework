@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('commandments_app.urls', namespace='commandments')),
     path('account/', include('account_app.urls', namespace='account')),
     path('rosetta/', include('rosetta.urls')),
+    path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('admin_portal/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
 ]

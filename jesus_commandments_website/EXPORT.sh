@@ -124,6 +124,12 @@ MSG
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended exporting Media Resources" | tee -a ${log}
 
+	# Export Media Lessons from Database to CSV
+	echo "INFO: ${start} - Start exporting Media Lessons" | tee -a ${log}
+	python3 manage.py export_media_lessons data/media/media_lessons.csv | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended exporting Media Lessons" | tee -a ${log}
+
 	# Git commit Media and create a pull request 
 	cd ${cur}/data/media
 	media_repository=git@github.com:walkasjesus/walkasjesus_media.git
@@ -132,7 +138,7 @@ MSG
 		git remote remove origin
 		git remote add origin ${media_repository}
 	fi
-	git add media.csv
+	git add media.csv media_lessons.csv
 	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${media_submessage}"
 	git push -u origin ${branch}
 	hub pull-request -h ${branch} -F - <<MSG2

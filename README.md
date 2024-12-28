@@ -70,6 +70,11 @@ _This will export all media resources from the database into the CSV:_
 
 `./jesus_commandments_website/export_media.sh`  
 
+9. Export all media lessons into the CSV  
+_This will export all media lessons from the database into the CSV:_  
+
+`./jesus_commandments_website/export_media_lessons.sh`
+
 ## Development instructions
 
 The following extra information might be helpfull when helping to improve this application. 

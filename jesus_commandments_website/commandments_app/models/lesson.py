@@ -2,7 +2,7 @@ from itertools import count
 
 from django.db import models
 from django.utils import translation
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from commandments_app.models import Commandment, LessonCategories
 
@@ -13,7 +13,7 @@ class LessonManager(models.Manager):
 class Lesson(models.Model):
     title = models.CharField(max_length=256, help_text="De bijbehorende titel van de te leren 'stap'")
     story = models.CharField(max_length=256, help_text="De titel van de les uit de Kinderbijbel", null=True, blank=True, default=None)
-    activities = RichTextField(help_text="Beschrijf bij de les horende actititeiten, verwerkingsopdrachten of een leuke sketch. Wees creatief!", null=True, blank=True, default=None)
+    activities = CKEditor5Field(help_text="Beschrijf bij de les horende actititeiten, verwerkingsopdrachten of een leuke sketch. Wees creatief!", null=True, blank=True, default=None)
     category = models.CharField(max_length=64,
                                 choices=[(tag.name, tag.value) for tag in LessonCategories],
                                 default=LessonCategories.oldtestament)

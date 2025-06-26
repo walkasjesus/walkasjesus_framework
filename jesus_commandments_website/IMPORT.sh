@@ -79,7 +79,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Check and get latest Master branch repository
 	COMMANDMENTS_UPTODATE=false
-	cd ${cur}/data/biblereferences
+	cd "${cur}/data/biblereferences"
 	commandments_repository=git@github.com:walkasjesus/walkasjesus_biblereferences.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
 	if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
@@ -97,7 +97,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Check and get latest Master branch repository
 	MEDIA_UPTODATE=false
-	cd ${cur}/data/media
+	cd "${cur}/data/media"
 	media_repository=git@github.com:walkasjesus/walkasjesus_media.git
 	current_repository=$(git remote -v | grep push | awk '{print $2}')
 	if [[ $(echo ${current_repository}) != "${media_repository}" ]]; then
@@ -113,7 +113,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		exit 1
 	fi
 
-	cd ${cur}
+	cd "${cur}"
 	if [[ $(echo $DELETE_DATABASE) == "true" ]]; then
 		if mysqldump $database > /root/mysqldump_$database_$today.sql | tee -a ${log}; then
 			echo "INFO: Succesfully backuped $database to /root/mysqldump_${database}_${today}.sql" | tee -a ${log}
@@ -130,7 +130,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	fi
 
 	# Import the Commandments CSV
-	cd ${cur}
+	cd "${cur}"
 	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
 		python3 manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
@@ -145,7 +145,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	fi
 
 	# Import the Media CSV
-	cd ${cur}
+	cd "${cur}"
 	if [[ $(echo $MEDIA_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Media Resources" | tee -a ${log}
 		python3 manage.py import_media data/media/media.csv | tee -a ${log}

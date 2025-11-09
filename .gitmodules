@@ -7,3 +7,6 @@
 [submodule "jesus_commandments_website/translations"]
 	path = jesus_commandments_website/translations
 	url = git@github.com:walkasjesus/walkasjesus_translations.git
+[submodule "jesus_commandments_website/data/lawofmessiah"]
+	path = jesus_commandments_website/data/lawofmessiah
+	url = git@github.com:walkasjesus/LawofMessiah.git

@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.models import LogEntry, DELETION
 from django.urls import path, reverse
 from django.utils.html import escape
 from reversion.admin import VersionAdmin
+from django.db.models import Count, Q
 
 from commandments_app.models import *
 from commandments_app.models.commandment_question import Question
@@ -27,6 +29,51 @@ class BibleAdmin(admin.ModelAdmin):
             path('', AdminBibleView.as_view(), name=view_name),
         ]
 
+class MediaTargetAudienceFilter(SimpleListFilter):
+    title = 'media target audience'
+    parameter_name = 'media_target_audience'
+
+    def lookups(self, request, model_admin):
+        audiences = set()
+        for model in [Song, Movie, Superbook, Henkieshow, ShortMovie, WaJVideo, Drawing, Testimony, Blog, Picture, Sermon, Book]:
+            audiences.update(model.objects.values_list('target_audience', flat=True))
+        return [(a, a) for a in audiences if a]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if not value:
+            return queryset
+        from django.db.models import Q
+        q = Q()
+        for rel in [
+            'song', 'movie', 'superbook', 'henkieshow', 'shortmovie', 'wajvideo',
+            'drawing', 'testimony', 'blog', 'picture', 'sermon', 'book'
+        ]:
+            q |= Q(**{f"{rel}__target_audience": value})
+        return queryset.filter(q).distinct()
+
+class MediaLanguageFilter(SimpleListFilter):
+    title = 'media language'
+    parameter_name = 'media_language'
+
+    def lookups(self, request, model_admin):
+        languages = set()
+        for model in [Song, Movie, Superbook, Henkieshow, ShortMovie, WaJVideo, Drawing, Testimony, Blog, Picture, Sermon, Book]:
+            languages.update(model.objects.values_list('language', flat=True))
+        return [(l, l) for l in languages if l]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if not value:
+            return queryset
+        from django.db.models import Q
+        q = Q()
+        for rel in [
+            'song', 'movie', 'superbook', 'henkieshow', 'shortmovie', 'wajvideo',
+            'drawing', 'testimony', 'blog', 'picture', 'sermon', 'book'
+        ]:
+            q |= Q(**{f"{rel}__language": value})
+        return queryset.filter(q).distinct()
 
 class PrimaryBibleReferencesInline(admin.TabularInline):
     model = PrimaryBibleReference
@@ -129,7 +176,20 @@ class CommandmentAdmin(VersionAdmin):
     class Meta:
         verbose_name_plural = 'Step'
 
-    list_display = ['id', 'title', 'primary_bible_reference', 'category']
+    list_display = [
+        'id',
+        'title',
+        'quote',
+        'song_count',
+        'shortmovie_count',
+        'testimony_count',
+        'sermon_count',
+        'movie_count',
+        'blog_count',
+        'superbook_count',
+        'henkieshow_count',        
+    ]
+    list_filter = [MediaTargetAudienceFilter, MediaLanguageFilter]
     inlines = [
         PrimaryBibleReferencesInline,
         DirectBibleReferenceInline,
@@ -153,6 +213,91 @@ class CommandmentAdmin(VersionAdmin):
         BlogInline,
         BookInline,
     ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # Get filter values from request.GET
+        target_audience = request.GET.get('media_target_audience')
+        media_language = request.GET.get('media_language')
+
+        # Annotate counts based on filters
+        song_filter = Q()
+        movie_filter = Q()
+        shortmovie_filter = Q()
+        testimony_filter = Q()
+        blog_filter = Q()
+        sermon_filter = Q()
+        superbook_filter = Q()
+        henkieshow_filter = Q()
+        if target_audience:
+            song_filter &= Q(song__target_audience=target_audience)
+            movie_filter &= Q(movie__target_audience=target_audience)
+            shortmovie_filter &= Q(shortmovie__target_audience=target_audience)
+            testimony_filter &= Q(testimony__target_audience=target_audience)
+            blog_filter &= Q(blog__target_audience=target_audience)
+            sermon_filter &= Q(sermon__target_audience=target_audience)
+            superbook_filter &= Q(superbook__target_audience=target_audience)
+            henkieshow_filter &= Q(henkieshow__target_audience=target_audience)
+        if media_language:
+            song_filter &= Q(song__language=media_language)
+            movie_filter &= Q(movie__language=media_language)
+            shortmovie_filter &= Q(shortmovie__language=media_language)
+            testimony_filter &= Q(testimony__language=media_language)
+            blog_filter &= Q(blog__language=media_language)
+            sermon_filter &= Q(sermon__language=media_language)
+            superbook_filter &= Q(superbook__language=media_language)
+            henkieshow_filter &= Q(henkieshow__language=media_language)
+
+        return qs.annotate(
+            song_count=Count('song', filter=song_filter, distinct=True),
+            movie_count=Count('movie', filter=movie_filter, distinct=True),
+            shortmovie_count=Count('shortmovie', filter=shortmovie_filter, distinct=True),
+            testimony_count=Count('testimony', filter=testimony_filter, distinct=True),
+            blog_count=Count('blog', filter=blog_filter, distinct=True),
+            sermon_count=Count('sermon', filter=sermon_filter, distinct=True),
+            superbook_count=Count('superbook', filter=superbook_filter, distinct=True),
+            henkieshow_count=Count('henkieshow', filter=henkieshow_filter, distinct=True),
+        )
+    
+    def song_count(self, obj):
+        return obj.song_count
+    song_count.admin_order_field = 'song_count'
+    song_count.short_description = "Songs"
+
+    def movie_count(self, obj):
+        return obj.movie_count
+    movie_count.admin_order_field = 'movie_count'
+    movie_count.short_description = "Movies"
+
+    def shortmovie_count(self, obj):
+        return obj.shortmovie_count
+    shortmovie_count.admin_order_field = 'shortmovie_count'
+    shortmovie_count.short_description = "ShortMovies"
+
+    def testimony_count(self, obj):
+        return obj.testimony_count
+    testimony_count.admin_order_field = "testimony_count"
+    testimony_count.short_description = "Testimonies"
+
+    def blog_count(self, obj):
+        return obj.blog_count
+    blog_count.admin_order_field = "blog_count"
+    blog_count.short_description = "Blogs"
+
+    def sermon_count(self, obj):
+        return obj.sermon_count
+    sermon_count.admin_order_field = "sermon_count"
+    sermon_count.short_description = "Sermons"
+
+    def superbook_count(self, obj):
+        return obj.superbook_count
+    superbook_count.admin_order_field = 'superbook_count'
+    superbook_count.short_description = "Superbooks"
+
+    def henkieshow_count(self, obj):
+        return obj.henkieshow_count
+    henkieshow_count.admin_order_field = 'henkieshow_count'
+    henkieshow_count.short_description = "Henkieshows"
 
 class PrimaryLessonBibleReferencesInline(admin.TabularInline):
     model = PrimaryLessonBibleReference

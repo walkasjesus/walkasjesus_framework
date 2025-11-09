@@ -27,3 +27,7 @@ jesus_commandments_website/static/js/gtag.js
 *.mo
 hsv_bible_lib/hsv_bible_lib/tests/path
 hsv_bible_lib/hsv_bible_lib/tests/key
+.DS_Store
+jesus_commandments_website/.DS_Store
+jesus_commandments_website/data/.DS_Store
+

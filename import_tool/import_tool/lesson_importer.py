@@ -2,7 +2,7 @@ import pandas
 
 from import_tool.bible_reference import BibleReference
 from import_tool.lesson import Lesson
-from commandments_app.models import Commandment
+from walkasjesus_app.models import Commandment
 
 
 def first(data_frame, column):
@@ -15,7 +15,7 @@ def first(data_frame, column):
 
 
 class LessonImporter(object):
-    def load(self, file_path='../../../jesus_commandments_website/data/biblereferences/lessons.csv'):
+    def load(self, file_path='../../../walkasjesus_website/data/biblereferences/lessons.csv'):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         lessons = []

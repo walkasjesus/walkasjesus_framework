@@ -15,7 +15,7 @@ def first(data_frame, column):
 
 
 class MediaImporter(object):
-    def load(self, file_path='../../../jesus_commandments_website/data/media/media.csv'):
+    def load(self, file_path='../../../walkasjesus_website/data/media/media.csv'):
         df = pandas.read_csv(file_path, delimiter=';', na_filter= False)
 
         commandments = []

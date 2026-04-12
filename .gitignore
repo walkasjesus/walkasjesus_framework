@@ -12,22 +12,22 @@ build
 
 bible_api_cache.json
 
-jesus_commandments_website/media
-jesus_commandments_website/log
+walkasjesus_website/media
+walkasjesus_website/log
 
 API_KEY.txt
 
-jesus_commandments_website/jesus_commandments_website/settings.py
-jesus_commandments_website/account_app/management/commands/import_users.py
+walkasjesus_website/walkasjesus_website/settings.py
+walkasjesus_website/account_app/management/commands/import_users.py
 
 # Exclude specific Google Analytics gtag.js for specific country
-jesus_commandments_website/static/js/gtag.js
+walkasjesus_website/static/js/gtag.js
 
 # Compiled translation files
 *.mo
 hsv_bible_lib/hsv_bible_lib/tests/path
 hsv_bible_lib/hsv_bible_lib/tests/key
 .DS_Store
-jesus_commandments_website/.DS_Store
-jesus_commandments_website/data/.DS_Store
+walkasjesus_website/.DS_Store
+walkasjesus_website/data/.DS_Store
 

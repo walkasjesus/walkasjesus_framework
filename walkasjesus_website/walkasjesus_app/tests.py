@@ -50,7 +50,7 @@ class BibleTranslationTestCase(TestCase):
 class TestBibleReference(TestCase):
     def test_str(self):
         """ Test the to string method works """
-        reference = AbstractBibleReference()
+        reference = DirectBibleReference()
         reference.book = BibleBooks.Daniel.name
         reference.begin_chapter = 2
         reference.begin_verse = 15
@@ -68,7 +68,8 @@ class UniqueModelConstraintsTestCase(TestCase):
         reference2 = PrimaryBibleReference(commandment_id=1)
 
         reference1.save()
-        self.assertRaises(IntegrityError, reference2.save)
+        with self.assertRaises(IntegrityError):
+            reference2.save()
 
     def test_unique_direct_bible_references(self):
         """ Test to see if the unique constraint works"""

@@ -168,6 +168,11 @@ class LessonBibleSection(AbstractBibleReference):
 class PrimaryBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['commandment'], name='unique_primary_reference_per_commandment')
+        ]
+
 
 class DirectBibleReference(AbstractBibleReference):
     commandment = models.ForeignKey(Commandment, on_delete=models.CASCADE, null=True, blank=True, default=None)

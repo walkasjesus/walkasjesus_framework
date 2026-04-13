@@ -1,17 +1,17 @@
 # Application core
-django>=5.1.4
-pandas>=2.2.3
-Pillow>=11.0.0
+django>=6.0.4
+pandas>=3.0.2
+Pillow>=12.2.0
 django-vinaigrette>=2.0.1
-django-rosetta>=0.10.1
+django-rosetta>=0.10.3
 -e ../bible_lib
 django-url-or-relative-url-field>=0.2.0
-sorl-thumbnail>=12.11.0
-mysqlclient>=2.2.6
+sorl-thumbnail>=13.0.0
+mysqlclient>=2.2.8
 django-cookie-law>=2.2.0
-django-reversion>=5.1.0
-whitenoise>=6.8.2
-django-ckeditor-5>=0.2.15
+django-reversion>=6.1.0
+whitenoise>=6.12.0
+django-ckeditor-5>=0.2.20
 
 # Tools
 -e ../import_tool
@@ -19,12 +19,12 @@ django-ckeditor-5>=0.2.15
 polib>=1.2.0
 
 # Monitoring
-sentry-sdk>=2.19.2
+sentry-sdk>=2.57.0
 
 # Debug and Development
-django-debug-toolbar>=4.4.6
+django-debug-toolbar>=6.3.0
 
 # Used to communicate with youtube
-requests>=2.32.3
-google-api-python-client>=2.156.0
+requests>=2.33.1
+google-api-python-client>=2.194.0
 oauth2client>=4.1.3

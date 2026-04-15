@@ -99,13 +99,13 @@
             </div>
         </div>                               
         <div class="row">
-            <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:lesson_verses' lesson.id %}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img commandment_id">
                             <h3>{{ lesson.id }}</h3>
                         </div>
-                        <div id="bible_lesson_details" class="our-services-text">
+                        <div class="our-services-text bible_lesson_details">
                             <h4>{% trans 'Lesson' %} {{ lesson.id }} -
                                 {% for bible_section in lesson.bible_section %}
                                     {{ bible_section.short_name_chapter }}{% if not forloop.last %}, {% endif %}
@@ -118,10 +118,10 @@
                                 {% if lesson.related_step_description %}
                                 <b>{% trans 'Related Step description' %}:</b> {{ lesson.related_step_description }}<br>
                                 {% endif %}
-                                <b>{% trans 'Related Step Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Related Step Bible text' %}:</b> <span class="bible-verse-text" data-verse-ref="{{ lesson.primary_bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span> ({{ lesson.primary_bible_reference }})<br>
                             {% else %}
                                 <b>{% trans 'Lesson text to learn' %}:</b> {{ lesson.title }}<br>
-                                <b>{% trans 'Related Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Related Bible text' %}:</b> <span class="bible-verse-text" data-verse-ref="{{ lesson.primary_bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span> ({{ lesson.primary_bible_reference }})<br>
                             {% endif %}
                         </div>
                     </div>
@@ -320,13 +320,13 @@
                             <ul>
                             {% for bible_reference in lesson.direct_bible_references %}
                                 {% if bible_reference.positive_negative == "negative" %}
-                                <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="negative_list"><b>{{ bible_reference }}</b> <span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span></li>
                                 {% elif bible_reference.positive_negative == "both" %}
-                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> <span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span></li>
                                 {% elif bible_reference.positive_negative == "positive" %}
-                                <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="positive_list"><b>{{ bible_reference }}</b> <span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span></li>
                                 {% else %}
-                                <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="unknown_list"><b>{{ bible_reference }}</b> <span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span></li>
                                 {% endif %}
                             {% endfor %}
                             </ul>

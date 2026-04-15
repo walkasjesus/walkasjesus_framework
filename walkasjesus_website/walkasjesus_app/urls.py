@@ -10,7 +10,7 @@ from walkasjesus_app.views.vision_view import VisionView
 from walkasjesus_app.views.legalism_view import LegalismView
 from walkasjesus_app.views.termsandconditions_view import TermsView
 from walkasjesus_app.views.privacy_view import PrivacyView
-from walkasjesus_app.views.detail_view import DetailView, DetailLessonView
+from walkasjesus_app.views.detail_view import DetailView, DetailLessonView, BibleVersesCommandmentView, BibleVersesLessonView
 from walkasjesus_app.views.index_view import IndexView
 from walkasjesus_app.views.listing_view import ListingView
 from walkasjesus_app.views.listing_lesson_view import ListingLessonView
@@ -30,7 +30,9 @@ urlpatterns = [
     path('termsandconditions/', TermsView.as_view(), name='termsandconditions'),
     path('privacy/', PrivacyView.as_view(), name='privacy'),
     path('step/<int:commandment_id>/', DetailView.as_view(), name='detail'),
+    path('step/<int:commandment_id>/verses/', BibleVersesCommandmentView.as_view(), name='commandment_verses'),
     path('lesson/<int:lesson_id>/', DetailLessonView.as_view(), name='lessondetail'),
+    path('lesson/<int:lesson_id>/verses/', BibleVersesLessonView.as_view(), name='lesson_verses'),
     path('admin/reset_bibles/', AdminResetBibles.as_view(), name='admin_reset_bibles'),
     path('admin/persist_bible_cache/', AdminPersistBibleCache.as_view(), name='admin_persist_bible_cache'),
     path('admin/enable_bible/', AdminEnableBible.as_view(), name='admin_enable_bible'),
@@ -47,7 +49,9 @@ urlpatterns += [
     path(_('voorwaarden/'), TermsView.as_view(), name='termsandconditions'),
     path(_('privacy/'), PrivacyView.as_view(), name='privacy'),
     path(_('stap/<int:commandment_id>/'), DetailView.as_view(), name='detail'),
+    path(_('stap/<int:commandment_id>/bijbelverzen/'), BibleVersesCommandmentView.as_view(), name='commandment_verses'),
     path(_('les/<int:lesson_id>/'), DetailLessonView.as_view(), name='lessondetail'),
+    path(_('les/<int:lesson_id>/bijbelverzen/'), BibleVersesLessonView.as_view(), name='lesson_verses'),
     path(_('admin/herstel_bijbels/'), AdminResetBibles.as_view(), name='admin_reset_bibles'),
     path(_('admin/cache_bijbel_opslaan/'), AdminPersistBibleCache.as_view(), name='admin_persist_bible_cache'),
     path(_('admin/activeer_bijbel/'), AdminEnableBible.as_view(), name='admin_enable_bible'),

@@ -1,5 +1,39 @@
 $(document).ready(function(){
-  
+
+  function getCsrfToken() {
+    // Try cookie first (works on HTTPS), fall back to DOM (works on HTTP dev)
+    var match = document.cookie.match(/csrftoken=([^;]+)/);
+    if (match) return match[1];
+    var input = document.querySelector('[name=csrfmiddlewaretoken]');
+    return input ? input.value : '';
+  }
+
+  function getVersesUrl() {
+    var container = document.querySelector('[data-verses-url]');
+    return container ? container.getAttribute('data-verses-url') : '';
+  }
+
+  // Auto-load bible verse texts on detail pages
+  var versesUrl = getVersesUrl();
+  if (versesUrl) {
+    console.debug('Loading bible verses from:', versesUrl);
+    $.ajax({
+      type: 'POST',
+      url: versesUrl,
+      data: { 'csrfmiddlewaretoken': getCsrfToken() },
+      success: function(data) {
+        if (data.verses) {
+          $.each(data.verses, function(pk, text) {
+            $('[data-verse-ref="' + pk + '"]').text(text);
+          });
+        }
+      },
+      error: function(xhr) {
+        console.error('Failed to load bible verses:', xhr.status, xhr.responseText);
+      }
+    });
+  }
+
   if($.cookie('jc_bible_trans_settings')){
     $('#changeLanguageModal').modal('show');
     $.removeCookie('jc_bible_trans_settings');
@@ -91,7 +125,37 @@ $(document).ready(function(){
     $(document).on('change', '.drpBibleTranslation', function(event){
       event.preventDefault();
       $.cookie('jc_bible_trans_settings', true);
-      this.form.submit();
+      var $form = $(this).closest('form');
+      var versesUrl = getVersesUrl();
+      var bibleId = $(this).val();
+
+      if (versesUrl) {
+        var csrfToken = getCsrfToken();
+        var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+        $('.bible-verse-text').html(spinner);
+        $('#changeLanguageModal').modal('hide');
+        console.debug('Changing bible translation via:', versesUrl, 'bible_id:', bibleId);
+        $.ajax({
+          type: 'POST',
+          url: versesUrl,
+          data: {
+            'bible_id': bibleId,
+            'csrfmiddlewaretoken': csrfToken
+          },
+          success: function(data) {
+            if (data.verses) {
+              $.each(data.verses, function(pk, text) {
+                $('[data-verse-ref="' + pk + '"]').text(text);
+              });
+            }
+          },
+          error: function() {
+            $form[0].submit();
+          }
+        });
+      } else {
+        this.form.submit();
+      }
     });
 
     $(document).on('click', '.btnSaveLanguages', function(event){

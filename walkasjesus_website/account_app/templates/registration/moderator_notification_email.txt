@@ -1,0 +1,8 @@
+A new user has registered.
+
+Username: {{ user.username }}
+Email: {{ user.email }}
+First name: {{ user.first_name }}
+Last name: {{ user.last_name }}
+
+This account is inactive until the email confirmation link is used.

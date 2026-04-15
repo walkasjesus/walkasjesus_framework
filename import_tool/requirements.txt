@@ -1,2 +1,2 @@
-pandas
+pandas>=3.0.2
 -e ../bible_lib

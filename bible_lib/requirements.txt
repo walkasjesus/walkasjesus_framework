@@ -1,2 +1,2 @@
-requests
-pycountry
+requests>=2.33.1
+pycountry>=26.2.16

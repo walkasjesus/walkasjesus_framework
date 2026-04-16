@@ -4,9 +4,9 @@
 {% load cache %}
 {% load cookielaw_tags %}
 <html lang="en">
-  {% cache cache_timeout head cache_on_language %}
   <head>
-    <title>{% trans 'Walk as Jesus - learn it - live it - give it' %}</title>
+    <title>{% block title_content %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}</title>
+  {% cache cache_timeout head cache_on_language %}
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
     <meta charset="utf-8">
@@ -44,8 +44,32 @@
     <link href="{% static 'cookielaw/css/cookielaw.css' %}" rel="stylesheet">
     <!-- Customcss which needs presedence -->
     <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
-  </head>
   {% endcache %}
+  {% block head_meta %}
+    <meta name="description" content="{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/jc_icon.png' %}">
+    <meta property="og:site_name" content="Walk as Jesus">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{% block twitter_title %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endblock %}">
+  {% endblock %}
+  {% block jsonld %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Walk as Jesus",
+    "url": "{{ request.scheme }}://{{ request.get_host }}/",
+    "description": "Discover the commandments of Jesus Christ. Learn it, Live it, Give it."
+  }
+  </script>
+  {% endblock %}
+  </head>
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
     {% cookielaw_banner %}
 

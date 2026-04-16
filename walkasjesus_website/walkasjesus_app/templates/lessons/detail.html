@@ -3,6 +3,27 @@
 {% load i18n %}
 {% load media_extras %}
 {% load cache %}
+{% block title_content %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block og_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block og_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block twitter_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block twitter_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ lesson.title|escapejs }}",
+  "description": "{% if lesson.story %}{{ lesson.story|truncatechars:200|escapejs }}{% else %}Walk as Jesus - Discover the commandments of Jesus Christ.{% endif %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Walk as Jesus",
+    "url": "{{ request.scheme }}://{{ request.get_host }}/"
+  }
+}
+</script>
+{% endblock %}
 {% block content %}
 {% cache cache_timeout lessons_detail cache_on_bible lesson.id %}
 <nav class="floating-menu">

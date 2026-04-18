@@ -66,8 +66,12 @@ class Command(BaseCommand):
                 skipped_count += 1
                 continue
             
-            # Build relative image URL (relative to MEDIA_ROOT)
+            # Build image path relative to MEDIA_ROOT (e.g. images/aa11.png)
             img_url = os.path.join(image_dir, filename).replace('\\', '/')
+            if img_url.startswith('media/'):
+                img_url = img_url[len('media/'):]
+            if img_url.startswith('/'):
+                img_url = img_url[1:]
             
             try:
                 # Try to get or create the drawing

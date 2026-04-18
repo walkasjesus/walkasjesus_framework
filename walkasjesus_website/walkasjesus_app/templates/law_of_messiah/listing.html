@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="ftco-section bg-light" id="law-of-messiah-section">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">{% trans 'Law of Messiah' %}</span>
+                    <h2 class="mb-4">{% trans 'Overview of all Laws of Messiah' %}</h2>
+                    <p>{% trans 'Discover each commandment with its category, commentary and Scripture references.' %}</p>
+                    <p>{% blocktrans %}This page presents the structured commandments (mitzvot) derived from the Bible, as documented in <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster. The goal here is to make these commandments easier to filter, search, compare, and study for discipleship and personal reflection.{% endblocktrans %}</p>
+                    <p>
+                        {% blocktrans %}Source material: <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}
+                        <br>
+                        <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">Volume 1 &amp; 2</a> |
+                        <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">Volume 3</a>
+                    </p>
+                    <p><small>{% blocktrans %}License notice: content is shared under CC BY-ND 4.0. Attribution is required and modified derivatives of the original material may not be distributed.{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
+                </div>
+            </div>
+            <div class="row justify-content-center pb-4">
+                <div class="col-md-12">
+                    <div class="our-services-wrapper">
+                        <div class="services-inner">
+                            <div class="our-services-text">
+                                <h4>{% trans 'Filter commandments that apply to you' %}</h4>
+                                <form method="get" class="row align-items-end justify-content-center law-filter-form">
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-source">{% trans 'Testament' %}</label>
+                                        <select id="filter-source" name="source_dataset" class="form-control law-filter-select">
+                                            <option value="">{% trans 'All' %}</option>
+                                            <option value="ot"{% if selected_source_dataset == 'ot' %} selected{% endif %}>{% trans 'Old Testament' %}</option>
+                                            <option value="nt"{% if selected_source_dataset == 'nt' %} selected{% endif %}>{% trans 'New Testament' %}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-category">{% trans 'Category' %}</label>
+                                        <select id="filter-category" name="category" class="form-control law-filter-select">
+                                            <option value="">{% trans 'All' %}</option>
+                                            {% for option in category_options %}
+                                                <option value="{{ option }}"{% if selected_category == option %} selected{% endif %}>{{ option }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-type">{% trans 'Commandment type' %}</label>
+                                        <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
+                                            <option value="">{% trans 'All' %}</option>
+                                            <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans 'Positive' %}</option>
+                                            <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans 'Negative' %}</option>
+                                            <option value="both"{% if selected_commandment_type == 'both' %} selected{% endif %}>{% trans 'Positive & Negative' %}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-form">{% trans 'Form' %}</label>
+                                        <select id="filter-form" name="commandment_form" class="form-control law-filter-select">
+                                            <option value="">{% trans 'All' %}</option>
+                                            <option value="explicit"{% if selected_commandment_form == 'explicit' %} selected{% endif %}>{% trans 'Explicit' %}</option>
+                                            <option value="implied"{% if selected_commandment_form == 'implied' %} selected{% endif %}>{% trans 'Implied' %}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-person">{% trans 'Applies to (person)' %}</label>
+                                        <select id="filter-person" name="ncla_person" class="form-control law-filter-select">
+                                            {% for value, label in ncla_person_options %}
+                                                <option value="{{ value }}"{% if selected_ncla_person == value %} selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <label for="filter-application">{% trans 'Application' %}</label>
+                                        <select id="filter-application" name="ncla_application" class="form-control law-filter-select">
+                                            {% for value, label in ncla_application_options %}
+                                                <option value="{{ value }}"{% if selected_ncla_application == value %} selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3 law-filter-actions">
+                                        <button type="submit" class="btn btn-primary btn-outline-primary py-2 px-3 law-filter-button">{% trans 'Filter' %}</button>
+                                    </div>
+                                </form>
+                                <p class="law-filter-summary mb-0 mt-2"><strong>{{ laws_count }}</strong> {% trans 'commandments match your current filter.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% if laws %}
+                    {% for law in laws %}
+                        {% include "law_of_messiah/single_law_of_messiah_overview.html" %}
+                    {% endfor %}
+                {% else %}
+                    <p>{% trans 'No Law of Messiah records are available.' %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

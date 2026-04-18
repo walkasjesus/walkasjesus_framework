@@ -1,0 +1,30 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="col-md-4">
+    <div class="sermon-wrap ftco-animate">
+        <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if law.primary_drawing %}{{ law.primary_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
+            <div class="number-content law-number-content">
+                <h3>{{ law.id }}</h3>
+            </div>
+            <div class="commandment-media-items">
+                {% if law.primary_drawing %}<img title="{% trans 'Drawing Found' %}" src="{% static 'images/drawing.png' %}" alt="">{% endif %}
+            </div>
+            <div class="text-content p-4 text-center">
+                {% if law.primary_drawing %}<span>{% trans 'Drawing available' %}</span>{% endif %}
+                <h3>{{ law.title|default:law.id }}</h3>
+                <p class="mb-2"><strong>{% trans 'Category' %}:</strong> {{ law.category|default:'-' }}</p>
+                <p>
+                    <a href="{% url 'commandments:law_of_messiah_detail' law.id %}" class="btn-custom p-2 text-center">
+                        <span class="icon-play"></span>
+                        {% if LANGUAGE_CODE|slice:":2" == 'nl' %}
+                            Bekijk gebod
+                        {% else %}
+                            View law
+                        {% endif %}
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

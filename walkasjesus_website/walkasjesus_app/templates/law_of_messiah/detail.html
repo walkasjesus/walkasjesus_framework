@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load cache %}
+
+{% block title_content %}{{ law.title|default:law.id }} - {% trans 'Law of Messiah' %}{% endblock %}
+
+{% block content %}
+{% cache cache_timeout law_of_messiah_detail cache_on_language law.id %}
+<section class="ftco-daily-verse img" style="background-image:url('{% if law.primary_drawing_url %}{{ law.primary_drawing_url }}{% else %}{% static 'images/bg_2.jpg' %}{% endif %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-11">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-12 heading-section text-center ftco-animate">
+                        <span class="subheading">{{ law.id }}</span>
+                    </div>
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
+                        <span class="subheading">{{ law.title|default:law.id }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner law-commandment-main">
+                        <div class="our-services-img commandment_id law-commandment-id">
+                            <h3>{{ law.id }}</h3>
+                        </div>
+                        <div class="our-services-text commandment_details">
+                            <h4>{{ law.commandment|linebreaksbr }}</h4>
+
+                            <p><strong>{% trans 'Category' %}:</strong> {{ law.category|default:'-' }}</p>
+                            <p><strong>{% trans 'Type' %}:</strong> {{ law.get_commandment_type_display }}</p>
+                            <p><strong>{% trans 'Form' %}:</strong> {{ law.get_commandment_form_display|default:'-' }}</p>
+                            <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.get_source_dataset_display }}</p>
+                            <div class="lom-ncla-summary">
+                                <h5>{% trans 'New Covenant Literal Application' %}</h5>
+                                <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
+                                <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                <details class="lom-ncla-explainer">
+                                    <summary>{% trans 'More explanation about New Covenant Literal Application' %}</summary>
+                                    <div class="lom-ncla-explainer-content">
+                                        <p>{% blocktrans %}The New Covenant Literal Application Code (NCLA) is an interpretive guide used by the authors to indicate which person categories a mitzvah applies to, and at what level of literal compliance.{% endblocktrans %}</p>
+                                        <p>{% blocktrans %}It combines person categories such as Jewish, K'rov Yisrael, and Gentile, together with male/female distinctions and an application level such as mandated, recommended, optional, or prohibited.{% endblocktrans %}</p>
+                                        <p>{% blocktrans %}This code reflects the authors' interpretive opinion and is provided for prayerful consideration. On this page, the technical code is summarized into plain language to help new readers understand it more easily.{% endblocktrans %}</p>
+                                        {% if ncla_summary.detailed_codes %}
+                                            <p><strong>{% trans 'Detailed code labels' %}:</strong> {{ ncla_summary.detailed_codes|join:' | ' }}</p>
+                                        {% endif %}
+                                        <p><a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/nc-lac.php">{% trans 'Read the full explanation from the source' %}</a></p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/bible.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Bible references' %}</h4>
+
+                            {% if key_nt_scriptures %}
+                            <h5>{% trans 'Key NT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in key_nt_scriptures %}
+                                <li>
+                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
+                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if key_ot_scriptures %}
+                            <h5>{% trans 'Key OT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in key_ot_scriptures %}
+                                <li>
+                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
+                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if supportive_nt_scriptures %}
+                            <h5>{% trans 'Supportive NT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in supportive_nt_scriptures %}
+                                <li>
+                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
+                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if supportive_ot_scriptures %}
+                            <h5>{% trans 'Supportive OT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in supportive_ot_scriptures %}
+                                <li>
+                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
+                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law.commentary_rudolph or law.commentary_juster or law.classical_commentators %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Commentary' %}</h4>
+                            {% if law.commentary_rudolph %}
+                            <h5>{% trans 'Rudolph' %}</h5>
+                            <p>{{ law.commentary_rudolph|linebreaksbr }}</p>
+                            {% endif %}
+                            {% if law.commentary_juster %}
+                            <h5>{% trans 'Juster' %}</h5>
+                            <p>{{ law.commentary_juster|linebreaksbr }}</p>
+                            {% endif %}
+                            {% if law.classical_commentators %}
+                            <h5>{% trans 'Classical commentators' %}</h5>
+                            <p>{{ law.classical_commentators|linebreaksbr }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if drawings %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/drawing.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Drawings' %}</h4>
+                            <div class="row">
+                                {% for drawing in drawings %}
+                                <div class="col-md-6">
+                                    {% if drawing.img_url %}
+                                    <img src="{{ drawing.img_url }}" class="img-fluid mb-2" alt="Law of Messiah drawing">
+                                    {% endif %}
+                                    {% if drawing.author %}<p><strong>{% trans 'Author' %}:</strong> {{ drawing.author }}</p>{% endif %}
+                                    {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Source and License' %}</h4>
+                            <p>{% blocktrans %}Based on <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}</p>
+                            <p>
+                                <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">Volume 1 &amp; 2</a> |
+                                <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">Volume 3</a>
+                            </p>
+                            <p><small>{% blocktrans %}License: CC BY-ND 4.0 (Attribution required, NoDerivatives).{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
+                            <p><small>{% blocktrans %}Disclaimer: the original content is authored by Rabbi Michael Rudolph and Rabbi Daniel Juster; additional notes or implementation details on this website are not part of their original work and do not represent their views.{% endblocktrans %}</small></p>
+                            {% if law.source %}<p><small><strong>{% trans 'Record source' %}:</strong> <a href="{{ law.source }}" target="_blank" rel="noopener">{{ law.source }}</a></small></p>{% endif %}
+                            {% if law.copyright %}<p><small><strong>{% trans 'Copyright note' %}:</strong> {{ law.copyright }}</small></p>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Back to overview' %}</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endcache %}
+{% endblock %}

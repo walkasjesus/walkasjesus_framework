@@ -14,6 +14,11 @@ from walkasjesus_app.views.detail_view import DetailView, DetailLessonView, Bibl
 from walkasjesus_app.views.index_view import IndexView
 from walkasjesus_app.views.listing_view import ListingView
 from walkasjesus_app.views.listing_lesson_view import ListingLessonView
+from walkasjesus_app.views.law_of_messiah_view import (
+    LawOfMessiahListingView,
+    LawOfMessiahDetailView,
+    LawOfMessiahBibleVersesView,
+)
 from walkasjesus_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView, BibleTranslationsForLanguageView
 
 app_name = 'commandments'
@@ -26,6 +31,9 @@ urlpatterns = [
     path('bible-translations/', BibleTranslationsForLanguageView.as_view(), name='bible_translations_for_language'),
     path('steps_overview/', ListingView.as_view(), name='listing'),
     path('lessons_overview/', ListingLessonView.as_view(), name='lesson_listing'),
+    path('laws_of_messiah/', LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
+    path('laws_of_messiah/<str:law_id>/', LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
+    path('laws_of_messiah/<str:law_id>/verses/', LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),
     path('vision/', VisionView.as_view(), name='vision'),
     path('legalism/', LegalismView.as_view(), name='legalism'),
     path('termsandconditions/', TermsView.as_view(), name='termsandconditions'),
@@ -45,6 +53,9 @@ urlpatterns += [
     path(_('talen/'), UserPreferencesLanguagesView.as_view(), name='languages'),
     path(_('stappen_overzicht/'), ListingView.as_view(), name='listing'),
     path(_('lessen_overzicht/'), ListingLessonView.as_view(), name='lesson_listing'),
+    path(_('wet_van_christus/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
+    path(_('wet_van_christus/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
+    path(_('wet_van_christus/<str:law_id>/bijbelverzen/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),
     path(_('visie/'), VisionView.as_view(), name='vision'),
     path(_('wetticisme/'), LegalismView.as_view(), name='legalism'),
     path(_('voorwaarden/'), TermsView.as_view(), name='termsandconditions'),

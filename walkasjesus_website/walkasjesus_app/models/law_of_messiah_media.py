@@ -48,10 +48,14 @@ class LawOfMessiahDrawing(LawOfMessiahMedia):
     """Drawing media for Law of Messiah items."""
 
     def thumbnail_url(self):
-        image_source_path = self.img_url
-        # The thumbnail searches relative to the media directory so remove the leading media directory.
+        image_source_path = (self.img_url or '').strip()
+        # The thumbnail storage is rooted at MEDIA_ROOT, so normalize to a path relative to it.
         if image_source_path.startswith(MEDIA_URL):
             image_source_path = image_source_path[len(MEDIA_URL):]
+        if image_source_path.startswith('/'):
+            image_source_path = image_source_path[1:]
+        if image_source_path.startswith('media/'):
+            image_source_path = image_source_path[len('media/'):]
 
         thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
         return thumbnail.url

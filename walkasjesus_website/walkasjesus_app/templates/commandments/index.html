@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load media_extras %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block homebanner %}
 {% cache cache_timeout commandments_index_banner cache_on_language %}
@@ -129,6 +130,15 @@
                       <div class="background-quote">
                         <span>"{% trans 'Are you ready to walk as Jesus walked? Step by step...' %}"</span>
                       </div>
+                      <p class="mt-4 text-center">
+                        <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary py-3 px-4 btn-lom-cta">
+                          {% if LANGUAGE_CODE|slice:":2" == 'nl' %}
+                            Klik hier om het hele overzicht van de 'wet van Christus' te zien
+                          {% else %}
+                            Click here to discover all Laws of Messiah
+                          {% endif %}
+                        </a>
+                      </p>
                   </div>
               </div>
           </div>

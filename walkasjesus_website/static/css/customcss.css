@@ -321,6 +321,148 @@ p {
     font-size: 27px;
 }
 
+.law-filter-form {
+    margin-top: 10px;
+}
+
+.law-filter-form label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.law-filter-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: #fff;
+    border: 1px solid #000000;
+    border-radius: .25em;
+    box-shadow: none;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 14px;
+    min-height: 42px;
+    padding: 8px 12px;
+}
+
+.law-filter-actions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-left: 22px;
+}
+
+.law-filter-button {
+    min-width: 120px;
+}
+
+.law-filter-summary {
+    text-align: center;
+}
+
+.law-number-content {
+    width: 72px !important;
+    height: 72px !important;
+    top: 12px !important;
+    left: 12px !important;
+    opacity: 0.35 !important;
+}
+
+.law-number-content h3 {
+    font-size: 24px;
+    padding: 12px 4px !important;
+}
+
+.law-commandment-id {
+    background-image: url('/static/images/our-services-img-wider.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 104px;
+    min-width: 104px;
+    height: 65px;
+    margin-left: -98px;
+}
+
+.commandment_id.law-commandment-id h3 {
+    font-size: 25pt;
+    font-family: "mufanpfs";
+    font-weight: bold;
+    margin-left: 0px;
+    text-align: center;
+    padding: 5px 7px;
+}
+
+.law-commandment-main .our-services-text {
+    margin-left: 26px;
+}
+
+.lom-ncla-summary {
+    margin-top: 18px;
+}
+
+.lom-ncla-explainer {
+    background: #d8ebff;
+    border: 1px solid #7bb3e6;
+    border-radius: 8px;
+    margin-top: 14px;
+    padding: 0;
+}
+
+.lom-ncla-explainer summary {
+    color: #0c4d86;
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    padding: 12px 16px;
+}
+
+.lom-ncla-explainer summary::-webkit-details-marker {
+    display: none;
+}
+
+.lom-ncla-explainer-content {
+    padding: 0 16px 14px 16px;
+}
+
+@media (max-width: 991.98px) {
+    .law-filter-actions {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .law-filter-button {
+        width: 100%;
+    }
+
+    .law-number-content {
+        width: 62px !important;
+        height: 62px !important;
+    }
+
+    .law-number-content h3 {
+        font-size: 20px;
+        padding-top: 10px !important;
+    }
+}
+
+.btn-lom-cta {
+    background-color: #e2b900;
+    border: 1px solid #e2b900;
+    color: #3a332d;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.btn-lom-cta:hover,
+.btn-lom-cta:focus {
+    background-color: #25844b;
+    border-color: #25844b;
+    color: #ffffff;
+}
+
 .vision-author {
     text-align: right;
 }
@@ -354,9 +496,12 @@ p {
 }
 
 .commandment_id {
-    background-image: url('/static/images/our-services-img.png');
     background-repeat: no-repeat;
     width: 65px;
+}
+
+.commandment_id:not(.law-commandment-id) {
+    background-image: url('/static/images/our-services-img.png');
 }
 
 .commandment_id h3 {

@@ -1,6 +1,6 @@
 from gettext import gettext
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from django.conf import settings
 from walkasjesus_app.models import UserPreferences, BibleTranslation
@@ -43,4 +43,19 @@ class UserPreferencesLanguagesView(View):
             messages.error(request, gettext('No languages selected'))
 
         return redirect
+
+
+class BibleTranslationsForLanguageView(View):
+    """Returns JSON with Bible translations available for the given language code."""
+    def get(self, request):
+        language_code = request.GET.get('language', 'en')
+        bible_translation = BibleTranslation()
+        bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
+        default_bible_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+            default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+        return JsonResponse({
+            'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
+            'default_bible_id': default_bible_id,
+        })
 

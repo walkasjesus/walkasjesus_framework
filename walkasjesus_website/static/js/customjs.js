@@ -119,49 +119,16 @@ $(document).ready(function(){
 
     $(document).on('change', '.drpSelectLanguage', function(event){
       event.preventDefault();
-      $.cookie('jc_bible_trans_settings', true);
-      this.form.submit();
+      $(this).trigger('jc:site-language-changed', [$(this).val()]);
     });
     $(document).on('change', '.drpBibleTranslation', function(event){
       event.preventDefault();
-      $.cookie('jc_bible_trans_settings', true);
-      var $form = $(this).closest('form');
-      var versesUrl = getVersesUrl();
-      var bibleId = $(this).val();
-
-      if (versesUrl) {
-        var csrfToken = getCsrfToken();
-        var spinner = '<i class="fa fa-spinner fa-spin"></i>';
-        $('.bible-verse-text').html(spinner);
-        $('#changeLanguageModal').modal('hide');
-        console.debug('Changing bible translation via:', versesUrl, 'bible_id:', bibleId);
-        $.ajax({
-          type: 'POST',
-          url: versesUrl,
-          data: {
-            'bible_id': bibleId,
-            'csrfmiddlewaretoken': csrfToken
-          },
-          success: function(data) {
-            if (data.verses) {
-              $.each(data.verses, function(pk, text) {
-                $('[data-verse-ref="' + pk + '"]').text(text);
-              });
-            }
-          },
-          error: function() {
-            $form[0].submit();
-          }
-        });
-      } else {
-        this.form.submit();
-      }
+      $(this).trigger('jc:bible-translation-changed', [$(this).val()]);
     });
 
     $(document).on('click', '.btnSaveLanguages', function(event){
       event.preventDefault();
-      //$.cookie('jc_bible_trans_settings', true);
-      this.form.submit();
+      $(this).trigger('jc:save-language-bible-settings');
     });
 
   });

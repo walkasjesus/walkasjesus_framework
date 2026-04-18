@@ -14,7 +14,7 @@ from walkasjesus_app.views.detail_view import DetailView, DetailLessonView, Bibl
 from walkasjesus_app.views.index_view import IndexView
 from walkasjesus_app.views.listing_view import ListingView
 from walkasjesus_app.views.listing_lesson_view import ListingLessonView
-from walkasjesus_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView
+from walkasjesus_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView, BibleTranslationsForLanguageView
 
 app_name = 'commandments'
 
@@ -23,6 +23,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('bible/', UserPreferencesBibleView.as_view(), name='bible'),
     path('languages/', UserPreferencesLanguagesView.as_view(), name='languages'),
+    path('bible-translations/', BibleTranslationsForLanguageView.as_view(), name='bible_translations_for_language'),
     path('steps_overview/', ListingView.as_view(), name='listing'),
     path('lessons_overview/', ListingLessonView.as_view(), name='lesson_listing'),
     path('vision/', VisionView.as_view(), name='vision'),

@@ -98,8 +98,8 @@
             {% if user.is_authenticated %}
 	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
 	          <li class="nav-item">
-	            <form method="post" action="{% url 'account:logout' %}" style="display:inline;">{% csrf_token %}
-	              <button type="submit" class="nav-link" style="background:none;border:none;cursor:pointer;padding:0;"><span>{% trans 'Logout' %}</span></button>
+              <form method="post" action="{% url 'account:logout' %}" class="logout-form">{% csrf_token %}
+                <button type="submit" class="nav-link logout-button"><span>{% trans 'Logout' %}</span></button>
 	            </form>
 	          </li>
             {% else %}
@@ -166,8 +166,8 @@
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'account:profile' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Profile' %} ({{ user.username }})</a></li>
                     <li>
-                      <form method="post" action="{% url 'account:logout' %}" style="display:inline;">{% csrf_token %}
-                        <button type="submit" class="py-1 d-block" style="background:none;border:none;cursor:pointer;padding:0;"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Logout' %}</button>
+                      <form method="post" action="{% url 'account:logout' %}" class="logout-form">{% csrf_token %}
+                        <button type="submit" class="py-1 d-block logout-button"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Logout' %}</button>
                       </form>
                     </li>
                 {% else %}

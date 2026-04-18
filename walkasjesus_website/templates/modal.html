@@ -11,7 +11,7 @@
         </div>
         <div class="modal-body">
             <div class="selectWrapper">
-                <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                <form action="{% url 'set_language' %}" method="post" id="frmSiteLanguage">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ redirect_to }}">
                     <b>{% trans 'Site language' %}:</b>
                     <div class="select">
@@ -31,10 +31,10 @@
             <div class="selectWrapper">
                 <b>{% trans 'Bible translation' %}:</b>
                 <div class="btnBibleTranslation">
-                <form action="{% url 'commandments:bible' %}" method="post">{% csrf_token %}
+                <form action="{% url 'commandments:bible' %}" method="post" id="frmBibleTranslation">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <div class="select">
-                    <select name="bible_id" class="drpBibleTranslation">
+                    <select name="bible_id" class="drpBibleTranslation" id="drpBibleTranslation">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
                         <option value="{{ user_preferences.bible.id }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
@@ -66,13 +66,13 @@
             <div class="selectWrapper">
                 <b>{% trans 'Media Resource language' %}:</b>     
                 <div class="multiselect">
-                    <form action="{% url 'commandments:languages' %}" class="frmLanguages" method="post">{% csrf_token %}
+                    <form action="{% url 'commandments:languages' %}" class="frmLanguages" method="post" id="frmLanguages">{% csrf_token %}
                         <input name="next" type="hidden" value="{{ request.get_full_path }}">
                         <select id="multiselect" name="languages" multiple class="btnSelectResourceType">
                             {% get_available_languages as LANGUAGES %}
                             {% get_language_info_list for LANGUAGES as languages %}
                             {% for language in languages %}
-                            <option value="{{ language.code }}">
+                            <option value="{{ language.code }}"{% if language.code in user_preferences.languages %} selected{% endif %}>
                                 {{ language.name_local }} ({{ language.code }})
                             </option>
                             {% endfor %}
@@ -88,4 +88,95 @@
       </div>
     </div>
   </div>
-  
+<script>
+(function () {
+    var languageForm = document.getElementById('frmSiteLanguage');
+    var bibleForm = document.getElementById('frmBibleTranslation');
+    var mediaLanguagesForm = document.getElementById('frmLanguages');
+    var languageSelect = document.querySelector('.drpSelectLanguage');
+    var bibleSelect = document.getElementById('drpBibleTranslation');
+    var saveButton = document.querySelector('.btnSaveLanguages');
+    var bibleTranslationsUrl = "{% url 'commandments:bible_translations_for_language' %}";
+
+    function refreshBibleDropdown(selectedLanguage) {
+        bibleSelect.disabled = true;
+
+        fetch(bibleTranslationsUrl + '?language=' + encodeURIComponent(selectedLanguage))
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                bibleSelect.innerHTML = '';
+                if (data.bibles.length === 0) {
+                    var opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = '-';
+                    bibleSelect.appendChild(opt);
+                } else {
+                    data.bibles.forEach(function (bible) {
+                        var opt = document.createElement('option');
+                        opt.value = bible.id;
+                        opt.textContent = bible.name;
+                        if (bible.id === data.default_bible_id) {
+                            opt.selected = true;
+                        }
+                        bibleSelect.appendChild(opt);
+                    });
+                }
+                bibleSelect.disabled = false;
+            })
+            .catch(function () {
+                bibleSelect.disabled = false;
+            });
+
+    }
+
+    function postForm(formElement) {
+        var payload = new URLSearchParams(new FormData(formElement));
+        var csrfTokenInput = formElement.querySelector('input[name="csrfmiddlewaretoken"]');
+        var csrfToken = csrfTokenInput ? csrfTokenInput.value : '';
+
+        return fetch(formElement.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: payload.toString()
+        });
+    }
+
+    languageSelect.addEventListener('change', function () {
+        var selectedLanguage = this.value;
+        refreshBibleDropdown(selectedLanguage);
+    });
+
+    saveButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        saveButton.disabled = true;
+
+        postForm(languageForm)
+            .then(function () {
+                return postForm(bibleForm);
+            })
+            .then(function () {
+                return postForm(mediaLanguagesForm);
+            })
+            .then(function () {
+                if (window.jQuery && jQuery.removeCookie) {
+                    jQuery.removeCookie('jc_bible_trans_settings');
+                }
+                window.location.reload();
+            })
+            .catch(function () {
+                if (window.jQuery && jQuery.removeCookie) {
+                    jQuery.removeCookie('jc_bible_trans_settings');
+                }
+                window.location.reload();
+            })
+            .finally(function () {
+                saveButton.disabled = false;
+            });
+    });
+})();
+</script>  

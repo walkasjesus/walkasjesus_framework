@@ -1,0 +1,22 @@
+.field-ncla #id_ncla {
+  min-width: 1200px;
+  max-width: 1400px;
+}
+
+.field-ncla #id_ncla > div {
+  margin-bottom: 4px;
+}
+
+.field-ncla #id_ncla label {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 1200px;
+  white-space: nowrap;
+}
+
+.field-ncla .readonly,
+.field-ncla .help,
+.field-ncla .related-widget-wrapper {
+  max-width: none;
+}

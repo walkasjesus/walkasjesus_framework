@@ -11,6 +11,7 @@ def register_translations(app_config):
         'LessonDrawing': ['description'],
         'LessonPicture': ['description'],
         'LessonQuestion': ['text'],
+        'LawOfMessiah': ['title', 'commandment', 'commentary_rudolph', 'commentary_juster', 'classical_commentators'],
     }
 
     # Register fields to translate

@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.models import LogEntry, DELETION
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django import forms
 from django.urls import path, reverse
 from django.utils.html import escape
 from reversion.admin import VersionAdmin
@@ -377,6 +379,209 @@ class LessonAdmin(VersionAdmin):
     ]
 
 
+class LawOfMessiahBibleReferenceInline(admin.TabularInline):
+    model = LawOfMessiahBibleReference
+    extra = 0
+    fields = ['reference_type', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse']
+
+
+class LawOfMessiahDrawingInline(admin.TabularInline):
+    model = LawOfMessiahDrawing
+    extra = 1
+    fields = ['author', 'description', 'img_url', 'is_public']
+
+
+class LawOfMessiahAdminForm(forms.ModelForm):
+    title = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 2, 'cols': 120}),
+    )
+    ncla = forms.MultipleChoiceField(
+        choices=LawOfMessiah.NCLA_CHOICES,
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+    class Meta:
+        model = LawOfMessiah
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._related_choice_maps = {
+            'commandments_related_ot': self._related_commandment_choice_map(LawOfMessiah.SOURCE_DATASET_OT),
+            'commandments_related_nt': self._related_commandment_choice_map(LawOfMessiah.SOURCE_DATASET_NT),
+        }
+        self._code_choice_maps = {
+            'maimonides': self._code_choice_map('maimonides'),
+            'meir': self._code_choice_map('meir'),
+            'chinuch': self._code_choice_map('chinuch'),
+        }
+
+        self.fields['commandments_related_ot'] = forms.MultipleChoiceField(
+            choices=list(self._related_choice_maps['commandments_related_ot'].items()),
+            required=False,
+            widget=FilteredSelectMultiple('Related OT commandments', is_stacked=False),
+        )
+        self.fields['commandments_related_nt'] = forms.MultipleChoiceField(
+            choices=list(self._related_choice_maps['commandments_related_nt'].items()),
+            required=False,
+            widget=FilteredSelectMultiple('Related NT commandments', is_stacked=False),
+        )
+        self.fields['maimonides'] = forms.MultipleChoiceField(
+            choices=list(self._code_choice_maps['maimonides'].items()),
+            required=False,
+            widget=FilteredSelectMultiple('Maimonides', is_stacked=False),
+        )
+        self.fields['meir'] = forms.MultipleChoiceField(
+            choices=list(self._code_choice_maps['meir'].items()),
+            required=False,
+            widget=FilteredSelectMultiple('Meir', is_stacked=False),
+        )
+        self.fields['chinuch'] = forms.MultipleChoiceField(
+            choices=list(self._code_choice_maps['chinuch'].items()),
+            required=False,
+            widget=FilteredSelectMultiple('Chinuch', is_stacked=False),
+        )
+
+        if self.instance and self.instance.pk:
+            self.fields['ncla'].initial = self.instance.ncla or []
+            self.fields['commandments_related_ot'].initial = self._related_ids(self.instance.commandments_related_ot)
+            self.fields['commandments_related_nt'].initial = self._related_ids(self.instance.commandments_related_nt)
+            self.fields['maimonides'].initial = self.instance.maimonides or []
+            self.fields['meir'].initial = self.instance.meir or []
+            self.fields['chinuch'].initial = self.instance.chinuch or []
+
+        self.fields['ncla'].help_text = (
+            'NCLA = Person category + literal application code. '
+            'Example: JMm means Jewish male, literal compliance mandated.'
+        )
+
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.Textarea):
+                field.widget.attrs['rows'] = 2
+                field.widget.attrs['cols'] = 120
+
+        for field_name in ['commentary_rudolph', 'commentary_juster']:
+            value = getattr(self.instance, field_name, '') if self.instance else ''
+            if value and str(value).strip():
+                self.fields[field_name].widget.attrs['rows'] = 12
+            else:
+                self.fields[field_name].widget.attrs['rows'] = 2
+
+    def _related_commandment_choice_map(self, source_dataset):
+        queryset = LawOfMessiah.objects.filter(source_dataset=source_dataset).order_by('id')
+        return {item.id: f'{item.id} - {item.title}' for item in queryset}
+
+    def _code_choice_map(self, field_name):
+        values = set()
+        for items in LawOfMessiah.objects.values_list(field_name, flat=True):
+            if not items:
+                continue
+            for code in items:
+                if code:
+                    values.add(code)
+        return {code: code for code in sorted(values)}
+
+    def _related_ids(self, items):
+        if not items:
+            return []
+        related_ids = []
+        for item in items:
+            if isinstance(item, dict) and item.get('id'):
+                related_ids.append(item['id'])
+            elif isinstance(item, str):
+                related_ids.append(item)
+        return related_ids
+
+    def clean_ncla(self):
+        values = self.cleaned_data.get('ncla') or []
+        return sorted(set(values))
+
+    def clean_commandments_related_ot(self):
+        return self._clean_related_commandments('commandments_related_ot')
+
+    def clean_commandments_related_nt(self):
+        return self._clean_related_commandments('commandments_related_nt')
+
+    def clean_maimonides(self):
+        return sorted(set(self.cleaned_data.get('maimonides') or []))
+
+    def clean_meir(self):
+        return sorted(set(self.cleaned_data.get('meir') or []))
+
+    def clean_chinuch(self):
+        return sorted(set(self.cleaned_data.get('chinuch') or []))
+
+    def _clean_related_commandments(self, field_name):
+        selected_ids = self.cleaned_data.get(field_name) or []
+        choice_map = self._related_choice_maps[field_name]
+        cleaned = []
+        for item_id in selected_ids:
+            label = choice_map.get(item_id, item_id)
+            title = label.split(' - ', 1)[1] if ' - ' in label else ''
+            cleaned.append({'id': item_id, 'title': title})
+        return cleaned
+
+
+class LawOfMessiahAdmin(VersionAdmin):
+    form = LawOfMessiahAdminForm
+    list_display = ['id', 'title', 'category', 'commandment_type', 'commandment_form', 'source_dataset']
+    list_filter = ['source_dataset', 'commandment_type', 'commandment_form', 'category', 'ncla_deviation', 'classical_commandment']
+    search_fields = ['id', 'title', 'commandment', 'category']
+    inlines = [LawOfMessiahBibleReferenceInline, LawOfMessiahDrawingInline]
+    fieldsets = (
+        ('Core', {
+            'fields': (
+                'id',
+                'title',
+                'commandment',
+                'category',
+                'source_dataset',
+                'commandment_type',
+                'commandment_form',
+            ),
+        }),
+        ('Commentary', {
+            'fields': (
+                'commentary_rudolph',
+                'commentary_juster',
+                'classical_commentators',
+            ),
+        }),
+        ('Classification', {
+            'classes': ('collapse',),
+            'fields': (
+                'ncla',
+                'ncla_deviation',
+                'classical_commandment',
+            ),
+        }),
+        ('Relations', {
+            'classes': ('collapse',),
+            'fields': (
+                'commandments_related_ot',
+                'commandments_related_nt',
+                'maimonides',
+                'meir',
+                'chinuch',
+            ),
+        }),
+        ('Source', {
+            'classes': ('collapse',),
+            'fields': (
+                'source',
+                'copyright',
+            ),
+        }),
+    )
+
+    class Media:
+        css = {
+            'all': ('css/admin/law_of_messiah_admin.css',)
+        }
+
+
 class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 
@@ -432,5 +637,6 @@ class LogEntryAdmin(admin.ModelAdmin):
 admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(Lesson, LessonAdmin)
+admin.site.register(LawOfMessiah, LawOfMessiahAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)

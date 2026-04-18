@@ -13,3 +13,5 @@ from .user_preferences import *
 from .lesson_question import *
 from .commandment_question import *
 from .redirect import *
+from .law_of_messiah import *
+from .law_of_messiah_media import *

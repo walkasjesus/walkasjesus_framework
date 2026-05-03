@@ -4,7 +4,7 @@ from django.contrib.admin.models import LogEntry, DELETION
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
 from django.urls import path, reverse
-from django.utils.html import escape
+from django.utils.html import escape, mark_safe
 from reversion.admin import VersionAdmin
 from django.db.models import Count, Q
 
@@ -391,15 +391,149 @@ class LawOfMessiahDrawingInline(admin.TabularInline):
     fields = ['author', 'description', 'img_url', 'is_public']
 
 
+class NCLAGroupWidget(forms.Widget):
+    """Compact checkbox-grid widget for editing structured NCLA groups."""
+
+    PERSON_CODES = ['JM', 'JF', 'KM', 'KF', 'GM', 'GF']
+    PERSON_LABELS = {
+        'JM': 'Jewish M', 'JF': 'Jewish F',
+        'KM': "K'rov M", 'KF': "K'rov F",
+        'GM': 'Gentile M', 'GF': 'Gentile F',
+    }
+    APP_CODES = ['m', 'r', 'o', 'n', 'u', 'p', 'i']
+    APP_LABELS = {
+        'm': 'Mand.', 'r': 'Recomm.', 'o': 'Optional',
+        'n': 'Not recom.', 'u': 'Unauthor.', 'p': 'Prohib.', 'i': 'Imposs.',
+    }
+    APP_COLORS = {
+        'm': '#c8e6c9', 'r': '#dcedc8', 'o': '#fff9c4',
+        'n': '#ffe0b2', 'u': '#ffccbc', 'p': '#ffcdd2', 'i': '#e0e0e0',
+    }
+
+    def format_value(self, value):
+        import json as _json
+        if not value:
+            return [{'group': 'All', 'codes': []}]
+        if isinstance(value, str):
+            try:
+                parsed = _json.loads(value)
+                if isinstance(parsed, list):
+                    if parsed and isinstance(parsed[0], str):
+                        return [{'group': 'All', 'codes': sorted(parsed)}]
+                    return parsed or [{'group': 'All', 'codes': []}]
+            except Exception:
+                pass
+            return [{'group': 'All', 'codes': []}]
+        if isinstance(value, list):
+            if not value:
+                return [{'group': 'All', 'codes': []}]
+            if isinstance(value[0], str):
+                return [{'group': 'All', 'codes': sorted(value)}]
+            return value
+        return [{'group': 'All', 'codes': []}]
+
+    def value_from_datadict(self, data, files, name):
+        return data.get(name, '')
+
+    def render(self, name, value, attrs=None, renderer=None):
+        import json as _json
+        groups = self.format_value(value)
+        widget_id = (attrs or {}).get('id', name)
+        json_attr = escape(_json.dumps(groups, ensure_ascii=False))
+
+        parts = []
+        parts.append(f'<div class="ncla-widget" id="ncla-widget-{widget_id}">')
+        parts.append(f'<input type="hidden" name="{name}" id="{widget_id}" value="{json_attr}">')
+        # Hidden template for JS cloning
+        parts.append('<div style="display:none">')
+        parts.append(self._group_html('__TPL__', 'New Group', [], widget_id, template=True))
+        parts.append('</div>')
+        parts.append(f'<div id="ncla-groups-{widget_id}">')
+        for i, grp in enumerate(groups):
+            parts.append(self._group_html(i, grp.get('group', 'All'), grp.get('codes', []), widget_id))
+        parts.append('</div>')
+        parts.append(f'<button type="button" class="button" style="margin-top:6px" onclick="nclaAddGroup(\'{widget_id}\')">')
+        parts.append('+ Add group</button>')
+        parts.append('</div>')
+        parts.append(self._js(widget_id))
+        return mark_safe('\n'.join(parts))
+
+    def _group_html(self, index, group_name, codes, widget_id, template=False):
+        tmpl = ' data-template="1"' if template else ''
+        code_set = set(codes)
+        safe_name = escape(group_name)
+        rows = []
+        rows.append(
+            f'<div class="ncla-group-block" data-index="{index}"{tmpl} '
+            f'style="margin:6px 0;padding:8px;border:1px solid #ccc;background:#f9f9f9">'
+        )
+        rows.append(
+            f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'
+            f'<strong>Group:</strong>'
+            f'<input type="text" class="ncla-gname" value="{safe_name}" style="flex:1;padding:2px 6px" '
+            f'onchange="nclaSerialize(\'{widget_id}\')">'
+            f'<button type="button" class="button" style="background:#ba2121;color:#fff;padding:2px 8px" '
+            f'onclick="nclaRemove(this,\'{widget_id}\')">&#x2715; Remove</button>'
+            f'</div>'
+        )
+        rows.append('<table style="border-collapse:collapse;font-size:11px">')
+        rows.append('<tr><th style="padding:3px 8px;text-align:left">Person</th>')
+        for ac in self.APP_CODES:
+            bg = self.APP_COLORS.get(ac, '')
+            rows.append(f'<th style="padding:3px 5px;text-align:center;background:{bg}">{self.APP_LABELS[ac]}<br><code>{ac}</code></th>')
+        rows.append('</tr>')
+        for pc in self.PERSON_CODES:
+            rows.append(f'<tr><td style="padding:3px 8px;font-weight:bold">{self.PERSON_LABELS[pc]}<br><code style="font-weight:normal">{pc}</code></td>')
+            for ac in self.APP_CODES:
+                full_code = f'{pc}{ac}'
+                chk = ' checked' if full_code in code_set else ''
+                bg = self.APP_COLORS.get(ac, '')
+                rows.append(
+                    f'<td style="text-align:center;background:{bg}">'
+                    f'<input type="checkbox" class="ncla-cb" data-code="{full_code}"{chk} '
+                    f'onchange="nclaSerialize(\'{widget_id}\')" title="{full_code}">'
+                    f'</td>'
+                )
+            rows.append('</tr>')
+        rows.append('</table></div>')
+        return '\n'.join(rows)
+
+    def _js(self, wid):
+        return (
+            f'<script>(function(){{'
+            f'function ser(wid){{'
+            f'var g=[];'
+            f'document.querySelectorAll("#ncla-groups-"+wid+" .ncla-group-block").forEach(function(b){{'
+            f'var n=b.querySelector(".ncla-gname").value.trim()||"All";'
+            f'var c=[];b.querySelectorAll(".ncla-cb:checked").forEach(function(x){{c.push(x.dataset.code);}});'
+            f'if(c.length)g.push({{group:n,codes:c.sort()}});'
+            f'}});'
+            f'document.getElementById(wid).value=JSON.stringify(g);'
+            f'}}'
+            f'window.nclaSerialize=ser;'
+            f'window.nclaAddGroup=function(wid){{'
+            f'var t=document.querySelector("#ncla-widget-"+wid+" [data-template]").cloneNode(true);'
+            f't.removeAttribute("data-template");t.style.display="";'
+            f'document.getElementById("ncla-groups-"+wid).appendChild(t);'
+            f'}};'
+            f'window.nclaRemove=function(btn,wid){{'
+            f'var all=document.querySelectorAll("#ncla-groups-"+wid+" .ncla-group-block");'
+            f'if(all.length<=1){{btn.closest(".ncla-group-block").querySelectorAll(".ncla-cb").forEach(function(x){{x.checked=false;}});}}'
+            f'else{{btn.closest(".ncla-group-block").remove();}}'
+            f'ser(wid);'
+            f'}};'
+            f'}})();</script>'
+        )
+
+
 class LawOfMessiahAdminForm(forms.ModelForm):
     title = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': 2, 'cols': 120}),
     )
-    ncla = forms.MultipleChoiceField(
-        choices=LawOfMessiah.NCLA_CHOICES,
+    ncla = forms.CharField(
         required=False,
-        widget=forms.CheckboxSelectMultiple,
+        widget=NCLAGroupWidget(),
     )
 
     class Meta:
@@ -409,52 +543,58 @@ class LawOfMessiahAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._related_choice_maps = {
-            'commandments_related_ot': self._related_commandment_choice_map(LawOfMessiah.SOURCE_DATASET_OT),
-            'commandments_related_nt': self._related_commandment_choice_map(LawOfMessiah.SOURCE_DATASET_NT),
+            'related_lawofmessiah': self._related_commandment_choice_map(),
+            'related_steps': self._related_steps_choice_map(),
+            'maimonides': self._maimonides_choice_map(),
         }
         self._code_choice_maps = {
-            'maimonides': self._code_choice_map('maimonides'),
             'meir': self._code_choice_map('meir'),
             'chinuch': self._code_choice_map('chinuch'),
         }
 
-        self.fields['commandments_related_ot'] = forms.MultipleChoiceField(
-            choices=list(self._related_choice_maps['commandments_related_ot'].items()),
+        self.fields['related_lawofmessiah'] = forms.MultipleChoiceField(
+            choices=list(self._related_choice_maps['related_lawofmessiah'].items()),
             required=False,
-            widget=FilteredSelectMultiple('Related OT commandments', is_stacked=False),
+            widget=FilteredSelectMultiple('Related Law of Messiah commandments', is_stacked=False),
         )
-        self.fields['commandments_related_nt'] = forms.MultipleChoiceField(
-            choices=list(self._related_choice_maps['commandments_related_nt'].items()),
+        self.fields['related_steps'] = forms.MultipleChoiceField(
+            choices=list(self._related_choice_maps['related_steps'].items()),
             required=False,
-            widget=FilteredSelectMultiple('Related NT commandments', is_stacked=False),
+            widget=FilteredSelectMultiple('Related Steps', is_stacked=False),
         )
         self.fields['maimonides'] = forms.MultipleChoiceField(
-            choices=list(self._code_choice_maps['maimonides'].items()),
+            choices=list(self._related_choice_maps['maimonides'].items()),
             required=False,
-            widget=FilteredSelectMultiple('Maimonides', is_stacked=False),
+            widget=FilteredSelectMultiple('Maimonides commandments', is_stacked=False),
         )
         self.fields['meir'] = forms.MultipleChoiceField(
             choices=list(self._code_choice_maps['meir'].items()),
             required=False,
-            widget=FilteredSelectMultiple('Meir', is_stacked=False),
+            widget=FilteredSelectMultiple('Meir commandments', is_stacked=False),
         )
         self.fields['chinuch'] = forms.MultipleChoiceField(
             choices=list(self._code_choice_maps['chinuch'].items()),
             required=False,
-            widget=FilteredSelectMultiple('Chinuch', is_stacked=False),
+            widget=FilteredSelectMultiple('Chinuch commandments', is_stacked=False),
         )
 
         if self.instance and self.instance.pk:
-            self.fields['ncla'].initial = self.instance.ncla or []
-            self.fields['commandments_related_ot'].initial = self._related_ids(self.instance.commandments_related_ot)
-            self.fields['commandments_related_nt'].initial = self._related_ids(self.instance.commandments_related_nt)
+            ncla_val = self.instance.ncla or []
+            self.fields['ncla'].initial = ncla_val
+            related_values = self.instance.related_lawofmessiah or []
+            if not related_values:
+                related_values = (self.instance.commandments_related_ot or []) + (self.instance.commandments_related_nt or [])
+            self.fields['related_lawofmessiah'].initial = self._related_ids(related_values)
+            self.fields['related_steps'].initial = [s.id for s in self.instance.related_steps.all()]
             self.fields['maimonides'].initial = self.instance.maimonides or []
             self.fields['meir'].initial = self.instance.meir or []
             self.fields['chinuch'].initial = self.instance.chinuch or []
 
+        valid_codes = ', '.join(code for code, _ in LawOfMessiah.NCLA_CHOICES)
         self.fields['ncla'].help_text = (
-            'NCLA = Person category + literal application code. '
-            'Example: JMm means Jewish male, literal compliance mandated.'
+            'Check the boxes for each person category and literal application level. '
+            'Use "+ Add group" when this commandment has ncla_deviation (different rules per group/context). '
+            f'Valid codes: {valid_codes}.'
         )
 
         for field_name, field in self.fields.items():
@@ -469,9 +609,21 @@ class LawOfMessiahAdminForm(forms.ModelForm):
             else:
                 self.fields[field_name].widget.attrs['rows'] = 2
 
-    def _related_commandment_choice_map(self, source_dataset):
-        queryset = LawOfMessiah.objects.filter(source_dataset=source_dataset).order_by('id')
+    def _related_commandment_choice_map(self):
+        queryset = LawOfMessiah.objects.order_by('id')
         return {item.id: f'{item.id} - {item.title}' for item in queryset}
+
+    def _related_steps_choice_map(self):
+        """Map related steps (Commandments) for selection."""
+        from walkasjesus_app.models import Commandment
+        queryset = Commandment.objects.order_by('id')
+        return {str(item.id): f'{item.id} - {item.title}' for item in queryset}
+
+    def _maimonides_choice_map(self):
+        """Map Maimonides commandments for selection."""
+        from walkasjesus_app.models import Maimonides
+        queryset = Maimonides.objects.order_by('id')
+        return {item.id: f'{item.id} - {item.commandment}' for item in queryset}
 
     def _code_choice_map(self, field_name):
         values = set()
@@ -495,14 +647,40 @@ class LawOfMessiahAdminForm(forms.ModelForm):
         return related_ids
 
     def clean_ncla(self):
-        values = self.cleaned_data.get('ncla') or []
-        return sorted(set(values))
+        import json as _json
+        raw = (self.cleaned_data.get('ncla') or '').strip()
+        if not raw:
+            return []
+        try:
+            parsed = _json.loads(raw)
+        except (ValueError, TypeError) as exc:
+            raise forms.ValidationError(f'Invalid JSON: {exc}')
+        if not isinstance(parsed, list):
+            raise forms.ValidationError('NCLA must be a JSON list of groups.')
+        valid_codes = {code for code, _ in LawOfMessiah.NCLA_CHOICES}
+        cleaned = []
+        for i, entry in enumerate(parsed):
+            if not isinstance(entry, dict):
+                raise forms.ValidationError(f'Group {i + 1} must be a JSON object with "group" and "codes" keys.')
+            group_name = str(entry.get('group', 'All') or 'All').strip()
+            codes = entry.get('codes', [])
+            if not isinstance(codes, list):
+                raise forms.ValidationError(f'Group "{group_name}": "codes" must be a list.')
+            bad = [c for c in codes if c not in valid_codes]
+            if bad:
+                raise forms.ValidationError(f'Group "{group_name}": unknown code(s): {", ".join(bad)}.')
+            if codes:
+                cleaned.append({'group': group_name, 'codes': sorted(codes)})
+        return cleaned
 
-    def clean_commandments_related_ot(self):
-        return self._clean_related_commandments('commandments_related_ot')
+    def clean_related_lawofmessiah(self):
+        return self._clean_related_commandments('related_lawofmessiah')
 
-    def clean_commandments_related_nt(self):
-        return self._clean_related_commandments('commandments_related_nt')
+    def clean_related_steps(self):
+        """Convert selected step IDs back to Commandment objects."""
+        from walkasjesus_app.models import Commandment
+        selected_ids = self.cleaned_data.get('related_steps') or []
+        return Commandment.objects.filter(id__in=selected_ids)
 
     def clean_maimonides(self):
         return sorted(set(self.cleaned_data.get('maimonides') or []))
@@ -514,21 +692,24 @@ class LawOfMessiahAdminForm(forms.ModelForm):
         return sorted(set(self.cleaned_data.get('chinuch') or []))
 
     def _clean_related_commandments(self, field_name):
+        """Return just the IDs for storage in JSONField."""
         selected_ids = self.cleaned_data.get(field_name) or []
-        choice_map = self._related_choice_maps[field_name]
-        cleaned = []
-        for item_id in selected_ids:
-            label = choice_map.get(item_id, item_id)
-            title = label.split(' - ', 1)[1] if ' - ' in label else ''
-            cleaned.append({'id': item_id, 'title': title})
-        return cleaned
+        return sorted(set(selected_ids)) if selected_ids else []
 
 
 class LawOfMessiahAdmin(VersionAdmin):
     form = LawOfMessiahAdminForm
-    list_display = ['id', 'title', 'category', 'commandment_type', 'commandment_form', 'source_dataset']
-    list_filter = ['source_dataset', 'commandment_type', 'commandment_form', 'category', 'ncla_deviation', 'classical_commandment']
-    search_fields = ['id', 'title', 'commandment', 'category']
+    list_display = ['id', 'title', 'is_unique', 'category', 'commandment_type', 'commandment_form', 'source_dataset']
+    list_filter = [
+        'source_dataset',
+        'commandment_type',
+        'commandment_form',
+        'is_unique',
+        'category',
+        'ncla_deviation',
+        'classical_commandment',
+    ]
+    search_fields = ['id', 'title', 'commandment', 'category', 'source', 'copyright']
     inlines = [LawOfMessiahBibleReferenceInline, LawOfMessiahDrawingInline]
     fieldsets = (
         ('Core', {
@@ -536,13 +717,17 @@ class LawOfMessiahAdmin(VersionAdmin):
                 'id',
                 'title',
                 'commandment',
+                'commandment_subtitles',
                 'category',
                 'source_dataset',
                 'commandment_type',
                 'commandment_form',
+                'is_unique',
+                'double_ids',
             ),
         }),
         ('Commentary', {
+            'classes': ('collapse',),
             'fields': (
                 'commentary_rudolph',
                 'commentary_juster',
@@ -560,8 +745,8 @@ class LawOfMessiahAdmin(VersionAdmin):
         ('Relations', {
             'classes': ('collapse',),
             'fields': (
-                'commandments_related_ot',
-                'commandments_related_nt',
+                'related_lawofmessiah',
+                'related_steps',
                 'maimonides',
                 'meir',
                 'chinuch',
@@ -640,3 +825,13 @@ admin.site.register(Lesson, LessonAdmin)
 admin.site.register(LawOfMessiah, LawOfMessiahAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)
+
+
+class MaimonidesAdmin(admin.ModelAdmin):
+    list_display = ['id', 'commandment_type', 'commandment']
+    list_filter = ['commandment_type']
+    search_fields = ['id', 'commandment']
+    ordering = ['id']
+
+
+admin.site.register(Maimonides, MaimonidesAdmin)

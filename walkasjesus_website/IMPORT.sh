@@ -31,6 +31,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	DELETE_DATABASE=false
 	QUIET=false
 	FORCE=false
+	lom_source=data/lawofmessiah/filter_output/collected_ids_titles.yaml
 	today=$(date +%Y%m%d)
 	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/commandments.${today}.log
@@ -141,7 +142,15 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Lessons" | tee -a ${log}
 		echo "INFO: ${start} - Start importing Law of Messiah" | tee -a ${log}
-		python3 manage.py import_law_of_messiah | tee -a ${log}
+		python3 manage.py import_law_of_messiah --source "${lom_source}" | tee -a ${log}
+		echo "INFO: ${start} - Start importing Law of Messiah drawings" | tee -a ${log}
+		python3 manage.py import_law_of_messiah_drawings | tee -a ${log}
+		end=$(date '+%Y-%m-%d %H:%M:%S')
+		echo "INFO: ${end} - Ended importing Law of Messiah drawings" | tee -a ${log}
+		echo "INFO: ${start} - Start importing Maimonides commandments" | tee -a ${log}
+		python3 manage.py import_maimonides | tee -a ${log}
+		end=$(date '+%Y-%m-%d %H:%M:%S')
+		echo "INFO: ${end} - Ended importing Maimonides commandments" | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Law of Messiah" | tee -a ${log}
 	else
@@ -162,6 +171,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 # Other Operating Systems like Windows
 else
+	lom_source=data/lawofmessiah/filter_output/collected_ids_titles.yaml
 	echo "INFO: Start importing Commandments"
 	python3 manage.py import_commandments data/biblereferences/commandments.csv
 	echo "INFO: Ended importing Commandments"
@@ -169,7 +179,13 @@ else
 	python3 manage.py import_lessons data/biblereferences/lessons.csv
 	echo "INFO: Ended importing Lessons"
 	echo "INFO: Start importing Law of Messiah"
-	python3 manage.py import_law_of_messiah
+	python3 manage.py import_law_of_messiah --source "${lom_source}"
+	echo "INFO: Start importing Law of Messiah drawings"
+	python3 manage.py import_law_of_messiah_drawings
+	echo "INFO: Ended importing Law of Messiah drawings"
+	echo "INFO: Start importing Maimonides commandments"
+	python3 manage.py import_maimonides
+	echo "INFO: Ended importing Maimonides commandments"
 	echo "INFO: Ended importing Law of Messiah"
 
 	echo "INFO: Start importing Media Resources"

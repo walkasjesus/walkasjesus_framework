@@ -8,12 +8,34 @@
                 <h3>{{ law.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% if law.primary_drawing %}<img title="{% trans 'Drawing Found' %}" src="{% static 'images/drawing.png' %}" alt="">{% endif %}
+                {% for person_icon in law.ncla_person_icons %}
+                    {% if person_icon.code == 'JEW' %}
+                        <img
+                            class="lom-person-icon"
+                            src="{% static 'images/s_jew.png' %}"
+                            alt="{{ person_icon.label }}"
+                            title="{{ person_icon.label }}"
+                        >
+                    {% elif person_icon.code == 'MESSIANIC' %}
+                        <img
+                            class="lom-person-icon"
+                            src="{% static 'images/s_messianic.png' %}"
+                            alt="{{ person_icon.label }}"
+                            title="{{ person_icon.label }}"
+                        >
+                    {% elif person_icon.code == 'GENTILE' %}
+                        <img
+                            class="lom-person-icon"
+                            src="{% static 'images/s_gentile.png' %}"
+                            alt="{{ person_icon.label }}"
+                            title="{{ person_icon.label }}"
+                        >
+                    {% endif %}
+                {% endfor %}
             </div>
             <div class="text-content p-4 text-center">
-                {% if law.primary_drawing %}<span>{% trans 'Drawing available' %}</span>{% endif %}
                 <h3>{{ law.title|default:law.id }}</h3>
-                <p class="mb-2"><strong>{% trans 'Category' %}:</strong> {{ law.category|default:'-' }}</p>
+                    <p class="mb-2"><span class="law-category-pill">{{ law.category|default:'-' }}</span></p>
                 <p>
                     <a href="{% url 'commandments:law_of_messiah_detail' law.id %}" class="btn-custom p-2 text-center">
                         <span class="icon-play"></span>

@@ -376,6 +376,18 @@ p {
     padding: 12px 4px !important;
 }
 
+.law-category-pill {
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(24, 74, 128, 0.2);
+    border-radius: 4px;
+    color: #194a7f;
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 2px 8px;
+}
+
 .law-commandment-id {
     background-image: url('/static/images/our-services-img-wider.png');
     background-repeat: no-repeat;
@@ -387,7 +399,7 @@ p {
 }
 
 .commandment_id.law-commandment-id h3 {
-    font-size: 25pt;
+    font-size: 30pt;
     font-family: "mufanpfs";
     font-weight: bold;
     margin-left: 0px;
@@ -425,6 +437,89 @@ p {
 
 .lom-ncla-explainer-content {
     padding: 0 16px 14px 16px;
+}
+
+.lom-related-steps .sermon-wrap {
+    margin-bottom: 20px;
+}
+
+.lom-related-commandments h5 {
+    margin-top: 16px;
+    margin-bottom: 10px;
+}
+
+.lom-related-intro {
+    color: #4f6071;
+    margin-bottom: 10px;
+}
+
+.lom-related-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lom-related-links li {
+    margin-bottom: 10px;
+}
+
+.lom-related-links a {
+    background: #eef6ff;
+    border-left: 4px solid #2f7dbf;
+    border-radius: 4px;
+    color: #114e85;
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+}
+
+.lom-related-links a:hover,
+.lom-related-links a:focus {
+    background: #d8ebff;
+    color: #0b3c67;
+    text-decoration: none;
+}
+
+.lom-related-links .lom-related-link {
+    color: inherit;
+}
+
+.lom-related-links .lom-related-link-positive {
+    background: #e9f8ef;
+    border-left-color: #2f9e63;
+    color: #1d6b43;
+}
+
+.lom-related-links .lom-related-link-positive:hover,
+.lom-related-links .lom-related-link-positive:focus {
+    background: #d8f1e3;
+    color: #165736;
+}
+
+.lom-related-links .lom-related-link-negative {
+    background: #fdeeee;
+    border-left-color: #cb3f3f;
+    color: #8f2323;
+}
+
+.lom-related-links .lom-related-link-negative:hover,
+.lom-related-links .lom-related-link-negative:focus {
+    background: #f9dddd;
+    color: #721c1c;
+}
+
+.lom-related-links .lom-related-link-primary {
+    font-weight: 600;
+}
+
+.lom-primary-badge {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 8px;
+    padding: 2px 8px;
+    vertical-align: middle;
 }
 
 @media (max-width: 991.98px) {
@@ -465,6 +560,26 @@ p {
 
 .vision-author {
     text-align: right;
+}
+
+.lom-commandment-subtitle {
+    color: #222222;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.lom-commandment-subtitle::before {
+    background: #e2b900 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 35px;
 }
 
 .negative_list {
@@ -589,6 +704,25 @@ right: 16px;
 width: 40px;
 height: 40px;
 opacity: .8;
+}
+
+.commandment-media-items .lom-person-icon {
+    background-image: url('/static/images/our-services-img.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #fff;
+    display: inline-flex;
+    font-size: 11px;
+    font-weight: 700;
+    height: 40px;
+    justify-content: center;
+    margin-left: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    width: 40px;
+}
+
+.commandment-media-items .lom-person-icon span {
+    align-self: center;
 }
 
 /* Frontpage media resources */

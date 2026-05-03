@@ -27,62 +27,85 @@
                         <div class="services-inner">
                             <div class="our-services-text">
                                 <h4>{% trans 'Filter commandments that apply to you' %}</h4>
-                                <form method="get" class="row align-items-end justify-content-center law-filter-form">
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-source">{% trans 'Testament' %}</label>
-                                        <select id="filter-source" name="source_dataset" class="form-control law-filter-select">
-                                            <option value="">{% trans 'All' %}</option>
-                                            <option value="ot"{% if selected_source_dataset == 'ot' %} selected{% endif %}>{% trans 'Old Testament' %}</option>
-                                            <option value="nt"{% if selected_source_dataset == 'nt' %} selected{% endif %}>{% trans 'New Testament' %}</option>
-                                        </select>
+                                <form method="get" class="law-filter-form">
+                                    <!-- Search Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-lg-6 col-md-8">
+                                            <label for="filter-q" class="form-label">{% trans 'Search' %}</label>
+                                            <input id="filter-q" type="text" name="q" value="{{ selected_q }}" class="form-control" placeholder="{% trans 'ID, title, or commandment text' %}">
+                                        </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-category">{% trans 'Category' %}</label>
-                                        <select id="filter-category" name="category" class="form-control law-filter-select">
-                                            <option value="">{% trans 'All' %}</option>
-                                            {% for option in category_options %}
-                                                <option value="{{ option }}"{% if selected_category == option %} selected{% endif %}>{{ option }}</option>
-                                            {% endfor %}
-                                        </select>
+
+                                    <!-- Category & Source Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-source" class="form-label">{% trans 'Testament' %}</label>
+                                            <select id="filter-source" name="source_dataset" class="form-control law-filter-select">
+                                                <option value="">{% trans 'All' %}</option>
+                                                <option value="ot"{% if selected_source_dataset == 'ot' %} selected{% endif %}>{% trans 'Old Testament' %}</option>
+                                                <option value="nt"{% if selected_source_dataset == 'nt' %} selected{% endif %}>{% trans 'New Testament' %}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-category" class="form-label">{% trans 'Category' %}</label>
+                                            <select id="filter-category" name="category" class="form-control law-filter-select">
+                                                <option value="">{% trans 'All' %}</option>
+                                                {% for option in category_options %}
+                                                    <option value="{{ option }}"{% if selected_category == option %} selected{% endif %}>{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-classical" class="form-label">{% trans 'Classical commandment' %}</label>
+                                            <select id="filter-classical" name="classical_commandment" class="form-control law-filter-select">
+                                                <option value=""{% if selected_classical_commandment == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                <option value="true"{% if selected_classical_commandment == 'true' %} selected{% endif %}>{% trans 'Classical only' %}</option>
+                                                <option value="false"{% if selected_classical_commandment == 'false' %} selected{% endif %}>{% trans 'Non-classical only' %}</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-type">{% trans 'Commandment type' %}</label>
-                                        <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
-                                            <option value="">{% trans 'All' %}</option>
-                                            <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans 'Positive' %}</option>
-                                            <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans 'Negative' %}</option>
-                                            <option value="both"{% if selected_commandment_type == 'both' %} selected{% endif %}>{% trans 'Positive & Negative' %}</option>
-                                        </select>
+
+                                    <!-- Applicability Filters Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-person" class="form-label">{% trans 'Applies to (person)' %}</label>
+                                            <select id="filter-person" name="ncla_person" class="form-control law-filter-select">
+                                                {% for value, label in ncla_person_options %}
+                                                    <option value="{{ value }}"{% if selected_ncla_person == value %} selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-application" class="form-label">{% trans 'Application' %}</label>
+                                            <select id="filter-application" name="ncla_application" class="form-control law-filter-select">
+                                                {% for value, label in ncla_application_options %}
+                                                    <option value="{{ value }}"{% if selected_ncla_application == value %} selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% if ncla_group_options %}
+                                        <div class="col-md-4">
+                                            <label for="filter-ncla-group" class="form-label">{% trans 'Context / situation' %}</label>
+                                            <select id="filter-ncla-group" name="ncla_group" class="form-control law-filter-select">
+                                                <option value="">{% trans 'Any context' %}</option>
+                                                {% for option in ncla_group_options %}
+                                                    <option value="{{ option }}"{% if selected_ncla_group == option %} selected{% endif %}>{{ option }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-form">{% trans 'Form' %}</label>
-                                        <select id="filter-form" name="commandment_form" class="form-control law-filter-select">
-                                            <option value="">{% trans 'All' %}</option>
-                                            <option value="explicit"{% if selected_commandment_form == 'explicit' %} selected{% endif %}>{% trans 'Explicit' %}</option>
-                                            <option value="implied"{% if selected_commandment_form == 'implied' %} selected{% endif %}>{% trans 'Implied' %}</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-person">{% trans 'Applies to (person)' %}</label>
-                                        <select id="filter-person" name="ncla_person" class="form-control law-filter-select">
-                                            {% for value, label in ncla_person_options %}
-                                                <option value="{{ value }}"{% if selected_ncla_person == value %} selected{% endif %}>{{ label }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 mb-3">
-                                        <label for="filter-application">{% trans 'Application' %}</label>
-                                        <select id="filter-application" name="ncla_application" class="form-control law-filter-select">
-                                            {% for value, label in ncla_application_options %}
-                                                <option value="{{ value }}"{% if selected_ncla_application == value %} selected{% endif %}>{{ label }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2 col-md-4 mb-3 law-filter-actions">
-                                        <button type="submit" class="btn btn-primary btn-outline-primary py-2 px-3 law-filter-button">{% trans 'Filter' %}</button>
+
+                                    <!-- Action Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary btn-outline-primary py-2 px-4 law-filter-button">{% trans 'Filter' %}</button>
+                                        </div>
                                     </div>
                                 </form>
-                                <p class="law-filter-summary mb-0 mt-2"><strong>{{ laws_count }}</strong> {% trans 'commandments match your current filter.' %}</p>
+
+                                <!-- Results Summary -->
+                                <p class="law-filter-summary"><strong>{{ laws_count }}</strong> {% trans 'commandments match your current filter.' %}</p>
                             </div>
                         </div>
                     </div>

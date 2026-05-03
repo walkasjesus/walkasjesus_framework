@@ -32,23 +32,76 @@
                         </div>
                         <div class="our-services-text commandment_details">
                             <h4>{{ law.commandment|linebreaksbr }}</h4>
+                            {% if law.subtitle_texts %}
+                                {% for subtitle_text in law.subtitle_texts %}
+                                    <p class="lom-commandment-subtitle">{{ subtitle_text|linebreaksbr }}</p>
+                                {% endfor %}
+                            {% endif %}
 
                             <p><strong>{% trans 'Category' %}:</strong> {{ law.category|default:'-' }}</p>
                             <p><strong>{% trans 'Type' %}:</strong> {{ law.get_commandment_type_display }}</p>
                             <p><strong>{% trans 'Form' %}:</strong> {{ law.get_commandment_form_display|default:'-' }}</p>
                             <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.get_source_dataset_display }}</p>
+                            <p><strong>{% trans 'Uniqueness' %}:</strong> {% if law.is_unique %}{% trans 'Unique' %}{% else %}{% trans 'Not unique' %}{% endif %}</p>
+                            <p><strong>{% trans 'NCLA deviation' %}:</strong> {% if law.ncla_deviation %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
+                            <p><strong>{% trans 'Classical commandment' %}:</strong> {% if law.classical_commandment %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
+                            {% if law.double_ids %}<p><strong>{% trans 'Double IDs' %}:</strong> {{ law.double_ids|join:', ' }}</p>{% endif %}
+                            {% if enriched_maimonides %}
+                            <p><strong>{% trans 'Maimonides' %}:</strong></p>
+                            <ul class="lom-related-links mb-2">
+                                {% for mai in enriched_maimonides %}
+                                <li>
+                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ mai.id }}"
+                                       class="lom-related-link {% if mai.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}">
+                                        <strong>{{ mai.id }}</strong> – {{ mai.commandment }}
+                                    </a>
+                                    {% for step_id in mai.step_ids %}
+                                    <a href="{% url 'commandments:detail' step_id %}" class="lom-related-link lom-related-link-positive mt-1" style="font-size:0.9em;">
+                                        &#8594; {% trans 'Step' %} {{ step_id }}
+                                    </a>
+                                    {% endfor %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if law.meir %}<p><strong>{% trans 'Meir' %}:</strong> {{ law.meir|join:', ' }}</p>{% endif %}
+                            {% if law.chinuch %}<p><strong>{% trans 'Chinuch' %}:</strong> {{ law.chinuch|join:', ' }}</p>{% endif %}
                             <div class="lom-ncla-summary">
                                 <h5>{% trans 'New Covenant Literal Application' %}</h5>
                                 <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
                                 <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                {% if ncla_summary.groups|length > 1 %}
+                                    <table class="table table-sm lom-ncla-groups-table">
+                                        <thead>
+                                            <tr>
+                                                <th>{% trans 'Group' %}</th>
+                                                <th>{% trans 'Person categories' %}</th>
+                                                <th>{% trans 'Application' %}</th>
+                                                <th>{% trans 'Codes' %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for grp in ncla_summary.groups %}
+                                            <tr>
+                                                <td>{{ grp.group }}</td>
+                                                <td>{{ grp.person_summary }}</td>
+                                                <td>{{ grp.application_summary }}</td>
+                                                <td><code>{{ grp.codes|join:' ' }}</code></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
                                 <details class="lom-ncla-explainer">
                                     <summary>{% trans 'More explanation about New Covenant Literal Application' %}</summary>
                                     <div class="lom-ncla-explainer-content">
                                         <p>{% blocktrans %}The New Covenant Literal Application Code (NCLA) is an interpretive guide used by the authors to indicate which person categories a mitzvah applies to, and at what level of literal compliance.{% endblocktrans %}</p>
                                         <p>{% blocktrans %}It combines person categories such as Jewish, K'rov Yisrael, and Gentile, together with male/female distinctions and an application level such as mandated, recommended, optional, or prohibited.{% endblocktrans %}</p>
                                         <p>{% blocktrans %}This code reflects the authors' interpretive opinion and is provided for prayerful consideration. On this page, the technical code is summarized into plain language to help new readers understand it more easily.{% endblocktrans %}</p>
-                                        {% if ncla_summary.detailed_codes %}
-                                            <p><strong>{% trans 'Detailed code labels' %}:</strong> {{ ncla_summary.detailed_codes|join:' | ' }}</p>
+                                        {% if ncla_summary.groups|length == 1 %}
+                                            {% with grp=ncla_summary.groups.0 %}
+                                                <p><strong>{% trans 'Detailed codes' %}:</strong> {{ grp.detailed|join:' | ' }}</p>
+                                            {% endwith %}
                                         {% endif %}
                                         <p><a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/nc-lac.php">{% trans 'Read the full explanation from the source' %}</a></p>
                                     </div>
@@ -74,8 +127,13 @@
                             <ul>
                                 {% for ref in key_nt_scriptures %}
                                 <li>
-                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
-                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -86,8 +144,13 @@
                             <ul>
                                 {% for ref in key_ot_scriptures %}
                                 <li>
-                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
-                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -98,8 +161,13 @@
                             <ul>
                                 {% for ref in supportive_nt_scriptures %}
                                 <li>
-                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
-                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -110,12 +178,19 @@
                             <ul>
                                 {% for ref in supportive_ot_scriptures %}
                                 <li>
-                                    <b>{{ ref.get_book_display }} {{ ref.begin_chapter }}:{{ ref.begin_verse }}-{{ ref.end_chapter }}:{{ ref.end_verse }}</b>
-                                    <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
                             {% endif %}
+
+                            <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
                         </div>
                     </div>
                 </div>
@@ -158,17 +233,60 @@
                         </div>
                         <div class="our-services-text">
                             <h4>{% trans 'Drawings' %}</h4>
-                            <div class="row">
-                                {% for drawing in drawings %}
-                                <div class="col-md-6">
-                                    {% if drawing.img_url %}
-                                    <img src="{{ drawing.img_url }}" class="img-fluid mb-2" alt="Law of Messiah drawing">
-                                    {% endif %}
-                                    {% if drawing.author %}<p><strong>{% trans 'Author' %}:</strong> {{ drawing.author }}</p>{% endif %}
-                                    {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
-                                </div>
+                            {% for drawing in drawings %}
+                                {% if drawing.img_url %}
+                                <img src="{{ drawing.img_url }}" alt="{{ drawing.author }} - Law of Messiah drawing" style="max-width:97%;max-height:97%;">
+                                {% endif %}
+                                {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
+                                {% if drawing.author %}<p>{% trans 'Artist' %}: {{ drawing.author }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if related_lawofmessiah %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-related-commandments">
+                            <h4>{% trans 'Related Law of Messiah commandments' %}</h4>
+                            <ul class="lom-related-links">
+                                {% for related in related_lawofmessiah %}
+                                <li>
+                                    <a
+                                        href="{% url 'commandments:law_of_messiah_detail' related.id %}"
+                                        class="lom-related-link {% if related.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}"
+                                    >
+                                        {{ related.id }} - {{ related.title|default:related.id }}
+                                    </a>
+                                </li>
                                 {% endfor %}
-                            </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if related_steps %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-related-steps">
+                            <h4>{% trans 'Related 77 steps' %}</h4>
+                            <ul class="lom-related-links">
+                                {% for commandment in related_steps %}
+                                <li><a href="{% url 'commandments:detail' commandment.id %}">{{ commandment.id }} - {{ commandment.title|default:commandment.id }}</a></li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -190,7 +308,13 @@
                             </p>
                             <p><small>{% blocktrans %}License: CC BY-ND 4.0 (Attribution required, NoDerivatives).{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
                             <p><small>{% blocktrans %}Disclaimer: the original content is authored by Rabbi Michael Rudolph and Rabbi Daniel Juster; additional notes or implementation details on this website are not part of their original work and do not represent their views.{% endblocktrans %}</small></p>
-                            {% if law.source %}<p><small><strong>{% trans 'Record source' %}:</strong> <a href="{{ law.source }}" target="_blank" rel="noopener">{{ law.source }}</a></small></p>{% endif %}
+                            {% if law.source %}
+                                {% if law.source_is_url %}
+                                    <p><small><strong>{% trans 'Record source' %}:</strong> <a href="{{ law.source }}" target="_blank" rel="noopener">{{ law.source }}</a></small></p>
+                                {% else %}
+                                    <p><small><strong>{% trans 'Record source' %}:</strong> {{ law.source }}</small></p>
+                                {% endif %}
+                            {% endif %}
                             {% if law.copyright %}<p><small><strong>{% trans 'Copyright note' %}:</strong> {{ law.copyright }}</small></p>{% endif %}
                         </div>
                     </div>

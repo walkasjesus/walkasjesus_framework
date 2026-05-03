@@ -1,5 +1,57 @@
 $(document).ready(function(){
 
+  var verseCache = {};
+  var verseFetchInFlight = {};
+
+  function collectRefIds(selector) {
+    var ids = [];
+    $(selector).each(function() {
+      var pk = String($(this).attr('data-verse-ref') || '').trim();
+      if (pk) {
+        ids.push(pk);
+      }
+    });
+    return Array.from(new Set(ids));
+  }
+
+  function fetchVerses(versesUrl, refIds, onDone) {
+    if (!versesUrl || !refIds || refIds.length === 0) {
+      if (onDone) onDone({});
+      return;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: versesUrl,
+      data: {
+        csrfmiddlewaretoken: getCsrfToken(),
+        verse_refs: refIds
+      },
+      success: function(data) {
+        var verses = (data && data.verses) ? data.verses : {};
+        $.each(verses, function(pk, text) {
+          verseCache[String(pk)] = text;
+        });
+        if (onDone) onDone(verses);
+      },
+      error: function(xhr) {
+        console.error('Failed to load bible verses:', xhr.status, xhr.responseText);
+        if (onDone) onDone({});
+      }
+    });
+  }
+
+  function revealManualVerse($link, pk) {
+    var text = verseCache[pk];
+    if (typeof text === 'undefined') {
+      return false;
+    }
+
+    $('.bible-verse-text[data-verse-ref="' + pk + '"][data-verse-manual="1"]').text(text);
+    $link.hide();
+    return true;
+  }
+
   function getCsrfToken() {
     // Try cookie first (works on HTTPS), fall back to DOM (works on HTTP dev)
     var match = document.cookie.match(/csrftoken=([^;]+)/);
@@ -16,23 +68,35 @@ $(document).ready(function(){
   // Auto-load bible verse texts on detail pages
   var versesUrl = getVersesUrl();
   if (versesUrl) {
-    console.debug('Loading bible verses from:', versesUrl);
-    $.ajax({
-      type: 'POST',
-      url: versesUrl,
-      data: { 'csrfmiddlewaretoken': getCsrfToken() },
-      success: function(data) {
-        if (data.verses) {
-          $.each(data.verses, function(pk, text) {
-            $('[data-verse-ref="' + pk + '"]').text(text);
-          });
-        }
-      },
-      error: function(xhr) {
-        console.error('Failed to load bible verses:', xhr.status, xhr.responseText);
-      }
-    });
+    var autoRefIds = collectRefIds('.bible-verse-text[data-verse-ref]:not([data-verse-manual="1"])');
+    if (autoRefIds.length > 0) {
+      console.debug('Loading bible verses from:', versesUrl, 'refs:', autoRefIds.length);
+      fetchVerses(versesUrl, autoRefIds, function(verses) {
+        $.each(verses, function(pk, text) {
+          $('.bible-verse-text[data-verse-ref="' + pk + '"]:not([data-verse-manual="1"])').text(text);
+        });
+      });
+    }
   }
+
+  $(document).on('click', '.bible-verse-load-link', function(event) {
+    event.preventDefault();
+    var $link = $(this);
+    var pk = String($link.attr('data-verse-ref'));
+
+    if (!revealManualVerse($link, pk)) {
+      if (verseFetchInFlight[pk]) {
+        return;
+      }
+
+      verseFetchInFlight[pk] = true;
+      $('.bible-verse-text[data-verse-ref="' + pk + '"][data-verse-manual="1"]').html('<i class="fa fa-spinner fa-spin"></i>');
+      fetchVerses(versesUrl, [pk], function() {
+        revealManualVerse($link, pk);
+        verseFetchInFlight[pk] = false;
+      });
+    }
+  });
 
   if($.cookie('jc_bible_trans_settings')){
     $('#changeLanguageModal').modal('show');

@@ -73,6 +73,27 @@ class AbstractBibleReference(models.Model):
 
         return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
 
+    def display_reference(self):
+        """Return compact reference formatting, e.g. Matthew 25:13-30 or Matthew 25:13-26:2."""
+        return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def verse_count_estimate(self):
+        """Return exact count for single-chapter ranges, otherwise a conservative long-range estimate."""
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return 1
+
+        end_chapter = self.end_chapter or self.begin_chapter
+        end_verse = self.end_verse or self.begin_verse
+
+        if end_chapter == self.begin_chapter:
+            return max(1, (end_verse - self.begin_verse) + 1)
+
+        # For cross-chapter ranges, we intentionally treat it as long.
+        return 999
+
+    def is_long_passage(self):
+        return self.verse_count_estimate() > 5
+
     def text(self):
         """Get the verse text from the bible api."""
         if self.end_chapter == 0:
@@ -101,18 +122,7 @@ class AbstractBibleReference(models.Model):
         return gettext('Could not load text at the moment.')
 
     def __str__(self):
-        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
-
-        if self.begin_chapter == 0 or self.end_verse == 0:
-            return book_chapter_verse
-
-        if self.begin_chapter == self.end_chapter and self.begin_verse == self.end_verse:
-            return book_chapter_verse
-
-        if self.begin_chapter == self.end_chapter and self.end_verse > self.begin_verse:
-            return f'{book_chapter_verse}-{self.end_verse}'
-
-        return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
+        return self.display_reference()
 
     def __lt__(self, other):
         if self.__class__ is not other.__class__:

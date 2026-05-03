@@ -15,7 +15,7 @@ from walkasjesus_app.models import BibleTranslation, LawOfMessiah, Maimonides, U
 from walkasjesus_app.views.detail_view import _step_to_law_mapping
 
 
-VERSE_CACHE_TIMEOUT = 60 * 60 * 24
+VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 
 
 def _normalize_image_url(url):
@@ -225,19 +225,24 @@ def _ncla_group_options():
 
 
 def _reference_text(ref, bible):
+    text, _ = _reference_text_with_source(ref, bible)
+    return text
+
+
+def _reference_text_with_source(ref, bible):
     cache_key = (
         f"verse_text:v1:{getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible}:"
         f"{ref.book}:{ref.begin_chapter}:{ref.begin_verse}:{ref.end_chapter}:{ref.end_verse}"
     )
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached
+        return cached, 'cache'
 
     end_chapter = ref.end_chapter if ref.end_chapter else ref.begin_chapter
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
     text = bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse)
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
-    return text
+    return text, 'api'
 
 
 def _extract_related_law_ids(related_items):
@@ -446,14 +451,18 @@ class LawOfMessiahBibleVersesView(View):
 
             law = get_object_or_404(LawOfMessiah.objects.prefetch_related('bible_reference_rows'), pk=law_id)
             verses = {}
+            verse_sources = {}
             refs = law.bible_reference_rows.all()
             if requested_ref_ids:
                 refs = refs.filter(pk__in=requested_ref_ids)
 
             for ref in refs:
-                verses[str(ref.pk)] = _reference_text(ref, bible)
+                text, source = _reference_text_with_source(ref, bible)
+                ref_key = str(ref.pk)
+                verses[ref_key] = text
+                verse_sources[ref_key] = source
 
-            return JsonResponse({'verses': verses})
+            return JsonResponse({'verses': verses, 'verse_sources': verse_sources})
         except Exception as ex:
             logging.getLogger().exception(ex)
             return JsonResponse({'error': 'Could not load Bible verses.'}, status=500)

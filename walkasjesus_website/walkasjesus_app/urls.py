@@ -20,6 +20,7 @@ from walkasjesus_app.views.law_of_messiah_view import (
     LawOfMessiahBibleVersesView,
 )
 from walkasjesus_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView, BibleTranslationsForLanguageView
+from walkasjesus_app.views.user_preferences import CommentaryTranslationView
 from walkasjesus_app.views.maimonides_view import MaimonidesList
 
 app_name = 'commandments'
@@ -30,6 +31,7 @@ urlpatterns = [
     path('bible/', UserPreferencesBibleView.as_view(), name='bible'),
     path('languages/', UserPreferencesLanguagesView.as_view(), name='languages'),
     path('bible-translations/', BibleTranslationsForLanguageView.as_view(), name='bible_translations_for_language'),
+    path('commentary-translate/', CommentaryTranslationView.as_view(), name='commentary_translate'),
     path('steps_overview/', ListingView.as_view(), name='listing'),
     path('lessons_overview/', ListingLessonView.as_view(), name='lesson_listing'),
     path('maimonides/', MaimonidesList.as_view(), name='maimonides_listing'),
@@ -53,6 +55,7 @@ urlpatterns = [
 urlpatterns += [
     path(_('bijbel/'), UserPreferencesBibleView.as_view(), name='bible'),
     path(_('talen/'), UserPreferencesLanguagesView.as_view(), name='languages'),
+    path(_('commentaar-vertalen/'), CommentaryTranslationView.as_view(), name='commentary_translate'),
     path(_('stappen_overzicht/'), ListingView.as_view(), name='listing'),
     path(_('lessen_overzicht/'), ListingLessonView.as_view(), name='lesson_listing'),
     path(_('maimonides/'), MaimonidesList.as_view(), name='maimonides_listing'),

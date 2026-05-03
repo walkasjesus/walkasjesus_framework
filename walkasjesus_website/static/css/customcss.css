@@ -378,7 +378,7 @@ p {
 
 .law-category-pill {
     background: rgba(0, 0, 0, 0.12);
-    border: 1px solid rgba(24, 74, 128, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     color: #194a7f;
     display: inline-block;
@@ -580,6 +580,118 @@ p {
     height: 1px;
     position: absolute;
     width: 35px;
+}
+
+/* ----- Sefaria Jewish Commentary ----- */
+.sefaria-commentary-btn {
+    background: #f5f0e8;
+    border: 1px solid #c8a84b;
+    color: #5c4a1e;
+    font-size: 11px;
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+.sefaria-commentary-btn:hover {
+    background: #ede3cc;
+    color: #3d2f08;
+}
+.scriptura-commentary-btn {
+    margin-left: 0;
+}
+.commentary-favicon {
+    border-radius: 3px;
+    height: 14px;
+    margin-right: 4px;
+    vertical-align: text-bottom;
+    width: 14px;
+}
+.commentary-inline-icon {
+    display: inline-flex;
+    margin-right: 4px;
+    vertical-align: text-bottom;
+}
+.commentary-inline-icon-svg {
+    height: 14px;
+    width: 14px;
+}
+.sefaria-commentary-panel {
+    background: #fdfbf5;
+    border: 1px solid #e0d5b0;
+    border-radius: 6px;
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+}
+.scriptura-commentary-panel {
+    background: #fdfbf5;
+    border: 1px solid #e0d5b0;
+    border-radius: 6px;
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+}
+.sefaria-select-label {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+.sefaria-commentator-btn {
+    background: #fff;
+    border: 1px solid #c8a84b;
+    border-radius: 3px;
+    color: #5c4a1e;
+    font-size: 11px;
+    padding: 2px 8px;
+}
+.sefaria-commentator-btn.active,
+.sefaria-commentator-btn:hover {
+    background: #e2b900;
+    border-color: #c8a84b;
+    color: #3d2f08;
+}
+.sefaria-commentary-body {
+    font-size: 13px;
+    line-height: 1.6;
+}
+.sefaria-commentary-body b,
+.sefaria-commentary-body strong {
+    color: #3d2f08;
+    font-weight: 700;
+}
+.sefaria-commentary-body i,
+.sefaria-commentary-body em {
+    color: #5c4a1e;
+}
+.sefaria-commentary-body a {
+    color: #8b6f1f;
+    text-decoration: underline;
+}
+.sefaria-commentary-body .font1 {
+    color: #2f2410;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05em;
+    letter-spacing: 0.02em;
+}
+.sefaria-attribution {
+    color: #888;
+    font-size: 11px;
+    margin-bottom: 0;
+    margin-top: 6px;
+}
+.sefaria-no-result {
+    color: #888;
+    font-size: 12px;
+    margin: 0;
+}
+
+.verse-loading-spinner-cache,
+.commentary-loading-spinner-cache {
+    color: #8b8b8b;
+}
+
+.verse-loading-spinner-api,
+.commentary-loading-spinner-api {
+    color: #4e8f63;
 }
 
 .negative_list {

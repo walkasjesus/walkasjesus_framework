@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils import translation
 
 from walkasjesus_app.models import BibleTranslation, UserPreferences
@@ -21,4 +22,5 @@ def cache_settings(request):
         'cache_on_language': UserPreferences(request.session).language,
         'cache_on_multi_language': UserPreferences(request.session).languages,
         'cache_on_bible': translation.get_language() + '_' + UserPreferences(request.session).bible.id,
+        'commentary_cache_timeout_seconds': int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6)),
     }

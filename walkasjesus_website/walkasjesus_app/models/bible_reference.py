@@ -1,6 +1,7 @@
 import logging
 
 from bible_lib import Bible, BibleBooks as BibleLibBibleBooks
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext
 
@@ -92,7 +93,37 @@ class AbstractBibleReference(models.Model):
         return 999
 
     def is_long_passage(self):
-        return self.verse_count_estimate() > 5
+        threshold = max(1, int(getattr(settings, 'BIBLE_AUTO_LOAD_VERSE_LIMIT', 5)))
+        return self.verse_count_estimate() > threshold
+
+    def client_ref_id(self):
+        """Unique identifier for frontend/API mapping across different reference models."""
+        return f'{self.__class__.__name__}:{self.pk}'
+
+    def sefaria_reference(self):
+        """Return reference with English book names for Sefaria API compatibility."""
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def scriptura_book(self):
+        """Return English book name for Scriptura API."""
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()}'
+
+    def scriptura_chapter(self):
+        return self.begin_chapter
+
+    def scriptura_verse(self):
+        return self.begin_verse
+
+    def is_ot(self):
+        """Returns True if this reference is from the Old Testament."""
+        try:
+            return BibleBooks[self.book] < BibleBooks.Matthew
+        except Exception:
+            return False
 
     def text(self):
         """Get the verse text from the bible api."""

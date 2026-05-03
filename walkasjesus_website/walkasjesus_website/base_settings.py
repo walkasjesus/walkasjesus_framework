@@ -223,3 +223,13 @@ ROSETTA_MESSAGES_PER_PAGE = 25
 # Maximum number of GET/POST parameters that will be read before a
 # SuspiciousOperation (TooManyFieldsSent) is raised.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
+
+# Bible text retrieval settings
+# 6 months default for verse text caching (seconds)
+BIBLE_API_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
+# 6 months default for commentary cache (translations + frontend commentary cache)
+COMMENTARY_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
+# Verse count above which passages are manual "Click to retrieve"
+BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
+# Set to True only for debugging: disables Django cache usage (forces fresh loads)
+DISABLE_CACHE_FOR_DEBUG = False

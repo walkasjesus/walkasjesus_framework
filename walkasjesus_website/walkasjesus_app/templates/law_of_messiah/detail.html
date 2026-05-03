@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block title_content %}{{ law.title|default:law.id }} - {% trans 'Law of Messiah' %}{% endblock %}
 
@@ -23,7 +24,7 @@
             </div>
         </div>
 
-        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}">
+        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner law-commandment-main">
@@ -129,11 +130,13 @@
                                 <li>
                                     <b>{{ ref.display_reference }}</b>
                                     {% if ref.is_long_passage %}
-                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -146,11 +149,15 @@
                                 <li>
                                     <b>{{ ref.display_reference }}</b>
                                     {% if ref.is_long_passage %}
-                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    <div class="sefaria-commentary-panel"></div>{% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -163,11 +170,13 @@
                                 <li>
                                     <b>{{ ref.display_reference }}</b>
                                     {% if ref.is_long_passage %}
-                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -180,11 +189,16 @@
                                 <li>
                                     <b>{{ ref.display_reference }}</b>
                                     {% if ref.is_long_passage %}
-                                        <a href="#" class="bible-verse-load-link" data-verse-ref="{{ ref.pk }}">{% trans 'Click to retrieve' %} {{ ref.display_reference }}</a>
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    
+                                        <div class="sefaria-commentary-panel"></div>{% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>

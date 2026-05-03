@@ -1,9 +1,41 @@
 from gettext import gettext
+import hashlib
+
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from django.conf import settings
+from google_trans import Translator
+import requests
+
 from walkasjesus_app.models import UserPreferences, BibleTranslation
+
+
+COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
+
+
+def _translate_commentary_text(text, target_language):
+    try:
+        translator = Translator()
+        return translator.translate(text, src='en', dest=target_language).text
+    except Exception:
+        response = requests.get(
+            'https://translate.googleapis.com/translate_a/single',
+            params={
+                'client': 'gtx',
+                'sl': 'en',
+                'tl': target_language,
+                'dt': 't',
+                'q': text,
+            },
+            timeout=15,
+        )
+        response.raise_for_status()
+        data = response.json()
+        segments = data[0] if isinstance(data, list) and data else []
+        translated_parts = [segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0]]
+        return ''.join(translated_parts)
 
 class UserPreferencesBibleView(View):
     def post(self, request):
@@ -58,4 +90,32 @@ class BibleTranslationsForLanguageView(View):
             'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
             'default_bible_id': default_bible_id,
         })
+
+
+class CommentaryTranslationView(View):
+    """Machine-translates commentary text for the current UI language."""
+
+    def post(self, request):
+        text = str(request.POST.get('text', '')).strip()
+        target_language = str(request.POST.get('target_language', 'en')).strip().lower()[:2]
+
+        if not text:
+            return JsonResponse({'translated_text': ''})
+
+        if not target_language or target_language == 'en':
+            return JsonResponse({'translated_text': text, 'language': 'en', 'machine_translated': False})
+
+        digest = hashlib.sha256(f'{target_language}:{text}'.encode('utf-8')).hexdigest()
+        cache_key = f'commentary_translation:v1:{digest}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return JsonResponse(cached)
+
+        payload = {
+            'translated_text': _translate_commentary_text(text, target_language),
+            'language': target_language,
+            'machine_translated': True,
+        }
+        cache.set(cache_key, payload, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
+        return JsonResponse(payload)
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy
 
 from .bible_books import BibleBooks
@@ -186,6 +187,22 @@ class LawOfMessiahBibleReference(models.Model):
     def display_reference(self):
         return f'{self.get_book_display()} {self._str_chapter_verses()}'
 
+    def sefaria_reference(self):
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def scriptura_book(self):
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()}'
+
+    def scriptura_chapter(self):
+        return self.begin_chapter
+
+    def scriptura_verse(self):
+        return self.begin_verse
+
     def verse_count_estimate(self):
         if self.begin_chapter == 0 or self.end_verse == 0:
             return 1
@@ -200,7 +217,12 @@ class LawOfMessiahBibleReference(models.Model):
         return 999
 
     def is_long_passage(self):
-        return self.verse_count_estimate() > 5
+        threshold = max(1, int(getattr(settings, 'BIBLE_AUTO_LOAD_VERSE_LIMIT', 5)))
+        return self.verse_count_estimate() > threshold
+
+    def is_ot(self):
+        """Returns True if this is an Old Testament reference, False for New Testament."""
+        return 'ot' in self.reference_type
 
     def __str__(self):
         return f"{self.get_reference_type_display()}: {self.display_reference()}"

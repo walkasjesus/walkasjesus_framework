@@ -15,7 +15,7 @@ from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTr
 
 LOGGER = logging.getLogger(__name__)
 STEPS_LOM_MAPPING_FILE = Path(__file__).resolve().parents[2] / 'data' / 'biblereferences' / 'steps_lawofmessiah_mapping.yaml'
-VERSE_CACHE_TIMEOUT = 60 * 60 * 24
+VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 
 
 def _normalize_law_id(law_id):
@@ -112,13 +112,23 @@ class DetailLessonView(View):
                                                             'bible': selected_bible})
 
 
-def _collect_verses(bible, references):
+def _collect_verses(bible, references, key_builder=None, verse_sources=None):
     """Fetch verse texts for a list of references using the given bible."""
+    if key_builder is None:
+        key_builder = lambda ref: str(ref.pk)
+
     verses = {}
     for ref in references:
-        text = _get_or_fetch_verse_text(bible, ref)
-        verses[str(ref.pk)] = text if text else ''
+        text, source = _get_or_fetch_verse_text_with_source(bible, ref)
+        ref_key = key_builder(ref)
+        verses[ref_key] = text if text else ''
+        if verse_sources is not None:
+            verse_sources[ref_key] = source
     return verses
+
+
+def _reference_client_key(ref):
+    return ref.client_ref_id() if hasattr(ref, 'client_ref_id') else str(ref.pk)
 
 
 def _bible_cache_id(bible):
@@ -133,15 +143,20 @@ def _verse_cache_key(bible, ref):
 
 
 def _get_or_fetch_verse_text(bible, ref):
+    text, _ = _get_or_fetch_verse_text_with_source(bible, ref)
+    return text
+
+
+def _get_or_fetch_verse_text_with_source(bible, ref):
     cache_key = _verse_cache_key(bible, ref)
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached
+        return cached, 'cache'
 
     ref.set_bible(bible)
     text = ref.text() or ''
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
-    return text
+    return text, 'api'
 
 
 def _requested_ref_ids(request):
@@ -175,10 +190,13 @@ class BibleVersesCommandmentView(View):
         commandment.bible = new_bible
 
         verses = {}
+        verse_sources = {}
         primary = commandment.primary_bible_reference()
         if primary:
-            text = _get_or_fetch_verse_text(new_bible, primary)
-            verses[str(primary.pk)] = text if text else ''
+            text, source = _get_or_fetch_verse_text_with_source(new_bible, primary)
+            primary_key = _reference_client_key(primary)
+            verses[primary_key] = text if text else ''
+            verse_sources[primary_key] = source
 
         for method_name in [
             'direct_bible_references',
@@ -186,15 +204,25 @@ class BibleVersesCommandmentView(View):
             'example_bible_references',
             'otlaw_bible_references',
             'wisdom_bible_references',
+            'duplicate_bible_references',
+            'study_bible_references',
         ]:
-            verses.update(_collect_verses(new_bible, getattr(commandment, method_name)()))
+            verses.update(
+                _collect_verses(
+                    new_bible,
+                    getattr(commandment, method_name)(),
+                    key_builder=_reference_client_key,
+                    verse_sources=verse_sources,
+                )
+            )
 
         requested_ref_ids = _requested_ref_ids(request)
 
         if requested_ref_ids:
             verses = {pk: text for pk, text in verses.items() if pk in requested_ref_ids}
+            verse_sources = {pk: src for pk, src in verse_sources.items() if pk in requested_ref_ids}
 
-        return JsonResponse({'verses': verses})
+        return JsonResponse({'verses': verses, 'verse_sources': verse_sources})
 
 
 class BibleVersesLessonView(View):
@@ -216,17 +244,21 @@ class BibleVersesLessonView(View):
             lesson.commandment.bible = new_bible
 
         verses = {}
+        verse_sources = {}
         primary = lesson.primary_bible_reference()
         if primary:
-            text = _get_or_fetch_verse_text(new_bible, primary)
-            verses[str(primary.pk)] = text if text else ''
+            text, source = _get_or_fetch_verse_text_with_source(new_bible, primary)
+            primary_key = str(primary.pk)
+            verses[primary_key] = text if text else ''
+            verse_sources[primary_key] = source
 
-        verses.update(_collect_verses(new_bible, lesson.direct_bible_references()))
+        verses.update(_collect_verses(new_bible, lesson.direct_bible_references(), verse_sources=verse_sources))
 
         requested_ref_ids = _requested_ref_ids(request)
 
         if requested_ref_ids:
             verses = {pk: text for pk, text in verses.items() if pk in requested_ref_ids}
+            verse_sources = {pk: src for pk, src in verse_sources.items() if pk in requested_ref_ids}
 
-        return JsonResponse({'verses': verses})
+        return JsonResponse({'verses': verses, 'verse_sources': verse_sources})
 

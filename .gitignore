@@ -11,6 +11,7 @@ build
 *.sqlite3-journal
 
 bible_api_cache.json
+.django_cache
 
 walkasjesus_website/media
 walkasjesus_website/log

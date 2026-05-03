@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+  // Normalize YouTube iframe permissions to avoid browser policy warnings.
+  $('iframe[src*="youtube.com/embed/"], iframe[src*="youtube-nocookie.com/embed/"]').each(function() {
+    var $iframe = $(this);
+    $iframe.attr('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    $iframe.attr('allowfullscreen', 'allowfullscreen');
+    if (!$iframe.attr('referrerpolicy')) {
+      $iframe.attr('referrerpolicy', 'strict-origin-when-cross-origin');
+    }
+  });
+
   var verseCache = {};
   var verseSourceCache = {};
   var verseFetchInFlight = {};
@@ -314,6 +324,8 @@ $(document).ready(function(){
   if (versesUrl) {
     var autoRefIds = collectRefIds('.bible-verse-text[data-verse-ref]:not([data-verse-manual="1"])');
     if (autoRefIds.length > 0) {
+      // Show API spinner style while the first fetch for this page is pending.
+      $('.bible-verse-text[data-verse-ref]:not([data-verse-manual="1"])').html(verseSpinnerHtml('api'));
       console.debug('Loading bible verses from:', versesUrl, 'refs:', autoRefIds.length);
       fetchVerses(versesUrl, autoRefIds, function(verses) {
         $.each(verses, function(pk, text) {
@@ -697,10 +709,15 @@ $(document).ready(function(){
       });
     });
 
-    $(document).on('click', '.sefaria-commentator-btn', function() {
+    $(document).on('click', '.sefaria-commentary-panel .sefaria-commentator-btn', function() {
       var $btn = $(this);
       var commentator = $btn.data('commentator');
       var ref = $btn.data('ref');
+
+      if (!commentator || !ref) {
+        return;
+      }
+
       var $panel = $btn.closest('.sefaria-commentary-panel');
       var $textDiv = $panel.find('.sefaria-commentary-text');
       var fullRef = commentator + ' on ' + ref;

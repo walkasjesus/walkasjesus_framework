@@ -224,7 +224,7 @@
                                     <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
                                     {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
                                     <div class="video-iframe">
-                                        <iframe src="{{ superbook.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                        <iframe src="{{ superbook.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -246,7 +246,7 @@
                                 <h5>{{ henkieshow.title }}</h5>
                                 {% if henkieshow.description %}<p>{{ henkieshow.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ henkieshow.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ henkieshow.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                                 <p><b><a href="{{ henkieshow.img_url }}" target="_blank">{% trans 'Discover more creative methods of this Bible story on The Henkie Show' %}</a></b></p>
                                 <p style="clear: left;"> </p>
@@ -270,7 +270,7 @@
                                 <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
                                 {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ short_movie.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ short_movie.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}
@@ -293,7 +293,7 @@
                                 <h5>{{ song.author }} - {{ song.title }}</h5>
                                 {% if song.description %}<p>{{ song.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ song.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ song.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}
@@ -316,7 +316,7 @@
                                 <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                                 {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ testimony.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ testimony.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}

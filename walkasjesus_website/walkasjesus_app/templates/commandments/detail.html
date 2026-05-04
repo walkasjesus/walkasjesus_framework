@@ -681,11 +681,11 @@
                                     </div>
                                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
+                                        <span class="sr-only">{% trans 'Previous' %}</span>
                                     </a>
                                     <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
+                                        <span class="sr-only">{% trans 'Next' %}</span>
                                     </a>
                                     </div>
                                 </div>
@@ -714,7 +714,12 @@
                                         href="{% url 'commandments:law_of_messiah_detail' mapped_lawofmessiah.id %}"
                                         class="lom-related-link lom-related-link-primary {% if mapped_lawofmessiah.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}"
                                     >
-                                        {{ mapped_lawofmessiah.id }} - {{ mapped_lawofmessiah.title|default:mapped_lawofmessiah.id }}
+                                        {% if mapped_lawofmessiah.is_unique %}
+                                            <strong>{{ mapped_lawofmessiah.id }} - {{ mapped_lawofmessiah.title|default:mapped_lawofmessiah.id }}</strong>
+                                            <span class="lom-primary-badge">{% trans 'Unique' %}</span>
+                                        {% else %}
+                                            {{ mapped_lawofmessiah.id }} - {{ mapped_lawofmessiah.title|default:mapped_lawofmessiah.id }}
+                                        {% endif %}
                                         <span class="lom-primary-badge">{% trans 'Primary mapping' %}</span>
                                     </a>
                                 </li>
@@ -730,7 +735,12 @@
                                         href="{% url 'commandments:law_of_messiah_detail' related.id %}"
                                         class="lom-related-link {% if related.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}"
                                     >
-                                        {{ related.id }} - {{ related.title|default:related.id }}
+                                        {% if related.is_unique %}
+                                            <strong>{{ related.id }} - {{ related.title|default:related.id }}</strong>
+                                            <span class="lom-primary-badge">{% trans 'Unique' %}</span>
+                                        {% else %}
+                                            {{ related.id }} - {{ related.title|default:related.id }}
+                                        {% endif %}
                                     </a>
                                 </li>
                                 {% endfor %}

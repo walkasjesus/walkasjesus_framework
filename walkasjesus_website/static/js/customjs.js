@@ -79,6 +79,9 @@ $(document).ready(function(){
     }
 
     renderVerseText($('.bible-verse-text[data-verse-ref="' + pk + '"][data-verse-manual="1"]'), text);
+    // Hide the line breaks around the now-hidden "Click to retrieve" button.
+    $link.prev('br').hide();
+    $link.nextAll('br').first().hide();
     $link.hide();
     return true;
   }
@@ -124,7 +127,7 @@ $(document).ready(function(){
     }
 
     if (!$target.data('jcVersePrepared')) {
-      $target.css({ display: 'block', marginBottom: '6px' });
+      $target.css({ display: 'block' });
       $target.insertBefore($link);
       $target.data('jcVersePrepared', true);
     }
@@ -146,6 +149,85 @@ $(document).ready(function(){
   function getCommentaryTranslateUrl() {
     var container = document.querySelector('[data-commentary-translate-url]');
     return container ? container.getAttribute('data-commentary-translate-url') : '';
+  }
+
+  function uiMessage(key, variables) {
+    var lang = getCommentaryLanguage() === 'nl' ? 'nl' : 'en';
+    var messages = {
+      loading_commentary: {
+        en: 'Loading commentary...',
+        nl: 'Commentaar laden...'
+      },
+      no_commentary_scriptura_chapter: {
+        en: 'No commentary found for this chapter on Scriptura API.',
+        nl: 'Geen commentaar gevonden voor dit hoofdstuk op Scriptura API.'
+      },
+      no_exact_scriptura_verse: {
+        en: 'No exact commentary was found for verse {verse}. Choose an available entry from this chapter.',
+        nl: 'Geen exacte toelichting gevonden voor vers {verse}. Kies een beschikbare toelichting uit dit hoofdstuk.'
+      },
+      select_available_commentary: {
+        en: 'Select an available commentary:',
+        nl: 'Kies een beschikbare toelichting:'
+      },
+      could_not_load_scriptura: {
+        en: 'Could not load commentary from Scriptura API.',
+        nl: 'Kon commentaar van Scriptura API niet laden.'
+      },
+      select_commentator: {
+        en: 'Select a commentator:',
+        nl: 'Kies een commentator:'
+      },
+      could_not_reach_sefaria: {
+        en: 'Could not reach Sefaria API. Please check your connection.',
+        nl: 'Kan Sefaria API niet bereiken. Controleer je verbinding.'
+      },
+      no_jewish_commentary_for_reference: {
+        en: 'No Jewish commentary found for this reference on Sefaria.',
+        nl: 'Geen Joodse toelichting gevonden voor deze verwijzing op Sefaria.'
+      },
+      jewish_commentary_by_sefaria: {
+        en: 'Jewish commentary provided by',
+        nl: 'Joodse toelichting aangeboden door'
+      },
+      loading_commentator: {
+        en: 'Loading {name}...',
+        nl: '{name} laden...'
+      },
+      machine_translated_from_en: {
+        en: 'Machine translated from English.',
+        nl: 'Automatisch vertaald vanuit het Engels.'
+      },
+      view_on_sefaria: {
+        en: 'View on Sefaria',
+        nl: 'Bekijk op Sefaria'
+      },
+      no_english_text_available: {
+        en: 'No English text available for {name} on this passage.',
+        nl: 'Geen Engelse tekst beschikbaar voor {name} bij deze passage.'
+      },
+      complex_structure_on_sefaria: {
+        en: '{name} has a complex structure on Sefaria.',
+        nl: '{name} heeft een complexe structuur op Sefaria.'
+      },
+      could_not_load_commentary_text: {
+        en: 'Could not load commentary text for {name}.',
+        nl: 'Kon commentaartekst voor {name} niet laden.'
+      },
+      could_not_load_verse_text: {
+        en: 'Could not load verse text.',
+        nl: 'Kon bijbeltekst niet laden.'
+      }
+    };
+
+    var template = (messages[key] && messages[key][lang]) || (messages[key] && messages[key].en) || key;
+    if (!variables) {
+      return template;
+    }
+
+    return template.replace(/\{(\w+)\}/g, function(_, variableKey) {
+      return typeof variables[variableKey] === 'undefined' ? '' : String(variables[variableKey]);
+    });
   }
 
   function getCommentaryCacheTimeoutSeconds() {
@@ -359,7 +441,7 @@ $(document).ready(function(){
       fetchVerses(requestVersesUrl, [pk], function() {
         if (!revealManualVerse($link, pk)) {
           if ($manualTarget.length) {
-            $manualTarget.text('Could not load verse text.');
+            $manualTarget.text(uiMessage('could_not_load_verse_text'));
           }
         }
         verseFetchInFlight[pk] = false;
@@ -530,7 +612,7 @@ $(document).ready(function(){
       }
 
       if (cachedScripturaEntries) {
-        $panel.html(commentarySpinnerHtml('cache', 'Loading commentary...')).slideDown(200);
+        $panel.html(commentarySpinnerHtml('cache', uiMessage('loading_commentary'))).slideDown(200);
         var entries = cachedScripturaEntries;
         var entryKeys = Object.keys(entries).filter(function(key) {
           return entries[key];
@@ -539,19 +621,17 @@ $(document).ready(function(){
         });
 
         if (entryKeys.length === 0) {
-          $panel.html('<p class="sefaria-no-result"><em>No commentary found for this chapter on Scriptura API.</em></p>').slideDown(200);
+          $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_commentary_scriptura_chapter') + '</em></p>').slideDown(200);
           return;
         }
 
         var html = '';
         if (!entries[String(verse)]) {
           html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
-            (getCommentaryLanguage() === 'nl'
-              ? ('Geen exacte toelichting gevonden voor vers ' + $('<span>').text(String(verse)).html() + '. Kies een beschikbare entry uit dit hoofdstuk.')
-              : ('No exact commentary was found for verse ' + $('<span>').text(String(verse)).html() + '. Choose an available entry from this chapter.')) +
+            uiMessage('no_exact_scriptura_verse', { verse: $('<span>').text(String(verse)).html() }) +
             '</em></p>';
         }
-        html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + (getCommentaryLanguage() === 'nl' ? 'Kies een beschikbare toelichting:' : 'Select an available commentary:') + '</p>';
+        html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + uiMessage('select_available_commentary') + '</p>';
         entryKeys.forEach(function(entryKey) {
           html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-entry-btn mr-1 mb-1" data-entry-key="' + $('<span>').text(entryKey).html() + '">' + $('<span>').text(scripturaEntryLabel(entryKey)).html() + '</button>';
         });
@@ -567,7 +647,7 @@ $(document).ready(function(){
         return;
       }
 
-      $panel.html(commentarySpinnerHtml('api', 'Loading commentary...')).slideDown(200);
+      $panel.html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
 
       $.ajax({
         url: scripturaCommentaryUrl(source, book, chapter),
@@ -586,19 +666,17 @@ $(document).ready(function(){
           });
 
           if (entryKeys.length === 0) {
-            $panel.html('<p class="sefaria-no-result"><em>No commentary found for this chapter on Scriptura API.</em></p>');
+            $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_commentary_scriptura_chapter') + '</em></p>');
             return;
           }
 
           var html = '';
           if (!entries[String(verse)]) {
             html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
-              (getCommentaryLanguage() === 'nl'
-                ? ('Geen exacte toelichting gevonden voor vers ' + $('<span>').text(String(verse)).html() + '. Kies een beschikbare entry uit dit hoofdstuk.')
-                : ('No exact commentary was found for verse ' + $('<span>').text(String(verse)).html() + '. Choose an available entry from this chapter.')) +
+              uiMessage('no_exact_scriptura_verse', { verse: $('<span>').text(String(verse)).html() }) +
               '</em></p>';
           }
-          html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + (getCommentaryLanguage() === 'nl' ? 'Kies een beschikbare toelichting:' : 'Select an available commentary:') + '</p>';
+          html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + uiMessage('select_available_commentary') + '</p>';
           entryKeys.forEach(function(entryKey) {
             html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-entry-btn mr-1 mb-1" data-entry-key="' + $('<span>').text(entryKey).html() + '">' + $('<span>').text(scripturaEntryLabel(entryKey)).html() + '</button>';
           });
@@ -614,7 +692,7 @@ $(document).ready(function(){
         },
         error: function(xhr) {
           console.log('[Scriptura] Commentary request failed:', xhr.status, xhr.responseText);
-          $panel.html('<p class="sefaria-no-result"><em>Could not load commentary from Scriptura API.</em></p>');
+          $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
         }
       });
     });
@@ -651,12 +729,12 @@ $(document).ready(function(){
       }
 
       if (cachedRelatedHtml) {
-        $panel.html(commentarySpinnerHtml('cache', 'Loading commentary...')).slideDown(200);
+        $panel.html(commentarySpinnerHtml('cache', uiMessage('loading_commentary'))).slideDown(200);
         $panel.html(cachedRelatedHtml).slideDown(200);
         return;
       }
 
-      $panel.html(commentarySpinnerHtml('api', 'Loading commentary...')).slideDown(200);
+      $panel.html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
 
       var apiUrl = 'https://www.sefaria.org/api/related/' + encodeURIComponent(ref);
       console.log('[Sefaria] Fetching related for ref:', ref);
@@ -689,22 +767,22 @@ $(document).ready(function(){
           console.log('[Sefaria] English commentaries:', englishNames);
           
           if (englishNames.length === 0) {
-            $panel.html('<p class="sefaria-no-result"><em>No Jewish commentary found for this reference on Sefaria.</em></p>');
+            $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_jewish_commentary_for_reference') + '</em></p>');
             return;
           }
 
-          var html = '<div class="sefaria-commentators"><p class="sefaria-select-label">Select a commentator:</p>';
+          var html = '<div class="sefaria-commentators"><p class="sefaria-select-label">' + uiMessage('select_commentator') + '</p>';
           $.each(englishNames, function(i, name) {
             var safeName = $('<span>').text(name).html();
             var safeRef = $('<span>').text(ref).html();
             html += '<button class="btn btn-sm sefaria-commentator-btn mr-1 mb-1" data-commentator="' + safeName + '" data-ref="' + safeRef + '">' + safeName + '</button>';
           });
-          html += '</div><div class="sefaria-commentary-text"></div><p class="sefaria-attribution" style="font-size:10px; margin-top:10px; color:#999;">Jewish commentary provided by <a href="https://www.sefaria.org/" target="_blank" rel="noopener noreferrer" style="color:#5c4a1e;">Sefaria</a></p>';
+          html += '</div><div class="sefaria-commentary-text"></div><p class="sefaria-attribution" style="font-size:10px; margin-top:10px; color:#999;">' + uiMessage('jewish_commentary_by_sefaria') + ' <a href="https://www.sefaria.org/" target="_blank" rel="noopener noreferrer" style="color:#5c4a1e;">Sefaria</a></p>';
           setCommentaryCachedValue(sefariaRelatedCache, 'sefaria_related', ref, html);
           $panel.html(html);
         },
         error: function() {
-          $panel.html('<p class="sefaria-no-result"><em>Could not reach Sefaria API. Please check your connection.</em></p>');
+          $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_reach_sefaria') + '</em></p>');
         }
       });
     });
@@ -725,7 +803,7 @@ $(document).ready(function(){
 
       $panel.find('.sefaria-commentator-btn').removeClass('active');
       $btn.addClass('active');
-      $textDiv.html(commentarySpinnerHtml(cachedCommentary ? 'cache' : 'api', 'Loading ' + $('<span>').text(commentator).html() + '...'));
+      $textDiv.html(commentarySpinnerHtml(cachedCommentary ? 'cache' : 'api', uiMessage('loading_commentator', { name: $('<span>').text(commentator).html() })));
 
       var escapedName = $('<span>').text(commentator).html();
 
@@ -734,11 +812,7 @@ $(document).ready(function(){
         var displayText = sanitizedHtml || $('<span>').text(bodyText || '').html().replace(/\n/g, '<br>');
         var translationNote = '';
         if (isMachineTranslated) {
-          if (getCommentaryLanguage() === 'nl') {
-            translationNote = '<p class="sefaria-attribution"><em>Automatisch vertaald vanuit het Engels.</em></p>';
-          } else {
-            translationNote = '<p class="sefaria-attribution"><em>Machine translated from English.</em></p>';
-          }
+          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em></p>';
         }
 
         $textDiv.html(
@@ -746,7 +820,7 @@ $(document).ready(function(){
           '<strong>' + escapedName + '</strong>' +
           translationNote +
           '<div class="sefaria-commentary-body mt-1">' + displayText + '</div>' +
-          '<p class="sefaria-attribution"><a href="' + sefariaUrl + '" target="_blank" rel="noopener noreferrer">View on Sefaria</a></p>' +
+          '<p class="sefaria-attribution"><a href="' + sefariaUrl + '" target="_blank" rel="noopener noreferrer">' + uiMessage('view_on_sefaria') + '</a></p>' +
           '</div>'
         );
       }
@@ -774,7 +848,7 @@ $(document).ready(function(){
               renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated);
             });
           } else {
-            $textDiv.html('<p class="sefaria-no-result"><em>No English text available for ' + escapedName + ' on this passage.</em></p>');
+            $textDiv.html('<p class="sefaria-no-result"><em>' + uiMessage('no_english_text_available', { name: escapedName }) + '</em></p>');
           }
         },
         error: function(jqXHR) {
@@ -795,7 +869,7 @@ $(document).ready(function(){
                   renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated);
                 });
               } else {
-                $textDiv.html('<p class="sefaria-no-result"><em>No English text available for ' + escapedName + ' on this passage.</em></p>');
+                $textDiv.html('<p class="sefaria-no-result"><em>' + uiMessage('no_english_text_available', { name: escapedName }) + '</em></p>');
               }
             },
             error: function(jqXHR2) {
@@ -810,11 +884,11 @@ $(document).ready(function(){
                 // For complex-structured books, provide a link to view on Sefaria
                 var sefariaUrl = 'https://www.sefaria.org/' + encodeURIComponent(fullRef).replace(/%20/g, '_');
                 $textDiv.html(
-                  '<p class="sefaria-no-result"><em>' + escapedName + ' has a complex structure on Sefaria.<br>' +
-                  '<a href="' + sefariaUrl + '" target="_blank" rel="noopener noreferrer" style="color:#5c4a1e;">View on Sefaria</a></em></p>'
+                  '<p class="sefaria-no-result"><em>' + uiMessage('complex_structure_on_sefaria', { name: escapedName }) + '<br>' +
+                  '<a href="' + sefariaUrl + '" target="_blank" rel="noopener noreferrer" style="color:#5c4a1e;">' + uiMessage('view_on_sefaria') + '</a></em></p>'
                 );
               } else {
-                $textDiv.html('<p class="sefaria-no-result"><em>Could not load commentary text for ' + escapedName + '.</em></p>');
+                $textDiv.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_commentary_text', { name: escapedName }) + '</em></p>');
               }
             }
           });

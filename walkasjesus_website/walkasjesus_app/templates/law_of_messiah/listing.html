@@ -10,7 +10,6 @@
                 <div class="col-md-12 heading-section text-center ftco-animate">
                     <span class="subheading">{% trans 'Law of Messiah' %}</span>
                     <h2 class="mb-4">{% trans 'Overview of all Laws of Messiah' %}</h2>
-                    <p>{% trans 'Discover each commandment with its category, commentary and Scripture references.' %}</p>
                     <p>{% blocktrans %}This page presents the structured commandments (mitzvot) derived from the Bible, as documented in <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster. The goal here is to make these commandments easier to filter, search, compare, and study for discipleship and personal reflection.{% endblocktrans %}</p>
                     <p>
                         {% blocktrans %}Source material: <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}
@@ -51,7 +50,7 @@
                                             <select id="filter-category" name="category" class="form-control law-filter-select">
                                                 <option value="">{% trans 'All' %}</option>
                                                 {% for option in category_options %}
-                                                    <option value="{{ option }}"{% if selected_category == option %} selected{% endif %}>{{ option }}</option>
+                                                    <option value="{{ option.value }}"{% if selected_category == option.value %} selected{% endif %}>{{ option.label }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

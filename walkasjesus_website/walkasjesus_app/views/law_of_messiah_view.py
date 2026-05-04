@@ -145,8 +145,6 @@ def _ncla_summary(ncla_data):
 
     person_labels = _person_label_map()
     application_labels = _application_label_map()
-    label_map = _ncla_label_map()
-
     groups_detail = []
     all_person_codes = set()
     all_application_codes = set()
@@ -156,7 +154,16 @@ def _ncla_summary(ncla_data):
             continue
         group_name = entry.get('group', 'All')
         codes = entry.get('codes', [])
-        detailed = [label_map.get(c, c) for c in codes]
+        detailed = []
+        for code in codes:
+            if len(code) >= 3:
+                person_code = code[:2]
+                application_code = code[-1]
+                person_label = person_labels.get(person_code, person_code)
+                application_label = application_labels.get(application_code, application_code)
+                detailed.append(f'{code} - {person_label}, {application_label}')
+            else:
+                detailed.append(code)
         person_set = sorted(set(c[:2] for c in codes if len(c) >= 3))
         app_set = sorted(set(c[-1] for c in codes if len(c) >= 3))
         all_person_codes.update(person_set)
@@ -333,9 +340,16 @@ class LawOfMessiahListingView(View):
 
         filter_options = _ncla_filter_options()
         ncla_group_options = _ncla_group_options()
-        categories = list(
+        category_values = list(
             LawOfMessiah.objects.exclude(category='').order_by('category').values_list('category', flat=True).distinct()
         )
+        category_options = [
+            {
+                'value': value,
+                'label': _(value),
+            }
+            for value in category_values
+        ]
         return render(
             request,
             'law_of_messiah/listing.html',
@@ -350,7 +364,7 @@ class LawOfMessiahListingView(View):
                 'selected_ncla_person': person_code,
                 'selected_ncla_application': application_code,
                 'selected_ncla_group': ncla_group,
-                'category_options': categories,
+                'category_options': category_options,
                 'ncla_person_options': filter_options['person'],
                 'ncla_application_options': filter_options['application'],
                 'ncla_group_options': ncla_group_options,

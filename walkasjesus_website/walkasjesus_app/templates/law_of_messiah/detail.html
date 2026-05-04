@@ -4,7 +4,7 @@
 {% load cache %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block title_content %}{{ law.title|default:law.id }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
 
 {% block content %}
 {% cache cache_timeout law_of_messiah_detail cache_on_language law.id %}
@@ -18,7 +18,7 @@
                         <span class="subheading">{{ law.id }}</span>
                     </div>
                     <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
-                        <span class="subheading">{{ law.title|default:law.id }}</span>
+                        <span class="subheading">{{ law.translated_title }}</span>
                     </div>
                 </div>
             </div>
@@ -32,17 +32,17 @@
                             <h3>{{ law.id }}</h3>
                         </div>
                         <div class="our-services-text commandment_details">
-                            <h4>{{ law.commandment|linebreaksbr }}</h4>
+                            <h4>{{ law.translated_commandment|linebreaksbr }}</h4>
                             {% if law.subtitle_texts %}
                                 {% for subtitle_text in law.subtitle_texts %}
                                     <p class="lom-commandment-subtitle">{{ subtitle_text|linebreaksbr }}</p>
                                 {% endfor %}
                             {% endif %}
 
-                            <p><strong>{% trans 'Category' %}:</strong> {{ law.category|default:'-' }}</p>
-                            <p><strong>{% trans 'Type' %}:</strong> {{ law.get_commandment_type_display }}</p>
-                            <p><strong>{% trans 'Form' %}:</strong> {{ law.get_commandment_form_display|default:'-' }}</p>
-                            <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.get_source_dataset_display }}</p>
+                            <p><strong>{% trans 'Category' %}:</strong> {{ law.translated_category }}</p>
+                            <p><strong>{% trans 'Type' %}:</strong> {{ law.translated_commandment_type_display }}</p>
+                            <p><strong>{% trans 'Form' %}:</strong> {{ law.translated_commandment_form_display }}</p>
+                            <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.translated_source_dataset_display }}</p>
                             <p><strong>{% trans 'Uniqueness' %}:</strong> {% if law.is_unique %}{% trans 'Unique' %}{% else %}{% trans 'Not unique' %}{% endif %}</p>
                             <p><strong>{% trans 'NCLA deviation' %}:</strong> {% if law.ncla_deviation %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
                             <p><strong>{% trans 'Classical commandment' %}:</strong> {% if law.classical_commandment %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
@@ -221,16 +221,16 @@
                         <div class="our-services-text">
                             <h4>{% trans 'Commentary' %}</h4>
                             {% if law.commentary_rudolph %}
-                            <h5>{% trans 'Rudolph' %}</h5>
-                            <p>{{ law.commentary_rudolph|linebreaksbr }}</p>
+                            <h5>{% trans 'Rabbi Michael Rudolph' %}</h5>
+                            <p>{{ law.translated_commentary_rudolph|linebreaksbr }}</p>
                             {% endif %}
                             {% if law.commentary_juster %}
-                            <h5>{% trans 'Juster' %}</h5>
-                            <p>{{ law.commentary_juster|linebreaksbr }}</p>
+                            <h5>{% trans 'Rabbi Daniel Juster' %}</h5>
+                            <p>{{ law.translated_commentary_juster|linebreaksbr }}</p>
                             {% endif %}
                             {% if law.classical_commentators %}
                             <h5>{% trans 'Classical commentators' %}</h5>
-                            <p>{{ law.classical_commentators|linebreaksbr }}</p>
+                            <p>{{ law.translated_classical_commentators|linebreaksbr }}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -276,7 +276,12 @@
                                         href="{% url 'commandments:law_of_messiah_detail' related.id %}"
                                         class="lom-related-link {% if related.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}"
                                     >
-                                        {{ related.id }} - {{ related.title|default:related.id }}
+                                        {% if related.is_unique %}
+                                            <strong>{{ related.id }} - {{ related.title|default:related.id }}</strong>
+                                            <span class="lom-primary-badge">{% trans 'Unique' %}</span>
+                                        {% else %}
+                                            {{ related.id }} - {{ related.title|default:related.id }}
+                                        {% endif %}
                                     </a>
                                 </li>
                                 {% endfor %}

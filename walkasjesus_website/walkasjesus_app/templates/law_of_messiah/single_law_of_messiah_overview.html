@@ -34,16 +34,12 @@
                 {% endfor %}
             </div>
             <div class="text-content p-4 text-center">
-                <h3>{{ law.title|default:law.id }}</h3>
-                    <p class="mb-2"><span class="law-category-pill">{{ law.category|default:'-' }}</span></p>
+                <h3>{{ law.translated_title }}</h3>
+                    <p class="mb-2"><span class="law-category-pill">{{ law.translated_category }}</span></p>
                 <p>
                     <a href="{% url 'commandments:law_of_messiah_detail' law.id %}" class="btn-custom p-2 text-center">
                         <span class="icon-play"></span>
-                        {% if LANGUAGE_CODE|slice:":2" == 'nl' %}
-                            Bekijk gebod
-                        {% else %}
-                            View law
-                        {% endif %}
+                        {% trans 'Discover how?!' %}
                     </a>
                 </p>
             </div>

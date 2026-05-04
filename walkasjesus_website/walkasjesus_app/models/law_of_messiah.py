@@ -1,6 +1,12 @@
 from django.db import models
 from django.conf import settings
+from django.core.cache import cache
+from django.utils.translation import gettext as _
+from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy
+import hashlib
+
+import requests
 
 from .bible_books import BibleBooks
 
@@ -33,9 +39,81 @@ def _ncla_choices():
     return choices
 
 
+COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
+
+
+def _split_translation_chunks(text, max_len=4200):
+    chunks = []
+    for paragraph in str(text or '').split('\n\n'):
+        part = paragraph.strip()
+        if not part:
+            continue
+        if len(part) <= max_len:
+            chunks.append(part)
+            continue
+
+        for i in range(0, len(part), max_len):
+            chunks.append(part[i:i + max_len])
+    return chunks
+
+
+def _translate_en_to_language(text, target_language):
+    chunks = _split_translation_chunks(text)
+    translated_chunks = []
+
+    for chunk in chunks:
+        response = requests.get(
+            'https://translate.googleapis.com/translate_a/single',
+            params={
+                'client': 'gtx',
+                'sl': 'en',
+                'tl': target_language,
+                'dt': 't',
+                'q': chunk,
+            },
+            timeout=15,
+        )
+        response.raise_for_status()
+        data = response.json()
+        segments = data[0] if isinstance(data, list) and data else []
+        translated_parts = [segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0]]
+        translated_chunks.append(''.join(translated_parts))
+
+    return '\n\n'.join(translated_chunks)
+
+
+def _translated_dynamic_commentary(text):
+    source_text = str(text or '').strip()
+    if not source_text:
+        return ''
+
+    translated_text = _(source_text)
+    language = (get_language() or 'en').lower()[:2]
+
+    # If a PO translation exists (or UI language is English), prefer that path.
+    if language == 'en' or translated_text != source_text:
+        return translated_text
+
+    digest = hashlib.sha256(f'{language}:{source_text}'.encode('utf-8')).hexdigest()
+    cache_key = f'law_of_messiah_commentary_translation:v1:{digest}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        machine_translated = _translate_en_to_language(source_text, language)
+        if machine_translated:
+            cache.set(cache_key, machine_translated, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
+            return machine_translated
+    except Exception:
+        pass
+
+    return translated_text
+
+
 class LawOfMessiah(models.Model):
     HUMAN_READABLE_NAME_EN = 'Law of Messiah'
-    HUMAN_READABLE_NAME_NL = 'Wet van Christus'
+    HUMAN_READABLE_NAME_NL = 'Wet van de Messias'
 
     SOURCE_DATASET_OT = 'ot'
     SOURCE_DATASET_NT = 'nt'
@@ -123,6 +201,43 @@ class LawOfMessiah(models.Model):
     @classmethod
     def human_readable_name(cls, language='en'):
         return cls.HUMAN_READABLE_NAME_NL if language.lower().startswith('nl') else cls.HUMAN_READABLE_NAME_EN
+
+    @property
+    def translated_title(self):
+        return _(self.title) if self.title else self.id
+
+    @property
+    def translated_commandment(self):
+        return _(self.commandment) if self.commandment else ''
+
+    @property
+    def translated_category(self):
+        return _(self.category) if self.category else '-'
+
+    @property
+    def translated_commandment_type_display(self):
+        return _(self.get_commandment_type_display())
+
+    @property
+    def translated_commandment_form_display(self):
+        value = self.get_commandment_form_display()
+        return _(value) if value else '-'
+
+    @property
+    def translated_source_dataset_display(self):
+        return _(self.get_source_dataset_display())
+
+    @property
+    def translated_commentary_rudolph(self):
+        return _translated_dynamic_commentary(self.commentary_rudolph)
+
+    @property
+    def translated_commentary_juster(self):
+        return _translated_dynamic_commentary(self.commentary_juster)
+
+    @property
+    def translated_classical_commentators(self):
+        return _translated_dynamic_commentary(self.classical_commentators)
 
     def __str__(self):
         if self.title:

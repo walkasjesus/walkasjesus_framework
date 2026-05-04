@@ -385,6 +385,11 @@ p {
     font-size: 0.9em;
     font-weight: 500;
     line-height: 1.2;
+    min-width: 130px;
+    min-height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 2px 8px;
 }
 

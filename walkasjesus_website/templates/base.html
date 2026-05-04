@@ -5,7 +5,7 @@
 {% load cookielaw_tags %}
 <html lang="en">
   <head>
-    <title>{% block title_content %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}</title>
+    <title>{% block title_content %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}</title>
   {% cache cache_timeout head cache_on_language %}
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
@@ -46,17 +46,17 @@
     <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
   {% endcache %}
   {% block head_meta %}
-    <meta name="description" content="{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}">
+    <meta name="description" content="{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="{% block og_title %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/jc_icon.png' %}">
     <meta property="og:site_name" content="Walk as Jesus">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{% block twitter_title %}{% trans 'Walk as Jesus - learn it - live it - give it' %}{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}{% endblock %}">
   {% endblock %}
   {% block jsonld %}
   <script type="application/ld+json">
@@ -65,7 +65,7 @@
     "@type": "WebSite",
     "name": "Walk as Jesus",
     "url": "{{ request.scheme }}://{{ request.get_host }}/",
-    "description": "Discover the commandments of Jesus Christ. Learn it, Live it, Give it."
+    "description": "Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups."
   }
   </script>
   {% endblock %}
@@ -81,37 +81,22 @@
             {% trans "Learn it - Live it - Give it" %}
           </div>
         </div>
-        <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> {% trans 'Menu' %}
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav nav">
-	          <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
-    		  <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
-    		  <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Childrens Bible Lessons' %}</span></a></li>
-    		  <li class="nav-item"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
-    		  <li class="nav-item"><a href="{% url 'commandments:maimonides_listing' %}" class="nav-link"><span>{% trans 'Maimonides' %}</span></a></li>
-	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
-	          <li class="nav-item" targetaudience="adults"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>{% trans 'Legalism?!' %}</span></a></li>
-            {% if user.is_superuser or user.is_staff %}
-            <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-	          <li class="nav-item"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
-	          <li class="nav-item">
-              <form method="post" action="{% url 'account:logout' %}" class="logout-form">{% csrf_token %}
-                <button type="submit" class="nav-link logout-button"><span>{% trans 'Logout' %}</span></button>
-	            </form>
-	          </li>
-            {% else %}
-            <li class="nav-item"><a href="{% url 'account:login' %}" class="nav-link"><span>{% trans 'Login' %}</span></a></li>
-            {% endif %}
-          </ul>
-          <div>
-            <p><a href="javascript:void(0);" class="btn btn-primary btn-outline-primary btn-change-bible" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a></p>
-          </div>
-          <div class="btn btn-primary btn-outline-primary btn-superbook" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids Site, you will find the same commandments with limited videos and resources' %}">
+        <!-- Always-visible top-right action buttons -->
+        <div class="navbar-top-actions d-flex align-items-center ml-auto">
+          <a href="javascript:void(0);" class="btn btn-primary btn-outline-primary btn-change-bible" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a>
+          {% if user.is_authenticated %}
+          <form method="post" action="{% url 'account:logout' %}" class="logout-form d-inline ml-2">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-outline-primary btn-nav-user-icon" title="{% trans 'Logout' %}">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </form>
+          {% else %}
+          <a href="{% url 'account:login' %}" class="btn btn-primary btn-outline-primary btn-nav-user-icon ml-2" title="{% trans 'Login' %}">
+            <i class="fas fa-sign-in-alt"></i>
+          </a>
+          {% endif %}
+          <div class="btn btn-primary btn-outline-primary btn-superbook ml-2" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids Site, you will find the same commandments with limited videos and resources' %}">
             <div class="custom-control custom-checkbox image-checkbox">
               <input type="checkbox" class="custom-control-input chk-kids-mode" id="chk-kids-mode-1">
               <label class="custom-control-label" for="chk-kids-mode-1">
@@ -119,6 +104,29 @@
               </label>
             </div>
           </div>
+        </div>
+
+        <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> {% trans 'Menu' %}
+	      </button>
+
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav nav">
+            <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
+	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
+        <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
+	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>
+            <li class="nav-item kids-mode-hide" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
+            {% if user.is_superuser or user.is_staff %}
+            <li class="nav-item kids-mode-hide"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+	          <li class="nav-item kids-mode-hide"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
+            {% endif %}
+            {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
+            <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>Wettiscisme?!</span></a></li>
+            {% endif %}
+          </ul>
         </div>
       </div>
 	  </nav>
@@ -153,9 +161,11 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">{% trans 'Site Navigation' %}</h2>
               <ul class="list-unstyled">
-		        <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans '77 Steps' %}</a></li>
-                <li><a href="{% url 'commandments:lesson_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Childrens Bible Lessons' %}</a></li>
-                <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Our Vision' %}</a></li>
+		        <li><a href="{% url 'commandments:index' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Start' %}</a></li>
+		        <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Follow Jesus in 77 Steps' %}</a></li>
+                <li><a href="{% url 'commandments:lesson_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Children & Lessons' %}</a></li>
+                <li><a href="{% url 'commandments:law_of_messiah_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Live the Law of Messiah' %}</a></li>
+                <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'About This Site' %}</a></li>
                 <li><a href="{% url 'commandments:legalism' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Legalism?!' %}</a></li>
               </ul>
             </div>

@@ -49,6 +49,7 @@
                             {% if law.double_ids %}<p><strong>{% trans 'Double IDs' %}:</strong> {{ law.double_ids|join:', ' }}</p>{% endif %}
                             {% if enriched_maimonides %}
                             <p><strong>{% trans 'Maimonides' %}:</strong></p>
+                            <p>{% blocktrans %}Maimonides was a medieval Jewish rabbi who organized 613 Torah commandments into a structured list. These linked items show where this Law of Messiah commandment overlaps with that classical framework.{% endblocktrans %}</p>
                             <ul class="lom-related-links mb-2">
                                 {% for mai in enriched_maimonides %}
                                 <li>

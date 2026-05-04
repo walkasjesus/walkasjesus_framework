@@ -558,6 +558,63 @@ p {
     color: #ffffff;
 }
 
+.btn-home-secondary-cta {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #e2b900;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-transform: none;
+}
+
+.btn-home-secondary-cta:hover,
+.btn-home-secondary-cta:focus {
+    background: #e2b900;
+    border-color: #e2b900;
+    color: #3a332d;
+}
+
+/* ----- Login/logout icon button in navbar ----- */
+.btn-nav-user-icon {
+  height: 38px;
+  padding: 4px 10px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----- Top-right navbar actions group ----- */
+.navbar-top-actions {
+  order: 3;
+  margin-left: auto;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-top-actions {
+    order: 2;
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+}
+
+/* ----- Card button alignment (desktop only) ----- */
+@media (min-width: 992px) {
+  .services-2 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .services-2 .text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .services-2 .text p:last-child {
+    margin-top: auto;
+  }
+}
+
 .vision-author {
     text-align: right;
 }
@@ -750,18 +807,18 @@ p {
 }
 
 .btn-superbook {
-    padding: 0px;
-    margin-left: 5px;
-    margin-top: -15px;
-    height: 50px;
-    margin-bottom: 5px;
+    padding: 4px 8px;
+    height: 38px;
+    display: inline-flex !important;
+    align-items: center;
 }
 
 .btn-change-bible {
-    margin-left: 5px;
-    margin-bottom: 5px;
-    height: 50px;
+    height: 38px;
     width: 180px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
 }
 
 .custom-control.image-checkbox {

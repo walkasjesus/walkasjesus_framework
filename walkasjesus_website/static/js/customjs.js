@@ -453,14 +453,29 @@ $(document).ready(function(){
     $('#changeLanguageModal').modal('show');
     $.removeCookie('jc_bible_trans_settings');
   }  
+  function applyKidsModeState(isKidsMode, animated) {
+    var showFn = animated ? 'slideDown' : 'show';
+    var hideFn = animated ? 'slideUp' : 'hide';
+
+    if (isKidsMode) {
+      $('[targetaudience="kids"]')[showFn]();
+      $('[targetaudience="adults"]')[hideFn]();
+      $('.kids-mode-hide')[hideFn]();
+      $('.chk-kids-mode').prop('checked', true);
+      return;
+    }
+
+    $('[targetaudience="kids"]')[hideFn]();
+    $('[targetaudience="adults"]')[showFn]();
+    $('.kids-mode-hide')[showFn]();
+    $('.chk-kids-mode').prop('checked', false);
+  }
+
   if($.cookie('jc_kids_mode')){
-    $('.chk-kids-mode').prop('checked', true);
-    $('[targetaudience="kids"]').show();
-    $('[targetaudience="adults"]').hide();
+    applyKidsModeState(true, false);
   }
   else {
-    $('[targetaudience="kids"]').hide();
-    $('[targetaudience="adults"]').show();
+    applyKidsModeState(false, false);
   }
 
   $(document).on('change', '.chk-kids-mode', function(event){
@@ -468,15 +483,11 @@ $(document).ready(function(){
     var checked = $(this).prop('checked');
     if (checked){
       $.cookie('jc_kids_mode', true, { expires: 365 });
-      $('[targetaudience="kids"]').slideDown();
-      $('[targetaudience="adults"]').slideUp();
-      $('.chk-kids-mode').prop('checked', true);
+      applyKidsModeState(true, true);
     }
     else {
       $.removeCookie('jc_kids_mode');
-      $('[targetaudience="kids"]').slideUp();
-      $('[targetaudience="adults"]').slideDown();
-      $('.chk-kids-mode').prop('checked', false);
+      applyKidsModeState(false, true);
     }
   });
 

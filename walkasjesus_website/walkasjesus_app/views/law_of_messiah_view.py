@@ -249,10 +249,16 @@ def _reference_text(ref, bible):
 
 
 def _reference_text_with_source(ref, bible):
+    bible_cache_id = str(getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible)
+    copyright_cache_key = f"bible_copyright:v1:{bible_cache_id}"
     cache_key = (
-        f"verse_text:v1:{getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible}:"
+        f"verse_text:v1:{bible_cache_id}:"
         f"{ref.book}:{ref.begin_chapter}:{ref.begin_verse}:{ref.end_chapter}:{ref.end_verse}"
     )
+    cached_copyright = cache.get(copyright_cache_key)
+    if cached_copyright:
+        bible.copyright = cached_copyright
+
     cached = cache.get(cache_key)
     if cached is not None:
         return cached, 'cache'
@@ -261,6 +267,8 @@ def _reference_text_with_source(ref, bible):
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
     text = bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse)
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
+    if getattr(bible, 'copyright', ''):
+        cache.set(copyright_cache_key, bible.copyright, VERSE_CACHE_TIMEOUT)
     return text, 'api'
 
 
@@ -407,10 +415,21 @@ class LawOfMessiahListingView(View):
 class LawOfMessiahDetailView(View):
     def get(self, request, law_id: str):
         selected_bible = UserPreferences(request.session).bible
+        selected_bible_cache_id = str(getattr(selected_bible, 'id', '') or getattr(selected_bible, 'bible_id', '') or selected_bible)
+        cached_copyright = cache.get(f"bible_copyright:v1:{selected_bible_cache_id}")
+        if cached_copyright:
+            selected_bible.copyright = cached_copyright
         law = get_object_or_404(
             LawOfMessiah.objects.prefetch_related('bible_reference_rows', 'media', 'related_steps__drawing_set'),
             pk=law_id,
         )
+        if not cached_copyright:
+            first_ref = law.bible_reference_rows.first()
+            if first_ref is not None:
+                try:
+                    _reference_text_with_source(first_ref, selected_bible)
+                except Exception:
+                    pass
         law.primary_drawing = _find_primary_drawing(law)
         law.primary_drawing_url = _normalize_image_url(law.primary_drawing.img_url) if law.primary_drawing else ''
         law.source_is_url = _is_http_url(law.source)

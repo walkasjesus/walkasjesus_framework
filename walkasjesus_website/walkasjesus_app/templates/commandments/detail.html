@@ -342,7 +342,7 @@
                             {% endif %}
                             <br>
                             <h4>{% trans 'Legend' %}</h4>
-                            <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
+                            <p><b><i>{% trans 'Bible verses copyright' %}: {% if bible.copyright %}{{ bible.copyright }}{% else %}{% trans 'Not provided for this Bible translation.' %}{% endif %}</i></b></p>
                             <br>
                             <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
                                 <p><i>{% trans 'Click here to see the explanation of the different symbols, Author, OT Law etc.' %}</i></p>

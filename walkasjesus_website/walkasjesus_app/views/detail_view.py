@@ -67,6 +67,9 @@ class DetailView(View):
     def get(self, request, commandment_id: int):
         commandment = get_object_or_404(Commandment, pk=commandment_id)
         selected_bible = UserPreferences(request.session).bible
+        cached_copyright = cache.get(_bible_copyright_cache_key(selected_bible))
+        if cached_copyright:
+            selected_bible.copyright = cached_copyright
         commandment.bible = selected_bible
         commandment.languages = UserPreferences(request.session).languages
 
@@ -106,6 +109,9 @@ class DetailLessonView(View):
     def get(self, request, lesson_id: int):
         lesson = get_object_or_404(Lesson, pk=lesson_id)
         selected_bible = UserPreferences(request.session).bible
+        cached_copyright = cache.get(_bible_copyright_cache_key(selected_bible))
+        if cached_copyright:
+            selected_bible.copyright = cached_copyright
         lesson.bible = selected_bible
         lesson.languages = UserPreferences(request.session).languages
         return render(request, 'lessons/detail.html', {'lesson': lesson,
@@ -142,6 +148,10 @@ def _verse_cache_key(bible, ref):
     )
 
 
+def _bible_copyright_cache_key(bible):
+    return f"bible_copyright:v1:{_bible_cache_id(bible)}"
+
+
 def _get_or_fetch_verse_text(bible, ref):
     text, _ = _get_or_fetch_verse_text_with_source(bible, ref)
     return text
@@ -149,6 +159,10 @@ def _get_or_fetch_verse_text(bible, ref):
 
 def _get_or_fetch_verse_text_with_source(bible, ref):
     cache_key = _verse_cache_key(bible, ref)
+    cached_copyright = cache.get(_bible_copyright_cache_key(bible))
+    if cached_copyright:
+        bible.copyright = cached_copyright
+
     cached = cache.get(cache_key)
     if cached is not None:
         return cached, 'cache'
@@ -156,6 +170,8 @@ def _get_or_fetch_verse_text_with_source(bible, ref):
     ref.set_bible(bible)
     text = ref.text() or ''
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
+    if getattr(bible, 'copyright', ''):
+        cache.set(_bible_copyright_cache_key(bible), bible.copyright, VERSE_CACHE_TIMEOUT)
     return text, 'api'
 
 

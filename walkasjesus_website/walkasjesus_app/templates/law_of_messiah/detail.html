@@ -7,7 +7,7 @@
 {% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
 
 {% block content %}
-{% cache cache_timeout law_of_messiah_detail cache_on_language law.id %}
+{% cache cache_timeout law_of_messiah_detail cache_on_language cache_on_bible law.id %}
 <section class="ftco-daily-verse img" style="background-image:url('{% if law.primary_drawing_url %}{{ law.primary_drawing_url }}{% else %}{% static 'images/bg_2.jpg' %}{% endif %}');">
     <div class="overlay"></div>
     <div class="container">
@@ -205,7 +205,7 @@
                             </ul>
                             {% endif %}
 
-                            <p><b><i>{% trans 'Bible verses copyright' %}: {{ bible.copyright }}</i></b></p>
+                            <p><b><i>{% trans 'Bible verses copyright' %}: {% if bible.copyright %}{{ bible.copyright }}{% else %}{% trans 'Not provided for this Bible translation.' %}{% endif %}</i></b></p>
                         </div>
                     </div>
                 </div>
@@ -323,8 +323,8 @@
                             <h4>{% trans 'Source and License' %}</h4>
                             <p>{% blocktrans %}Based on <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}</p>
                             <p>
-                                <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">Volume 1 &amp; 2</a> |
-                                <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">Volume 3</a>
+                                <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">{% trans 'Volume 1 & 2' %}</a> |
+                                <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">{% trans 'Volume 3' %}</a>
                             </p>
                             <p><small>{% blocktrans %}License: CC BY-ND 4.0 (Attribution required, NoDerivatives).{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
                             <p><small>{% blocktrans %}Disclaimer: the original content is authored by Rabbi Michael Rudolph and Rabbi Daniel Juster; additional notes or implementation details on this website are not part of their original work and do not represent their views.{% endblocktrans %}</small></p>

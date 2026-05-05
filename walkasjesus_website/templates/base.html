@@ -120,9 +120,6 @@
             {% if user.is_superuser or user.is_staff %}
             <li class="nav-item kids-mode-hide"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
             {% endif %}
-            {% if user.is_authenticated %}
-	          <li class="nav-item kids-mode-hide"><a href="{% url 'account:profile' %}" class="nav-link"><span>{% trans 'Profile' %} ({{ user.username }})</span></a></li>
-            {% endif %}
             {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
             <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>Wettiscisme?!</span></a></li>
             {% endif %}

@@ -11,8 +11,8 @@
         </div>
         <div class="modal-body">
             <div class="selectWrapper">
-                <form action="{% url 'set_language' %}" method="post" id="frmSiteLanguage">{% csrf_token %}
-                    <input name="next" type="hidden" value="{{ redirect_to }}">
+                <form action="{% url 'commandments:language_switch' %}" method="post" id="frmSiteLanguage">{% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <b>{% trans 'Site language' %}:</b>
                     <div class="select">
                         <select class="drpSelectLanguage" name="language" >
@@ -39,10 +39,10 @@
                         <option value="{{ user_preferences.bible.id }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
                         </option>
-                        {% for bible in bible_translation.all_in_user_language %}
-                            {% if bible.id != user_preferences.bible.id %}
-                            <option value="{{ bible.id }}">
-                                {{ bible.name }}
+                        {% for bible_item in bible_translation.all_in_user_language %}
+                            {% if bible_item.id != user_preferences.bible.id %}
+                            <option value="{{ bible_item.id }}">
+                                {{ bible_item.name }}
                             </option>
                             {% endif %}
                         {% endfor %}
@@ -144,6 +144,29 @@
         });
     }
 
+    function postLanguageSwitch(selectedLanguage) {
+        var payload = new URLSearchParams();
+        var csrfTokenInput = languageForm.querySelector('input[name="csrfmiddlewaretoken"]');
+        var csrfToken = csrfTokenInput ? csrfTokenInput.value : '';
+        payload.append('language', selectedLanguage);
+        payload.append('next', window.location.pathname + window.location.search);
+        payload.append('bible_id', bibleSelect.value || '');
+
+        return fetch(languageForm.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: payload.toString()
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error('Language switch failed');
+            }
+            return response.json();
+        });
+    }
+
     languageSelect.addEventListener('change', function () {
         var selectedLanguage = this.value;
         refreshBibleDropdown(selectedLanguage);
@@ -155,18 +178,17 @@
 
         saveButton.disabled = true;
 
-        postForm(languageForm)
+        postForm(mediaLanguagesForm)
             .then(function () {
-                return postForm(bibleForm);
+                return postLanguageSwitch(languageSelect.value);
             })
-            .then(function () {
-                return postForm(mediaLanguagesForm);
-            })
-            .then(function () {
+            .then(function (data) {
                 if (window.jQuery && jQuery.removeCookie) {
                     jQuery.removeCookie('jc_bible_trans_settings');
                 }
-                window.location.reload();
+                var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+                var target = (data && data.redirect_url) ? data.redirect_url : currentUrl;
+                window.location.href = target;
             })
             .catch(function () {
                 if (window.jQuery && jQuery.removeCookie) {

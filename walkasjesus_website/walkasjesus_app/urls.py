@@ -19,13 +19,14 @@ from walkasjesus_app.views.law_of_messiah_view import (
     LawOfMessiahBibleVersesView,
 )
 from walkasjesus_app.views.user_preferences import UserPreferencesLanguagesView, UserPreferencesBibleView, BibleTranslationsForLanguageView
-from walkasjesus_app.views.user_preferences import CommentaryTranslationView
+from walkasjesus_app.views.user_preferences import CommentaryTranslationView, UserPreferencesLanguageSwitchView
 from walkasjesus_app.views.maimonides_view import MaimonidesList
 
 app_name = 'commandments'
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('language-switch/', UserPreferencesLanguageSwitchView.as_view(), name='language_switch'),
     path(_('bible/'), UserPreferencesBibleView.as_view(), name='bible'),
     path(_('languages/'), UserPreferencesLanguagesView.as_view(), name='languages'),
     path(_('bible-translations/'), BibleTranslationsForLanguageView.as_view(), name='bible_translations_for_language'),

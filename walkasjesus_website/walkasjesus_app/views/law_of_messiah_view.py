@@ -219,10 +219,22 @@ def _matches_ncla_filters(law, person_code, application_code, group_name=''):
     return False
 
 
-def _ncla_group_options():
-    """Return distinct ncla group names from laws that have ncla_deviation, for the context filter."""
+def _ncla_group_options(commandment_type=LawOfMessiah.COMMANDMENT_TYPE_POSITIVE, unique_filter='true'):
+    """Return distinct ncla group names from laws that have ncla_deviation, scoped to current list filters."""
+    query = LawOfMessiah.objects.filter(ncla_deviation=True)
+    if commandment_type in {
+        LawOfMessiah.COMMANDMENT_TYPE_POSITIVE,
+        LawOfMessiah.COMMANDMENT_TYPE_NEGATIVE,
+        LawOfMessiah.COMMANDMENT_TYPE_BOTH,
+    }:
+        query = query.filter(commandment_type=commandment_type)
+    if unique_filter == 'true':
+        query = query.filter(is_unique=True)
+    elif unique_filter == 'false':
+        query = query.filter(is_unique=False)
+
     groups = set()
-    for ncla_data in LawOfMessiah.objects.filter(ncla_deviation=True).values_list('ncla', flat=True):
+    for ncla_data in query.values_list('ncla', flat=True):
         for entry in (ncla_data or []):
             if isinstance(entry, dict):
                 g = entry.get('group', '').strip()
@@ -290,16 +302,35 @@ class LawOfMessiahListingView(View):
     def get(self, request):
         search_query = request.GET.get('q', '').strip()
         source_dataset = request.GET.get('source_dataset', '').strip().lower()
-        commandment_type = request.GET.get('commandment_type', '').strip().lower()
+        commandment_type = request.GET.get('commandment_type', LawOfMessiah.COMMANDMENT_TYPE_POSITIVE).strip().lower()
+        unique_filter = request.GET.get('is_unique', 'true').strip().lower()
         classical_filter = request.GET.get('classical_commandment', '').strip().lower()
         category = request.GET.get('category', '').strip()
         person_code = request.GET.get('ncla_person', '').strip().upper()
         application_code = request.GET.get('ncla_application', '').strip().lower()
         ncla_group = request.GET.get('ncla_group', '').strip()
 
-        laws_query = LawOfMessiah.objects.filter(
-            is_unique=True, commandment_type=LawOfMessiah.COMMANDMENT_TYPE_POSITIVE
-        ).order_by('id').prefetch_related('media')
+        if commandment_type not in {
+            LawOfMessiah.COMMANDMENT_TYPE_POSITIVE,
+            LawOfMessiah.COMMANDMENT_TYPE_NEGATIVE,
+            LawOfMessiah.COMMANDMENT_TYPE_BOTH,
+            '',
+        }:
+            commandment_type = LawOfMessiah.COMMANDMENT_TYPE_POSITIVE
+
+        laws_query = LawOfMessiah.objects.order_by('id').prefetch_related('media')
+        if unique_filter == 'true':
+            laws_query = laws_query.filter(is_unique=True)
+        elif unique_filter == 'false':
+            laws_query = laws_query.filter(is_unique=False)
+
+        if commandment_type in {
+            LawOfMessiah.COMMANDMENT_TYPE_POSITIVE,
+            LawOfMessiah.COMMANDMENT_TYPE_NEGATIVE,
+            LawOfMessiah.COMMANDMENT_TYPE_BOTH,
+        }:
+            laws_query = laws_query.filter(commandment_type=commandment_type)
+
         if search_query:
             laws_query = laws_query.filter(
                 Q(id__icontains=search_query)
@@ -339,7 +370,7 @@ class LawOfMessiahListingView(View):
             ]
 
         filter_options = _ncla_filter_options()
-        ncla_group_options = _ncla_group_options()
+        ncla_group_options = _ncla_group_options(commandment_type=commandment_type, unique_filter=unique_filter)
         category_values = list(
             LawOfMessiah.objects.exclude(category='').order_by('category').values_list('category', flat=True).distinct()
         )
@@ -359,6 +390,7 @@ class LawOfMessiahListingView(View):
                 'selected_q': search_query,
                 'selected_source_dataset': source_dataset,
                 'selected_commandment_type': commandment_type,
+                'selected_is_unique': unique_filter,
                 'selected_classical_commandment': classical_filter,
                 'selected_category': category,
                 'selected_ncla_person': person_code,

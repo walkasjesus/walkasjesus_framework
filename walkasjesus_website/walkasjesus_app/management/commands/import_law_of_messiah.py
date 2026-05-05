@@ -62,6 +62,13 @@ class Command(BaseCommand):
             return
 
         commandment_type = self._map_commandment_type(item.get('commandment_type'))
+        ncla_data = self._map_ncla(item.get('ncla'))
+        ncla_deviation = self._map_bool(item.get('ncla_deviation', False))
+        if commandment_type == LawOfMessiah.COMMANDMENT_TYPE_NEGATIVE:
+            # Negative commandments are intentionally excluded from context/situation filtering.
+            ncla_data = []
+            ncla_deviation = False
+
         commandment_form = self._map_commandment_form(item.get('commandment_form'))
         source_dataset = self._map_source_dataset(item.get('source_dataset'), item_id)
 
@@ -84,8 +91,8 @@ class Command(BaseCommand):
             'maimonides': item.get('maimonides') or [],
             'meir': item.get('meir') or [],
             'chinuch': item.get('chinuch') or [],
-            'ncla': self._map_ncla(item.get('ncla')),
-            'ncla_deviation': self._map_bool(item.get('ncla_deviation', False)),
+            'ncla': ncla_data,
+            'ncla_deviation': ncla_deviation,
             'classical_commandment': self._map_bool(item.get('classical_commandment', False)),
             'source': item.get('source', '') or '',
             'copyright': item.get('copyright', '') or '',

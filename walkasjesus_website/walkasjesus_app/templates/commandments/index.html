@@ -15,31 +15,46 @@
         <div class="col-md-8 text-center ftco-animate mt-5">
           <div class="text">
             <div class="subheading">
-              <span>{% trans 'Start Here' %}</span>
+              <span>{% trans 'Becoming like Him' %}</span>
             </div>
-            <h1 class="mb-4">{% trans 'Follow Jesus' %}</h1>
-            <p>{% blocktrans %}Walk as Jesus helps new believers, families, and groups understand where to begin. Start with 77 practical steps, then continue with the full Law of Messiah to reflect every commandment on your life together.{% endblocktrans %}</p>
-            <p>
-              <a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Start with the 77 steps' %}</a>
-              <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary text-white py-2 px-4">{% trans 'Complete Law of Messiah' %}</a>
-            </p>
+            <h1 class="mb-4">{% trans 'Walk as Jesus' %}</h1>
+            <h1 class="mb-4">{% trans 'in 77 steps' %}</h1>
+            <p>{% blocktrans %}Jesus tought many different things. We help applying all 77 steps in your daily life{% endblocktrans %}</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_1.jpg' %});">
     <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
         <div class="col-md-8 text-center ftco-animate mt-5">
           <div class="text">
             <div class="subheading">
-              <span>{% trans 'Go further' %}</span>
+              <span>{% trans 'Jesus Commandments' %}</span>
             </div>
-            <h1 class="mb-4">{% trans 'Live the Law of Messiah' %}</h1>
-            <p>{% blocktrans %}After the 77 steps, continue by living out the full range of biblical commandments with your group. Apply each commandment to your daily life together and become more like our Messiah.{% endblocktrans %}</p>
+      	    <h1 class="mb-4">{% trans 'First Grace' %}<span> {% trans 'then obedience' %}</span></h1>
+            <p>{% trans 'Bringing people back to the heart of Christ' %}...</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Going Deeper' %}</span>
+            </div>
+            <h1 class="mb-4">{% trans 'Law of Messiah' %}</h1>
+            <p>{% blocktrans %}A collection by two Jewish Rabbis of all commandments from Scripture. We converted their book series into this website so you can use them with your group to deepen your understanding and application of these commandments.{% endblocktrans %}</p>
             <p>
               <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Complete Law of Messiah' %}</a>
             </p>
@@ -48,22 +63,18 @@
       </div>
     </div>
   </div>
-
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_3.png' %});">
     <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
         <div class="col-md-8 text-center ftco-animate mt-5">
           <div class="text">
             <div class="subheading">
-              <span>{% trans 'Teach the next generation' %}</span>
+              <span>{% trans 'Kids site' %}</span>
             </div>
-            <h1 class="mb-4">{% trans 'Children & Lessons' %}</h1>
-            <h1 class="mb-4">{% trans 'bring the Bible to life' %}</h1>
-            <p>{% blocktrans %}Teach children, families, and groups with guided lessons, media, and Bible stories. Help the next generation understand and live the teachings of Jesus.{% endblocktrans %}</p>
-            <p>
-              <a href="{% url 'commandments:lesson_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Teach Our Children' %}</a>
-            </p>
+            <h1 class="mb-4">{% trans 'A special' %} <span>{% trans 'Childrens method' %}</span> {% trans 'to teach 3 foundational principles' %}</h1>
+            <p>{% trans 'Help the next generation understand and live the teachings of Jesus' %}</p>
+            <p><a href="{% url 'commandments:lesson_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Children & Lessons' %}</a></p>
           </div>
         </div>
       </div>
@@ -83,8 +94,8 @@
       <div class="col-md-12 heading-section text-center ftco-animate">
         <span class="subheading">{% trans 'What is this site?' %}</span>
         <h2 class="mb-4">{% trans 'One mission, three clear pathways' %}</h2>
-        <p>{% blocktrans %}This site is designed to help people follow Jesus in a way that is practical, understandable, and teachable. The 77 steps are the best place to begin. The Law of Messiah helps your group continue by living out the full range of biblical commandments. The lessons section helps you teach children, families, and groups.{% endblocktrans %}</p>
-        <p><strong>{% trans 'Choose the path that fits you best.' %}</strong></p>
+        <p>{% blocktrans %}When you have discovered who Jesus is and what He has done for you, you really want nothing more than to follow Him and dedicate your life to Him. But where do you start? The 77 steps are the best place to begin as a group. The Law of Messiah helps your group continue by living out the full range of Biblical commandments. The lessons section helps you teach our children{% endblocktrans %}</p>
+        <p><strong>{% trans 'Always remember: First Grace, then Obedience' %}</strong></p>
       </div>
     </div>
 
@@ -93,8 +104,8 @@
         <div class="services-2 text-center">
           <div class="icon"><img src="{% static 'images/jc_icon.png' %}" width="65px" alt=""></div>
           <div class="text">
-            <h3>{% trans '77 Steps' %}</h3>
-            <p>{% trans 'Start here if you want a practical discipleship path through the teachings of Jesus.' %}</p>
+            <h3>{% trans '77 Unique Steps' %}</h3>
+            <p>{% trans 'We encourage you to come together with other followers of Jesus and help each other by applying these steps into your life. For each step you will find all kinds of related bible verses, sermons, songs, illustrations and lots more resources to guide you.' %}</p>
             <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Begin here' %}</a></p>
           </div>
         </div>
@@ -104,8 +115,8 @@
           <div class="icon"><img src="{% static 'images/bible.png' %}" width="65px" alt=""></div>
           <div class="text">
             <h3>{% trans 'Law of Messiah' %}</h3>
-            <p>{% trans 'Live commandments from a New Covenant perspective, with commentary and Scripture references to apply them in daily life.' %}</p>
-            <p><a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Live this path' %}</a></p>
+            <p>{% trans 'A collection by two Jewish Rabbis of all commandments from Scripture. We converted their book series into this website so you can use them with your group to deepen your understanding and application of these commandments.' %}</p>
+            <p><a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Going Deeper' %}</a></p>
           </div>
         </div>
       </div>
@@ -114,7 +125,7 @@
           <div class="icon"><img src="{% static 'images/superbook.png' %}" width="65px" alt=""></div>
           <div class="text">
             <h3>{% trans 'Children & Lessons' %}</h3>
-            <p>{% trans 'Teach children, families, and groups with guided lessons, media, and Bible stories.' %}</p>
+            <p>{% trans "Take children on an adventure through 121 Bible lessons — teaching foundational principles, God's Grand Plan, and wholesome relationships." %}</p>
             <p><a href="{% url 'commandments:lesson_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Teach Our Children' %}</a></p>
           </div>
         </div>
@@ -140,8 +151,8 @@
 
     <div class="row justify-content-center pb-5 mt-5">
       <div class="col-md-12 heading-section text-center ftco-animate">
-        <span class="subheading">{% trans 'Start with discipleship' %}</span>
-        <h2 class="mb-4">{% trans 'The 77 steps are the clearest place to begin' %}</h2>
+        <span class="subheading">{% trans 'We start at the Cross' %}</span>
+        <h2 class="mb-4">{% trans 'First Grace, then Obedience' %}</h2>
         <p>{% blocktrans %}If you are new to this site, start with the 77 steps. They focus on practical obedience, daily discipleship, and the direct teachings of Jesus. Each step includes Bible references and supporting resources to help you live it out.{% endblocktrans %}</p>
         <p><strong>{% trans 'Are you ready to discover the first step?' %}</strong></p>
         </div>
@@ -163,9 +174,9 @@
                       <div class="background-quote">
                         <span>"{% trans 'Go further when you are ready: live and teach with confidence.' %}"</span>
                       </div>
-                      <p class="mt-4 text-center">{% blocktrans %}The Law of Messiah helps your group continue after the 77 steps, so you can mirror all biblical commandments in daily discipleship and become more like Jesus together.{% endblocktrans %}</p>
+                      <p class="mt-4 text-center">{% blocktrans %}The Law of Messiah helps your group continue after the 77 steps, so you can mirror all Biblical commandments in daily discipleship and become more like Jesus together.{% endblocktrans %}</p>
+                      <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary btn-change-bible">{% trans 'Complete Law of Messiah' %}</a>
                       <p class="mt-4 text-center">
-                        <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary py-3 px-4 btn-lom-cta">{% trans 'Complete Law of Messiah' %}</a>
                       </p>
                   </div>
               </div>

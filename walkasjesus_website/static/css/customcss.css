@@ -325,6 +325,18 @@ p {
     margin-top: 10px;
 }
 
+.law-filter-form .form-control {
+    border-radius: .25em;
+    font-size: 14px;
+    height: 33px !important;
+    min-height: 33px !important;
+}
+
+.law-filter-form input.form-control {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
 .law-filter-form label {
     display: block;
     font-size: 12px;
@@ -334,18 +346,27 @@ p {
 }
 
 .law-filter-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    background: #fff;
-    border: 1px solid #000000;
-    border-radius: .25em;
+    border: 0;
+    border-radius: 0;
     box-shadow: none;
     font-family: "Open Sans", Arial, sans-serif;
     font-size: 14px;
-    min-height: 42px;
-    padding: 8px 12px;
+    height: 100%;
+    min-height: 100%;
+    padding: 0 0.5em;
+}
+
+.law-filter-select-wrap {
+    box-sizing: border-box;
+    height: 33px !important;
+    line-height: 2.3;
+    margin-bottom: 0;
+    min-height: 33px !important;
+}
+
+.law-filter-select-wrap::after {
+    background: #1b1919;
+    color: #fff;
 }
 
 .law-filter-actions {
@@ -356,7 +377,67 @@ p {
 }
 
 .law-filter-button {
+    align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
+    height: 33px !important;
+    justify-content: center;
+    min-height: 33px !important;
     min-width: 120px;
+    padding: 0 18px;
+}
+
+.law-filter-cta {
+    border: 1px solid #e2b900;
+    border-radius: 5px;
+    color: rgb(88, 69, 57);
+    font-size: 12px;
+    text-transform: uppercase;
+    background: transparent;
+    letter-spacing: 3px;
+}
+
+.law-filter-cta:hover,
+.law-filter-cta:focus {
+    background: #e2b900;
+    color: rgb(88, 69, 57);
+}
+
+.law-filter-legend-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.law-filter-legend-btn {
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid #2f5d83;
+    border-radius: 5px;
+    color: #2f5d83;
+    display: inline-flex;
+    font-size: 12px;
+    height: 33px !important;
+    justify-content: center;
+    min-height: 33px !important;
+    text-transform: uppercase;
+    background: transparent;
+    letter-spacing: 1px;
+    padding: 0 18px;
+}
+
+.law-filter-legend-btn:hover,
+.law-filter-legend-btn:focus {
+    background: #2f5d83;
+    color: #fff;
+}
+
+.law-filter-legend-toggle {
+    white-space: normal;
+    text-align: right;
+}
+
+.law-filter-legend-wrap .collapse {
+    width: 100%;
 }
 
 .law-filter-summary {
@@ -535,6 +616,20 @@ p {
 
     .law-filter-button {
         width: 100%;
+    }
+
+    .law-filter-action-row .col-auto {
+        width: 100%;
+    }
+
+    .law-filter-legend-wrap {
+        justify-content: stretch;
+        margin-top: 10px;
+    }
+
+    .law-filter-legend-toggle {
+        width: 100%;
+        text-align: center;
     }
 
     .law-number-content {

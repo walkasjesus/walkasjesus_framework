@@ -44,34 +44,30 @@
                             <p><strong>{% trans 'Form' %}:</strong> {{ law.translated_commandment_form_display }}</p>
                             <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.translated_source_dataset_display }}</p>
                             <p><strong>{% trans 'Uniqueness' %}:</strong> {% if law.is_unique %}{% trans 'Unique' %}{% else %}{% trans 'Not unique' %}{% endif %}</p>
-                            <p><strong>{% trans 'NCLA deviation' %}:</strong> {% if law.ncla_deviation %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
                             <p><strong>{% trans 'Classical commandment' %}:</strong> {% if law.classical_commandment %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
-                            {% if law.double_ids %}<p><strong>{% trans 'Double IDs' %}:</strong> {{ law.double_ids|join:', ' }}</p>{% endif %}
-                            {% if enriched_maimonides %}
-                            <p><strong>{% trans 'Maimonides' %}:</strong></p>
-                            <p>{% blocktrans %}Maimonides was a medieval Jewish rabbi who organized 613 Torah commandments into a structured list. These linked items show where this Law of Messiah commandment overlaps with that classical framework.{% endblocktrans %}</p>
-                            <ul class="lom-related-links mb-2">
-                                {% for mai in enriched_maimonides %}
-                                <li>
-                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ mai.id }}"
-                                       class="lom-related-link {% if mai.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}">
-                                        <strong>{{ mai.id }}</strong> – {{ mai.commandment }}
-                                    </a>
-                                    {% for step_id in mai.step_ids %}
-                                    <a href="{% url 'commandments:detail' step_id %}" class="lom-related-link lom-related-link-positive mt-1" style="font-size:0.9em;">
-                                        &#8594; {% trans 'Step' %} {{ step_id }}
-                                    </a>
-                                    {% endfor %}
-                                </li>
+                            {% if law.related_steps|length > 0 %}
+                            <p><strong>{% trans 'Related 77 Steps' %}:</strong>
+                                <br><small style="opacity: 0.85;">{% trans 'This Law of Messiah commandment is directly connected to the following beginner step(s):' %}</small>
+                                <ul class="lom-related-links" style="margin-top: 0.5rem; margin-bottom: 0;">
+                                {% for step_id in law.related_steps %}
+                                    <li>
+                                        <a href="{% url 'commandments:detail' step_id.id %}" class="lom-related-link lom-related-link-positive">
+                                            {{ step_id.id }} - {{ step_id.title|default:step_id.id }}
+                                        </a>
+                                    </li>
                                 {% endfor %}
-                            </ul>
+                                </ul>
+                            </p>
                             {% endif %}
-                            {% if law.meir %}<p><strong>{% trans 'Meir' %}:</strong> {{ law.meir|join:', ' }}</p>{% endif %}
-                            {% if law.chinuch %}<p><strong>{% trans 'Chinuch' %}:</strong> {{ law.chinuch|join:', ' }}</p>{% endif %}
                             <div class="lom-ncla-summary">
                                 <h5>{% trans 'New Covenant Literal Application' %}</h5>
                                 <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
                                 <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                {% if law.ncla_deviation %}
+                                    {% for grp in ncla_summary.groups %}{% if grp.group != 'All' %}
+                                    <p><small><strong>{% trans 'Context' %}:</strong> {{ grp.group }} — {{ grp.person_summary }}, {{ grp.application_summary }}</small></p>
+                                    {% endif %}{% endfor %}
+                                {% endif %}
                                 {% if ncla_summary.groups|length > 1 %}
                                     <table class="table table-sm lom-ncla-groups-table">
                                         <thead>
@@ -293,6 +289,45 @@
             </div>
             {% endif %}
 
+            {% if enriched_maimonides or law.meir or law.chinuch %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-classical-sources">
+                            <h4>{% trans 'Classical sources' %}</h4>
+                            {% if enriched_maimonides %}
+                            <h5>{% trans 'Maimonides' %}</h5>
+                            <p><small>{% blocktrans %}Maimonides (Rabbi Moshe ben Maimon, 12th century) organized all 613 Torah commandments into a structured list. These linked items show where this Law of Messiah commandment overlaps with that classical framework.{% endblocktrans %}</small></p>
+                            <ul class="lom-related-links mb-2">
+                                {% for mai in enriched_maimonides %}
+                                <li>
+                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ mai.id }}"
+                                       class="lom-related-link {% if mai.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}">
+                                        <strong>{{ mai.id }}</strong> – {{ mai.commandment }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if law.meir %}
+                            <h5>{% trans 'Meir of Rothenburg' %}</h5>
+                            <p><small>{% blocktrans %}Rabbi Meir of Rothenburg (13th century, Germany) was a leading Talmudic authority. These reference numbers link this commandment to his halachic rulings.{% endblocktrans %}</small></p>
+                            <p>{{ law.meir|join:', ' }}</p>
+                            {% endif %}
+                            {% if law.chinuch %}
+                            <h5>{% trans 'Sefer HaChinuch' %}</h5>
+                            <p><small>{% blocktrans %}The Sefer HaChinuch (13th century) is a systematic presentation of all 613 commandments, organized by weekly Torah portion. These reference numbers link this commandment to that work.{% endblocktrans %}</small></p>
+                            <p>{{ law.chinuch|join:', ' }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             {% if related_steps %}
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -302,6 +337,7 @@
                         </div>
                         <div class="our-services-text lom-related-steps">
                             <h4>{% trans 'Related 77 steps' %}</h4>
+                            <p><small>{% blocktrans %}The 77 Steps are a beginner's guide to walking as Jesus walked, designed to be studied together in a group. These connected steps show where this Law of Messiah commandment is reflected in that introductory program.{% endblocktrans %}</small></p>
                             <ul class="lom-related-links">
                                 {% for commandment in related_steps %}
                                 <li><a href="{% url 'commandments:detail' commandment.id %}">{{ commandment.id }} - {{ commandment.title|default:commandment.id }}</a></li>

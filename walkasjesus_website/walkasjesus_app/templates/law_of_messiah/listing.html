@@ -2,6 +2,39 @@
 {% load static %}
 {% load i18n %}
 
+{% block title_content %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block meta_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block og_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block og_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block twitter_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block twitter_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "{% trans 'Overview of all Laws of Messiah' %}",
+    "description": "Explore biblical commandments and mitzvot in the Law of Messiah.",
+    "url": "{{ request.build_absolute_uri }}",
+    "mainEntity": {
+        "@type": "ItemList",
+        "name": "Law of Messiah commandments",
+        "numberOfItems": {{ seo_law_index|length }},
+        "itemListElement": [
+            {% for item in seo_law_index %}
+            {
+                "@type": "ListItem",
+                "position": {{ forloop.counter }},
+                "url": "{{ request.scheme }}://{{ request.get_host }}{{ item.url }}",
+                "name": "{{ item.id|escapejs }} - {{ item.title|escapejs }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
     <div class="ftco-section bg-light" id="law-of-messiah-section">

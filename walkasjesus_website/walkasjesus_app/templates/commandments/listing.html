@@ -2,6 +2,14 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+
+{% block title_content %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block meta_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+{% block og_title %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block og_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+{% block twitter_title %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block twitter_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+
 {% block content %}
 {% cache cache_timeout commandments_listing cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">

@@ -46,17 +46,19 @@
     <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
   {% endcache %}
   {% block head_meta %}
-    <meta name="description" content="{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}">
+    <meta name="description" content="{% block meta_description %}Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.{% endblock %}">
+    <meta name="keywords" content="Walk as Jesus, walk with Jesus, Yeshua, Messiah, Law of Messiah, commandments, mitzvot, Bible study, discipleship, Christian obedience, Torah, New Covenant">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
     <meta property="og:title" content="{% block og_title %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/jc_icon.png' %}">
     <meta property="og:site_name" content="Walk as Jesus">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{% block twitter_title %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}{% trans 'Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups.' %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.{% endblock %}">
   {% endblock %}
   {% block jsonld %}
   <script type="application/ld+json">
@@ -64,8 +66,10 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Walk as Jesus",
+    "alternateName": ["Walk with Jesus", "Walk as Yeshua"],
     "url": "{{ request.scheme }}://{{ request.get_host }}/",
-    "description": "Walk as Jesus helps you follow Jesus in daily life through 77 steps, then continue by living the full Law of Messiah with your group, with lessons for children and groups."
+    "description": "Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.",
+    "keywords": "Walk as Jesus, walk with Jesus, Yeshua, Messiah, Law of Messiah, commandments, mitzvot, Bible study, discipleship"
   }
   </script>
   {% endblock %}

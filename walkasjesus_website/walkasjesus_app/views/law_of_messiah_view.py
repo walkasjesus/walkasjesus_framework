@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
 
@@ -306,6 +307,10 @@ def _requested_ref_ids(request):
     return {str(item).strip() for item in requested if str(item).strip()}
 
 
+def _normalize_search_text(value):
+    return str(value or '').strip().casefold()
+
+
 class LawOfMessiahListingView(View):
     def get(self, request):
         search_query = request.GET.get('q', '').strip()
@@ -339,12 +344,6 @@ class LawOfMessiahListingView(View):
         }:
             laws_query = laws_query.filter(commandment_type=commandment_type)
 
-        if search_query:
-            laws_query = laws_query.filter(
-                Q(id__icontains=search_query)
-                | Q(title__icontains=search_query)
-                | Q(commandment__icontains=search_query)
-            )
         if source_dataset in {LawOfMessiah.SOURCE_DATASET_OT, LawOfMessiah.SOURCE_DATASET_NT}:
             laws_query = laws_query.filter(source_dataset=source_dataset)
         if classical_filter == 'true':
@@ -357,6 +356,26 @@ class LawOfMessiahListingView(View):
         laws = list(laws_query)
         if person_code or application_code or ncla_group:
             laws = [law for law in laws if _matches_ncla_filters(law, person_code, application_code, ncla_group)]
+
+        # Language-aware search: include both raw DB text and translated display text (e.g. Dutch UI terms).
+        normalized_search = _normalize_search_text(search_query)
+        if normalized_search:
+            def _matches_search(law_obj):
+                haystack = [
+                    law_obj.id,
+                    law_obj.title,
+                    law_obj.commandment,
+                    law_obj.category,
+                    law_obj.translated_title,
+                    law_obj.translated_commandment,
+                    law_obj.translated_category,
+                ]
+                for item in haystack:
+                    if normalized_search in _normalize_search_text(item):
+                        return True
+                return False
+
+            laws = [law for law in laws if _matches_search(law)]
 
         ncla_labels = _ncla_label_map()
         person_labels = _person_label_map()
@@ -389,6 +408,17 @@ class LawOfMessiahListingView(View):
             }
             for value in category_values
         ]
+
+        seo_law_index = []
+        for law in LawOfMessiah.objects.order_by('id').only('id', 'title'):
+            seo_law_index.append(
+                {
+                    'id': law.id,
+                    'title': law.translated_title,
+                    'url': reverse('commandments:law_of_messiah_detail', kwargs={'law_id': law.id}),
+                }
+            )
+
         return render(
             request,
             'law_of_messiah/listing.html',
@@ -408,6 +438,7 @@ class LawOfMessiahListingView(View):
                 'ncla_person_options': filter_options['person'],
                 'ncla_application_options': filter_options['application'],
                 'ncla_group_options': ncla_group_options,
+                'seo_law_index': seo_law_index,
             },
         )
 

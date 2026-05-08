@@ -5,6 +5,23 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block meta_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block og_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block og_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block twitter_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block twitter_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ law.translated_title|escapejs }}",
+    "description": "{{ law.translated_title|escapejs }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context.",
+    "url": "{{ request.build_absolute_uri }}",
+    "about": ["Law of Messiah", "Yeshua", "Messiah", "commandments", "mitzvot"]
+}
+</script>
+{% endblock %}
 
 {% block content %}
 {% cache cache_timeout law_of_messiah_detail cache_on_language cache_on_bible law.id %}
@@ -63,6 +80,7 @@
                                 <h5>{% trans 'New Covenant Literal Application' %}</h5>
                                 <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
                                 <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                <p><strong>{% trans 'NCLA deviation' %}:</strong> {% if law.ncla_deviation %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
                                 {% if law.ncla_deviation %}
                                     {% for grp in ncla_summary.groups %}{% if grp.group != 'All' %}
                                     <p><small><strong>{% trans 'Context' %}:</strong> {{ grp.group }} — {{ grp.person_summary }}, {{ grp.application_summary }}</small></p>

@@ -5,6 +5,13 @@
 {% load cache %}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block title_content %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block meta_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
+{% block og_title %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block og_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
+{% block twitter_title %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block twitter_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
+
 {% block homebanner %}
 {% cache cache_timeout commandments_index_banner cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">

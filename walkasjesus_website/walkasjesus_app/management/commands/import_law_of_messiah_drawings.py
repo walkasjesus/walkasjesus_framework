@@ -27,10 +27,17 @@ class Command(BaseCommand):
             default='Jenske Visser',
             help='The author name for the drawings'
         )
+        parser.add_argument(
+            '--filename-prefix',
+            type=str,
+            default='jv_waj_lom_',
+            help='Optional filename prefix to strip before matching the Law of Messiah ID'
+        )
 
     def handle(self, *args, **options):
         image_dir = options['image_dir']
         author = options['author']
+        filename_prefix = options['filename_prefix']
         
         # Build the full path to the images directory
         full_image_path = os.path.join(BASE_DIR, image_dir)
@@ -51,8 +58,15 @@ class Command(BaseCommand):
             if not filename.lower().endswith('.png'):
                 continue
             
-            # Extract ID from filename (e.g., aa11.png -> AA11)
-            lom_id = os.path.splitext(filename)[0].upper()
+            stem = os.path.splitext(filename)[0]
+            if filename_prefix and not stem.startswith(filename_prefix):
+                continue
+
+            # Extract ID from filename (e.g., jv_waj_lom_aa11.png -> AA11)
+            if filename_prefix and stem.startswith(filename_prefix):
+                lom_id = stem[len(filename_prefix):].upper()
+            else:
+                lom_id = stem.upper()
             
             try:
                 # Check if Law of Messiah with this ID exists

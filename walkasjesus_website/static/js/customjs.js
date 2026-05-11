@@ -151,6 +151,11 @@ $(document).ready(function(){
     return container ? container.getAttribute('data-commentary-translate-url') : '';
   }
 
+  function getCommentaryScripturaUrl() {
+    var container = document.querySelector('[data-commentary-scriptura-url]');
+    return container ? container.getAttribute('data-commentary-scriptura-url') : '';
+  }
+
   function uiMessage(key, variables) {
     var lang = getCommentaryLanguage() === 'nl' ? 'nl' : 'en';
     var messages = {
@@ -567,20 +572,73 @@ $(document).ready(function(){
       return '';
     }
 
-    function getScripturaSource() {
-      return getCommentaryLanguage() === 'nl' ? 'matthew_henry_nl' : 'matthew-henry';
+    function getScripturaSources() {
+      if (getCommentaryLanguage() === 'nl') {
+        return ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry'];
+      }
+      return ['matthew-henry', 'matthew_henry'];
+    }
+
+    function getScripturaEndpoints() {
+      var proxyUrl = String(getCommentaryScripturaUrl() || '').trim();
+      if (proxyUrl) {
+        return [proxyUrl];
+      }
+      return ['https://www.scriptura-api.com/api/commentary', 'https://scriptura-api.com/api/commentary'];
     }
 
     function escapeScripturaParam(value) {
       return encodeURIComponent(String(value || '').trim());
     }
 
-    function scripturaCommentaryUrl(source, book, chapter, verse) {
-      var url = 'https://www.scriptura-api.com/api/commentary?source=' + escapeScripturaParam(source) + '&book=' + escapeScripturaParam(book) + '&chapter=' + escapeScripturaParam(chapter);
+    function scripturaCommentaryUrl(endpoint, source, book, chapter, verse) {
+      var separator = endpoint.indexOf('?') === -1 ? '?' : '&';
+      var url = endpoint + separator + 'source=' + escapeScripturaParam(source) + '&book=' + escapeScripturaParam(book) + '&chapter=' + escapeScripturaParam(chapter);
       if (typeof verse !== 'undefined' && verse !== null && String(verse) !== '') {
         url += '&verse=' + escapeScripturaParam(verse);
       }
       return url;
+    }
+
+    function fetchScripturaCommentary(book, chapter, onSuccess, onError) {
+      var endpoints = getScripturaEndpoints();
+      var sources = getScripturaSources();
+      var candidates = [];
+
+      endpoints.forEach(function(endpoint) {
+        sources.forEach(function(source) {
+          candidates.push({
+            endpoint: endpoint,
+            source: source,
+            url: scripturaCommentaryUrl(endpoint, source, book, chapter)
+          });
+        });
+      });
+
+      function tryCandidate(index) {
+        if (index >= candidates.length) {
+          if (onError) onError();
+          return;
+        }
+
+        var candidate = candidates[index];
+        $.ajax({
+          url: candidate.url,
+          type: 'GET',
+          success: function(data) {
+            if (data && typeof data === 'object' && Object.keys(data).length > 0) {
+              if (onSuccess) onSuccess(data, candidate.source, candidate.endpoint);
+              return;
+            }
+            tryCandidate(index + 1);
+          },
+          error: function() {
+            tryCandidate(index + 1);
+          }
+        });
+      }
+
+      tryCandidate(0);
     }
 
     function scripturaEntryLabel(entryKey) {
@@ -590,10 +648,10 @@ $(document).ready(function(){
       return getCommentaryLanguage() === 'nl' ? ('Vers ' + entryKey) : ('Verse ' + entryKey);
     }
 
-    function renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter) {
+    function renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, endpoint) {
       var safeHtml = sanitizeSefariaHtml(String(commentaryText || '').replace(/\n/g, '<br>'));
       var displayHtml = safeHtml || $('<span>').text(commentaryText || '').html().replace(/\n/g, '<br>');
-      var scripturaUrl = scripturaCommentaryUrl(source, book, chapter, entryKey);
+      var scripturaUrl = scripturaCommentaryUrl(endpoint || getScripturaEndpoints()[0], source, book, chapter, entryKey);
       var sourceLabel = getCommentaryLanguage() === 'nl' ? 'Matthew Henry (NL)' : 'Matthew Henry';
       var titleLabel = scripturaEntryLabel(entryKey);
       $panel.find('.scriptura-commentary-entry-btn').removeClass('active');
@@ -613,7 +671,8 @@ $(document).ready(function(){
       var chapter = $btn.data('scriptura-chapter');
       var verse = $btn.data('scriptura-verse');
       var $panel = $btn.nextAll('.scriptura-commentary-panel').first();
-      var source = getScripturaSource();
+      var source = getScripturaSources()[0];
+      var scripturaEndpoint = getScripturaEndpoints()[0];
       var chapterCacheKey = [source, String(book || ''), String(chapter || '')].join('|');
       var cachedScripturaEntries = getCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey);
 
@@ -650,24 +709,22 @@ $(document).ready(function(){
         $panel.html(html).slideDown(200);
         $panel.data('scripturaEntries', entries);
         $panel.data('scripturaSource', source);
+        $panel.data('scripturaEndpoint', scripturaEndpoint);
         $panel.data('scripturaBook', book);
         $panel.data('scripturaChapter', chapter);
 
         var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
-        renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter);
+        renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, scripturaEndpoint);
         return;
       }
 
       $panel.html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
 
-      $.ajax({
-        url: scripturaCommentaryUrl(source, book, chapter),
-        type: 'GET',
-        success: function(data) {
-          var entries = {};
-          if (data && typeof data === 'object') {
-            entries = data;
-          }
+      fetchScripturaCommentary(book, chapter, function(data, resolvedSource, resolvedHost) {
+          var entries = data || {};
+          source = resolvedSource;
+          scripturaEndpoint = resolvedHost;
+          chapterCacheKey = [source, String(book || ''), String(chapter || '')].join('|');
           setCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey, entries);
 
           var entryKeys = Object.keys(entries).filter(function(key) {
@@ -695,17 +752,16 @@ $(document).ready(function(){
           $panel.html(html);
           $panel.data('scripturaEntries', entries);
           $panel.data('scripturaSource', source);
+          $panel.data('scripturaEndpoint', scripturaEndpoint);
           $panel.data('scripturaBook', book);
           $panel.data('scripturaChapter', chapter);
 
           var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
-          renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter);
-        },
-        error: function(xhr) {
-          console.log('[Scriptura] Commentary request failed:', xhr.status, xhr.responseText);
+          renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, scripturaEndpoint);
+        }, function() {
+          console.log('[Scriptura] Commentary request failed for all configured hosts/sources');
           $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
-        }
-      });
+        });
     });
 
     $(document).on('click', '.scriptura-commentary-entry-btn', function() {
@@ -713,6 +769,7 @@ $(document).ready(function(){
       var $panel = $btn.closest('.scriptura-commentary-panel');
       var entries = $panel.data('scripturaEntries') || {};
       var source = $panel.data('scripturaSource');
+      var scripturaEndpoint = $panel.data('scripturaEndpoint') || getScripturaEndpoints()[0];
       var book = $panel.data('scripturaBook');
       var chapter = $panel.data('scripturaChapter');
       var entryKey = String($btn.data('entry-key'));
@@ -722,7 +779,7 @@ $(document).ready(function(){
         return;
       }
 
-      renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter);
+      renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, scripturaEndpoint);
     });
 
     $(document).on('click', '.sefaria-commentary-btn', function() {

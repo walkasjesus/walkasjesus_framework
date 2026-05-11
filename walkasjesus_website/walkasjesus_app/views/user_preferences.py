@@ -1,6 +1,6 @@
 from gettext import gettext
 import hashlib
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.contrib import messages
 from django.core.cache import cache
@@ -16,6 +16,7 @@ from walkasjesus_app.models import UserPreferences, BibleTranslation
 
 
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
+CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
 
 
 def _resolve_path_in_any_language(path):
@@ -54,6 +55,35 @@ def _localized_next_url(next_url, language_code):
             return urlunsplit(('', '', path, split.query, split.fragment))
         except Resolver404:
             return fallback
+
+
+def _absolute_redirect_for_language(request, language_code, redirect_url):
+    # Keep relative redirects when domain mapping is not configured.
+    if not redirect_url or redirect_url.startswith('http://') or redirect_url.startswith('https://'):
+        return redirect_url
+
+    nl_domain = getattr(settings, 'GEO_REDIRECT_NL_DOMAIN', '').strip()
+    en_domain = getattr(settings, 'GEO_REDIRECT_EN_DOMAIN', '').strip()
+    if not nl_domain or not en_domain:
+        return redirect_url
+
+    target_domain = nl_domain if language_code == 'nl' else en_domain
+    host = request.get_host().split(':')[0]
+    if host == target_domain:
+        return redirect_url
+
+    split = urlsplit(redirect_url)
+    query_items = parse_qsl(split.query, keep_blank_values=True)
+    query_items.append((CROSS_DOMAIN_LANG_PARAM, language_code))
+    redirect_url = urlunsplit(('', '', split.path or '/', urlencode(query_items, doseq=True), split.fragment))
+
+    forwarded_proto = str(request.META.get('HTTP_X_FORWARDED_PROTO', '')).strip().lower()
+    scheme = getattr(settings, 'GEO_REDIRECT_SCHEME', 'https')
+    if request.is_secure():
+        scheme = 'https'
+    elif forwarded_proto in ('http', 'https'):
+        scheme = forwarded_proto
+    return f'{scheme}://{target_domain}{redirect_url}'
 
 
 def _default_bible_for_language(language_code):
@@ -95,6 +125,7 @@ class UserPreferencesLanguageSwitchView(View):
         translation.activate(language_code)
 
         redirect_url = _localized_next_url(next_url, language_code)
+        redirect_url = _absolute_redirect_for_language(request, language_code, redirect_url)
         response = JsonResponse({'redirect_url': redirect_url})
         response.set_cookie(
             settings.LANGUAGE_COOKIE_NAME,
@@ -212,4 +243,36 @@ class CommentaryTranslationView(View):
         }
         cache.set(cache_key, payload, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
         return JsonResponse(payload)
+
+
+class ScripturaCommentaryProxyView(View):
+    """Proxy Scriptura API calls through Django to avoid browser CORS issues."""
+
+    def get(self, request):
+        source = str(request.GET.get('source', '')).strip()
+        book = str(request.GET.get('book', '')).strip()
+        chapter = str(request.GET.get('chapter', '')).strip()
+        verse = str(request.GET.get('verse', '')).strip()
+
+        if not source or not book or not chapter:
+            return JsonResponse({'error': gettext('Missing Scriptura parameters')}, status=400)
+
+        try:
+            response = requests.get(
+                'https://www.scriptura-api.com/api/commentary',
+                params={
+                    'source': source,
+                    'book': book,
+                    'chapter': chapter,
+                    'verse': verse,
+                },
+                timeout=20,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            if isinstance(payload, dict):
+                return JsonResponse(payload)
+            return JsonResponse({}, safe=False)
+        except Exception as exc:
+            return JsonResponse({'error': str(exc)}, status=502)
 

@@ -144,7 +144,7 @@
             </div>
         </div>                               
         <div class="row">
-            <div id="commandment_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:commandment_verses' commandment.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}">
+            <div id="commandment_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:commandment_verses' commandment.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-scriptura-url="{% url 'commandments:commentary_scriptura' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img commandment_id">

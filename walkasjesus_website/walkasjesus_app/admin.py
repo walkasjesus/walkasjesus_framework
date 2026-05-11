@@ -723,7 +723,6 @@ class LawOfMessiahAdmin(VersionAdmin):
                 'commandment_type',
                 'commandment_form',
                 'is_unique',
-                'double_ids',
             ),
         }),
         ('Commentary', {

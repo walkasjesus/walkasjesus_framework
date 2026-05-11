@@ -37,13 +37,31 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        source = options['source']
+        source = self._resolve_source(options['source'])
         items = self._load_items(source)
         items = [item for item in items if self._is_law_of_messiah_item(item)]
 
         self.stdout.write(f'Importing {len(items)} Law of Messiah records')
         for item in items:
             self._upsert_item(item)
+
+    def _resolve_source(self, source):
+        if os.path.exists(source):
+            return source
+
+        legacy_name = 'collected_ids_titles.yaml'
+        fallback_name = 'filtered_commandments.yaml'
+        if os.path.basename(source) == legacy_name:
+            fallback_source = os.path.join(os.path.dirname(source), fallback_name)
+            if os.path.exists(fallback_source):
+                self.stdout.write(
+                    self.style.WARNING(
+                        f'Source file not found: {source}. Falling back to: {fallback_source}'
+                    )
+                )
+                return fallback_source
+
+        raise FileNotFoundError(f'Source YAML not found: {source}')
 
     def _load_items(self, source):
         with open(source, 'r', encoding='utf-8') as file_handle:
@@ -81,7 +99,6 @@ class Command(BaseCommand):
             'commandment_form': commandment_form,
             'category': item.get('category', '') or '',
             'is_unique': self._map_bool(item.get('unique', False)),
-            'double_ids': self._map_double_ids(item.get('double_ids')),
             'commentary_rudolph': item.get('commentary_rudolph', '') or '',
             'commentary_juster': item.get('commentary_juster', '') or '',
             'classical_commentators': item.get('classical_commentators', '') or '',
@@ -186,24 +203,6 @@ class Command(BaseCommand):
             return False
         normalized = str(value).strip().lower()
         return normalized in {'1', 'true', 'yes', 'y', 'on'}
-
-    def _map_double_ids(self, value):
-        if not value:
-            return []
-
-        if not isinstance(value, list):
-            value = [value]
-
-        output = []
-        for entry in value:
-            if isinstance(entry, dict):
-                raw_id = str(entry.get('id', '')).strip()
-            else:
-                raw_id = str(entry).strip()
-            if raw_id:
-                output.append(raw_id.upper())
-
-        return sorted(set(output))
 
     def _map_related_lawofmessiah(self, item):
         raw_items = item.get('related_lawofmessiah')

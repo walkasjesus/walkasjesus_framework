@@ -247,6 +247,8 @@
                             <h5>{% trans 'Classical commentators' %}</h5>
                             <p>{{ law.translated_classical_commentators|linebreaksbr }}</p>
                             {% endif %}
+                            </br>
+                            {% if law.copyright %}<p><b><i>{{ law.copyright }}</i></b></p>{% endif %}
                         </div>
                     </div>
                 </div>

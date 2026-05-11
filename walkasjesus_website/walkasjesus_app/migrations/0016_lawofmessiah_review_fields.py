@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='lawofmessiah',
-            name='double_ids',
+            name='related_lawofmessiah',
             field=models.JSONField(blank=True, default=list),
         ),
         migrations.AddField(

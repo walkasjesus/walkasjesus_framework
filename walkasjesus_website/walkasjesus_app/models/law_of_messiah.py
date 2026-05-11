@@ -152,7 +152,7 @@ class LawOfMessiah(models.Model):
     commandment_form = models.CharField(max_length=64, choices=COMMANDMENT_FORM_CHOICES, default=COMMANDMENT_FORM_EMPTY, blank=True)
     category = models.CharField(max_length=256, blank=True, default='')
     is_unique = models.BooleanField(default=False)
-    double_ids = models.JSONField(default=list, blank=True)
+    related_lawofmessiah = models.JSONField(default=list, blank=True)
 
     commentary_rudolph = models.TextField(blank=True, default='')
     commentary_juster = models.TextField(blank=True, default='')

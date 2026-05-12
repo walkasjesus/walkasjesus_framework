@@ -46,6 +46,11 @@ def _is_http_url(value):
 
 
 def _find_primary_drawing(law):
+    for related_step in law.related_steps.all().order_by('id'):
+        step_drawing = related_step.background_drawing()
+        if step_drawing and step_drawing.img_url:
+            return step_drawing
+
     for drawing in law.media.all():
         if drawing.img_url:
             return drawing
@@ -315,8 +320,20 @@ class LawOfMessiahListingView(View):
     def get(self, request):
         search_query = request.GET.get('q', '').strip()
         source_dataset = request.GET.get('source_dataset', '').strip().lower()
-        commandment_type = request.GET.get('commandment_type', LawOfMessiah.COMMANDMENT_TYPE_POSITIVE).strip().lower()
-        unique_filter = request.GET.get('is_unique', 'true').strip().lower()
+        commandment_type_param = request.GET.get('commandment_type')
+        unique_filter_param = request.GET.get('is_unique')
+        default_commandment_type = '' if search_query else LawOfMessiah.COMMANDMENT_TYPE_POSITIVE
+        default_unique_filter = '' if search_query else 'true'
+        commandment_type = (
+            commandment_type_param.strip().lower()
+            if commandment_type_param is not None
+            else default_commandment_type
+        )
+        unique_filter = (
+            unique_filter_param.strip().lower()
+            if unique_filter_param is not None
+            else default_unique_filter
+        )
         classical_filter = request.GET.get('classical_commandment', '').strip().lower()
         category = request.GET.get('category', '').strip()
         person_code = request.GET.get('ncla_person', '').strip().upper()
@@ -331,7 +348,7 @@ class LawOfMessiahListingView(View):
         }:
             commandment_type = LawOfMessiah.COMMANDMENT_TYPE_POSITIVE
 
-        laws_query = LawOfMessiah.objects.order_by('id').prefetch_related('media')
+        laws_query = LawOfMessiah.objects.order_by('id').prefetch_related('media', 'related_steps__drawing_set')
         if unique_filter == 'true':
             laws_query = laws_query.filter(is_unique=True)
         elif unique_filter == 'false':
@@ -360,6 +377,8 @@ class LawOfMessiahListingView(View):
         # Language-aware search: include both raw DB text and translated display text (e.g. Dutch UI terms).
         normalized_search = _normalize_search_text(search_query)
         if normalized_search:
+            search_terms = [term for term in normalized_search.split() if term]
+
             def _matches_search(law_obj):
                 haystack = [
                     law_obj.id,
@@ -370,9 +389,11 @@ class LawOfMessiahListingView(View):
                     law_obj.translated_commandment,
                     law_obj.translated_category,
                 ]
-                for item in haystack:
-                    if normalized_search in _normalize_search_text(item):
-                        return True
+                searchable_text = ' '.join(_normalize_search_text(item) for item in haystack if item)
+                if normalized_search in searchable_text:
+                    return True
+                if len(search_terms) > 1:
+                    return any(term in searchable_text for term in search_terms)
                 return False
 
             laws = [law for law in laws if _matches_search(law)]

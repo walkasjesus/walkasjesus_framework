@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 from django.core.management.base import BaseCommand
-from walkasjesus_app.models import LawOfMessiah, Commandment
+from walkasjesus_app.models import LawOfMessiah, Commandment, LawOfMessiahDrawing
 
 
 class Command(BaseCommand):
@@ -38,6 +38,7 @@ class Command(BaseCommand):
 
         created = 0
         updated = 0
+        drawing_synced = 0
         skipped = 0
         
         for mapping in mappings:
@@ -59,6 +60,9 @@ class Command(BaseCommand):
                     law.related_steps.add(step)
                     self.stdout.write(self.style.SUCCESS(f"✓ Linked Step {step_id} to Law {law_id}"))
                     created += 1
+
+                if self._sync_law_step_drawing(law, step):
+                    drawing_synced += 1
             except (Commandment.DoesNotExist, LawOfMessiah.DoesNotExist) as e:
                 self.stdout.write(self.style.WARNING(f"✗ Skipped Step {step_id} → Law {law_id}: {str(e)}"))
                 skipped += 1
@@ -66,4 +70,31 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"\nSummary:"))
         self.stdout.write(f"  Created: {created}")
         self.stdout.write(f"  Updated: {updated}")
+        self.stdout.write(f"  Step drawings synced: {drawing_synced}")
         self.stdout.write(f"  Skipped: {skipped}")
+
+    def _sync_law_step_drawing(self, law, step):
+        step_drawing = step.background_drawing()
+        if not step_drawing or not step_drawing.img_url:
+            return False
+
+        drawing_url = str(step_drawing.img_url).strip()
+        if not drawing_url:
+            return False
+
+        existing = LawOfMessiahDrawing.objects.filter(
+            law_of_messiah=law,
+            img_url=drawing_url,
+        ).exists()
+        if existing:
+            return False
+
+        LawOfMessiahDrawing.objects.create(
+            law_of_messiah=law,
+            img_url=drawing_url,
+            author=step_drawing.author or 'Step drawing sync',
+            title=f'Step {step.id} drawing for {law.id}',
+            is_public=step_drawing.is_public,
+        )
+        self.stdout.write(self.style.SUCCESS(f"  + Synced drawing from Step {step.id} to Law {law.id}"))
+        return True

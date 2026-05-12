@@ -2,6 +2,7 @@ import os
 import re
 
 from django.core.management import BaseCommand
+from django.core.management import call_command
 from import_tool.bible_reference import BibleReference as ImportedBibleReference
 import yaml
 
@@ -35,6 +36,11 @@ class Command(BaseCommand):
             ),
             help='Path to collected_ids_titles.yaml',
         )
+        parser.add_argument(
+            '--skip-sync-steps',
+            action='store_true',
+            help='Skip running sync_steps_lawofmessiah_mapping after import.',
+        )
 
     def handle(self, *args, **options):
         source = self._resolve_source(options['source'])
@@ -44,6 +50,10 @@ class Command(BaseCommand):
         self.stdout.write(f'Importing {len(items)} Law of Messiah records')
         for item in items:
             self._upsert_item(item)
+
+        if not options.get('skip_sync_steps', False):
+            self.stdout.write('Syncing step-to-Law-of-Messiah mappings')
+            call_command('sync_steps_lawofmessiah_mapping')
 
     def _resolve_source(self, source):
         if os.path.exists(source):

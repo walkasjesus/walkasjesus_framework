@@ -80,7 +80,6 @@
                                 <h5>{% trans 'New Covenant Literal Application' %}</h5>
                                 <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
                                 <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
-                                <p><strong>{% trans 'NCLA deviation' %}:</strong> {% if law.ncla_deviation %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
                                 {% if law.ncla_deviation %}
                                     {% for grp in ncla_summary.groups %}{% if grp.group != 'All' %}
                                     <p><small><strong>{% trans 'Context' %}:</strong> {{ grp.group }} — {{ grp.person_summary }}, {{ grp.application_summary }}</small></p>

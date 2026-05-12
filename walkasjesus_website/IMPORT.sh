@@ -143,6 +143,8 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		echo "INFO: ${end} - Ended importing Lessons" | tee -a ${log}
 		echo "INFO: ${start} - Start importing Law of Messiah" | tee -a ${log}
 		python3 manage.py import_law_of_messiah --source "${lom_source}" | tee -a ${log}
+		python3 manage.py sync_steps_lawofmessiah_mapping | tee -a ${log}
+		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${start} - Start importing Law of Messiah drawings" | tee -a ${log}
 		python3 manage.py import_law_of_messiah_drawings --filename-prefix jv_waj_lom_ | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')

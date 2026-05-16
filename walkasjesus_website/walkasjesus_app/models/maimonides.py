@@ -17,7 +17,7 @@ class Maimonides(models.Model):
 
     class Meta:
         verbose_name = 'Maimonides commandment'
-        verbose_name_plural = 'Maimonides commandments'
+        verbose_name_plural = 'Maimonides Commandments'
         ordering = ['id']
 
     def __str__(self):

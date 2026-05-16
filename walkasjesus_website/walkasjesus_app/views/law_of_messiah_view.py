@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
 
-from walkasjesus_app.models import BibleTranslation, LawOfMessiah, Maimonides, UserPreferences
+from walkasjesus_app.models import BibleTranslation, LawOfMessiah, LawOfMessiahDrawing, Lesson, Maimonides, UserPreferences
 from walkasjesus_app.views.detail_view import _step_to_law_mapping
 
 
@@ -52,9 +52,138 @@ def _find_primary_drawing(law):
             return step_drawing
 
     for drawing in law.media.all():
-        if drawing.img_url:
+        if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.img_url:
             return drawing
     return None
+
+
+def _law_media_type_order():
+    return [
+        LawOfMessiahDrawing.MEDIA_TYPE_DRAWING,
+        LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+        LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK,
+        LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW,
+        LawOfMessiahDrawing.MEDIA_TYPE_MOVIE,
+        LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE,
+        LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO,
+        LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY,
+        LawOfMessiahDrawing.MEDIA_TYPE_BLOG,
+        LawOfMessiahDrawing.MEDIA_TYPE_PICTURE,
+        LawOfMessiahDrawing.MEDIA_TYPE_SERMON,
+        LawOfMessiahDrawing.MEDIA_TYPE_BOOK,
+    ]
+
+
+def _collect_law_media_by_type(law):
+    grouped = {media_type: [] for media_type in _law_media_type_order()}
+    seen = set()
+
+    def add_item(media_type, title, description, img_url, url, author, target_audience, language, is_public):
+        normalized_media_type = str(media_type or '').strip().lower() or LawOfMessiahDrawing.MEDIA_TYPE_DRAWING
+        if normalized_media_type not in grouped:
+            return
+        key = (
+            normalized_media_type,
+            str(title or '').strip(),
+            str(img_url or '').strip(),
+            str(url or '').strip(),
+            str(author or '').strip(),
+        )
+        if key in seen:
+            return
+        seen.add(key)
+        grouped[normalized_media_type].append({
+            'media_type': normalized_media_type,
+            'title': title or '',
+            'description': description or '',
+            'img_url': _normalize_image_url(img_url),
+            'url': url or '',
+            'author': author or '',
+            'target_audience': target_audience or 'any',
+            'language': language or 'any',
+            'is_public': bool(is_public),
+        })
+
+    for media in law.media.all():
+        add_item(
+            media_type=media.media_type,
+            title=media.title,
+            description=media.description,
+            img_url=media.img_url,
+            url=media.url,
+            author=media.author,
+            target_audience=media.target_audience,
+            language=media.language,
+            is_public=media.is_public,
+        )
+
+    # Always include media from related steps so BA20-like mappings show shared resources.
+    step_media_map = {
+        LawOfMessiahDrawing.MEDIA_TYPE_SONG: 'song_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK: 'superbook_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW: 'henkieshow_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_MOVIE: 'movie_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE: 'shortmovie_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO: 'wajvideo_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_DRAWING: 'drawing_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY: 'testimony_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_BLOG: 'blog_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_PICTURE: 'picture_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_SERMON: 'sermon_set',
+        LawOfMessiahDrawing.MEDIA_TYPE_BOOK: 'book_set',
+    }
+    for step in law.related_steps.all():
+        for media_type, relation in step_media_map.items():
+            for media in getattr(step, relation).all():
+                add_item(
+                    media_type=media_type,
+                    title=media.title,
+                    description=media.description,
+                    img_url=media.img_url,
+                    url=media.url,
+                    author=media.author,
+                    target_audience=media.target_audience,
+                    language=media.language,
+                    is_public=media.is_public,
+                )
+
+    related_steps = list(law.related_steps.all())
+    related_lessons = list(Lesson.objects.filter(commandment__in=related_steps)) if related_steps else []
+    shared_query = LawOfMessiahDrawing.objects.filter(Q(law_of_messiah=law))
+    if related_steps:
+        shared_query = shared_query | LawOfMessiahDrawing.objects.filter(commandment__in=related_steps)
+    if related_lessons:
+        shared_query = shared_query | LawOfMessiahDrawing.objects.filter(lesson__in=related_lessons)
+
+    for media in shared_query.distinct():
+        add_item(
+            media_type=media.media_type,
+            title=media.title,
+            description=media.description,
+            img_url=media.img_url,
+            url=media.url,
+            author=media.author,
+            target_audience=media.target_audience,
+            language=media.language,
+            is_public=media.is_public,
+        )
+
+    return grouped
+
+
+def _dedupe_drawings_for_display(drawings):
+    unique = []
+    seen = set()
+    for drawing in drawings or []:
+        key = (
+            str(drawing.get('img_url') or '').strip(),
+            str(drawing.get('url') or '').strip(),
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(drawing)
+    return unique
 
 
 def _ncla_label_map():
@@ -335,6 +464,7 @@ class LawOfMessiahListingView(View):
             else default_unique_filter
         )
         classical_filter = request.GET.get('classical_commandment', '').strip().lower()
+        illustration_filter = request.GET.get('illustration', '').strip().lower()
         category = request.GET.get('category', '').strip()
         person_code = request.GET.get('ncla_person', '').strip().upper()
         application_code = request.GET.get('ncla_application', '').strip().lower()
@@ -348,7 +478,14 @@ class LawOfMessiahListingView(View):
         }:
             commandment_type = LawOfMessiah.COMMANDMENT_TYPE_POSITIVE
 
-        laws_query = LawOfMessiah.objects.order_by('id').prefetch_related('media', 'related_steps__drawing_set')
+        if illustration_filter not in {'', 'true', 'false'}:
+            illustration_filter = ''
+
+        laws_query = LawOfMessiah.objects.order_by('id').prefetch_related(
+            'media',
+            'related_steps__drawing_set',
+            'related_steps__shared_media_resources',
+        )
         if unique_filter == 'true':
             laws_query = laws_query.filter(is_unique=True)
         elif unique_filter == 'false':
@@ -371,6 +508,10 @@ class LawOfMessiahListingView(View):
             laws_query = laws_query.filter(category=category)
 
         laws = list(laws_query)
+        if illustration_filter in {'true', 'false'}:
+            wants_illustration = illustration_filter == 'true'
+            laws = [law for law in laws if bool(_find_primary_drawing(law)) is wants_illustration]
+
         if person_code or application_code or ncla_group:
             laws = [law for law in laws if _matches_ncla_filters(law, person_code, application_code, ncla_group)]
 
@@ -451,6 +592,7 @@ class LawOfMessiahListingView(View):
                 'selected_commandment_type': commandment_type,
                 'selected_is_unique': unique_filter,
                 'selected_classical_commandment': classical_filter,
+                'selected_illustration': illustration_filter,
                 'selected_category': category,
                 'selected_ncla_person': person_code,
                 'selected_ncla_application': application_code,
@@ -486,13 +628,10 @@ class LawOfMessiahDetailView(View):
         law.primary_drawing_url = _normalize_image_url(law.primary_drawing.img_url) if law.primary_drawing else ''
         law.source_is_url = _is_http_url(law.source)
 
-        drawings = []
-        for drawing in law.media.all():
-            drawings.append({
-                'author': drawing.author,
-                'description': drawing.description,
-                'img_url': _normalize_image_url(drawing.img_url),
-            })
+        media_by_type = _collect_law_media_by_type(law)
+        drawings = _dedupe_drawings_for_display(
+            media_by_type.get(LawOfMessiahDrawing.MEDIA_TYPE_DRAWING, [])
+        )
 
         related_values = law.related_lawofmessiah or []
         if not related_values:
@@ -537,6 +676,7 @@ class LawOfMessiahDetailView(View):
             'law': law,
             'bible': selected_bible,
             'drawings': drawings,
+            'law_media_by_type': media_by_type,
             'related_steps': related_steps,
             'enriched_maimonides': enriched_maimonides,
             'related_lawofmessiah': [related_law_map[item_id] for item_id in related_law_ids if item_id in related_law_map],

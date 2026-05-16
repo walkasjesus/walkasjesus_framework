@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
-from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTranslation, LawOfMessiah
+from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTranslation, LawOfMessiah, LawOfMessiahDrawing
 
 
 LOGGER = logging.getLogger(__name__)
@@ -93,6 +93,9 @@ class DetailView(View):
                 }
                 mapped_related_laws = [related_law_map[item_id] for item_id in related_ids if item_id in related_law_map]
 
+        shared_media_by_type = _collect_shared_media_by_type(commandment=commandment)
+        _apply_shared_media_to_commandment_display(commandment, shared_media_by_type)
+
         return render(
             request,
             'commandments/detail.html',
@@ -101,6 +104,7 @@ class DetailView(View):
                 'bible': selected_bible,
                 'mapped_lawofmessiah': mapped_law,
                 'mapped_related_lawofmessiah': mapped_related_laws,
+                'shared_media_by_type': shared_media_by_type,
             },
         )
 
@@ -114,8 +118,58 @@ class DetailLessonView(View):
             selected_bible.copyright = cached_copyright
         lesson.bible = selected_bible
         lesson.languages = UserPreferences(request.session).languages
-        return render(request, 'lessons/detail.html', {'lesson': lesson,
-                                                            'bible': selected_bible})
+        shared_media_by_type = _collect_shared_media_by_type(commandment=lesson.commandment, lesson=lesson)
+        _apply_shared_media_to_lesson_display(lesson, shared_media_by_type)
+
+        return render(request, 'lessons/detail.html', {
+            'lesson': lesson,
+            'bible': selected_bible,
+            'shared_media_by_type': shared_media_by_type,
+        })
+
+
+def _shared_media_types():
+    return [choice[0] for choice in LawOfMessiahDrawing.MEDIA_TYPE_CHOICES]
+
+
+def _collect_shared_media_by_type(commandment=None, lesson=None):
+    grouped = {media_type: [] for media_type in _shared_media_types()}
+    query = LawOfMessiahDrawing.objects.none()
+    if commandment is not None:
+        query = query | LawOfMessiahDrawing.objects.filter(commandment=commandment)
+    if lesson is not None:
+        query = query | LawOfMessiahDrawing.objects.filter(lesson=lesson)
+
+    for media in query.distinct().order_by('media_type', 'id'):
+        grouped[media.media_type].append(media)
+    return grouped
+
+
+def _apply_shared_media_to_commandment_display(commandment, grouped):
+    commandment.drawings = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_DRAWING, [])
+    commandment.songs = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SONG, [])
+    commandment.superbooks = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK, [])
+    commandment.henkieshows = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW, [])
+    commandment.movies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_MOVIE, [])
+    commandment.short_movies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE, [])
+    commandment.waj_video = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO, [])
+    commandment.sermons = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SERMON, [])
+    commandment.pictures = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PICTURE, [])
+    commandment.testimonies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY, [])
+    commandment.blogs = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_BLOG, [])
+    commandment.books = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_BOOK, [])
+    commandment.background_drawing = commandment.drawings[0] if commandment.drawings else ''
+
+
+def _apply_shared_media_to_lesson_display(lesson, grouped):
+    lesson.drawings = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_DRAWING, [])
+    lesson.songs = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SONG, [])
+    lesson.superbooks = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK, [])
+    lesson.henkieshows = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW, [])
+    lesson.short_movies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE, [])
+    lesson.pictures = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PICTURE, [])
+    lesson.testimonies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY, [])
+    lesson.background_drawing = lesson.drawings[0] if lesson.drawings else ''
 
 
 def _collect_verses(bible, references, key_builder=None, verse_sources=None):

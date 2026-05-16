@@ -93,8 +93,9 @@ class Command(BaseCommand):
                     law_of_messiah=law_of_messiah,
                     img_url=img_url,
                     defaults={
+                        'media_type': LawOfMessiahDrawing.MEDIA_TYPE_DRAWING,
                         'author': author,
-                        'title': f'Drawing for {lom_id}',
+                        'language': 'any',
                         'is_public': True,
                     }
                 )

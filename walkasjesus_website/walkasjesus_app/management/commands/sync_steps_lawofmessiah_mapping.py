@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
         created = 0
         updated = 0
-        drawing_synced = 0
+        media_synced = 0
         skipped = 0
         
         for mapping in mappings:
@@ -61,8 +61,7 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.SUCCESS(f"✓ Linked Step {step_id} to Law {law_id}"))
                     created += 1
 
-                if self._sync_law_step_drawing(law, step):
-                    drawing_synced += 1
+                media_synced += self._sync_law_step_media(law, step)
             except (Commandment.DoesNotExist, LawOfMessiah.DoesNotExist) as e:
                 self.stdout.write(self.style.WARNING(f"✗ Skipped Step {step_id} → Law {law_id}: {str(e)}"))
                 skipped += 1
@@ -70,31 +69,52 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"\nSummary:"))
         self.stdout.write(f"  Created: {created}")
         self.stdout.write(f"  Updated: {updated}")
-        self.stdout.write(f"  Step drawings synced: {drawing_synced}")
+        self.stdout.write(f"  Step media synced: {media_synced}")
         self.stdout.write(f"  Skipped: {skipped}")
 
-    def _sync_law_step_drawing(self, law, step):
-        step_drawing = step.background_drawing()
-        if not step_drawing or not step_drawing.img_url:
-            return False
+    def _sync_law_step_media(self, law, step):
+        synced = 0
+        media_map = {
+            LawOfMessiahDrawing.MEDIA_TYPE_SONG: step.song_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK: step.superbook_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW: step.henkieshow_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_MOVIE: step.movie_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE: step.shortmovie_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO: step.wajvideo_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_DRAWING: step.drawing_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY: step.testimony_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_BLOG: step.blog_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_PICTURE: step.picture_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_SERMON: step.sermon_set.all(),
+            LawOfMessiahDrawing.MEDIA_TYPE_BOOK: step.book_set.all(),
+        }
 
-        drawing_url = str(step_drawing.img_url).strip()
-        if not drawing_url:
-            return False
+        for media_type, items in media_map.items():
+            for item in items:
+                img_url = str(item.img_url or '').strip()
+                url = str(item.url or '').strip()
+                if not img_url and not url:
+                    continue
 
-        existing = LawOfMessiahDrawing.objects.filter(
-            law_of_messiah=law,
-            img_url=drawing_url,
-        ).exists()
-        if existing:
-            return False
+                _, created = LawOfMessiahDrawing.objects.get_or_create(
+                    law_of_messiah=law,
+                    commandment=step,
+                    media_type=media_type,
+                    title=item.title or '',
+                    description=item.description or '',
+                    target_audience=item.target_audience,
+                    language=item.language,
+                    img_url=img_url,
+                    url=url,
+                    author=item.author or '',
+                    defaults={
+                        'is_public': item.is_public,
+                    },
+                )
+                if created:
+                    synced += 1
 
-        LawOfMessiahDrawing.objects.create(
-            law_of_messiah=law,
-            img_url=drawing_url,
-            author=step_drawing.author or 'Step drawing sync',
-            title=f'Step {step.id} drawing for {law.id}',
-            is_public=step_drawing.is_public,
-        )
-        self.stdout.write(self.style.SUCCESS(f"  + Synced drawing from Step {step.id} to Law {law.id}"))
-        return True
+        if synced:
+            self.stdout.write(self.style.SUCCESS(f"  + Synced {synced} media items from Step {step.id} to Law {law.id}"))
+
+        return synced

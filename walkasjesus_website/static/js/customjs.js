@@ -458,6 +458,32 @@ $(document).ready(function(){
     $('#changeLanguageModal').modal('show');
     $.removeCookie('jc_bible_trans_settings');
   }  
+
+  function refreshAudienceBoundSections() {
+    $('.our-services-wrapper').each(function() {
+      var $wrapper = $(this);
+      var $section = $wrapper.closest('.col-xl-12, .col-lg-12, .col-md-12, .col-sm-12');
+      if (!$section.length) {
+        return;
+      }
+
+      var $audienceNodes = $section.filter('[targetaudience]').add($section.find('[targetaudience]'));
+      if (!$audienceNodes.length) {
+        return;
+      }
+
+      // Reset section visibility first so visibility checks only depend on audience-node display.
+      $section.show();
+      var hasVisibleAudienceNode = $audienceNodes.filter(function() {
+        return $(this).css('display') !== 'none';
+      }).length > 0;
+
+      if (!hasVisibleAudienceNode) {
+        $section.hide();
+      }
+    });
+  }
+
   function applyKidsModeState(isKidsMode, animated) {
     var showFn = animated ? 'slideDown' : 'show';
     var hideFn = animated ? 'slideUp' : 'hide';
@@ -467,6 +493,7 @@ $(document).ready(function(){
       $('[targetaudience="adults"]')[hideFn]();
       $('.kids-mode-hide')[hideFn]();
       $('.chk-kids-mode').prop('checked', true);
+      refreshAudienceBoundSections();
       return;
     }
 
@@ -474,6 +501,7 @@ $(document).ready(function(){
     $('[targetaudience="adults"]')[showFn]();
     $('.kids-mode-hide')[showFn]();
     $('.chk-kids-mode').prop('checked', false);
+    refreshAudienceBoundSections();
   }
 
   if($.cookie('jc_kids_mode')){

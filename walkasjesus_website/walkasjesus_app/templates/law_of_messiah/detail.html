@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% load media_extras %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
@@ -24,7 +25,103 @@
 {% endblock %}
 
 {% block content %}
-{% cache cache_timeout law_of_messiah_detail cache_on_language cache_on_bible law.id %}
+{% cache cache_timeout law_of_messiah_detail_v2 cache_on_language cache_on_bible law.id %}
+<nav class="floating-menu">
+    <ul class="main-menu">
+        {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
+        <li>
+            <a href="#biblereferences" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law.commentary_rudolph or law.commentary_juster or law.classical_commentators %}
+        <li>
+            <a href="#commentary" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Commentary' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if drawings %}
+        <li>
+            <a href="#drawings" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Drawings' %}" src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.picture %}
+        <li>
+            <a href="#pictures" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Pictures' %}" src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.superbook %}
+        <li targetaudience="kids">
+            <a href="#superbook" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.henkieshow %}
+        <li targetaudience="kids">
+            <a href="#henkieshow" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'De Henkie Show' %}" src="{% static 'images/henkieshow.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.shortmovie %}
+        <li>
+            <a href="#short_movies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Short Movies' %}" src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.song %}
+        <li>
+            <a href="#songs" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Songs' %}" src="{% static 'images/song.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.movie %}
+        <li>
+            <a href="#movies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Movies' %}" src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.testimony %}
+        <li>
+            <a href="#testimonies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Testimonies' %}" src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.blog %}
+        <li targetaudience="adults">
+            <a href="#blogs" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Blogs' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.sermon %}
+        <li targetaudience="adults">
+            <a href="#sermons" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Sermons' %}" src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.book %}
+        <li targetaudience="adults">
+            <a href="#books" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Books' %}" src="{% static 'images/book.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    <div class="menu-bg"></div>
+</nav>
 <section class="ftco-daily-verse img" style="background-image:url('{% if law.primary_drawing_url %}{{ law.primary_drawing_url }}{% else %}{% static 'images/bg_2.jpg' %}{% endif %}');">
     <div class="overlay"></div>
     <div class="container">
@@ -128,7 +225,7 @@
             </div>
 
             {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -226,7 +323,7 @@
             {% endif %}
 
             {% if law.commentary_rudolph or law.commentary_juster or law.classical_commentators %}
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="commentary" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -255,7 +352,7 @@
             {% endif %}
 
             {% if drawings %}
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">
@@ -269,6 +366,261 @@
                                 {% endif %}
                                 {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
                                 {% if drawing.author %}<p>{% trans 'Artist' %}: {{ drawing.author }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.superbook %}
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Superbook' %}</h4>
+                            {% for item in law_media_by_type.superbook %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.henkieshow %}
+            <div id="henkieshow" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/henkieshow.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'De Henkie Show' %}</h4>
+                            {% for item in law_media_by_type.henkieshow %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.shortmovie %}
+            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/shortmovie.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Short Movies' %}</h4>
+                            {% for item in law_media_by_type.shortmovie %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.song %}
+            <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/song.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Songs' %}</h4>
+                            {% for item in law_media_by_type.song %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.movie %}
+            <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/movie.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Movies' %}</h4>
+                            {% for item in law_media_by_type.movie %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.testimony %}
+            <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/testimony.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Testimonies' %}</h4>
+                            {% for item in law_media_by_type.testimony %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.wajvideo %}
+            <div id="waj_video" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/wajvideo.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Walk as Jesus motivational video' %}</h4>
+                            {% for item in law_media_by_type.wajvideo %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.blog %}
+            <div id="blogs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Blogs' %}</h4>
+                            {% for item in law_media_by_type.blog %}
+                            <h5>{% if item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</a>{% else %}{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}{% endif %}</h5>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.sermon %}
+            <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/sermon.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Sermons' %}</h4>
+                            {% for item in law_media_by_type.sermon %}
+                            <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            <div class="video-iframe">
+                                <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.book %}
+            <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/book.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Books' %}</h4>
+                            {% for item in law_media_by_type.book %}
+                            <div class="media">
+                                {% if item.img_url %}<img class="d-flex align-self-start mr-3" style="max-width:20%;max-height:20%;" src="{{ item.img_url }}" alt="{{ item.author }} - {{ item.title }}">{% endif %}
+                                <div class="media-body">
+                                    </br>
+                                    </br>
+                                    <h5 class="mt-0 font-weight-bold">{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    {% if item.url %}<p><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url }}</a></p>{% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.picture %}
+            <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/picture.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Pictures' %}</h4>
+                            {% for item in law_media_by_type.picture %}
+                                {% if item.img_url %}<img src="{{ item.img_url }}" alt="{{ item.author }} - {{ item.title }}" style="max-width:97%;max-height:97%;">{% endif %}
+                                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
                             {% endfor %}
                         </div>
                     </div>

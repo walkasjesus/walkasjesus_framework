@@ -1,167 +1,96 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# This script will EXPORT all commandments and media items from the current database into the CSV and upload it as a pull request to github.
-#
-# There is made a separation between 'Commandments' and 'Media'.
-#
-# The 'Commandments' is a CSV with all:
-# - Walk as Jesus
-# - Bible references
-# - Questions
-# - Quotes
-# Commandments CSV source is stored in a git submodule with its origin from [data/biblereferences/commandments.csv](https://github.com/walkasjesus/walkasjesus_biblereferences)
-#
-# The 'Media' is a CSV with all:
-# - Songs, Blogs, Movies, Drawings, Pictures, Superbook, etc.
-#   Based on their:
-# -- language
-# -- target audience
-# Media CSV source is stored in a git submodule with its origin from [data/media/media.csv](https://github.com/walkasjesus/walkasjesus_media)
+# Export current database content to local CSV files only.
+# No remote actions are performed (no push, no PR, no remote rewrites).
 
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$ROOT_DIR"
+
+TODAY="$(date +%Y%m%d)"
+START="$(date '+%Y-%m-%d %H:%M:%S')"
+LOG="log/commandments.${TODAY}.log"
+BRANCH_STAMP="$(date +%Y%m%d_%H%M%S)"
 
 if [[ -f ./venv/Scripts/activate ]]; then
-	source ./venv/Scripts/activate
-elif [[ -f ./venv/bin/activate ]]; then 
-	source ./venv/bin/activate
+    # Windows virtualenv (Git Bash)
+    source ./venv/Scripts/activate
+    PYTHON_BIN="python"
+elif [[ -f ./venv/bin/activate ]]; then
+    source ./venv/bin/activate
+    PYTHON_BIN="python3"
+elif [[ -x ../.venv/bin/python ]]; then
+    PYTHON_BIN="../.venv/bin/python"
 else
-	echo "ERROR: cannot find environment binary"
+    PYTHON_BIN="python3"
 fi
 
-# If Linux based servers. This is the preferred Operating System.
-if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
-	today=$(date +%Y%m%d)
-	time=$(date +%H%M)
-	start=$(date '+%Y-%m-%d %H:%M:%S')
-	now_epoch=$(date +%s)
-	cur=$(dirname "$(realpath $0)")
-	log=log/commandments.${today}.log
-	last_import=$(grep 'Start importing Commandments' log/commandments.*.log | tail -1 | grep -Eo '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}')
-	rsakey=/home/jesuscommandments/.ssh/id_rsa
-	branch=${today}_${time}
+ensure_branch_for_submodule() {
+    local submodule_path="$1"
+    local branch_suffix="$2"
+    local created="false"
 
-	# Get Changelog information from last import date until now
-	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment LIKE '%Media%' INTO OUTFILE '/tmp/media_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
-	mysql jcdatabase -e "select user_id,comment from reversion_revision where date_created >= '${last_import}' and date_created <= '${start}' and comment != 'No fields changed.' and comment NOT LIKE '%Media%' and user_id is NOT NULL INTO OUTFILE '/tmp/commandments_changes_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
-	mysql jcdatabase -e "select id,username,first_name,last_name,email from auth_user INTO OUTFILE '/tmp/users_${now_epoch}.csv' FIELDS TERMINATED BY ';';"
+    if [[ ! -d "$submodule_path/.git" && ! -f "$submodule_path/.git" ]]; then
+        echo "WARN: ${submodule_path} is not a git repository. Skipping branch check."
+        return 0
+    fi
 
-	# Replace user_id to human readable name
-	IFS=$'\n'
-	for line in $(cat /tmp/users_${now_epoch}.csv); do
-		id=$(echo $line | awk -F ";" '{print $1}')
-		username=$(echo $line | awk -F ";" '{print $2}')
-		firstname=$(echo $line | awk -F ";" '{print $3}')
-		lastname=$(echo $line | awk -F ";" '{print $4}')
-		email=$(echo $line | awk -F ";" '{print $5}')
+    local current_branch
+    current_branch="$(git -C "$submodule_path" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
 
-		if [[ -n ${firstname} || -n ${lastname} || -n ${email} ]]; then
-				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/media_changes_${now_epoch}.csv
-				sed -i "s/^${id};/${firstname} ${lastname} (${email});/" /tmp/commandments_changes_${now_epoch}.csv
-		else
-				sed -i "s/^${id};/${username};/" /tmp/media_changes_${now_epoch}.csv
-				sed -i "s/^${id};/${username};/" /tmp/commandments_changes_${now_epoch}.csv
-		fi
+    if [[ -z "$current_branch" ]]; then
+        echo "WARN: Unable to detect branch for ${submodule_path}."
+        return 0
+    fi
 
-	done
+    if [[ "$current_branch" == "HEAD" || "$current_branch" == "master" || "$current_branch" == "main" ]]; then
+        local new_branch="export_${branch_suffix}_${BRANCH_STAMP}"
+        if git -C "$submodule_path" show-ref --verify --quiet "refs/heads/${new_branch}"; then
+            git -C "$submodule_path" checkout "$new_branch" >/dev/null
+        else
+            git -C "$submodule_path" checkout -b "$new_branch" >/dev/null
+            created="true"
+        fi
+        if [[ "$created" == "true" ]]; then
+            echo "INFO: ${submodule_path} switched from ${current_branch} to ${new_branch} (created)"
+        else
+            echo "INFO: ${submodule_path} switched from ${current_branch} to ${new_branch}"
+        fi
+    else
+        echo "INFO: ${submodule_path} keeping existing branch ${current_branch}"
+    fi
+}
 
-	# Information used for commit messages
-	title=$(echo "Changes from ${last_import} until ${today}")
-	message_subtitle=$(echo "A summary of all the changes made: (name;changes)")
-	commandments_submessage=$(cat /tmp/commandments_changes_${now_epoch}.csv)
-	media_submessage=$(cat /tmp/media_changes_${now_epoch}.csv)
+report_csv_change() {
+    local repo_path="$1"
+    local file_path="$2"
+    local label="$3"
 
-	# Setup SSH agent to connect to Github
-	eval $(ssh-agent)
-	ssh-add ${rsakey}
+    if git -C "$repo_path" diff --quiet -- "$file_path"; then
+        echo "INFO: ${label} unchanged"
+    else
+        echo "INFO: ${label} changed"
+        git -C "$repo_path" status --short -- "$file_path"
+    fi
+}
 
-	####################
-	### Commandments ###
-	####################
+echo "INFO: ${START} - Preparing export branches" | tee -a "$LOG"
+ensure_branch_for_submodule "data/biblereferences" "biblereferences" | tee -a "$LOG"
+ensure_branch_for_submodule "data/media" "media" | tee -a "$LOG"
 
-	# Export Commandments from Database to CSV
-	cd ${cur}/data/biblereferences
-	time=$(date +%H%M%S)
-	git checkout -b ${branch}
-	cd ${cur}
-	echo "INFO: ${start} - Start exporting Commandments" | tee -a ${log}
-	python3 manage.py export_commandments data/biblereferences/commandments.csv | tee -a ${log}
-	end=$(date '+%Y-%m-%d %H:%M:%S')
-	echo "INFO: ${end} - Ended exporting Commandments" | tee -a ${log}
+echo "INFO: ${START} - Start exporting Commandments" | tee -a "$LOG"
+"$PYTHON_BIN" manage.py export_commandments data/biblereferences/commandments.csv | tee -a "$LOG"
+END="$(date '+%Y-%m-%d %H:%M:%S')"
+echo "INFO: ${END} - Ended exporting Commandments" | tee -a "$LOG"
 
-	# Git commit Commandments and create a pull request 
-	cd ${cur}/data/biblereferences
-	commandments_repository=git@github.com:walkasjesus/walkasjesus_biblereferences.git
-	current_repository=$(git remote -v | grep push | awk '{print $2}')
-	if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
-		git remote remove origin
-		git remote add origin ${commandments_repository}
-	fi
-	git add commandments.csv
-	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${commandments_submessage}"
-	git push -u origin ${branch}
-	hub pull-request -h ${branch} -F - <<MSG
-${title}
+echo "INFO: ${END} - Start exporting Media Resources" | tee -a "$LOG"
+"$PYTHON_BIN" manage.py export_media data/media/media.csv | tee -a "$LOG"
+END="$(date '+%Y-%m-%d %H:%M:%S')"
+echo "INFO: ${END} - Ended exporting Media Resources" | tee -a "$LOG"
 
-${message_subtitle}
+echo "INFO: ${END} - Export result summary" | tee -a "$LOG"
+report_csv_change "data/biblereferences" "commandments.csv" "biblereferences/commandments.csv" | tee -a "$LOG"
+report_csv_change "data/media" "media.csv" "media/media.csv" | tee -a "$LOG"
 
-${commandments_submessage}
-MSG
-
-	# Cleanup local git branch
-	git checkout master
-	git branch -d ${branch}
-
-	#############
-	### Media ###
-	#############
-
-	# Export Media from Database to CSV
-	cd ${cur}/data/media
-	time=$(date +%H%M%S)
-	git checkout -b ${branch}
-	cd ${cur}
-	echo "INFO: ${start} - Start exporting Media Resources" | tee -a ${log}
-	python3 manage.py export_media data/media/media.csv | tee -a ${log}
-	end=$(date '+%Y-%m-%d %H:%M:%S')
-	echo "INFO: ${end} - Ended exporting Media Resources" | tee -a ${log}
-
-	# Export Media Lessons from Database to CSV
-	echo "INFO: ${start} - Start exporting Media Lessons" | tee -a ${log}
-	python3 manage.py export_media_lessons data/media/media_lessons.csv | tee -a ${log}
-	end=$(date '+%Y-%m-%d %H:%M:%S')
-	echo "INFO: ${end} - Ended exporting Media Lessons" | tee -a ${log}
-
-	# Git commit Media and create a pull request 
-	cd ${cur}/data/media
-	media_repository=git@github.com:walkasjesus/walkasjesus_media.git
-	current_repository=$(git remote -v | grep push | awk '{print $2}')
-	if [[ $(echo ${current_repository}) != "${media_repository}" ]]; then
-		git remote remove origin
-		git remote add origin ${media_repository}
-	fi
-	git add media.csv media_lessons.csv
-	git commit -m "Changes from ${last_import} until ${today}" -m "${message_subtitle}" -m "${media_submessage}"
-	git push -u origin ${branch}
-	hub pull-request -h ${branch} -F - <<MSG2
-${title}
-
-${message_subtitle}
-
-${media_submessage}
-MSG2
-
-	# Cleanup local git branch
-	git checkout master
-	git branch -d ${branch}
-
-	# Kill SSH agent
-	pkill ssh-agent
-
-else
-	echo "INFO: Start exporting Commandments"
-	python3 manage.py export_commandments data/biblereferences/commandments.csv
-	echo "INFO: Ended exporting Commandments"
-
-	echo "INFO: Start exporting Media Resources"
-	python3 manage.py export_media data/media/media.csv
-	echo "INFO: Ended exporting Media Resources"
-fi
+echo "INFO: Finished local export only. No push was performed." | tee -a "$LOG"

@@ -1,3 +1,6 @@
+import csv
+from pathlib import Path
+
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.models import LogEntry, DELETION
@@ -13,6 +16,7 @@ from walkasjesus_app.models.commandment_question import Question
 from walkasjesus_app.models.lesson_question import LessonQuestion
 from walkasjesus_app.models.lesson_media import *
 from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
+from walkasjesus_website.settings import BASE_DIR
 
 
 class Bible(models.Model):
@@ -155,7 +159,6 @@ class SermonInline(admin.TabularInline):
     model = Sermon
     extra = 0
 
-
 class PictureInline(admin.TabularInline):
     model = Picture
     extra = 0
@@ -174,13 +177,57 @@ class BookInline(admin.TabularInline):
     extra = 0
 
 
+def commandment_category_choices(current_value=''):
+    categories = []
+    seen = set()
+    csv_path = Path(BASE_DIR) / 'data' / 'biblereferences' / 'commandments.csv'
+
+    try:
+        with open(csv_path, 'r', encoding='utf-8', newline='') as handle:
+            reader = csv.DictReader(handle, delimiter=';')
+            for row in reader:
+                category = (row.get('category') or '').strip()
+                if category and category not in seen:
+                    seen.add(category)
+                    categories.append(category)
+    except FileNotFoundError:
+        pass
+
+    for category in Commandment.objects.exclude(category='').order_by('category').values_list('category', flat=True).distinct():
+        if category not in seen:
+            seen.add(category)
+            categories.append(category)
+
+    if current_value and current_value not in seen:
+        categories.append(current_value)
+
+    return [(category, category) for category in categories]
+
+
+class CommandmentAdminForm(forms.ModelForm):
+    class Meta:
+        model = Commandment
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        current_value = getattr(self.instance, 'category', '') if self.instance else ''
+        self.fields['category'] = forms.ChoiceField(
+            choices=commandment_category_choices(current_value=current_value),
+            required=False,
+        )
+
+
 class CommandmentAdmin(VersionAdmin):
+    form = CommandmentAdminForm
+
     class Meta:
         verbose_name_plural = 'Step'
 
     list_display = [
         'id',
         'title',
+        'category',
         'quote',
         'song_count',
         'shortmovie_count',
@@ -191,7 +238,8 @@ class CommandmentAdmin(VersionAdmin):
         'superbook_count',
         'henkieshow_count',        
     ]
-    list_filter = [MediaTargetAudienceFilter, MediaLanguageFilter]
+    list_filter = ['category', MediaTargetAudienceFilter, MediaLanguageFilter]
+    search_fields = ['=id', 'title', 'quote']
     inlines = [
         PrimaryBibleReferencesInline,
         DirectBibleReferenceInline,
@@ -202,18 +250,6 @@ class CommandmentAdmin(VersionAdmin):
         OTLawBibleReferenceInline,
         WisdomBibleReferenceInline,
         QuestionInline,
-        DrawingInline,
-        SongInline,
-        SuperbookInline,
-        HenkieshowInline,
-        MovieInline,
-        ShortMovieInline,
-        WaJVideoInline,
-        SermonInline,
-        PictureInline,
-        TestimonyInline,
-        BlogInline,
-        BookInline,
     ]
 
     def get_queryset(self, request):
@@ -364,15 +400,9 @@ class LessonQuestionInline(admin.TabularInline):
 
 class LessonAdmin(VersionAdmin):
     list_display = ['id', 'story', 'bible_section', 'title']
+    search_fields = ['=id', 'title', 'story', 'commandment__title']
     inlines = [
         LessonQuestionInline,
-        LessonSongInline,
-        LessonSuperbookInline,
-        LessonHenkieshowInline,
-        LessonShortMovieInline,
-        LessonPictureInline,
-        LessonTestimonyInline,
-        LessonDrawingInline,
         LessonBibleSectionInLine,
         PrimaryLessonBibleReferencesInline,
         DirectLessonBibleReferenceInline,
@@ -388,7 +418,7 @@ class LawOfMessiahBibleReferenceInline(admin.TabularInline):
 class LawOfMessiahDrawingInline(admin.TabularInline):
     model = LawOfMessiahDrawing
     extra = 1
-    fields = ['author', 'description', 'img_url', 'is_public']
+    fields = ['media_type', 'author', 'title', 'description', 'img_url', 'url', 'target_audience', 'language', 'is_public']
 
 
 class NCLAGroupWidget(forms.Widget):
@@ -766,6 +796,155 @@ class LawOfMessiahAdmin(VersionAdmin):
         }
 
 
+class MediaResourceAdmin(admin.ModelAdmin):
+    list_display = [
+        'id',
+        'law_item_display',
+        'commandment_item_display',
+        'lesson_item_display',
+        'media_type',
+        'title',
+        'author',
+        'language',
+        'target_audience',
+        'song_count',
+        'shortmovie_count',
+        'testimony_count',
+        'sermon_count',
+        'movie_count',
+        'blog_count',
+        'superbook_count',
+        'media_total',
+    ]
+    list_filter = ['media_type', 'language', 'target_audience', 'is_public', 'law_of_messiah', 'commandment', 'lesson']
+    search_fields = ['law_of_messiah__id', 'law_of_messiah__title', 'commandment__id', 'commandment__title', 'lesson__id', 'lesson__title', 'title', 'author', 'description', 'img_url', 'url']
+    fields = ['law_of_messiah', 'commandment', 'lesson', 'media_type', 'title', 'description', 'img_url', 'url', 'author', 'target_audience', 'language', 'is_public']
+    autocomplete_fields = ['law_of_messiah', 'commandment', 'lesson']
+    ordering = ['law_of_messiah__id', 'commandment__id', 'lesson__id', 'media_type', 'title']
+
+    def law_item_display(self, obj):
+        if not obj.law_of_messiah:
+            return '-'
+        if obj.law_of_messiah.title:
+            return f'{obj.law_of_messiah.id} - {obj.law_of_messiah.title}'
+        return obj.law_of_messiah.id
+
+    law_item_display.short_description = 'Law of Messiah item'
+
+    def lesson_item_display(self, obj):
+        if not obj.lesson:
+            return '-'
+        if obj.lesson.title:
+            return f'{obj.lesson.id} - {obj.lesson.title}'
+        return obj.lesson.id
+
+    lesson_item_display.short_description = 'Lesson item'
+
+    def commandment_item_display(self, obj):
+        if not obj.commandment:
+            return '-'
+        if obj.commandment.title:
+            return f'{obj.commandment.id} - {obj.commandment.title}'
+        return obj.commandment.id
+
+    commandment_item_display.short_description = 'Commandment item'
+
+    def _scope_queryset(self, obj):
+        if obj.law_of_messiah_id:
+            return MediaResource.objects.filter(law_of_messiah_id=obj.law_of_messiah_id)
+        if obj.commandment_id:
+            return MediaResource.objects.filter(commandment_id=obj.commandment_id)
+        if obj.lesson_id:
+            return MediaResource.objects.filter(lesson_id=obj.lesson_id)
+        return MediaResource.objects.none()
+
+    def _scope_type_counts(self, obj):
+        if hasattr(obj, '_scope_type_counts_cache'):
+            return obj._scope_type_counts_cache
+        counts = {
+            LawOfMessiahDrawing.MEDIA_TYPE_SONG: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_SERMON: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_MOVIE: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_BLOG: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK: 0,
+            LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW: 0,
+        }
+        for row in self._scope_queryset(obj).values('media_type').annotate(total=Count('id')):
+            media_type = row.get('media_type')
+            if media_type in counts:
+                counts[media_type] = row.get('total', 0)
+        obj._scope_type_counts_cache = counts
+        return counts
+
+    def media_total(self, obj):
+        return self._scope_queryset(obj).count()
+
+    media_total.short_description = 'Total'
+
+    def song_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_SONG]
+
+    song_count.short_description = 'Songs'
+
+    def shortmovie_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE]
+
+    shortmovie_count.short_description = 'ShortMovies'
+
+    def testimony_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY]
+
+    testimony_count.short_description = 'Testimonies'
+
+    def sermon_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_SERMON]
+
+    sermon_count.short_description = 'Sermons'
+
+    def movie_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_MOVIE]
+
+    movie_count.short_description = 'Movies'
+
+    def blog_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_BLOG]
+
+    blog_count.short_description = 'Blogs'
+
+    def superbook_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK]
+
+    superbook_count.short_description = 'Superbooks'
+
+    def henkieshow_count(self, obj):
+        return self._scope_type_counts(obj)[LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW]
+
+    henkieshow_count.short_description = 'Henkieshows'
+
+    def law_media_count(self, obj):
+        if not obj.law_of_messiah:
+            return 0
+        return MediaResource.objects.filter(law_of_messiah=obj.law_of_messiah).count()
+
+    law_media_count.short_description = 'Law media count'
+
+    def step_media_count(self, obj):
+        if not obj.commandment:
+            return 0
+        return MediaResource.objects.filter(commandment=obj.commandment).count()
+
+    step_media_count.short_description = 'Step media count'
+
+    def lesson_media_count(self, obj):
+        if not obj.lesson:
+            return 0
+        return MediaResource.objects.filter(lesson=obj.lesson).count()
+
+    lesson_media_count.short_description = 'Lesson media count'
+
+
 class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 
@@ -822,6 +1001,7 @@ admin.site.register(Bible, BibleAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(LawOfMessiah, LawOfMessiahAdmin)
+admin.site.register(MediaResource, MediaResourceAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)
 

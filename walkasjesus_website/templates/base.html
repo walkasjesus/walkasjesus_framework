@@ -117,6 +117,18 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav">
             <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
+	      <li class="nav-item d-lg-none nav-item-mobile-utility"><a href="javascript:void(0);" class="nav-link nav-link-mobile-utility" data-toggle="modal" data-target="#changeLanguageModal"><span>{% trans 'Change language / Bible' %}</span></a></li>
+	      <li class="nav-item d-lg-none nav-item-mobile-utility nav-item-mobile-kids">
+              <div class="nav-link nav-link-mobile-utility nav-link-mobile-kids-toggle">
+                <span>{% trans 'Children site' %}</span>
+                <div class="custom-control custom-checkbox image-checkbox mobile-kids-toggle-wrap">
+                  <input type="checkbox" class="custom-control-input chk-kids-mode" id="chk-kids-mode-mobile">
+                  <label class="custom-control-label" for="chk-kids-mode-mobile">
+                      <img src="/static/images/gizmo.png" alt="#" >
+                  </label>
+                </div>
+              </div>
+            </li>
 	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
         <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
 	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>

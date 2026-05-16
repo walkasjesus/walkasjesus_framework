@@ -126,6 +126,16 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-illustration" class="form-label">{% trans 'Illustration' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-illustration" name="illustration" class="form-control law-filter-select">
+                                                    <option value=""{% if selected_illustration == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                    <option value="true"{% if selected_illustration == 'true' %} selected{% endif %}>true</option>
+                                                    <option value="false"{% if selected_illustration == 'false' %} selected{% endif %}>false</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- Applicability Filters Row -->
@@ -238,6 +248,8 @@
                                                         <dd class="text-muted">{% trans 'Unique shows one canonical representative commandment from a duplicate cluster. Be aware that this was not determined by the original authors.' %}</dd>
                                                         <dt>{% trans 'Positive / negative' %}</dt>
                                                         <dd class="text-muted">{% trans 'Choose whether to show positive commands, negative prohibitions, both-type entries, or all.' %}</dd>
+                                                        <dt>{% trans 'Illustration' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Filter commandments by whether they have a visible illustration image.' %}</dd>
                                                         <dt>{% trans 'Context / situation' %}</dt>
                                                         <dd class="text-muted">{% trans 'Narrows results to commandments relevant in a specific life context (e.g. Temple, Marriage, Community).' %}</dd>
                                                     </dl>

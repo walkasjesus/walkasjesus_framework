@@ -49,11 +49,7 @@ class Command(BaseCommand):
             model_commandment, is_new = Commandment.objects.get_or_create(id=commandment.id)
             model_commandment.title = commandment.title
             model_commandment.title_negative = commandment.title_negative
-            try:
-                model_commandment.category = CommandmentCategories(commandment.category).name
-            except (ValueError, KeyError):
-                # Allow non-enum category labels (e.g. Law of Messiah categories).
-                model_commandment.category = commandment.category
+            model_commandment.category = commandment.category
             model_commandment.quote = commandment.quote
             model_commandment.quote_source = commandment.quote_source
             model_commandment.save()

@@ -12,8 +12,13 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
 
+from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, LawOfMessiahDrawing, Lesson, Maimonides, UserPreferences
-from walkasjesus_app.views.detail_view import _step_to_law_mapping
+from walkasjesus_app.views.detail_view import (
+    _allowed_target_audiences,
+    _filter_grouped_media_by_audience,
+    _step_to_law_mapping,
+)
 
 
 VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
@@ -48,11 +53,11 @@ def _is_http_url(value):
 def _find_primary_drawing(law):
     for related_step in law.related_steps.all().order_by('id'):
         step_drawing = related_step.background_drawing()
-        if step_drawing and step_drawing.img_url:
+        if step_drawing and step_drawing.img_url and media_file_exists(step_drawing.img_url):
             return step_drawing
 
     for drawing in law.media.all():
-        if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.img_url:
+        if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.img_url and media_file_exists(drawing.img_url):
             return drawing
     return None
 
@@ -628,7 +633,10 @@ class LawOfMessiahDetailView(View):
         law.primary_drawing_url = _normalize_image_url(law.primary_drawing.img_url) if law.primary_drawing else ''
         law.source_is_url = _is_http_url(law.source)
 
-        media_by_type = _collect_law_media_by_type(law)
+        media_by_type = _filter_grouped_media_by_audience(
+            _collect_law_media_by_type(law),
+            _allowed_target_audiences(request),
+        )
         drawings = _dedupe_drawings_for_display(
             media_by_type.get(LawOfMessiahDrawing.MEDIA_TYPE_DRAWING, [])
         )

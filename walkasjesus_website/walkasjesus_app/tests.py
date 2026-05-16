@@ -1,10 +1,12 @@
 from bible_lib import BibleBooks
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation
+from walkasjesus_app.context_processors import cache_settings
+from walkasjesus_app.views.detail_view import _allowed_target_audiences, _filter_grouped_media_by_audience
 
 
 class BibleTranslationTestCase(TestCase):
@@ -100,3 +102,57 @@ class UniqueModelConstraintsTestCase(TestCase):
         bible_ref.end_chapter = chapter
         bible_ref.end_verse = verse
         return bible_ref
+
+
+class KidsModeMediaFilterTestCase(SimpleTestCase):
+    def test_kids_mode_keeps_only_audience_neutral_media(self):
+        grouped = {
+            'superbook': [
+                {'target_audience': 'kids', 'title': 'Kids only'},
+                {'target_audience': 'adults', 'title': 'Adults only'},
+                {'target_audience': 'any', 'title': 'Everyone'},
+            ]
+        }
+
+        filtered = _filter_grouped_media_by_audience(grouped, {'any'})
+
+        self.assertEqual(
+            [item['title'] for item in filtered['superbook']],
+            ['Everyone'],
+        )
+
+    def test_default_mode_keeps_adults_and_any_media(self):
+        grouped = {
+            'shortmovie': [
+                {'target_audience': 'kids', 'title': 'Kids only'},
+                {'target_audience': 'adults', 'title': 'Adults only'},
+                {'target_audience': 'any', 'title': 'Everyone'},
+            ]
+        }
+
+        filtered = _filter_grouped_media_by_audience(grouped, {'adults', 'any'})
+
+        self.assertEqual(
+            [item['title'] for item in filtered['shortmovie']],
+            ['Adults only', 'Everyone'],
+        )
+
+
+class KidsModeCacheSettingsTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_cache_settings_include_default_mode_key(self):
+        request = self.factory.get('/')
+        request.session = self.client.session
+
+        self.assertEqual(cache_settings(request)['cache_on_kids_mode'], 'default')
+        self.assertEqual(_allowed_target_audiences(request), {'any', 'adults'})
+
+    def test_cache_settings_include_kids_mode_key(self):
+        request = self.factory.get('/', HTTP_COOKIE='jc_kids_mode=true')
+        request.session = self.client.session
+        request.COOKIES['jc_kids_mode'] = 'true'
+
+        self.assertEqual(cache_settings(request)['cache_on_kids_mode'], 'kids')
+        self.assertEqual(_allowed_target_audiences(request), {'any'})

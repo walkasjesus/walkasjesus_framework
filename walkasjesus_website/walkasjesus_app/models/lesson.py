@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import translation
 from django_ckeditor_5.fields import CKEditor5Field
 
+from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models import Commandment, LessonCategories
 
 class LessonManager(models.Manager):
@@ -72,14 +73,19 @@ class Lesson(models.Model):
         return self.testimonies()[0] if self.testimonies() else ''
 
     def drawings(self):
-        legacy_lesson = [d for d in self.lessondrawing_set.all() if d.is_public]
-        shared_lesson = list(self.shared_media_resources.filter(media_type='drawing', is_public=True))
+        legacy_lesson = [d for d in self.lessondrawing_set.all() if d.is_public and media_file_exists(d.img_url)]
+        shared_lesson = [d for d in self.shared_media_resources.filter(media_type='drawing', is_public=True) if media_file_exists(d.img_url)]
         lesson_drawings = legacy_lesson + shared_lesson
 
         if self.commandment:
             commandment_drawings = self.commandment.drawings()
             return lesson_drawings + list(commandment_drawings)
-        return lesson_drawings
+        if lesson_drawings:
+            return lesson_drawings
+        legacy_fallback = [d for d in self.lessondrawing_set.all() if d.is_public]
+        if legacy_fallback:
+            return legacy_fallback
+        return list(self.shared_media_resources.filter(media_type='drawing', is_public=True))
 
 
     def songs(self):

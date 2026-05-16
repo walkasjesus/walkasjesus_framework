@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import translation
 
+from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models.commandment_categories import CommandmentCategories
 
 
@@ -90,9 +91,15 @@ class Commandment(models.Model):
     def drawings(self):
         # This is actually faster than filter in in the query,
         # as prefetch_related can be used if we do all() instead of filter()
-        legacy = [d for d in self.drawing_set.all() if d.is_public]
+        legacy = [d for d in self.drawing_set.all() if d.is_public and media_file_exists(d.img_url)]
         if legacy:
             return legacy
+        shared = [d for d in self.shared_media_resources.filter(media_type='drawing', is_public=True) if media_file_exists(d.img_url)]
+        if shared:
+            return shared
+        legacy_fallback = [d for d in self.drawing_set.all() if d.is_public]
+        if legacy_fallback:
+            return legacy_fallback
         return list(self.shared_media_resources.filter(media_type='drawing', is_public=True))
 
     def songs(self):

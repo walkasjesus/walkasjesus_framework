@@ -25,7 +25,7 @@
 </script>
 {% endblock %}
 {% block content %}
-{% cache cache_timeout commandments_detail cache_on_bible commandment.id %}
+{% cache cache_timeout commandments_detail cache_on_bible cache_on_kids_mode commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         <li targetaudience="adults">
@@ -362,7 +362,7 @@
                 </div>
             </div>
             {% endcache %}
-            {% cache cache_timeout commandments_detail_media cache_on_multi_language commandment.id %}
+            {% cache cache_timeout commandments_detail_media cache_on_multi_language cache_on_kids_mode commandment.id %}
             {% if commandment.quote %}
             <div class="container">
                 <div class="row justify-content-center">

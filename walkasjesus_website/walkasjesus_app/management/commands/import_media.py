@@ -91,21 +91,34 @@ class Command(BaseCommand):
             lesson=lesson,
             media_type=media_type,
             title=row.get('media_title', ''),
-            description=row.get('media_description_en', ''),
             target_audience=(row.get('media_target_audience', 'any') or 'any'),
             language=(row.get('media_lang', 'en') or 'en'),
             img_url=row.get('media_img_url', ''),
             url=row.get('media_url', ''),
             author=row.get('media_author', ''),
         )
+        defaults = {
+            'description': row.get('media_description_en', ''),
+            'is_public': str(row.get('media_public', '')).strip().lower() == 'yes',
+        }
+
         queryset = LawOfMessiahDrawing.objects.filter(**lookup).order_by('id')
-        if queryset.exists():
+        existing = list(queryset[:2])
+        if len(existing) > 1:
+            queryset.exclude(id=existing[0].id).delete()
+
+        if existing:
+            media = existing[0]
+            updated = False
+            for field, value in defaults.items():
+                if getattr(media, field) != value:
+                    setattr(media, field, value)
+                    updated = True
+            if updated:
+                media.save(update_fields=list(defaults.keys()))
             return False
 
-        LawOfMessiahDrawing.objects.create(
-            **lookup,
-            is_public=str(row.get('media_public', '')).strip().lower() == 'yes',
-        )
+        LawOfMessiahDrawing.objects.create(**lookup, **defaults)
         return True
 
     def _dedupe_shared_media(self):

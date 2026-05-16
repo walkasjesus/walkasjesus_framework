@@ -1,11 +1,10 @@
 from django.conf.global_settings import LANGUAGES
 from django.db import models
-from sorl.thumbnail import get_thumbnail
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
 from django.utils.translation import gettext_lazy
+from walkasjesus_app.media_image_utils import resolved_media_url, thumbnail_url_or_placeholder
 from .law_of_messiah import LawOfMessiah
-from walkasjesus_website.settings import MEDIA_URL
 
 
 class LawOfMessiahMedia(models.Model):
@@ -103,17 +102,10 @@ class LawOfMessiahDrawing(LawOfMessiahMedia):
     """Drawing media for Law of Messiah items."""
 
     def thumbnail_url(self):
-        image_source_path = (self.img_url or '').strip()
-        # The thumbnail storage is rooted at MEDIA_ROOT, so normalize to a path relative to it.
-        if image_source_path.startswith(MEDIA_URL):
-            image_source_path = image_source_path[len(MEDIA_URL):]
-        if image_source_path.startswith('/'):
-            image_source_path = image_source_path[1:]
-        if image_source_path.startswith('media/'):
-            image_source_path = image_source_path[len('media/'):]
+        return thumbnail_url_or_placeholder(self.img_url)
 
-        thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
-        return thumbnail.url
+    def resolved_img_url(self):
+        return resolved_media_url(self.img_url) or self.img_url
 
 
 class MediaResource(LawOfMessiahDrawing):

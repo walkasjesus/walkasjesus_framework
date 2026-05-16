@@ -93,7 +93,10 @@ class DetailView(View):
                 }
                 mapped_related_laws = [related_law_map[item_id] for item_id in related_ids if item_id in related_law_map]
 
-        shared_media_by_type = _collect_shared_media_by_type(commandment=commandment)
+        shared_media_by_type = _filter_grouped_media_by_audience(
+            _collect_shared_media_by_type(commandment=commandment),
+            _allowed_target_audiences(request),
+        )
         _apply_shared_media_to_commandment_display(commandment, shared_media_by_type)
 
         return render(
@@ -118,7 +121,10 @@ class DetailLessonView(View):
             selected_bible.copyright = cached_copyright
         lesson.bible = selected_bible
         lesson.languages = UserPreferences(request.session).languages
-        shared_media_by_type = _collect_shared_media_by_type(commandment=lesson.commandment, lesson=lesson)
+        shared_media_by_type = _filter_grouped_media_by_audience(
+            _collect_shared_media_by_type(commandment=lesson.commandment, lesson=lesson),
+            _allowed_target_audiences(request),
+        )
         _apply_shared_media_to_lesson_display(lesson, shared_media_by_type)
 
         return render(request, 'lessons/detail.html', {
@@ -130,6 +136,28 @@ class DetailLessonView(View):
 
 def _shared_media_types():
     return [choice[0] for choice in LawOfMessiahDrawing.MEDIA_TYPE_CHOICES]
+
+
+def _allowed_target_audiences(request):
+    if request.COOKIES.get('jc_kids_mode'):
+        return {'any'}
+    return {'any', 'adults'}
+
+
+def _media_target_audience(item):
+    if isinstance(item, dict):
+        return item.get('target_audience') or 'any'
+    return getattr(item, 'target_audience', 'any') or 'any'
+
+
+def _filter_grouped_media_by_audience(grouped, allowed_target_audiences):
+    return {
+        media_type: [
+            item for item in items
+            if _media_target_audience(item) in allowed_target_audiences
+        ]
+        for media_type, items in grouped.items()
+    }
 
 
 def _collect_shared_media_by_type(commandment=None, lesson=None):

@@ -25,7 +25,7 @@
 </script>
 {% endblock %}
 {% block content %}
-{% cache cache_timeout lessons_detail cache_on_bible lesson.id %}
+{% cache cache_timeout lessons_detail cache_on_bible cache_on_kids_mode lesson.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         {% if lesson.direct_bible_references %}
@@ -208,7 +208,7 @@
             {% endif %}
 
             {% endcache %}
-            {% cache cache_timeout lessons_detail_media cache_on_multi_language lesson.id %}
+            {% cache cache_timeout lessons_detail_media cache_on_multi_language cache_on_kids_mode lesson.id %}
 
             {% if lesson.superbooks %}
             <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">

@@ -96,7 +96,7 @@ class Command(BaseCommand):
                 if not img_url and not url:
                     continue
 
-                _, created = LawOfMessiahDrawing.objects.get_or_create(
+                existing_media = LawOfMessiahDrawing.objects.filter(
                     law_of_messiah=law,
                     commandment=step,
                     media_type=media_type,
@@ -107,11 +107,36 @@ class Command(BaseCommand):
                     img_url=img_url,
                     url=url,
                     author=item.author or '',
-                    defaults={
-                        'is_public': item.is_public,
-                    },
                 )
-                if created:
+
+                existing_primary = existing_media.order_by('pk').first()
+                duplicate_count = existing_media.count()
+                if duplicate_count > 1:
+                    existing_media.exclude(pk=existing_primary.pk).delete()
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"  ! Removed {duplicate_count - 1} duplicate media items for Step {step.id} and Law {law.id}"
+                        )
+                    )
+
+                if existing_primary:
+                    if existing_primary.is_public != item.is_public:
+                        existing_primary.is_public = item.is_public
+                        existing_primary.save(update_fields=['is_public'])
+                else:
+                    LawOfMessiahDrawing.objects.create(
+                        law_of_messiah=law,
+                        commandment=step,
+                        media_type=media_type,
+                        title=item.title or '',
+                        description=item.description or '',
+                        target_audience=item.target_audience,
+                        language=item.language,
+                        img_url=img_url,
+                        url=url,
+                        author=item.author or '',
+                        is_public=item.is_public,
+                    )
                     synced += 1
 
         if synced:

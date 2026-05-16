@@ -117,7 +117,17 @@
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav">
             <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
-	      <li class="nav-item d-lg-none nav-item-mobile-utility"><a href="javascript:void(0);" class="nav-link nav-link-mobile-utility" data-toggle="modal" data-target="#changeLanguageModal"><span>{% trans 'Change language / Bible' %}</span></a></li>
+	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
+        <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
+	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>
+            <li class="nav-item kids-mode-hide" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
+            {% if user.is_superuser or user.is_staff %}
+            <li class="nav-item kids-mode-hide"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
+            {% endif %}
+            {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
+            <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>Wettiscisme?!</span></a></li>
+            {% endif %}
+            <li class="nav-item d-lg-none nav-item-mobile-utility"><a href="javascript:void(0);" class="nav-link nav-link-mobile-utility" data-toggle="modal" data-target="#changeLanguageModal"><span>{% trans 'Change language / Bible' %}</span></a></li>
 	      <li class="nav-item d-lg-none nav-item-mobile-utility nav-item-mobile-kids">
               <div class="nav-link nav-link-mobile-utility nav-link-mobile-kids-toggle">
                 <span>{% trans 'Children site' %}</span>
@@ -129,16 +139,6 @@
                 </div>
               </div>
             </li>
-	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
-        <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
-	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>
-            <li class="nav-item kids-mode-hide" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
-            {% if user.is_superuser or user.is_staff %}
-            <li class="nav-item kids-mode-hide"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
-            {% endif %}
-            {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-            <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>Wettiscisme?!</span></a></li>
-            {% endif %}
           </ul>
         </div>
       </div>

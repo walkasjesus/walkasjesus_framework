@@ -1,3 +1,4 @@
+import os
 """
 Django settings for walkasjesus_website project.
 These settings are fixed settings that are not server dependent.
@@ -231,6 +232,9 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 BIBLE_API_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
 # 6 months default for commentary cache (translations + frontend commentary cache)
 COMMENTARY_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
+# Commentary endpoint defaults to BijbelAPI and supports optional x-api-key auth.
+COMMENTARY_API_URL = os.getenv('COMMENTARY_API_URL', 'https://www.bijbelapi.com/api/commentary')
+BIJBEL_API_KEY = os.getenv('BIJBEL_API_KEY', '')
 # Verse count above which passages are manual "Click to retrieve"
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)

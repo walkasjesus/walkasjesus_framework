@@ -275,7 +275,7 @@ class CommentaryTranslationView(View):
 
 
 class ScripturaCommentaryProxyView(View):
-    """Proxy Scriptura API calls through Django to avoid browser CORS issues."""
+    """Proxy BijbelAPI commentary calls through Django to avoid browser CORS issues."""
 
     def get(self, request):
         source = str(request.GET.get('source', '')).strip()
@@ -284,17 +284,23 @@ class ScripturaCommentaryProxyView(View):
         verse = str(request.GET.get('verse', '')).strip()
 
         if not source or not book or not chapter:
-            return JsonResponse({'error': gettext('Missing Scriptura parameters')}, status=400)
+            return JsonResponse({'error': gettext('Missing commentary parameters')}, status=400)
+
+        headers = {}
+        bijbel_api_key = str(getattr(settings, 'BIJBEL_API_KEY', '')).strip()
+        if bijbel_api_key:
+            headers['x-api-key'] = bijbel_api_key
 
         try:
             response = requests.get(
-                'https://www.scriptura-api.com/api/commentary',
+                str(getattr(settings, 'COMMENTARY_API_URL', 'https://www.bijbelapi.com/api/commentary')).strip(),
                 params={
                     'source': source,
                     'book': book,
                     'chapter': chapter,
                     'verse': verse,
                 },
+                headers=headers,
                 timeout=20,
             )
             response.raise_for_status()

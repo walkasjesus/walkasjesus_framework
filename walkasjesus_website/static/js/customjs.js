@@ -164,8 +164,8 @@ $(document).ready(function(){
         nl: 'Commentaar laden...'
       },
       no_commentary_scriptura_chapter: {
-        en: 'No commentary found for this chapter on Scriptura API.',
-        nl: 'Geen commentaar gevonden voor dit hoofdstuk op Scriptura API.'
+        en: 'No commentary found for this chapter on BijbelAPI.',
+        nl: 'Geen commentaar gevonden voor dit hoofdstuk op BijbelAPI.'
       },
       no_exact_scriptura_verse: {
         en: 'No exact commentary was found for verse {verse}. Choose an available entry from this chapter.',
@@ -176,8 +176,8 @@ $(document).ready(function(){
         nl: 'Kies een beschikbare toelichting:'
       },
       could_not_load_scriptura: {
-        en: 'Could not load commentary from Scriptura API.',
-        nl: 'Kon commentaar van Scriptura API niet laden.'
+        en: 'Could not load commentary from BijbelAPI.',
+        nl: 'Kon commentaar van BijbelAPI niet laden.'
       },
       select_commentator: {
         en: 'Select a commentator:',
@@ -607,7 +607,8 @@ $(document).ready(function(){
       if (getCommentaryLanguage() === 'nl') {
         return ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry'];
       }
-      return ['matthew-henry', 'matthew_henry'];
+      // English is not available as a separate source on BijbelAPI
+      // return ['matthew_henry_en', 'matthew-henry-en', 'matthew-henry', 'matthew_henry'];
     }
 
     function getScripturaEndpoints() {
@@ -615,7 +616,7 @@ $(document).ready(function(){
       if (proxyUrl) {
         return [proxyUrl];
       }
-      return ['https://www.scriptura-api.com/api/commentary', 'https://scriptura-api.com/api/commentary'];
+      return ['https://www.bijbelapi.com/api/commentary', 'https://bijbelapi.com/api/commentary'];
     }
 
     function escapeScripturaParam(value) {
@@ -691,7 +692,7 @@ $(document).ready(function(){
         '<div class="sefaria-commentary-content">' +
         '<strong>' + sourceLabel + ' · ' + titleLabel + '</strong>' +
         '<div class="sefaria-commentary-body mt-1">' + displayHtml + '</div>' +
-        '<p class="sefaria-attribution">Commentary provided by <a href="https://www.scriptura-api.com/" target="_blank" rel="noopener noreferrer">Scriptura API</a> · <a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a></p>' +
+        '<p class="sefaria-attribution">Commentary provided by <a href="https://www.bijbelapi.com/" target="_blank" rel="noopener noreferrer">BijbelAPI</a> · <a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a></p>' +
         '</div>'
       );
     }
@@ -790,7 +791,7 @@ $(document).ready(function(){
           var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
           renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, scripturaEndpoint);
         }, function() {
-          console.log('[Scriptura] Commentary request failed for all configured hosts/sources');
+          console.log('[BijbelAPI] Commentary request failed for all configured hosts/sources');
           $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
         });
     });

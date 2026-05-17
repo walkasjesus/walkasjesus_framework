@@ -1,3 +1,6 @@
+import json
+from unittest.mock import Mock, patch
+
 from bible_lib import BibleBooks
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase
@@ -14,6 +17,7 @@ from walkasjesus_app.views.detail_view import (
     _filter_grouped_media_by_audience,
     _lesson_allowed_target_audiences,
 )
+from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView
 
 
 class BibleTranslationTestCase(TestCase):
@@ -230,3 +234,85 @@ class SharedMediaDeduplicationTestCase(TestCase):
 
         self.assertEqual(len(songs), 1)
         self.assertEqual(songs[0].title, 'Create in me a clean heart')
+
+
+class CommentaryProxyViewTestCase(SimpleTestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_missing_required_params_returns_400(self):
+        request = self.factory.get('/commentary-scriptura/', {'book': 'John'})
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('error', json.loads(response.content.decode('utf-8')))
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_proxy_calls_configured_bijbelapi_endpoint(self, mock_get):
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {'16': 'For God so loved the world'}
+        mock_get.return_value = mock_response
+
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {
+                'source': 'matthew-henry',
+                'book': 'John',
+                'chapter': '3',
+                'verse': '16',
+            },
+        )
+
+        with self.settings(
+            COMMENTARY_API_URL='https://www.bijbelapi.com/api/commentary',
+            BIJBEL_API_KEY='test-key',
+        ):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), {'16': 'For God so loved the world'})
+        mock_get.assert_called_once_with(
+            'https://www.bijbelapi.com/api/commentary',
+            params={
+                'source': 'matthew-henry',
+                'book': 'John',
+                'chapter': '3',
+                'verse': '16',
+            },
+            headers={'x-api-key': 'test-key'},
+            timeout=20,
+        )
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_proxy_omits_api_key_header_when_not_configured(self, mock_get):
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {'0': 'intro'}
+        mock_get.return_value = mock_response
+
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'matthew-henry', 'book': 'John', 'chapter': '3'},
+        )
+
+        with self.settings(BIJBEL_API_KEY=''):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        mock_get.assert_called_once()
+        self.assertEqual(mock_get.call_args.kwargs['headers'], {})
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_upstream_error_returns_502(self, mock_get):
+        mock_get.side_effect = Exception('upstream failed')
+
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'matthew-henry', 'book': 'John', 'chapter': '3'},
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 502)
+        self.assertIn('error', json.loads(response.content.decode('utf-8')))

@@ -19,23 +19,24 @@ _This will initialize a first database structure with all required tables, or up
 
 `./walkasjesus_website/update_database.sh`
 
-3. Import all commandments into the database  
-_This will import the following commandments CSV into the database:_  
+3. Import all steps, law of Messiah, Lessons and Media resources into the database  
+_This will import the following repositories into the database:_  
 
-* [walkasjesus_biblereferences](https://github.com/walkasjesus/walkasjesus_biblereferences)
+`./walkasjesus_website/IMPORT.sh`
+
+* [walkasjesus_biblereferences](https://github.com/walkasjesus/walkasjesus_biblereferences/commandments.csv)
   _Repository for the Walk as Jesus Framework where all the commandments with all their related Bible References are stored in a CSV_  
-
-`./walkasjesus_website/import_commandments.sh`  
-
-4. Import all media resources into the database  
-_This will import the following media CSV into the database:_  
 
 * [walkasjesus_media](https://github.com/walkasjesus/walkasjesus_media)
   _Repository for the Walk as Jesus Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
 
-`./walkasjesus_website/import_media.sh`  
+* [walkasjesus_lessons](https://github.com/walkasjesus/walkasjesus_biblereferences/lessons.csv)
+  _Repository for the Walk as Jesus Framework where all the lessons are stored in a CSV_
 
-5. Create admin user  
+* [lawofmessiah](https://github.com/walkasjesus/LawofMessiah/collected_ids_titles.yaml)
+  _Digitalized version for all Law of Messiah commandments from the book 'Torah from a New Covenant Perspective* by Michael Rudolph and Daniel C. Juster'_
+
+4. Create admin user  
 _This will create an admin user_  
 
 Copy an example file to create the admin user:
@@ -47,33 +48,12 @@ Then you need to configure your admin credentials in this file:
 Now run the script to create the admin in the database:   
 `./walkasjesus_website/create_admin_user.sh`  
 
-6. Run the server
+5. Run the server
 _This will run the server on your local machine on port 8000_  
 
 `./walkasjesus_website/run_server.sh`
 
-7. You can visit http://localhost:8000 to see the website on your local machine
-
-8. Export all commandments into the CSV  
-_This will export all commandments from the current database into the CSV:_  
-
-* [walkasjesus_biblereferences](https://github.com/walkasjesus/walkasjesus_biblereferences)
-  _Repository for the Walk as Jesus Framework where all the commandments with all their related Bible References are stored in a CSV_  
-
-`./walkasjesus_website/export_commandments.sh`  
-
-9. Export all media resources into the CSV  
-_This will export all media resources from the database into the CSV:_  
-
-* [walkasjesus_media](https://github.com/walkasjesus/walkasjesus_media)
-  _Repository for the Walk as Jesus Framework where all the resources (movies, songs, blogs, sermons, testimonies, etc) in all languages are stored in a CSV_  
-
-`./walkasjesus_website/export_media.sh`  
-
-9. Export all media lessons into the CSV  
-_This will export all media lessons from the database into the CSV:_  
-
-`./walkasjesus_website/export_media_lessons.sh`
+6. You can visit http://localhost:8000 to see the website on your local machine
 
 ## Development instructions
 
@@ -134,3 +114,7 @@ Repository for the [Walk as Jesus Framework](https://github.com/walkasjesus/walk
 ### walkasjesus_translations
 
 This repository contains all translation files from English to other languages. We use Google translate to make a first automated translation. The next step for the translator is to review all translated items and acknowledge them through the admin panel of the website.
+
+### LawofMessiah
+
+This repository contains the structured content and scripts for processing the commandments (*mitzvot*) derived from the Bible, as presented in the book series *The Law of Messiah - Torah from a New Covenant Perspective* by Michael Rudolph and Daniel C. Juster. The goal of this project is to make the commandments more accessible by organizing them into structured formats (e.g., YAML) and providing tools for filtering, searching, and studying them.

@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title_content %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block meta_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block og_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block og_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block twitter_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
+{% block twitter_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "{% trans 'Overview of all Laws of Messiah' %}",
+    "description": "Explore biblical commandments and mitzvot in the Law of Messiah.",
+    "url": "{{ request.build_absolute_uri }}",
+    "mainEntity": {
+        "@type": "ItemList",
+        "name": "Law of Messiah commandments",
+        "numberOfItems": {{ seo_law_index|length }},
+        "itemListElement": [
+            {% for item in seo_law_index %}
+            {
+                "@type": "ListItem",
+                "position": {{ forloop.counter }},
+                "url": "{{ request.scheme }}://{{ request.get_host }}{{ item.url }}",
+                "name": "{{ item.id|escapejs }} - {{ item.title|escapejs }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="ftco-section bg-light" id="law-of-messiah-section">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">{% trans 'Law of Messiah' %}</span>
+                    <h2 class="mb-4">{% trans 'Overview of all Laws of Messiah' %}</h2>
+                    <p>{% blocktrans %}This page presents the structured commandments (mitzvot) derived from the Bible, as documented in <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster. The goal here is to help groups continue after the 77 steps by filtering and applying these commandments in daily discipleship, reflection, and obedience.{% endblocktrans %}</p>
+                    <p>
+                        {% blocktrans %}Source material: <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}
+                        <br>
+                        <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">{% trans 'Volume 1 & 2' %}</a> |
+                        <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">{% trans 'Volume 3' %}</a>
+                    </p>
+                    <p><small>{% blocktrans %}License notice: content is shared under CC BY-ND 4.0. Attribution is required and modified derivatives of the original material may not be distributed.{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
+                </div>
+            </div>
+            <div class="row justify-content-center pb-4">
+                <div class="col-md-12">
+                    <div class="our-services-wrapper">
+                        <div class="services-inner">
+                            <div class="our-services-text">
+                                <h4>{% trans 'Filter commandments that apply to you' %}</h4>
+                                <form method="get" class="law-filter-form">
+                                    <!-- Search Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <label for="filter-q" class="form-label">{% trans 'Search' %}</label>
+                                            <input id="filter-q" type="text" name="q" value="{{ selected_q }}" class="form-control" placeholder="{% trans 'ID, title, or commandment text' %}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Category & Source Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-source" class="form-label">{% trans 'Testament' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-source" name="source_dataset" class="form-control law-filter-select">
+                                                    <option value="">{% trans 'All' %}</option>
+                                                    <option value="ot"{% if selected_source_dataset == 'ot' %} selected{% endif %}>{% trans 'Old Testament' %}</option>
+                                                    <option value="nt"{% if selected_source_dataset == 'nt' %} selected{% endif %}>{% trans 'New Testament' %}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-category" class="form-label">{% trans 'Category' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-category" name="category" class="form-control law-filter-select">
+                                                    <option value="">{% trans 'All' %}</option>
+                                                    {% for option in category_options %}
+                                                        <option value="{{ option.value }}"{% if selected_category == option.value %} selected{% endif %}>{{ option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-classical" class="form-label">{% trans 'Classical commandment' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-classical" name="classical_commandment" class="form-control law-filter-select">
+                                                    <option value=""{% if selected_classical_commandment == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                    <option value="true"{% if selected_classical_commandment == 'true' %} selected{% endif %}>{% trans 'Classical only' %}</option>
+                                                    <option value="false"{% if selected_classical_commandment == 'false' %} selected{% endif %}>{% trans 'Non-classical only' %}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Core scope defaults -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-unique" class="form-label">{% trans 'Unique' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-unique" name="is_unique" class="form-control law-filter-select">
+                                                    <option value="true"{% if selected_is_unique == 'true' %} selected{% endif %}>{% trans 'Unique only' %}</option>
+                                                    <option value="false"{% if selected_is_unique == 'false' %} selected{% endif %}>{% trans 'Non-unique only' %}</option>
+                                                    <option value=""{% if selected_is_unique == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-type" class="form-label">{% trans 'Positive / negative' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
+                                                    <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans 'Positive only' %}</option>
+                                                    <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans 'Negative only' %}</option>
+                                                    <option value="both"{% if selected_commandment_type == 'both' %} selected{% endif %}>{% trans 'Positive & negative only' %}</option>
+                                                    <option value=""{% if selected_commandment_type == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-illustration" class="form-label">{% trans 'Illustration' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-illustration" name="illustration" class="form-control law-filter-select">
+                                                    <option value=""{% if selected_illustration == '' %} selected{% endif %}>{% trans 'All' %}</option>
+                                                    <option value="true"{% if selected_illustration == 'true' %} selected{% endif %}>true</option>
+                                                    <option value="false"{% if selected_illustration == 'false' %} selected{% endif %}>false</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Applicability Filters Row -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-person" class="form-label">{% trans 'Applies to (person)' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-person" name="ncla_person" class="form-control law-filter-select">
+                                                    {% for value, label in ncla_person_options %}
+                                                        <option value="{{ value }}"{% if selected_ncla_person == value %} selected{% endif %}>{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-application" class="form-label">{% trans 'Application' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-application" name="ncla_application" class="form-control law-filter-select">
+                                                    {% for value, label in ncla_application_options %}
+                                                        <option value="{{ value }}"{% if selected_ncla_application == value %} selected{% endif %}>{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {% if ncla_group_options %}
+                                        <div class="col-md-4">
+                                            <label for="filter-ncla-group" class="form-label">{% trans 'Context / situation' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-ncla-group" name="ncla_group" class="form-control law-filter-select">
+                                                    <option value="">{% trans 'Any context' %}</option>
+                                                    {% for option in ncla_group_options %}
+                                                        <option value="{{ option }}"{% if selected_ncla_group == option %} selected{% endif %}>{{ option }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Action Row -->
+                                    <div class="row mb-3 align-items-center law-filter-action-row">
+                                        <div class="col-auto mb-2 mb-md-0">
+                                            <button type="submit" class="btn law-filter-button law-filter-cta">{% trans 'Apply Filter' %}</button>
+                                        </div>
+                                        <div class="col-auto ml-md-auto mb-2 mb-md-0 law-filter-legend-wrap">
+                                            <button class="btn law-filter-legend-toggle law-filter-legend-btn" type="button" data-toggle="collapse" data-target="#filter-legend" aria-expanded="false" aria-controls="filter-legend">
+                                        <span class="ion-ios-information-circle-outline mr-1"></span> {% trans 'Legend — what do the icons and filters mean?' %} <span class="ion-ios-arrow-down ml-1"></span>
+                                    </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <!-- Legend toggle -->
+                                <div class="mb-3">
+                                    <div class="collapse" id="filter-legend">
+                                        <div class="card card-body bg-light border-0">
+
+                                            <div class="row">
+                                                <!-- Person icons -->
+                                                <div class="col-md-4 mb-3">
+                                                    <h6 class="font-weight-bold">{% trans 'Person icons' %}</h6>
+                                                    <p class="small text-muted mb-2">{% trans 'These icons on each card show which group(s) this commandment applies to.' %}</p>
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <img src="{% static 'images/s_jew.png' %}" alt="Jewish" class="lom-person-icon mr-2" style="width:28px;">
+                                                        <div>
+                                                            <strong>{% trans 'Jewish' %}</strong><br>
+                                                            <small class="text-muted">{% trans 'Born into the Jewish people (biological or formal conversion). This commandment originates directly from Torah.' %}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <img src="{% static 'images/s_messianic.png' %}" alt="K'rov Yisrael" class="lom-person-icon mr-2" style="width:28px;">
+                                                        <div>
+                                                            <strong>{% trans "K'rov Yisrael" %}</strong><br>
+                                                            <small class="text-muted">{% trans "Literally 'near to Israel' — non-Jewish believers who are deeply grafted into the Messianic Jewish community and choose to embrace a Torah-informed lifestyle." %}</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <img src="{% static 'images/s_gentile.png' %}" alt="Gentile" class="lom-person-icon mr-2" style="width:28px;">
+                                                        <div>
+                                                            <strong>{% trans 'Gentile' %}</strong><br>
+                                                            <small class="text-muted">{% trans 'Non-Jewish followers of Messiah. Commandments marked here are considered universally applicable to all believers.' %}</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Application levels -->
+                                                <div class="col-md-4 mb-3">
+                                                    <h6 class="font-weight-bold">{% trans 'Application levels' %}</h6>
+                                                    <p class="small text-muted mb-2">{% trans 'The "Application" filter sets how strongly the commandment applies to the selected person group.' %}</p>
+                                                    <div class="mb-1"><span class="badge badge-danger mr-2">{% trans 'Mandated' %}</span> <small class="text-muted">{% trans 'Required — clear Biblical obligation.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-warning mr-2">{% trans 'Recommended' %}</span> <small class="text-muted">{% trans 'Strongly encouraged, but not strictly required.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-info mr-2">{% trans 'Optional' %}</span> <small class="text-muted">{% trans 'Permitted and valued, left to personal conviction.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-light mr-2">{% trans 'Not generally recommended' %}</span> <small class="text-muted">{% trans 'Normally discouraged, though not categorically forbidden.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-dark mr-2">{% trans 'Unauthorized' %}</span> <small class="text-muted">{% trans 'Not permitted under the current covenant context.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-secondary mr-2">{% trans 'Prohibited' %}</span> <small class="text-muted">{% trans 'Explicitly forbidden for this person group.' %}</small></div>
+                                                    <div class="mb-1"><span class="badge badge-secondary mr-2">{% trans 'Impossible' %}</span> <small class="text-muted">{% trans 'Cannot currently be carried out (for example due to missing Temple/priesthood conditions).' %}</small></div>
+                                                </div>
+
+                                                <!-- Other filters -->
+                                                <div class="col-md-4 mb-3">
+                                                    <h6 class="font-weight-bold">{% trans 'Other filters' %}</h6>
+                                                    <dl class="small">
+                                                        <dt>{% trans 'Testament' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Limit to commandments whose primary source is from the Old or New Testament.' %}</dd>
+                                                        <dt>{% trans 'Category' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Broad topic group (e.g. Worship, Justice, Family). Useful for thematic study.' %}</dd>
+                                                        <dt>{% trans 'Classical commandment' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Classical commandments are the 613 Torah commandments as categorised by Maimonides. Non-classical ones are additions identified from a New Covenant perspective.' %}</dd>
+                                                        <dt>{% trans 'Unique' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Unique shows one canonical representative commandment from a duplicate cluster. Be aware that this was not determined by the original authors.' %}</dd>
+                                                        <dt>{% trans 'Positive / negative' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Choose whether to show positive commands, negative prohibitions, both-type entries, or all.' %}</dd>
+                                                        <dt>{% trans 'Illustration' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Filter commandments by whether they have a visible illustration image.' %}</dd>
+                                                        <dt>{% trans 'Context / situation' %}</dt>
+                                                        <dd class="text-muted">{% trans 'Narrows results to commandments relevant in a specific life context (e.g. Temple, Marriage, Community).' %}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Results Summary -->
+                                <p class="law-filter-summary"><strong>{{ laws_count }}</strong> {% trans 'commandments match your current filter.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% if laws %}
+                    {% for law in laws %}
+                        {% include "law_of_messiah/single_law_of_messiah_overview.html" %}
+                    {% endfor %}
+                {% else %}
+                    <p>{% trans 'No Law of Messiah records are available.' %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

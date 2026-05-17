@@ -103,8 +103,7 @@ class QueryBuilder:
 
         # For some reason not all bibles on the bible api follow the same index convention,
         # This is a list of bibles that use a different index for specific books.
-        bibles_following_alternative_daniel_key = ['de4e12af7f28f599-01',
-                                                   '9879dbb7cfe39e4d-01',
+        bibles_following_alternative_daniel_key = ['9879dbb7cfe39e4d-01',
                                                    '9879dbb7cfe39e4d-02',
                                                    '9879dbb7cfe39e4d-03',
                                                    '7142879509583d59-01',

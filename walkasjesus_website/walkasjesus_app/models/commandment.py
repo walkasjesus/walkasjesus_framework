@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import translation
 
-from walkasjesus_app.models import CommandmentCategories
+from walkasjesus_app.media_image_utils import media_file_exists
+from walkasjesus_app.models.commandment_categories import CommandmentCategories
 
 
 class CommandmentManager(models.Manager):
@@ -18,14 +19,21 @@ class CommandmentManager(models.Manager):
 class Commandment(models.Model):
     title = models.CharField(max_length=256)
     title_negative = models.CharField(max_length=256, default='', blank=True)
-    category = models.CharField(max_length=64,
-                                choices=[(tag.name, tag.value) for tag in CommandmentCategories],
-                                default=CommandmentCategories.firstcommandment)
+    category = models.CharField(max_length=256, default='', blank=True)
     quote = models.TextField(default='', blank=True, null=True)
     quote_source = models.CharField(max_length=256, default='', blank=True, null=True)
     bible = None
     languages = [translation.get_language()]
     objects = CommandmentManager()
+
+    def get_category_display(self):
+        try:
+            return CommandmentCategories[self.category].value
+        except KeyError:
+            try:
+                return CommandmentCategories(self.category).value
+            except ValueError:
+                return self.category
 
     def primary_bible_reference(self):
         """ Primary references is the first found unique reference according to the words of Jesus,
@@ -83,7 +91,16 @@ class Commandment(models.Model):
     def drawings(self):
         # This is actually faster than filter in in the query,
         # as prefetch_related can be used if we do all() instead of filter()
-        return [d for d in self.drawing_set.all() if d.is_public]
+        legacy = [d for d in self.drawing_set.all() if d.is_public and media_file_exists(d.img_url)]
+        if legacy:
+            return legacy
+        shared = [d for d in self.shared_media_resources.filter(media_type='drawing', is_public=True) if media_file_exists(d.img_url)]
+        if shared:
+            return shared
+        legacy_fallback = [d for d in self.drawing_set.all() if d.is_public]
+        if legacy_fallback:
+            return legacy_fallback
+        return list(self.shared_media_resources.filter(media_type='drawing', is_public=True))
 
     def songs(self):
         return self._filter_on_language(self.song_set)
@@ -133,5 +150,12 @@ class Commandment(models.Model):
         [ref.set_bible(self.bible) for ref in sorted_query_set]
         return sorted_query_set
 
+    class Meta:
+        verbose_name = 'Step'
+        verbose_name_plural = 'Steps'
+        ordering = ['id']
+
     def __str__(self):
-        return self.title
+        if self.title:
+            return f'{self.id} - {self.title}'
+        return str(self.id)

@@ -8,8 +8,11 @@ if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 
 	source ./venv/bin/activate
+elif [[ -f ../venv/bin/activate ]]; then
+	source ../venv/bin/activate
 else
 	echo "ERROR: cannot find environment binary"
+	exit 1
 fi
 
 # If Linux based servers. This is the preferred Operating System.
@@ -24,8 +27,11 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	#python3 manage.py makemessages -l fr --ignore=venv | tee -a ${log}
 	#python3 manage.py makemessages -l de --ignore=venv | tee -a ${log}
 
+	echo "Auto translating new untranslated Dutch entries while keeping existing translations intact." | tee -a ${log}
+	python3 manage.py auto_translate | tee -a ${log}
+
 	echo "Compiling the .po files. Run this also after changing the .po files." | tee -a ${log}
-	django-admin compilemessages | tee -a ${log}
+	python3 -m django compilemessages -l nl -i venv | tee -a ${log}
 
 	end=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "INFO: ${end} - Ended translating files" | tee -a ${log}
@@ -38,8 +44,11 @@ else
 	#python3 manage.py makemessages -l fr --ignore=venv
 	#python3 manage.py makemessages -l de --ignore=venv
 
+	echo "Auto translating new untranslated Dutch entries while keeping existing translations intact."
+	python3 manage.py auto_translate
+
 	echo "Compiling the .po files. Run this also after changing the .po files."
-	django-admin compilemessages
+	python3 -m django compilemessages -l nl -i venv
 
 	echo "INFO: Ended translating files"
 fi

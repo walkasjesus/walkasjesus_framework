@@ -1,11 +1,10 @@
 import re
 from django.conf.global_settings import LANGUAGES
 from django.db import models
-from sorl.thumbnail import get_thumbnail
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
+from walkasjesus_app.media_image_utils import resolved_media_url, thumbnail_url_or_placeholder
 from walkasjesus_app.models import Commandment, gettext_lazy
-from walkasjesus_website.settings import MEDIA_URL
 
 
 class Media(models.Model):
@@ -73,13 +72,10 @@ class Drawing(Media):
     pass
 
     def thumbnail_url(self):
-        image_source_path = self.img_url
-        # The thumbnail searches relative to the media directory so remove the leading media directory.
-        if image_source_path.startswith(MEDIA_URL):
-            image_source_path = image_source_path[len(MEDIA_URL):]
+        return thumbnail_url_or_placeholder(self.img_url)
 
-        thumbnail = get_thumbnail(image_source_path, '620x877', quality=85)
-        return thumbnail.url
+    def resolved_img_url(self):
+        return resolved_media_url(self.img_url) or self.img_url
 
 
 class Song(Media):

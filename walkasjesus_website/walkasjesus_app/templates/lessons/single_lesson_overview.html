@@ -16,7 +16,6 @@
                 {% if lesson.commandment %}<img title="{% trans 'Related Step Found' %}" src="{% static 'images/games.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
-                {% if lesson.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
                 <p>
                     <a href="{% url 'commandments:lessondetail' lesson.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> <strong>{% trans 'Lesson' %} {{ lesson.id }} -
                         {% for bible_section in lesson.bible_section %}

@@ -1,9 +1,31 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load media_extras %}
 {% load cache %}
+{% block title_content %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block og_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block og_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block twitter_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
+{% block twitter_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ lesson.title|escapejs }}",
+  "description": "{% if lesson.story %}{{ lesson.story|truncatechars:200|escapejs }}{% else %}Walk as Jesus - Discover the commandments of Jesus Christ.{% endif %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Walk as Jesus",
+    "url": "{{ request.scheme }}://{{ request.get_host }}/"
+  }
+}
+</script>
+{% endblock %}
 {% block content %}
-{% cache cache_timeout lessons_detail cache_on_bible lesson.id %}
+{% cache cache_timeout lessons_detail cache_on_bible cache_on_kids_mode lesson.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         {% if lesson.direct_bible_references %}
@@ -99,30 +121,46 @@
             </div>
         </div>                               
         <div class="row">
-            <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:lesson_verses' lesson.id %}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img commandment_id">
                             <h3>{{ lesson.id }}</h3>
                         </div>
-                        <div id="bible_lesson_details" class="our-services-text">
+                        <div class="our-services-text bible_lesson_details">
                             <h4>{% trans 'Lesson' %} {{ lesson.id }} -
                                 {% for bible_section in lesson.bible_section %}
                                     {{ bible_section.short_name_chapter }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %} - {{ lesson.story }}
                             </h4>
 
+                            {% with primary_ref=lesson.primary_bible_reference %}
                             {% if lesson.commandment %}
                                 <p><i>{% trans "This lesson we will learn the following 'step' which can be learned to the children to remember as truth for their lives" %}</i></p><br>
                                 <b>{% trans 'Related Step text to learn' %}:</b> {{ lesson.title }}<br>
                                 {% if lesson.related_step_description %}
                                 <b>{% trans 'Related Step description' %}:</b> {{ lesson.related_step_description }}<br>
                                 {% endif %}
-                                <b>{% trans 'Related Step Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Related Step Bible text' %}:</b>
+                                {% if primary_ref.is_long_passage %}
+                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Click to retrieve" %} {{ primary_ref.display_reference }}</a>
+                                    <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}" data-verse-manual="1"></span>
+                                {% else %}
+                                    <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                {% endif %}
+                                ({{ primary_ref }})<br>
                             {% else %}
                                 <b>{% trans 'Lesson text to learn' %}:</b> {{ lesson.title }}<br>
-                                <b>{% trans 'Related Bible text' %}:</b> {{ lesson.primary_bible_reference.text }} ({{ lesson.primary_bible_reference }})<br>
+                                <b>{% trans 'Related Bible text' %}:</b>
+                                {% if primary_ref.is_long_passage %}
+                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Click to retrieve" %} {{ primary_ref.display_reference }}</a>
+                                    <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}" data-verse-manual="1"></span>
+                                {% else %}
+                                    <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                {% endif %}
+                                ({{ primary_ref }})<br>
                             {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>
@@ -170,7 +208,7 @@
             {% endif %}
 
             {% endcache %}
-            {% cache cache_timeout lessons_detail_media cache_on_multi_language lesson.id %}
+            {% cache cache_timeout lessons_detail_media cache_on_multi_language cache_on_kids_mode lesson.id %}
 
             {% if lesson.superbooks %}
             <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
@@ -186,7 +224,7 @@
                                     <h5>{{ superbook.author }} - {{ superbook.title }}</h5>
                                     {% if superbook.description %}<p>{{ superbook.description }}</p>{% endif %}
                                     <div class="video-iframe">
-                                        <iframe src="{{ superbook.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                        <iframe src="{{ superbook.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -208,7 +246,7 @@
                                 <h5>{{ henkieshow.title }}</h5>
                                 {% if henkieshow.description %}<p>{{ henkieshow.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ henkieshow.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ henkieshow.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                                 <p><b><a href="{{ henkieshow.img_url }}" target="_blank">{% trans 'Discover more creative methods of this Bible story on The Henkie Show' %}</a></b></p>
                                 <p style="clear: left;"> </p>
@@ -232,7 +270,7 @@
                                 <h5>{{ short_movie.author }} - {{ short_movie.title }}</h5>
                                 {% if short_movie.description %}<p>{{ short_movie.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ short_movie.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ short_movie.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="YouTube video player" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}
@@ -255,7 +293,7 @@
                                 <h5>{{ song.author }} - {{ song.title }}</h5>
                                 {% if song.description %}<p>{{ song.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ song.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ song.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}
@@ -278,7 +316,7 @@
                                 <h5>{{ testimony.author }} - {{ testimony.title }}</h5>
                                 {% if testimony.description %}<p>{{ testimony.description }}</p>{% endif %}
                                 <div class="video-iframe">
-                                    <iframe src="{{ testimony.url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    <iframe src="{{ testimony.url|youtube_captions_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
                                 </div>
                             </div>
                             {% endfor %}
@@ -320,13 +358,13 @@
                             <ul>
                             {% for bible_reference in lesson.direct_bible_references %}
                                 {% if bible_reference.positive_negative == "negative" %}
-                                <li class="negative_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="negative_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% elif bible_reference.positive_negative == "both" %}
-                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% elif bible_reference.positive_negative == "positive" %}
-                                <li class="positive_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="positive_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% else %}
-                                <li class="unknown_list"><b>{{ bible_reference }}</b> {{ bible_reference.text }}</li>
+                                <li class="unknown_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% endif %}
                             {% endfor %}
                             </ul>
@@ -384,11 +422,11 @@
                                     </div>
                                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
+                                        <span class="sr-only">{% trans 'Previous' %}</span>
                                     </a>
                                     <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
+                                        <span class="sr-only">{% trans 'Next' %}</span>
                                     </a>
                                     </div>
                                 </div>

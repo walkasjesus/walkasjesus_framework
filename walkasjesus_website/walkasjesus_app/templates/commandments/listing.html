@@ -2,6 +2,14 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+
+{% block title_content %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block meta_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+{% block og_title %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block og_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+{% block twitter_title %}{% trans '77 Steps to Walk with Jesus (Yeshua) - Commandments for Daily Discipleship' %}{% endblock %}
+{% block twitter_description %}Discover 77 practical steps and commandments of Jesus (Yeshua) to apply in daily life, with Bible references and discipleship resources for personal growth, families, and groups.{% endblock %}
+
 {% block content %}
 {% cache cache_timeout commandments_listing cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
@@ -12,7 +20,7 @@
                     <span class="subheading">{% trans '1 John 2:6' %}</span>
                     <h2 class="mb-4"><span>{% trans 'He who says he abides in Him' %},</span> {% trans 'ought himself also to walk just as He walked' %}</h2>
                     <p>{% blocktrans %}When you have discovered who Jesus is and what He has done, you really want nothing more than to follow Him and dedicate your life to Him. But how do you give hands and feet in following Jesus? We present you 77 unique steps which Jesus taught throughout his ministry which we find in the four gospels. We encourage you to come together with other followers of Jesus and help each other by talking about how you can apply these steps into your life. For each step you will find all kind of related bible verses, movies, songs, illustrations and lots more resources.{% endblocktrans %}</p>
-		    <p><strong>{% trans 'Are you ready to discover the first step?' %}</strong></p>
+		    <p><strong>{% trans 'Are you ready to discover the first step? Remember: First Grace, then Obedience' %}</strong></p>
                 </div>
             </div>
             <div class="row">

@@ -3,9 +3,12 @@
 {% block content %}
 
 <ul>
-    <li><a href="{% url 'account:signup' %}">{% trans 'Signup' %}</a></li>
     <li><a href="{% url 'account:login' %}">{% trans 'Login' %}</a></li>
-    <li><a href="{% url 'account:logout' %}">{% trans 'Logout' %}</a></li>
+    <li>
+      <form method="post" action="{% url 'account:logout' %}" style="display:inline;">{% csrf_token %}
+        <button type="submit" style="background:none;border:none;cursor:pointer;padding:0;">{% trans 'Logout' %}</button>
+      </form>
+    </li>
     <li><a href="{% url 'account:profile' %}">{% trans 'Profile' %}</a></li>
     <li><a href="{% url 'account:change_password' %}">{% trans 'Change password' %}</a></li>
 </ul>

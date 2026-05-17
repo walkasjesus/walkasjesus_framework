@@ -3,19 +3,44 @@ from walkasjesus_app.models import BibleTranslation
 from walkasjesus_website import settings
 
 class UserPreferences:
+    PER_LANGUAGE_BIBLE_SESSION_KEY = 'bible_id_per_language'
+
     def __init__(self, session):
         self.session = session
 
+    def _current_language_code(self):
+        return str(self.language or '').strip().lower()[:2]
+
+    def _stored_bibles_by_language(self):
+        raw_value = self.session.get(self.PER_LANGUAGE_BIBLE_SESSION_KEY, {})
+        if not isinstance(raw_value, dict):
+            return {}
+        return {
+            str(lang).strip().lower()[:2]: str(bible_id).strip()
+            for lang, bible_id in raw_value.items()
+            if str(lang).strip() and str(bible_id).strip()
+        }
+
     @property
     def bible(self):
-        # Check if a translation ID is stored in the session
+        current_language = self._current_language_code()
+
+        # Prefer an explicitly stored Bible preference for the active language.
+        preferred_bibles = self._stored_bibles_by_language()
+        preferred_bible_id = preferred_bibles.get(current_language, '')
+        if preferred_bible_id and preferred_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            return BibleTranslation().get(preferred_bible_id)
+
+        # Backward compatible fallback for old sessions.
         if 'bible_id' in self.session:
-            bible_id = self.session['bible_id']
+            bible_id = str(self.session['bible_id'])
             if bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
-                return BibleTranslation().get(bible_id)
+                legacy_bible = BibleTranslation().get(bible_id)
+                if str(getattr(legacy_bible, 'language', '')).strip().lower()[:2] == current_language:
+                    return legacy_bible
 
         # Fallback to default Bible translation
-        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(self.language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        default_bible = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(current_language, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
         
         # Ensure the default Bible is not disabled
         if default_bible not in settings.DISABLED_BIBLE_TRANSLATIONS:
@@ -29,6 +54,9 @@ class UserPreferences:
     def bible(self, value):
         if value.id not in settings.DISABLED_BIBLE_TRANSLATIONS:
             self.session['bible_id'] = value.id
+            preferred_bibles = self._stored_bibles_by_language()
+            preferred_bibles[self._current_language_code()] = value.id
+            self.session[self.PER_LANGUAGE_BIBLE_SESSION_KEY] = preferred_bibles
 
     @property
     def language(self):

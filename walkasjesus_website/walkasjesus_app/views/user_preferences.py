@@ -1,9 +1,195 @@
 from gettext import gettext
+import hashlib
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.core.cache import cache
+from django.urls import NoReverseMatch, Resolver404, resolve, reverse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.utils import translation
 from django.views import View
 from django.conf import settings
+from google_trans import Translator
+import requests
+
 from walkasjesus_app.models import UserPreferences, BibleTranslation
+
+
+COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
+CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
+CROSS_DOMAIN_BIBLE_PARAM = '__waj_bible'
+
+
+def _resolve_path_in_any_language(path):
+    for code, _ in settings.LANGUAGES:
+        with translation.override(code):
+            try:
+                return resolve(path)
+            except Resolver404:
+                continue
+    return None
+
+
+def _localized_next_url(next_url, language_code):
+    fallback = '/'
+    if not next_url:
+        return fallback
+
+    split = urlsplit(next_url)
+    if split.scheme or split.netloc:
+        return fallback
+    path = split.path or '/'
+
+    match = _resolve_path_in_any_language(path)
+    if match is not None:
+        try:
+            with translation.override(language_code):
+                localized_path = reverse(match.view_name, args=match.args, kwargs=match.kwargs)
+            return urlunsplit(('', '', localized_path, split.query, split.fragment))
+        except NoReverseMatch:
+            pass
+
+    # If the incoming path is already valid in the target language, keep it.
+    with translation.override(language_code):
+        try:
+            resolve(path)
+            return urlunsplit(('', '', path, split.query, split.fragment))
+        except Resolver404:
+            return fallback
+
+
+def _absolute_redirect_for_language(request, language_code, redirect_url, selected_bible_id=''):
+    # Keep relative redirects when domain mapping is not configured.
+    if not redirect_url or redirect_url.startswith('http://') or redirect_url.startswith('https://'):
+        return redirect_url
+
+    nl_domain = getattr(settings, 'GEO_REDIRECT_NL_DOMAIN', '').strip()
+    en_domain = getattr(settings, 'GEO_REDIRECT_EN_DOMAIN', '').strip()
+    if not nl_domain or not en_domain:
+        return redirect_url
+
+    target_domain = nl_domain if language_code == 'nl' else en_domain
+    host = request.get_host().split(':')[0]
+    if host == target_domain:
+        return redirect_url
+
+    split = urlsplit(redirect_url)
+    query_items = parse_qsl(split.query, keep_blank_values=True)
+    query_items.append((CROSS_DOMAIN_LANG_PARAM, language_code))
+    selected_bible_id = str(selected_bible_id or '').strip()
+    if selected_bible_id:
+        query_items.append((CROSS_DOMAIN_BIBLE_PARAM, selected_bible_id))
+    redirect_url = urlunsplit(('', '', split.path or '/', urlencode(query_items, doseq=True), split.fragment))
+
+    forwarded_proto = str(request.META.get('HTTP_X_FORWARDED_PROTO', '')).strip().lower()
+    scheme = getattr(settings, 'GEO_REDIRECT_SCHEME', 'https')
+    if request.is_secure():
+        scheme = 'https'
+    elif forwarded_proto in ('http', 'https'):
+        scheme = forwarded_proto
+    return f'{scheme}://{target_domain}{redirect_url}'
+
+
+def _default_bible_for_language(language_code):
+    default_bible_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+    if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+        default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+    return BibleTranslation().get(default_bible_id)
+
+
+def _preferred_bible_for_language(session, language_code):
+    preferred_bibles = session.get(UserPreferences.PER_LANGUAGE_BIBLE_SESSION_KEY, {})
+    if isinstance(preferred_bibles, dict):
+        preferred_bible_id = str(preferred_bibles.get(language_code, '')).strip()
+        if preferred_bible_id and preferred_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            try:
+                preferred_bible = BibleTranslation().get(preferred_bible_id)
+                if preferred_bible.language == language_code:
+                    return preferred_bible
+            except Exception:
+                pass
+    return _default_bible_for_language(language_code)
+
+
+def _default_media_languages_for_language(language_code):
+    normalized = str(language_code or '').strip().lower()[:2]
+    if normalized == 'nl':
+        return ['en', 'nl']
+    if normalized:
+        return [normalized]
+    return ['en']
+
+
+class UserPreferencesLanguageSwitchView(View):
+    """Switch UI language safely and return a localized redirect URL.
+
+    This avoids 404 after language change when the current path slug differs per locale.
+    """
+
+    def post(self, request):
+        language_code = str(request.POST.get('language', '')).strip().lower()
+        next_url = request.POST.get('next', request.META.get('HTTP_REFERER', '/'))
+
+        supported_languages = {code for code, _ in settings.LANGUAGES}
+        if language_code not in supported_languages:
+            return JsonResponse({'error': gettext('Unsupported language')}, status=400)
+
+        # Keep selected bible aligned with the selected site language.
+        requested_bible_id = str(request.POST.get('bible_id', '')).strip()
+        bible = None
+        if requested_bible_id and requested_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            try:
+                candidate = BibleTranslation().get(requested_bible_id)
+                if candidate.language == language_code:
+                    bible = candidate
+            except Exception:
+                bible = None
+
+        if bible is None:
+            bible = _preferred_bible_for_language(request.session, language_code)
+
+        translation.activate(language_code)
+        preferences = UserPreferences(request.session)
+        preferences.bible = bible
+        preferences.languages = _default_media_languages_for_language(language_code)
+
+        redirect_url = _localized_next_url(next_url, language_code)
+        redirect_url = _absolute_redirect_for_language(request, language_code, redirect_url, bible.id)
+        response = JsonResponse({'redirect_url': redirect_url})
+        response.set_cookie(
+            settings.LANGUAGE_COOKIE_NAME,
+            language_code,
+            max_age=getattr(settings, 'LANGUAGE_COOKIE_AGE', None),
+            path=getattr(settings, 'LANGUAGE_COOKIE_PATH', '/'),
+            domain=getattr(settings, 'LANGUAGE_COOKIE_DOMAIN', None),
+            secure=getattr(settings, 'LANGUAGE_COOKIE_SECURE', False),
+            httponly=getattr(settings, 'LANGUAGE_COOKIE_HTTPONLY', False),
+            samesite=getattr(settings, 'LANGUAGE_COOKIE_SAMESITE', None),
+        )
+        return response
+
+
+def _translate_commentary_text(text, target_language):
+    try:
+        translator = Translator()
+        return translator.translate(text, src='en', dest=target_language).text
+    except Exception:
+        response = requests.get(
+            'https://translate.googleapis.com/translate_a/single',
+            params={
+                'client': 'gtx',
+                'sl': 'en',
+                'tl': target_language,
+                'dt': 't',
+                'q': text,
+            },
+            timeout=15,
+        )
+        response.raise_for_status()
+        data = response.json()
+        segments = data[0] if isinstance(data, list) and data else []
+        translated_parts = [segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0]]
+        return ''.join(translated_parts)
 
 class UserPreferencesBibleView(View):
     def post(self, request):
@@ -43,4 +229,79 @@ class UserPreferencesLanguagesView(View):
             messages.error(request, gettext('No languages selected'))
 
         return redirect
+
+
+class BibleTranslationsForLanguageView(View):
+    """Returns JSON with Bible translations available for the given language code."""
+    def get(self, request):
+        language_code = request.GET.get('language', 'en')
+        bible_translation = BibleTranslation()
+        bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
+        default_bible_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
+        if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+            default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+        return JsonResponse({
+            'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
+            'default_bible_id': default_bible_id,
+        })
+
+
+class CommentaryTranslationView(View):
+    """Machine-translates commentary text for the current UI language."""
+
+    def post(self, request):
+        text = str(request.POST.get('text', '')).strip()
+        target_language = str(request.POST.get('target_language', 'en')).strip().lower()[:2]
+
+        if not text:
+            return JsonResponse({'translated_text': ''})
+
+        if not target_language or target_language == 'en':
+            return JsonResponse({'translated_text': text, 'language': 'en', 'machine_translated': False})
+
+        digest = hashlib.sha256(f'{target_language}:{text}'.encode('utf-8')).hexdigest()
+        cache_key = f'commentary_translation:v1:{digest}'
+        cached = cache.get(cache_key)
+        if cached is not None:
+            return JsonResponse(cached)
+
+        payload = {
+            'translated_text': _translate_commentary_text(text, target_language),
+            'language': target_language,
+            'machine_translated': True,
+        }
+        cache.set(cache_key, payload, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
+        return JsonResponse(payload)
+
+
+class ScripturaCommentaryProxyView(View):
+    """Proxy Scriptura API calls through Django to avoid browser CORS issues."""
+
+    def get(self, request):
+        source = str(request.GET.get('source', '')).strip()
+        book = str(request.GET.get('book', '')).strip()
+        chapter = str(request.GET.get('chapter', '')).strip()
+        verse = str(request.GET.get('verse', '')).strip()
+
+        if not source or not book or not chapter:
+            return JsonResponse({'error': gettext('Missing Scriptura parameters')}, status=400)
+
+        try:
+            response = requests.get(
+                'https://www.scriptura-api.com/api/commentary',
+                params={
+                    'source': source,
+                    'book': book,
+                    'chapter': chapter,
+                    'verse': verse,
+                },
+                timeout=20,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            if isinstance(payload, dict):
+                return JsonResponse(payload)
+            return JsonResponse({}, safe=False)
+        except Exception as exc:
+            return JsonResponse({'error': str(exc)}, status=502)
 

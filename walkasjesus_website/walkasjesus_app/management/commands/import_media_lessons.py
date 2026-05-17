@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.core.management import BaseCommand
@@ -5,6 +6,7 @@ from django.db import IntegrityError
 from import_tool import LessonMediaImporter
 
 from walkasjesus_app.models import *
+from walkasjesus_app.media_resource_matcher import has_shared_lesson_media
 from walkasjesus_website.settings import BASE_DIR
 
 
@@ -27,6 +29,21 @@ class Command(BaseCommand):
 
     def _add_media(self, lesson_id, media):
         media_type = media.type.lower().strip()
+        if has_shared_lesson_media(
+            lesson_id,
+            media_type=media_type,
+            title=media.title,
+            description=media.description,
+            target_audience=media.target_audience,
+            language=media.language,
+            img_url=media.img_url,
+            url=media.url,
+            author=media.author,
+            is_public=media.is_public,
+        ):
+            print(f'Skipped legacy media for lesson {lesson_id} because it already exists as a shared Media Resource.')
+            return
+
         if media_type == 'song':
             model_reference = LessonSong(lesson_id=lesson_id)
         elif media_type == 'superbook':

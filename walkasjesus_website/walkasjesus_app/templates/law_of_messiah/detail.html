@@ -1,0 +1,758 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load cache %}
+{% load media_extras %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block meta_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block og_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block og_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block twitter_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
+{% block twitter_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block jsonld %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ law.translated_title|escapejs }}",
+    "description": "{{ law.translated_title|escapejs }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context.",
+    "url": "{{ request.build_absolute_uri }}",
+    "about": ["Law of Messiah", "Yeshua", "Messiah", "commandments", "mitzvot"]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% cache cache_timeout law_of_messiah_detail_v2 cache_on_language cache_on_bible cache_on_kids_mode law.id %}
+<nav class="floating-menu">
+    <ul class="main-menu">
+        {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
+        <li>
+            <a href="#biblereferences" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Bible references' %}" src="{% static 'images/bible.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law.commentary_rudolph or law.commentary_juster or law.classical_commentators %}
+        <li>
+            <a href="#commentary" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Commentary' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if drawings %}
+        <li>
+            <a href="#drawings" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Drawings' %}" src="{% static 'images/drawing.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.picture %}
+        <li>
+            <a href="#pictures" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Pictures' %}" src="{% static 'images/picture.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.superbook %}
+        <li targetaudience="kids">
+            <a href="#superbook" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Superbook' %}" src="{% static 'images/superbook.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.henkieshow %}
+        <li targetaudience="kids">
+            <a href="#henkieshow" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'De Henkie Show' %}" src="{% static 'images/henkieshow.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.shortmovie %}
+        <li>
+            <a href="#short_movies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Short Movies' %}" src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.song %}
+        <li>
+            <a href="#songs" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Songs' %}" src="{% static 'images/song.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.movie %}
+        <li>
+            <a href="#movies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Movies' %}" src="{% static 'images/movie.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.testimony %}
+        <li>
+            <a href="#testimonies" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Testimonies' %}" src="{% static 'images/testimony.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.blog %}
+        <li targetaudience="adults">
+            <a href="#blogs" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Blogs' %}" src="{% static 'images/blog.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.sermon %}
+        <li targetaudience="adults">
+            <a href="#sermons" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Sermons' %}" src="{% static 'images/sermon.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+        {% if law_media_by_type.book %}
+        <li targetaudience="adults">
+            <a href="#books" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Books' %}" src="{% static 'images/book.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    <div class="menu-bg"></div>
+</nav>
+<section class="ftco-daily-verse img" style="background-image:url('{% if law.primary_drawing_url %}{{ law.primary_drawing_url }}{% else %}{% static 'images/bg_2.jpg' %}{% endif %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-11">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-12 heading-section text-center ftco-animate">
+                        <span class="subheading">{{ law.id }}</span>
+                    </div>
+                    <div class="col-md-12 daily-verse pl-md-5 ftco-animate">
+                        <span class="subheading">{{ law.translated_title }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner law-commandment-main">
+                        <div class="our-services-img commandment_id law-commandment-id">
+                            <h3>{{ law.id }}</h3>
+                        </div>
+                        <div class="our-services-text commandment_details">
+                            <h4>{{ law.translated_commandment|linebreaksbr }}</h4>
+                            {% if law.subtitle_texts %}
+                                {% for subtitle_text in law.subtitle_texts %}
+                                    <p class="lom-commandment-subtitle">{{ subtitle_text|linebreaksbr }}</p>
+                                {% endfor %}
+                            {% endif %}
+
+                            <p><strong>{% trans 'Category' %}:</strong> {{ law.translated_category }}</p>
+                            <p><strong>{% trans 'Type' %}:</strong> {{ law.translated_commandment_type_display }}</p>
+                            <p><strong>{% trans 'Form' %}:</strong> {{ law.translated_commandment_form_display }}</p>
+                            <p><strong>{% trans 'Source dataset' %}:</strong> {{ law.translated_source_dataset_display }}</p>
+                            <p><strong>{% trans 'Uniqueness' %}:</strong> {% if law.is_unique %}{% trans 'Unique' %}{% else %}{% trans 'Not unique' %}{% endif %}</p>
+                            <p><strong>{% trans 'Classical commandment' %}:</strong> {% if law.classical_commandment %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif %}</p>
+                            {% if law.related_steps|length > 0 %}
+                            <p><strong>{% trans 'Related 77 Steps' %}:</strong>
+                                <br><small style="opacity: 0.85;">{% trans 'This Law of Messiah commandment is directly connected to the following beginner step(s):' %}</small>
+                                <ul class="lom-related-links" style="margin-top: 0.5rem; margin-bottom: 0;">
+                                {% for step_id in law.related_steps %}
+                                    <li>
+                                        <a href="{% url 'commandments:detail' step_id.id %}" class="lom-related-link lom-related-link-positive">
+                                            {{ step_id.id }} - {{ step_id.title|default:step_id.id }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                                </ul>
+                            </p>
+                            {% endif %}
+                            <div class="lom-ncla-summary">
+                                <h5>{% trans 'New Covenant Literal Application' %}</h5>
+                                <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
+                                <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                {% if law.ncla_deviation %}
+                                    {% for grp in ncla_summary.groups %}{% if grp.group != 'All' %}
+                                    <p><small><strong>{% trans 'Context' %}:</strong> {{ grp.group }} — {{ grp.person_summary }}, {{ grp.application_summary }}</small></p>
+                                    {% endif %}{% endfor %}
+                                {% endif %}
+                                {% if ncla_summary.groups|length > 1 %}
+                                    <table class="table table-sm lom-ncla-groups-table">
+                                        <thead>
+                                            <tr>
+                                                <th>{% trans 'Group' %}</th>
+                                                <th>{% trans 'Person categories' %}</th>
+                                                <th>{% trans 'Application' %}</th>
+                                                <th>{% trans 'Codes' %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for grp in ncla_summary.groups %}
+                                            <tr>
+                                                <td>{{ grp.group }}</td>
+                                                <td>{{ grp.person_summary }}</td>
+                                                <td>{{ grp.application_summary }}</td>
+                                                <td><code>{{ grp.codes|join:' ' }}</code></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                                <details class="lom-ncla-explainer">
+                                    <summary>{% trans 'More explanation about New Covenant Literal Application' %}</summary>
+                                    <div class="lom-ncla-explainer-content">
+                                        <p>{% blocktrans %}The New Covenant Literal Application Code (NCLA) is an interpretive guide used by the authors to indicate which person categories a mitzvah applies to, and at what level of literal compliance.{% endblocktrans %}</p>
+                                        <p>{% blocktrans %}It combines person categories such as Jewish, K'rov Yisrael, and Gentile, together with male/female distinctions and an application level such as mandated, recommended, optional, or prohibited.{% endblocktrans %}</p>
+                                        <p>{% blocktrans %}This code reflects the authors' interpretive opinion and is provided for prayerful consideration. On this page, the technical code is summarized into plain language to help new readers understand it more easily.{% endblocktrans %}</p>
+                                        {% if ncla_summary.groups|length == 1 %}
+                                            {% with grp=ncla_summary.groups.0 %}
+                                                <p><strong>{% trans 'Detailed codes' %}:</strong> {{ grp.detailed|join:' | ' }}</p>
+                                            {% endwith %}
+                                        {% endif %}
+                                        <p><a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/nc-lac.php">{% trans 'Read the full explanation from the source' %}</a></p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
+            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/bible.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Bible references' %}</h4>
+
+                            {% if key_nt_scriptures %}
+                            <h5>{% trans 'Key NT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in key_nt_scriptures %}
+                                <li>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if key_ot_scriptures %}
+                            <h5>{% trans 'Key OT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in key_ot_scriptures %}
+                                <li>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    <div class="sefaria-commentary-panel"></div>{% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if supportive_nt_scriptures %}
+                            <h5>{% trans 'Supportive NT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in supportive_nt_scriptures %}
+                                <li>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            {% if supportive_ot_scriptures %}
+                            <h5>{% trans 'Supportive OT Scriptures' %}</h5>
+                            <ul>
+                                {% for ref in supportive_ot_scriptures %}
+                                <li>
+                                    <b>{{ ref.display_reference }}</b>
+                                    {% if ref.is_long_passage %}
+                                            <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ ref.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ ref.display_reference }}</button>
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}" data-verse-manual="1"></span>
+                                    {% else %}
+                                        <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
+                                    {% endif %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    <div class="scriptura-commentary-panel"></div>
+                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    
+                                        <div class="sefaria-commentary-panel"></div>{% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            <p><b><i>{% trans 'Bible verses copyright' %}: {% if bible.copyright %}{{ bible.copyright }}{% else %}{% trans 'Not provided for this Bible translation.' %}{% endif %}</i></b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law.commentary_rudolph or law.commentary_juster or law.classical_commentators %}
+            <div id="commentary" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Commentary' %}</h4>
+                            {% if law.commentary_rudolph %}
+                            <h5>{% trans 'Rabbi Michael Rudolph' %}</h5>
+                            <p>{{ law.translated_commentary_rudolph|linebreaksbr }}</p>
+                            {% endif %}
+                            {% if law.commentary_juster %}
+                            <h5>{% trans 'Rabbi Daniel Juster' %}</h5>
+                            <p>{{ law.translated_commentary_juster|linebreaksbr }}</p>
+                            {% endif %}
+                            {% if law.classical_commentators %}
+                            <h5>{% trans 'Classical commentators' %}</h5>
+                            <p>{{ law.translated_classical_commentators|linebreaksbr }}</p>
+                            {% endif %}
+                            </br>
+                            {% if law.copyright %}<p><b><i>{{ law.copyright }}</i></b></p>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if drawings %}
+            <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/drawing.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Drawings' %}</h4>
+                            {% for drawing in drawings %}
+                                {% if drawing.img_url %}
+                                <img src="{{ drawing.img_url }}" alt="{{ drawing.author }} - Law of Messiah drawing" style="max-width:97%;max-height:97%;">
+                                {% endif %}
+                                {% if drawing.description %}<p>{{ drawing.description }}</p>{% endif %}
+                                {% if drawing.author %}<p>{% trans 'Artist' %}: {{ drawing.author }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.superbook %}
+            <div id="superbook" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/superbook.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Superbook' %}</h4>
+                            {% for item in law_media_by_type.superbook %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.henkieshow %}
+            <div id="henkieshow" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/henkieshow.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'De Henkie Show' %}</h4>
+                            {% for item in law_media_by_type.henkieshow %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.shortmovie %}
+            <div id="short_movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/shortmovie.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Short Movies' %}</h4>
+                            {% for item in law_media_by_type.shortmovie %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.song %}
+            <div id="songs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/song.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Songs' %}</h4>
+                            {% for item in law_media_by_type.song %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.movie %}
+            <div id="movies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/movie.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Movies' %}</h4>
+                            {% for item in law_media_by_type.movie %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.testimony %}
+            <div id="testimonies" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/testimony.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Testimonies' %}</h4>
+                            {% for item in law_media_by_type.testimony %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.wajvideo %}
+            <div id="waj_video" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/wajvideo.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Walk as Jesus motivational video' %}</h4>
+                            {% for item in law_media_by_type.wajvideo %}
+                                <div targetaudience="{{ item.target_audience }}">
+                                    <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    <div class="video-iframe">
+                                        <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.blog %}
+            <div id="blogs" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/blog.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Blogs' %}</h4>
+                            {% for item in law_media_by_type.blog %}
+                            <h5>{% if item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</a>{% else %}{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}{% endif %}</h5>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.sermon %}
+            <div id="sermons" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/sermon.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Sermons' %}</h4>
+                            {% for item in law_media_by_type.sermon %}
+                            <h5>{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            <div class="video-iframe">
+                                <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.book %}
+            <div id="books" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/book.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Books' %}</h4>
+                            {% for item in law_media_by_type.book %}
+                            <div class="media">
+                                {% if item.img_url %}<img class="d-flex align-self-start mr-3" style="max-width:20%;max-height:20%;" src="{{ item.img_url }}" alt="{{ item.author }} - {{ item.title }}">{% endif %}
+                                <div class="media-body">
+                                    </br>
+                                    </br>
+                                    <h5 class="mt-0 font-weight-bold">{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</h5>
+                                    {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                                    {% if item.url %}<p><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url }}</a></p>{% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.picture %}
+            <div id="pictures" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/picture.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Pictures' %}</h4>
+                            {% for item in law_media_by_type.picture %}
+                                {% if item.img_url %}<img src="{{ item.img_url }}" alt="{{ item.author }} - {{ item.title }}" style="max-width:97%;max-height:97%;">{% endif %}
+                                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if related_lawofmessiah %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-related-commandments">
+                            <h4>{% trans 'Related Law of Messiah commandments' %}</h4>
+                            <ul class="lom-related-links">
+                                {% for related in related_lawofmessiah %}
+                                <li>
+                                    <a
+                                        href="{% url 'commandments:law_of_messiah_detail' related.id %}"
+                                        class="lom-related-link {% if related.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}"
+                                    >
+                                        {% if related.is_unique %}
+                                            <strong>{{ related.id }} - {{ related.title|default:related.id }}</strong>
+                                            <span class="lom-primary-badge">{% trans 'Unique' %}</span>
+                                        {% else %}
+                                            {{ related.id }} - {{ related.title|default:related.id }}
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if enriched_maimonides or law.meir or law.chinuch %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-classical-sources">
+                            <h4>{% trans 'Classical sources' %}</h4>
+                            {% if enriched_maimonides %}
+                            <h5>{% trans 'Maimonides' %}</h5>
+                            <p><small>{% blocktrans %}Maimonides (Rabbi Moshe ben Maimon, 12th century) organized all 613 Torah commandments into a structured list. These linked items show where this Law of Messiah commandment overlaps with that classical framework.{% endblocktrans %}</small></p>
+                            <ul class="lom-related-links mb-2">
+                                {% for mai in enriched_maimonides %}
+                                <li>
+                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ mai.id }}"
+                                       class="lom-related-link {% if mai.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}">
+                                        <strong>{{ mai.id }}</strong> – {{ mai.commandment }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% if law.meir %}
+                            <h5>{% trans 'Meir of Rothenburg' %}</h5>
+                            <p><small>{% blocktrans %}Rabbi Meir of Rothenburg (13th century, Germany) was a leading Talmudic authority. These reference numbers link this commandment to his halachic rulings.{% endblocktrans %}</small></p>
+                            <p>{{ law.meir|join:', ' }}</p>
+                            {% endif %}
+                            {% if law.chinuch %}
+                            <h5>{% trans 'Sefer HaChinuch' %}</h5>
+                            <p><small>{% blocktrans %}The Sefer HaChinuch (13th century) is a systematic presentation of all 613 commandments, organized by weekly Torah portion. These reference numbers link this commandment to that work.{% endblocktrans %}</small></p>
+                            <p>{{ law.chinuch|join:', ' }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if related_steps %}
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text lom-related-steps">
+                            <h4>{% trans 'Related 77 steps' %}</h4>
+                            <p><small>{% blocktrans %}The 77 Steps are a beginner's guide to walking as Jesus walked, designed to be studied together in a group. These connected steps show where this Law of Messiah commandment is reflected in that introductory program.{% endblocktrans %}</small></p>
+                            <ul class="lom-related-links">
+                                {% for commandment in related_steps %}
+                                <li><a href="{% url 'commandments:detail' commandment.id %}">{{ commandment.id }} - {{ commandment.title|default:commandment.id }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                            <img src="{% static 'images/list.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Source and License' %}</h4>
+                            <p>{% blocktrans %}Based on <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.{% endblocktrans %}</p>
+                            <p>
+                                <a target="_blank" rel="noopener" href="https://tikkunamerica.org/halachah/toc.php">{% trans 'Volume 1 & 2' %}</a> |
+                                <a target="_blank" rel="noopener" href="https://www.genesisobservatory.us/ohev/Documents/Mitzvot%20in%20the%20New%20Testament/Vol%203.pdf">{% trans 'Volume 3' %}</a>
+                            </p>
+                            <p><small>{% blocktrans %}License: CC BY-ND 4.0 (Attribution required, NoDerivatives).{% endblocktrans %} <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a></small></p>
+                            <p><small>{% blocktrans %}Disclaimer: the original content is authored by Rabbi Michael Rudolph and Rabbi Daniel Juster; additional notes or implementation details on this website are not part of their original work and do not represent their views.{% endblocktrans %}</small></p>
+                            {% if law.source %}
+                                {% if law.source_is_url %}
+                                    <p><small><strong>{% trans 'Record source' %}:</strong> <a href="{{ law.source }}" target="_blank" rel="noopener">{{ law.source }}</a></small></p>
+                                {% else %}
+                                    <p><small><strong>{% trans 'Record source' %}:</strong> {{ law.source }}</small></p>
+                                {% endif %}
+                            {% endif %}
+                            {% if law.copyright %}<p><small><strong>{% trans 'Copyright note' %}:</strong> {{ law.copyright }}</small></p>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Back to overview' %}</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endcache %}
+{% endblock %}

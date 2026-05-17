@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
+
+# Disallow admin and internal paths
+Disallow: /admin_portal/
+Disallow: /rosetta/
+Disallow: /account/
+Disallow: /i18n/
+Disallow: /ckeditor5/

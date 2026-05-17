@@ -38,3 +38,39 @@
     overflow: hidden;  
     margin-top: 10px;
 }
+
+@media (max-width: 767.98px) {
+    #CookielawBanner {
+        padding: 8px 0;
+    }
+
+    .cookie-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .cookie-text {
+        float: none;
+        width: auto;
+        flex: 1;
+        padding-left: 12px;
+        padding-right: 8px;
+        font-size: 12px;
+        line-height: 1.35;
+        max-height: 3.1em;
+        overflow: hidden;
+    }
+
+    .cookie-buttons {
+        margin-top: 0;
+        white-space: nowrap;
+        padding-right: 12px;
+    }
+
+    #CookielawBanner .button {
+        font-size: 11px;
+        padding: 2px 8px;
+    }
+}

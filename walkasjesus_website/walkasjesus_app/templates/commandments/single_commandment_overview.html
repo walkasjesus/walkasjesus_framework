@@ -11,10 +11,9 @@
                 {% if commandment.found_henkieshow.title %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
-                {% if commandment.background_drawing.img_url is defined %}<span>{% trans 'Drawing in progress' %}</span>{% endif %}
                 <h3>{{ commandment.title }}</h3>
                 <p class="">
-                    <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Howto' %}?</a>
+                    <a href="{% url 'commandments:detail' commandment.id %}" class="btn-custom p-2 text-center"><span class="icon-play"></span> {% trans 'Discover how?!' %}</a>
                 </p>
             </div>
         </div>

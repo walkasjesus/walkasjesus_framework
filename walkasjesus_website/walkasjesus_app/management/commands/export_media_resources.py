@@ -1,0 +1,1 @@
+from walkasjesus_app.management.commands.export_media_law_of_messiah import Command

@@ -24,12 +24,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6m)jc5ad@)5$(mspp(ynawossd^arrt)%oy1pvfvm8fec55&bv'
+SECRET_KEY = 'replace-me-with-a-secret-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "dev.walkasjesus.org", "walkasjesus.org", "www.walkasjesus.org", "wandelalsjezus.nl", "www.wandelalsjezus.nl", "jesuscommandments.org", "www.jesuscommandments.org", "jezusgeboden.nl", "www.jezusgeboden.nl"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "https://dev.walkasjesus.org", "https://walkasjesus.org", "https://www.walkasjesus.org", "https://wandelalsjezus.nl", "https://www.wandelalsjezus.nl", "https://jesuscommandments.org", "https://www.jesuscommandments.org", "https://jezusgeboden.nl", "https://www.jezusgeboden.nl"]
+CSRF_ALLOWED_ORIGINS = ["http://localhost", "https://dev.walkasjesus.org", "https://walkasjesus.org", "https://www.walkasjesus.org", "https://wandelalsjezus.nl", "https://www.wandelalsjezus.nl", "https://jesuscommandments.org", "https://www.jesuscommandments.org", "https://jezusgeboden.nl", "https://www.jezusgeboden.nl"]
+CORS_ORIGINS_WHITELIST = ["http://localhost", "https://dev.walkasjesus.org", "https://walkasjesus.org", "https://www.walkasjesus.org", "https://wandelalsjezus.nl", "https://www.wandelalsjezus.nl", "https://jesuscommandments.org", "https://www.jesuscommandments.org", "https://jezusgeboden.nl", "https://www.jezusgeboden.nl"]
 
 if DEBUG:
     INSTALLED_APPS += [
@@ -50,15 +53,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-#    Use the following settings if you use a mariadb/mysql backend
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'jcdatabase',
-#        'USER': 'jcsystem',
-#        'PASSWORD': 'verysecretpassword',
-#        'HOST': '127.0.0.1',
-#        'PORT': '',
-#    }
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -81,13 +75,40 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/admin_portal/'
 LOGOUT_REDIRECT_URL = '/'
 
+DEFAULT_FROM_EMAIL = 'noreply@walkasjesus.org'
+ACCOUNT_MODERATOR_EMAILS = []
+ACCOUNT_EMAIL_FAIL_SILENTLY = False
+
+# Cache backend configuration
+# Local default: FileBasedCache (persists across webserver restarts).
+# Production Redis: set these environment variables:
+# - DJANGO_CACHE_BACKEND=django_redis.cache.RedisCache
+# - DJANGO_CACHE_LOCATION=redis://127.0.0.1:6379/1 (adjust host/db)
+# Also install django-redis in the production environment.
+DJANGO_CACHE_BACKEND = os.getenv('DJANGO_CACHE_BACKEND', 'django.core.cache.backends.filebased.FileBasedCache')
+DJANGO_CACHE_LOCATION = os.getenv('DJANGO_CACHE_LOCATION', os.path.join(BASE_DIR, '.django_cache'))
+
+if DJANGO_CACHE_BACKEND == 'django.core.cache.backends.filebased.FileBasedCache':
+    os.makedirs(DJANGO_CACHE_LOCATION, exist_ok=True)
+
 CACHES = {
     'default': {
-        # 'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake-jesus_commandments-1',
+        'BACKEND': DJANGO_CACHE_BACKEND,
+        'LOCATION': DJANGO_CACHE_LOCATION,
     }
 }
+
+if DJANGO_CACHE_BACKEND == 'django_redis.cache.RedisCache':
+    CACHES['default']['OPTIONS'] = {
+        'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    }
+
+if DISABLE_CACHE_FOR_DEBUG:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.pil_engine.Engine'
+THUMBNAIL_DEBUG = True
 
 # Monitoring application
 if not DEBUG:
@@ -104,17 +125,13 @@ INTERNAL_IPS = [
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 #SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 SECURE_HSTS_SECONDS = 86400  # 1 day
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-DISABLED_BIBLE_TRANSLATIONS = [
-    '39d55004bcd11d2f-01'  # Statenvertaling Jongbloed-editie
-]
 
 BIBLE_API_KEY = ''  # The API key to scripture.api.bible
 DEFAULT_BIBLE_ANY_LANGUAGE = 'de4e12af7f28f599-01'
@@ -123,3 +140,10 @@ DEFAULT_BIBLE_PER_LANGUAGE = {
     'nl': '87f620660790371b-01', # Herziene Statenvertaling
 }
 
+DISABLED_BIBLE_TRANSLATIONS = [
+    '39d55004bcd11d2f-01'  # Statenvertaling Jongbloed-editie
+]
+
+# The YouTube Data API v3 is an API that provides access to YouTube data, such as videos, playlists, and channels.
+# This is used to check and clear the not found or accessable youtube media items from the media csv.
+YOUTUBE_API_KEY = ''

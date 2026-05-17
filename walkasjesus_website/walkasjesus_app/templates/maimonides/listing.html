@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="ftco-section bg-light" id="maimonides-section">
+        <div class="container">
+            <div class="row justify-content-center pb-5">
+                <div class="col-md-12 heading-section text-center ftco-animate">
+                    <span class="subheading">{% trans "Maimonides" %}</span>
+                    <h2 class="mb-4">{% trans "Maimonides' 613 Commandments" %}</h2>
+                    <p>{% blocktrans %}Maimonides (Rambam) compiled 613 commandments drawn from the Torah, traditionally categorized as 248 positive ("do") and 365 negative ("do not") commandments. Browse each commandment below and discover which Laws of Messiah from the New Covenant perspective relate to it.{% endblocktrans %}</p>
+                </div>
+            </div>
+
+            <!-- Filter Form -->
+            <div class="row justify-content-center pb-4">
+                <div class="col-md-10">
+                    <form method="get" class="law-filter-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="filter-q" class="form-label">{% trans "Search" %}</label>
+                                <input id="filter-q" type="text" name="q" value="{{ selected_q }}"
+                                       class="form-control"
+                                       placeholder="{% trans 'ID or commandment text' %}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="filter-type" class="form-label">{% trans "Type" %}</label>
+                                <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
+                                    <option value="">{% trans "All" %}</option>
+                                    <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans "Positive (Do)" %}</option>
+                                    <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans "Negative (Do not)" %}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">{% trans "Apply Filter" %}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Result count -->
+            <div class="row justify-content-center pb-2">
+                <div class="col-md-10">
+                    <p class="text-muted"><small>{% blocktrans with count=commandments_count %}Showing {{ count }} commandment(s){% endblocktrans %}</small></p>
+                </div>
+            </div>
+
+            <!-- Commandments list -->
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    {% for cmd in commandments %}
+                    <div class="card mb-3 ftco-animate">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start justify-content-between flex-wrap">
+                                <div class="flex-grow-1">
+                                    <p class="card-text mt-1 mb-2"></p>
+                                    <h5 class="card-title mb-1">
+                                        <span class="badge {% if cmd.commandment_type == 'positive' %}badge-success{% else %}badge-danger{% endif %} mr-2">
+                                            {{ cmd.id }}
+                                        </span>
+                                        {{ cmd.commandment }}
+                                    </h5>
+                                    {% if cmd.related_lawofmessiah %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">{% trans "Related Law of Messiah commandments:" %}</small>
+                                        <ul class="lom-related-links mt-1">
+                                            {% for lom in cmd.related_lawofmessiah %}
+                                            <li>
+                                                <a href="{% url 'commandments:law_of_messiah_detail' lom.id %}"
+                                                   class="lom-related-link {% if lom.commandment_type == 'negative' %}lom-related-link-negative{% elif lom.commandment_type == 'positive' %}lom-related-link-positive{% endif %}">
+                                                    <strong>{{ lom.id }}</strong>{% if lom.title %} – {{ lom.title }}{% endif %}
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    {% else %}
+                                    <div class="mt-1">
+                                        <small class="text-muted">{% trans "No related Law of Messiah commandments found." %}</small>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">{% trans "No commandments found matching your filter." %}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

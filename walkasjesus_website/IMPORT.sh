@@ -31,6 +31,7 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	DELETE_DATABASE=false
 	QUIET=false
 	FORCE=false
+	lom_source=data/lawofmessiah/filter_output/collected_ids_titles.yaml
 	today=$(date +%Y%m%d)
 	start=$(date '+%Y-%m-%d %H:%M:%S')
 	log=log/commandments.${today}.log
@@ -74,26 +75,26 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	fi
 
 	# Setup SSH agent to connect to Github
-	eval $(ssh-agent)
-	ssh-add ${rsakey}
+	# eval $(ssh-agent)
+	# ssh-add ${rsakey}
 
 	# Check and get latest Master branch repository
-	COMMANDMENTS_UPTODATE=false
-	cd "${cur}/data/biblereferences"
-	commandments_repository=git@github.com:walkasjesus/walkasjesus_biblereferences.git
-	current_repository=$(git remote -v | grep push | awk '{print $2}')
-	if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
-		git remote remove origin
-		git remote add origin ${commandments_repository}
-	fi
-	# Check if we have a clean git status
-	if git status; then
-		git checkout master
-		git pull origin master 2>&1 | grep "Already up to date" && COMMANDMENTS_UPTODATE=true
-	else
-		echo "ERROR: No clean git status! Please invesigate why" | tee -a ${log}
-		exit 1
-	fi
+	# COMMANDMENTS_UPTODATE=false
+	# cd "${cur}/data/biblereferences"
+	# commandments_repository=git@github.com:walkasjesus/walkasjesus_biblereferences.git
+	# current_repository=$(git remote -v | grep push | awk '{print $2}')
+	# if [[ $(echo ${current_repository}) != "${commandments_repository}" ]]; then
+	# 	git remote remove origin
+	# 	git remote add origin ${commandments_repository}
+	# fi
+	# # Check if we have a clean git status
+	# if git status; then
+	# 	git checkout master
+	# 	git pull origin master 2>&1 | grep "Already up to date" && COMMANDMENTS_UPTODATE=true
+	# else
+	# 	echo "ERROR: No clean git status! Please invesigate why" | tee -a ${log}
+	# 	exit 1
+	# fi
 
 	# Check and get latest Master branch repository
 	MEDIA_UPTODATE=false
@@ -105,13 +106,13 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		git remote add origin ${media_repository}
 	fi
 	# Check if we have a clean git status
-	if git status; then
-		git checkout master
-		git pull origin master 2>&1 | grep "Already up to date" && MEDIA_UPTODATE=true
-	else
-		echo "ERROR: No clean git status! Please invesigate why" | tee -a ${log}
-		exit 1
-	fi
+	# if git status; then
+	# 	git checkout master
+	# 	git pull origin master 2>&1 | grep "Already up to date" && MEDIA_UPTODATE=true
+	# else
+	# 	echo "ERROR: No clean git status! Please invesigate why" | tee -a ${log}
+	# 	exit 1
+	# fi
 
 	cd "${cur}"
 	if [[ $(echo $DELETE_DATABASE) == "true" ]]; then
@@ -131,25 +132,32 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 	# Import the Commandments CSV
 	cd "${cur}"
-	if [[ $(echo $COMMANDMENTS_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
-		echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
-		python3 manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
-		end=$(date '+%Y-%m-%d %H:%M:%S')
-		echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
-		echo "INFO: ${start} - Start importing Lessons" | tee -a ${log}
-		python3 manage.py import_lessons data/biblereferences/lessons.csv | tee -a ${log}
-		end=$(date '+%Y-%m-%d %H:%M:%S')
-		echo "INFO: ${end} - Ended importing Lessons" | tee -a ${log}
-	else
-		echo "INFO: - Commandments allready up-to-date. Skipping import." | tee -a ${log}
-	fi
+	echo "INFO: ${start} - Start importing Commandments" | tee -a ${log}
+	python3 manage.py import_commandments data/biblereferences/commandments.csv | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing Commandments" | tee -a ${log}
+	echo "INFO: ${start} - Start importing Lessons" | tee -a ${log}
+	python3 manage.py import_lessons data/biblereferences/lessons.csv | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing Lessons" | tee -a ${log}
+	echo "INFO: ${start} - Start importing Law of Messiah" | tee -a ${log}
+	python3 manage.py import_law_of_messiah --source "${lom_source}" | tee -a ${log}
+	echo "INFO: ${start} - Start importing Law of Messiah drawings" | tee -a ${log}
+	python3 manage.py import_law_of_messiah_drawings --filename-prefix jv_waj_lom_ | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing Law of Messiah drawings" | tee -a ${log}
+	echo "INFO: ${start} - Start importing Maimonides commandments" | tee -a ${log}
+	python3 manage.py import_maimonides | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing Maimonides commandments" | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing Law of Messiah" | tee -a ${log}
 
 	# Import the Media CSV
 	cd "${cur}"
 	if [[ $(echo $MEDIA_UPTODATE) == "false" || $(echo $FORCE) == "true" ]]; then
 		echo "INFO: ${start} - Start importing Media Resources" | tee -a ${log}
 		python3 manage.py import_media data/media/media.csv | tee -a ${log}
-		python3 manage.py import_media_lessons data/media/media_lessons.csv | tee -a ${log}
 		end=$(date '+%Y-%m-%d %H:%M:%S')
 		echo "INFO: ${end} - Ended importing Media Resources" | tee -a ${log}
 	else
@@ -158,15 +166,24 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 
 # Other Operating Systems like Windows
 else
+	lom_source=data/lawofmessiah/filter_output/collected_ids_titles.yaml
 	echo "INFO: Start importing Commandments"
 	python3 manage.py import_commandments data/biblereferences/commandments.csv
 	echo "INFO: Ended importing Commandments"
 	echo "INFO: Start importing Lessons"
 	python3 manage.py import_lessons data/biblereferences/lessons.csv
 	echo "INFO: Ended importing Lessons"
+	echo "INFO: Start importing Law of Messiah"
+	python3 manage.py import_law_of_messiah --source "${lom_source}"
+	echo "INFO: Start importing Law of Messiah drawings"
+	python3 manage.py import_law_of_messiah_drawings --filename-prefix jv_waj_lom_
+	echo "INFO: Ended importing Law of Messiah drawings"
+	echo "INFO: Start importing Maimonides commandments"
+	python3 manage.py import_maimonides
+	echo "INFO: Ended importing Maimonides commandments"
+	echo "INFO: Ended importing Law of Messiah"
 
 	echo "INFO: Start importing Media Resources"
 	python3 manage.py import_media data/media/media.csv
-	python3 manage.py import_media_lessons data/media/media_lessons.csv
 	echo "INFO: Ended importing Media Resources"
 fi

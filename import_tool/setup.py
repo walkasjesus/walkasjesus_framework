@@ -8,5 +8,5 @@ setup(
    author_email='verzend.aan@gmail.com',
    packages=['import_tool'],
    test_suite="tests",
-   install_requires=['pandas'],
+   install_requires=['pandas', 'PyYAML'],
 )

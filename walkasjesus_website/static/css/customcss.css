@@ -21,6 +21,52 @@
     width: 100%;
 }
 
+.logout-form {
+    display: inline;
+    margin: 0;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+}
+
+.ftco-navbar-light .navbar-nav > .nav-item > .logout-form > .logout-button.nav-link {
+    font-size: 12px;
+    padding-top: .7rem;
+    padding-bottom: .7rem;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #fff;
+    font-weight: 400;
+    opacity: 1 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 991.98px) {
+    .ftco-navbar-light .navbar-nav > .nav-item > .logout-form > .logout-button.nav-link {
+        padding-left: 0;
+        padding-right: 0;
+        padding-bottom: 1rem;
+        padding-top: 0;
+        color: #fff;
+    }
+}
+
+.ftco-footer .logout-form {
+    display: block;
+}
+
+.ftco-footer .logout-button {
+    text-align: left;
+    width: 100%;
+    padding: .25rem 0;
+}
+
 .mediasettings {
     margin-left: 22px;
     padding-right: 38px;
@@ -275,8 +321,564 @@ p {
     font-size: 27px;
 }
 
+.law-filter-form {
+    margin-top: 10px;
+}
+
+.law-filter-form .form-control {
+    border-radius: .25em;
+    font-size: 14px;
+    height: 33px !important;
+    min-height: 33px !important;
+}
+
+.law-filter-form input.form-control {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.law-filter-form label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.law-filter-select {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 14px;
+    height: 100%;
+    min-height: 100%;
+    padding: 0 0.5em;
+}
+
+.law-filter-select-wrap {
+    box-sizing: border-box;
+    height: 33px !important;
+    line-height: 2.3;
+    margin-bottom: 0;
+    min-height: 33px !important;
+}
+
+.law-filter-select-wrap::after {
+    background: #1b1919;
+    color: #fff;
+}
+
+.law-filter-actions {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-left: 22px;
+}
+
+.law-filter-button {
+    align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
+    height: 33px !important;
+    justify-content: center;
+    min-height: 33px !important;
+    min-width: 120px;
+    padding: 0 18px;
+}
+
+.law-filter-cta {
+    border: 1px solid #e2b900;
+    border-radius: 5px;
+    color: rgb(88, 69, 57);
+    font-size: 12px;
+    text-transform: uppercase;
+    background: transparent;
+    letter-spacing: 3px;
+}
+
+.law-filter-cta:hover,
+.law-filter-cta:focus {
+    background: #e2b900;
+    color: rgb(88, 69, 57);
+}
+
+.law-filter-legend-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.law-filter-legend-btn {
+    align-items: center;
+    box-sizing: border-box;
+    border: 1px solid #2f5d83;
+    border-radius: 5px;
+    color: #2f5d83;
+    display: inline-flex;
+    font-size: 12px;
+    height: 33px !important;
+    justify-content: center;
+    min-height: 33px !important;
+    text-transform: uppercase;
+    background: transparent;
+    letter-spacing: 1px;
+    padding: 0 18px;
+}
+
+.law-filter-legend-btn:hover,
+.law-filter-legend-btn:focus {
+    background: #2f5d83;
+    color: #fff;
+}
+
+.law-filter-legend-toggle {
+    white-space: normal;
+    text-align: right;
+}
+
+.law-filter-legend-wrap .collapse {
+    width: 100%;
+}
+
+.law-filter-summary {
+    text-align: center;
+}
+
+.law-number-content {
+    width: 72px !important;
+    height: 72px !important;
+    top: 12px !important;
+    left: 12px !important;
+    opacity: 0.35 !important;
+}
+
+.law-number-content h3 {
+    font-size: 24px;
+    padding: 12px 4px !important;
+}
+
+.law-category-pill {
+    background: rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    color: #194a7f;
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: 500;
+    line-height: 1.2;
+    min-width: 130px;
+    min-height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 8px;
+}
+
+.law-commandment-id {
+    background-image: url('/static/images/our-services-img-wider.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 104px;
+    min-width: 104px;
+    height: 65px;
+    margin-left: -98px;
+}
+
+.commandment_id.law-commandment-id h3 {
+    font-size: 30pt;
+    font-family: "mufanpfs";
+    font-weight: bold;
+    margin-left: 0px;
+    text-align: center;
+    padding: 5px 7px;
+}
+
+.law-commandment-main .our-services-text {
+    margin-left: 26px;
+}
+
+.lom-ncla-summary {
+    margin-top: 18px;
+}
+
+.lom-ncla-explainer {
+    background: #d8ebff;
+    border: 1px solid #7bb3e6;
+    border-radius: 8px;
+    margin-top: 14px;
+    padding: 0;
+}
+
+.lom-ncla-explainer summary {
+    color: #0c4d86;
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    padding: 12px 16px;
+}
+
+.lom-ncla-explainer summary::-webkit-details-marker {
+    display: none;
+}
+
+.lom-ncla-explainer-content {
+    padding: 0 16px 14px 16px;
+}
+
+.lom-related-steps .sermon-wrap {
+    margin-bottom: 20px;
+}
+
+.lom-related-commandments h5 {
+    margin-top: 16px;
+    margin-bottom: 10px;
+}
+
+.lom-related-intro {
+    color: #4f6071;
+    margin-bottom: 10px;
+}
+
+.lom-related-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lom-related-links li {
+    margin-bottom: 10px;
+}
+
+.lom-related-links a {
+    background: #eef6ff;
+    border-left: 4px solid #2f7dbf;
+    border-radius: 4px;
+    color: #114e85;
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+}
+
+.lom-related-links a:hover,
+.lom-related-links a:focus {
+    background: #d8ebff;
+    color: #0b3c67;
+    text-decoration: none;
+}
+
+.lom-related-links .lom-related-link {
+    color: inherit;
+}
+
+.lom-related-links .lom-related-link-positive {
+    background: #e9f8ef;
+    border-left-color: #2f9e63;
+    color: #1d6b43;
+}
+
+.lom-related-links .lom-related-link-positive:hover,
+.lom-related-links .lom-related-link-positive:focus {
+    background: #d8f1e3;
+    color: #165736;
+}
+
+.lom-related-links .lom-related-link-negative {
+    background: #fdeeee;
+    border-left-color: #cb3f3f;
+    color: #8f2323;
+}
+
+.lom-related-links .lom-related-link-negative:hover,
+.lom-related-links .lom-related-link-negative:focus {
+    background: #f9dddd;
+    color: #721c1c;
+}
+
+.lom-related-links .lom-related-link-primary {
+    font-weight: 600;
+}
+
+.lom-primary-badge {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 8px;
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+
+@media (max-width: 991.98px) {
+    .law-filter-actions {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .law-filter-button {
+        width: 100%;
+    }
+
+    .law-filter-action-row .col-auto {
+        width: 100%;
+    }
+
+    .law-filter-legend-wrap {
+        justify-content: stretch;
+        margin-top: 10px;
+    }
+
+    .law-filter-legend-toggle {
+        width: 100%;
+        text-align: center;
+    }
+
+    .law-number-content {
+        width: 62px !important;
+        height: 62px !important;
+    }
+
+    .law-number-content h3 {
+        font-size: 20px;
+        padding-top: 10px !important;
+    }
+}
+
+.btn-lom-cta {
+    background-color: #e2b900;
+    border: 1px solid #e2b900;
+    color: #3a332d;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.btn-lom-cta:hover,
+.btn-lom-cta:focus {
+    background-color: #25844b;
+    border-color: #25844b;
+    color: #ffffff;
+}
+
+.btn-home-secondary-cta {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid #e2b900;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-transform: none;
+}
+
+.btn-home-secondary-cta:hover,
+.btn-home-secondary-cta:focus {
+    background: #e2b900;
+    border-color: #e2b900;
+    color: #3a332d;
+}
+
+/* ----- Login/logout icon button in navbar ----- */
+.btn-nav-user-icon {
+  height: 38px;
+  padding: 4px 10px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----- Top-right navbar actions group ----- */
+.navbar-top-actions {
+  order: 3;
+  margin-left: auto;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-top-actions {
+        display: none !important;
+    }
+
+    #ftco-navbar .navbar-collapse {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .ftco-navbar-light.scrolled #ftco-navbar .navbar-collapse,
+    .ftco_navbar.scrolled #ftco-navbar .navbar-collapse {
+        border-top-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-item-mobile-utility .nav-link-mobile-utility {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0;
+        margin: 0;
+        background: none;
+        border: none;
+        font-size: inherit;
+        letter-spacing: inherit;
+        text-transform: none;
+    }
+
+    .nav-item-mobile-kids .mobile-kids-toggle-wrap {
+        display: none;
+    }
+
+    .nav-item-mobile-kids .mobile-kids-toggle-wrap img {
+        display: none;
+  }
+}
+
+/* ----- Card button alignment (desktop only) ----- */
+@media (min-width: 992px) {
+  .services-2 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .services-2 .text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .services-2 .text p:last-child {
+    margin-top: auto;
+  }
+}
+
 .vision-author {
     text-align: right;
+}
+
+.lom-commandment-subtitle {
+    color: #222222;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    padding-bottom: 10px;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.lom-commandment-subtitle::before {
+    background: #e2b900 none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 1px;
+    position: absolute;
+    width: 35px;
+}
+
+/* ----- Sefaria Jewish Commentary ----- */
+.sefaria-commentary-btn {
+    background: #f5f0e8;
+    border: 1px solid #c8a84b;
+    color: #5c4a1e;
+    font-size: 11px;
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+.sefaria-commentary-btn:hover {
+    background: #ede3cc;
+    color: #3d2f08;
+}
+.scriptura-commentary-btn {
+    margin-left: 0;
+}
+.commentary-favicon {
+    border-radius: 3px;
+    height: 14px;
+    margin-right: 4px;
+    vertical-align: text-bottom;
+    width: 14px;
+}
+.commentary-inline-icon {
+    display: inline-flex;
+    margin-right: 4px;
+    vertical-align: text-bottom;
+}
+.commentary-inline-icon-svg {
+    height: 14px;
+    width: 14px;
+}
+.sefaria-commentary-panel {
+    background: #fdfbf5;
+    border: 1px solid #e0d5b0;
+    border-radius: 6px;
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+}
+.scriptura-commentary-panel {
+    background: #fdfbf5;
+    border: 1px solid #e0d5b0;
+    border-radius: 6px;
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+}
+.sefaria-select-label {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+.sefaria-commentator-btn {
+    background: #fff;
+    border: 1px solid #c8a84b;
+    border-radius: 3px;
+    color: #5c4a1e;
+    font-size: 11px;
+    padding: 2px 8px;
+}
+.sefaria-commentator-btn.active,
+.sefaria-commentator-btn:hover {
+    background: #e2b900;
+    border-color: #c8a84b;
+    color: #3d2f08;
+}
+.sefaria-commentary-body {
+    font-size: 13px;
+    line-height: 1.6;
+}
+.sefaria-commentary-body b,
+.sefaria-commentary-body strong {
+    color: #3d2f08;
+    font-weight: 700;
+}
+.sefaria-commentary-body i,
+.sefaria-commentary-body em {
+    color: #5c4a1e;
+}
+.sefaria-commentary-body a {
+    color: #8b6f1f;
+    text-decoration: underline;
+}
+.sefaria-commentary-body .font1 {
+    color: #2f2410;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05em;
+    letter-spacing: 0.02em;
+}
+.sefaria-attribution {
+    color: #888;
+    font-size: 11px;
+    margin-bottom: 0;
+    margin-top: 6px;
+}
+.sefaria-no-result {
+    color: #888;
+    font-size: 12px;
+    margin: 0;
+}
+
+.verse-loading-spinner-cache,
+.commentary-loading-spinner-cache {
+    color: #8b8b8b;
+}
+
+.verse-loading-spinner-api,
+.commentary-loading-spinner-api {
+    color: #4e8f63;
 }
 
 .negative_list {
@@ -308,9 +910,12 @@ p {
 }
 
 .commandment_id {
-    background-image: url('/static/images/our-services-img.png');
     background-repeat: no-repeat;
     width: 65px;
+}
+
+.commandment_id:not(.law-commandment-id) {
+    background-image: url('/static/images/our-services-img.png');
 }
 
 .commandment_id h3 {
@@ -332,18 +937,18 @@ p {
 }
 
 .btn-superbook {
-    padding: 0px;
-    margin-left: 5px;
-    margin-top: -15px;
-    height: 50px;
-    margin-bottom: 5px;
+    padding: 4px 8px;
+    height: 38px;
+    display: inline-flex !important;
+    align-items: center;
 }
 
 .btn-change-bible {
-    margin-left: 5px;
-    margin-bottom: 5px;
-    height: 50px;
+    height: 38px;
     width: 180px;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
 }
 
 .custom-control.image-checkbox {
@@ -398,6 +1003,25 @@ right: 16px;
 width: 40px;
 height: 40px;
 opacity: .8;
+}
+
+.commandment-media-items .lom-person-icon {
+    background-image: url('/static/images/our-services-img.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #fff;
+    display: inline-flex;
+    font-size: 11px;
+    font-weight: 700;
+    height: 40px;
+    justify-content: center;
+    margin-left: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    width: 40px;
+}
+
+.commandment-media-items .lom-person-icon span {
+    align-self: center;
 }
 
 /* Frontpage media resources */

@@ -1,6 +1,7 @@
 import logging
 
 from bible_lib import Bible, BibleBooks as BibleLibBibleBooks
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext
 
@@ -73,6 +74,57 @@ class AbstractBibleReference(models.Model):
 
         return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
 
+    def display_reference(self):
+        """Return compact reference formatting, e.g. Matthew 25:13-30 or Matthew 25:13-26:2."""
+        return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def verse_count_estimate(self):
+        """Return exact count for single-chapter ranges, otherwise a conservative long-range estimate."""
+        if self.begin_chapter == 0 or self.end_verse == 0:
+            return 1
+
+        end_chapter = self.end_chapter or self.begin_chapter
+        end_verse = self.end_verse or self.begin_verse
+
+        if end_chapter == self.begin_chapter:
+            return max(1, (end_verse - self.begin_verse) + 1)
+
+        # For cross-chapter ranges, we intentionally treat it as long.
+        return 999
+
+    def is_long_passage(self):
+        threshold = max(1, int(getattr(settings, 'BIBLE_AUTO_LOAD_VERSE_LIMIT', 5)))
+        return self.verse_count_estimate() > threshold
+
+    def client_ref_id(self):
+        """Unique identifier for frontend/API mapping across different reference models."""
+        return f'{self.__class__.__name__}:{self.pk}'
+
+    def sefaria_reference(self):
+        """Return reference with English book names for Sefaria API compatibility."""
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()} {self._str_chapter_verses()}'
+
+    def scriptura_book(self):
+        """Return English book name for Scriptura API."""
+        from django.utils import translation
+        with translation.override('en'):
+            return f'{self.get_book_display()}'
+
+    def scriptura_chapter(self):
+        return self.begin_chapter
+
+    def scriptura_verse(self):
+        return self.begin_verse
+
+    def is_ot(self):
+        """Returns True if this reference is from the Old Testament."""
+        try:
+            return BibleBooks[self.book] < BibleBooks.Matthew
+        except Exception:
+            return False
+
     def text(self):
         """Get the verse text from the bible api."""
         if self.end_chapter == 0:
@@ -101,18 +153,7 @@ class AbstractBibleReference(models.Model):
         return gettext('Could not load text at the moment.')
 
     def __str__(self):
-        book_chapter_verse = f'{self.get_book_display()} {self.begin_chapter}:{self.begin_verse}'
-
-        if self.begin_chapter == 0 or self.end_verse == 0:
-            return book_chapter_verse
-
-        if self.begin_chapter == self.end_chapter and self.begin_verse == self.end_verse:
-            return book_chapter_verse
-
-        if self.begin_chapter == self.end_chapter and self.end_verse > self.begin_verse:
-            return f'{book_chapter_verse}-{self.end_verse}'
-
-        return f'{book_chapter_verse}-{self.end_chapter}:{self.end_verse}'
+        return self.display_reference()
 
     def __lt__(self, other):
         if self.__class__ is not other.__class__:

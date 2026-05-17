@@ -1,12 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load media_extras %}
 {% load cache %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title_content %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block meta_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
+{% block og_title %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block og_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
+{% block twitter_title %}{% trans 'Walk as Jesus - Walk with Jesus in 77 Steps, Commandments and Law of Messiah' %}{% endblock %}
+{% block twitter_description %}Walk as Jesus helps you walk with Jesus (Yeshua) through 77 practical steps, then go deeper into the Law of Messiah with biblical commandments and mitzvot for everyday discipleship.{% endblock %}
 
 {% block homebanner %}
 {% cache cache_timeout commandments_index_banner cache_on_language %}
 <section class="home-slider js-fullheight owl-carousel">
-  
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_4.jpg' %});">
     <div class="overlay"></div>
     <div class="container">
@@ -43,6 +51,25 @@
     </div>
   </div>
   
+  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-8 text-center ftco-animate mt-5">
+          <div class="text">
+            <div class="subheading">
+              <span>{% trans 'Going Deeper' %}</span>
+            </div>
+            <h1 class="mb-4">{% trans 'Law of Messiah' %}</h1>
+            <p>{% blocktrans %}A collection by two Jewish Rabbis of all commandments from Scripture. We converted their book series into this website so you can use them with your group to deepen your understanding and application of these commandments.{% endblocktrans %}</p>
+            <p>
+              <a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Complete Law of Messiah' %}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_3.png' %});">
     <div class="overlay"></div>
       <div class="container">
@@ -52,26 +79,9 @@
             <div class="subheading">
               <span>{% trans 'Kids site' %}</span>
             </div>
-	    <h1 class="mb-4">{% trans 'A special' %} <span>{% trans 'childrens version' %}</span> {% trans 'of this site to teach how Jesus walked' %}</h1>
-            <p>{% trans 'With links to Superbook animated Bible stories' %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="slider-item js-fullheight" style="background-image:url({% static 'images/bg_2.jpg' %});">
-    <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
-        <div class="col-md-8 text-center ftco-animate mt-5">
-          <div class="text">
-            <div class="subheading">
-              <span>{% trans 'Matthew 28:19-20' %}</span>
-            </div>
-            <h1 class="mb-4">{% blocktrans %}Therefore go and <span>make Disciples</span> of all nations{% endblocktrans %}</h1>
-            <p>{% blocktrans %}teaching them to <span><strong>obey everything</strong></span> I have commanded you{% endblocktrans %}</p>
-            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Discover how' %}</a></p>
+            <h1 class="mb-4">{% trans 'A special' %} <span>{% trans 'Childrens method' %}</span> {% trans 'to teach 3 foundational principles' %}</h1>
+            <p>{% trans 'Help the next generation understand and live the teachings of Jesus' %}</p>
+            <p><a href="{% url 'commandments:lesson_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Children & Lessons' %}</a></p>
           </div>
         </div>
       </div>
@@ -87,30 +97,62 @@
 {% cache cache_timeout commandments_index cache_on_language %}
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
-    <div class="row justify-content-center col-md-12">
-      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="adults"> 
+    <div class="row justify-content-center pb-5">
+      <div class="col-md-12 heading-section text-center ftco-animate">
+        <span class="subheading">{% trans 'Walk with Jesus' %}</span>
+        <h2 class="mb-4">{% trans 'Beginning & Advanced' %}</h2>
+        <p>{% blocktrans %}When you have discovered who Jesus is and what He has done for you, you really want nothing more than to follow Him and dedicate your life to Him. But where do you start? The 77 steps are the best place to begin as a group. The Law of Messiah helps your group continue by living out the full range of Biblical commandments.{% endblocktrans %}</p>
+        <p><strong>{% trans 'Always remember: First Grace, then Obedience' %}</strong></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-6 ftco-animate">
+        <div class="services-2 text-center">
+          <div class="icon"><img src="{% static 'images/jc_icon.png' %}" width="65px" alt=""></div>
+          <div class="text">
+            <h3><b>{% trans 'Beginning' %}</b></h3>
+            <h3>{% trans '77 Unique Steps' %}</h3>
+            <p>{% trans 'We encourage you to come together with other followers of Jesus and help each other by applying these steps into your life. For each step you will find all kinds of related bible verses, sermons, songs, illustrations and lots more resources to guide you.' %}</p>
+            <p><a href="{% url 'commandments:listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Begin here' %}</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-6 ftco-animate">
+        <div class="services-2 text-center">
+          <div class="icon"><img src="{% static 'images/bible.png' %}" width="65px" alt=""></div>
+          <div class="text">
+            <h3><b>{% trans 'Advanced' %}</b></h3>
+            <h3>{% trans 'Law of Messiah' %}</h3>
+            <p>{% trans 'A collection by two Jewish Rabbis of all commandments from Scripture. We converted their book series into this website so you can use them with your group to deepen your understanding and application of these commandments.' %}</p>
+            <p><a href="{% url 'commandments:law_of_messiah_listing' %}" class="btn btn-primary btn-outline-primary py-2 px-4">{% trans 'Continue your walk' %}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+      {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
+      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="adults">
         <h2>{% trans "Intro video 'Walk as Jesus'" %}</h2>
         <div class="video-iframe">
-            <iframe src="https://www.youtube.com/embed/eTc08O8qEm0" frameborder="0" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+          <iframe src="{{ 'https://www.youtube.com/embed/eTc08O8qEm0'|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
         </div>
       </div>
-      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="kids"> 
+      {% endif %}
+      <div class="col-md-12 heading-section text-center ftco-animate" targetaudience="kids">
         <h2>{% trans "Bring the Bible back to life in your child's heart" %}</h2>
         <div class="video-iframe">
-            <iframe src="https://www.youtube.com/embed/kiDQI7Ymkwc" frameborder="0" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+          <iframe src="{{ 'https://www.youtube.com/embed/kiDQI7Ymkwc'|youtube_captions_url }}" frameborder="0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
         </div>
       </div>
-  </div>
-    <div class="row justify-content-center pb-5">
-          <div class="col-md-12 heading-section text-center ftco-animate">
-
-            <span class="subheading">{% trans '1 John 2:6' %}</span>
-            <h2 class="mb-4"><span>{% trans 'He who says he abides in Him' %},</span> {% trans 'ought himself also to walk just as He walked' %}</h2>
-                    <p>{% blocktrans %}When you have discovered who Jesus is and what He has done, you really want nothing more than to follow Him and dedicate your life to Him. But how do you give hands and feet in following Jesus? We present you 77 unique steps which Jesus taught throughout his ministry which we find in the four gospels. We encourage you to come together with other followers of Jesus and help each other by talking about how you can apply these steps into your life. For each step you will find all kind of related bible verses, movies, songs, illustrations and lots more resources.{% endblocktrans %}</p>
-		    <p><strong>{% trans 'Are you ready to discover the first step?' %}</strong></p>
-	    
-        </div>
     </div>
+
+    <div class="background-quote">
+      <span>"{% trans 'Are you ready to discover the first step?' %}"</span>
+    </div>
+  </br>
+
   <div class="row">
   {% if commandments %}
     {% for commandment in commandments %}
@@ -120,72 +162,8 @@
     <p>{% trans 'No commandments are available.' %}</p>
   {% endif %}
   </div>
-  <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-md-12">
-              <div class="row justify-content-center align-items-center">
-                  <div class="col-md-12 daily-verse pl-md-5 ftco-animate fadeInUp ftco-animated">
-                      <div class="background-quote">
-                        <span>"{% trans 'Are you ready to walk as Jesus walked? Step by step...' %}"</span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
 
 </div>
-</section>
-
-<section class="ftco-counter" id="section-counter">
-  <div class="container-fluid px-0">
-    <div class="row no-gutters">
-      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-        <div class="block-18 text-center py-5">
-          <div class="text">
-            <div class="icon d-flex justify-content-center align-items-center">
-              <a href="{% url 'commandments:listing' %}"><img src="{% static 'images/list.png' %}" width="80px" alt=""></a>
-            </div>
-            <a href="{% url 'commandments:listing' %}"><strong class="number" data-number="{{ commandments_total }}">0</strong></a>
-            <span><a style="color:rgba(0, 0, 0, 0.7)" href="{% url 'commandments:listing' %}">{% trans 'Unique steps' %}</a></span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-        <div class="block-18 text-center py-5">
-          <div class="text">
-            <div class="icon d-flex justify-content-center align-items-center">
-      <img src="{% static 'images/bible.png' %}" width="80px" alt="">
-    </div>
-            <strong class="number" data-number="{{ bibles.count }}">0</strong>
-            <span>{% trans 'Bible translations' %}</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-        <div class="block-18 text-center py-5">
-          <div class="text">
-            <div class="icon d-flex justify-content-center align-items-center">
-      <img src="{% static 'images/languages.png' %}" width="80px" alt="">
-    </div>
-            <strong class="number" data-number="{{ languages_total }}">0</strong>
-            <span>{% trans 'Languages' %}</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 justify-content-center counter-wrap ftco-animate">
-        <div class="block-18 text-center py-5">
-          <div class="text">
-            <div class="icon d-flex justify-content-center align-items-center">
-      <img src="{% static 'images/people.png' %}" width="80px" alt="">
-    </div>
-            <strong class="number" data-number="{{ users_total }}">0</strong>
-            <span>{% trans 'Contributers' %}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </section>
 
 {% endcache %}

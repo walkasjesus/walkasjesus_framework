@@ -1,12 +1,19 @@
 from bible_lib import BibleBooks
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.utils import translation
 
-from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment
+from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation
 from walkasjesus_app.context_processors import cache_settings
-from walkasjesus_app.views.detail_view import _allowed_target_audiences, _filter_grouped_media_by_audience
+from walkasjesus_app.views.detail_view import (
+    _allowed_media_languages,
+    _allowed_target_audiences,
+    _collect_shared_media_by_type,
+    _filter_grouped_media_by_audience,
+    _lesson_allowed_target_audiences,
+)
 
 
 class BibleTranslationTestCase(TestCase):
@@ -105,7 +112,7 @@ class UniqueModelConstraintsTestCase(TestCase):
 
 
 class KidsModeMediaFilterTestCase(SimpleTestCase):
-    def test_kids_mode_keeps_only_audience_neutral_media(self):
+    def test_kids_mode_keeps_kids_and_audience_neutral_media(self):
         grouped = {
             'superbook': [
                 {'target_audience': 'kids', 'title': 'Kids only'},
@@ -114,11 +121,11 @@ class KidsModeMediaFilterTestCase(SimpleTestCase):
             ]
         }
 
-        filtered = _filter_grouped_media_by_audience(grouped, {'any'})
+        filtered = _filter_grouped_media_by_audience(grouped, {'any', 'kids'})
 
         self.assertEqual(
             [item['title'] for item in filtered['superbook']],
-            ['Everyone'],
+            ['Kids only', 'Everyone'],
         )
 
     def test_default_mode_keeps_adults_and_any_media(self):
@@ -137,6 +144,22 @@ class KidsModeMediaFilterTestCase(SimpleTestCase):
             ['Adults only', 'Everyone'],
         )
 
+    def test_filter_respects_language_policy(self):
+        grouped = {
+            'song': [
+                {'language': 'en', 'target_audience': 'any', 'title': 'English'},
+                {'language': 'nl', 'target_audience': 'any', 'title': 'Dutch'},
+                {'language': 'any', 'target_audience': 'any', 'title': 'Language independent'},
+            ]
+        }
+
+        filtered = _filter_grouped_media_by_audience(grouped, {'any', 'adults'}, {'any', 'unknown', 'en'})
+
+        self.assertEqual(
+            [item['title'] for item in filtered['song']],
+            ['English', 'Language independent'],
+        )
+
 
 class KidsModeCacheSettingsTestCase(TestCase):
     def setUp(self):
@@ -147,7 +170,7 @@ class KidsModeCacheSettingsTestCase(TestCase):
         request.session = self.client.session
 
         self.assertEqual(cache_settings(request)['cache_on_kids_mode'], 'default')
-        self.assertEqual(_allowed_target_audiences(request), {'any', 'adults'})
+        self.assertEqual(_allowed_target_audiences(request), {'any', 'kids', 'adults'})
 
     def test_cache_settings_include_kids_mode_key(self):
         request = self.factory.get('/', HTTP_COOKIE='jc_kids_mode=true')
@@ -155,4 +178,55 @@ class KidsModeCacheSettingsTestCase(TestCase):
         request.COOKIES['jc_kids_mode'] = 'true'
 
         self.assertEqual(cache_settings(request)['cache_on_kids_mode'], 'kids')
-        self.assertEqual(_allowed_target_audiences(request), {'any'})
+        self.assertEqual(_allowed_target_audiences(request), {'any', 'kids', 'adults'})
+
+    def test_lesson_mode_always_uses_kids_and_any(self):
+        self.assertEqual(_lesson_allowed_target_audiences(), {'any', 'kids'})
+
+
+class MediaLanguagePolicyTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_english_ui_uses_english_media_only(self):
+        with translation.override('en'):
+            request = self.factory.get('/')
+            self.assertEqual(_allowed_media_languages(request), {'any', 'unknown', 'en'})
+
+    def test_dutch_ui_uses_dutch_and_english_media(self):
+        with translation.override('nl'):
+            request = self.factory.get('/')
+            self.assertEqual(_allowed_media_languages(request), {'any', 'unknown', 'nl', 'en'})
+
+
+class SharedMediaDeduplicationTestCase(TestCase):
+    def setUp(self):
+        self.commandment = Commandment.objects.create(
+            id=1001,
+            title='Step 1001',
+            title_negative='Step 1001 negative',
+        )
+        self.lesson = Lesson.objects.create(
+            id=1001,
+            title='Lesson 1001',
+            commandment=self.commandment,
+        )
+
+    def test_collect_shared_media_deduplicates_by_content(self):
+        common = {
+            'media_type': LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+            'title': 'Create in me a clean heart',
+            'author': 'Keith Green',
+            'url': 'https://example.org/song',
+            'target_audience': 'any',
+            'language': 'en',
+            'is_public': True,
+        }
+        LawOfMessiahDrawing.objects.create(commandment=self.commandment, **common)
+        LawOfMessiahDrawing.objects.create(lesson=self.lesson, **common)
+
+        grouped = _collect_shared_media_by_type(commandment=self.commandment, lesson=self.lesson)
+        songs = grouped[LawOfMessiahDrawing.MEDIA_TYPE_SONG]
+
+        self.assertEqual(len(songs), 1)
+        self.assertEqual(songs[0].title, 'Create in me a clean heart')

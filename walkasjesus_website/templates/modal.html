@@ -97,11 +97,12 @@
     var bibleSelect = document.getElementById('drpBibleTranslation');
     var saveButton = document.querySelector('.btnSaveLanguages');
     var bibleTranslationsUrl = "{% url 'commandments:bible_translations_for_language' %}";
+    var bibleRefreshPromise = Promise.resolve();
 
     function refreshBibleDropdown(selectedLanguage) {
         bibleSelect.disabled = true;
 
-        fetch(bibleTranslationsUrl + '?language=' + encodeURIComponent(selectedLanguage))
+        return fetch(bibleTranslationsUrl + '?language=' + encodeURIComponent(selectedLanguage))
             .then(function (response) { return response.json(); })
             .then(function (data) {
                 bibleSelect.innerHTML = '';
@@ -169,7 +170,7 @@
 
     languageSelect.addEventListener('change', function () {
         var selectedLanguage = this.value;
-        refreshBibleDropdown(selectedLanguage);
+        bibleRefreshPromise = refreshBibleDropdown(selectedLanguage);
     });
 
     saveButton.addEventListener('click', function (event) {
@@ -178,7 +179,10 @@
 
         saveButton.disabled = true;
 
-        postForm(mediaLanguagesForm)
+        Promise.resolve(bibleRefreshPromise)
+            .then(function () {
+                return postForm(mediaLanguagesForm);
+            })
             .then(function () {
                 return postLanguageSwitch(languageSelect.value);
             })

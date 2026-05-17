@@ -84,14 +84,17 @@ class LanguageBibleSwitchFlowTest(TestCase):
     def setUp(self):
         cache.clear()
 
-    def _switch_language(self, language_code, next_url, bible_id):
+    def _switch_language(self, language_code, next_url, bible_id=None):
+        payload = {
+            'language': language_code,
+            'next': next_url,
+        }
+        if bible_id is not None:
+            payload['bible_id'] = bible_id
+
         response = self.client.post(
             reverse('commandments:language_switch'),
-            {
-                'language': language_code,
-                'next': next_url,
-                'bible_id': bible_id,
-            },
+            payload,
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.client.cookies[settings.LANGUAGE_COOKIE_NAME].value, language_code)
@@ -148,3 +151,23 @@ class LanguageBibleSwitchFlowTest(TestCase):
 
                     self._assert_verse_fetch_uses_bible(verses_url, second_bible.id)
                     self._assert_page_has_expected_copyright(redirect_url, second_bible)
+
+    @patch('bible_lib.bible_api.api_bible.ApiBible.verses', new=_mocked_api_bible_verses)
+    def test_switching_back_to_language_reuses_preferred_bible_for_that_language(self):
+        en_default = self.en_bibles[0]
+        en_custom = self.en_bibles[1]
+        nl_default = self.nl_bibles[0]
+
+        with override('en'):
+            step_detail_url = reverse('commandments:detail', args=[self.step_id])
+            step_verses_url = reverse('commandments:commandment_verses', args=[self.step_id])
+
+        redirect_url = self._switch_language('en', step_detail_url, en_default.id)
+        redirect_url = self._switch_language('en', redirect_url, en_custom.id)
+        self._assert_verse_fetch_uses_bible(step_verses_url, en_custom.id)
+
+        redirect_url = self._switch_language('nl', redirect_url, nl_default.id)
+        self._assert_verse_fetch_uses_bible(step_verses_url, nl_default.id)
+
+        redirect_url = self._switch_language('en', redirect_url)
+        self._assert_verse_fetch_uses_bible(step_verses_url, en_custom.id)

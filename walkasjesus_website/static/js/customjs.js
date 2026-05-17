@@ -522,6 +522,9 @@ $(document).ready(function(){
       $.removeCookie('jc_kids_mode');
       applyKidsModeState(false, true);
     }
+
+    // Load server-filtered content for the selected audience mode.
+    window.location.reload();
   });
 
   const introVid = $("#WaJ-intro-video");

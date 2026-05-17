@@ -15,6 +15,7 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
+CROSS_DOMAIN_BIBLE_PARAM = '__waj_bible'
 
 
 class GeoLocationRedirectMiddleware(MiddlewareMixin):
@@ -52,11 +53,28 @@ class GeoLocationRedirectMiddleware(MiddlewareMixin):
         handoff_lang = str(request.GET.get(CROSS_DOMAIN_LANG_PARAM, '')).strip().lower()
         supported_languages = {code for code, _ in getattr(settings, 'LANGUAGES', [])}
         if handoff_lang in supported_languages:
+            handoff_bible = str(request.GET.get(CROSS_DOMAIN_BIBLE_PARAM, '')).strip()
+            try:
+                from django.utils import translation
+                translation.activate(handoff_lang)
+            except Exception:
+                pass
+
+            if handoff_bible and handoff_bible not in getattr(settings, 'DISABLED_BIBLE_TRANSLATIONS', []):
+                try:
+                    from walkasjesus_app.models import BibleTranslation, UserPreferences
+
+                    candidate = BibleTranslation().get(handoff_bible)
+                    if str(getattr(candidate, 'language', '')).strip().lower() == handoff_lang:
+                        UserPreferences(request.session).bible = candidate
+                except Exception:
+                    pass
+
             split = urlsplit(request.get_full_path())
             kept_query = [
                 (key, value)
                 for key, value in parse_qsl(split.query, keep_blank_values=True)
-                if key != CROSS_DOMAIN_LANG_PARAM
+                if key not in {CROSS_DOMAIN_LANG_PARAM, CROSS_DOMAIN_BIBLE_PARAM}
             ]
             clean_path = urlunsplit(('', '', split.path or '/', urlencode(kept_query, doseq=True), split.fragment))
             response = HttpResponseRedirect(clean_path)

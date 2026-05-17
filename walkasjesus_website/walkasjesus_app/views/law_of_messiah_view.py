@@ -15,6 +15,7 @@ from django.views import View
 from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, LawOfMessiahDrawing, Lesson, Maimonides, UserPreferences
 from walkasjesus_app.views.detail_view import (
+    _allowed_media_languages,
     _allowed_target_audiences,
     _filter_grouped_media_by_audience,
     _step_to_law_mapping,
@@ -83,9 +84,38 @@ def _collect_law_media_by_type(law):
     grouped = {media_type: [] for media_type in _law_media_type_order()}
     seen = set()
 
+    def is_displayable(media_type, title, description, img_url, url):
+        normalized_media_type = str(media_type or '').strip().lower() or LawOfMessiahDrawing.MEDIA_TYPE_DRAWING
+        title = str(title or '').strip()
+        description = str(description or '').strip()
+        img_url = str(img_url or '').strip()
+        url = str(url or '').strip()
+
+        if normalized_media_type in {
+            LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+            LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK,
+            LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW,
+            LawOfMessiahDrawing.MEDIA_TYPE_MOVIE,
+            LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE,
+            LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO,
+            LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY,
+            LawOfMessiahDrawing.MEDIA_TYPE_SERMON,
+        }:
+            return bool(url)
+
+        if normalized_media_type in {
+            LawOfMessiahDrawing.MEDIA_TYPE_DRAWING,
+            LawOfMessiahDrawing.MEDIA_TYPE_PICTURE,
+        }:
+            return bool(img_url)
+
+        return bool(title or description or url or img_url)
+
     def add_item(media_type, title, description, img_url, url, author, target_audience, language, is_public):
         normalized_media_type = str(media_type or '').strip().lower() or LawOfMessiahDrawing.MEDIA_TYPE_DRAWING
         if normalized_media_type not in grouped:
+            return
+        if not is_displayable(media_type, title, description, img_url, url):
             return
         key = (
             normalized_media_type,
@@ -636,6 +666,7 @@ class LawOfMessiahDetailView(View):
         media_by_type = _filter_grouped_media_by_audience(
             _collect_law_media_by_type(law),
             _allowed_target_audiences(request),
+            _allowed_media_languages(request),
         )
         drawings = _dedupe_drawings_for_display(
             media_by_type.get(LawOfMessiahDrawing.MEDIA_TYPE_DRAWING, [])

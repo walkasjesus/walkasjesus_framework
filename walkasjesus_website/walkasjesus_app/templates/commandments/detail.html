@@ -159,7 +159,6 @@
                             {% else %}
                             <ul class="positive_list positive_list_title">
                             {% endif %}
-                                <li>{{ commandment.title }}</li>
                                 <b>{{ commandment.primary_bible_reference }}</b><br>
                                 {% if commandment.primary_bible_reference.is_long_passage %}
                                     <button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn bible-verse-load-link mt-1" data-verse-ref="{{ commandment.primary_bible_reference.client_ref_id }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ commandment.primary_bible_reference.display_reference }}</button>

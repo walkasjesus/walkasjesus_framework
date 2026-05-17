@@ -8,6 +8,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.utils import translation
 from django.views import View
 
 from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTranslation, LawOfMessiah, LawOfMessiahDrawing
@@ -96,7 +97,9 @@ class DetailView(View):
         shared_media_by_type = _filter_grouped_media_by_audience(
             _collect_shared_media_by_type(commandment=commandment),
             _allowed_target_audiences(request),
+            _allowed_media_languages(request),
         )
+        shared_media_by_type = _enforce_kids_only_media_types(shared_media_by_type, _is_kids_mode(request))
         _apply_shared_media_to_commandment_display(commandment, shared_media_by_type)
 
         return render(
@@ -123,7 +126,8 @@ class DetailLessonView(View):
         lesson.languages = UserPreferences(request.session).languages
         shared_media_by_type = _filter_grouped_media_by_audience(
             _collect_shared_media_by_type(commandment=lesson.commandment, lesson=lesson),
-            _allowed_target_audiences(request),
+            _lesson_allowed_target_audiences(),
+            _allowed_media_languages(request),
         )
         _apply_shared_media_to_lesson_display(lesson, shared_media_by_type)
 
@@ -139,9 +143,27 @@ def _shared_media_types():
 
 
 def _allowed_target_audiences(request):
-    if request.COOKIES.get('jc_kids_mode'):
-        return {'any'}
+    if _is_kids_mode(request):
+        return {'any', 'kids'}
     return {'any', 'adults'}
+
+
+def _is_kids_mode(request):
+    return bool(request.COOKIES.get('jc_kids_mode'))
+
+
+def _lesson_allowed_target_audiences():
+    # Lessons are always child-focused pages.
+    return {'any', 'kids'}
+
+
+def _allowed_media_languages(request):
+    current_language = str(translation.get_language() or '').strip().lower()[:2]
+    if current_language == 'nl':
+        return {'any', 'unknown', 'nl', 'en'}
+    if current_language:
+        return {'any', 'unknown', current_language}
+    return {'any', 'unknown', 'en'}
 
 
 def _media_target_audience(item):
@@ -150,18 +172,86 @@ def _media_target_audience(item):
     return getattr(item, 'target_audience', 'any') or 'any'
 
 
-def _filter_grouped_media_by_audience(grouped, allowed_target_audiences):
+def _media_language(item):
+    if isinstance(item, dict):
+        return str(item.get('language') or 'any').strip().lower() or 'any'
+    return str(getattr(item, 'language', 'any') or 'any').strip().lower() or 'any'
+
+
+def _media_attr(item, key):
+    if isinstance(item, dict):
+        return str(item.get(key) or '').strip()
+    return str(getattr(item, key, '') or '').strip()
+
+
+def _is_displayable_media(item, media_type):
+    title = _media_attr(item, 'title')
+    description = _media_attr(item, 'description')
+    url = _media_attr(item, 'url')
+    img_url = _media_attr(item, 'img_url')
+
+    if media_type in {
+        LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+        LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK,
+        LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW,
+        LawOfMessiahDrawing.MEDIA_TYPE_MOVIE,
+        LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE,
+        LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO,
+        LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY,
+        LawOfMessiahDrawing.MEDIA_TYPE_SERMON,
+    }:
+        return bool(url)
+
+    if media_type in {
+        LawOfMessiahDrawing.MEDIA_TYPE_DRAWING,
+        LawOfMessiahDrawing.MEDIA_TYPE_PICTURE,
+    }:
+        return bool(img_url)
+
+    return bool(title or description or url or img_url)
+
+
+def _filter_grouped_media_by_audience(grouped, allowed_target_audiences, allowed_languages=None):
+    if allowed_languages is None:
+        allowed_languages = {'any', 'unknown', 'en'}
     return {
         media_type: [
             item for item in items
             if _media_target_audience(item) in allowed_target_audiences
+            and _media_language(item) in allowed_languages
+            and _is_displayable_media(item, media_type)
         ]
         for media_type, items in grouped.items()
     }
 
 
+def _enforce_kids_only_media_types(grouped, kids_mode):
+    if kids_mode:
+        return grouped
+
+    grouped[LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK] = []
+    grouped[LawOfMessiahDrawing.MEDIA_TYPE_HENKIESHOW] = []
+    return grouped
+
+
 def _collect_shared_media_by_type(commandment=None, lesson=None):
     grouped = {media_type: [] for media_type in _shared_media_types()}
+    seen = set()
+
+    def media_key(media):
+        normalized_title = str(media.title or '').strip().lower()
+        normalized_author = str(media.author or '').strip().lower()
+        fallback_locator = (
+            str(media.url or '').strip().lower(),
+            str(media.img_url or '').strip().lower(),
+        )
+        return (
+            media.media_type,
+            normalized_title,
+            normalized_author,
+            fallback_locator if not (normalized_title or normalized_author) else '',
+        )
+
     query = LawOfMessiahDrawing.objects.none()
     if commandment is not None:
         query = query | LawOfMessiahDrawing.objects.filter(commandment=commandment)
@@ -169,6 +259,10 @@ def _collect_shared_media_by_type(commandment=None, lesson=None):
         query = query | LawOfMessiahDrawing.objects.filter(lesson=lesson)
 
     for media in query.distinct().order_by('media_type', 'id'):
+        key = media_key(media)
+        if key in seen:
+            continue
+        seen.add(key)
         grouped[media.media_type].append(media)
     return grouped
 

@@ -17,6 +17,7 @@ from walkasjesus_app.models import UserPreferences, BibleTranslation
 
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
+CROSS_DOMAIN_BIBLE_PARAM = '__waj_bible'
 
 
 def _resolve_path_in_any_language(path):
@@ -57,7 +58,7 @@ def _localized_next_url(next_url, language_code):
             return fallback
 
 
-def _absolute_redirect_for_language(request, language_code, redirect_url):
+def _absolute_redirect_for_language(request, language_code, redirect_url, selected_bible_id=''):
     # Keep relative redirects when domain mapping is not configured.
     if not redirect_url or redirect_url.startswith('http://') or redirect_url.startswith('https://'):
         return redirect_url
@@ -75,6 +76,9 @@ def _absolute_redirect_for_language(request, language_code, redirect_url):
     split = urlsplit(redirect_url)
     query_items = parse_qsl(split.query, keep_blank_values=True)
     query_items.append((CROSS_DOMAIN_LANG_PARAM, language_code))
+    selected_bible_id = str(selected_bible_id or '').strip()
+    if selected_bible_id:
+        query_items.append((CROSS_DOMAIN_BIBLE_PARAM, selected_bible_id))
     redirect_url = urlunsplit(('', '', split.path or '/', urlencode(query_items, doseq=True), split.fragment))
 
     forwarded_proto = str(request.META.get('HTTP_X_FORWARDED_PROTO', '')).strip().lower()
@@ -91,6 +95,29 @@ def _default_bible_for_language(language_code):
     if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
         default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
     return BibleTranslation().get(default_bible_id)
+
+
+def _preferred_bible_for_language(session, language_code):
+    preferred_bibles = session.get(UserPreferences.PER_LANGUAGE_BIBLE_SESSION_KEY, {})
+    if isinstance(preferred_bibles, dict):
+        preferred_bible_id = str(preferred_bibles.get(language_code, '')).strip()
+        if preferred_bible_id and preferred_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+            try:
+                preferred_bible = BibleTranslation().get(preferred_bible_id)
+                if preferred_bible.language == language_code:
+                    return preferred_bible
+            except Exception:
+                pass
+    return _default_bible_for_language(language_code)
+
+
+def _default_media_languages_for_language(language_code):
+    normalized = str(language_code or '').strip().lower()[:2]
+    if normalized == 'nl':
+        return ['en', 'nl']
+    if normalized:
+        return [normalized]
+    return ['en']
 
 
 class UserPreferencesLanguageSwitchView(View):
@@ -119,13 +146,15 @@ class UserPreferencesLanguageSwitchView(View):
                 bible = None
 
         if bible is None:
-            bible = _default_bible_for_language(language_code)
+            bible = _preferred_bible_for_language(request.session, language_code)
 
-        UserPreferences(request.session).bible = bible
         translation.activate(language_code)
+        preferences = UserPreferences(request.session)
+        preferences.bible = bible
+        preferences.languages = _default_media_languages_for_language(language_code)
 
         redirect_url = _localized_next_url(next_url, language_code)
-        redirect_url = _absolute_redirect_for_language(request, language_code, redirect_url)
+        redirect_url = _absolute_redirect_for_language(request, language_code, redirect_url, bible.id)
         response = JsonResponse({'redirect_url': redirect_url})
         response.set_cookie(
             settings.LANGUAGE_COOKIE_NAME,

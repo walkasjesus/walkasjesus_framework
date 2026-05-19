@@ -2,23 +2,23 @@
 {% load static %}
 {% load i18n %}
 
-{% block title_content %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
-{% block meta_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
-{% block og_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
-{% block og_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
-{% block twitter_title %}{% trans 'Law of Messiah - Biblical Commandments and Mitzvot (New Covenant Perspective)' %}{% endblock %}
-{% block twitter_description %}Explore the Law of Messiah: biblical commandments and mitzvot from a New Covenant perspective, with practical filters for obedience, discipleship, and group study around Jesus (Yeshua) the Messiah.{% endblock %}
+{% block title_content %}{% trans 'Law of Messiah Study Hub | Commandments, Mitzvot, and Filters' %}{% endblock %}
+{% block meta_description %}{% trans 'Search and filter Law of Messiah topics with Scripture-linked commandments, themes, and practical discipleship categories for serious personal and group Bible study.' %}{% endblock %}
+{% block og_title %}{% trans 'Law of Messiah Study Hub | Commandments, Mitzvot, and Filters' %}{% endblock %}
+{% block og_description %}{% trans 'Search and filter Law of Messiah topics with Scripture-linked commandments, themes, and practical discipleship categories for serious personal and group Bible study.' %}{% endblock %}
+{% block twitter_title %}{% trans 'Law of Messiah Study Hub | Commandments, Mitzvot, and Filters' %}{% endblock %}
+{% block twitter_description %}{% trans 'Search and filter Law of Messiah topics with Scripture-linked commandments, themes, and practical discipleship categories for serious personal and group Bible study.' %}{% endblock %}
 {% block jsonld %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "{% trans 'Overview of all Laws of Messiah' %}",
-    "description": "Explore biblical commandments and mitzvot in the Law of Messiah.",
+    "description": "{% trans 'Search and filter Law of Messiah commandments and mitzvot for deeper biblical discipleship study.' %}",
     "url": "{{ request.build_absolute_uri }}",
     "mainEntity": {
         "@type": "ItemList",
-        "name": "Law of Messiah commandments",
+        "name": "{% trans 'Law of Messiah commandments' %}",
         "numberOfItems": {{ seo_law_index|length }},
         "itemListElement": [
             {% for item in seo_law_index %}

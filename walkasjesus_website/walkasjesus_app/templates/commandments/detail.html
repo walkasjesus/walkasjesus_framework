@@ -3,18 +3,19 @@
 {% load i18n %}
 {% load media_extras %}
 {% load cache %}
-{% block title_content %}{{ commandment.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block og_title %}{{ commandment.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block og_description %}{% if commandment.quote %}{{ commandment.quote|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
-{% block twitter_title %}{{ commandment.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block twitter_description %}{% if commandment.quote %}{{ commandment.quote|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block title_content %}{{ commandment.title }} | {% blocktrans with commandment_id=commandment.id %}Step {{ commandment_id }} to Follow Jesus{% endblocktrans %}{% endblock %}
+{% block meta_description %}{% blocktrans trimmed with commandment_title=commandment.title commandment_id=commandment.id %}Step {{ commandment_id }} focuses on "{{ commandment_title }}" with context-rich Bible passages, reflection prompts, and real-life obedience practice for followers of Jesus.{% endblocktrans %}{% endblock %}
+{% block og_title %}{{ commandment.title }} | {% blocktrans with commandment_id=commandment.id %}Step {{ commandment_id }} to Follow Jesus{% endblocktrans %}{% endblock %}
+{% block og_description %}{% blocktrans trimmed with commandment_title=commandment.title commandment_id=commandment.id %}Step {{ commandment_id }} focuses on "{{ commandment_title }}" with context-rich Bible passages, reflection prompts, and real-life obedience practice for followers of Jesus.{% endblocktrans %}{% endblock %}
+{% block twitter_title %}{{ commandment.title }} | {% blocktrans with commandment_id=commandment.id %}Step {{ commandment_id }} to Follow Jesus{% endblocktrans %}{% endblock %}
+{% block twitter_description %}{% blocktrans trimmed with commandment_title=commandment.title commandment_id=commandment.id %}Step {{ commandment_id }} focuses on "{{ commandment_title }}" with context-rich Bible passages, reflection prompts, and real-life obedience practice for followers of Jesus.{% endblocktrans %}{% endblock %}
 {% block jsonld %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "{{ commandment.title|escapejs }}",
-  "description": "{% if commandment.quote %}{{ commandment.quote|truncatechars:200|escapejs }}{% else %}Walk as Jesus - Discover the commandments of Jesus Christ.{% endif %}",
+    "description": "{% blocktrans trimmed with commandment_title=commandment.title|escapejs commandment_id=commandment.id %}Step {{ commandment_id }} focuses on \"{{ commandment_title }}\" with context-rich Bible passages, reflection prompts, and real-life obedience practice for followers of Jesus.{% endblocktrans %}",
   "url": "{{ request.build_absolute_uri }}",
   "isPartOf": {
     "@type": "WebSite",

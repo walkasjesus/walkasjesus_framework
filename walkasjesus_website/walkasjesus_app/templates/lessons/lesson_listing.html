@@ -2,6 +2,12 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% block title_content %}{% trans 'Children and Family Bible Lessons | Teach Faith Through Practice' %}{% endblock %}
+{% block meta_description %}{% trans 'Find engaging Bible lessons for children with stories, memory-focused steps, and practical activities that help families and ministry teams disciple the next generation.' %}{% endblock %}
+{% block og_title %}{% trans 'Children and Family Bible Lessons | Teach Faith Through Practice' %}{% endblock %}
+{% block og_description %}{% trans 'Find engaging Bible lessons for children with stories, memory-focused steps, and practical activities that help families and ministry teams disciple the next generation.' %}{% endblock %}
+{% block twitter_title %}{% trans 'Children and Family Bible Lessons | Teach Faith Through Practice' %}{% endblock %}
+{% block twitter_description %}{% trans 'Find engaging Bible lessons for children with stories, memory-focused steps, and practical activities that help families and ministry teams disciple the next generation.' %}{% endblock %}
 {% block content %}
 {% cache cache_timeout lessons_listing cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">

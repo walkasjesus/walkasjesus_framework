@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-19 04:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: account_app/templates/account/change_password.html:8
+#: account_app/templates/account/profile.html:55
+msgid "Save changes"
+msgstr ""
+
+#: account_app/templates/account/index.html:6
+#: account_app/templates/account/login.html:10
+msgid "Login"
+msgstr ""
+
+#: account_app/templates/account/index.html:9
+msgid "Logout"
+msgstr ""
+
+#: account_app/templates/account/index.html:12
+msgid "Profile"
+msgstr ""
+
+#: account_app/templates/account/index.html:13
+msgid "Change password"
+msgstr ""
+
+#: account_app/templates/account/login.html:9
+msgid "Contribute"
+msgstr ""
+
+#: account_app/templates/account/login.html:11
+msgid ""
+"Thank you for helping in teaching the words and steps of Jesus all around "
+"the world!"
+msgstr ""
+
+#: account_app/templates/account/login.html:15
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+
+#: account_app/templates/account/login.html:22
+msgid ""
+"Your account doesn't have access to this page. To proceed, please login with "
+"an account that has access."
+msgstr ""
+
+#: account_app/templates/account/login.html:25
+msgid "Please login to see this page."
+msgstr ""
+
+#: account_app/templates/account/profile.html:10
+msgid "My profile"
+msgstr ""
+
+#: account_app/templates/account/profile.html:11
+msgid "My Profile"
+msgstr ""
+
+#: account_app/templates/account/profile.html:22
+msgid "You can change your profile settings on this page."
+msgstr ""
+
+#: account_app/templates/account/profile.html:32
+#: account_app/templates/registration/signup.html:34
+msgid "I agree with the Terms and Conditions"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:10
+msgid "Signup"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:11
+msgid "Register for a new account"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:12
+msgid ""
+"The content of this website is made possible by contributors around the "
+"world. You can help improving by:"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:16
+msgid ""
+"Translating to your language, since most translation is done automatically, "
+"corrections are very welcome!"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:19
+msgid "Adding or correcting steps along with their Bible references"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:22
+msgid ""
+"Adding resources like movies, books, testimonies, blogs, songs, pictures, "
+"illustrations and sermons which are related to the corresponding steps"
+msgstr ""
+
+#: account_app/templates/registration/signup.html:57
+msgid "Sign up"
+msgstr ""

@@ -2,6 +2,12 @@
 {% load static %}
 {% load i18n %}
 {% load cache %}
+{% block title_content %}{% trans 'Our Vision for Disciple-Making | Walk as Jesus' %}{% endblock %}
+{% block meta_description %}{% trans 'See the mission, theological foundation, and practical direction behind Walk as Jesus, including why grace-first discipleship leads to mature obedience.' %}{% endblock %}
+{% block og_title %}{% trans 'Our Vision for Disciple-Making | Walk as Jesus' %}{% endblock %}
+{% block og_description %}{% trans 'See the mission, theological foundation, and practical direction behind Walk as Jesus, including why grace-first discipleship leads to mature obedience.' %}{% endblock %}
+{% block twitter_title %}{% trans 'Our Vision for Disciple-Making | Walk as Jesus' %}{% endblock %}
+{% block twitter_description %}{% trans 'See the mission, theological foundation, and practical direction behind Walk as Jesus, including why grace-first discipleship leads to mature obedience.' %}{% endblock %}
 {% block content %}
 {% cache cache_timeout vision cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">

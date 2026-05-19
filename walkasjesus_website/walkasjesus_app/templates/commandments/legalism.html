@@ -3,6 +3,12 @@
 {% load i18n %}
 {% load media_extras %}
 {% load cache %}
+{% block title_content %}{% trans 'Grace vs Legalism | Biblical Answers About Obedience to Jesus' %}{% endblock %}
+{% block meta_description %}{% trans 'Watch and study biblical teaching that clarifies common confusion about Torah, grace, and the commandments of Jesus in New Covenant discipleship.' %}{% endblock %}
+{% block og_title %}{% trans 'Grace vs Legalism | Biblical Answers About Obedience to Jesus' %}{% endblock %}
+{% block og_description %}{% trans 'Watch and study biblical teaching that clarifies common confusion about Torah, grace, and the commandments of Jesus in New Covenant discipleship.' %}{% endblock %}
+{% block twitter_title %}{% trans 'Grace vs Legalism | Biblical Answers About Obedience to Jesus' %}{% endblock %}
+{% block twitter_description %}{% trans 'Watch and study biblical teaching that clarifies common confusion about Torah, grace, and the commandments of Jesus in New Covenant discipleship.' %}{% endblock %}
 {% block content %}
 {% cache cache_timeout legalism cache_on_language %}
 <section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_1.jpg' %});">

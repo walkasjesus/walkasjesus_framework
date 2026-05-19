@@ -3,18 +3,19 @@
 {% load i18n %}
 {% load media_extras %}
 {% load cache %}
-{% block title_content %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block og_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block og_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
-{% block twitter_title %}{{ lesson.title }} - {% trans 'Walk as Jesus' %}{% endblock %}
-{% block twitter_description %}{% if lesson.story %}{{ lesson.story|truncatechars:200 }}{% else %}{% trans 'Walk as Jesus - Discover the commandments of Jesus Christ. Learn it, Live it, Give it.' %}{% endif %}{% endblock %}
+{% block title_content %}{{ lesson.title }} | {% trans 'Bible Lesson to Walk with Jesus' %}{% endblock %}
+{% block meta_description %}{% blocktrans trimmed with lesson_title=lesson.title %}Use the lesson "{{ lesson_title }}" to guide children through Scripture, discussion, and memorable practice points for homes, classrooms, and church groups.{% endblocktrans %}{% endblock %}
+{% block og_title %}{{ lesson.title }} | {% trans 'Bible Lesson to Walk with Jesus' %}{% endblock %}
+{% block og_description %}{% blocktrans trimmed with lesson_title=lesson.title %}Use the lesson "{{ lesson_title }}" to guide children through Scripture, discussion, and memorable practice points for homes, classrooms, and church groups.{% endblocktrans %}{% endblock %}
+{% block twitter_title %}{{ lesson.title }} | {% trans 'Bible Lesson to Walk with Jesus' %}{% endblock %}
+{% block twitter_description %}{% blocktrans trimmed with lesson_title=lesson.title %}Use the lesson "{{ lesson_title }}" to guide children through Scripture, discussion, and memorable practice points for homes, classrooms, and church groups.{% endblocktrans %}{% endblock %}
 {% block jsonld %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "{{ lesson.title|escapejs }}",
-  "description": "{% if lesson.story %}{{ lesson.story|truncatechars:200|escapejs }}{% else %}Walk as Jesus - Discover the commandments of Jesus Christ.{% endif %}",
+    "description": "{% blocktrans trimmed with lesson_title=lesson.title|escapejs %}Use the lesson \"{{ lesson_title }}\" to guide children through Scripture, discussion, and memorable practice points for homes, classrooms, and church groups.{% endblocktrans %}",
   "url": "{{ request.build_absolute_uri }}",
   "isPartOf": {
     "@type": "WebSite",

@@ -23,9 +23,24 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 	
 	echo "INFO: ${start} - Start translating files" | tee -a ${log}
 	echo "Adding new texts to the .po files." | tee -a ${log}
-	python3 manage.py makemessages -l nl --ignore=venv | tee -a ${log}
-	#python3 manage.py makemessages -l fr --ignore=venv | tee -a ${log}
-	#python3 manage.py makemessages -l de --ignore=venv | tee -a ${log}
+	python3 - <<'PY' | tee -a ${log}
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'walkasjesus_website.settings')
+from django.core.management.commands.makemessages import Command
+
+cmd = Command()
+cmd.run_from_argv([
+	'manage.py',
+	'makemessages',
+	'-l', 'nl',
+	'--extension=html',
+	'--ignore=venv',
+	'--ignore=data/*',
+	'--ignore=static/*',
+])
+PY
+	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
+	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
 
 	echo "Auto translating new untranslated Dutch entries while keeping existing translations intact." | tee -a ${log}
 	python3 manage.py auto_translate | tee -a ${log}
@@ -40,9 +55,24 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 else
 	echo "INFO: Start translating files"
 	echo "Adding new texts to the .po files."
-	python3 manage.py makemessages -l nl --ignore=venv
-	#python3 manage.py makemessages -l fr --ignore=venv
-	#python3 manage.py makemessages -l de --ignore=venv
+	python3 - <<'PY'
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'walkasjesus_website.settings')
+from django.core.management.commands.makemessages import Command
+
+cmd = Command()
+cmd.run_from_argv([
+	'manage.py',
+	'makemessages',
+	'-l', 'nl',
+	'--extension=html',
+	'--ignore=venv',
+	'--ignore=data/*',
+	'--ignore=static/*',
+])
+PY
+	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/*
+	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/*
 
 	echo "Auto translating new untranslated Dutch entries while keeping existing translations intact."
 	python3 manage.py auto_translate

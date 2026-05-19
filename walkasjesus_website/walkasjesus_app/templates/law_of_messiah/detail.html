@@ -5,19 +5,19 @@
 {% load media_extras %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block title_content %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
-{% block meta_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
-{% block og_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
-{% block og_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
-{% block twitter_title %}{{ law.translated_title }} - {% trans 'Law of Messiah' %}{% endblock %}
-{% block twitter_description %}{{ law.translated_title }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context for walking with Jesus (Yeshua) the Messiah.{% endblock %}
+{% block title_content %}{{ law.translated_title }} | {% trans 'Law of Messiah Commandment Study' %}{% endblock %}
+{% block meta_description %}{% blocktrans trimmed with law_title=law.translated_title %}Study "{{ law_title }}" with related Scripture, covenant context, and practical obedience guidance for disciples seeking to live out the Law of Messiah faithfully.{% endblocktrans %}{% endblock %}
+{% block og_title %}{{ law.translated_title }} | {% trans 'Law of Messiah Commandment Study' %}{% endblock %}
+{% block og_description %}{% blocktrans trimmed with law_title=law.translated_title %}Study "{{ law_title }}" with related Scripture, covenant context, and practical obedience guidance for disciples seeking to live out the Law of Messiah faithfully.{% endblocktrans %}{% endblock %}
+{% block twitter_title %}{{ law.translated_title }} | {% trans 'Law of Messiah Commandment Study' %}{% endblock %}
+{% block twitter_description %}{% blocktrans trimmed with law_title=law.translated_title %}Study "{{ law_title }}" with related Scripture, covenant context, and practical obedience guidance for disciples seeking to live out the Law of Messiah faithfully.{% endblocktrans %}{% endblock %}
 {% block jsonld %}
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "{{ law.translated_title|escapejs }}",
-    "description": "{{ law.translated_title|escapejs }} - Law of Messiah commandment (mitzvah) with Bible references, practical application, and New Covenant context.",
+    "description": "{% blocktrans trimmed with law_title=law.translated_title|escapejs %}Study \"{{ law_title }}\" with related Scripture, covenant context, and practical obedience guidance for disciples seeking to live out the Law of Messiah faithfully.{% endblocktrans %}",
     "url": "{{ request.build_absolute_uri }}",
     "about": ["Law of Messiah", "Yeshua", "Messiah", "commandments", "mitzvot"]
 }

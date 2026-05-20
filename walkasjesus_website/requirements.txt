@@ -19,6 +19,7 @@ django-redis>=5.4.0
 -e ../import_tool
 -e ../translate_tool
 polib>=1.2.0
+beautifulsoup4>=4.13.0
 
 # Monitoring
 sentry-sdk>=2.57.0

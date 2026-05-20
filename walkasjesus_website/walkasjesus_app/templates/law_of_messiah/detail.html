@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block content %}
-{% cache cache_timeout law_of_messiah_detail_v2 cache_on_language cache_on_bible cache_on_kids_mode law.id %}
+{% cache cache_timeout law_of_messiah_detail_v5 cache_on_language cache_on_bible cache_on_kids_mode law.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         {% if key_nt_scriptures or key_ot_scriptures or supportive_nt_scriptures or supportive_ot_scriptures %}
@@ -176,7 +176,30 @@
                             <div class="lom-ncla-summary">
                                 <h5>{% trans 'New Covenant Literal Application' %}</h5>
                                 <p><strong>{% trans 'Applies to Person Categories' %}:</strong> {{ ncla_summary.person_categories }}</p>
-                                <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application }}</p>
+                                {% if ncla_summary.application_details %}
+                                <div class="lom-ncla-application-grid mt-2 mb-2">
+                                    {% for item in ncla_summary.application_details %}
+                                    <div class="lom-ncla-application-card">
+                                        <div class="lom-ncla-application-title">{{ item.application_label|capfirst }}</div>
+                                        <div class="lom-ncla-person-groups">
+                                            {% for group in item.person_groups %}
+                                            <div class="lom-ncla-person-group">
+                                                <img src="{% static group.icon %}" alt="{{ group.label }}" class="lom-person-icon">
+                                                <span class="lom-ncla-group-label">{{ group.label }}</span>
+                                                <span class="lom-ncla-gender-icons">
+                                                    {% if group.male %}<i class="fa fa-mars" aria-hidden="true"></i><span class="sr-only">{% trans 'male' %}</span>{% endif %}
+                                                    {% if group.female %}<i class="fa fa-venus" aria-hidden="true"></i><span class="sr-only">{% trans 'female' %}</span>{% endif %}
+                                                </span>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="lom-ncla-application-caption">{{ item.summary }}</div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p><strong>{% trans 'Literal Application' %}:</strong> {{ ncla_summary.literal_application_expanded }}</p>
+                                {% endif %}
                                 {% if law.ncla_deviation %}
                                     {% for grp in ncla_summary.groups %}{% if grp.group != 'All' %}
                                     <p><small><strong>{% trans 'Context' %}:</strong> {{ grp.group }} — {{ grp.person_summary }}, {{ grp.application_summary }}</small></p>
@@ -205,11 +228,41 @@
                                     </table>
                                 {% endif %}
                                 <details class="lom-ncla-explainer">
-                                    <summary>{% trans 'More explanation about New Covenant Literal Application' %}</summary>
+                                    <summary>{% trans 'More explanation about the icons and New Covenant Literal Application' %}</summary>
                                     <div class="lom-ncla-explainer-content">
                                         <p>{% blocktrans %}The New Covenant Literal Application Code (NCLA) is an interpretive guide used by the authors to indicate which person categories a mitzvah applies to, and at what level of literal compliance.{% endblocktrans %}</p>
-                                        <p>{% blocktrans %}It combines person categories such as Jewish, K'rov Yisrael, and Gentile, together with male/female distinctions and an application level such as mandated, recommended, optional, or prohibited.{% endblocktrans %}</p>
-                                        <p>{% blocktrans %}This code reflects the authors' interpretive opinion and is provided for prayerful consideration. On this page, the technical code is summarized into plain language to help new readers understand it more easily.{% endblocktrans %}</p>
+                                        <p>{% blocktrans %}Each card above groups one application level such as mandated or optional. The three people icons show whether that application is meant for Jewish, K'rov Yisrael, or Gentile believers, and the male or female symbols show whether it applies to men, women, or both.{% endblocktrans %}</p>
+                                        <div class="lom-ncla-explainer-legend">
+                                            <div class="lom-ncla-explainer-item">
+                                                <img src="{% static 'images/s_jew.png' %}" alt="{% trans 'Jewish' %}" class="lom-person-icon">
+                                                <div>
+                                                    <strong>{% trans 'Jewish' %}</strong>
+                                                    <div class="small text-muted">{% trans 'Used for instruction directed to Jewish believers.' %}</div>
+                                                </div>
+                                            </div>
+                                            <div class="lom-ncla-explainer-item">
+                                                <img src="{% static 'images/s_messianic.png' %}" alt="{% trans "K'rov Yisrael" %}" class="lom-person-icon">
+                                                <div>
+                                                    <strong>{% trans "K'rov Yisrael" %}</strong>
+                                                    <div class="small text-muted">{% trans 'Used for non-Jewish believers living closely with Israel and Torah practice.' %}</div>
+                                                </div>
+                                            </div>
+                                            <div class="lom-ncla-explainer-item">
+                                                <img src="{% static 'images/s_gentile.png' %}" alt="{% trans 'Gentile' %}" class="lom-person-icon">
+                                                <div>
+                                                    <strong>{% trans 'Gentile' %}</strong>
+                                                    <div class="small text-muted">{% trans 'Used for instruction presented as applying to Gentile believers more broadly.' %}</div>
+                                                </div>
+                                            </div>
+                                            <div class="lom-ncla-explainer-item">
+                                                <span class="lom-ncla-gender-icons"><i class="fa fa-mars" aria-hidden="true"></i><i class="fa fa-venus" aria-hidden="true"></i></span>
+                                                <div>
+                                                    <strong>{% trans 'Male and female symbols' %}</strong>
+                                                    <div class="small text-muted">{% trans 'These show whether the instruction is directed to men, women, or both.' %}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p>{% blocktrans %}This code reflects the authors' interpretive opinion and is provided for prayerful consideration. The icon view is only a visual summary; the detailed codes and source explanation remain available below for careful study.{% endblocktrans %}</p>
                                         {% if ncla_summary.groups|length == 1 %}
                                             {% with grp=ncla_summary.groups.0 %}
                                                 <p><strong>{% trans 'Detailed codes' %}:</strong> {{ grp.detailed|join:' | ' }}</p>
@@ -676,7 +729,7 @@
                             <img src="{% static 'images/list.png' %}" width="65px" alt="">
                         </div>
                         <div class="our-services-text lom-classical-sources">
-                            <h4>{% trans 'Classical sources' %}</h4>
+                            <h4>{% trans 'Classical Commandments' %}</h4>
                             {% if enriched_maimonides %}
                             <h5>{% trans 'Maimonides' %}</h5>
                             <p><small>{% blocktrans %}Maimonides (Rabbi Moshe ben Maimon, 12th century) organized all 613 Torah commandments into a structured list. These linked items show where this Law of Messiah commandment overlaps with that classical framework.{% endblocktrans %}</small></p>
@@ -694,12 +747,20 @@
                             {% if law.meir %}
                             <h5>{% trans 'Meir of Rothenburg' %}</h5>
                             <p><small>{% blocktrans %}Rabbi Meir of Rothenburg (13th century, Germany) was a leading Talmudic authority. These reference numbers link this commandment to his halachic rulings.{% endblocktrans %}</small></p>
-                            <p>{{ law.meir|join:', ' }}</p>
+                            <ul class="lom-related-links mb-2">
+                                {% for item in law.meir %}
+                                <li><a href="{% url 'commandments:maimonides_listing' %}?q={{ item }}">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
                             {% endif %}
                             {% if law.chinuch %}
                             <h5>{% trans 'Sefer HaChinuch' %}</h5>
                             <p><small>{% blocktrans %}The Sefer HaChinuch (13th century) is a systematic presentation of all 613 commandments, organized by weekly Torah portion. These reference numbers link this commandment to that work.{% endblocktrans %}</small></p>
-                            <p>{{ law.chinuch|join:', ' }}</p>
+                            <ul class="lom-related-links mb-2">
+                                {% for item in law.chinuch %}
+                                <li><a href="{% url 'commandments:maimonides_listing' %}?q={{ item }}">{{ item }}</a></li>
+                                {% endfor %}
+                            </ul>
                             {% endif %}
                         </div>
                     </div>

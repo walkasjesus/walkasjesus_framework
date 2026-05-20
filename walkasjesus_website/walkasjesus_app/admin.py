@@ -1006,11 +1006,101 @@ admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)
 
 
+class MaimonidesBibleReferenceInline(admin.TabularInline):
+    model = MaimonidesBibleReference
+    extra = 0
+    fields = ('reference_type', 'source_code', 'book', 'begin_chapter', 'begin_verse', 'end_chapter', 'end_verse')
+    ordering = ('reference_type', 'source_code', 'book', 'begin_chapter', 'begin_verse', 'id')
+
+
+class MaimonidesAdminForm(forms.ModelForm):
+    meir_codes = forms.CharField(required=False, label='Meir of Rothenburg')
+    chinuch_codes = forms.CharField(required=False, label='Sefer HaChinuch')
+    rudolph_codes = forms.CharField(required=False, label='Law of Messiah / Rudolph')
+
+    class Meta:
+        model = Maimonides
+        fields = '__all__'
+        widgets = {
+            'commandment': forms.Textarea(attrs={'rows': 2}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['meir_codes'].widget = forms.TextInput(attrs={'class': 'vTextField'})
+        self.fields['chinuch_codes'].widget = forms.TextInput(attrs={'class': 'vTextField'})
+        self.fields['rudolph_codes'].widget = forms.TextInput(attrs={'class': 'vTextField'})
+
+        if self.instance and self.instance.pk:
+            self.fields['meir_codes'].initial = ', '.join(self.instance.meir or [])
+            self.fields['chinuch_codes'].initial = ', '.join(self.instance.chinuch or [])
+            self.fields['rudolph_codes'].initial = ', '.join(self.instance.rudolph or [])
+
+    def _parse_code_line(self, value):
+        normalized = str(value or '').replace('\n', ',').replace(';', ',')
+        return [item.strip() for item in normalized.split(',') if item.strip()]
+
+    def clean_meir_codes(self):
+        return self._parse_code_line(self.cleaned_data.get('meir_codes', ''))
+
+    def clean_chinuch_codes(self):
+        return self._parse_code_line(self.cleaned_data.get('chinuch_codes', ''))
+
+    def clean_rudolph_codes(self):
+        return self._parse_code_line(self.cleaned_data.get('rudolph_codes', ''))
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.meir = self.cleaned_data.get('meir_codes', [])
+        instance.chinuch = self.cleaned_data.get('chinuch_codes', [])
+        instance.rudolph = self.cleaned_data.get('rudolph_codes', [])
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
+
+
 class MaimonidesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'commandment_type', 'commandment']
+    form = MaimonidesAdminForm
+    list_display = ['id', 'commandment_type', 'commandment_preview', 'meir_summary', 'chinuch_summary', 'cross_reference_count']
     list_filter = ['commandment_type']
-    search_fields = ['id', 'commandment']
+    search_fields = ['id', 'commandment', 'meir', 'chinuch', 'rudolph']
     ordering = ['id']
+    inlines = [MaimonidesBibleReferenceInline]
+    fieldsets = (
+        (None, {
+            'fields': ('id', 'commandment_type', 'commandment'),
+        }),
+        ('Cross references', {
+            'fields': ('meir_codes', 'chinuch_codes', 'rudolph_codes'),
+        }),
+    )
+
+    class Media:
+        css = {
+            'all': ('css/admin/law_of_messiah_admin.css',)
+        }
+
+    def commandment_preview(self, obj):
+        text = str(obj.commandment or '').strip()
+        return text if len(text) <= 100 else f'{text[:97]}...'
+
+    commandment_preview.short_description = 'Commandment'
+
+    def meir_summary(self, obj):
+        return ', '.join(obj.meir or [])
+
+    meir_summary.short_description = 'Meir'
+
+    def chinuch_summary(self, obj):
+        return ', '.join(obj.chinuch or [])
+
+    chinuch_summary.short_description = 'HaChinuch'
+
+    def cross_reference_count(self, obj):
+        return len(obj.meir or []) + len(obj.chinuch or []) + len(obj.rudolph or []) + obj.bible_reference_rows.count()
+
+    cross_reference_count.short_description = 'Cross refs'
 
 
 admin.site.register(Maimonides, MaimonidesAdmin)

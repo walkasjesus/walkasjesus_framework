@@ -15,47 +15,91 @@
         <div class="container">
             <div class="row justify-content-center pb-5">
                 <div class="col-md-12 heading-section text-center ftco-animate">
-                    <span class="subheading">{% trans "Maimonides" %}</span>
+                    <span class="subheading">{% trans "Classical Commandments" %}</span>
                     <h2 class="mb-4">{% trans "Maimonides' 613 Commandments" %}</h2>
-                    <p>{% blocktrans %}Maimonides (Rambam) compiled 613 commandments drawn from the Torah, traditionally categorized as 248 positive ("do") and 365 negative ("do not") commandments. Browse each commandment below and discover which Laws of Messiah from the New Covenant perspective relate to it.{% endblocktrans %}</p>
+                    <p>{% blocktrans %}Maimonides (Rambam) compiled 613 commandments drawn from the Torah, traditionally categorized as 248 positive ("do") and 365 negative ("do not") commandments. Browse each commandment below, compare it with Meir of Rothenburg, Sefer HaChinuch, and Law of Messiah links, and retrieve the relevant Bible passages only when you need them.{% endblocktrans %}</p>
                 </div>
             </div>
-
-            <!-- Filter Form -->
             <div class="row justify-content-center pb-4">
-                <div class="col-md-10">
-                    <form method="get" class="law-filter-form">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="filter-q" class="form-label">{% trans "Search" %}</label>
-                                <input id="filter-q" type="text" name="q" value="{{ selected_q }}"
-                                       class="form-control"
-                                       placeholder="{% trans 'ID or commandment text' %}">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="filter-type" class="form-label">{% trans "Type" %}</label>
-                                <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
-                                    <option value="">{% trans "All" %}</option>
-                                    <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans "Positive (Do)" %}</option>
-                                    <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans "Negative (Do not)" %}</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">{% trans "Apply Filter" %}</button>
+                <div class="col-md-12">
+                    <div class="our-services-wrapper">
+                        <div class="services-inner">
+                            <div class="our-services-text">
+                                <h4>{% trans 'Filter classical commandment links' %}</h4>
+                                <form method="get" class="law-filter-form">
+                                    <div class="row mb-3">
+                                        <div class="col-12">
+                                            <label for="filter-q" class="form-label">{% trans 'Search' %}</label>
+                                            <input id="filter-q" type="text" name="q" value="{{ selected_q }}" class="form-control" placeholder="{% trans 'Search Maimonides, Meir, HaChinuch, Rudolph, scripture references, or Law of Messiah' %}">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="filter-type" class="form-label">{% trans 'Type' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-type" name="commandment_type" class="form-control law-filter-select">
+                                                    <option value="">{% trans 'All' %}</option>
+                                                    <option value="positive"{% if selected_commandment_type == 'positive' %} selected{% endif %}>{% trans 'Positive (Do)' %}</option>
+                                                    <option value="negative"{% if selected_commandment_type == 'negative' %} selected{% endif %}>{% trans 'Negative (Do not)' %}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="filter-sort" class="form-label">{% trans 'Sort by' %}</label>
+                                            <div class="select law-filter-select-wrap">
+                                                <select id="filter-sort" name="sort" class="form-control law-filter-select">
+                                                    {% for value, label in sort_options %}
+                                                    <option value="{{ value }}"{% if selected_sort == value %} selected{% endif %}>{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-end">
+                                            <button type="submit" class="btn law-filter-button law-filter-cta">{% trans 'Apply Filter' %}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 align-items-center law-filter-action-row">
+                                        <div class="col-auto ml-md-auto mb-2 mb-md-0 law-filter-legend-wrap">
+                                            <button class="btn law-filter-legend-toggle law-filter-legend-btn" type="button" data-toggle="collapse" data-target="#maimonides-legend" aria-expanded="false" aria-controls="maimonides-legend">
+                                                <span class="ion-ios-information-circle-outline mr-1"></span> {% trans 'Legend — what do these links and scripture groups mean?' %} <span class="ion-ios-arrow-down ml-1"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <p class="small text-muted mb-3"><strong>{% trans 'Bible verses copyright' %}:</strong> {% if bible.copyright %}{{ bible.copyright }}{% else %}{% trans 'Not provided for this Bible translation.' %}{% endif %}</p>
+                                </form>
+
+                                <div class="collapse" id="maimonides-legend">
+                                    <div class="card card-body bg-light border-0">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <h6 class="font-weight-bold">{% trans 'Cross-reference columns' %}</h6>
+                                                <p class="small text-muted mb-2">{% trans 'Meir of Rothenburg and Sefer HaChinuch list medieval Jewish numbering systems that overlap with the same Torah commandment.' %}</p>
+                                                <p class="small text-muted mb-0">{% trans 'Law of Messiah / Rudolph links point to commandments on this site that were already mapped to the same Maimonides ID.' %}</p>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <h6 class="font-weight-bold">{% trans 'Scripture groups' %}</h6>
+                                                <p class="small text-muted mb-2">{% trans 'When the same Bible passage is used by Maimonides, Meir, and HaChinuch, it is shown once with a shared source label instead of being repeated three times.' %}</p>
+                                                <p class="small text-muted mb-2">{% trans 'Unique Meir or HaChinuch passages still remain visible, together with their source numbering when that helps identify where the reference came from.' %}</p>
+                                                <p class="small text-muted mb-0">{% trans 'Click a verse button to load the Bible text on demand instead of preloading the entire page.' %}</p>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <h6 class="font-weight-bold">{% trans 'Sorting and searching' %}</h6>
+                                                <p class="small text-muted mb-2">{% trans 'Search covers the commandment text, all visible cross-reference codes, scripture references, and related Law of Messiah IDs and titles.' %}</p>
+                                                <p class="small text-muted mb-0">{% trans 'Sort by the first available Meir or HaChinuch code when you want those numbering systems grouped together.' %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-
-            <!-- Result count -->
             <div class="row justify-content-center pb-2">
                 <div class="col-md-10">
                     <p class="text-muted"><small>{% blocktrans with count=commandments_count %}Showing {{ count }} commandment(s){% endblocktrans %}</small></p>
                 </div>
             </div>
-
-            <!-- Commandments list -->
             <div class="row justify-content-center">
                 <div class="col-md-10">
                     {% for cmd in commandments %}
@@ -70,6 +114,79 @@
                                         </span>
                                         {{ cmd.commandment }}
                                     </h5>
+                                    <small class="text-muted d-block mb-2">{% if cmd.commandment_type == 'positive' %}{% trans 'Positive commandment' %}{% else %}{% trans 'Negative commandment' %}{% endif %}</small>
+                                    <div class="mt-3">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-2">
+                                                <small class="text-muted d-block">{% trans "Meir of Rothenburg" %}</small>
+                                                {% if cmd.meir %}
+                                                <div>
+                                                    {% for item in cmd.meir %}
+                                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ item }}" class="lom-related-link">{{ item }}</a>{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% else %}
+                                                <small class="text-muted">{% trans "None recorded" %}</small>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <small class="text-muted d-block">{% trans "Sefer HaChinuch" %}</small>
+                                                {% if cmd.chinuch %}
+                                                <div>
+                                                    {% for item in cmd.chinuch %}
+                                                    <a href="{% url 'commandments:maimonides_listing' %}?q={{ item }}" class="lom-related-link">{{ item }}</a>{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% else %}
+                                                <small class="text-muted">{% trans "None recorded" %}</small>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-4 mb-2">
+                                                <small class="text-muted d-block">{% trans "Law of Messiah / Rudolph" %}</small>
+                                                {% if cmd.related_lawofmessiah %}
+                                                <div>
+                                                    {% for lom in cmd.related_lawofmessiah %}
+                                                    <a href="{% url 'commandments:law_of_messiah_detail' lom.id %}" class="lom-related-link {% if lom.commandment_type == 'negative' %}lom-related-link-negative{% elif lom.commandment_type == 'positive' %}lom-related-link-positive{% endif %}">{{ lom.id }}</a>{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% elif cmd.rudolph %}
+                                                <div>
+                                                    {% for item in cmd.rudolph %}
+                                                    {{ item }}{% if not forloop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                {% else %}
+                                                <small class="text-muted">{% trans "None recorded" %}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if cmd.scripture_entries %}
+                                    <div class="mt-3" data-verses-url="{% url 'commandments:maimonides_verses' cmd.id %}" data-commentary-language="{{ request.LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-scriptura-url="{% url 'commandments:commentary_scriptura' %}">
+                                        <div class="mb-3">
+                                            <div class="mb-2">
+                                                <ul class="list-unstyled mb-0">
+                                                    {% for entry in cmd.scripture_entries %}
+                                                    <li class="mb-2">
+                                                        <div class="font-weight-bold small mb-1">{{ entry.usage_title }}</div>
+                                                        <strong>{{ entry.reference.display_reference }}</strong>
+                                                        <div class="mt-1">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary commentary-action-btn bible-verse-load-link" data-verse-ref="{{ entry.reference.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ entry.reference.display_reference }}</button>
+                                                        </div>
+                                                        <span class="bible-verse-text" data-verse-ref="{{ entry.reference.pk }}" data-verse-manual="1"></span>
+                                                        {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
+                                                        <div class="mt-1"><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn" data-scriptura-book="{{ entry.reference.scriptura_book }}" data-scriptura-chapter="{{ entry.reference.scriptura_chapter }}" data-scriptura-verse="{{ entry.reference.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button><div class="scriptura-commentary-panel"></div></div>
+                                                        {% endif %}
+                                                        {% if entry.reference.is_ot %}
+                                                        <div class="mt-1"><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn sefaria-commentary-btn-secondary" data-sefaria-ref="{{ entry.reference.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button><div class="sefaria-commentary-panel"></div></div>
+                                                        {% endif %}
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                     {% if cmd.related_lawofmessiah %}
                                     <div class="mt-2">
                                         <small class="text-muted">{% trans "Related Law of Messiah commandments:" %}</small>
@@ -98,7 +215,6 @@
                     {% endfor %}
                 </div>
             </div>
-
         </div>
     </div>
 </section>

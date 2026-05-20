@@ -24,7 +24,7 @@ from walkasjesus_app.views.user_preferences import (
     ScripturaCommentaryProxyView,
     UserPreferencesLanguageSwitchView,
 )
-from walkasjesus_app.views.maimonides_view import MaimonidesList
+from walkasjesus_app.views.maimonides_view import MaimonidesBibleVersesView, MaimonidesList
 
 app_name = 'commandments'
 
@@ -39,6 +39,7 @@ urlpatterns = [
     path(_('steps/'), ListingView.as_view(), name='listing'),
     path(_('lessons/'), ListingLessonView.as_view(), name='lesson_listing'),
     path(_('maimonides/'), MaimonidesList.as_view(), name='maimonides_listing'),
+    path(_('maimonides/<str:maimonides_id>/verses/'), MaimonidesBibleVersesView.as_view(), name='maimonides_verses'),
     path(_('law_of_messiah/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
     path(_('law_of_messiah/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
     path(_('law_of_messiah/<str:law_id>/verses/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),

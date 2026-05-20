@@ -501,6 +501,60 @@ p {
     margin-top: 18px;
 }
 
+.lom-ncla-application-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.lom-ncla-application-card {
+    background: #eef6ff;
+    border: 1px solid #c7dcf1;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.lom-ncla-application-title {
+    color: #114e85;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.lom-ncla-person-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lom-ncla-person-group {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+}
+
+.lom-ncla-person-group .lom-person-icon {
+    width: 26px;
+}
+
+.lom-ncla-group-label {
+    color: #173a59;
+    flex: 1 1 auto;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.lom-ncla-gender-icons {
+    color: #0c4d86;
+    display: inline-flex;
+    gap: 6px;
+}
+
+.lom-ncla-application-caption {
+    color: #4f6071;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
 .lom-ncla-explainer {
     background: #d8ebff;
     border: 1px solid #7bb3e6;
@@ -523,6 +577,27 @@ p {
 
 .lom-ncla-explainer-content {
     padding: 0 16px 14px 16px;
+}
+
+.lom-ncla-explainer-legend {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-bottom: 14px;
+}
+
+.lom-ncla-explainer-item {
+    align-items: center;
+    background: #f3f8fd;
+    border: 1px solid #c8dced;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+}
+
+.lom-ncla-explainer-item .lom-person-icon {
+    width: 28px;
 }
 
 .lom-related-steps .sermon-wrap {
@@ -609,6 +684,10 @@ p {
 }
 
 @media (max-width: 991.98px) {
+    .lom-ncla-application-grid {
+        grid-template-columns: 1fr;
+    }
+
     .law-filter-actions {
         padding-left: 15px;
         padding-right: 15px;
@@ -769,7 +848,8 @@ p {
     width: 35px;
 }
 
-/* ----- Sefaria Jewish Commentary ----- */
+/* ----- Commentary action buttons ----- */
+.commentary-action-btn,
 .sefaria-commentary-btn {
     background: #f5f0e8;
     border: 1px solid #c8a84b;
@@ -778,6 +858,7 @@ p {
     padding: 2px 8px;
     vertical-align: middle;
 }
+.commentary-action-btn:hover,
 .sefaria-commentary-btn:hover {
     background: #ede3cc;
     color: #3d2f08;

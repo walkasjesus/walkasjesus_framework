@@ -248,6 +248,60 @@ def _application_label_map():
     }
 
 
+def _person_group_metadata():
+    return {
+        'JEW': {
+            'label': _('Jewish'),
+            'icon': 'images/s_jew.png',
+        },
+        'MESSIANIC': {
+            'label': _("K'rov Yisrael"),
+            'icon': 'images/s_messianic.png',
+        },
+        'GENTILE': {
+            'label': _('Gentile'),
+            'icon': 'images/s_gentile.png',
+        },
+    }
+
+
+def _application_person_groups(person_codes):
+    grouped = {
+        'JEW': {'male': False, 'female': False},
+        'MESSIANIC': {'male': False, 'female': False},
+        'GENTILE': {'male': False, 'female': False},
+    }
+
+    for code in person_codes:
+        if code == 'JM':
+            grouped['JEW']['male'] = True
+        elif code == 'JF':
+            grouped['JEW']['female'] = True
+        elif code == 'KM':
+            grouped['MESSIANIC']['male'] = True
+        elif code == 'KF':
+            grouped['MESSIANIC']['female'] = True
+        elif code == 'GM':
+            grouped['GENTILE']['male'] = True
+        elif code == 'GF':
+            grouped['GENTILE']['female'] = True
+
+    metadata = _person_group_metadata()
+    items = []
+    for key in ['JEW', 'MESSIANIC', 'GENTILE']:
+        genders = grouped[key]
+        if not genders['male'] and not genders['female']:
+            continue
+        items.append({
+            'key': key,
+            'label': metadata[key]['label'],
+            'icon': metadata[key]['icon'],
+            'male': genders['male'],
+            'female': genders['female'],
+        })
+    return items
+
+
 def _ncla_filter_options():
     return {
         'person': [
@@ -310,6 +364,8 @@ def _ncla_summary(ncla_data):
         return {
             'person_categories': _('Not specified'),
             'literal_application': _('Not specified'),
+            'literal_application_expanded': _('Not specified'),
+            'application_details': [],
             'groups': [],
         }
 
@@ -318,6 +374,7 @@ def _ncla_summary(ncla_data):
     groups_detail = []
     all_person_codes = set()
     all_application_codes = set()
+    all_application_people = {}
 
     for entry in ncla_data:
         if not isinstance(entry, dict):
@@ -325,6 +382,7 @@ def _ncla_summary(ncla_data):
         group_name = entry.get('group', 'All')
         codes = entry.get('codes', [])
         detailed = []
+        group_application_people = {}
         for code in codes:
             if len(code) >= 3:
                 person_code = code[:2]
@@ -332,18 +390,37 @@ def _ncla_summary(ncla_data):
                 person_label = person_labels.get(person_code, person_code)
                 application_label = application_labels.get(application_code, application_code)
                 detailed.append(f'{code} - {person_label}, {application_label}')
+                group_application_people.setdefault(application_code, set()).add(person_code)
+                all_application_people.setdefault(application_code, set()).add(person_code)
             else:
                 detailed.append(code)
         person_set = sorted(set(c[:2] for c in codes if len(c) >= 3))
         app_set = sorted(set(c[-1] for c in codes if len(c) >= 3))
         all_person_codes.update(person_set)
         all_application_codes.update(app_set)
+        group_application_details = []
+        for application_code in app_set:
+            group_person_codes = sorted(group_application_people.get(application_code, set()))
+            if not group_person_codes:
+                continue
+            group_application_details.append({
+                'application_code': application_code,
+                'application_label': application_labels.get(application_code, application_code),
+                'person_codes': group_person_codes,
+                'person_labels': [person_labels.get(code, code) for code in group_person_codes],
+                'person_groups': _application_person_groups(group_person_codes),
+                'summary': _('%(application)s for %(persons)s') % {
+                    'application': application_labels.get(application_code, application_code),
+                    'persons': ', '.join(person_labels.get(code, code) for code in group_person_codes),
+                },
+            })
         groups_detail.append({
             'group': group_name,
             'codes': codes,
             'detailed': detailed,
             'person_summary': ', '.join(person_labels.get(p, p) for p in person_set),
             'application_summary': ', '.join(application_labels.get(a, a) for a in app_set),
+            'application_details': group_application_details,
         })
 
     unique_persons = sorted(all_person_codes)
@@ -355,10 +432,29 @@ def _ncla_summary(ncla_data):
         person_categories = ', '.join(person_labels.get(p, p) for p in unique_persons)
 
     literal_application = ', '.join(application_labels.get(a, a) for a in unique_applications)
+    application_details = []
+    for application_code in unique_applications:
+        application_person_codes = sorted(all_application_people.get(application_code, set()))
+        if not application_person_codes:
+            continue
+        application_details.append({
+            'application_code': application_code,
+            'application_label': application_labels.get(application_code, application_code),
+            'person_codes': application_person_codes,
+            'person_labels': [person_labels.get(code, code) for code in application_person_codes],
+            'person_groups': _application_person_groups(application_person_codes),
+            'summary': _('%(application)s for %(persons)s') % {
+                'application': application_labels.get(application_code, application_code),
+                'persons': ', '.join(person_labels.get(code, code) for code in application_person_codes),
+            },
+        })
+    literal_application_expanded = '; '.join(item['summary'] for item in application_details) or literal_application
 
     return {
         'person_categories': person_categories,
         'literal_application': literal_application,
+        'literal_application_expanded': literal_application_expanded,
+        'application_details': application_details,
         'groups': groups_detail,
     }
 

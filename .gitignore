@@ -15,6 +15,7 @@ bible_api_cache.json
 
 walkasjesus_website/media
 walkasjesus_website/log
+walkasjesus_website/staticfiles
 
 API_KEY.txt
 

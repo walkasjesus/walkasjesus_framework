@@ -2,6 +2,8 @@
 #
 # This script will initialize a first database structure with all required tables, or update existing tables with the latest migrations to apply
 
+set -euo pipefail
+
 if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 

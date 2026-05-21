@@ -1,12 +1,12 @@
 [submodule "walkasjesus_website/data/biblereferences"]
 	path = walkasjesus_website/data/biblereferences
-	url = git@github.com:walkasjesus/walkasjesus_biblereferences.git
+	url = https://github.com/walkasjesus/walkasjesus_biblereferences.git
 [submodule "walkasjesus_website/data/media"]
 	path = walkasjesus_website/data/media
-	url = git@github.com:walkasjesus/walkasjesus_media.git
+	url = https://github.com/walkasjesus/walkasjesus_media.git
 [submodule "walkasjesus_website/translations"]
 	path = walkasjesus_website/translations
-	url = git@github.com:walkasjesus/walkasjesus_translations.git
+	url = https://github.com/walkasjesus/walkasjesus_translations.git
 [submodule "walkasjesus_website/data/lawofmessiah"]
 	path = walkasjesus_website/data/lawofmessiah
-	url = git@github.com:walkasjesus/LawofMessiah.git
+	url = https://github.com/walkasjesus/LawofMessiah.git

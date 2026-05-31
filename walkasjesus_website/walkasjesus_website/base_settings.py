@@ -235,6 +235,18 @@ COMMENTARY_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
 # Commentary endpoint defaults to BijbelAPI and supports optional x-api-key auth.
 COMMENTARY_API_URL = os.getenv('COMMENTARY_API_URL', 'https://www.bijbelapi.com/api/commentary')
 BIJBEL_API_KEY = os.getenv('BIJBEL_API_KEY', '')
+# Optional legal/copyright footer shown under David Stern NT commentary.
+DAVID_STERN_COMMENTARY_FOOTER_TEXT = ''
+# Restrict David Stern commentary to authenticated users only.
+DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY = False
+# Disable selected Scriptura commentators in UI and proxy (ids: david-stern, matthew-henry).
+SCRIPTURA_DISABLED_COMMENTATORS = []
+
+# Local Complete Jewish Bible (David H. Stern, NT source) selector settings.
+CJB_BIBLE_ID = 'jnt-stern-en'
+CJB_BIBLE_NAME = 'Complete Jewish Bible (David H. Stern, NT)'
+CJB_BIBLE_ENABLED = True
+CJB_BIBLE_LOGGED_IN_ONLY = False
 # Verse count above which passages are manual "Click to retrieve"
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)

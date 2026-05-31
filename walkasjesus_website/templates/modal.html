@@ -14,6 +14,7 @@
                 <form action="{% url 'commandments:language_switch' %}" method="post" id="frmSiteLanguage">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <b>{% trans 'Site language' %}:</b>
+                    <input type="text" id="siteLanguageSearch" class="form-control form-control-sm mb-2" placeholder="{% trans 'Search language' %}" autocomplete="off">
                     <div class="select">
                         <select class="drpSelectLanguage" name="language" >
                             {% get_current_language as LANGUAGE_CODE %}
@@ -33,6 +34,7 @@
                 <div class="btnBibleTranslation">
                 <form action="{% url 'commandments:bible' %}" method="post" id="frmBibleTranslation">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <input type="text" id="bibleTranslationSearch" class="form-control form-control-sm mb-2" placeholder="{% trans 'Search Bible translation' %}" autocomplete="off">
                     <div class="select">
                     <select name="bible_id" class="drpBibleTranslation" id="drpBibleTranslation">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
@@ -95,9 +97,58 @@
     var mediaLanguagesForm = document.getElementById('frmLanguages');
     var languageSelect = document.querySelector('.drpSelectLanguage');
     var bibleSelect = document.getElementById('drpBibleTranslation');
+    var languageSearchInput = document.getElementById('siteLanguageSearch');
+    var bibleSearchInput = document.getElementById('bibleTranslationSearch');
     var saveButton = document.querySelector('.btnSaveLanguages');
     var bibleTranslationsUrl = "{% url 'commandments:bible_translations_for_language' %}";
     var bibleRefreshPromise = Promise.resolve();
+    var languageOptionSource = [];
+    var bibleOptionSource = [];
+
+    function snapshotSelectOptions(selectElement) {
+        return Array.prototype.map.call(selectElement.options, function (option) {
+            return {
+                value: option.value,
+                text: option.textContent,
+                selected: option.selected
+            };
+        });
+    }
+
+    function renderSelectFromSource(selectElement, optionSource, query) {
+        var normalizedQuery = String(query || '').trim().toLowerCase();
+        var currentValue = selectElement.value;
+        var filtered = optionSource.filter(function (item) {
+            if (!normalizedQuery) {
+                return true;
+            }
+            return String(item.text || '').toLowerCase().indexOf(normalizedQuery) !== -1;
+        });
+
+        selectElement.innerHTML = '';
+        filtered.forEach(function (item) {
+            var option = document.createElement('option');
+            option.value = item.value;
+            option.textContent = item.text;
+            if (item.value === currentValue || (!currentValue && item.selected)) {
+                option.selected = true;
+            }
+            selectElement.appendChild(option);
+        });
+
+        if (!selectElement.value && selectElement.options.length > 0) {
+            selectElement.options[0].selected = true;
+        }
+    }
+
+    function attachSelectSearch(inputElement, selectElement, optionSourceRef) {
+        if (!inputElement || !selectElement) {
+            return;
+        }
+        inputElement.addEventListener('input', function () {
+            renderSelectFromSource(selectElement, optionSourceRef(), inputElement.value);
+        });
+    }
 
     function refreshBibleDropdown(selectedLanguage) {
         bibleSelect.disabled = true;
@@ -122,6 +173,8 @@
                         bibleSelect.appendChild(opt);
                     });
                 }
+                bibleOptionSource = snapshotSelectOptions(bibleSelect);
+                renderSelectFromSource(bibleSelect, bibleOptionSource, bibleSearchInput ? bibleSearchInput.value : '');
                 bibleSelect.disabled = false;
             })
             .catch(function () {
@@ -171,6 +224,16 @@
     languageSelect.addEventListener('change', function () {
         var selectedLanguage = this.value;
         bibleRefreshPromise = refreshBibleDropdown(selectedLanguage);
+    });
+
+    languageOptionSource = snapshotSelectOptions(languageSelect);
+    bibleOptionSource = snapshotSelectOptions(bibleSelect);
+
+    attachSelectSearch(languageSearchInput, languageSelect, function () {
+        return languageOptionSource;
+    });
+    attachSelectSearch(bibleSearchInput, bibleSelect, function () {
+        return bibleOptionSource;
     });
 
     saveButton.addEventListener('click', function (event) {

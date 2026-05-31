@@ -17,6 +17,21 @@ $(document).ready(function(){
   var sefariaRelatedCache = {};
   var sefariaTextCache = {};
   var translationCache = {};
+  var SCRIPTURA_CHAPTER_CACHE_VERSION = 'v2';
+
+  // Manual per-commentator display configuration for Scriptura panel UI.
+  var scripturaUiConfig = {
+    commentatorAttribution: {
+      'david-stern': {
+        showProvider: false,
+        showApiResponse: false
+      },
+      'matthew-henry': {
+        showProvider: true,
+        showApiResponse: true
+      }
+    }
+  };
 
   function verseSpinnerHtml(source) {
     var spinnerClass = source === 'api' ? 'verse-loading-spinner verse-loading-spinner-api' : 'verse-loading-spinner verse-loading-spinner-cache';
@@ -183,6 +198,10 @@ $(document).ready(function(){
         en: 'Select a commentator:',
         nl: 'Kies een commentator:'
       },
+      no_scriptura_commentators_enabled: {
+        en: 'No Scriptura commentators are currently enabled.',
+        nl: 'Er zijn momenteel geen Scriptura-commentatoren ingeschakeld.'
+      },
       could_not_reach_sefaria: {
         en: 'Could not reach Sefaria API. Please check your connection.',
         nl: 'Kan Sefaria API niet bereiken. Controleer je verbinding.'
@@ -235,6 +254,22 @@ $(document).ready(function(){
     });
   }
 
+  function getDisabledScripturaCommentatorIds() {
+    var container = document.querySelector('[data-scriptura-disabled-commentators]');
+    var rawValue = String(container ? container.getAttribute('data-scriptura-disabled-commentators') : '').trim();
+    if (!rawValue) {
+      return {};
+    }
+    var disabled = {};
+    rawValue.split(',').forEach(function(item) {
+      var id = String(item || '').trim().toLowerCase();
+      if (id) {
+        disabled[id] = true;
+      }
+    });
+    return disabled;
+  }
+
   function getCommentaryCacheTimeoutSeconds() {
     var container = document.querySelector('[data-commentary-cache-timeout]');
     var rawValue = container ? container.getAttribute('data-commentary-cache-timeout') : '';
@@ -243,6 +278,20 @@ $(document).ready(function(){
       return parsed;
     }
     return 60 * 60 * 24 * 30 * 6;
+  }
+
+  function getDavidSternCommentaryFooterText($contextPanel) {
+    var rawValue = '';
+    if ($contextPanel && $contextPanel.length) {
+      rawValue = String(
+        $contextPanel.closest('[data-david-stern-commentary-footer]').attr('data-david-stern-commentary-footer') || ''
+      ).trim();
+    }
+    if (rawValue) {
+      return rawValue;
+    }
+    var container = document.querySelector('[data-david-stern-commentary-footer]');
+    return String(container ? container.getAttribute('data-david-stern-commentary-footer') : '').trim();
   }
 
   function commentaryStorageKey(bucket, key) {
@@ -605,12 +654,13 @@ $(document).ready(function(){
 
     function getScripturaCommentators() {
       var isDutch = getCommentaryLanguage() === 'nl';
-      return [
+      var allCommentators = [
         {
           id: 'david-stern',
           label: 'David Stern',
           apiSources: ['david-stern', 'david_stern', 'jnt-stern', 'jnt_stern'],
-          autoTranslate: true
+          autoTranslate: true,
+          attribution: scripturaUiConfig.commentatorAttribution['david-stern'] || { showProvider: true, showApiResponse: true }
         },
         {
           id: 'matthew-henry',
@@ -618,9 +668,15 @@ $(document).ready(function(){
           apiSources: isDutch
             ? ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry']
             : ['matthew_henry', 'matthew-henry'],
-          autoTranslate: !isDutch
+          autoTranslate: !isDutch,
+          attribution: scripturaUiConfig.commentatorAttribution['matthew-henry'] || { showProvider: true, showApiResponse: true }
         }
       ];
+
+      var disabled = getDisabledScripturaCommentatorIds();
+      return allCommentators.filter(function(commentator) {
+        return !disabled[commentator.id];
+      });
     }
 
     function getScripturaCommentatorById(commentatorId) {
@@ -630,7 +686,7 @@ $(document).ready(function(){
           return commentators[i];
         }
       }
-      return commentators[0];
+      return commentators.length ? commentators[0] : null;
     }
 
     function isNewTestamentBook(book) {
@@ -668,7 +724,14 @@ $(document).ready(function(){
     }
 
     function getDefaultScripturaCommentatorId(book) {
-      return isNewTestamentBook(book) ? 'david-stern' : 'matthew-henry';
+      var preferred = isNewTestamentBook(book) ? 'david-stern' : 'matthew-henry';
+      var commentators = getScripturaCommentators();
+      for (var i = 0; i < commentators.length; i += 1) {
+        if (commentators[i].id === preferred) {
+          return preferred;
+        }
+      }
+      return commentators.length ? commentators[0].id : '';
     }
 
     function getScripturaEndpoints() {
@@ -772,19 +835,42 @@ $(document).ready(function(){
           return;
         }
 
-        var safeHtml = sanitizeSefariaHtml(String(rawText || '').replace(/\n/g, '<br>'));
-        var displayHtml = safeHtml || $('<span>').text(rawText || '').html().replace(/\n/g, '<br>');
+        var normalizedText = String(rawText || '')
+          .replace(/\r\n/g, '\n')
+          .replace(/\r/g, '\n')
+          .replace(/[ \t]+\n/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
+        var safeHtml = sanitizeSefariaHtml(normalizedText.replace(/\n/g, '<br>'));
+        var displayHtml = safeHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
+        var attribution = (commentator && commentator.attribution) ? commentator.attribution : { showProvider: true, showApiResponse: true };
         var translationNote = '';
         if (isMachineTranslated) {
           translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em></p>';
         }
+
+        var attributionParts = [];
+        if (attribution.showProvider) {
+          attributionParts.push('Commentary provided by <a href="https://www.bijbelapi.com/" target="_blank" rel="noopener noreferrer">BijbelAPI</a>');
+        }
+        if (attribution.showApiResponse) {
+          attributionParts.push('<a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a>');
+        }
+        var footerText = String(attribution.footerText || '').trim();
+        if (!footerText && commentator && commentator.id === 'david-stern') {
+          footerText = getDavidSternCommentaryFooterText($panel);
+        }
+        if (footerText) {
+          attributionParts.push($('<span>').text(footerText).html());
+        }
+        var attributionHtml = attributionParts.length ? ('<p class="sefaria-attribution">' + attributionParts.join(' · ') + '</p>') : '';
 
         $panel.find('.scriptura-commentary-text').html(
           '<div class="sefaria-commentary-content">' +
           '<strong>' + $('<span>').text(sourceLabel).html() + ' · ' + $('<span>').text(titleLabel).html() + '</strong>' +
           translationNote +
           '<div class="sefaria-commentary-body mt-1">' + displayHtml + '</div>' +
-          '<p class="sefaria-attribution">Commentary provided by <a href="https://www.bijbelapi.com/" target="_blank" rel="noopener noreferrer">BijbelAPI</a> · <a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a></p>' +
+          attributionHtml +
           '</div>'
         );
       }
@@ -813,6 +899,45 @@ $(document).ready(function(){
         return;
       }
 
+      function parseVerseNumber(value) {
+        var match = String(value || '').match(/\d+/);
+        return match ? Number(match[0]) : NaN;
+      }
+
+      function pickPreferredEntryKey() {
+        var verseNumber = parseVerseNumber(verse);
+        var numericKeys = entryKeys.filter(function(key) {
+          return String(key) !== '0' && !isNaN(Number(key));
+        }).map(function(key) {
+          return { key: key, num: Number(key) };
+        }).sort(function(a, b) {
+          return a.num - b.num;
+        });
+
+        if (!isNaN(verseNumber)) {
+          if (entries[String(verseNumber)]) {
+            return String(verseNumber);
+          }
+          var candidate = null;
+          numericKeys.forEach(function(item) {
+            if (item.num <= verseNumber) {
+              candidate = item.key;
+            }
+          });
+          if (candidate) {
+            return candidate;
+          }
+        }
+
+        if (numericKeys.length > 0) {
+          return numericKeys[0].key;
+        }
+        if (entryKeys.indexOf('0') !== -1) {
+          return '0';
+        }
+        return entryKeys[0];
+      }
+
       var html = '';
       if (!entries[String(verse)]) {
         html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
@@ -834,7 +959,7 @@ $(document).ready(function(){
       $panel.data('scripturaChapter', chapter);
       $panel.data('scripturaCommentatorId', commentator.id);
 
-      var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
+      var preferredKey = pickPreferredEntryKey();
       renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, endpoint, commentator);
     }
 
@@ -843,7 +968,11 @@ $(document).ready(function(){
       var chapter = $panel.data('scripturaChapter');
       var verse = typeof preferredVerse === 'undefined' ? $panel.data('scripturaVerse') : preferredVerse;
       var commentator = getScripturaCommentatorById(commentatorId);
-      var chapterCacheKey = [commentator.id, String(book || ''), String(chapter || '')].join('|');
+      if (!commentator) {
+        $panel.find('.scriptura-commentary-source-content').html('<p class="sefaria-no-result"><em>' + uiMessage('no_scriptura_commentators_enabled') + '</em></p>');
+        return;
+      }
+      var chapterCacheKey = [SCRIPTURA_CHAPTER_CACHE_VERSION, commentator.id, String(book || ''), String(chapter || '')].join('|');
       var cachedEntries = getCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey);
 
       $panel.find('.scriptura-commentary-source-btn').removeClass('active');
@@ -884,6 +1013,10 @@ $(document).ready(function(){
       var verse = $btn.data('scriptura-verse');
       var $panel = $btn.nextAll('.scriptura-commentary-panel').first();
       var preferredCommentatorId = getDefaultScripturaCommentatorId(book);
+      if (!preferredCommentatorId) {
+        $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_scriptura_commentators_enabled') + '</em></p>').slideDown(200);
+        return;
+      }
 
       if ($panel.is(':visible')) {
         $panel.slideUp(200);

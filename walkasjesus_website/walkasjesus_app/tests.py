@@ -1,9 +1,11 @@
 import json
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from bible_lib import BibleBooks
+from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
 from django.utils import translation
 
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
@@ -17,7 +19,8 @@ from walkasjesus_app.views.detail_view import (
     _filter_grouped_media_by_audience,
     _lesson_allowed_target_audiences,
 )
-from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView
+from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView, _append_unique_commentary
+from walkasjesus_app.views.user_preferences import BibleTranslationsForLanguageView
 
 
 class BibleTranslationTestCase(TestCase):
@@ -187,6 +190,28 @@ class KidsModeCacheSettingsTestCase(TestCase):
     def test_lesson_mode_always_uses_kids_and_any(self):
         self.assertEqual(_lesson_allowed_target_audiences(), {'any', 'kids'})
 
+    @override_settings(DAVID_STERN_COMMENTARY_FOOTER_TEXT='Custom Stern footer')
+    def test_cache_settings_include_david_stern_footer(self):
+        request = self.factory.get('/')
+        request.session = self.client.session
+
+        self.assertEqual(cache_settings(request)['david_stern_commentary_footer_text'], 'Custom Stern footer')
+
+    @override_settings(SCRIPTURA_DISABLED_COMMENTATORS=['matthew-henry'])
+    def test_cache_settings_include_scriptura_disabled_commentators(self):
+        request = self.factory.get('/')
+        request.session = self.client.session
+
+        self.assertEqual(cache_settings(request)['scriptura_disabled_commentators'], 'matthew-henry')
+
+    @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=True)
+    def test_cache_settings_hide_david_stern_for_anonymous_when_login_required(self):
+        request = self.factory.get('/')
+        request.session = self.client.session
+        request.user = AnonymousUser()
+
+        self.assertFalse(cache_settings(request)['david_stern_commentary_available'])
+
 
 class MediaLanguagePolicyTestCase(TestCase):
     def setUp(self):
@@ -247,6 +272,16 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn('error', json.loads(response.content.decode('utf-8')))
 
+    def test_append_unique_commentary_deduplicates_sections(self):
+        merged = _append_unique_commentary('Line one\n\nLine two', 'Line two\n\nLine three')
+
+        self.assertEqual(merged, 'Line one\n\nLine two\n\nLine three')
+
+    def test_append_unique_commentary_deduplicates_repeated_paragraphs_in_single_text(self):
+        merged = _append_unique_commentary('', 'Fast. See Lk 18:12N.\n\nFast. See Lk 18:12N.')
+
+        self.assertEqual(merged, 'Fast. See Lk 18:12N.')
+
     @patch('walkasjesus_app.views.user_preferences.requests.get')
     def test_local_david_stern_source_uses_embedded_jnt_data(self, mock_get):
         request = self.factory.get(
@@ -281,6 +316,26 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content.decode('utf-8')), {})
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_local_david_stern_source_returns_verse_entries_not_intro_only(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {
+                'source': 'david-stern',
+                'book': 'Matthew',
+                'chapter': '5',
+            },
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+        payload = json.loads(response.content.decode('utf-8'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('3', payload)
+        self.assertTrue(str(payload['3']).strip())
+        self.assertNotIn('\n\n\n', payload['3'])
         mock_get.assert_not_called()
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
@@ -321,6 +376,51 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         )
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_proxy_returns_404_for_disabled_commentator(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'matthew-henry', 'book': 'John', 'chapter': '3'},
+        )
+
+        with self.settings(SCRIPTURA_DISABLED_COMMENTATORS=['matthew-henry']):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertIn('error', json.loads(response.content.decode('utf-8')))
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_proxy_returns_403_for_david_stern_when_login_required_and_anonymous(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'david-stern', 'book': 'John', 'chapter': '3'},
+        )
+        request.user = AnonymousUser()
+
+        with self.settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=True):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 403)
+        self.assertIn('error', json.loads(response.content.decode('utf-8')))
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_proxy_allows_david_stern_when_login_required_and_authenticated(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'david-stern', 'book': 'Matthew', 'chapter': '1'},
+        )
+        request.user = SimpleNamespace(is_authenticated=True)
+
+        with self.settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=True):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertIn('18', payload)
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
     def test_proxy_omits_api_key_header_when_not_configured(self, mock_get):
         mock_response = Mock()
         mock_response.raise_for_status.return_value = None
@@ -352,3 +452,58 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
 
         self.assertEqual(response.status_code, 502)
         self.assertIn('error', json.loads(response.content.decode('utf-8')))
+
+
+class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
+    def test_hides_cjb_for_anonymous_when_login_required(self, mock_bible_translation):
+        mock_bible_translation.return_value.all_enabled.return_value = [
+            SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
+            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern, NT)', language='en'),
+        ]
+
+        request = self.factory.get('/bible-translations/?language=en')
+        request.user = AnonymousUser()
+
+        with self.settings(
+            DEFAULT_BIBLE_ANY_LANGUAGE='de4e12af7f28f599-01',
+            DEFAULT_BIBLE_PER_LANGUAGE={'en': 'jnt-stern-en'},
+            CJB_BIBLE_ID='jnt-stern-en',
+            CJB_BIBLE_ENABLED=True,
+            CJB_BIBLE_LOGGED_IN_ONLY=True,
+            DISABLED_BIBLE_TRANSLATIONS=[],
+        ):
+            response = BibleTranslationsForLanguageView.as_view()(request)
+
+        payload = json.loads(response.content.decode('utf-8'))
+        returned_ids = [entry['id'] for entry in payload['bibles']]
+        self.assertEqual(returned_ids, ['de4e12af7f28f599-01'])
+        self.assertEqual(payload['default_bible_id'], 'de4e12af7f28f599-01')
+
+    @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
+    def test_shows_cjb_for_authenticated_when_login_required(self, mock_bible_translation):
+        mock_bible_translation.return_value.all_enabled.return_value = [
+            SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
+            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern, NT)', language='en'),
+        ]
+
+        request = self.factory.get('/bible-translations/?language=en')
+        request.user = SimpleNamespace(is_authenticated=True)
+
+        with self.settings(
+            DEFAULT_BIBLE_ANY_LANGUAGE='de4e12af7f28f599-01',
+            DEFAULT_BIBLE_PER_LANGUAGE={'en': 'jnt-stern-en'},
+            CJB_BIBLE_ID='jnt-stern-en',
+            CJB_BIBLE_ENABLED=True,
+            CJB_BIBLE_LOGGED_IN_ONLY=True,
+            DISABLED_BIBLE_TRANSLATIONS=[],
+        ):
+            response = BibleTranslationsForLanguageView.as_view()(request)
+
+        payload = json.loads(response.content.decode('utf-8'))
+        returned_ids = [entry['id'] for entry in payload['bibles']]
+        self.assertEqual(returned_ids, ['de4e12af7f28f599-01', 'jnt-stern-en'])
+        self.assertEqual(payload['default_bible_id'], 'jnt-stern-en')

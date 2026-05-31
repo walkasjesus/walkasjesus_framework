@@ -1,6 +1,7 @@
 from gettext import gettext
 import hashlib
 import json
+import re
 from pathlib import Path
 from functools import lru_cache
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -15,23 +16,123 @@ from django.conf import settings
 from google_trans import Translator
 import requests
 
+from walkasjesus_app.lib.access_policy import (
+    filter_visible_bibles_for_request,
+    is_bible_id_visible_for_request,
+    is_david_stern_commentary_allowed,
+    is_david_stern_source,
+)
 from walkasjesus_app.models import UserPreferences, BibleTranslation
 
 
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
 CROSS_DOMAIN_BIBLE_PARAM = '__waj_bible'
-LOCAL_DAVID_STERN_SOURCES = {
-    'david-stern',
-    'david_stern',
-    'jnt-stern',
-    'jnt_stern',
-    'stern',
+SCRIPTURA_SOURCE_TO_COMMENTATOR = {
+    'david-stern': 'david-stern',
+    'david_stern': 'david-stern',
+    'jnt-stern': 'david-stern',
+    'jnt_stern': 'david-stern',
+    'stern': 'david-stern',
+    'matthew-henry': 'matthew-henry',
+    'matthew_henry': 'matthew-henry',
+    'matthew-henry-nl': 'matthew-henry',
+    'matthew_henry_nl': 'matthew-henry',
 }
 
 
 def _normalize_book_name(value):
     return ''.join(ch for ch in str(value or '').lower() if ch.isalnum())
+
+
+def _normalize_commentary_text(value):
+    text = str(value or '').replace('\r\n', '\n').replace('\r', '\n')
+    lines = [line.strip() for line in text.split('\n')]
+    text = '\n'.join(lines)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    text = text.strip()
+
+    if not text:
+        return ''
+
+    paragraphs = [part.strip() for part in text.split('\n\n') if part.strip()]
+    deduped_paragraphs = []
+    for part in paragraphs:
+        if not deduped_paragraphs or deduped_paragraphs[-1] != part:
+            deduped_paragraphs.append(part)
+    return '\n\n'.join(deduped_paragraphs)
+
+
+def _normalize_commentary_entry_key(value):
+    if value in (None, ''):
+        return '0'
+    try:
+        return str(int(value))
+    except Exception:
+        match = re.search(r'\d+', str(value))
+        if match:
+            return str(int(match.group(0)))
+        return '0'
+
+
+def _append_unique_commentary(existing_text, new_text):
+    existing_normalized = _normalize_commentary_text(existing_text)
+    new_normalized = _normalize_commentary_text(new_text)
+
+    if not existing_normalized:
+        return new_normalized
+    if not new_normalized:
+        return existing_normalized
+
+    merged_parts = [part.strip() for part in existing_normalized.split('\n\n') if part.strip()]
+    seen_parts = set(merged_parts)
+
+    for part in [part.strip() for part in new_normalized.split('\n\n') if part.strip()]:
+        if part not in seen_parts:
+            merged_parts.append(part)
+            seen_parts.add(part)
+
+    return '\n\n'.join(merged_parts)
+
+
+def _is_scriptura_commentator_disabled(source):
+    commentator_id = SCRIPTURA_SOURCE_TO_COMMENTATOR.get(str(source or '').strip().lower(), '')
+    if not commentator_id:
+        return False
+
+    disabled_commentators = getattr(settings, 'SCRIPTURA_DISABLED_COMMENTATORS', [])
+    if not isinstance(disabled_commentators, (list, tuple, set)):
+        return False
+
+    disabled_set = {str(item).strip().lower() for item in disabled_commentators if str(item).strip()}
+    return commentator_id in disabled_set
+
+
+def _available_bibles_for_language(request, language_code):
+    bible_translation = BibleTranslation()
+    bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
+    return filter_visible_bibles_for_request(request, bibles)
+
+
+def _resolve_default_bible_id_for_language(request, language_code):
+    fallback_any_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+    preferred_default_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, fallback_any_id)
+
+    if is_bible_id_visible_for_request(request, preferred_default_id):
+        return preferred_default_id
+
+    if is_bible_id_visible_for_request(request, fallback_any_id):
+        return fallback_any_id
+
+    visible_for_language = _available_bibles_for_language(request, language_code)
+    if visible_for_language:
+        return visible_for_language[0].id
+
+    visible_any = filter_visible_bibles_for_request(request, BibleTranslation().all_enabled())
+    if visible_any:
+        return visible_any[0].id
+
+    return ''
 
 
 @lru_cache(maxsize=1)
@@ -69,27 +170,23 @@ def _load_local_david_stern_index():
             for verse_key, verse_items in commentary_by_verse.items():
                 text = ''
                 if isinstance(verse_items, list):
-                    text = '\n\n'.join(str(item).strip() for item in verse_items if str(item).strip())
+                    for item in verse_items:
+                        text = _append_unique_commentary(text, item)
                 else:
-                    text = str(verse_items or '').strip()
+                    text = _normalize_commentary_text(verse_items)
                 if text:
-                    entries[str(verse_key)] = text
+                    entries[_normalize_commentary_entry_key(verse_key)] = text
 
             for section in chapter.get('commentary_sections') or []:
                 verse_start = section.get('verse_start')
-                entry_key = '0'
-                if verse_start not in (None, ''):
-                    try:
-                        entry_key = str(int(verse_start))
-                    except Exception:
-                        entry_key = str(verse_start)
+                entry_key = _normalize_commentary_entry_key(verse_start)
 
-                text = str(section.get('text') or '').strip()
+                text = _normalize_commentary_text(section.get('text'))
                 if not text:
                     continue
 
                 if entries.get(entry_key):
-                    entries[entry_key] = f"{entries[entry_key]}\n\n{text}"
+                    entries[entry_key] = _append_unique_commentary(entries[entry_key], text)
                 else:
                     entries[entry_key] = text
 
@@ -181,25 +278,25 @@ def _absolute_redirect_for_language(request, language_code, redirect_url, select
     return f'{scheme}://{target_domain}{redirect_url}'
 
 
-def _default_bible_for_language(language_code):
-    default_bible_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
-    if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
-        default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+def _default_bible_for_language(request, language_code):
+    default_bible_id = _resolve_default_bible_id_for_language(request, language_code)
+    if not default_bible_id:
+        return BibleTranslation().get(settings.DEFAULT_BIBLE_ANY_LANGUAGE)
     return BibleTranslation().get(default_bible_id)
 
 
-def _preferred_bible_for_language(session, language_code):
+def _preferred_bible_for_language(request, session, language_code):
     preferred_bibles = session.get(UserPreferences.PER_LANGUAGE_BIBLE_SESSION_KEY, {})
     if isinstance(preferred_bibles, dict):
         preferred_bible_id = str(preferred_bibles.get(language_code, '')).strip()
-        if preferred_bible_id and preferred_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+        if preferred_bible_id and is_bible_id_visible_for_request(request, preferred_bible_id):
             try:
                 preferred_bible = BibleTranslation().get(preferred_bible_id)
                 if preferred_bible.language == language_code:
                     return preferred_bible
             except Exception:
                 pass
-    return _default_bible_for_language(language_code)
+    return _default_bible_for_language(request, language_code)
 
 
 def _default_media_languages_for_language(language_code):
@@ -228,7 +325,7 @@ class UserPreferencesLanguageSwitchView(View):
         # Keep selected bible aligned with the selected site language.
         requested_bible_id = str(request.POST.get('bible_id', '')).strip()
         bible = None
-        if requested_bible_id and requested_bible_id not in settings.DISABLED_BIBLE_TRANSLATIONS:
+        if requested_bible_id and is_bible_id_visible_for_request(request, requested_bible_id):
             try:
                 candidate = BibleTranslation().get(requested_bible_id)
                 if candidate.language == language_code:
@@ -237,7 +334,7 @@ class UserPreferencesLanguageSwitchView(View):
                 bible = None
 
         if bible is None:
-            bible = _preferred_bible_for_language(request.session, language_code)
+            bible = _preferred_bible_for_language(request, request.session, language_code)
 
         translation.activate(language_code)
         preferences = UserPreferences(request.session)
@@ -288,9 +385,8 @@ class UserPreferencesBibleView(View):
         if bible_id:
             try:
                 new_bible = BibleTranslation().get(bible_id)
-                
-                # Check if the selected Bible is in the disabled list
-                if bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+
+                if not is_bible_id_visible_for_request(request, bible_id):
                     messages.error(request, gettext('The selected Bible translation is currently disabled.'))
                 else:
                     UserPreferences(request.session).bible = new_bible
@@ -326,11 +422,10 @@ class BibleTranslationsForLanguageView(View):
     """Returns JSON with Bible translations available for the given language code."""
     def get(self, request):
         language_code = request.GET.get('language', 'en')
-        bible_translation = BibleTranslation()
-        bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
-        default_bible_id = settings.DEFAULT_BIBLE_PER_LANGUAGE.get(language_code, settings.DEFAULT_BIBLE_ANY_LANGUAGE)
-        if default_bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
-            default_bible_id = settings.DEFAULT_BIBLE_ANY_LANGUAGE
+        bibles = _available_bibles_for_language(request, language_code)
+        default_bible_id = _resolve_default_bible_id_for_language(request, language_code)
+        if default_bible_id and not any(b.id == default_bible_id for b in bibles):
+            default_bible_id = bibles[0].id if bibles else ''
         return JsonResponse({
             'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
             'default_bible_id': default_bible_id,
@@ -377,7 +472,13 @@ class ScripturaCommentaryProxyView(View):
         if not source or not book or not chapter:
             return JsonResponse({'error': gettext('Missing commentary parameters')}, status=400)
 
-        if source.lower() in LOCAL_DAVID_STERN_SOURCES:
+        if _is_scriptura_commentator_disabled(source):
+            return JsonResponse({'error': gettext('This commentator is disabled')}, status=404)
+
+        if is_david_stern_source(source) and not is_david_stern_commentary_allowed(request):
+            return JsonResponse({'error': gettext('Login required for this commentator')}, status=403)
+
+        if is_david_stern_source(source):
             try:
                 chapter_number = int(chapter)
             except Exception:

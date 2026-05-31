@@ -1,5 +1,8 @@
 from gettext import gettext
 import hashlib
+import json
+from pathlib import Path
+from functools import lru_cache
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from django.contrib import messages
@@ -18,6 +21,94 @@ from walkasjesus_app.models import UserPreferences, BibleTranslation
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 CROSS_DOMAIN_LANG_PARAM = '__waj_lang'
 CROSS_DOMAIN_BIBLE_PARAM = '__waj_bible'
+LOCAL_DAVID_STERN_SOURCES = {
+    'david-stern',
+    'david_stern',
+    'jnt-stern',
+    'jnt_stern',
+    'stern',
+}
+
+
+def _normalize_book_name(value):
+    return ''.join(ch for ch in str(value or '').lower() if ch.isalnum())
+
+
+@lru_cache(maxsize=1)
+def _load_local_david_stern_index():
+    index = {}
+    data_path = Path(__file__).resolve().parents[3] / 'bible_lib' / 'sources' / 'jnt_bible_lib_compatible.json'
+
+    if not data_path.exists():
+        return index
+
+    try:
+        with data_path.open('r', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except Exception:
+        return index
+
+    for book in payload.get('books', []):
+        aliases = {
+            book.get('bible_book'),
+            book.get('bible_book_enum_name'),
+            book.get('bible_book_abbreviation'),
+            book.get('book_title_source'),
+        }
+
+        for chapter in book.get('chapters', []):
+            chapter_number = chapter.get('chapter_number')
+            try:
+                chapter_number = int(chapter_number)
+            except Exception:
+                continue
+
+            entries = {}
+
+            commentary_by_verse = chapter.get('commentary_by_verse') or {}
+            for verse_key, verse_items in commentary_by_verse.items():
+                text = ''
+                if isinstance(verse_items, list):
+                    text = '\n\n'.join(str(item).strip() for item in verse_items if str(item).strip())
+                else:
+                    text = str(verse_items or '').strip()
+                if text:
+                    entries[str(verse_key)] = text
+
+            for section in chapter.get('commentary_sections') or []:
+                verse_start = section.get('verse_start')
+                entry_key = '0'
+                if verse_start not in (None, ''):
+                    try:
+                        entry_key = str(int(verse_start))
+                    except Exception:
+                        entry_key = str(verse_start)
+
+                text = str(section.get('text') or '').strip()
+                if not text:
+                    continue
+
+                if entries.get(entry_key):
+                    entries[entry_key] = f"{entries[entry_key]}\n\n{text}"
+                else:
+                    entries[entry_key] = text
+
+            if not entries:
+                continue
+
+            for alias in aliases:
+                normalized_alias = _normalize_book_name(alias)
+                if normalized_alias:
+                    index[f'{normalized_alias}|{chapter_number}'] = entries
+
+    return index
+
+
+def _local_david_stern_commentary(book, chapter):
+    normalized_book = _normalize_book_name(book)
+    if not normalized_book:
+        return {}
+    return _load_local_david_stern_index().get(f'{normalized_book}|{chapter}', {})
 
 
 def _resolve_path_in_any_language(path):
@@ -285,6 +376,14 @@ class ScripturaCommentaryProxyView(View):
 
         if not source or not book or not chapter:
             return JsonResponse({'error': gettext('Missing commentary parameters')}, status=400)
+
+        if source.lower() in LOCAL_DAVID_STERN_SOURCES:
+            try:
+                chapter_number = int(chapter)
+            except Exception:
+                return JsonResponse({'error': gettext('Invalid chapter parameter')}, status=400)
+
+            return JsonResponse(_local_david_stern_commentary(book, chapter_number))
 
         headers = {}
         bijbel_api_key = str(getattr(settings, 'BIJBEL_API_KEY', '')).strip()

@@ -603,12 +603,72 @@ $(document).ready(function(){
       return '';
     }
 
-    function getScripturaSources() {
-      if (getCommentaryLanguage() === 'nl') {
-        return ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry'];
+    function getScripturaCommentators() {
+      var isDutch = getCommentaryLanguage() === 'nl';
+      return [
+        {
+          id: 'david-stern',
+          label: 'David Stern',
+          apiSources: ['david-stern', 'david_stern', 'jnt-stern', 'jnt_stern'],
+          autoTranslate: true
+        },
+        {
+          id: 'matthew-henry',
+          label: isDutch ? 'Matthew Henry (NL)' : 'Matthew Henry',
+          apiSources: isDutch
+            ? ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry']
+            : ['matthew_henry', 'matthew-henry'],
+          autoTranslate: !isDutch
+        }
+      ];
+    }
+
+    function getScripturaCommentatorById(commentatorId) {
+      var commentators = getScripturaCommentators();
+      for (var i = 0; i < commentators.length; i += 1) {
+        if (commentators[i].id === commentatorId) {
+          return commentators[i];
+        }
       }
-      // English is not available as a separate source on BijbelAPI
-      // return ['matthew_henry_en', 'matthew-henry-en', 'matthew-henry', 'matthew_henry'];
+      return commentators[0];
+    }
+
+    function isNewTestamentBook(book) {
+      var normalized = String(book || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      var ntBooks = {
+        matthew: true,
+        mark: true,
+        luke: true,
+        john: true,
+        acts: true,
+        romans: true,
+        '1corinthians': true,
+        '2corinthians': true,
+        galatians: true,
+        ephesians: true,
+        philippians: true,
+        colossians: true,
+        '1thessalonians': true,
+        '2thessalonians': true,
+        '1timothy': true,
+        '2timothy': true,
+        titus: true,
+        philemon: true,
+        hebrews: true,
+        james: true,
+        '1peter': true,
+        '2peter': true,
+        '1john': true,
+        '2john': true,
+        '3john': true,
+        jude: true,
+        revelation: true
+      };
+      return !!ntBooks[normalized];
+    }
+
+    function getDefaultScripturaCommentatorId(book) {
+      return isNewTestamentBook(book) ? 'david-stern' : 'matthew-henry';
     }
 
     function getScripturaEndpoints() {
@@ -632,9 +692,9 @@ $(document).ready(function(){
       return url;
     }
 
-    function fetchScripturaCommentary(book, chapter, onSuccess, onError) {
+    function fetchScripturaCommentary(book, chapter, commentator, onSuccess, onError) {
       var endpoints = getScripturaEndpoints();
-      var sources = getScripturaSources();
+      var sources = (commentator && commentator.apiSources) ? commentator.apiSources : [];
       var candidates = [];
 
       endpoints.forEach(function(endpoint) {
@@ -680,21 +740,141 @@ $(document).ready(function(){
       return getCommentaryLanguage() === 'nl' ? ('Vers ' + entryKey) : ('Verse ' + entryKey);
     }
 
-    function renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, endpoint) {
-      var safeHtml = sanitizeSefariaHtml(String(commentaryText || '').replace(/\n/g, '<br>'));
-      var displayHtml = safeHtml || $('<span>').text(commentaryText || '').html().replace(/\n/g, '<br>');
-      var scripturaUrl = scripturaCommentaryUrl(endpoint || getScripturaEndpoints()[0], source, book, chapter, entryKey);
-      var sourceLabel = getCommentaryLanguage() === 'nl' ? 'Matthew Henry (NL)' : 'Matthew Henry';
+    function buildScripturaSourceButtons(activeCommentatorId) {
+      var html = '<div class="scriptura-commentary-sources">' +
+        '<p class="sefaria-select-label">' + uiMessage('select_commentator') + '</p>';
+
+      getScripturaCommentators().forEach(function(commentator) {
+        var activeClass = commentator.id === activeCommentatorId ? ' active' : '';
+        html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-source-btn mr-1 mb-1' + activeClass + '" data-scriptura-commentator="' + $('<span>').text(commentator.id).html() + '">' +
+          $('<span>').text(commentator.label).html() +
+          '</button>';
+      });
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, endpoint, commentator) {
       var titleLabel = scripturaEntryLabel(entryKey);
+      var sourceLabel = (commentator && commentator.label) ? commentator.label : 'Commentary';
+      var scripturaUrl = scripturaCommentaryUrl(endpoint || getScripturaEndpoints()[0], source, book, chapter, entryKey);
+      var shouldTranslate = !!(commentator && commentator.autoTranslate);
+      var renderToken = String(Date.now()) + ':' + String(Math.random());
+
+      $panel.data('scripturaRenderToken', renderToken);
       $panel.find('.scriptura-commentary-entry-btn').removeClass('active');
       $panel.find('.scriptura-commentary-entry-btn[data-entry-key="' + entryKey + '"]').addClass('active');
-      $panel.find('.scriptura-commentary-text').html(
-        '<div class="sefaria-commentary-content">' +
-        '<strong>' + sourceLabel + ' · ' + titleLabel + '</strong>' +
-        '<div class="sefaria-commentary-body mt-1">' + displayHtml + '</div>' +
-        '<p class="sefaria-attribution">Commentary provided by <a href="https://www.bijbelapi.com/" target="_blank" rel="noopener noreferrer">BijbelAPI</a> · <a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a></p>' +
-        '</div>'
-      );
+      $panel.find('.scriptura-commentary-text').html(commentarySpinnerHtml('api', uiMessage('loading_commentary')));
+
+      function renderCommentaryBody(rawText, isMachineTranslated) {
+        if ($panel.data('scripturaRenderToken') !== renderToken) {
+          return;
+        }
+
+        var safeHtml = sanitizeSefariaHtml(String(rawText || '').replace(/\n/g, '<br>'));
+        var displayHtml = safeHtml || $('<span>').text(rawText || '').html().replace(/\n/g, '<br>');
+        var translationNote = '';
+        if (isMachineTranslated) {
+          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em></p>';
+        }
+
+        $panel.find('.scriptura-commentary-text').html(
+          '<div class="sefaria-commentary-content">' +
+          '<strong>' + $('<span>').text(sourceLabel).html() + ' · ' + $('<span>').text(titleLabel).html() + '</strong>' +
+          translationNote +
+          '<div class="sefaria-commentary-body mt-1">' + displayHtml + '</div>' +
+          '<p class="sefaria-attribution">Commentary provided by <a href="https://www.bijbelapi.com/" target="_blank" rel="noopener noreferrer">BijbelAPI</a> · <a href="' + scripturaUrl + '" target="_blank" rel="noopener noreferrer">Open API response</a></p>' +
+          '</div>'
+        );
+      }
+
+      if (!shouldTranslate) {
+        renderCommentaryBody(commentaryText || '', false);
+        return;
+      }
+
+      translateCommentaryText(String(commentaryText || ''), function(translatedText, isMachineTranslated) {
+        renderCommentaryBody(translatedText, isMachineTranslated);
+      });
+    }
+
+    function renderScripturaSourceContent($panel, entries, verse, commentator, source, book, chapter, endpoint) {
+      var entryKeys = Object.keys(entries || {}).filter(function(key) {
+        return key.indexOf('__') !== 0 && entries[key];
+      }).sort(function(a, b) {
+        return Number(a) - Number(b);
+      });
+
+      if (entryKeys.length === 0) {
+        $panel.find('.scriptura-commentary-source-content').html(
+          '<p class="sefaria-no-result"><em>' + uiMessage('no_commentary_scriptura_chapter') + '</em></p>'
+        );
+        return;
+      }
+
+      var html = '';
+      if (!entries[String(verse)]) {
+        html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
+          uiMessage('no_exact_scriptura_verse', { verse: $('<span>').text(String(verse)).html() }) +
+          '</em></p>';
+      }
+
+      html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + uiMessage('select_available_commentary') + '</p>';
+      entryKeys.forEach(function(entryKey) {
+        html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-entry-btn mr-1 mb-1" data-entry-key="' + $('<span>').text(entryKey).html() + '">' + $('<span>').text(scripturaEntryLabel(entryKey)).html() + '</button>';
+      });
+      html += '</div><div class="scriptura-commentary-text"></div>';
+
+      $panel.find('.scriptura-commentary-source-content').html(html);
+      $panel.data('scripturaEntries', entries);
+      $panel.data('scripturaSource', source);
+      $panel.data('scripturaEndpoint', endpoint);
+      $panel.data('scripturaBook', book);
+      $panel.data('scripturaChapter', chapter);
+      $panel.data('scripturaCommentatorId', commentator.id);
+
+      var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
+      renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, endpoint, commentator);
+    }
+
+    function loadScripturaCommentaryForCommentator($panel, commentatorId, preferredVerse) {
+      var book = $panel.data('scripturaBook');
+      var chapter = $panel.data('scripturaChapter');
+      var verse = typeof preferredVerse === 'undefined' ? $panel.data('scripturaVerse') : preferredVerse;
+      var commentator = getScripturaCommentatorById(commentatorId);
+      var chapterCacheKey = [commentator.id, String(book || ''), String(chapter || '')].join('|');
+      var cachedEntries = getCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey);
+
+      $panel.find('.scriptura-commentary-source-btn').removeClass('active');
+      $panel.find('.scriptura-commentary-source-btn[data-scriptura-commentator="' + commentator.id + '"]').addClass('active');
+
+      if (cachedEntries) {
+        renderScripturaSourceContent(
+          $panel,
+          cachedEntries,
+          verse,
+          commentator,
+          cachedEntries.__source || commentator.apiSources[0],
+          book,
+          chapter,
+          cachedEntries.__endpoint || getScripturaEndpoints()[0]
+        );
+        return;
+      }
+
+      $panel.find('.scriptura-commentary-source-content').html(commentarySpinnerHtml('api', uiMessage('loading_commentary')));
+
+      fetchScripturaCommentary(book, chapter, commentator, function(data, resolvedSource, resolvedHost) {
+        var entries = data || {};
+        entries.__source = resolvedSource;
+        entries.__endpoint = resolvedHost;
+        setCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey, entries);
+        renderScripturaSourceContent($panel, entries, verse, commentator, resolvedSource, book, chapter, resolvedHost);
+      }, function() {
+        console.log('[BijbelAPI] Commentary request failed for all configured hosts/sources');
+        $panel.find('.scriptura-commentary-source-content').html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
+      });
     }
 
     $(document).on('click', '.scriptura-commentary-btn', function() {
@@ -703,97 +883,29 @@ $(document).ready(function(){
       var chapter = $btn.data('scriptura-chapter');
       var verse = $btn.data('scriptura-verse');
       var $panel = $btn.nextAll('.scriptura-commentary-panel').first();
-      var source = getScripturaSources()[0];
-      var scripturaEndpoint = getScripturaEndpoints()[0];
-      var chapterCacheKey = [source, String(book || ''), String(chapter || '')].join('|');
-      var cachedScripturaEntries = getCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey);
+      var preferredCommentatorId = getDefaultScripturaCommentatorId(book);
 
       if ($panel.is(':visible')) {
         $panel.slideUp(200);
         return;
       }
 
-      if (cachedScripturaEntries) {
-        $panel.html(commentarySpinnerHtml('cache', uiMessage('loading_commentary'))).slideDown(200);
-        var entries = cachedScripturaEntries;
-        var entryKeys = Object.keys(entries).filter(function(key) {
-          return entries[key];
-        }).sort(function(a, b) {
-          return Number(a) - Number(b);
-        });
+      $panel.html(buildScripturaSourceButtons(preferredCommentatorId) + '<div class="scriptura-commentary-source-content">' + commentarySpinnerHtml('api', uiMessage('loading_commentary')) + '</div>').slideDown(200);
+      $panel.data('scripturaBook', book);
+      $panel.data('scripturaChapter', chapter);
+      $panel.data('scripturaVerse', verse);
 
-        if (entryKeys.length === 0) {
-          $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_commentary_scriptura_chapter') + '</em></p>').slideDown(200);
-          return;
-        }
+      loadScripturaCommentaryForCommentator($panel, preferredCommentatorId, verse);
+    });
 
-        var html = '';
-        if (!entries[String(verse)]) {
-          html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
-            uiMessage('no_exact_scriptura_verse', { verse: $('<span>').text(String(verse)).html() }) +
-            '</em></p>';
-        }
-        html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + uiMessage('select_available_commentary') + '</p>';
-        entryKeys.forEach(function(entryKey) {
-          html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-entry-btn mr-1 mb-1" data-entry-key="' + $('<span>').text(entryKey).html() + '">' + $('<span>').text(scripturaEntryLabel(entryKey)).html() + '</button>';
-        });
-        html += '</div><div class="scriptura-commentary-text"></div>';
-        $panel.html(html).slideDown(200);
-        $panel.data('scripturaEntries', entries);
-        $panel.data('scripturaSource', source);
-        $panel.data('scripturaEndpoint', scripturaEndpoint);
-        $panel.data('scripturaBook', book);
-        $panel.data('scripturaChapter', chapter);
-
-        var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
-        renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, scripturaEndpoint);
+    $(document).on('click', '.scriptura-commentary-source-btn', function() {
+      var $btn = $(this);
+      var commentatorId = String($btn.data('scriptura-commentator') || '');
+      var $panel = $btn.closest('.scriptura-commentary-panel');
+      if (!commentatorId || !$panel.length) {
         return;
       }
-
-      $panel.html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
-
-      fetchScripturaCommentary(book, chapter, function(data, resolvedSource, resolvedHost) {
-          var entries = data || {};
-          source = resolvedSource;
-          scripturaEndpoint = resolvedHost;
-          chapterCacheKey = [source, String(book || ''), String(chapter || '')].join('|');
-          setCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey, entries);
-
-          var entryKeys = Object.keys(entries).filter(function(key) {
-            return entries[key];
-          }).sort(function(a, b) {
-            return Number(a) - Number(b);
-          });
-
-          if (entryKeys.length === 0) {
-            $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_commentary_scriptura_chapter') + '</em></p>');
-            return;
-          }
-
-          var html = '';
-          if (!entries[String(verse)]) {
-            html += '<p class="sefaria-no-result scriptura-commentary-hint"><em>' +
-              uiMessage('no_exact_scriptura_verse', { verse: $('<span>').text(String(verse)).html() }) +
-              '</em></p>';
-          }
-          html += '<div class="scriptura-commentators"><p class="sefaria-select-label">' + uiMessage('select_available_commentary') + '</p>';
-          entryKeys.forEach(function(entryKey) {
-            html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-entry-btn mr-1 mb-1" data-entry-key="' + $('<span>').text(entryKey).html() + '">' + $('<span>').text(scripturaEntryLabel(entryKey)).html() + '</button>';
-          });
-          html += '</div><div class="scriptura-commentary-text"></div>';
-          $panel.html(html);
-          $panel.data('scripturaEntries', entries);
-          $panel.data('scripturaSource', source);
-          $panel.data('scripturaEndpoint', scripturaEndpoint);
-          $panel.data('scripturaBook', book);
-          $panel.data('scripturaChapter', chapter);
-
-          var preferredKey = entries[String(verse)] ? String(verse) : (entryKeys.indexOf('0') !== -1 ? '0' : entryKeys[0]);
-          renderScripturaEntry($panel, preferredKey, entries[preferredKey], source, book, chapter, scripturaEndpoint);
-        }, function() {
-          console.log('[BijbelAPI] Commentary request failed for all configured hosts/sources');
-          $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
-        });
+      loadScripturaCommentaryForCommentator($panel, commentatorId);
     });
 
     $(document).on('click', '.scriptura-commentary-entry-btn', function() {
@@ -804,6 +916,8 @@ $(document).ready(function(){
       var scripturaEndpoint = $panel.data('scripturaEndpoint') || getScripturaEndpoints()[0];
       var book = $panel.data('scripturaBook');
       var chapter = $panel.data('scripturaChapter');
+      var commentatorId = $panel.data('scripturaCommentatorId');
+      var commentator = getScripturaCommentatorById(commentatorId);
       var entryKey = String($btn.data('entry-key'));
       var commentaryText = entries[entryKey] || '';
 
@@ -811,7 +925,7 @@ $(document).ready(function(){
         return;
       }
 
-      renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, scripturaEndpoint);
+      renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, scripturaEndpoint, commentator);
     });
 
     $(document).on('click', '.sefaria-commentary-btn', function() {

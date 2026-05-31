@@ -9,7 +9,7 @@ build
 
 *.sqlite3
 *.sqlite3-journal
-
+bible_lib/sources
 bible_api_cache.json
 .django_cache
 

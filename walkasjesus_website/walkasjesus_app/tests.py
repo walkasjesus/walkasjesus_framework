@@ -248,6 +248,42 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         self.assertIn('error', json.loads(response.content.decode('utf-8')))
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_local_david_stern_source_uses_embedded_jnt_data(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {
+                'source': 'david-stern',
+                'book': 'Matthew',
+                'chapter': '1',
+            },
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+        payload = json.loads(response.content.decode('utf-8'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('18', payload)
+        self.assertIn('Ruach HaKodesh', payload['18'])
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_local_david_stern_source_returns_empty_for_missing_chapter(self, mock_get):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {
+                'source': 'david-stern',
+                'book': 'Matthew',
+                'chapter': '999',
+            },
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), {})
+        mock_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
     def test_proxy_calls_configured_bijbelapi_endpoint(self, mock_get):
         mock_response = Mock()
         mock_response.raise_for_status.return_value = None

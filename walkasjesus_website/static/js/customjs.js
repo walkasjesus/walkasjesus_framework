@@ -194,6 +194,10 @@ $(document).ready(function(){
         en: 'Could not load commentary from BijbelAPI.',
         nl: 'Kon commentaar van BijbelAPI niet laden.'
       },
+      scriptura_login_required: {
+        en: 'Login required to view this commentator.',
+        nl: 'Log in om deze commentator te bekijken.'
+      },
       select_commentator: {
         en: 'Select a commentator:',
         nl: 'Kies een commentator:'
@@ -759,6 +763,7 @@ $(document).ready(function(){
       var endpoints = getScripturaEndpoints();
       var sources = (commentator && commentator.apiSources) ? commentator.apiSources : [];
       var candidates = [];
+      var lastErrorMessage = '';
 
       endpoints.forEach(function(endpoint) {
         sources.forEach(function(source) {
@@ -772,7 +777,7 @@ $(document).ready(function(){
 
       function tryCandidate(index) {
         if (index >= candidates.length) {
-          if (onError) onError();
+          if (onError) onError(lastErrorMessage);
           return;
         }
 
@@ -787,7 +792,10 @@ $(document).ready(function(){
             }
             tryCandidate(index + 1);
           },
-          error: function() {
+          error: function(jqXHR) {
+            if (jqXHR && jqXHR.status === 403) {
+              lastErrorMessage = uiMessage('scriptura_login_required');
+            }
             tryCandidate(index + 1);
           }
         });
@@ -1000,10 +1008,19 @@ $(document).ready(function(){
         entries.__endpoint = resolvedHost;
         setCommentaryCachedValue(scripturaChapterCache, 'scriptura_chapter', chapterCacheKey, entries);
         renderScripturaSourceContent($panel, entries, verse, commentator, resolvedSource, book, chapter, resolvedHost);
-      }, function() {
+      }, function(errorMessage) {
         console.log('[BijbelAPI] Commentary request failed for all configured hosts/sources');
-        $panel.find('.scriptura-commentary-source-content').html('<p class="sefaria-no-result"><em>' + uiMessage('could_not_load_scriptura') + '</em></p>');
+        $panel.find('.scriptura-commentary-source-content').html('<p class="sefaria-no-result"><em>' + (errorMessage || uiMessage('could_not_load_scriptura')) + '</em></p>');
       });
+    }
+
+    function resolveCommentaryPanel($btn, panelClass) {
+      var $panel = $btn.nextAll(panelClass).first();
+      if ($panel.length) {
+        return $panel;
+      }
+
+      return $btn.closest('.bible-study-verse-item, .bible-study-verse-card').find(panelClass).first();
     }
 
     $(document).on('click', '.scriptura-commentary-btn', function() {
@@ -1011,7 +1028,10 @@ $(document).ready(function(){
       var book = $btn.data('scriptura-book');
       var chapter = $btn.data('scriptura-chapter');
       var verse = $btn.data('scriptura-verse');
-      var $panel = $btn.nextAll('.scriptura-commentary-panel').first();
+      var $panel = resolveCommentaryPanel($btn, '.scriptura-commentary-panel');
+      if (!$panel.length) {
+        return;
+      }
       var preferredCommentatorId = getDefaultScripturaCommentatorId(book);
       if (!preferredCommentatorId) {
         $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_scriptura_commentators_enabled') + '</em></p>').slideDown(200);
@@ -1067,7 +1087,10 @@ $(document).ready(function(){
       if (!ref) {
         return;
       }
-      var $panel = $btn.next('.sefaria-commentary-panel');
+      var $panel = resolveCommentaryPanel($btn, '.sefaria-commentary-panel');
+      if (!$panel.length) {
+        return;
+      }
       var cachedRelatedHtml = getCommentaryCachedValue(sefariaRelatedCache, 'sefaria_related', ref);
 
       if ($panel.is(':visible')) {
@@ -1244,5 +1267,10 @@ $(document).ready(function(){
     });
 
     // ----- Sefaria Jewish Commentary END ------ \\
+
+    // Hide NT Commentary buttons when no Scriptura commentators are enabled.
+    if (getScripturaCommentators().length === 0) {
+      $('.scriptura-commentary-btn').hide();
+    }
 
   });

@@ -249,5 +249,7 @@ CJB_BIBLE_ENABLED = True
 CJB_BIBLE_LOGGED_IN_ONLY = False
 # Verse count above which passages are manual "Click to retrieve"
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
+# Maximum number of verses the user can select simultaneously on the Bible Study page.
+BIBLE_STUDY_MAX_VERSES = 5
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False

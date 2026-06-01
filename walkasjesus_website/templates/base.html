@@ -119,6 +119,7 @@
             <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	      <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
         <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
+	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:bible_study' %}" class="nav-link"><span>{% trans 'Bible Study' %}</span></a></li>
 	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>
             <li class="nav-item kids-mode-hide" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
@@ -167,6 +168,7 @@
                 <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans '77 Steps' %}</a></li>
                 <li><a href="{% url 'commandments:lesson_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Children & Lessons' %}</a></li>
                 <li><a href="{% url 'commandments:law_of_messiah_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Law of Messiah' %}</a></li>
+                <li><a href="{% url 'commandments:bible_study' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Bible Study' %}</a></li>
                 <li><a href="{% url 'commandments:maimonides_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Classical Commandments' %}</a></li>
                 <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Vision' %}</a></li>
                 {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
@@ -249,5 +251,6 @@
   <script src="{% static 'js/customjs.js' %}"></script>
 
   {% endcache %}
+  {% block extra_body_scripts %}{% endblock %}
   </body>
 </html>

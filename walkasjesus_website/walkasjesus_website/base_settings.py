@@ -251,5 +251,8 @@ CJB_BIBLE_LOGGED_IN_ONLY = False
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
 # Maximum number of verses the user can select simultaneously on the Bible Study page.
 BIBLE_STUDY_MAX_VERSES = 5
+# Default Bible Study translations per language when no bible_id query params are provided.
+# Example: {'EN': ['kjv'], 'NL': ['hsv']}
+BIBLE_STUDY_DEFAULT_BIBLE_IDS_BY_LANGUAGE = {}
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False

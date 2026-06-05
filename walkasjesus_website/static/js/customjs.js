@@ -16,6 +16,7 @@ $(document).ready(function(){
   var scripturaChapterCache = {};
   var sefariaRelatedCache = {};
   var sefariaTextCache = {};
+  var detailOriginalTextCache = {};
   var translationCache = {};
   var SCRIPTURA_CHAPTER_CACHE_VERSION = 'v2';
 
@@ -135,6 +136,108 @@ $(document).ready(function(){
     return String(getVersesUrl() || '').trim();
   }
 
+  function getBibleStudyUrl() {
+    var container = document.querySelector('[data-bible-study-url]');
+    return container ? String(container.getAttribute('data-bible-study-url') || '').trim() : '';
+  }
+
+  function getOriginalTextUrl() {
+    var container = document.querySelector('[data-original-text-url]');
+    return container ? String(container.getAttribute('data-original-text-url') || '').trim() : '';
+  }
+
+  function bibleStudyBookLookup() {
+    return {
+      'Genesis': 'Genesis', 'Exodus': 'Exodus', 'Leviticus': 'Leviticus', 'Numbers': 'Numbers', 'Deuteronomy': 'Deuteronomy',
+      'Joshua': 'Joshua', 'Judges': 'Judges', 'Ruth': 'Ruth', '1 Samuel': 'SamuelFirstBook', 'I Samuel': 'SamuelFirstBook',
+      '2 Samuel': 'SamuelSecondBook', 'II Samuel': 'SamuelSecondBook', '1 Kings': 'KingsFirstBook', 'I Kings': 'KingsFirstBook',
+      '2 Kings': 'KingsSecondBook', 'II Kings': 'KingsSecondBook', '1 Chronicles': 'ChroniclesFirstBook', 'I Chronicles': 'ChroniclesFirstBook',
+      '2 Chronicles': 'ChroniclesSecondBook', 'II Chronicles': 'ChroniclesSecondBook', 'Ezra': 'Ezra', 'Nehemiah': 'Nehemiah',
+      'Esther': 'Esther', 'Job': 'Job', 'Psalms': 'Psalms', 'Proverbs': 'Proverbs', 'Ecclesiastes': 'Ecclesiastes',
+      'Song of Solomon': 'SongOfSolomon', 'Song of Songs': 'SongOfSolomon', 'Isaiah': 'Isaiah', 'Jeremiah': 'Jeremiah',
+      'Lamentations': 'Lamentations', 'Ezekiel': 'Ezekiel', 'Daniel': 'Daniel', 'Hosea': 'Hosea', 'Joel': 'Joel', 'Amos': 'Amos',
+      'Obadiah': 'Obadiah', 'Jonah': 'Jonah', 'Micah': 'Micah', 'Nahum': 'Nahum', 'Habakkuk': 'Habakkuk', 'Zephaniah': 'Zephaniah',
+      'Haggai': 'Haggai', 'Zechariah': 'Zechariah', 'Malachi': 'Malachi', 'Matthew': 'Matthew', 'Mark': 'Mark', 'Luke': 'Luke',
+      'John': 'John', 'Acts': 'Acts', 'Romans': 'Romans', '1 Corinthians': 'CorinthiansFirstBook', '2 Corinthians': 'CorinthiansSecondBook',
+      'Galatians': 'Galatians', 'Ephesians': 'Ephesians', 'Philippians': 'Philippians', 'Colossians': 'Colossians',
+      '1 Thessalonians': 'ThessaloniansFirstBook', '2 Thessalonians': 'ThessaloniansSecondBook', '1 Timothy': 'TimothyFirstBook',
+      '2 Timothy': 'TimothySecondBook', 'Titus': 'Titus', 'Philemon': 'Philemon', 'Hebrews': 'Hebrews', 'James': 'James',
+      '1 Peter': 'PeterFirstBook', '2 Peter': 'PeterSecondBook', '1 John': 'JohnFirstBook', '2 John': 'JohnSecondBook',
+      '3 John': 'JohnThirdBook', 'Jude': 'Jude', 'Revelation': 'Revelation'
+    };
+  }
+
+  function appBookFromDisplayName(name) {
+    return bibleStudyBookLookup()[String(name || '').trim()] || '';
+  }
+
+  function parseBibleStudyReference(reference) {
+    var normalized = String(reference || '').trim();
+    if (!normalized) {
+      return null;
+    }
+
+    var match = normalized.match(/^(.*?)\s+(\d+):(\d+)(?:-(?:(\d+):)?(\d+))?$/);
+    if (!match) {
+      return null;
+    }
+
+    var book = appBookFromDisplayName(match[1]);
+    if (!book) {
+      return null;
+    }
+
+    var chapter = Number(match[2]);
+    var startVerse = Number(match[3]);
+    var endChapter = match[4] ? Number(match[4]) : chapter;
+    var endVerse = match[5] ? Number(match[5]) : startVerse;
+    return {
+      book: book,
+      chapter: chapter,
+      startVerse: startVerse,
+      endChapter: endChapter,
+      endVerse: endVerse
+    };
+  }
+
+  function buildBibleStudyUrl(details) {
+    if (!details || !details.book) {
+      return '';
+    }
+
+    var baseUrl = getBibleStudyUrl();
+    if (!baseUrl) {
+      return '';
+    }
+
+    var params = new URLSearchParams();
+    params.set('book', String(details.book));
+    params.set('chapter', String(details.chapter || 1));
+    params.set('start_verse', String(details.startVerse || 1));
+    params.set('end_verse', String(details.endVerse || details.startVerse || 1));
+    if (details.showOriginalText) {
+      params.set('show_original', '1');
+    }
+    return baseUrl + '?' + params.toString();
+  }
+
+  function scripturaBookLabelFromKey(book) {
+    var mapping = {
+      SamuelFirstBook: '1 Samuel', SamuelSecondBook: '2 Samuel', KingsFirstBook: '1 Kings', KingsSecondBook: '2 Kings',
+      ChroniclesFirstBook: '1 Chronicles', ChroniclesSecondBook: '2 Chronicles', SongOfSolomon: 'Song of Solomon',
+      CorinthiansFirstBook: '1 Corinthians', CorinthiansSecondBook: '2 Corinthians', ThessaloniansFirstBook: '1 Thessalonians',
+      ThessaloniansSecondBook: '2 Thessalonians', TimothyFirstBook: '1 Timothy', TimothySecondBook: '2 Timothy',
+      PeterFirstBook: '1 Peter', PeterSecondBook: '2 Peter', JohnFirstBook: '1 John', JohnSecondBook: '2 John', JohnThirdBook: '3 John'
+    };
+    return mapping[String(book || '')] || String(book || '');
+  }
+
+  function setCommentaryButtonActive($btn, isActive) {
+    if ($btn && $btn.length) {
+      $btn.toggleClass('active', !!isActive);
+    }
+  }
+
   function ensureManualVerseTarget($link, pk) {
     var $target = $('.bible-verse-text[data-verse-ref="' + pk + '"][data-verse-manual="1"]').first();
     if (!$target.length) {
@@ -185,6 +288,18 @@ $(document).ready(function(){
       no_exact_scriptura_verse: {
         en: 'No exact commentary was found for verse {verse}. Choose an available entry from this chapter.',
         nl: 'Geen exacte toelichting gevonden voor vers {verse}. Kies een beschikbare toelichting uit dit hoofdstuk.'
+      },
+      other_commentary: {
+        en: 'Other Commentary',
+        nl: 'Overige Commentaar'
+      },
+      original_text: {
+        en: 'Original text',
+        nl: 'Originele tekst'
+      },
+      study_deeper_in_bible_study_page: {
+        en: 'Study deeper in our Bible Study page',
+        nl: 'Bestudeer dit dieper op onze Bijbelstudie-pagina'
       },
       select_available_commentary: {
         en: 'Select an available commentary:',
@@ -826,6 +941,139 @@ $(document).ready(function(){
       return html;
     }
 
+    function applyCommentaryButtonLabel($button) {
+      var label = uiMessage('other_commentary');
+      if (!$button || !$button.length) {
+        return;
+      }
+      var textNodes = $button.contents().filter(function() {
+        return this.nodeType === 3 && $.trim(this.nodeValue).length;
+      });
+      if (textNodes.length) {
+        textNodes.last()[0].nodeValue = ' ' + label;
+      } else {
+        $button.append(document.createTextNode(' ' + label));
+      }
+    }
+
+    function extractBibleStudyDetails($context) {
+      var $scriptura = $context.find('.scriptura-commentary-btn').first();
+      var referenceLabel = $.trim($context.find('b').first().text());
+      var parsedReference = parseBibleStudyReference(referenceLabel);
+      if (parsedReference && parsedReference.book) {
+        return parsedReference;
+      }
+
+      if ($scriptura.length) {
+        return {
+          book: appBookFromDisplayName($scriptura.data('scriptura-book')),
+          chapter: Number($scriptura.data('scriptura-chapter') || 1),
+          startVerse: Number($scriptura.data('scriptura-verse') || 1),
+          endChapter: Number($scriptura.data('scriptura-chapter') || 1),
+          endVerse: Number($scriptura.data('scriptura-verse') || 1)
+        };
+      }
+
+      var $sefaria = $context.find('.sefaria-commentary-btn-secondary').first();
+      if ($sefaria.length) {
+        return parseBibleStudyReference($sefaria.data('sefaria-ref'));
+      }
+
+      return null;
+    }
+
+    function buildBibleStudyAnchor(details, label, showOriginalText) {
+      var payload = $.extend({}, details || {});
+      payload.showOriginalText = !!showOriginalText;
+      var href = buildBibleStudyUrl(payload);
+      if (!href) {
+        return $();
+      }
+      return $('<a>', {
+        'class': 'detail-bible-study-link',
+        href: href,
+        title: uiMessage('study_deeper_in_bible_study_page')
+      }).text(label || '');
+    }
+
+    function enhanceDetailBibleStudyLinks() {
+      $('.scriptura-commentary-btn').each(function() {
+        applyCommentaryButtonLabel($(this));
+      });
+
+      $('.scriptura-commentary-btn, .sefaria-commentary-btn-secondary').each(function() {
+        var $seed = $(this);
+        var $context = $seed.closest('li, .our-services-text');
+        if (!$context.length || $context.closest('.bible-study-shell').length || $context.data('jcBibleStudyEnhanced')) {
+          return;
+        }
+
+        var details = extractBibleStudyDetails($context);
+        if (!details || !details.book) {
+          return;
+        }
+
+        $context.data('jcBibleStudyEnhanced', true);
+
+        var $reference = $context.find('b').first();
+        var referenceLabel = $.trim($reference.text());
+        var $verseTarget = $context.find('.bible-verse-load-link, .bible-verse-text').first();
+        var $actionButtons = $context.find('.scriptura-commentary-btn, .sefaria-commentary-btn-secondary').filter(function() {
+          return !$(this).hasClass('bible-verse-load-link');
+        });
+
+        if (getScripturaCommentators().length > 0 && !$context.find('.scriptura-commentary-btn').length) {
+          var $scripturaBtn = $('<button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn"></button>');
+          $scripturaBtn.attr('data-scriptura-book', scripturaBookLabelFromKey(details.book));
+          $scripturaBtn.attr('data-scriptura-chapter', details.chapter);
+          $scripturaBtn.attr('data-scriptura-verse', details.startVerse);
+          $scripturaBtn.append('<span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span>');
+          applyCommentaryButtonLabel($scripturaBtn);
+          $scripturaBtn.appendTo($context);
+        }
+
+        if (!$context.find('.detail-original-text-btn').length) {
+          $('<button>', {
+            type: 'button',
+            'class': 'btn btn-sm commentary-action-btn detail-original-text-btn',
+            title: uiMessage('original_text')
+          })
+            .attr('data-bible-study-book', details.book)
+            .attr('data-bible-study-chapter', details.chapter)
+            .attr('data-bible-study-start-verse', details.startVerse)
+            .attr('data-bible-study-end-verse', details.endVerse)
+            .text(uiMessage('original_text'))
+            .appendTo($context);
+        }
+
+        if (!$context.find('.detail-inline-original-panel').length) {
+          $('<div class="detail-inline-original-panel"></div>').appendTo($context);
+        }
+
+        $actionButtons = $context.find('.scriptura-commentary-btn, .sefaria-commentary-btn-secondary, .detail-original-text-btn').filter(function() {
+          return !$(this).hasClass('bible-verse-load-link');
+        });
+
+        if ($reference.length && referenceLabel && $actionButtons.length) {
+          var $row = $('<div class="bible-reference-action-row"></div>');
+          var $link = buildBibleStudyAnchor(details, referenceLabel, false);
+          if ($link.length) {
+            $row.append($link);
+          }
+          $actionButtons.each(function() {
+            $row.append(this);
+          });
+          if ($verseTarget.length) {
+            $row.insertBefore($verseTarget.first());
+          } else {
+            $context.prepend($row);
+          }
+          $reference.hide();
+          $reference.next('br').hide();
+        }
+      });
+    }
+
     function renderScripturaEntry($panel, entryKey, commentaryText, source, book, chapter, endpoint, commentator) {
       var titleLabel = scripturaEntryLabel(entryKey);
       var sourceLabel = (commentator && commentator.label) ? commentator.label : 'Commentary';
@@ -1020,7 +1268,230 @@ $(document).ready(function(){
         return $panel;
       }
 
+      $panel = $btn.closest('li').find(panelClass).first();
+      if ($panel.length) {
+        return $panel;
+      }
+
+      $panel = $btn.closest('.our-services-text').find(panelClass).first();
+      if ($panel.length) {
+        return $panel;
+      }
+
       return $btn.closest('.bible-study-verse-item, .bible-study-verse-card').find(panelClass).first();
+    }
+
+    function detailOriginalCacheKey(details) {
+      return [details.book, details.chapter, details.startVerse, details.endVerse].join('|');
+    }
+
+    function detailOriginalChunks(details) {
+      var chunks = [];
+      var startVerse = Number(details.startVerse || 1);
+      var endVerse = Number(details.endVerse || startVerse);
+      while (startVerse <= endVerse) {
+        var chunkEnd = Math.min(endVerse, startVerse + 4);
+        chunks.push({
+          book: details.book,
+          chapter: Number(details.chapter || 1),
+          startVerse: startVerse,
+          endVerse: chunkEnd
+        });
+        startVerse = chunkEnd + 1;
+      }
+      return chunks;
+    }
+
+    function detailOriginalFirstSelectableWordIndex(words) {
+      for (var index = 0; index < (words || []).length; index += 1) {
+        if (words[index] && words[index].clickable) {
+          return index;
+        }
+      }
+      return -1;
+    }
+
+    function detailOriginalWordTitle(word) {
+      var lines = [];
+      if (word && word.translation_label) {
+        lines.push(String(word.translation_label));
+      }
+      $.each((word && word.candidates) || [], function(index, candidate) {
+        if (index >= 4) {
+          return false;
+        }
+        var gloss = ((candidate && candidate.glosses) || []).slice(0, 3).join(', ');
+        var definition = gloss || String((candidate && candidate.definition) || '');
+        lines.push(String((candidate && candidate.strongs_number) || '') + ': ' + definition);
+      });
+      return lines.join('\n');
+    }
+
+    function detailOriginalWordTranslation(word) {
+      if (!word || !word.clickable) {
+        return '';
+      }
+      return word.translation_label ? String(word.translation_label) : 'No tag yet';
+    }
+
+    function detailOriginalSentenceHtml(words) {
+      return '<div class="detail-inline-original-sentence-words">' + (words || []).map(function(word, index) {
+        var tokenText = String((word && (word.sentence_text || word.text)) || '').trim();
+        if (!tokenText) {
+          return '';
+        }
+        return '<span class="detail-inline-original-token" data-word-index="' + $('<span>').text(String(index)).html() + '">' + $('<span>').text(tokenText).html() + '</span>';
+      }).join('') + '</div>';
+    }
+
+    function detailOriginalRenderWordDetail($panel, versePayload, wordIndex) {
+      var words = (versePayload && versePayload.words) || [];
+      var selectedWord = (wordIndex >= 0 && wordIndex < words.length) ? words[wordIndex] : null;
+      var $detail = $panel.find('.detail-inline-original-detail-body');
+      if (!$detail.length) {
+        return;
+      }
+
+      if (!selectedWord || !selectedWord.clickable) {
+        $detail.html('<p class="mb-0 text-muted">Hover or click an original-language word to inspect Strong\'s numbers, lemma data, and possible translations.</p>');
+        return;
+      }
+
+      var html = '<div class="detail-inline-original-meta"><strong>' + $('<span>').text(selectedWord.text || '').html() + '</strong></div>';
+      if (selectedWord.translation_label) {
+        html += '<p class="mb-2"><small>Direct gloss: ' + $('<span>').text(selectedWord.translation_label).html() + '</small></p>';
+      }
+      if (selectedWord.grammar) {
+        html += '<p class="mb-2"><small>Grammar: <code>' + $('<span>').text(selectedWord.grammar).html() + '</code></small></p>';
+      }
+
+      $.each(selectedWord.candidates || [], function(_, candidate) {
+        var meaningsHtml = ((candidate && candidate.possible_translations) || []).map(function(meaning) {
+          return '<li>' + $('<span>').text(meaning).html() + '</li>';
+        }).join('');
+        var referencesHtml = ((candidate && candidate.references) || []).slice(0, 24).map(function(reference) {
+          return '<span class="detail-inline-original-ref-item">' + $('<span>').text(reference).html() + '</span>';
+        }).join('');
+        html += '<div class="detail-inline-original-candidate">' +
+          '<div class="detail-inline-original-candidate-head">' +
+          '<strong>' + $('<span>').text(String((candidate && candidate.strongs_number) || '')).html() + '</strong>' +
+          ((candidate && candidate.lemma) ? '<span>' + $('<span>').text(candidate.lemma).html() + '</span>' : '') +
+          ((candidate && candidate.transliteration) ? '<span class="text-muted">' + $('<span>').text(candidate.transliteration).html() + '</span>' : '') +
+          '</div>' +
+          ((candidate && candidate.definition) ? '<p class="mb-1">' + $('<span>').text(candidate.definition).html() + '</p>' : '') +
+          (meaningsHtml ? '<div><small class="font-weight-bold d-block mb-1">Possible meanings</small><ul class="detail-inline-original-meaning-list">' + meaningsHtml + '</ul></div>' : '') +
+          (referencesHtml ? '<div class="mt-2"><small class="font-weight-bold d-block mb-1">Where it occurs</small><div class="detail-inline-original-ref-list">' + referencesHtml + '</div></div>' : '') +
+          ((candidate && candidate.derivation) ? '<p class="mb-0 mt-2"><small>Derivation: ' + $('<span>').text(candidate.derivation).html() + '</small></p>' : '') +
+          ((candidate && candidate.blueletter_url) ? '<p class="mb-0 mt-2"><small><a href="' + $('<span>').text(candidate.blueletter_url).html() + '" target="_blank" rel="noopener noreferrer">Open in Blue Letter Bible</a></small></p>' : '') +
+          '</div>';
+      });
+
+      $detail.html(html);
+    }
+
+    function detailOriginalSyncSelection($panel, wordIndex) {
+      $panel.find('.detail-inline-original-token').removeClass('active');
+      $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').addClass('active');
+    }
+
+    function detailOriginalSyncHover($panel, wordIndex, hovering) {
+      $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+    }
+
+    function detailOriginalVerseHtml(referenceLabel, verseKey, versePayload) {
+      var firstWordIndex = detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []);
+      var wordButtons = ((versePayload && versePayload.words) || []).map(function(word, index) {
+        if (!word || !word.clickable) {
+          return '<span class="detail-inline-original-word-item"><span>' + $('<span>').text(String((word && word.text) || '')).html() + '</span><span class="detail-inline-original-word-translation">&nbsp;</span></span>';
+        }
+        return '<span class="detail-inline-original-word-item">' +
+          '<button type="button" class="detail-inline-original-word-btn' + (index === firstWordIndex ? ' active' : '') + '" data-word-index="' + $('<span>').text(String(index)).html() + '" title="' + $('<span>').text(detailOriginalWordTitle(word)).html() + '">' + $('<span>').text(String(word.text || '')).html() + '</button>' +
+          '<span class="detail-inline-original-word-translation">' + $('<span>').text(detailOriginalWordTranslation(word)).html() + '</span>' +
+          '</span>';
+      }).join('');
+
+      return '<div class="detail-inline-original-verse" data-verse="' + $('<span>').text(String(verseKey)).html() + '">' +
+        '<div class="detail-inline-original-title">Original text · ' + $('<span>').text(referenceLabel).html() + '</div>' +
+        '<div class="row">' +
+          '<div class="col-lg-6 mb-2">' +
+            '<div class="detail-inline-original-sentence">' +
+              detailOriginalSentenceHtml((versePayload && versePayload.words) || []) +
+              '<div class="detail-inline-original-word-cloud">' + wordButtons + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="col-lg-6 mb-2">' +
+            '<div class="detail-inline-original-detail">' +
+              '<span class="detail-inline-original-title">Strong\'s details</span>' +
+              '<div class="detail-inline-original-detail-body"></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function detailOriginalApplyPayload($panel, details, payload) {
+      var verses = (payload && payload.verses) ? payload.verses : {};
+      var html = '<div class="detail-inline-original-grid"></div>';
+      $panel.html(html);
+      var $grid = $panel.find('.detail-inline-original-grid');
+      Object.keys(verses).sort(function(a, b) { return Number(a) - Number(b); }).forEach(function(verseKey) {
+        var referenceLabel = scripturaBookLabelFromKey(details.book) + ' ' + details.chapter + ':' + verseKey;
+        var versePayload = verses[verseKey] || {};
+        var $verse = $(detailOriginalVerseHtml(referenceLabel, verseKey, versePayload));
+        $verse.data('versePayload', versePayload);
+        $grid.append($verse);
+        detailOriginalRenderWordDetail($verse, versePayload, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
+        detailOriginalSyncSelection($verse, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
+      });
+    }
+
+    function fetchDetailOriginalText(details, onDone) {
+      var cacheKey = detailOriginalCacheKey(details);
+      if (detailOriginalTextCache[cacheKey]) {
+        onDone(detailOriginalTextCache[cacheKey]);
+        return;
+      }
+
+      var originalTextUrl = getOriginalTextUrl();
+      if (!originalTextUrl) {
+        onDone({ verses: {} });
+        return;
+      }
+
+      var merged = { verses: {} };
+      var chunks = detailOriginalChunks(details);
+
+      function fetchChunk(index) {
+        if (index >= chunks.length) {
+          detailOriginalTextCache[cacheKey] = merged;
+          onDone(merged);
+          return;
+        }
+
+        var chunk = chunks[index];
+        $.ajax({
+          type: 'POST',
+          url: originalTextUrl,
+          timeout: 20000,
+          dataType: 'json',
+          data: {
+            csrfmiddlewaretoken: getCsrfToken(),
+            book: chunk.book,
+            chapter: chunk.chapter,
+            start_verse: chunk.startVerse,
+            end_verse: chunk.endVerse
+          },
+          success: function(payload) {
+            $.extend(merged.verses, (payload && payload.verses) || {});
+            fetchChunk(index + 1);
+          },
+          error: function() {
+            fetchChunk(index + 1);
+          }
+        });
+      }
+
+      fetchChunk(0);
     }
 
     $(document).on('click', '.scriptura-commentary-btn', function() {
@@ -1039,10 +1510,12 @@ $(document).ready(function(){
       }
 
       if ($panel.is(':visible')) {
+        setCommentaryButtonActive($btn, false);
         $panel.slideUp(200);
         return;
       }
 
+      setCommentaryButtonActive($btn, true);
       $panel.html(buildScripturaSourceButtons(preferredCommentatorId) + '<div class="scriptura-commentary-source-content">' + commentarySpinnerHtml('api', uiMessage('loading_commentary')) + '</div>').slideDown(200);
       $panel.data('scripturaBook', book);
       $panel.data('scripturaChapter', chapter);
@@ -1094,10 +1567,12 @@ $(document).ready(function(){
       var cachedRelatedHtml = getCommentaryCachedValue(sefariaRelatedCache, 'sefaria_related', ref);
 
       if ($panel.is(':visible')) {
+        setCommentaryButtonActive($btn, false);
         $panel.slideUp(200);
         return;
       }
 
+      setCommentaryButtonActive($btn, true);
       if (cachedRelatedHtml) {
         $panel.html(commentarySpinnerHtml('cache', uiMessage('loading_commentary'))).slideDown(200);
         $panel.html(cachedRelatedHtml).slideDown(200);
@@ -1266,11 +1741,65 @@ $(document).ready(function(){
       });
     });
 
+    $(document).on('click', '.detail-original-text-btn', function() {
+      var $btn = $(this);
+      var details = extractBibleStudyDetails($btn.closest('li, .our-services-text'));
+      var $panel = $btn.closest('li').find('.detail-inline-original-panel').first();
+      if (!$panel.length) {
+        $panel = $btn.closest('.our-services-text').find('.detail-inline-original-panel').first();
+      }
+      if (!$panel.length || !details.book) {
+        return;
+      }
+
+      if ($panel.hasClass('is-open')) {
+        setCommentaryButtonActive($btn, false);
+        $panel.removeClass('is-open').slideUp(200);
+        return;
+      }
+
+      setCommentaryButtonActive($btn, true);
+      $panel.addClass('is-open').html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
+      fetchDetailOriginalText(details, function(payload) {
+        if (!payload || !payload.verses || Object.keys(payload.verses).length === 0) {
+          $panel.html('<p class="mb-0"><em>' + uiMessage('could_not_load_verse_text') + '</em></p>');
+          return;
+        }
+        detailOriginalApplyPayload($panel, details, payload);
+      });
+    });
+
+    $(document).on('mouseenter focus', '.detail-inline-original-word-btn', function() {
+      var $btn = $(this);
+      var wordIndex = Number($btn.data('wordIndex'));
+      detailOriginalSyncHover($btn.closest('.detail-inline-original-verse'), wordIndex, true);
+    });
+
+    $(document).on('mouseleave blur', '.detail-inline-original-word-btn', function() {
+      var $btn = $(this);
+      var wordIndex = Number($btn.data('wordIndex'));
+      detailOriginalSyncHover($btn.closest('.detail-inline-original-verse'), wordIndex, false);
+    });
+
+    $(document).on('click', '.detail-inline-original-word-btn', function() {
+      var $btn = $(this);
+      var wordIndex = Number($btn.data('wordIndex'));
+      var $verse = $btn.closest('.detail-inline-original-verse');
+      var versePayload = $verse.data('versePayload') || {};
+
+      $verse.find('.detail-inline-original-word-btn').removeClass('active');
+      $btn.addClass('active');
+      detailOriginalSyncSelection($verse, wordIndex);
+      detailOriginalRenderWordDetail($verse, versePayload, wordIndex);
+    });
+
     // ----- Sefaria Jewish Commentary END ------ \\
 
     // Hide NT Commentary buttons when no Scriptura commentators are enabled.
     if (getScripturaCommentators().length === 0) {
       $('.scriptura-commentary-btn').hide();
     }
+
+    enhanceDetailBibleStudyLinks();
 
   });

@@ -177,5 +177,10 @@ class BibleTranslationMetaData(models.Model):
     bible_id = models.CharField(max_length=32, unique=True, null=False, default='')
     is_enabled = models.BooleanField(default=True)
 
+    class Meta:
+        permissions = [
+            ('view_restricted_cjb_translation', 'Can view the restricted Complete Jewish Bible translation'),
+        ]
+
 
 BibleTranslation._all_bibles = BibleTranslation._build_all_bibles()

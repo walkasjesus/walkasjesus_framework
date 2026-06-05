@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.views import View
 
 from walkasjesus_app.lib.access_policy import filter_visible_bibles_for_request, is_bible_id_visible_for_request
+from walkasjesus_app.lib.strongs_service import original_text_payload
 from walkasjesus_app.models import BibleTranslation, UserPreferences
 from walkasjesus_app.models.bible_books import BibleBooks
 
@@ -75,10 +76,44 @@ def _safe_int(value, default, minimum=1):
         return default
 
 
+def _default_bible_ids_from_settings(enabled_bibles, max_bibles):
+    configured = getattr(settings, 'BIBLE_STUDY_DEFAULT_BIBLE_IDS_BY_LANGUAGE', {}) or {}
+    if not isinstance(configured, dict):
+        return []
+
+    visible_by_id = {str(bible.id): bible for bible in enabled_bibles}
+    selected_ids = []
+
+    for language_code, configured_ids in configured.items():
+        normalized_language = str(language_code or '').strip().upper()[:2]
+        if isinstance(configured_ids, (str, int)):
+            configured_list = [configured_ids]
+        else:
+            configured_list = list(configured_ids or [])
+
+        for bible_id in configured_list:
+            normalized_id = str(bible_id or '').strip()
+            bible = visible_by_id.get(normalized_id)
+            if not bible:
+                continue
+            bible_language = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+            if normalized_language and bible_language != normalized_language:
+                continue
+            if normalized_id not in selected_ids:
+                selected_ids.append(normalized_id)
+            break
+
+        if len(selected_ids) >= max_bibles:
+            break
+
+    return selected_ids[:max_bibles]
+
+
 class BibleStudyView(View):
     def get(self, request):
         max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
-        max_bibles = 4
+        show_original_text = str(request.GET.get('show_original', '')).strip().lower() in {'1', 'true', 'yes', 'on'}
+        max_bibles = 2 if show_original_text else 4
 
         bible_books = [(b.name, str(b.value)) for b in BibleBooks]
 
@@ -96,6 +131,8 @@ class BibleStudyView(View):
         end_verse = min(end_verse, start_verse + max_verses - 1)
 
         bible_ids = request.GET.getlist('bible_id')
+        if not bible_ids:
+            bible_ids = _default_bible_ids_from_settings(enabled_bibles, max_bibles)
         if not bible_ids:
             default_bible = UserPreferences(request.session).bible
             bible_ids = [default_bible.id] if default_bible else []
@@ -176,6 +213,7 @@ class BibleStudyView(View):
             'max_bibles': max_bibles,
             'visible_bible_slots': visible_bible_slots,
             'is_ot_book': is_ot_book,
+            'show_original_text': show_original_text,
         })
 
 
@@ -233,3 +271,26 @@ class BibleStudyVersesView(View):
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),
         })
+
+
+class BibleStudyOriginalTextView(View):
+    """AJAX endpoint: returns original-language verses with candidate Strongs lookups."""
+
+    def post(self, request):
+        book_name = str(request.POST.get('book', '')).strip()
+        chapter = _safe_int(request.POST.get('chapter'), 1)
+        start_verse = _safe_int(request.POST.get('start_verse'), 1)
+        end_verse = _safe_int(request.POST.get('end_verse'), start_verse)
+        end_verse = max(start_verse, end_verse)
+
+        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        end_verse = min(end_verse, start_verse + max_verses - 1)
+
+        if book_name not in _VALID_BOOK_NAMES:
+            return JsonResponse({'error': 'Invalid book'}, status=400)
+
+        verses = {}
+        for verse in range(start_verse, end_verse + 1):
+            verses[str(verse)] = original_text_payload(book_name, chapter, verse)
+
+        return JsonResponse({'verses': verses})

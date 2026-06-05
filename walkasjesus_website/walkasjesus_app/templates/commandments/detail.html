@@ -26,7 +26,7 @@
 </script>
 {% endblock %}
 {% block content %}
-{% cache cache_timeout commandments_detail cache_on_bible cache_on_kids_mode commandment.id %}
+{% cache cache_timeout commandments_detail_v2 cache_on_bible cache_on_kids_mode commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         <li targetaudience="adults">
@@ -347,15 +347,27 @@
                             <p><b><i>{% trans 'Bible verses copyright' %}: {% if bible.copyright %}{{ bible.copyright }}{% else %}{% trans 'Not provided for this Bible translation.' %}{% endif %}</i></b></p>
                             <br>
                             <div class="alert alert-warning" role="alert" data-toggle="collapse" data-target="#collapseLegend" aria-expanded="false" aria-controls="collapseLegend">
-                                <p><i>{% trans 'Click here to see the explanation of the different symbols, Author, OT Law etc.' %}</i></p>
+                                <p><i>{% trans 'Click here to see an explanation of the symbols, Author, OT Law, commentary buttons, and the original text tools.' %}</i></p>
                             </div>
                             <div class="collapse" id="collapseLegend">
                                 <div class="alert alert-warning infobox">
+                                    <p>{% trans 'Each Bible reference can show the verse text itself, related commentary, and the original-language study tools directly below that same reference.' %}</p>
+                                    <div class="detail-legend-button-preview">
+                                        <button type="button" class="btn btn-sm commentary-action-btn" disabled>{% trans 'Other Commentary' %}</button>
+                                        <button type="button" class="btn btn-sm commentary-action-btn" disabled>{% trans 'Jewish Commentary' %}</button>
+                                        <button type="button" class="btn btn-sm commentary-action-btn" disabled>{% trans 'Original text' %}</button>
+                                    </div>
                                     <ul style="font-size: 11pt;">
                                         <li class="negative_list"><i>{% trans 'A related Bible reference to the step which is negative, something you should not do' %}</i></li>
                                         <li class="pos_neg_list"><i>{% trans 'A related Bible reference to the step which is both positive and negative' %}</i></li>
                                         <li class="positive_list"><i>{% trans 'A related Bible reference to the step which is positive, something you should do or learn from' %}</i></li>
                                         <li class="unknown_list"><i>{% trans 'A related Bible reference to the step which is not yet determined positive or negative' %}</i></li>
+                                        <li><i>{% trans 'Author shows who most likely wrote the Bible book or passage. This helps place the verse in its historical setting.' %}</i></li>
+                                        <li><i>{% trans 'OT Law points to the Old Testament commandment or Torah theme that is linked to this step.' %}</i></li>
+                                        <li><i>{% trans 'Other Commentary opens Christian or general Bible commentary for the New Testament reference directly on this page.' %}</i></li>
+                                        <li><i>{% trans 'Jewish Commentary opens Jewish commentary from Sefaria. Sefaria is a digital library of Jewish texts that makes Torah, Tanakh, Talmud, and related commentary broadly accessible online.' %}</i></li>
+                                        <li><i>{% trans 'Original text opens the Hebrew or Greek source words with Strong’s information. This is useful because every translation already includes interpretation, while the source word can carry several possible shades of meaning.' %}</i></li>
+                                        <li><i>{% trans 'Example: click Original text under a verse, then click one of the Hebrew or Greek words to inspect possible meanings, related occurrences, and dictionary links.' %}</i></li>
                                     </ul>
                                 </div>
                             </div>

@@ -74,7 +74,7 @@
   </script>
   {% endblock %}
   </head>
-  <body>
+  <body data-bible-study-url="{% url 'commandments:bible_study' %}" data-original-text-url="{% url 'commandments:bible_study_original_text' %}">
     {% cookielaw_banner %}
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">

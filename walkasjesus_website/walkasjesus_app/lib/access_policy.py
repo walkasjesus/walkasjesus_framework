@@ -9,10 +9,26 @@ _LOCAL_DAVID_STERN_SOURCES = {
     'stern',
 }
 
+CJB_RESTRICTED_PERMISSION = 'walkasjesus_app.view_restricted_cjb_translation'
+
 
 def _is_authenticated(request):
     user = getattr(request, 'user', None)
     return bool(getattr(user, 'is_authenticated', False))
+
+
+def _has_permission(request, permission_name):
+    user = getattr(request, 'user', None)
+    if not user or not getattr(user, 'is_authenticated', False):
+        return False
+
+    has_perm = getattr(user, 'has_perm', None)
+    if callable(has_perm):
+        try:
+            return bool(has_perm(permission_name))
+        except TypeError:
+            return False
+    return False
 
 
 def cjb_bible_id():
@@ -46,8 +62,11 @@ def is_bible_id_visible_for_request(request, bible_id):
     if is_cjb_bible_id(normalized_id):
         if not bool(getattr(settings, 'CJB_BIBLE_ENABLED', True)):
             return False
-        if bool(getattr(settings, 'CJB_BIBLE_LOGGED_IN_ONLY', False)) and not _is_authenticated(request):
-            return False
+        if bool(getattr(settings, 'CJB_BIBLE_LOGGED_IN_ONLY', False)):
+            if not _is_authenticated(request):
+                return False
+            if not _has_permission(request, CJB_RESTRICTED_PERMISSION):
+                return False
 
     return True
 

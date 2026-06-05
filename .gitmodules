@@ -10,3 +10,9 @@
 [submodule "walkasjesus_website/data/lawofmessiah"]
 	path = walkasjesus_website/data/lawofmessiah
 	url = https://github.com/walkasjesus/LawofMessiah.git
+[submodule "walkasjesus_website/data/strongs"]
+	path = walkasjesus_website/data/strongs
+	url = https://github.com/openscriptures/strongs.git
+[submodule "walkasjesus_website/data/stepbible"]
+	path = walkasjesus_website/data/stepbible
+	url = https://github.com/STEPBible/STEPBible-Data.git

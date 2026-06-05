@@ -274,6 +274,31 @@ $(document).ready(function(){
     return container ? container.getAttribute('data-commentary-scriptura-url') : '';
   }
 
+  function getSwordCommentaryEnabled() {
+    var container = document.querySelector('[data-sword-commentary-enabled]');
+    return String(container ? container.getAttribute('data-sword-commentary-enabled') : '').trim() === '1';
+  }
+
+  function getSwordCommentators() {
+    if (!getSwordCommentaryEnabled()) {
+      return [];
+    }
+
+    var container = document.querySelector('[data-sword-commentators]');
+    var rawValue = String(container ? container.getAttribute('data-sword-commentators') : '').trim();
+    if (!rawValue) {
+      return [];
+    }
+
+    try {
+      var payload = JSON.parse(rawValue);
+      return Array.isArray(payload) ? payload : [];
+    } catch (err) {
+      console.warn('Could not parse SWORD commentary metadata.', err);
+      return [];
+    }
+  }
+
   function uiMessage(key, variables) {
     var lang = getCommentaryLanguage() === 'nl' ? 'nl' : 'en';
     var messages = {
@@ -282,8 +307,8 @@ $(document).ready(function(){
         nl: 'Commentaar laden...'
       },
       no_commentary_scriptura_chapter: {
-        en: 'No commentary found for this chapter on BijbelAPI.',
-        nl: 'Geen commentaar gevonden voor dit hoofdstuk op BijbelAPI.'
+        en: 'No commentary found for this chapter.',
+        nl: 'Geen commentaar gevonden voor dit hoofdstuk.'
       },
       no_exact_scriptura_verse: {
         en: 'No exact commentary was found for verse {verse}. Choose an available entry from this chapter.',
@@ -306,8 +331,8 @@ $(document).ready(function(){
         nl: 'Kies een beschikbare toelichting:'
       },
       could_not_load_scriptura: {
-        en: 'Could not load commentary from BijbelAPI.',
-        nl: 'Kon commentaar van BijbelAPI niet laden.'
+        en: 'Could not load commentary from the configured source.',
+        nl: 'Kon commentaar van de geconfigureerde bron niet laden.'
       },
       scriptura_login_required: {
         en: 'Login required to view this commentator.',
@@ -514,8 +539,10 @@ $(document).ready(function(){
       A: true,
       B: true,
       BR: true,
+        DIV: true,
       EM: true,
       I: true,
+        P: true,
       SMALL: true,
       SPAN: true,
       STRONG: true,
@@ -773,12 +800,14 @@ $(document).ready(function(){
 
     function getScripturaCommentators() {
       var isDutch = getCommentaryLanguage() === 'nl';
-      var allCommentators = [
+      var builtInCommentators = [
         {
           id: 'david-stern',
           label: 'David Stern',
           apiSources: ['david-stern', 'david_stern', 'jnt-stern', 'jnt_stern'],
           autoTranslate: true,
+          sourceType: 'scriptura',
+          supportsOldTestament: false,
           attribution: scripturaUiConfig.commentatorAttribution['david-stern'] || { showProvider: true, showApiResponse: true }
         },
         {
@@ -788,9 +817,32 @@ $(document).ready(function(){
             ? ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry']
             : ['matthew_henry', 'matthew-henry'],
           autoTranslate: !isDutch,
+          sourceType: 'scriptura',
+          supportsOldTestament: true,
           attribution: scripturaUiConfig.commentatorAttribution['matthew-henry'] || { showProvider: true, showApiResponse: true }
         }
       ];
+
+      var swordCommentators = getSwordCommentators().map(function(item) {
+        var sourceId = String(item.id || '').trim();
+        return {
+          id: sourceId,
+          label: String(item.label || sourceId),
+          apiSources: Array.isArray(item.api_sources) && item.api_sources.length ? item.api_sources : [sourceId],
+          autoTranslate: false,
+          sourceType: 'sword',
+          supportsOldTestament: true,
+          attribution: {
+            showProvider: false,
+            showApiResponse: false,
+            footerText: String(item.copyright_text || '').trim()
+          }
+        };
+      }).filter(function(item) {
+        return !!item.id;
+      });
+
+      var allCommentators = builtInCommentators.concat(swordCommentators);
 
       var disabled = getDisabledScripturaCommentatorIds();
       return allCommentators.filter(function(commentator) {
@@ -843,13 +895,28 @@ $(document).ready(function(){
     }
 
     function getDefaultScripturaCommentatorId(book) {
-      var preferred = isNewTestamentBook(book) ? 'david-stern' : 'matthew-henry';
       var commentators = getScripturaCommentators();
-      for (var i = 0; i < commentators.length; i += 1) {
-        if (commentators[i].id === preferred) {
-          return preferred;
+
+      if (isNewTestamentBook(book)) {
+        for (var i = 0; i < commentators.length; i += 1) {
+          if (commentators[i].id === 'david-stern') {
+            return 'david-stern';
+          }
+        }
+      } else {
+        for (var j = 0; j < commentators.length; j += 1) {
+          if (commentators[j].sourceType === 'sword') {
+            return commentators[j].id;
+          }
         }
       }
+
+      for (var k = 0; k < commentators.length; k += 1) {
+        if (commentators[k].supportsOldTestament) {
+          return commentators[k].id;
+        }
+      }
+
       return commentators.length ? commentators[0].id : '';
     }
 
@@ -1030,6 +1097,11 @@ $(document).ready(function(){
           $scripturaBtn.append('<span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span>');
           applyCommentaryButtonLabel($scripturaBtn);
           $scripturaBtn.appendTo($context);
+
+          // OT blocks can have only a Sefaria panel by default; add Scriptura panel on demand.
+          if (!$context.find('.scriptura-commentary-panel').length) {
+            $('<div class="scriptura-commentary-panel"></div>').appendTo($context);
+          }
         }
 
         if (!$context.find('.detail-original-text-btn').length) {
@@ -1097,8 +1169,57 @@ $(document).ready(function(){
           .replace(/[ \t]+\n/g, '\n')
           .replace(/\n{3,}/g, '\n\n')
           .trim();
-        var safeHtml = sanitizeSefariaHtml(normalizedText.replace(/\n/g, '<br>'));
-        var displayHtml = safeHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
+
+        function commentaryParagraphs(text) {
+          var paragraphs = String(text || '')
+            .split(/\n{2,}/)
+            .map(function(paragraph) {
+              return paragraph.trim();
+            })
+            .filter(Boolean);
+
+          if (paragraphs.length > 1) {
+            return paragraphs;
+          }
+
+          if (!text || text.length < 240) {
+            return [text];
+          }
+
+          var sentences = String(text).match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [text];
+          if (sentences.length < 3) {
+            return [text];
+          }
+
+          paragraphs = [];
+          var buffer = [];
+          var bufferLength = 0;
+          $.each(sentences, function(_, sentence) {
+            sentence = String(sentence || '').trim();
+            if (!sentence) {
+              return;
+            }
+
+            buffer.push(sentence);
+            bufferLength += sentence.length;
+            if (buffer.length >= 2 || bufferLength >= 260) {
+              paragraphs.push(buffer.join(' '));
+              buffer = [];
+              bufferLength = 0;
+            }
+          });
+
+          if (buffer.length) {
+            paragraphs.push(buffer.join(' '));
+          }
+
+          return paragraphs.length ? paragraphs : [text];
+        }
+
+        var displayHtml = sanitizeSefariaHtml(commentaryParagraphs(normalizedText).map(function(paragraph) {
+          return '<p>' + $('<span>').text(paragraph).html().replace(/\n/g, '<br>') + '</p>';
+        }).join(''));
+        displayHtml = displayHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
         var attribution = (commentator && commentator.attribution) ? commentator.attribution : { showProvider: true, showApiResponse: true };
         var translationNote = '';
         if (isMachineTranslated) {

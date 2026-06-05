@@ -22,7 +22,9 @@ from walkasjesus_app.lib.access_policy import (
     is_david_stern_commentary_allowed,
     is_david_stern_source,
 )
+from walkasjesus_app.lib.sword_commentary import normalize_book_key, sword_commentary_enabled, sword_disabled_source_ids
 from walkasjesus_app.models import UserPreferences, BibleTranslation
+from walkasjesus_app.models import SwordCommentarySource, SwordCommentaryEntry
 
 
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
@@ -42,7 +44,7 @@ SCRIPTURA_SOURCE_TO_COMMENTATOR = {
 
 
 def _normalize_book_name(value):
-    return ''.join(ch for ch in str(value or '').lower() if ch.isalnum())
+    return normalize_book_key(value)
 
 
 def _normalize_commentary_text(value):
@@ -96,6 +98,10 @@ def _append_unique_commentary(existing_text, new_text):
 
 
 def _is_scriptura_commentator_disabled(source):
+    normalized_source = str(source or '').strip().lower()
+    if normalized_source in sword_disabled_source_ids():
+        return True
+
     commentator_id = SCRIPTURA_SOURCE_TO_COMMENTATOR.get(str(source or '').strip().lower(), '')
     if not commentator_id:
         return False
@@ -106,6 +112,37 @@ def _is_scriptura_commentator_disabled(source):
 
     disabled_set = {str(item).strip().lower() for item in disabled_commentators if str(item).strip()}
     return commentator_id in disabled_set
+
+
+def _is_sword_source_enabled(source_id):
+    if not sword_commentary_enabled():
+        return False
+    normalized_source = str(source_id or '').strip().lower()
+    if not normalized_source:
+        return False
+    if not normalized_source.startswith('sword-'):
+        return False
+    if normalized_source in sword_disabled_source_ids():
+        return False
+    return SwordCommentarySource.objects.filter(source_id=source_id, is_enabled=True).exists()
+
+
+def _local_sword_commentary(source_id, book, chapter):
+    source = SwordCommentarySource.objects.filter(source_id=source_id, is_enabled=True).first()
+    if not source:
+        return {}
+
+    book_key = _normalize_book_name(book)
+    if not book_key:
+        return {}
+
+    entries = SwordCommentaryEntry.objects.filter(source=source, book_key=book_key, chapter=chapter).order_by('verse')
+    payload = {}
+    for entry in entries:
+        text = _normalize_commentary_text(entry.text)
+        if text:
+            payload[str(entry.verse)] = text
+    return payload
 
 
 def _available_bibles_for_language(request, language_code):
@@ -474,6 +511,13 @@ class ScripturaCommentaryProxyView(View):
 
         if _is_scriptura_commentator_disabled(source):
             return JsonResponse({'error': gettext('This commentator is disabled')}, status=404)
+
+        if _is_sword_source_enabled(source):
+            try:
+                chapter_number = int(chapter)
+            except Exception:
+                return JsonResponse({'error': gettext('Invalid chapter parameter')}, status=400)
+            return JsonResponse(_local_sword_commentary(source, book, chapter_number))
 
         if is_david_stern_source(source) and not is_david_stern_commentary_allowed(request):
             return JsonResponse({'error': gettext('Login required for this commentator')}, status=403)

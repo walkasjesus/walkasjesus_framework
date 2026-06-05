@@ -164,6 +164,11 @@ if which tee > /dev/null 2>&1 && which date > /dev/null 2>&1; then
 		echo "INFO: - Media Resources allready up-to-date. Skipping import." | tee -a ${log}
 	fi
 
+	echo "INFO: ${start} - Start importing SWORD commentaries" | tee -a ${log}
+	python3 manage.py import_sword_commentaries | tee -a ${log}
+	end=$(date '+%Y-%m-%d %H:%M:%S')
+	echo "INFO: ${end} - Ended importing SWORD commentaries" | tee -a ${log}
+
 # Other Operating Systems like Windows
 else
 	lom_source=data/lawofmessiah/filter_output/collected_ids_titles.yaml
@@ -186,4 +191,8 @@ else
 	echo "INFO: Start importing Media Resources"
 	python3 manage.py import_media data/media/media.csv
 	echo "INFO: Ended importing Media Resources"
+
+	echo "INFO: Start importing SWORD commentaries"
+	python3 manage.py import_sword_commentaries
+	echo "INFO: Ended importing SWORD commentaries"
 fi

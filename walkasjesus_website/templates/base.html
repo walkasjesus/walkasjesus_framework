@@ -74,7 +74,7 @@
   </script>
   {% endblock %}
   </head>
-  <body data-bible-study-url="{% url 'commandments:bible_study' %}" data-original-text-url="{% url 'commandments:bible_study_original_text' %}">
+  <body data-bible-study-url="{% url 'commandments:bible_study' %}" data-original-text-url="{% url 'commandments:bible_study_original_text' %}" data-sword-commentary-enabled="{% if sword_commentary_enabled %}1{% else %}0{% endif %}" data-sword-commentators='{{ sword_commentators_json|escape }}'>
     {% cookielaw_banner %}
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">

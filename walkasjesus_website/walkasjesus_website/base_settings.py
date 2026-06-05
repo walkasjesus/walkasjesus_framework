@@ -242,6 +242,52 @@ DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY = False
 # Disable selected Scriptura commentators in UI and proxy (ids: david-stern, matthew-henry).
 SCRIPTURA_DISABLED_COMMENTATORS = []
 
+# Imported CrossWire SWORD commentary support.
+SWORD_COMMENTARY_ENABLED = True
+# Disable selected SWORD source ids in UI and proxy.
+SWORD_DISABLED_COMMENTARY_SOURCES = []
+# Import configuration for local SWORD commentary modules.
+SWORD_COMMENTARY_IMPORT_SOURCES = [
+    {
+        'id': 'sword-lightfoot-en',
+        'module': 'Lightfoot',
+        'import_format': 'mod2imp',
+        'path': 'data/commentaries/en_lightfoot',
+        'language': 'en',
+        'label': 'John Lightfoot',
+        'copyright_text': 'Public Domain',
+        'sort_order': 30,
+    },
+    {
+        'id': 'sword-kingcomments-en',
+        'module': 'KingComments',
+        'path': 'data/commentaries/en_kingcomments',
+        'language': 'en',
+        'label': 'King',
+        'copyright_text': 'Copyrighted; Free non-commercial distribution',
+        'sort_order': 20,
+    },
+    {
+        'id': 'sword-kingcomments-nl',
+        'module': 'DutKingComments',
+        'path': 'data/commentaries/nl_kingcomments',
+        'language': 'nl',
+        'label': 'King',
+        'copyright_text': 'Copyrighted; Free non-commercial distribution',
+        'sort_order': 20,
+    },
+    {
+        'id': 'sword-dutkant-nl',
+        'module': 'DutKant',
+        'import_format': 'mod2imp',
+        'path': 'data/commentaries/nl_statenvertaling_kanttekeningen',
+        'language': 'nl',
+        'label': 'Statenvertaling Kanttekeningen',
+        'copyright_text': 'Public Domain',
+        'sort_order': 10,
+    },
+]
+
 # Local Complete Jewish Bible (David H. Stern, NT source) selector settings.
 CJB_BIBLE_ID = 'jnt-stern-en'
 CJB_BIBLE_NAME = 'Complete Jewish Bible (David H. Stern, NT)'

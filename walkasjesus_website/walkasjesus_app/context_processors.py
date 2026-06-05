@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils import translation
 
 from walkasjesus_app.lib.access_policy import is_david_stern_commentary_allowed
+from walkasjesus_app.lib.sword_commentary import available_sword_commentators_json, sword_commentary_enabled
 from walkasjesus_app.models import BibleTranslation, UserPreferences
 
 
@@ -23,6 +24,13 @@ def cache_settings(request):
         disabled_commentators = []
     disabled_commentators = [str(item).strip().lower() for item in disabled_commentators if str(item).strip()]
 
+    disabled_sword_sources = getattr(settings, 'SWORD_DISABLED_COMMENTARY_SOURCES', [])
+    if not isinstance(disabled_sword_sources, (list, tuple, set)):
+        disabled_sword_sources = []
+    disabled_commentators.extend([str(item).strip().lower() for item in disabled_sword_sources if str(item).strip()])
+
+    language_code = str(translation.get_language() or 'en').strip().lower()[:2]
+
     return {
         'cache_timeout': 3600,
         'cache_on_language': UserPreferences(request.session).language,
@@ -33,4 +41,6 @@ def cache_settings(request):
         'david_stern_commentary_footer_text': str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip(),
         'david_stern_commentary_available': is_david_stern_commentary_allowed(request),
         'scriptura_disabled_commentators': ','.join(disabled_commentators),
+        'sword_commentary_enabled': sword_commentary_enabled(),
+        'sword_commentators_json': available_sword_commentators_json(language_code),
     }

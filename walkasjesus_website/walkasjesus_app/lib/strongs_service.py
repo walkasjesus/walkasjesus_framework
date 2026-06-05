@@ -481,20 +481,17 @@ def _parse_stepbible_row(line, language):
 
 def _fallback_token_payload(raw_token, language):
     lookup_key = _normalize_lookup_word(raw_token, language)
-    hover_lines = []
-    if lookup_key:
-        hover_lines.append('No verse-aligned STEPBible row was found for this token')
 
     return {
         'text': raw_token,
         'sentence_text': raw_token,
         'lookup_key': lookup_key,
-        'clickable': bool(lookup_key),
+        'clickable': False,
         'has_candidates': False,
         'strongs_count': 0,
         'translation_label': '',
-        'detail_note': 'No verse-aligned STEPBible tagging row was found for this token.',
-        'hover_summary': ' | '.join(hover_lines),
+        'detail_note': '',
+        'hover_summary': '',
         'candidates': [],
         'grammar': '',
         'tagging_source': '',
@@ -534,7 +531,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v3:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v4:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

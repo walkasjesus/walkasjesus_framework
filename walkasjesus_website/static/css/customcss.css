@@ -1002,8 +1002,13 @@ p {
     margin-bottom: 0.35rem;
 }
 .detail-inline-original-meaning-list {
+    list-style: disc outside;
     margin: 0;
-    padding-left: 1rem;
+    padding-left: 1.2rem;
+}
+.detail-inline-original-meaning-list li {
+    list-style: disc outside;
+    margin-bottom: 0.15rem;
 }
 .detail-inline-original-ref-list {
     display: flex;
@@ -1081,6 +1086,12 @@ p {
 .sefaria-commentary-body {
     font-size: 13px;
     line-height: 1.6;
+}
+.sefaria-commentary-body p {
+    margin: 0 0 0.75rem;
+}
+.sefaria-commentary-body p:last-child {
+    margin-bottom: 0;
 }
 .sefaria-commentary-body b,
 .sefaria-commentary-body strong {

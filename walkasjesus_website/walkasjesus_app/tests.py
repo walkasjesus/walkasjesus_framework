@@ -11,6 +11,8 @@ from django.utils import translation
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation
+from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
+from walkasjesus_app.lib.strongs_service import original_text_payload
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.views.detail_view import (
     _allowed_media_languages,
@@ -204,6 +206,26 @@ class KidsModeCacheSettingsTestCase(TestCase):
 
         self.assertEqual(cache_settings(request)['scriptura_disabled_commentators'], 'matthew-henry')
 
+    def test_cache_settings_include_sword_commentator_metadata_for_active_language(self):
+        SwordCommentarySource.objects.create(
+            source_id='sword-kingcomments-en',
+            module_name='KingComments',
+            display_name='King',
+            language='en',
+            is_enabled=True,
+            copyright_text='Copyrighted; Free non-commercial distribution',
+        )
+        request = self.factory.get('/')
+        request.session = self.client.session
+
+        with translation.override('en'):
+            payload = cache_settings(request)
+
+        commentators = json.loads(payload['sword_commentators_json'])
+        self.assertEqual(len(commentators), 1)
+        self.assertEqual(commentators[0]['id'], 'sword-kingcomments-en')
+        self.assertTrue(payload['sword_commentary_enabled'])
+
     @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=True)
     def test_cache_settings_hide_david_stern_for_anonymous_when_login_required(self):
         request = self.factory.get('/')
@@ -226,6 +248,16 @@ class MediaLanguagePolicyTestCase(TestCase):
         with translation.override('nl'):
             request = self.factory.get('/')
             self.assertEqual(_allowed_media_languages(request), {'any', 'unknown', 'nl', 'en'})
+
+
+class StrongsServiceFallbackTestCase(TestCase):
+    def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self):
+        payload = original_text_payload('Psalms', 3, 2)
+
+        self.assertGreater(len(payload['words']), 0)
+        self.assertTrue(all(not word['clickable'] for word in payload['words']))
+        self.assertTrue(all(not word['has_candidates'] for word in payload['words']))
+        self.assertTrue(all(not word['detail_note'] for word in payload['words']))
 
 
 class SharedMediaDeduplicationTestCase(TestCase):
@@ -283,6 +315,7 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         self.assertEqual(merged, 'Fast. See Lk 18:12N.')
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=False)
     def test_local_david_stern_source_uses_embedded_jnt_data(self, mock_get):
         request = self.factory.get(
             '/commentary-scriptura/',
@@ -302,6 +335,7 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         mock_get.assert_not_called()
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=False)
     def test_local_david_stern_source_returns_empty_for_missing_chapter(self, mock_get):
         request = self.factory.get(
             '/commentary-scriptura/',
@@ -319,6 +353,7 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         mock_get.assert_not_called()
 
     @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=False)
     def test_local_david_stern_source_returns_verse_entries_not_intro_only(self, mock_get):
         request = self.factory.get(
             '/commentary-scriptura/',
@@ -451,6 +486,50 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
         response = ScripturaCommentaryProxyView.as_view()(request)
 
         self.assertEqual(response.status_code, 502)
+        self.assertIn('error', json.loads(response.content.decode('utf-8')))
+
+
+class SwordCommentaryProxyViewTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.source = SwordCommentarySource.objects.create(
+            source_id='sword-kingcomments-en',
+            module_name='KingComments',
+            display_name='King',
+            language='en',
+            is_enabled=True,
+            copyright_text='Copyrighted; Free non-commercial distribution',
+        )
+        SwordCommentaryEntry.objects.create(
+            source=self.source,
+            book='Genesis',
+            book_key='genesis',
+            chapter=1,
+            verse=1,
+            text='In the beginning commentary',
+        )
+
+    def test_proxy_returns_local_sword_commentary_entries(self):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'sword-kingcomments-en', 'book': 'Genesis', 'chapter': '1'},
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), {'1': 'In the beginning commentary'})
+
+    def test_proxy_returns_404_for_disabled_sword_source(self):
+        request = self.factory.get(
+            '/commentary-scriptura/',
+            {'source': 'sword-kingcomments-en', 'book': 'Genesis', 'chapter': '1'},
+        )
+
+        with self.settings(SWORD_DISABLED_COMMENTARY_SOURCES=['sword-kingcomments-en']):
+            response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 404)
         self.assertIn('error', json.loads(response.content.decode('utf-8')))
 
 

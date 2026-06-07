@@ -69,11 +69,84 @@ _SCRIPTURA_BOOK_NAMES = {
 _VALID_BOOK_NAMES = {b.name for b in BibleBooks}
 
 
+def _bible_dropdown_label(bible):
+    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+    bible_name = str(getattr(bible, 'name', '') or '').strip()
+    return f'{language_code} - {bible_name}' if language_code else bible_name
+
+
+def _bible_dropdown_sort_key(bible):
+    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+    bible_name = str(getattr(bible, 'name', '') or '').strip()
+    return f'{bible_name} - {language_code}'.casefold()
+
+
 def _safe_int(value, default, minimum=1):
     try:
         return max(minimum, int(value))
     except (ValueError, TypeError):
         return default
+
+
+def _chapter_max_cache_key(bible_id, book_name, chapter):
+    return f'bible_study:chapter_max:v1:{bible_id}:{book_name}:{chapter}'
+
+
+def _chapter_has_verse(bible, bible_lib_book, chapter, verse_number):
+    try:
+        text = bible.verses(bible_lib_book, chapter, verse_number, chapter, verse_number)
+    except Exception:
+        return False
+    normalized = str(text or '').strip()
+    if not normalized:
+        return False
+
+    lowered = normalized.lower()
+    if lowered in {'not found', 'could not read text'}:
+        return False
+    if 'failed to retrieve' in lowered or 'status code 404' in lowered:
+        return False
+
+    return True
+
+
+def _chapter_max_verse_for_bible(bible, book_name, chapter):
+    cache_key = _chapter_max_cache_key(getattr(bible, 'id', ''), book_name, chapter)
+    cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
+    # Psalm 119 has the highest verse count (176). Values above that are stale/invalid.
+    if isinstance(cached, int) and 0 <= cached <= 176:
+        return cached
+
+    bible_lib_book = BibleLibBibleBooks[book_name]
+    if not _chapter_has_verse(bible, bible_lib_book, chapter, 1):
+        cache.set(cache_key, 0, VERSE_CACHE_TIMEOUT)
+        return 0
+
+    max_probe = 300
+    low = 1
+    high = 2
+
+    while high <= max_probe and _chapter_has_verse(bible, bible_lib_book, chapter, high):
+        low = high
+        high *= 2
+
+    high = min(high, max_probe)
+    if _chapter_has_verse(bible, bible_lib_book, chapter, high):
+        max_verse = high
+    else:
+        left = low + 1
+        right = high - 1
+        max_verse = low
+        while left <= right:
+            middle = (left + right) // 2
+            if _chapter_has_verse(bible, bible_lib_book, chapter, middle):
+                max_verse = middle
+                left = middle + 1
+            else:
+                right = middle - 1
+
+    cache.set(cache_key, max_verse, VERSE_CACHE_TIMEOUT)
+    return max_verse
 
 
 def _default_bible_ids_from_settings(enabled_bibles, max_bibles):
@@ -113,12 +186,15 @@ class BibleStudyView(View):
     def get(self, request):
         max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
         show_original_text = str(request.GET.get('show_original', '')).strip().lower() in {'1', 'true', 'yes', 'on'}
-        max_bibles = 2 if show_original_text else 4
+        max_bibles = 4
 
         bible_books = [(b.name, str(b.value)) for b in BibleBooks]
 
         all_bibles = BibleTranslation().all_in_supported_languages()
-        enabled_bibles = filter_visible_bibles_for_request(request, all_bibles)
+        enabled_bibles = sorted(
+            filter_visible_bibles_for_request(request, all_bibles),
+            key=_bible_dropdown_sort_key,
+        )
 
         book = request.GET.get('book', 'John')
         if book not in _VALID_BOOK_NAMES:
@@ -270,6 +346,44 @@ class BibleStudyVersesView(View):
             'bible_name': getattr(bible, 'name', bible_id),
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),
+        })
+
+
+class BibleStudyChapterMetaView(View):
+    """AJAX endpoint: returns the max verse number available for a chapter."""
+
+    def get(self, request):
+        book_name = str(request.GET.get('book', '')).strip()
+        chapter = _safe_int(request.GET.get('chapter'), 1)
+        bible_id = str(request.GET.get('bible_id', '')).strip()
+
+        if book_name not in _VALID_BOOK_NAMES:
+            return JsonResponse({'error': 'Invalid book'}, status=400)
+
+        all_bibles = BibleTranslation().all_in_supported_languages()
+        enabled_bibles = filter_visible_bibles_for_request(request, all_bibles)
+
+        if bible_id:
+            if not is_bible_id_visible_for_request(request, bible_id):
+                return JsonResponse({'error': 'Bible not available'}, status=403)
+            bible = BibleTranslation().get(bible_id)
+        else:
+            default_bible = UserPreferences(request.session).bible
+            default_id = getattr(default_bible, 'id', '') if default_bible else ''
+            visible_by_id = {b.id: b for b in enabled_bibles}
+            bible = visible_by_id.get(default_id)
+            if not bible and enabled_bibles:
+                bible = enabled_bibles[0]
+
+        if not bible:
+            return JsonResponse({'error': 'Bible not found'}, status=404)
+
+        max_verse = _chapter_max_verse_for_bible(bible, book_name, chapter)
+        return JsonResponse({
+            'book': book_name,
+            'chapter': chapter,
+            'bible_id': getattr(bible, 'id', ''),
+            'max_verse': max_verse,
         })
 
 

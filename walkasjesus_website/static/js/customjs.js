@@ -34,6 +34,159 @@ $(document).ready(function(){
     }
   };
 
+  function setupNativeComboForSelect($select) {
+    if (!$select || !$select.length) {
+      return;
+    }
+    if ($select.prop('multiple')) {
+      return;
+    }
+    if ($select.closest('.bible-study-select-wrap').length) {
+      return;
+    }
+
+    var $wrap = $select.closest('.select');
+    if (!$wrap.length) {
+      return;
+    }
+
+    var selectId = String($select.attr('id') || '');
+    if (!selectId) {
+      return;
+    }
+
+    var liveSearchAttr = String($select.attr('data-live-search') || '').toLowerCase();
+    var liveSearch = liveSearchAttr === 'true' || liveSearchAttr === '1';
+    var $input = $wrap.children('.native-combo-input[data-select-id="' + selectId + '"]');
+    var $menu = $wrap.children('.native-combo-menu[data-select-id="' + selectId + '"]');
+
+    function closeMenu() {
+      $wrap.removeClass('native-combo-open');
+    }
+
+    function renderMenu() {
+      var typed = $.trim(String($input.val() || '')).toLowerCase();
+      var selectedValue = String($select.val() || '');
+      var items = [];
+
+      $select.find('option').each(function() {
+        var optionValue = String($(this).val() || '');
+        var label = $.trim($(this).text());
+        if (!optionValue || !label) {
+          return;
+        }
+        if (liveSearch && typed && label.toLowerCase().indexOf(typed) === -1) {
+          return;
+        }
+        items.push({ value: optionValue, label: label });
+      });
+
+      $menu.empty();
+      if (!items.length) {
+        $menu.append('<div class="native-combo-empty">No matching option found.</div>');
+        return;
+      }
+
+      $.each(items, function(_, item) {
+        var $item = $('<button type="button" class="native-combo-option"></button>')
+          .attr('data-value', item.value)
+          .toggleClass('active', item.value === selectedValue)
+          .text(item.label);
+        $menu.append($item);
+      });
+    }
+
+    function syncInputValue() {
+      var selectedLabel = $.trim($select.find('option:selected').text());
+      $input.val(selectedLabel);
+      $input.prop('disabled', !!$select.prop('disabled'));
+      renderMenu();
+    }
+
+    if (!$input.length) {
+      $input = $('<input type="search" class="native-combo-input" autocomplete="off">')
+        .attr('data-select-id', selectId)
+        .insertAfter($select);
+
+      if (!liveSearch) {
+        $input.prop('readonly', true);
+      }
+
+      $input.on('focus click', function() {
+        if ($select.prop('disabled')) {
+          return;
+        }
+        $('.select.native-combo-open').not($wrap).removeClass('native-combo-open');
+        renderMenu();
+        $wrap.addClass('native-combo-open');
+      });
+
+      $input.on('input', function() {
+        if (!liveSearch) {
+          return;
+        }
+        var typed = $.trim(String($input.val() || '')).toLowerCase();
+        var selectedValue = '';
+        $select.find('option').each(function() {
+          var optionValue = String($(this).val() || '');
+          if (!optionValue || selectedValue) {
+            return;
+          }
+          var label = $.trim($(this).text()).toLowerCase();
+          if (typed && (label === typed || label.indexOf(typed) === 0)) {
+            selectedValue = optionValue;
+          }
+        });
+        if (selectedValue) {
+          $select.val(selectedValue).trigger('change');
+        }
+        renderMenu();
+        $wrap.addClass('native-combo-open');
+      });
+    }
+
+    if (!$menu.length) {
+      $menu = $('<div class="native-combo-menu"></div>')
+        .attr('data-select-id', selectId)
+        .insertAfter($input);
+
+      $menu.on('mousedown', '.native-combo-option', function(event) {
+        event.preventDefault();
+        var value = String($(this).attr('data-value') || '');
+        if (!value) {
+          return;
+        }
+        $select.val(value).trigger('change');
+        syncInputValue();
+        closeMenu();
+      });
+    }
+
+    $wrap.addClass('native-combo-enabled');
+    syncInputValue();
+  }
+
+  function initStyledNativeSelectCombos() {
+    if ($.fn && $.fn.selectpicker) {
+      return;
+    }
+
+    $('.select select').each(function() {
+      setupNativeComboForSelect($(this));
+    });
+
+    $(document).off('mousedown.jcNativeCombo').on('mousedown.jcNativeCombo', function(event) {
+      if ($(event.target).closest('.select.native-combo-enabled').length) {
+        return;
+      }
+      $('.select.native-combo-open').removeClass('native-combo-open');
+    });
+
+    $(document).off('jc:native-select-refresh.jcNativeCombo').on('jc:native-select-refresh.jcNativeCombo', 'select', function() {
+      setupNativeComboForSelect($(this));
+    });
+  }
+
   function verseSpinnerHtml(source) {
     var spinnerClass = source === 'api' ? 'verse-loading-spinner verse-loading-spinner-api' : 'verse-loading-spinner verse-loading-spinner-cache';
     return '<i class="fa fa-spinner fa-spin ' + spinnerClass + '"></i>';
@@ -385,6 +538,22 @@ $(document).ready(function(){
       could_not_load_verse_text: {
         en: 'Could not load verse text.',
         nl: 'Kon bijbeltekst niet laden.'
+      },
+      original_text_tooltip: {
+        en: 'Show the original Hebrew or Greek text with an interactive Strong\'s lexicon.',
+        nl: 'Toon de originele Hebreeuwse of Griekse tekst met een interactief Strong\'s lexicon.'
+      },
+      other_commentary_tooltip: {
+        en: 'Open commentary from Lightfoot, King, or other available commentators.',
+        nl: 'Open commentaar van Statenvertaling kanttekeningen, King of andere beschikbare commentatoren.'
+      },
+      jewish_commentary_tooltip: {
+        en: 'Open Jewish commentary from Sefaria for this Old Testament passage.',
+        nl: 'Open Joods commentaar van Sefaria voor deze Oudtestamentische passage.'
+      },
+      bible_study_link_tooltip: {
+        en: 'Explore this passage in the interactive Bible Study page.',
+        nl: 'Verken deze passage op de interactieve Bijbelstudie-pagina.'
       }
     };
 
@@ -601,6 +770,32 @@ $(document).ready(function(){
     return template.innerHTML;
   }
 
+  function sanitizeScripturaCommentaryHtml(rawHtml) {
+    if (!rawHtml) {
+      return '';
+    }
+
+    var normalized = String(rawHtml || '')
+      .replace(/&lt;\/?\s*scripref\b[^&]*&gt;/gi, '')
+      .replace(/<\/?\s*scripref\b[^>]*>/gi, '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .replace(/<br\s*\/?>\s*(<br\s*\/?>\s*)+/gi, '<br><br>');
+
+    var safeHtml = sanitizeSefariaHtml(normalized);
+    if (!safeHtml) {
+      return '';
+    }
+
+    safeHtml = safeHtml
+      .replace(/\s*<br\s*\/?>\s*/gi, '<br>')
+      .replace(/(?:<br>\s*){3,}/gi, '<br><br>')
+      .replace(/^[\s\n]*(<br>\s*)+/i, '')
+      .replace(/(<br>\s*)+[\s\n]*$/i, '');
+
+    return safeHtml.trim();
+  }
+
   // Auto-load bible verse texts on detail pages
   var versesUrl = getVersesUrl();
   if (versesUrl) {
@@ -616,6 +811,7 @@ $(document).ready(function(){
       });
     }
   }
+    initStyledNativeSelectCombos();
 
   $(document).on('click', '.bible-verse-load-link', function(event) {
     event.preventDefault();
@@ -1105,17 +1301,18 @@ $(document).ready(function(){
         }
 
         if (!$context.find('.detail-original-text-btn').length) {
-          $('<button>', {
+          var $origBtn = $('<button>', {
             type: 'button',
-            'class': 'btn btn-sm commentary-action-btn detail-original-text-btn',
-            title: uiMessage('original_text')
+            'class': 'btn btn-sm commentary-action-btn detail-original-text-btn jc-tooltip-host'
           })
             .attr('data-bible-study-book', details.book)
             .attr('data-bible-study-chapter', details.chapter)
             .attr('data-bible-study-start-verse', details.startVerse)
             .attr('data-bible-study-end-verse', details.endVerse)
-            .text(uiMessage('original_text'))
+            .attr('data-jc-tooltip', uiMessage('original_text_tooltip'))
             .appendTo($context);
+          $origBtn.append('<i class="fa fa-language mr-1" aria-hidden="true"></i>');
+          $origBtn.append(document.createTextNode(uiMessage('original_text')));
         }
 
         if (!$context.find('.detail-inline-original-panel').length) {
@@ -1130,9 +1327,25 @@ $(document).ready(function(){
           var $row = $('<div class="bible-reference-action-row"></div>');
           var $link = buildBibleStudyAnchor(details, referenceLabel, false);
           if ($link.length) {
+            $link.attr('data-jc-tooltip', uiMessage('bible_study_link_tooltip')).addClass('jc-tooltip-host');
             $row.append($link);
           }
           $actionButtons.each(function() {
+            var $btn = $(this);
+            if (!$btn.data('jcTooltipSet')) {
+              var tooltip = '';
+              if ($btn.hasClass('scriptura-commentary-btn')) {
+                tooltip = uiMessage('other_commentary_tooltip');
+              } else if ($btn.hasClass('sefaria-commentary-btn-secondary')) {
+                tooltip = uiMessage('jewish_commentary_tooltip');
+              } else if ($btn.hasClass('detail-original-text-btn')) {
+                tooltip = uiMessage('original_text_tooltip');
+              }
+              if (tooltip) {
+                $btn.attr('data-jc-tooltip', tooltip).addClass('jc-tooltip-host');
+              }
+              $btn.data('jcTooltipSet', true);
+            }
             $row.append(this);
           });
           if ($verseTarget.length) {
@@ -1216,9 +1429,12 @@ $(document).ready(function(){
           return paragraphs.length ? paragraphs : [text];
         }
 
-        var displayHtml = sanitizeSefariaHtml(commentaryParagraphs(normalizedText).map(function(paragraph) {
-          return '<p>' + $('<span>').text(paragraph).html().replace(/\n/g, '<br>') + '</p>';
-        }).join(''));
+        var containsHtml = /<[^>]+>/.test(String(rawText || ''));
+        var displayHtml = containsHtml
+          ? sanitizeScripturaCommentaryHtml(rawText)
+          : sanitizeSefariaHtml(commentaryParagraphs(normalizedText).map(function(paragraph) {
+              return '<p>' + $('<span>').text(paragraph).html().replace(/\n/g, '<br>') + '</p>';
+            }).join(''));
         displayHtml = displayHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
         var attribution = (commentator && commentator.attribution) ? commentator.attribution : { showProvider: true, showApiResponse: true };
         var translationNote = '';

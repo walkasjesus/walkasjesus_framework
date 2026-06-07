@@ -14,9 +14,8 @@
                 <form action="{% url 'commandments:language_switch' %}" method="post" id="frmSiteLanguage">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <b>{% trans 'Site language' %}:</b>
-                    <input type="text" id="siteLanguageSearch" class="form-control form-control-sm mb-2" placeholder="{% trans 'Search language' %}" autocomplete="off">
                     <div class="select">
-                        <select class="drpSelectLanguage" name="language" >
+                        <select class="drpSelectLanguage selectpicker" id="drpSelectLanguageModal" name="language" data-live-search="false" data-width="100%" data-size="10">
                             {% get_current_language as LANGUAGE_CODE %}
                             {% get_available_languages as LANGUAGES %}
                             {% get_language_info_list for LANGUAGES as languages %}
@@ -34,9 +33,8 @@
                 <div class="btnBibleTranslation">
                 <form action="{% url 'commandments:bible' %}" method="post" id="frmBibleTranslation">{% csrf_token %}
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                    <input type="text" id="bibleTranslationSearch" class="form-control form-control-sm mb-2" placeholder="{% trans 'Search Bible translation' %}" autocomplete="off">
                     <div class="select">
-                    <select name="bible_id" class="drpBibleTranslation" id="drpBibleTranslation">
+                    <select name="bible_id" class="drpBibleTranslation selectpicker" id="drpBibleTranslation" data-live-search="true" data-width="100%" data-size="10">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
                         <option value="{{ user_preferences.bible.id }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
@@ -97,57 +95,32 @@
     var mediaLanguagesForm = document.getElementById('frmLanguages');
     var languageSelect = document.querySelector('.drpSelectLanguage');
     var bibleSelect = document.getElementById('drpBibleTranslation');
-    var languageSearchInput = document.getElementById('siteLanguageSearch');
-    var bibleSearchInput = document.getElementById('bibleTranslationSearch');
     var saveButton = document.querySelector('.btnSaveLanguages');
     var bibleTranslationsUrl = "{% url 'commandments:bible_translations_for_language' %}";
     var bibleRefreshPromise = Promise.resolve();
-    var languageOptionSource = [];
-    var bibleOptionSource = [];
 
-    function snapshotSelectOptions(selectElement) {
-        return Array.prototype.map.call(selectElement.options, function (option) {
-            return {
-                value: option.value,
-                text: option.textContent,
-                selected: option.selected
-            };
-        });
-    }
+    function refreshPicker(selectElement, options) {
+        options = options || {};
+        var liveSearch = options.liveSearch !== false;
 
-    function renderSelectFromSource(selectElement, optionSource, query) {
-        var normalizedQuery = String(query || '').trim().toLowerCase();
-        var currentValue = selectElement.value;
-        var filtered = optionSource.filter(function (item) {
-            if (!normalizedQuery) {
-                return true;
+        if (window.jQuery && jQuery.fn && jQuery.fn.selectpicker) {
+            var $select = jQuery(selectElement);
+            $select.closest('.select').removeClass('native-combo-enabled');
+            $select.siblings('.native-combo-input, .native-combo-datalist, .native-combo-menu').remove();
+            if ($select.data('selectpicker')) {
+                $select.selectpicker('refresh');
+            } else {
+                $select.selectpicker({
+                    liveSearch: liveSearch,
+                    size: 10
+                });
             }
-            return String(item.text || '').toLowerCase().indexOf(normalizedQuery) !== -1;
-        });
-
-        selectElement.innerHTML = '';
-        filtered.forEach(function (item) {
-            var option = document.createElement('option');
-            option.value = item.value;
-            option.textContent = item.text;
-            if (item.value === currentValue || (!currentValue && item.selected)) {
-                option.selected = true;
-            }
-            selectElement.appendChild(option);
-        });
-
-        if (!selectElement.value && selectElement.options.length > 0) {
-            selectElement.options[0].selected = true;
-        }
-    }
-
-    function attachSelectSearch(inputElement, selectElement, optionSourceRef) {
-        if (!inputElement || !selectElement) {
             return;
         }
-        inputElement.addEventListener('input', function () {
-            renderSelectFromSource(selectElement, optionSourceRef(), inputElement.value);
-        });
+
+        if (selectElement) {
+            selectElement.dispatchEvent(new CustomEvent('jc:native-select-refresh', { bubbles: true }));
+        }
     }
 
     function refreshBibleDropdown(selectedLanguage) {
@@ -157,6 +130,11 @@
             .then(function (response) { return response.json(); })
             .then(function (data) {
                 bibleSelect.innerHTML = '';
+                var blank = document.createElement('option');
+                blank.value = '';
+                blank.textContent = '';
+                bibleSelect.appendChild(blank);
+
                 if (data.bibles.length === 0) {
                     var opt = document.createElement('option');
                     opt.value = '';
@@ -167,18 +145,15 @@
                         var opt = document.createElement('option');
                         opt.value = bible.id;
                         opt.textContent = bible.name;
-                        if (bible.id === data.default_bible_id) {
-                            opt.selected = true;
-                        }
                         bibleSelect.appendChild(opt);
                     });
                 }
-                bibleOptionSource = snapshotSelectOptions(bibleSelect);
-                renderSelectFromSource(bibleSelect, bibleOptionSource, bibleSearchInput ? bibleSearchInput.value : '');
                 bibleSelect.disabled = false;
+                refreshPicker(bibleSelect);
             })
             .catch(function () {
                 bibleSelect.disabled = false;
+                refreshPicker(bibleSelect);
             });
 
     }
@@ -226,15 +201,8 @@
         bibleRefreshPromise = refreshBibleDropdown(selectedLanguage);
     });
 
-    languageOptionSource = snapshotSelectOptions(languageSelect);
-    bibleOptionSource = snapshotSelectOptions(bibleSelect);
-
-    attachSelectSearch(languageSearchInput, languageSelect, function () {
-        return languageOptionSource;
-    });
-    attachSelectSearch(bibleSearchInput, bibleSelect, function () {
-        return bibleOptionSource;
-    });
+    refreshPicker(languageSelect, { liveSearch: false });
+    refreshPicker(bibleSelect, { liveSearch: true });
 
     saveButton.addEventListener('click', function (event) {
         event.preventDefault();

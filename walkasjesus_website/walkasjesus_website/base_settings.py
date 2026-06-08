@@ -300,5 +300,20 @@ BIBLE_STUDY_MAX_VERSES = 5
 # Default Bible Study translations per language when no bible_id query params are provided.
 # Example: {'EN': ['kjv'], 'NL': ['hsv']}
 BIBLE_STUDY_DEFAULT_BIBLE_IDS_BY_LANGUAGE = {}
+# Local on-disk chapter metadata index used by Bible Study type-ahead chapter lookups.
+# The index can be generated one-time via:
+#   python manage.py build_bible_study_chapter_index
+BIBLE_STUDY_CHAPTER_INDEX_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'bible_study_chapter_index.json')
+# Use one primary bible for index generation and as fallback for all bible_id lookups.
+# Verse/chapter structure is shared across translations, so this avoids per-translation API scans.
+BIBLE_STUDY_CHAPTER_INDEX_PRIMARY_BIBLE_ID = 'de4e12af7f28f599-01'
+# Limit one-time builds by default to selected books to keep API usage low.
+BIBLE_STUDY_CHAPTER_INDEX_DEFAULT_BOOKS = ['Genesis']
+# Keep False to avoid expensive full-bible scans during regular requests.
+BIBLE_STUDY_CHAPTER_INDEX_AUTOBUILD = False
+# Keep False in production to avoid API usage during user requests when index data is missing.
+BIBLE_STUDY_CHAPTER_INDEX_ALLOW_LIVE_FETCH = False
+# Retry transient network failures while running the explicit build command.
+BIBLE_STUDY_CHAPTER_INDEX_RETRY_ATTEMPTS = 3
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False

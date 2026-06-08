@@ -4,8 +4,10 @@ from unittest.mock import Mock, patch
 
 from bible_lib import BibleBooks
 from django.contrib.auth.models import AnonymousUser
+from django.core.cache import cache
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
+from django.urls import reverse
 from django.utils import translation
 
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
@@ -23,6 +25,18 @@ from walkasjesus_app.views.detail_view import (
 )
 from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView, _append_unique_commentary
 from walkasjesus_app.views.user_preferences import BibleTranslationsForLanguageView
+
+
+class MockBibleStudyBible:
+    def __init__(self, bible_id, name, language, verses_by_ref, copyright=''):
+        self.id = bible_id
+        self.name = name
+        self.language = language
+        self.copyright = copyright
+        self._verses_by_ref = verses_by_ref
+
+    def verses(self, book, start_chapter, start_verse, end_chapter, end_verse):
+        return self._verses_by_ref.get((book.name, start_chapter, start_verse), '')
 
 
 class BibleTranslationTestCase(TestCase):
@@ -199,7 +213,7 @@ class KidsModeCacheSettingsTestCase(TestCase):
 
         self.assertEqual(cache_settings(request)['david_stern_commentary_footer_text'], 'Custom Stern footer')
 
-    @override_settings(SCRIPTURA_DISABLED_COMMENTATORS=['matthew-henry'])
+    @override_settings(COMMENTARY_DISABLED_SOURCES=['matthew-henry'], DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=False, CJB_BIBLE_ENABLED=True)
     def test_cache_settings_include_scriptura_disabled_commentators(self):
         request = self.factory.get('/')
         request.session = self.client.session
@@ -224,7 +238,37 @@ class KidsModeCacheSettingsTestCase(TestCase):
         commentators = json.loads(payload['sword_commentators_json'])
         self.assertEqual(len(commentators), 1)
         self.assertEqual(commentators[0]['id'], 'sword-kingcomments-en')
+        self.assertTrue(commentators[0]['auto_translate'])
+        self.assertEqual(commentators[0]['native_language'], 'en')
         self.assertTrue(payload['sword_commentary_enabled'])
+    @override_settings(SWORD_COMMENTARY_IMPORT_SOURCES=[
+        {
+            'id': 'sword-lightfoot-en',
+            'enabled': True,
+            'native_language': 'en',
+            'auto_translate': True,
+        }
+    ])
+    def test_cache_settings_include_auto_translated_lightfoot_for_dutch_ui(self):
+        SwordCommentarySource.objects.create(
+            source_id='sword-lightfoot-en',
+            module_name='Lightfoot',
+            display_name='John Lightfoot',
+            language='en',
+            is_enabled=True,
+            copyright_text='Public Domain',
+        )
+        request = self.factory.get('/')
+        request.session = self.client.session
+
+        with translation.override('nl'):
+            payload = cache_settings(request)
+
+        commentators = json.loads(payload['sword_commentators_json'])
+        self.assertEqual(len(commentators), 1)
+        self.assertEqual(commentators[0]['id'], 'sword-lightfoot-en')
+        self.assertTrue(commentators[0]['auto_translate'])
+        self.assertEqual(commentators[0]['native_language'], 'en')
 
     @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=True)
     def test_cache_settings_hide_david_stern_for_anonymous_when_login_required(self):
@@ -258,6 +302,38 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertTrue(all(not word['clickable'] for word in payload['words']))
         self.assertTrue(all(not word['has_candidates'] for word in payload['words']))
         self.assertTrue(all(not word['detail_note'] for word in payload['words']))
+
+
+class DynamicUiRegressionTestCase(TestCase):
+    def test_base_modal_no_longer_renders_save_changes_button(self):
+        response = self.client.get(reverse('commandments:law_of_messiah_listing'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Save changes')
+
+    def test_base_modal_defers_auto_apply_binding_until_dom_ready(self):
+        response = self.client.get(reverse('commandments:law_of_messiah_listing'))
+
+        self.assertEqual(response.status_code, 200)
+        # Function is defined in modal.html and called from base.html after jQuery loads
+        self.assertContains(response, 'window.jcInitChangeLanguageModal')
+        self.assertContains(response, 'jcInitChangeLanguageModal()')
+        self.assertContains(response, 'changed.bs.select.jcAutoApply')
+
+    def test_law_of_messiah_listing_no_longer_renders_apply_filter_button(self):
+        response = self.client.get(reverse('commandments:law_of_messiah_listing'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Apply Filter')
+
+    def test_law_of_messiah_listing_defers_filter_auto_apply_binding_until_dom_ready(self):
+        response = self.client.get(reverse('commandments:law_of_messiah_listing'))
+
+        self.assertEqual(response.status_code, 200)
+        # Filter script is in extra_body_scripts (after jQuery), not block content
+        self.assertContains(response, 'changed.bs.select.jcLawFilterAutoApply')
+        # No DOMContentLoaded guard needed since script is after jQuery
+        self.assertNotContains(response, 'initLawOfMessiahFilterAutoApply')
 
 
 class SharedMediaDeduplicationTestCase(TestCase):
@@ -417,7 +493,7 @@ class CommentaryProxyViewTestCase(SimpleTestCase):
             {'source': 'matthew-henry', 'book': 'John', 'chapter': '3'},
         )
 
-        with self.settings(SCRIPTURA_DISABLED_COMMENTATORS=['matthew-henry']):
+        with self.settings(COMMENTARY_DISABLED_SOURCES=['matthew-henry']):
             response = ScripturaCommentaryProxyView.as_view()(request)
 
         self.assertEqual(response.status_code, 404)
@@ -526,7 +602,7 @@ class SwordCommentaryProxyViewTestCase(TestCase):
             {'source': 'sword-kingcomments-en', 'book': 'Genesis', 'chapter': '1'},
         )
 
-        with self.settings(SWORD_DISABLED_COMMENTARY_SOURCES=['sword-kingcomments-en']):
+        with self.settings(COMMENTARY_DISABLED_SOURCES=['sword-kingcomments-en']):
             response = ScripturaCommentaryProxyView.as_view()(request)
 
         self.assertEqual(response.status_code, 404)
@@ -614,3 +690,212 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
         returned_ids = [entry['id'] for entry in payload['bibles']]
         self.assertEqual(returned_ids, ['de4e12af7f28f599-01', 'jnt-stern-en'])
         self.assertEqual(payload['default_bible_id'], 'jnt-stern-en')
+
+
+class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
+    @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
+    def test_bible_translations_endpoint_returns_bibles_for_each_language(self, mock_bible_translation):
+        mock_bible_translation.return_value.all_enabled.return_value = [
+            SimpleNamespace(id='en-kjv', name='KJV', language='en'),
+            SimpleNamespace(id='en-nkjv', name='NKJV', language='en'),
+            SimpleNamespace(id='nl-hsv', name='HSV', language='nl'),
+            SimpleNamespace(id='nl-svv', name='SVV', language='nl'),
+        ]
+
+        with self.settings(
+            DEFAULT_BIBLE_ANY_LANGUAGE='en-kjv',
+            DEFAULT_BIBLE_PER_LANGUAGE={'en': 'en-kjv', 'nl': 'nl-hsv'},
+            DISABLED_BIBLE_TRANSLATIONS=[],
+            CJB_BIBLE_ENABLED=False,
+        ):
+            cases = [
+                ('en', ['en-kjv', 'en-nkjv'], 'en-kjv'),
+                ('nl', ['nl-hsv', 'nl-svv'], 'nl-hsv'),
+            ]
+            for language_code, expected_ids, expected_default in cases:
+                with self.subTest(language_code=language_code):
+                    response = self.client.get(
+                        reverse('commandments:bible_translations_for_language'),
+                        {'language': language_code},
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    payload = json.loads(response.content.decode('utf-8'))
+                    self.assertEqual([entry['id'] for entry in payload['bibles']], expected_ids)
+                    self.assertEqual(payload['default_bible_id'], expected_default)
+
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_bible_study_verses_endpoint_returns_texts_for_english_and_dutch_bibles(self, mock_bible_translation):
+        english_bible = MockBibleStudyBible(
+            'en-kjv',
+            'KJV',
+            'en',
+            {
+                ('John', 3, 16): 'For God so loved the world',
+                ('John', 3, 17): 'For God sent not his Son into the world to condemn the world',
+            },
+        )
+        dutch_bible = MockBibleStudyBible(
+            'nl-hsv',
+            'HSV',
+            'nl',
+            {
+                ('Genesis', 1, 1): 'In het begin schiep God de hemel en de aarde.',
+                ('Genesis', 1, 2): 'De aarde nu was woest en leeg.',
+            },
+        )
+        bible_map = {
+            english_bible.id: english_bible,
+            dutch_bible.id: dutch_bible,
+        }
+        mock_bible_translation.return_value.get.side_effect = lambda bible_id: bible_map.get(bible_id)
+
+        with self.settings(DISABLED_BIBLE_TRANSLATIONS=[], CJB_BIBLE_ENABLED=False):
+            cases = [
+                ('en-kjv', 'John', 3, 16, 17, {
+                    '16': 'For God so loved the world',
+                    '17': 'For God sent not his Son into the world to condemn the world',
+                }),
+                ('nl-hsv', 'Genesis', 1, 1, 2, {
+                    '1': 'In het begin schiep God de hemel en de aarde.',
+                    '2': 'De aarde nu was woest en leeg.',
+                }),
+            ]
+            for bible_id, book, chapter, start_verse, end_verse, expected_verses in cases:
+                with self.subTest(bible_id=bible_id, book=book):
+                    response = self.client.post(
+                        reverse('commandments:bible_study_verses'),
+                        {
+                            'bible_id': bible_id,
+                            'book': book,
+                            'chapter': chapter,
+                            'start_verse': start_verse,
+                            'end_verse': end_verse,
+                        },
+                    )
+                    self.assertEqual(response.status_code, 200)
+                    payload = json.loads(response.content.decode('utf-8'))
+                    self.assertEqual(payload['verses'], expected_verses)
+
+
+class CommentaryTranslationViewTestCase(SimpleTestCase):
+    @patch('walkasjesus_app.views.user_preferences._translate_commentary_text')
+    def test_translation_endpoint_machine_translates_commentary_text(self, mock_translate_commentary_text):
+        cache.clear()
+        mock_translate_commentary_text.return_value = 'In het begin'
+
+        response = self.client.post(
+            reverse('commandments:commentary_translate'),
+            {'text': 'In the beginning', 'target_language': 'nl'},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['translated_text'], 'In het begin')
+        self.assertEqual(payload['language'], 'nl')
+        self.assertTrue(payload['machine_translated'])
+        mock_translate_commentary_text.assert_called_once_with('In the beginning', 'nl')
+
+
+class CommentaryCoverageForGenesisTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.lightfoot = SwordCommentarySource.objects.create(
+            source_id='sword-lightfoot-en',
+            module_name='Lightfoot',
+            display_name='John Lightfoot',
+            language='en',
+            is_enabled=True,
+            copyright_text='Public Domain',
+        )
+        self.king_en = SwordCommentarySource.objects.create(
+            source_id='sword-kingcomments-en',
+            module_name='KingComments',
+            display_name='King',
+            language='en',
+            is_enabled=True,
+            copyright_text='Copyrighted; Free non-commercial distribution',
+        )
+        self.king_nl = SwordCommentarySource.objects.create(
+            source_id='sword-kingcomments-nl',
+            module_name='DutKingComments',
+            display_name='King',
+            language='nl',
+            is_enabled=True,
+            copyright_text='Copyrighted; Free non-commercial distribution',
+        )
+        self.dutkant = SwordCommentarySource.objects.create(
+            source_id='sword-dutkant-nl',
+            module_name='DutKant',
+            display_name='Statenvertaling Kanttekeningen',
+            language='nl',
+            is_enabled=True,
+            copyright_text='Public Domain',
+        )
+
+        entries = [
+            (self.lightfoot, 'John Lightfoot on Genesis 1:1'),
+            (self.king_en, 'King commentary on Genesis 1:1'),
+            (self.king_nl, 'King commentaar op Genesis 1:1'),
+            (self.dutkant, 'Kanttekening bij Genesis 1:1'),
+        ]
+        for source, text in entries:
+            SwordCommentaryEntry.objects.create(
+                source=source,
+                book='Genesis',
+                book_key='genesis',
+                chapter=1,
+                verse=1,
+                text=text,
+            )
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    def test_genesis_commentary_is_available_for_all_sources_except_david_stern(self, mock_get):
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {'1': 'Matthew Henry on Genesis 1:1'}
+        mock_get.return_value = mock_response
+
+        cases = [
+            ('matthew-henry', 'Matthew Henry on Genesis 1:1'),
+            ('sword-lightfoot-en', 'John Lightfoot on Genesis 1:1'),
+            ('sword-kingcomments-en', 'King commentary on Genesis 1:1'),
+            ('sword-kingcomments-nl', 'King commentaar op Genesis 1:1'),
+            ('sword-dutkant-nl', 'Kanttekening bij Genesis 1:1'),
+        ]
+
+        for source_id, expected_text in cases:
+            with self.subTest(source_id=source_id):
+                request = self.factory.get(
+                    reverse('commandments:commentary_scriptura'),
+                    {'source': source_id, 'book': 'Genesis', 'chapter': '1', 'verse': '1'},
+                )
+                response = ScripturaCommentaryProxyView.as_view()(request)
+                self.assertEqual(response.status_code, 200)
+                payload = json.loads(response.content.decode('utf-8'))
+                self.assertEqual(payload.get('1'), expected_text)
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @override_settings(DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY=False)
+    def test_genesis_commentary_handles_david_stern_as_separate_exception(self, mock_get):
+        request = self.factory.get(
+            reverse('commandments:commentary_scriptura'),
+            {'source': 'david-stern', 'book': 'Genesis', 'chapter': '1', 'verse': '1'},
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), {})
+        mock_get.assert_not_called()
+
+    def test_lightfoot_commentary_proxy_returns_original_text_for_frontend_translation(self):
+        request = self.factory.get(
+            reverse('commandments:commentary_scriptura'),
+            {'source': 'sword-lightfoot-en', 'book': 'Genesis', 'chapter': '1', 'verse': '1'},
+        )
+
+        response = ScripturaCommentaryProxyView.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload, {'1': 'John Lightfoot on Genesis 1:1'})

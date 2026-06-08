@@ -14,10 +14,29 @@ def sword_commentary_enabled():
 
 
 def sword_disabled_source_ids():
-    disabled_sources = getattr(settings, 'SWORD_DISABLED_COMMENTARY_SOURCES', [])
-    if not isinstance(disabled_sources, (list, tuple, set)):
-        return set()
-    return {str(item).strip().lower() for item in disabled_sources if str(item).strip()}
+    # Sources can be disabled via the per-source `enabled: false` field, or the legacy list.
+    disabled = set()
+    import_sources = getattr(settings, 'SWORD_COMMENTARY_IMPORT_SOURCES', []) or []
+    for src in import_sources:
+        if isinstance(src, dict) and not src.get('enabled', True):
+            source_id = str(src.get('id', '') or '').strip().lower()
+            if source_id:
+                disabled.add(source_id)
+    # Legacy generic disabled list (covers all source types).
+    legacy = getattr(settings, 'COMMENTARY_DISABLED_SOURCES',
+                     getattr(settings, 'SWORD_DISABLED_COMMENTARY_SOURCES', []))
+    if isinstance(legacy, (list, tuple, set)):
+        disabled.update(str(item).strip().lower() for item in legacy if str(item).strip())
+    return disabled
+
+
+def get_sword_source_config(source_id):
+    """Return the settings dict for a given SWORD source id, or an empty dict."""
+    normalized = str(source_id or '').strip().lower()
+    for src in (getattr(settings, 'SWORD_COMMENTARY_IMPORT_SOURCES', []) or []):
+        if isinstance(src, dict) and str(src.get('id', '') or '').strip().lower() == normalized:
+            return src
+    return {}
 
 
 def available_sword_commentators(language_code):
@@ -26,12 +45,21 @@ def available_sword_commentators(language_code):
         return []
 
     disabled_ids = sword_disabled_source_ids()
-    sources = SwordCommentarySource.objects.filter(language=normalized_language, is_enabled=True).order_by('sort_order', 'display_name', 'source_id')
+    sources = SwordCommentarySource.objects.filter(is_enabled=True).order_by('sort_order', 'display_name', 'source_id')
 
     commentators = []
     for source in sources:
         source_id = str(source.source_id or '').strip()
         if not source_id or source_id.lower() in disabled_ids:
+            continue
+
+        source_config = get_sword_source_config(source_id)
+        native_language = str(source_config.get('native_language', getattr(source, 'language', '') or '')).strip().lower()[:2]
+        auto_translate = bool(source_config.get('auto_translate', False))
+
+        is_native_match = native_language == normalized_language
+        is_auto_translate_match = auto_translate and native_language == 'en' and normalized_language != 'en'
+        if not is_native_match and not is_auto_translate_match:
             continue
 
         commentators.append({
@@ -40,6 +68,8 @@ def available_sword_commentators(language_code):
             'copyright_text': str(source.copyright_text or '').strip(),
             'source_type': 'sword',
             'api_sources': [source_id],
+            'auto_translate': auto_translate,
+            'native_language': native_language,
         })
 
     return commentators

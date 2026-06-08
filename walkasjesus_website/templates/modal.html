@@ -41,9 +41,11 @@
                         </option>
                         {% for bible_item in bible_translation.all_in_user_language %}
                             {% if bible_item.id != user_preferences.bible.id %}
+                            {% if bible_item.id != cjb_bible_id or cjb_bible_visible %}
                             <option value="{{ bible_item.id }}">
                                 {{ bible_item.name }}
                             </option>
+                            {% endif %}
                             {% endif %}
                         {% endfor %}
                     </select>

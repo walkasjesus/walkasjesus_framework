@@ -239,14 +239,18 @@ BIJBEL_API_KEY = os.getenv('BIJBEL_API_KEY', '')
 DAVID_STERN_COMMENTARY_FOOTER_TEXT = ''
 # Restrict David Stern commentary to authenticated users only.
 DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY = False
-# Disable selected Scriptura commentators in UI and proxy (ids: david-stern, matthew-henry).
-SCRIPTURA_DISABLED_COMMENTATORS = []
+# Disable selected commentators in UI and proxy by ID (e.g. david-stern, matthew-henry, sword-lightfoot-en).
+# Covers all commentary sources regardless of type (Scriptura API, SWORD, etc.).
+COMMENTARY_DISABLED_SOURCES = []
 
 # Imported CrossWire SWORD commentary support.
 SWORD_COMMENTARY_ENABLED = True
-# Disable selected SWORD source ids in UI and proxy.
-SWORD_DISABLED_COMMENTARY_SOURCES = []
 # Import configuration for local SWORD commentary modules.
+# Per-source fields:
+#   enabled (bool, default True)      - show/hide this source globally
+#   native_language (str, e.g. 'en')  - the language the commentary text is written in
+#   auto_translate (bool, default False) - automatically machine-translate to the UI language
+#                                          when native_language differs from the request language
 SWORD_COMMENTARY_IMPORT_SOURCES = [
     {
         'id': 'sword-lightfoot-en',
@@ -257,6 +261,9 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
         'label': 'John Lightfoot',
         'copyright_text': 'Public Domain',
         'sort_order': 30,
+        'enabled': True,
+        'native_language': 'en',
+        'auto_translate': True,
     },
     {
         'id': 'sword-kingcomments-en',
@@ -266,6 +273,9 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
         'label': 'King',
         'copyright_text': 'Copyrighted; Free non-commercial distribution',
         'sort_order': 20,
+        'enabled': True,
+        'native_language': 'en',
+        'auto_translate': False,
     },
     {
         'id': 'sword-kingcomments-nl',
@@ -275,6 +285,9 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
         'label': 'King',
         'copyright_text': 'Copyrighted; Free non-commercial distribution',
         'sort_order': 20,
+        'enabled': True,
+        'native_language': 'nl',
+        'auto_translate': False,
     },
     {
         'id': 'sword-dutkant-nl',
@@ -285,6 +298,9 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
         'label': 'Statenvertaling Kanttekeningen',
         'copyright_text': 'Public Domain',
         'sort_order': 10,
+        'enabled': True,
+        'native_language': 'nl',
+        'auto_translate': False,
     },
 ]
 

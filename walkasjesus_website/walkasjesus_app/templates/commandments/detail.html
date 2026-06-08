@@ -145,7 +145,7 @@
             </div>
         </div>                               
         <div class="row">
-            <div id="commandment_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:commandment_verses' commandment.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-scriptura-url="{% url 'commandments:commentary_scriptura' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}" data-david-stern-commentary-footer="{{ david_stern_commentary_footer_text }}" data-david-stern-commentary-available="{% if david_stern_commentary_available %}1{% else %}0{% endif %}" data-scriptura-disabled-commentators="{{ scriptura_disabled_commentators }}">
+            <div id="commandment_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:commandment_verses' commandment.id %}" data-commentary-language="{{ request.LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-scriptura-url="{% url 'commandments:commentary_scriptura' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}" data-david-stern-commentary-footer="{{ david_stern_commentary_footer_text }}" data-david-stern-commentary-available="{% if david_stern_commentary_available %}1{% else %}0{% endif %}" data-scriptura-disabled-commentators="{{ scriptura_disabled_commentators }}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img commandment_id">

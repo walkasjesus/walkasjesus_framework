@@ -75,6 +75,26 @@ _SCRIPTURA_BOOK_NAMES = {
 
 _VALID_BOOK_NAMES = {b.name for b in BibleBooks}
 
+# Canonical Protestant Bible chapter counts (KJV).
+# Used during index build so we never probe chapter existence via the API, saving quota.
+_CANONICAL_CHAPTER_COUNTS = {
+    'Genesis': 50, 'Exodus': 40, 'Leviticus': 27, 'Numbers': 36, 'Deuteronomy': 34,
+    'Joshua': 24, 'Judges': 21, 'Ruth': 4, 'SamuelFirstBook': 31, 'SamuelSecondBook': 24,
+    'KingsFirstBook': 22, 'KingsSecondBook': 25, 'ChroniclesFirstBook': 29, 'ChroniclesSecondBook': 36,
+    'Ezra': 10, 'Nehemiah': 13, 'Esther': 10, 'Job': 42, 'Psalms': 150,
+    'Proverbs': 31, 'Ecclesiastes': 12, 'SongOfSolomon': 8, 'Isaiah': 66, 'Jeremiah': 52,
+    'Lamentations': 5, 'Ezekiel': 48, 'Daniel': 12, 'Hosea': 14, 'Joel': 3,
+    'Amos': 9, 'Obadiah': 1, 'Jonah': 4, 'Micah': 7, 'Nahum': 3,
+    'Habakkuk': 3, 'Zephaniah': 3, 'Haggai': 2, 'Zechariah': 14, 'Malachi': 4,
+    'Matthew': 28, 'Mark': 16, 'Luke': 24, 'John': 21, 'Acts': 28,
+    'Romans': 16, 'CorinthiansFirstBook': 16, 'CorinthiansSecondBook': 13,
+    'Galatians': 6, 'Ephesians': 6, 'Philippians': 4, 'Colossians': 4,
+    'ThessaloniansFirstBook': 5, 'ThessaloniansSecondBook': 3,
+    'TimothyFirstBook': 6, 'TimothySecondBook': 4, 'Titus': 3, 'Philemon': 1,
+    'Hebrews': 13, 'James': 5, 'PeterFirstBook': 5, 'PeterSecondBook': 3,
+    'JohnFirstBook': 5, 'JohnSecondBook': 1, 'JohnThirdBook': 1, 'Jude': 1, 'Revelation': 22,
+}
+
 
 def _bible_dropdown_label(bible):
     language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
@@ -224,9 +244,8 @@ def _build_chapter_index_for_bible(bible, only_books=None):
             continue
         bible_lib_book = BibleLibBibleBooks[book_name]
         chapter_map = {}
-        for chapter in range(1, 301):
-            if not _chapter_has_verse(bible, bible_lib_book, chapter, 1):
-                break
+        chapter_count = _CANONICAL_CHAPTER_COUNTS.get(book_name, 0)
+        for chapter in range(1, chapter_count + 1):
             max_verse = _chapter_max_verse_for_existing_chapter(bible, bible_lib_book, chapter)
             chapter_map[str(chapter)] = int(max_verse)
         if chapter_map:

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.utils import translation
 
-from walkasjesus_app.lib.access_policy import is_david_stern_commentary_allowed
+from walkasjesus_app.lib.access_policy import is_david_stern_commentary_allowed, cjb_bible_id, is_bible_id_visible_for_request
 from walkasjesus_app.lib.sword_commentary import available_sword_commentators_json, sword_commentary_enabled
 from walkasjesus_app.models import BibleTranslation, UserPreferences
 
@@ -9,6 +9,8 @@ from walkasjesus_app.models import BibleTranslation, UserPreferences
 def bible_translation(request):
     return {
         'bible_translation': BibleTranslation(),
+        'cjb_bible_id': cjb_bible_id(),
+        'cjb_bible_visible': is_bible_id_visible_for_request(request, cjb_bible_id()),
     }
 
 
@@ -19,7 +21,8 @@ def user_preferences(request):
 
 
 def cache_settings(request):
-    disabled_commentators = getattr(settings, 'SCRIPTURA_DISABLED_COMMENTATORS', [])
+    disabled_commentators = getattr(settings, 'COMMENTARY_DISABLED_SOURCES',
+                                    getattr(settings, 'SCRIPTURA_DISABLED_COMMENTATORS', []))
     if not isinstance(disabled_commentators, (list, tuple, set)):
         disabled_commentators = []
     disabled_commentators = [str(item).strip().lower() for item in disabled_commentators if str(item).strip()]

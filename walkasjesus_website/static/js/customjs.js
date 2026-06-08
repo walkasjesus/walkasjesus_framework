@@ -407,13 +407,17 @@ $(document).ready(function(){
   }
 
   function getCommentaryLanguage() {
+    var container = document.querySelector('[data-commentary-language]');
+    var pageLanguage = container ? String(container.getAttribute('data-commentary-language') || '').trim().toLowerCase() : '';
+    if (pageLanguage) {
+      return pageLanguage.slice(0, 2);
+    }
     if ($.cookie) {
       var cookieLanguage = String($.cookie('django_language') || '').trim().toLowerCase();
       if (cookieLanguage) {
         return cookieLanguage.slice(0, 2);
       }
     }
-    var container = document.querySelector('[data-commentary-language]');
     return container ? String(container.getAttribute('data-commentary-language') || 'en').trim().toLowerCase() : 'en';
   }
 
@@ -1005,19 +1009,20 @@ $(document).ready(function(){
           sourceType: 'scriptura',
           supportsOldTestament: false,
           attribution: scripturaUiConfig.commentatorAttribution['david-stern'] || { showProvider: true, showApiResponse: true }
-        },
-        {
+        }
+      ];
+
+      if (isDutch) {
+        builtInCommentators.push({
           id: 'matthew-henry',
-          label: isDutch ? 'Matthew Henry (NL)' : 'Matthew Henry',
-          apiSources: isDutch
-            ? ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry']
-            : ['matthew_henry', 'matthew-henry'],
-          autoTranslate: !isDutch,
+          label: 'Matthew Henry (NL)',
+          apiSources: ['matthew_henry_nl', 'matthew-henry-nl', 'matthew_henry', 'matthew-henry'],
+          autoTranslate: false,
           sourceType: 'scriptura',
           supportsOldTestament: true,
           attribution: scripturaUiConfig.commentatorAttribution['matthew-henry'] || { showProvider: true, showApiResponse: true }
-        }
-      ];
+        });
+      }
 
       var swordCommentators = getSwordCommentators().map(function(item) {
         var sourceId = String(item.id || '').trim();
@@ -1025,7 +1030,7 @@ $(document).ready(function(){
           id: sourceId,
           label: String(item.label || sourceId),
           apiSources: Array.isArray(item.api_sources) && item.api_sources.length ? item.api_sources : [sourceId],
-          autoTranslate: false,
+          autoTranslate: !!item.auto_translate,
           sourceType: 'sword',
           supportsOldTestament: true,
           attribution: {

@@ -22,7 +22,7 @@ from walkasjesus_app.lib.access_policy import (
     is_david_stern_commentary_allowed,
     is_david_stern_source,
 )
-from walkasjesus_app.lib.sword_commentary import normalize_book_key, sword_commentary_enabled, sword_disabled_source_ids
+from walkasjesus_app.lib.sword_commentary import get_sword_source_config, normalize_book_key, sword_commentary_enabled, sword_disabled_source_ids
 from walkasjesus_app.models import UserPreferences, BibleTranslation
 from walkasjesus_app.models import SwordCommentarySource, SwordCommentaryEntry
 
@@ -106,10 +106,10 @@ def _is_scriptura_commentator_disabled(source):
     if not commentator_id:
         return False
 
-    disabled_commentators = getattr(settings, 'SCRIPTURA_DISABLED_COMMENTATORS', [])
+    disabled_commentators = getattr(settings, 'COMMENTARY_DISABLED_SOURCES',
+                                    getattr(settings, 'SCRIPTURA_DISABLED_COMMENTATORS', []))
     if not isinstance(disabled_commentators, (list, tuple, set)):
         return False
-
     disabled_set = {str(item).strip().lower() for item in disabled_commentators if str(item).strip()}
     return commentator_id in disabled_set
 

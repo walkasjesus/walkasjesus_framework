@@ -1398,8 +1398,7 @@
       '<div class="services-inner" style="padding:1rem 1.2rem; align-items:flex-start;">' +
       '<div class="our-services-text w-100">' +
       '<div class="d-flex align-items-center flex-wrap mb-3">' +
-      '<span class="badge badge-secondary mr-2 mb-1">' + escapeHtml(state.bookLabel) + '</span>' +
-      '<span class="badge badge-light border mr-2 bible-study-reference-chip" style="font-size:0.9rem; min-width:2.8rem;">' + escapeHtml(String(state.chapter)) + ':' + escapeHtml(String(verseNumber)) + '</span>' +
+      '<span class="badge badge-light border mr-2 bible-study-reference-chip" style="font-size:0.9rem; min-width:2.8rem;">' + escapeHtml(state.bookLabel) + escapeHtml(String(state.chapter)) + ':' + escapeHtml(String(verseNumber)) + '</span>' +
       commentaryButtonHtml +
       '<div class="w-100"></div>' +
       '<div class="row w-100">' + cards + '</div>' +

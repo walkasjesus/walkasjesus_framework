@@ -139,6 +139,7 @@ MIDDLEWARE = [
     'walkasjesus_app.middleware.PermissionsPolicyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'walkasjesus_app.middleware.LocalizedUrlRedirectMiddleware',
     'walkasjesus_website.middleware.GeoLocationRedirectMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -186,7 +187,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
@@ -235,7 +236,101 @@ COMMENTARY_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
 # Commentary endpoint defaults to BijbelAPI and supports optional x-api-key auth.
 COMMENTARY_API_URL = os.getenv('COMMENTARY_API_URL', 'https://www.bijbelapi.com/api/commentary')
 BIJBEL_API_KEY = os.getenv('BIJBEL_API_KEY', '')
+# Optional legal/copyright footer shown under David Stern NT commentary.
+DAVID_STERN_COMMENTARY_FOOTER_TEXT = ''
+# Restrict David Stern commentary to authenticated users only.
+DAVID_STERN_COMMENTARY_LOGGED_IN_ONLY = False
+# Disable selected commentators in UI and proxy by ID (e.g. david-stern, matthew-henry, sword-lightfoot-en).
+# Covers all commentary sources regardless of type (Scriptura API, SWORD, etc.).
+COMMENTARY_DISABLED_SOURCES = []
+
+# Imported CrossWire SWORD commentary support.
+SWORD_COMMENTARY_ENABLED = True
+# Import configuration for local SWORD commentary modules.
+# Per-source fields:
+#   enabled (bool, default True)      - show/hide this source globally
+#   native_language (str, e.g. 'en')  - the language the commentary text is written in
+#   auto_translate (bool, default False) - automatically machine-translate to the UI language
+#                                          when native_language differs from the request language
+SWORD_COMMENTARY_IMPORT_SOURCES = [
+    {
+        'id': 'sword-lightfoot-en',
+        'module': 'Lightfoot',
+        'import_format': 'mod2imp',
+        'path': 'data/commentaries/en_lightfoot',
+        'language': 'en',
+        'label': 'John Lightfoot',
+        'copyright_text': 'Public Domain',
+        'sort_order': 30,
+        'enabled': True,
+        'native_language': 'en',
+        'auto_translate': True,
+    },
+    {
+        'id': 'sword-kingcomments-en',
+        'module': 'KingComments',
+        'path': 'data/commentaries/en_kingcomments',
+        'language': 'en',
+        'label': 'King',
+        'copyright_text': 'Copyrighted; Free non-commercial distribution',
+        'sort_order': 20,
+        'enabled': True,
+        'native_language': 'en',
+        'auto_translate': False,
+    },
+    {
+        'id': 'sword-kingcomments-nl',
+        'module': 'DutKingComments',
+        'path': 'data/commentaries/nl_kingcomments',
+        'language': 'nl',
+        'label': 'King',
+        'copyright_text': 'Copyrighted; Free non-commercial distribution',
+        'sort_order': 20,
+        'enabled': True,
+        'native_language': 'nl',
+        'auto_translate': False,
+    },
+    {
+        'id': 'sword-dutkant-nl',
+        'module': 'DutKant',
+        'import_format': 'mod2imp',
+        'path': 'data/commentaries/nl_statenvertaling_kanttekeningen',
+        'language': 'nl',
+        'label': 'Statenvertaling Kanttekeningen',
+        'copyright_text': 'Public Domain',
+        'sort_order': 10,
+        'enabled': True,
+        'native_language': 'nl',
+        'auto_translate': False,
+    },
+]
+
+# Local Complete Jewish Bible (David H. Stern, NT source) selector settings.
+CJB_BIBLE_ID = 'jnt-stern-en'
+CJB_BIBLE_NAME = 'Complete Jewish Bible (David H. Stern, NT)'
+CJB_BIBLE_ENABLED = True
+CJB_BIBLE_LOGGED_IN_ONLY = False
 # Verse count above which passages are manual "Click to retrieve"
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
+# Maximum number of verses the user can select simultaneously on the Bible Study page.
+BIBLE_STUDY_MAX_VERSES = 5
+# Default Bible Study translations per language when no bible_id query params are provided.
+# Example: {'EN': ['kjv'], 'NL': ['hsv']}
+BIBLE_STUDY_DEFAULT_BIBLE_IDS_BY_LANGUAGE = {}
+# Local on-disk chapter metadata index used by Bible Study type-ahead chapter lookups.
+# The index can be generated one-time via:
+#   python manage.py build_bible_study_chapter_index
+BIBLE_STUDY_CHAPTER_INDEX_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'bible_study_chapter_index.json')
+# Use one primary bible for index generation and as fallback for all bible_id lookups.
+# Verse/chapter structure is shared across translations, so this avoids per-translation API scans.
+BIBLE_STUDY_CHAPTER_INDEX_PRIMARY_BIBLE_ID = 'de4e12af7f28f599-01'
+# Limit one-time builds by default to selected books to keep API usage low.
+BIBLE_STUDY_CHAPTER_INDEX_DEFAULT_BOOKS = ['Genesis']
+# Keep False to avoid expensive full-bible scans during regular requests.
+BIBLE_STUDY_CHAPTER_INDEX_AUTOBUILD = False
+# Keep False in production to avoid API usage during user requests when index data is missing.
+BIBLE_STUDY_CHAPTER_INDEX_ALLOW_LIVE_FETCH = False
+# Retry transient network failures while running the explicit build command.
+BIBLE_STUDY_CHAPTER_INDEX_RETRY_ATTEMPTS = 3
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False

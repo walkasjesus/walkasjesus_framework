@@ -77,6 +77,109 @@
     margin-top: 5px;
 }
 
+.selectWrapper b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.select.native-combo-enabled select,
+.bible-study-select-wrap.native-combo-enabled select {
+    display: none;
+}
+
+.native-combo-input {
+    background: #fff;
+    border: 1px solid #e2b900;
+    border-radius: 4px;
+    box-shadow: none;
+    color: #2a2a2a;
+    font-size: 14px;
+    min-height: 33px;
+    padding: 4px 10px;
+    width: 100%;
+}
+
+.select.native-combo-enabled .native-combo-input,
+.law-filter-select-wrap.native-combo-enabled .native-combo-input,
+.bible-study-select-wrap.native-combo-enabled .native-combo-input {
+    border: 0;
+    border-radius: 0;
+    height: 100%;
+    min-height: 33px;
+    padding: 4px 50px 4px 10px;
+}
+
+.select.native-combo-enabled {
+    overflow: visible;
+}
+
+.select .native-combo-menu {
+    background: #fff7dc;
+    border: 1px solid #e0d5b0;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(34, 29, 17, 0.14);
+    display: none;
+    left: 0;
+    margin-top: 4px;
+    max-height: 260px;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 100%;
+    z-index: 12;
+}
+
+.select.native-combo-open .native-combo-menu {
+    display: block;
+}
+
+.select.native-combo-open .native-combo-input {
+    background: #fff7dc;
+}
+
+.select .native-combo-option,
+.select .native-combo-empty {
+    color: #4e3f1b;
+    display: block;
+    font-size: 13px;
+    line-height: 1.3;
+    padding: 0.45rem 0.65rem;
+    text-align: left;
+    width: 100%;
+}
+
+.select .native-combo-option {
+    background: #fff7dc;
+    border: 0;
+    cursor: pointer;
+}
+
+.select .native-combo-option:hover,
+.select .native-combo-option:focus,
+.select .native-combo-option.active {
+    background: #ecd071;
+    color: #3d2f08;
+    outline: 0;
+}
+
+.select .native-combo-empty {
+    color: #857343;
+    font-style: italic;
+}
+
+.select.native-combo-enabled .native-combo-input:hover,
+.law-filter-select-wrap.native-combo-enabled .native-combo-input:hover,
+.bible-study-select-wrap.native-combo-enabled .native-combo-input:hover {
+    background: #fff7dc;
+}
+
+.native-combo-input:focus {
+    border-color: #c8a84b;
+    box-shadow: 0 0 0 0.1rem rgba(226, 185, 0, 0.15);
+    outline: 0;
+}
+
 .multiselect-container{
     width: 100%;
 }
@@ -114,6 +217,95 @@
     border-radius: .25em;
 }
 
+#changeLanguageModal .select {
+    min-height: 34px;
+}
+
+#changeLanguageModal .select.native-combo-enabled .native-combo-input {
+    box-sizing: border-box;
+    height: 31px;
+    margin: 1px 0;
+    min-height: 31px;
+}
+
+#changeLanguageModal .multiselect-native-select,
+#changeLanguageModal .multiselect-native-select .btn-group {
+    display: block;
+    position: relative;
+    width: 100% !important;
+}
+
+#changeLanguageModal .multiselect-native-select .btn-group {
+    min-height: 34px;
+}
+
+#changeLanguageModal .multiselect-native-select .btn-group > .multiselect,
+#changeLanguageModal .btnMultiSelect {
+    background: #fff;
+    border: 1px solid #e2b900 !important;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #2a2a2a;
+    font-size: 14px;
+    height: 33px;
+    margin: 0;
+    min-height: 33px;
+    padding: 4px 34px 4px 10px;
+    text-align: left;
+    width: 100%;
+}
+
+#changeLanguageModal .multiselect-native-select .btn-group > .multiselect:hover,
+#changeLanguageModal .multiselect-native-select .btn-group > .multiselect:focus,
+#changeLanguageModal .multiselect-native-select .btn-group.open > .multiselect {
+    background: #fff7dc;
+    color: #3d2f08;
+    outline: 0;
+}
+
+#changeLanguageModal .multiselect-native-select .btn-group > .multiselect::after {
+    align-items: center;
+    background: rgba(226, 185, 0, 0.14);
+    border-left: 1px solid rgba(200, 168, 75, 0.75);
+    color: #5c4a1e;
+    content: '\25BC';
+    display: inline-flex;
+    height: 100%;
+    justify-content: center;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 34px;
+}
+
+#changeLanguageModal .multiselect-native-select .btn-group > .multiselect .caret {
+    display: none;
+}
+
+#changeLanguageModal .multiselect-container.dropdown-menu {
+    background: #fff7dc;
+    border: 1px solid #e0d5b0;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(34, 29, 17, 0.14);
+    left: 0 !important;
+    min-width: 100% !important;
+    width: 100% !important;
+}
+
+#changeLanguageModal .multiselect-container.dropdown-menu > li > a {
+    background: #fff7dc;
+    color: #4e3f1b;
+    font-size: 13px;
+}
+
+#changeLanguageModal .multiselect-container.dropdown-menu > li > a:hover,
+#changeLanguageModal .multiselect-container.dropdown-menu > li > a:focus,
+#changeLanguageModal .multiselect-container.dropdown-menu > li.active > a {
+    background: #ecd071;
+    color: #3d2f08;
+}
+
 .bg-container {
     background-image: url("/static/images/drawing_placeholder.png");
     min-height: 900px; }
@@ -130,6 +322,22 @@
   .jclogo img {
     width: 50px;
   }
+
+.ftco-navbar-light .navbar-brand {
+    align-items: center;
+    display: inline-flex;
+    gap: 6px;
+}
+
+.ftco-navbar-light .navbar-brand .brand-title {
+    display: inline-block;
+    color: #fff !important;
+}
+
+.ftco-navbar-light .navbar-brand:hover .brand-title,
+.ftco-navbar-light .navbar-brand:focus .brand-title {
+    color: #fff !important;
+}
   
 
 .logodiv {
@@ -149,6 +357,56 @@
 
 .ftco-navbar-light.scrolled .logodiv-subtitle {
     font-size: 9px;
+}
+
+.ftco-navbar-light.scrolled .navbar-brand {
+    font-size: 0 !important;
+    line-height: 1;
+    padding-bottom: 0.35rem !important;
+    padding-top: 0.35rem !important;
+}
+
+.ftco-navbar-light.scrolled .navbar-brand .brand-title,
+.ftco-navbar-light.scrolled .logodiv-subtitle {
+    display: none !important;
+}
+
+.ftco-navbar-light.scrolled .jclogo {
+    padding-right: 0;
+}
+
+.ftco-navbar-light.scrolled .jclogo img {
+    width: 30px;
+}
+
+.ftco-navbar-light.scrolled .container {
+    align-items: center;
+    min-height: 44px;
+}
+
+.ftco-navbar-light.scrolled .navbar-toggler {
+    font-size: 13px !important;
+    line-height: 1.2;
+    margin-left: 8px;
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+}
+
+.ftco-navbar-light.scrolled .navbar-top-actions {
+    display: none !important;
+}
+
+.ftco-navbar-light.scrolled .navbar-collapse {
+    display: none !important;
+}
+
+.ftco-navbar-light.scrolled .navbar-collapse.show,
+.ftco-navbar-light.scrolled .navbar-collapse.collapsing {
+    display: block !important;
+}
+
+.ftco-navbar-light.scrolled.navbar-expand-lg .navbar-toggler {
+    display: block;
 }
 
   .button {
@@ -361,12 +619,115 @@ p {
     height: 33px !important;
     line-height: 2.3;
     margin-bottom: 0;
-    min-height: 33px !important;
+    min-height: 34px !important;
 }
 
-.law-filter-select-wrap::after {
-    background: #1b1919;
-    color: #fff;
+.select,
+.law-filter-select-wrap,
+.bible-study-select-wrap {
+    background: #fff;
+    border: 1px solid #e2b900;
+    border-radius: 4px;
+}
+
+.select::after,
+.law-filter-select-wrap::after,
+.bible-study-select-wrap::after {
+    background: rgba(226, 185, 0, 0.14);
+    border-left: 1px solid rgba(200, 168, 75, 0.75);
+    color: #5c4a1e;
+}
+
+.select .bootstrap-select,
+.law-filter-select-wrap .bootstrap-select,
+.bible-study-select-wrap .bootstrap-select {
+    height: 100%;
+    width: 100% !important;
+}
+
+.select .bootstrap-select > .dropdown-toggle,
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle,
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle {
+    background: #fff;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: #000;
+    font-size: 14px;
+    height: 100%;
+    line-height: 1.2;
+    min-height: 33px;
+    padding: 4px 34px 4px 10px !important;
+}
+
+.select .bootstrap-select > .dropdown-toggle:focus,
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle:focus,
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle:focus {
+    background: #fff7dc;
+}
+
+.select .bootstrap-select > .dropdown-toggle:hover,
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle:hover,
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle:hover {
+    background: #fff7dc;
+}
+
+.select .bootstrap-select > .dropdown-toggle[aria-expanded="true"],
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle[aria-expanded="true"],
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle[aria-expanded="true"] {
+    background: #fff7dc;
+}
+
+.select .bootstrap-select > .dropdown-toggle .bs-caret,
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle .bs-caret,
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle .bs-caret,
+.select .bootstrap-select > .dropdown-toggle .caret,
+.law-filter-select-wrap .bootstrap-select > .dropdown-toggle .caret,
+.bible-study-select-wrap .bootstrap-select > .dropdown-toggle .caret {
+    display: none !important;
+}
+
+.bootstrap-select .dropdown-menu {
+    background: #fff7dc;
+    border: 1px solid #e0d5b0;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(34, 29, 17, 0.14);
+}
+
+.select .bootstrap-select .dropdown-menu,
+.law-filter-select-wrap .bootstrap-select .dropdown-menu,
+.bible-study-select-wrap .bootstrap-select .dropdown-menu {
+    left: 0 !important;
+    min-width: 100% !important;
+    width: 100% !important;
+}
+
+.bootstrap-select .dropdown-menu .inner {
+    background: #fff7dc;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item,
+.bootstrap-select .dropdown-menu li a {
+    background: #fff7dc;
+    color: #4e3f1b;
+    font-size: 13px;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item:hover,
+.bootstrap-select .dropdown-menu .dropdown-item:focus,
+.bootstrap-select .dropdown-menu li a:hover,
+.bootstrap-select .dropdown-menu li a:focus,
+.bootstrap-select .dropdown-menu li.selected a {
+    background: #ecd071;
+    color: #3d2f08;
+}
+
+.select.native-combo-enabled .native-combo-input,
+.law-filter-select-wrap.native-combo-enabled .native-combo-input,
+.bible-study-select-wrap.native-combo-enabled .native-combo-input {
+    box-sizing: border-box;
+    height: 31px;
+    margin: 1px 0;
+    min-height: 31px;
 }
 
 .law-filter-actions {
@@ -851,11 +1212,17 @@ p {
 /* ----- Commentary action buttons ----- */
 .commentary-action-btn,
 .sefaria-commentary-btn {
+    align-items: center;
     background: #f5f0e8;
     border: 1px solid #c8a84b;
+    border-radius: 4px;
     color: #5c4a1e;
+    display: inline-flex;
     font-size: 11px;
-    padding: 2px 8px;
+    justify-content: center;
+    line-height: 1.2;
+    min-height: 28px;
+    padding: 4px 9px;
     vertical-align: middle;
 }
 .commentary-action-btn:hover,
@@ -863,8 +1230,270 @@ p {
     background: #ede3cc;
     color: #3d2f08;
 }
+.commentary-action-btn.active,
+.commentary-action-btn.active:hover,
+.commentary-action-btn.active:focus,
+.sefaria-commentary-btn.active,
+.sefaria-commentary-btn.active:hover,
+.sefaria-commentary-btn.active:focus,
+.bible-study-original-toggle-btn.active {
+    background: #e2b900 !important;
+    border-color: #c8a84b !important;
+    color: #3d2f08 !important;
+}
 .scriptura-commentary-btn {
     margin-left: 0;
+}
+.bible-reference-action-row {
+    align-items: center;
+    background: #fcf8ec;
+    border: 1px solid #eadfbe;
+    border-radius: 8px;
+    column-gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 4px 0 8px;
+    padding: 6px 8px;
+    row-gap: 7px;
+}
+.bible-reference-action-row .commentary-action-btn,
+.bible-reference-action-row .sefaria-commentary-btn,
+.bible-reference-action-row .detail-original-text-btn {
+    align-items: center;
+    border-radius: 4px;
+    display: inline-flex;
+    font-size: 11px;
+    justify-content: center;
+    line-height: 1.2;
+    min-height: 28px;
+    padding: 4px 9px;
+}
+.detail-bible-study-link {
+    align-items: center;
+    background: #fffdf7;
+    border: 1px solid #dfd2aa;
+    border-radius: 4px;
+    color: #5c4a1e;
+    display: inline-flex;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1.2;
+    min-height: 28px;
+    padding: 4px 10px;
+    text-decoration: none;
+}
+.detail-bible-study-link:hover,
+.detail-bible-study-link:focus {
+    background: #f5ecd2;
+    color: #3d2f08;
+    text-decoration: none;
+}
+
+/* ---- JC tooltip (0.5s hover delay) ---- */
+.jc-tooltip-host {
+    position: relative;
+}
+.jc-tooltip-host::after {
+    background: rgba(20, 15, 5, 0.9);
+    border-radius: 5px;
+    color: #f7f4ed;
+    content: attr(data-jc-tooltip);
+    font-size: 0.73rem;
+    font-weight: 400;
+    left: 50%;
+    line-height: 1.4;
+    max-width: 230px;
+    min-width: 80px;
+    opacity: 0;
+    padding: 5px 9px;
+    pointer-events: none;
+    position: absolute;
+    text-align: center;
+    top: calc(100% + 6px);
+    transform: translateX(-50%);
+    transition: opacity 0.12s ease;
+    transition-delay: 0s;
+    white-space: normal;
+    word-break: normal;
+    z-index: 9990;
+}
+.jc-tooltip-host:hover::after {
+    opacity: 1;
+    transition-delay: 0.5s;
+}
+
+/* ---- Bible Study passage search ---- */
+.bs-passage-wrap {
+    position: relative;
+}
+.bs-passage-suggestions {
+    background: #fff;
+    border: 1px solid #e2b900;
+    border-radius: 0 0 6px 6px;
+    display: none;
+    left: 0;
+    max-height: 280px;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1050;
+}
+.bs-passage-suggestions.is-open {
+    display: block;
+}
+.bs-passage-suggestion-item {
+    border-bottom: 1px solid #f5eedb;
+    color: #3d2f08;
+    cursor: pointer;
+    display: block;
+    font-size: 13px;
+    padding: 7px 12px;
+}
+.bs-passage-suggestion-item:last-child {
+    border-bottom: 0;
+}
+.bs-passage-suggestion-item:hover,
+.bs-passage-suggestion-item.is-active {
+    background: #f7f0d8;
+}
+.detail-inline-original-panel {
+    background: #fbf8ee;
+    border: 1px solid #e0d5b0;
+    border-radius: 8px;
+    display: none;
+    margin-top: 8px;
+    padding: 12px;
+}
+.detail-inline-original-panel.is-open {
+    display: block;
+}
+.detail-inline-original-grid {
+    display: grid;
+    gap: 12px;
+}
+.detail-inline-original-verse {
+    border-top: 1px solid #eadfbe;
+    padding-top: 12px;
+}
+.detail-inline-original-verse:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+.detail-inline-original-title {
+    color: #5c4a1e;
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+.detail-inline-original-sentence,
+.detail-inline-original-detail {
+    background: #fffdf7;
+    border: 1px solid #e5d8b3;
+    border-radius: 6px;
+    height: 100%;
+    padding: 10px 12px;
+}
+.detail-inline-original-sentence-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.45rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+.detail-inline-original-word-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.55rem;
+}
+.detail-inline-original-word-item {
+    align-items: center;
+    display: inline-flex;
+    flex-direction: column;
+}
+.detail-inline-original-word-btn {
+    background: #f7f1de;
+    border: 1px solid #d8c48a;
+    border-radius: 5px;
+    color: #503f13;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.2;
+    padding: 0.18rem 0.42rem;
+}
+.detail-inline-original-word-btn:hover,
+.detail-inline-original-word-btn:focus,
+.detail-inline-original-word-btn.active {
+    background: #e2b900;
+    border-color: #c8a84b;
+    color: #3d2f08;
+    outline: 0;
+}
+.detail-inline-original-word-translation {
+    color: #6f5d2f;
+    font-size: 0.75rem;
+    margin-top: 0.2rem;
+}
+.detail-inline-original-token {
+    border-radius: 4px;
+    padding: 0 0.12rem;
+}
+.detail-inline-original-token.is-hovered,
+.detail-inline-original-token.active {
+    background: #fff1b8;
+}
+.detail-inline-original-meta {
+    color: #5c4a1e;
+    font-size: 0.92rem;
+    margin-bottom: 0.45rem;
+}
+.detail-inline-original-candidate {
+    background: #fff;
+    border: 1px solid #eadfbe;
+    border-radius: 6px;
+    margin-top: 0.65rem;
+    padding: 0.7rem 0.8rem;
+}
+.detail-inline-original-candidate-head {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.35rem;
+}
+.detail-inline-original-meaning-list {
+    list-style: disc outside;
+    margin: 0;
+    padding-left: 1.2rem;
+}
+.detail-inline-original-meaning-list li {
+    list-style: disc outside;
+    margin-bottom: 0.15rem;
+}
+.detail-inline-original-ref-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.2rem;
+}
+.detail-inline-original-ref-item {
+    background: #f5efda;
+    border: 1px solid #dfd1a6;
+    border-radius: 999px;
+    color: #6e5a28;
+    display: inline-block;
+    font-size: 0.74rem;
+    padding: 0.1rem 0.5rem;
+}
+.detail-legend-button-preview {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
 }
 .commentary-favicon {
     border-radius: 3px;
@@ -920,6 +1549,12 @@ p {
 .sefaria-commentary-body {
     font-size: 13px;
     line-height: 1.6;
+}
+.sefaria-commentary-body p {
+    margin: 0 0 0.75rem;
+}
+.sefaria-commentary-body p:last-child {
+    margin-bottom: 0;
 }
 .sefaria-commentary-body b,
 .sefaria-commentary-body strong {

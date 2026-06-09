@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
 from django.views import View
 
+from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, Maimonides, MaimonidesBibleReference, UserPreferences
 
 
@@ -257,7 +258,7 @@ class MaimonidesBibleVersesView(View):
             prefs = UserPreferences(request.session)
             bible_id = request.POST.get('bible_id', '')
             if bible_id:
-                if bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+                if not is_bible_id_visible_for_request(request, bible_id):
                     return JsonResponse({'error': 'Bible disabled'}, status=400)
                 bible = BibleTranslation().get(bible_id)
                 prefs.bible = bible

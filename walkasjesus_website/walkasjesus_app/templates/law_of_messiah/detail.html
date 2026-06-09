@@ -138,7 +138,7 @@
             </div>
         </div>
 
-        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}" data-commentary-language="{{ LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}">
+        <div class="row" data-verses-url="{% url 'commandments:law_of_messiah_verses' law.id %}" data-commentary-language="{{ request.LANGUAGE_CODE|slice:':2' }}" data-commentary-translate-url="{% url 'commandments:commentary_translate' %}" data-commentary-scriptura-url="{% url 'commandments:commentary_scriptura' %}" data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}" data-david-stern-commentary-footer="{{ david_stern_commentary_footer_text }}" data-david-stern-commentary-available="{% if david_stern_commentary_available %}1{% else %}0{% endif %}" data-scriptura-disabled-commentators="{{ scriptura_disabled_commentators }}">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner law-commandment-main">
@@ -299,9 +299,13 @@
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
-                                    {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    {% if not ref.is_ot %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "NT Commentary" %}</button>
                                     <div class="scriptura-commentary-panel"></div>
+                                    {% endif %}
+                                    {% if ref.is_ot %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference|default:ref.display_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    <div class="sefaria-commentary-panel"></div>
                                     {% endif %}
                                 </li>
                                 {% endfor %}
@@ -320,12 +324,14 @@
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
-                                        {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                        {% if not ref.is_ot %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "NT Commentary" %}</button>
                                     <div class="scriptura-commentary-panel"></div>
                                         {% endif %}
-                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
-                                    <div class="sefaria-commentary-panel"></div>{% endif %}
+                                        {% if ref.is_ot %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference|default:ref.display_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    <div class="sefaria-commentary-panel"></div>
+                                        {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>
@@ -343,9 +349,13 @@
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
-                                    {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                    {% if not ref.is_ot %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "NT Commentary" %}</button>
                                     <div class="scriptura-commentary-panel"></div>
+                                    {% endif %}
+                                    {% if ref.is_ot %}
+                                    <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference|default:ref.display_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                    <div class="sefaria-commentary-panel"></div>
                                     {% endif %}
                                 </li>
                                 {% endfor %}
@@ -364,13 +374,15 @@
                                     {% else %}
                                         <span class="bible-verse-text" data-verse-ref="{{ ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
                                     {% endif %}
-                                        {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Matthew Henry Commentary" %}</button>
+                                        {% if not ref.is_ot %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn mt-1" data-scriptura-book="{{ ref.scriptura_book }}" data-scriptura-chapter="{{ ref.scriptura_chapter }}" data-scriptura-verse="{{ ref.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "NT Commentary" %}</button>
                                     <div class="scriptura-commentary-panel"></div>
                                         {% endif %}
-                                        {% if ref.is_ot %}<br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
-                                    
-                                        <div class="sefaria-commentary-panel"></div>{% endif %}
+                                        {% if ref.is_ot %}
+                                        <br><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn mt-1 sefaria-commentary-btn-secondary" data-sefaria-ref="{{ ref.sefaria_reference|default:ref.display_reference }}"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>
+                                        
+                                        <div class="sefaria-commentary-panel"></div>
+                                        {% endif %}
                                 </li>
                                 {% endfor %}
                             </ul>

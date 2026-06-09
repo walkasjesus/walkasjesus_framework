@@ -11,6 +11,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import translation
 from django.views import View
 
+from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
 from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTranslation, LawOfMessiah, LawOfMessiahDrawing
 
 
@@ -371,7 +372,7 @@ class BibleVersesCommandmentView(View):
         bible_id = request.POST.get('bible_id', '')
         prefs = UserPreferences(request.session)
         if bible_id:
-            if bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+            if not is_bible_id_visible_for_request(request, bible_id):
                 return JsonResponse({'error': 'Bible disabled'}, status=400)
             new_bible = BibleTranslation().get(bible_id)
             prefs.bible = new_bible
@@ -423,7 +424,7 @@ class BibleVersesLessonView(View):
         bible_id = request.POST.get('bible_id', '')
         prefs = UserPreferences(request.session)
         if bible_id:
-            if bible_id in settings.DISABLED_BIBLE_TRANSLATIONS:
+            if not is_bible_id_visible_for_request(request, bible_id):
                 return JsonResponse({'error': 'Bible disabled'}, status=400)
             new_bible = BibleTranslation().get(bible_id)
             prefs.bible = new_bible

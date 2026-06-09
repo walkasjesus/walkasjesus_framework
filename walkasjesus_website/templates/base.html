@@ -74,38 +74,42 @@
   </script>
   {% endblock %}
   </head>
-  <body>
+  <body data-bible-study-url="{% url 'commandments:bible_study' %}" data-original-text-url="{% url 'commandments:bible_study_original_text' %}" data-sword-commentary-enabled="{% if sword_commentary_enabled %}1{% else %}0{% endif %}" data-sword-commentators='{{ sword_commentators_json|escape }}'>
     {% cookielaw_banner %}
 
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
         <div class="logodiv">
-        <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="jclogo"><img src="{% static 'images/jc_icon.png' %}"></span>{% trans 'Walk as Jesus' %}</a>
+        <a class="navbar-brand" href="{% url 'commandments:index' %}"><span class="jclogo"><img src="{% static 'images/jc_icon.png' %}"></span><span class="brand-title">{% trans 'Walk as Jesus' %}</span></a>
           <div class="logodiv-subtitle">
             {% trans "Learn it - Live it - Give it" %}
           </div>
         </div>
         <!-- Always-visible top-right action buttons -->
-        <div class="navbar-top-actions d-flex align-items-center ml-auto">
-          <a href="javascript:void(0);" class="btn btn-primary btn-outline-primary btn-change-bible" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a>
-          {% if user.is_authenticated %}
-          <form method="post" action="{% url 'account:logout' %}" class="logout-form d-inline ml-2">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary btn-outline-primary btn-nav-user-icon" title="{% trans 'Logout' %}">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
-          </form>
-          {% else %}
-          <a href="{% url 'account:login' %}" class="btn btn-primary btn-outline-primary btn-nav-user-icon ml-2" title="{% trans 'Login' %}">
-            <i class="fas fa-sign-in-alt"></i>
-          </a>
-          {% endif %}
-          <div class="btn btn-primary btn-outline-primary btn-superbook ml-2" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids Site, you will find the same commandments with limited videos and resources' %}">
-            <div class="custom-control custom-checkbox image-checkbox">
-              <input type="checkbox" class="custom-control-input chk-kids-mode" id="chk-kids-mode-1">
-              <label class="custom-control-label" for="chk-kids-mode-1">
-                  <img src="/static/images/gizmo.png" alt="#" >
-              </label>
+        <div class="navbar-top-actions ml-auto">
+          <div class="d-flex flex-column align-items-stretch">
+            <a href="javascript:void(0);" class="btn btn-primary btn-outline-primary btn-change-bible mb-1" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change language / Bible' %}</a>
+            <div class="d-flex">
+              {% if user.is_authenticated %}
+              <form method="post" action="{% url 'account:logout' %}" class="logout-form flex-fill mr-1">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-outline-primary btn-nav-user-icon w-100" title="{% trans 'Logout' %}">
+                  <i class="fas fa-sign-out-alt"></i>
+                </button>
+              </form>
+              {% else %}
+              <a href="{% url 'account:login' %}" class="btn btn-primary btn-outline-primary btn-nav-user-icon flex-fill mr-1" title="{% trans 'Login' %}">
+                <i class="fas fa-sign-in-alt"></i>
+              </a>
+              {% endif %}
+              <div class="btn btn-primary btn-outline-primary btn-superbook flex-fill" data-toggle="kids-tooltip" data-placement="bottom" title="{% trans 'When activating the Kids Site, you will find the same commandments with limited videos and resources' %}">
+                <div class="custom-control custom-checkbox image-checkbox">
+                  <input type="checkbox" class="custom-control-input chk-kids-mode" id="chk-kids-mode-1">
+                  <label class="custom-control-label" for="chk-kids-mode-1">
+                      <img src="/static/images/gizmo.png" alt="#" >
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -119,6 +123,7 @@
             <li class="nav-item"><a href="{% url 'commandments:index' %}" class="nav-link"><span>{% trans 'Home' %}</span></a></li>
 	      <li class="nav-item"><a href="{% url 'commandments:listing' %}" class="nav-link"><span>{% trans '77 Steps' %}</span></a></li>
         <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:law_of_messiah_listing' %}" class="nav-link"><span>{% trans 'Law of Messiah' %}</span></a></li>
+	      <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:bible_study' %}" class="nav-link"><span>{% trans 'Bible Study' %}</span></a></li>
 	      <li class="nav-item"><a href="{% url 'commandments:lesson_listing' %}" class="nav-link"><span>{% trans 'Children & Lessons' %}</span></a></li>
             <li class="nav-item kids-mode-hide" targetaudience="adults"><a href="{% url 'commandments:vision' %}" class="nav-link"><span>{% trans 'Vision' %}</span></a></li>
             {% if user.is_superuser or user.is_staff %}
@@ -167,6 +172,7 @@
                 <li><a href="{% url 'commandments:listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans '77 Steps' %}</a></li>
                 <li><a href="{% url 'commandments:lesson_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Children & Lessons' %}</a></li>
                 <li><a href="{% url 'commandments:law_of_messiah_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Law of Messiah' %}</a></li>
+                <li><a href="{% url 'commandments:bible_study' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Bible Study' %}</a></li>
                 <li><a href="{% url 'commandments:maimonides_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Classical Commandments' %}</a></li>
                 <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Vision' %}</a></li>
                 {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
@@ -249,5 +255,6 @@
   <script src="{% static 'js/customjs.js' %}"></script>
 
   {% endcache %}
+  {% block extra_body_scripts %}{% endblock %}
   </body>
 </html>

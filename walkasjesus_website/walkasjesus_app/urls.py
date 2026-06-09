@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.urls import path
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 # Import all your views and other necessary modules
@@ -25,6 +27,12 @@ from walkasjesus_app.views.user_preferences import (
     UserPreferencesLanguageSwitchView,
 )
 from walkasjesus_app.views.maimonides_view import MaimonidesBibleVersesView, MaimonidesList
+from walkasjesus_app.views.bible_study_view import (
+    BibleStudyView,
+    BibleStudyVersesView,
+    BibleStudyOriginalTextView,
+    BibleStudyChapterMetaView,
+)
 
 app_name = 'commandments'
 
@@ -40,6 +48,10 @@ urlpatterns = [
     path(_('lessons/'), ListingLessonView.as_view(), name='lesson_listing'),
     path(_('maimonides/'), MaimonidesList.as_view(), name='maimonides_listing'),
     path(_('maimonides/<str:maimonides_id>/verses/'), MaimonidesBibleVersesView.as_view(), name='maimonides_verses'),
+    path(_('bible-study/'), BibleStudyView.as_view(), name='bible_study'),
+    path(_('bible-study/verses/'), BibleStudyVersesView.as_view(), name='bible_study_verses'),
+    path(_('bible-study/chapter-meta/'), BibleStudyChapterMetaView.as_view(), name='bible_study_chapter_meta'),
+    path(_('bible-study/original-text/'), BibleStudyOriginalTextView.as_view(), name='bible_study_original_text'),
     path(_('law_of_messiah/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
     path(_('law_of_messiah/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
     path(_('law_of_messiah/<str:law_id>/verses/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),
@@ -55,3 +67,44 @@ urlpatterns = [
     path(_('admin/persist_bible_cache/'), AdminPersistBibleCache.as_view(), name='admin_persist_bible_cache'),
     path(_('admin/enable_bible/'), AdminEnableBible.as_view(), name='admin_enable_bible'),
 ]
+
+
+def _build_localized_aliases():
+    """Build URL aliases for all non-default languages using .po file translations.
+
+    Evaluates each gettext_lazy route in every supported language and registers
+    the translated slug as a named alias. No URL slugs are hardcoded here;
+    translations come automatically from the .po files.
+    To add a new language: add URL translations to its .po file only.
+    """
+    default_lang = settings.LANGUAGE_CODE
+    aliases = []
+
+    # Capture the default (English) route string for each translatable pattern.
+    with translation.override(default_lang):
+        default_routes = {
+            id(p): str(p.pattern._route)
+            for p in urlpatterns
+            if hasattr(p, 'pattern') and hasattr(p.pattern, '_route')
+        }
+
+    for lang_code, _ in settings.LANGUAGES:
+        if lang_code == default_lang:
+            continue
+        with translation.override(lang_code):
+            for p in urlpatterns:
+                pid = id(p)
+                if pid not in default_routes:
+                    continue
+                localized = str(p.pattern._route)
+                if localized != default_routes[pid]:
+                    # Same name so reverse() and _localized_next_url() work across languages.
+                    # Prepended before the named patterns so that reverse() in the default
+                    # language still returns the English URL (last entry wins in _reverse_dict).
+                    aliases.append(path(localized, p.callback, name=p.pattern.name))
+
+    return aliases
+
+
+# Prepend localized aliases so named English patterns overwrite them in reverse().
+urlpatterns = _build_localized_aliases() + urlpatterns

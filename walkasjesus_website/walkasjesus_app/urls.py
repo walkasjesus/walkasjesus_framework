@@ -53,6 +53,10 @@ urlpatterns = [
     path(_('law_of_messiah/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
     path(_('law_of_messiah/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
     path(_('law_of_messiah/<str:law_id>/verses/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),
+    # Dutch URL aliases (served without redirect so the Dutch URL works directly)
+    path('wet_van_christus/', LawOfMessiahListingView.as_view()),
+    path('wet_van_christus/<str:law_id>/', LawOfMessiahDetailView.as_view()),
+    path('wet_van_christus/<str:law_id>/bijbelverzen/', LawOfMessiahBibleVersesView.as_view()),
     path(_('vision/'), VisionView.as_view(), name='vision'),
     path(_('legalism/'), LegalismView.as_view(), name='legalism'),
     path(_('termsandconditions/'), TermsView.as_view(), name='termsandconditions'),

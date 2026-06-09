@@ -1,36 +1,50 @@
-import re
-
+from django.conf import settings
 from django.http import HttpResponseRedirect
+from django.urls import NoReverseMatch, Resolver404, resolve, reverse
+from django.utils import translation
 from django.utils.translation import get_language
 
 
-# Mapping of English URL prefixes to their Dutch equivalents for user-facing pages.
-_DUTCH_URL_MAP = [
-    (r'^/law_of_messiah/([^/]+)/$', '/wet_van_christus/{}/'),
-    (r'^/law_of_messiah/$', '/wet_van_christus/'),
-]
-_DUTCH_URL_PATTERNS = [(re.compile(pat), repl) for pat, repl in _DUTCH_URL_MAP]
-
-
 class LocalizedUrlRedirectMiddleware:
-    """Redirect English law_of_messiah URLs to their Dutch equivalents when language is Dutch."""
+    """Redirect English URL slugs to their localized equivalents for non-default languages.
+
+    Runs after LocaleMiddleware so the language is already set from the cookie/domain.
+    URL slug translations come from gettext_lazy() strings in urls.py and their
+    corresponding .po file entries — nothing is hardcoded here.
+    To add a new language: translate URL strings in its .po file only.
+    """
 
     def __init__(self, get_response):
         self.get_response = get_response
+        self._default_lang_prefix = settings.LANGUAGE_CODE[:2].lower()
 
     def __call__(self, request):
-        lang = (get_language() or 'en')[:2].lower()
-        if lang == 'nl':
-            path = request.path
-            for compiled, replacement in _DUTCH_URL_PATTERNS:
-                match = compiled.match(path)
-                if match:
-                    groups = match.groups()
-                    dutch_path = replacement.format(*groups)
+        language = get_language()  # Already set by LocaleMiddleware from cookie/domain.
+        if language and language[:2].lower() != self._default_lang_prefix:
+            # Resolve the current path in the default (English) language context.
+            # The path may still be in English (e.g. /law_of_messiah/) even though
+            # the user's preferred language is Dutch.
+            match = None
+            with translation.override(settings.LANGUAGE_CODE):
+                try:
+                    match = resolve(request.path)
+                except Resolver404:
+                    pass  # Already a localized URL or unknown path — no redirect needed.
+
+            if match is not None and match.view_name:
+                # Reverse with the active language to get the localized URL.
+                with translation.override(language):
+                    try:
+                        localized = reverse(
+                            match.view_name, args=match.args, kwargs=match.kwargs
+                        )
+                    except NoReverseMatch:
+                        localized = request.path
+
+                if localized != request.path:
                     query = request.META.get('QUERY_STRING', '')
-                    if query:
-                        dutch_path = dutch_path + '?' + query
-                    return HttpResponseRedirect(dutch_path)
+                    return HttpResponseRedirect(localized + ('?' + query if query else ''))
+
         return self.get_response(request)
 
 

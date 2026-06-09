@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.urls import path
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 
 # Import all your views and other necessary modules
@@ -53,10 +55,6 @@ urlpatterns = [
     path(_('law_of_messiah/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
     path(_('law_of_messiah/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
     path(_('law_of_messiah/<str:law_id>/verses/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),
-    # Dutch URL aliases (served without redirect so the Dutch URL works directly)
-    path('wet_van_christus/', LawOfMessiahListingView.as_view()),
-    path('wet_van_christus/<str:law_id>/', LawOfMessiahDetailView.as_view()),
-    path('wet_van_christus/<str:law_id>/bijbelverzen/', LawOfMessiahBibleVersesView.as_view()),
     path(_('vision/'), VisionView.as_view(), name='vision'),
     path(_('legalism/'), LegalismView.as_view(), name='legalism'),
     path(_('termsandconditions/'), TermsView.as_view(), name='termsandconditions'),
@@ -69,3 +67,44 @@ urlpatterns = [
     path(_('admin/persist_bible_cache/'), AdminPersistBibleCache.as_view(), name='admin_persist_bible_cache'),
     path(_('admin/enable_bible/'), AdminEnableBible.as_view(), name='admin_enable_bible'),
 ]
+
+
+def _build_localized_aliases():
+    """Build URL aliases for all non-default languages using .po file translations.
+
+    Evaluates each gettext_lazy route in every supported language and registers
+    the translated slug as a named alias. No URL slugs are hardcoded here;
+    translations come automatically from the .po files.
+    To add a new language: add URL translations to its .po file only.
+    """
+    default_lang = settings.LANGUAGE_CODE
+    aliases = []
+
+    # Capture the default (English) route string for each translatable pattern.
+    with translation.override(default_lang):
+        default_routes = {
+            id(p): str(p.pattern._route)
+            for p in urlpatterns
+            if hasattr(p, 'pattern') and hasattr(p.pattern, '_route')
+        }
+
+    for lang_code, _ in settings.LANGUAGES:
+        if lang_code == default_lang:
+            continue
+        with translation.override(lang_code):
+            for p in urlpatterns:
+                pid = id(p)
+                if pid not in default_routes:
+                    continue
+                localized = str(p.pattern._route)
+                if localized != default_routes[pid]:
+                    # Same name so reverse() and _localized_next_url() work across languages.
+                    # Prepended before the named patterns so that reverse() in the default
+                    # language still returns the English URL (last entry wins in _reverse_dict).
+                    aliases.append(path(localized, p.callback, name=p.pattern.name))
+
+    return aliases
+
+
+# Prepend localized aliases so named English patterns overwrite them in reverse().
+urlpatterns = _build_localized_aliases() + urlpatterns

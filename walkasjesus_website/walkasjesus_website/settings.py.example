@@ -144,6 +144,12 @@ DISABLED_BIBLE_TRANSLATIONS = [
     '39d55004bcd11d2f-01'  # Statenvertaling Jongbloed-editie
 ]
 
+# Override the auto-detected abbreviation for specific Bible IDs.
+# Key: bible_id (string), Value: desired abbreviation (string)
+BIBLE_ABBREVIATION_OVERRIDES = {
+    # '87f620660790371b-01': 'HSV',  # Herziene Statenvertaling
+}
+
 # The YouTube Data API v3 is an API that provides access to YouTube data, such as videos, playlists, and channels.
 # This is used to check and clear the not found or accessable youtube media items from the media csv.
 YOUTUBE_API_KEY = ''

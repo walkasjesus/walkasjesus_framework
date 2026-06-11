@@ -20,6 +20,7 @@ class LocalCompleteJewishBible(Bible):
         self.name = str(getattr(settings, 'CJB_BIBLE_NAME', 'Complete Jewish Bible (David H. Stern, NT)')).strip()
         self.language = 'en'
         self.copyright = str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip()
+        self.abbreviation = 'CJB'
 
     @staticmethod
     def _normalize_book_key(value):
@@ -123,6 +124,10 @@ class BibleTranslation:
         local_cjb_id = cjb_bible_id()
         if local_cjb_id and local_cjb_id not in bibles:
             bibles[local_cjb_id] = LocalCompleteJewishBible(local_cjb_id)
+        overrides = getattr(settings, 'BIBLE_ABBREVIATION_OVERRIDES', {})
+        for bible_id, abbreviation in overrides.items():
+            if bible_id in bibles:
+                bibles[bible_id].abbreviation = str(abbreviation)
         return bibles
 
     _all_bibles = {}

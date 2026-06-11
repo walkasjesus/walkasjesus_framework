@@ -707,7 +707,7 @@
                   <select class="form-control law-filter-select bs-bible-select selectpicker" id="bs-bible-{{ forloop.counter }}" name="bible_id" data-live-search="true" data-width="100%" data-size="10" data-none-selected-text="{% trans 'Choose a translation' %}">
                     <option value=""></option>
                     {% for bible in enabled_bibles %}
-                    <option value="{{ bible.id }}" data-copyright="{{ bible.copyright|default:''|escape }}">{{ bible.language|slice:":2"|upper }} - {{ bible.name }}</option>
+                    <option value="{{ bible.id }}" data-copyright="{{ bible.copyright|default:''|escape }}">{{ bible.language|slice:":2"|upper }} - {{ bible.abbreviation|upper }} - {{ bible.name }}</option>
                     {% endfor %}
                   </select>
                 </div>

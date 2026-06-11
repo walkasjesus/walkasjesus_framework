@@ -334,3 +334,9 @@ BIBLE_STUDY_CHAPTER_INDEX_ALLOW_LIVE_FETCH = False
 BIBLE_STUDY_CHAPTER_INDEX_RETRY_ATTEMPTS = 3
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False
+
+# Override the auto-detected abbreviation for specific Bible IDs.
+# Key: bible_id (string), Value: desired abbreviation (string)
+BIBLE_ABBREVIATION_OVERRIDES = {
+    '87f620660790371b-01': 'HSV',  # Herziene Statenvertaling (HSVU -> HSV)
+}

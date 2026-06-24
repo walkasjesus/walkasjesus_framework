@@ -1,10 +1,14 @@
 import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from bible_lib import BibleBooks
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
+from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
@@ -14,7 +18,7 @@ from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference,
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
-from walkasjesus_app.lib.strongs_service import original_text_payload
+from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.views.detail_view import (
     _allowed_media_languages,
@@ -302,6 +306,145 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertTrue(all(not word['clickable'] for word in payload['words']))
         self.assertTrue(all(not word['has_candidates'] for word in payload['words']))
         self.assertTrue(all(not word['detail_note'] for word in payload['words']))
+
+    def test_candidate_payload_exposes_structured_detail_sections(self):
+        candidate = _candidate_payload('G5083', 'greek', {})
+        derived_candidate = _candidate_payload('G1301', 'greek', {})
+        hebrew_candidate = _candidate_payload('H8104', 'hebrew', {})
+
+        self.assertIn('to watch over, guard, keep, preserve', candidate['outline_meanings'])
+        self.assertGreater(len(candidate['reference_groups']), 0)
+        self.assertTrue(all(len(group) <= 3 for group in candidate['reference_groups']))
+        self.assertGreater(len(candidate['translation_counts']), 0)
+        self.assertEqual(candidate['translation_counts'][0]['label'], 'to watch over, guard, keep, preserve')
+        self.assertGreater(candidate['translation_counts'][0]['count'], 0)
+        self.assertTrue(any(root_word['strongs_number'] == 'G5083' for root_word in derived_candidate['root_words']))
+        self.assertGreater(len(hebrew_candidate['translation_counts']), 0)
+        self.assertGreater(hebrew_candidate['translation_counts'][0]['count'], 0)
+        self.assertGreater(len(hebrew_candidate['references']), 0)
+        self.assertTrue(any(reference.startswith('Gen.') for reference in hebrew_candidate['references']))
+
+    @patch('walkasjesus_app.lib.strongs_service._lxx_greek_to_hebrew_index')
+    def test_candidate_payload_exposes_lxx_hebrew_equivalents_when_index_exists(self, mock_lxx_index):
+        mock_lxx_index.return_value = {
+            'G3056': {
+                'greekStrong': 'G3056',
+                'greekLemma': 'λόγος',
+                'hebrewCandidates': [
+                    {
+                        'strong': 'H1697',
+                        'lemma': 'דבר',
+                        'transliteration': 'dabar',
+                        'count': 842,
+                        'percentage': 81.4,
+                        'confidence': 94,
+                    },
+                    {
+                        'strong': 'H0565',
+                        'lemma': 'אמר',
+                        'transliteration': 'amar',
+                        'count': 103,
+                        'percentage': 9.9,
+                        'confidence': 63,
+                    },
+                ],
+            }
+        }
+
+        candidate = _candidate_payload('G3056', 'greek', {})
+
+        self.assertEqual(candidate['lxx_hebrew_equivalents'][0]['strong'], 'H1697')
+        self.assertEqual(candidate['lxx_hebrew_equivalents'][0]['confidence'], 94)
+        self.assertEqual(candidate['lxx_hebrew_equivalents'][1]['transliteration'], 'amar')
+        self.assertTrue(candidate['lxx_hebrew_equivalents'][0]['definition'])
+        self.assertGreater(len(candidate['lxx_hebrew_equivalents'][0]['possible_meanings']), 0)
+        self.assertIn('/lexicon/h1697/', candidate['lxx_hebrew_equivalents'][0]['blueletter_url'])
+
+    @patch('walkasjesus_app.lib.strongs_service._variant_step_codes')
+    @patch('walkasjesus_app.lib.strongs_service._stepbible_usage_index')
+    @patch('walkasjesus_app.lib.strongs_service._lookup_step_lexicon_entry')
+    @patch('walkasjesus_app.lib.strongs_service._lookup_open_scriptures_entry')
+    def test_hebrew_fallback_occurrence_labels_use_lexicon_label_when_no_variant_labels_exist(
+        self,
+        mock_open_scriptures,
+        mock_lookup_lexicon,
+        mock_usage_index,
+        mock_variant_step_codes,
+    ):
+        mock_variant_step_codes.return_value = []
+        mock_usage_index.return_value = {
+            'exact': {},
+            'base': {'H9999': ['Gen.1:1', 'Gen.1:2']},
+        }
+        mock_open_scriptures.return_value = {
+            'strongs_def': 'to test',
+            'kjv_def': 'test',
+        }
+        mock_lookup_lexicon.return_value = {
+            'lemma': 'נסה',
+            'transliteration': 'nasah',
+            'grammar': 'H:V',
+            'short_gloss': 'to test',
+            'definition': 'to test',
+            'full_entry': '',
+            'references': [],
+        }
+
+        candidate = _candidate_payload('H9999', 'hebrew', {})
+
+        self.assertEqual(candidate['translation_counts'][0]['label'], 'to test')
+        self.assertIn('to test', candidate['outline_meanings'])
+
+
+class LxxGreekToHebrewIndexCommandTestCase(SimpleTestCase):
+    def test_build_command_generates_ranked_candidates_from_tsv_evidence(self):
+        with TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            evidence_path = temp_path / 'evidence.tsv'
+            output_path = temp_path / 'lxx_greek_to_hebrew.json'
+            evidence_path.write_text(
+                '\n'.join([
+                    'greek_strong\tgreek_lemma\thebrew_strong\thebrew_lemma\thebrew_transliteration\tcount',
+                    'G3056\tλόγος\tH1697\tדבר\tdabar\t842',
+                    'G3056\tλόγος\tH0565\tאמר\tamar\t103',
+                    'G4102\tπίστις\tH0530\tאמונה\temunah\t25',
+                    'G4102\tπίστις\tH0982\tבטח\tbatach\t8',
+                ]) + '\n',
+                encoding='utf-8',
+            )
+
+            call_command(
+                'build_lxx_greek_to_hebrew_index',
+                evidence_file=str(evidence_path),
+                output=str(output_path),
+            )
+
+            payload = json.loads(output_path.read_text(encoding='utf-8'))
+            self.assertIn('G3056', payload)
+            self.assertEqual(payload['G3056']['greekLemma'], 'λόγος')
+            self.assertEqual(payload['G3056']['hebrewCandidates'][0]['strong'], 'H1697')
+            self.assertEqual(payload['G3056']['hebrewCandidates'][0]['count'], 842)
+            self.assertEqual(payload['G3056']['hebrewCandidates'][0]['percentage'], 89.1)
+            self.assertGreater(payload['G3056']['hebrewCandidates'][0]['confidence'], payload['G3056']['hebrewCandidates'][1]['confidence'])
+            self.assertEqual(payload['G4102']['hebrewCandidates'][1]['transliteration'], 'batach')
+
+    def test_build_command_falls_back_to_tbesg_lxx_notes_when_no_file_exists(self):
+        with TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            missing_path = temp_path / 'missing-evidence.tsv'
+            output_path = temp_path / 'fallback-lxx-greek-to-hebrew.json'
+
+            call_command(
+                'build_lxx_greek_to_hebrew_index',
+                evidence_file=str(missing_path),
+                output=str(output_path),
+                greek_strongs=['G0025'],
+            )
+
+            payload = json.loads(output_path.read_text(encoding='utf-8'))
+            self.assertIn('G0025', payload)
+            self.assertGreater(len(payload['G0025']['hebrewCandidates']), 0)
+            self.assertTrue(payload['G0025']['hebrewCandidates'][0]['strong'].startswith('H'))
 
 
 class DynamicUiRegressionTestCase(TestCase):

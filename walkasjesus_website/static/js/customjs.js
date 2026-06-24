@@ -255,11 +255,97 @@ $(document).ready(function(){
     return true;
   }
 
+  function currentBibleCopyAbbreviation() {
+    var selectedText = $.trim($('#drpBibleTranslation option:selected').text() || '');
+    if (!selectedText) {
+      return '';
+    }
+    var parts = selectedText.split(' - ');
+    if (parts.length >= 2 && $.trim(parts[1])) {
+      return $.trim(parts[1]).toLowerCase();
+    }
+    return selectedText.toLowerCase();
+  }
+
+  function cleanVerseReferenceLabel(rawText) {
+    var text = $.trim(String(rawText || '').replace(/\s+/g, ' '));
+    text = text.replace(/^click to retrieve\s*/i, '');
+    return $.trim(text);
+  }
+
+  function extractVerseReferenceLabel($element) {
+    var refId = String($element.attr('data-verse-ref') || '').trim();
+    var $context = $element.closest('li, .our-services-text, .tab-pane, .card, .media, p, div');
+    var $loadLink = refId ? $context.find('.bible-verse-load-link[data-verse-ref="' + refId + '"]').first() : $();
+    if ($loadLink.length) {
+      var linkText = cleanVerseReferenceLabel($loadLink.text());
+      if (linkText) {
+        return linkText;
+      }
+    }
+
+    var $bold = $element.prevAll('b, strong').first();
+    if ($bold.length) {
+      var boldText = cleanVerseReferenceLabel($bold.text());
+      if (boldText) {
+        return boldText;
+      }
+    }
+
+    return '';
+  }
+
+  function buildVerseCopyText($element) {
+    var verseText = $.trim($element.find('.bible-verse-text-content').first().text() || '');
+    if (!verseText) {
+      return '';
+    }
+    var footer = $.trim(extractVerseReferenceLabel($element) + ' ' + currentBibleCopyAbbreviation());
+    return footer ? verseText + '\n\n' + footer : verseText;
+  }
+
+  function attachVerseCopyButton($element) {
+    if (!$element.find('.bible-verse-text-content').length) {
+      return;
+    }
+    if ($element.find('.bible-verse-copy-btn').length) {
+      return;
+    }
+    $element.append('<button type="button" class="bible-verse-copy-btn"><i class="fa fa-copy" aria-hidden="true"></i> Copy</button>');
+  }
+
   function renderVerseText($elements, text) {
     $elements.each(function() {
       var $element = $(this);
-      $element.empty().text(text);
+      $element.empty().append($('<span class="bible-verse-text-content"></span>').text(text));
+      attachVerseCopyButton($element);
     });
+  }
+
+  function writeCopyText(text, onDone) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        if (onDone) onDone(true);
+      }).catch(function() {
+        if (onDone) onDone(false);
+      });
+      return;
+    }
+
+    var $temp = $('<textarea></textarea>').css({
+      left: '-9999px',
+      position: 'fixed',
+      top: '0'
+    }).val(text).appendTo('body');
+    $temp.trigger('focus').trigger('select');
+    var copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch (error) {
+      copied = false;
+    }
+    $temp.remove();
+    if (onDone) onDone(copied);
   }
 
   function getCsrfToken() {
@@ -847,6 +933,29 @@ $(document).ready(function(){
         verseFetchInFlight[pk] = false;
       });
     }
+  });
+
+  $(document).on('click', '.bible-verse-copy-btn', function(event) {
+    event.preventDefault();
+    var $button = $(this);
+    var $container = $button.closest('.bible-verse-text');
+    if (!$container.length) {
+      return;
+    }
+    var copyText = buildVerseCopyText($container);
+    if (!copyText) {
+      return;
+    }
+    writeCopyText(copyText, function(copied) {
+      if (!copied) {
+        return;
+      }
+      var $content = $container.find('.bible-verse-text-content').first();
+      $content.addClass('is-copied');
+      window.setTimeout(function() {
+        $content.removeClass('is-copied');
+      }, 1400);
+    });
   });
 
   if($.cookie('jc_bible_trans_settings')){

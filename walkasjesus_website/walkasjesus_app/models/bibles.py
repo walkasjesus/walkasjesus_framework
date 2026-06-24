@@ -19,7 +19,7 @@ class LocalCompleteJewishBible(Bible):
         super().__init__(bible_id=bible_id)
         self.name = str(getattr(settings, 'CJB_BIBLE_NAME', 'Complete Jewish Bible (David H. Stern, NT)')).strip()
         self.language = 'en'
-        self.copyright = str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip()
+        self.copyright = str(getattr(settings, 'COMPLETE_JEWISH_BIBLE_FOOTER_TEXT', '')).strip()
         self.abbreviation = 'CJB'
 
     @staticmethod

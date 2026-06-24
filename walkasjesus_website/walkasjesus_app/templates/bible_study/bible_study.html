@@ -74,6 +74,7 @@
       border: 1px solid #e0d5b0;
       border-radius: 6px;
       height: 100%;
+      position: relative;
       padding: 10px 12px;
     }
 
@@ -89,6 +90,40 @@
 
     .bible-study-shell .bs-verse-text {
       margin-bottom: 0;
+      padding-bottom: 2rem;
+      transition: text-decoration-color 0.18s ease, color 0.18s ease;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
+    }
+
+    .bible-study-shell .bs-verse-text.is-copied {
+      text-decoration-color: #c8a84b;
+    }
+
+    .bible-study-shell .bible-study-copy-btn {
+      align-items: center;
+      background: transparent;
+      border: 0;
+      border-radius: 999px;
+      bottom: 0.55rem;
+      color: #6a5520;
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 0.76rem;
+      gap: 0.3rem;
+      padding: 0.16rem 0.42rem;
+      position: absolute;
+      right: 0.55rem;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .bible-study-shell .bible-study-copy-btn:hover,
+    .bible-study-shell .bible-study-copy-btn:focus {
+      background: #f2ead1;
+      color: #3f3110;
+      outline: none;
     }
 
     .bible-study-shell .bible-study-commentary-slot {
@@ -399,6 +434,7 @@
     }
 
     .bible-study-shell .bs-original-sentence-token {
+      cursor: pointer;
       border-radius: 0.45rem;
       padding: 0 0.18rem;
       transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
@@ -466,6 +502,7 @@
 
     .bible-study-shell .bs-original-word-btn:hover,
     .bible-study-shell .bs-original-word-btn:focus,
+    .bible-study-shell .bs-original-word-btn.is-hovered,
     .bible-study-shell .bs-original-word-btn.active {
       background: #e8dcae;
       border-color: #c8a84b;
@@ -480,11 +517,21 @@
 
     .bible-study-shell .bs-original-word-translation {
       color: #7a6a3d;
+      cursor: pointer;
       font-size: 0.72rem;
       line-height: 1.15;
       min-height: 1.75em;
+      padding: 0.08rem 0.18rem;
+      border-radius: 0.35rem;
       text-align: center;
+      transition: background 0.15s ease, color 0.15s ease;
       word-break: break-word;
+    }
+
+    .bible-study-shell .bs-original-word-translation.is-hovered,
+    .bible-study-shell .bs-original-word-translation.active {
+      background: rgba(226, 185, 0, 0.18);
+      color: #4b3a12;
     }
 
     .bible-study-shell .bs-original-word-item-hbo .bs-original-word-translation {
@@ -585,6 +632,17 @@
       margin-top: 0.15rem;
     }
 
+    .bible-study-shell .bs-original-reference-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-right: 0.2rem;
+    }
+
+    .bible-study-shell .bs-original-reference-extra[hidden] {
+      display: none;
+    }
+
     .bible-study-shell .bs-original-reference-item {
       background: #f5efda;
       border: 1px solid #dfd1a6;
@@ -611,6 +669,145 @@
       color: #765b12;
       font-weight: 600;
       text-decoration: underline;
+    }
+
+    .bible-study-shell .bs-original-reference-toggle {
+      background: transparent;
+      border: 0;
+      color: #765b12;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-top: 0.15rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .bible-study-shell .bs-original-usage-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.18rem;
+    }
+
+    .bible-study-shell .bs-original-usage-count {
+      color: #7a6a3d;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .bible-study-shell .bs-original-root-word,
+    .bible-study-shell .bs-original-translation-count {
+      border: 1px solid #eadfbc;
+      border-radius: 6px;
+      margin-top: 0.4rem;
+      padding: 0.55rem 0.65rem;
+    }
+
+    .bible-study-shell .bs-original-root-head,
+    .bible-study-shell .bs-original-translation-count-head {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+    }
+
+    .bible-study-shell .bs-original-count-badge {
+      background: #efe6c7;
+      border-radius: 999px;
+      color: #59461b;
+      display: inline-flex;
+      font-size: 0.75rem;
+      font-weight: 700;
+      justify-content: center;
+      min-width: 2.2rem;
+      padding: 0.1rem 0.45rem;
+    }
+
+    .bible-study-shell .bs-original-root-link {
+      color: #765b12;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .bible-study-shell .bs-reference-preview-overlay {
+      align-items: center;
+      background: rgba(27, 22, 11, 0.54);
+      display: flex;
+      inset: 0;
+      justify-content: center;
+      padding: 1rem;
+      position: fixed;
+      z-index: 1080;
+    }
+
+    .bible-study-shell .bs-reference-preview-overlay[hidden] {
+      display: none;
+    }
+
+    .bible-study-shell .bs-reference-preview-dialog {
+      background: #fffdf7;
+      border: 1px solid #e0d5b0;
+      border-radius: 12px;
+      box-shadow: 0 18px 42px rgba(27, 22, 11, 0.24);
+      max-width: 720px;
+      position: relative;
+      width: 100%;
+    }
+
+    .bible-study-shell .bs-reference-preview-close {
+      background: transparent;
+      border: 0;
+      color: #6a5520;
+      cursor: pointer;
+      font-size: 1.7rem;
+      line-height: 1;
+      padding: 0.25rem 0.35rem;
+      position: absolute;
+      right: 0.8rem;
+      top: 0.7rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-body {
+      padding: 1.15rem 1.2rem 1rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-reference {
+      color: #40320f;
+      margin-bottom: 0.2rem;
+      padding-right: 2rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-translation {
+      color: #7a6a3d;
+      margin-bottom: 0.8rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-content {
+      color: #31250f;
+      line-height: 1.6;
+    }
+
+    .bible-study-shell .bs-reference-preview-verse {
+      margin-bottom: 0.55rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-verse-num {
+      color: #6a5520;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    .bible-study-shell .bs-reference-preview-actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: space-between;
+      margin-top: 1rem;
     }
 
     .bible-study-shell .bs-original-source-badge {
@@ -824,6 +1021,24 @@
   {% endif %}
   </div>
 
+  <div class="bs-reference-preview-overlay" id="bs-reference-preview" hidden>
+    <div class="bs-reference-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="bs-reference-preview-title">
+      <button type="button" class="bs-reference-preview-close" data-preview-close="1" aria-label="{% trans 'Close passage preview' %}">&times;</button>
+      <div class="bs-reference-preview-body">
+        <span class="bible-study-translation-title" id="bs-reference-preview-title">{% trans 'Passage preview' %}</span>
+        <h5 class="bs-reference-preview-reference"></h5>
+        <p class="small bs-reference-preview-translation"></p>
+        <div class="bs-reference-preview-content"></div>
+        <div class="bs-reference-preview-actions">
+          <button type="button" class="btn btn-sm commentary-action-btn bible-study-preview-study-btn" data-bible-study-reference="">
+            <i class="fa fa-book mr-1"></i> {% trans 'Study this passage' %}
+          </button>
+          <small class="text-muted">{% trans 'The preview uses the first selected translation.' %}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="bible-study-sources-card">
     <span class="bible-study-translation-title">{% trans 'Sources & licenses' %}</span>
     <p class="small mb-2">{% trans 'Original-language verse text is loaded from the installed Hebrew and Greek Bible sources in this app. The active source edition is shown above each original-text sentence.' %}</p>
@@ -843,9 +1058,12 @@
   var bibleStudyOriginalCache = {};
   var bsChapterMetaCache = {};
   var bsChapterMetaPending = {};
+  var bsReferencePreviewCache = {};
+  var bsReferencePreviewToken = 0;
   var bsAutoApplyTimer = null;
   var bsSuppressAutoApply = true;
   var bsOriginalOpenVerses = {};
+  var bsPendingStrongsSelection = null;
 
   // ---- Smart passage search data ----
   var bsBookList = [{% for book_name, book_label in bible_books %}{'n':'{{ book_name }}','l':'{{ book_label|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}];
@@ -1236,6 +1454,13 @@
     return String($('#bs-book').data('book-label') || '');
   }
 
+  function bibleStudyBookLabel(bookName) {
+    var match = bsBookList.filter(function(book) {
+      return String(book.n) === String(bookName || '');
+    })[0];
+    return match ? String(match.l || bookName || '') : String(bookName || '');
+  }
+
   function currentBibleStudyState() {
     var range = clampBibleStudyRange();
     return {
@@ -1275,6 +1500,10 @@
         params.append('bible_id', bible.id);
       }
     });
+    if (bsPendingStrongsSelection && bsPendingStrongsSelection.verse && bsPendingStrongsSelection.strongs) {
+      params.set('selected_verse', String(bsPendingStrongsSelection.verse));
+      params.set('selected_strongs', String(bsPendingStrongsSelection.strongs));
+    }
     var newUrl = window.location.pathname + '?' + params.toString();
     window.history.replaceState({}, '', newUrl);
   }
@@ -1365,6 +1594,12 @@
   function bibleStudyOriginalPanelsHtml(state, verseNumber) {
     var rangeKey = bibleStudyOriginalRangeKey(state);
     var spinnerSource = bibleStudyOriginalCache[rangeKey] ? 'cache' : 'api';
+    var uiLang = String($('.bible-study-shell').data('commentary-language') || '').slice(0, 2);
+    var translateBtnHtml = (uiLang && uiLang !== 'en')
+      ? '<button type="button" class="btn btn-sm btn-outline-secondary bs-strongs-translate-btn mt-1 mb-1" data-verse="' + escapeHtml(String(verseNumber)) + '" title="{% trans "Auto-translate definitions to your language" %}">' +
+        '<i class="fa fa-language mr-1"></i><span class="bs-translate-btn-label">{% trans "Translate" %}</span>' +
+        '</button>'
+      : '';
     return '<div class="row w-100 bible-study-original-row" data-verse="' + escapeHtml(String(verseNumber)) + '">' +
       '<div class="col-lg-6 mb-2">' +
       '<div class="bible-study-original-card bible-study-original-shell" data-verse="' + escapeHtml(String(verseNumber)) + '" data-range-key="' + escapeHtml(rangeKey) + '">' +
@@ -1374,7 +1609,10 @@
       '</div></div>' +
       '<div class="col-lg-6 mb-2">' +
       '<div class="bible-study-original-card bible-study-original-detail-card" data-verse="' + escapeHtml(String(verseNumber)) + '" data-range-key="' + escapeHtml(rangeKey) + '">' +
+      '<div class="bible-study-original-head">' +
       '<span class="bible-study-translation-title">{% trans "Strong&#39;s details" as bsi18n_strongs_details %}{{ bsi18n_strongs_details|escapejs }}</span>' +
+      translateBtnHtml +
+      '</div>' +
       '<div class="bs-original-word-detail">' + verseSpinnerHtml(spinnerSource) + '</div>' +
       '</div></div>' +
       '</div>';
@@ -1421,6 +1659,7 @@
       bibleStudySummaryHtml(state) +
       '<div class="row bible-study-results" id="bs-verse-area" data-book="' + escapeHtml(state.book) + '" data-chapter="' + escapeHtml(String(state.chapter)) + '" data-start-verse="' + escapeHtml(String(state.startVerse)) + '" data-end-verse="' + escapeHtml(String(state.endVerse)) + '"><div class="col-12">' + verseCardsHtml + '</div></div>'
     );
+    ensureBibleStudyCopyButtons(state);
     updateBibleStudyScripturaVisibility();
   }
 
@@ -1448,6 +1687,7 @@
         }
       }
     });
+    ensureBibleStudyCopyButtons(state);
   }
 
   function firstSelectableOriginalWordIndex(words) {
@@ -1460,6 +1700,84 @@
     });
     return foundIndex;
   }
+
+  // ---- Strong's detail translation (for non-English UI) ----
+  var bsStrongsTranslationActive = false;
+  var bsTranslateCache = {};
+
+  function bsTranslateText(text, onDone) {
+    var translateUrl = String($('.bible-study-shell').data('commentary-translate-url') || '').trim();
+    var targetLanguage = String($('.bible-study-shell').data('commentary-language') || '').slice(0, 2);
+    if (!text || !translateUrl || !targetLanguage || targetLanguage === 'en') {
+      if (onDone) { onDone(text); }
+      return;
+    }
+    var cacheKey = targetLanguage + '|' + text;
+    if (bsTranslateCache[cacheKey]) {
+      if (onDone) { onDone(bsTranslateCache[cacheKey]); }
+      return;
+    }
+    $.ajax({
+      type: 'POST',
+      url: translateUrl,
+      data: {
+        csrfmiddlewaretoken: (document.cookie.match(/csrftoken=([^;]+)/) || [null, ''])[1] || '',
+        text: text,
+        target_language: targetLanguage
+      },
+      success: function(data) {
+        var result = (data && data.translated_text) || text;
+        bsTranslateCache[cacheKey] = result;
+        if (onDone) { onDone(result); }
+      },
+      error: function() {
+        if (onDone) { onDone(text); }
+      }
+    });
+  }
+
+  function applyStrongsTranslation($card) {
+    $card.find('.bs-translatable-text').each(function() {
+      var $el = $(this);
+      if (!$el.data('originalText')) {
+        $el.data('originalText', $el.text());
+      }
+      var original = $el.data('originalText');
+      if (!original) { return; }
+      bsTranslateText(original, function(translated) {
+        $el.text(translated);
+      });
+    });
+  }
+
+  function revertStrongsTranslation($card) {
+    $card.find('.bs-translatable-text').each(function() {
+      var $el = $(this);
+      var original = $el.data('originalText');
+      if (original) { $el.text(original); }
+    });
+  }
+
+  function maybeApplyStrongsTranslation($detailCard) {
+    if (bsStrongsTranslationActive) {
+      applyStrongsTranslation($detailCard);
+    }
+  }
+
+  $(document).on('click', '.bs-strongs-translate-btn', function() {
+    bsStrongsTranslationActive = !bsStrongsTranslationActive;
+    var activeLabel = '{% trans "Show original" %}';
+    var inactiveLabel = '{% trans "Translate" %}';
+    $('.bs-translate-btn-label').text(bsStrongsTranslationActive ? activeLabel : inactiveLabel);
+    $('.bs-strongs-translate-btn').toggleClass('active', bsStrongsTranslationActive);
+    $('.bible-study-original-detail-card').each(function() {
+      if (bsStrongsTranslationActive) {
+        applyStrongsTranslation($(this));
+      } else {
+        revertStrongsTranslation($(this));
+      }
+    });
+  });
 
   function buildOriginalWordTitle(word) {
     var lines = [];
@@ -1490,6 +1808,376 @@
     return '{% trans "No tag yet" %}';
   }
 
+  function bibleStudyPreviewCacheKey(bibleId, reference) {
+    return [String(bibleId || ''), String(reference || '')].join('|');
+  }
+
+  function bibleStudyFlattenReferences(referenceGroups) {
+    return (referenceGroups || []).reduce(function(all, group) {
+      (group || []).forEach(function(reference) {
+        if (reference) {
+          all.push(reference);
+        }
+      });
+      return all;
+    }, []);
+  }
+
+  function bibleStudyReferenceButtons(referenceGroups, titleText) {
+    var references = bibleStudyFlattenReferences(referenceGroups);
+    var visible = references.slice(0, 10);
+    var extra = references.slice(10);
+    var renderGroups = function(items) {
+      var groups = [];
+      for (var index = 0; index < items.length; index += 3) {
+        groups.push(items.slice(index, index + 3));
+      }
+      return groups.map(function(group) {
+        var buttons = (group || []).map(function(reference) {
+          return '<a class="bs-original-reference-item bible-study-deeplink" href="#" data-bible-study-reference="' + escapeHtml(reference) + '" title="' + escapeHtml(titleText) + '">' + escapeHtml(reference) + '</a>';
+        }).join('');
+        return buttons ? '<div class="bs-original-reference-group">' + buttons + '</div>' : '';
+      }).join('');
+    };
+
+    var html = renderGroups(visible);
+    if (extra.length) {
+      html += '<span class="bs-original-reference-extra" hidden>' + renderGroups(extra) + '</span>' +
+        '<button type="button" class="bs-original-reference-toggle" data-expand-label="{% trans "See more" %}" data-collapse-label="{% trans "See less" %}">{% trans "See more" %}</button>';
+    }
+    return html;
+  }
+
+  function firstBibleStudyReference(referenceGroups) {
+    var references = bibleStudyFlattenReferences(referenceGroups);
+    return references.length ? String(references[0]) : '';
+  }
+
+  function firstParseableBibleStudyReference(references) {
+    for (var index = 0; index < (references || []).length; index += 1) {
+      var reference = $.trim(String(references[index] || ''));
+      if (reference && parseBibleStudyDeeplinkReference(reference)) {
+        return reference;
+      }
+    }
+    return '';
+  }
+
+  function firstBibleStudyReferenceForCandidate(candidate) {
+    if (!candidate) {
+      return '';
+    }
+    var translationCounts = (candidate.translation_counts || []);
+    for (var index = 0; index < translationCounts.length; index += 1) {
+      var reference = firstBibleStudyReference((translationCounts[index] && translationCounts[index].reference_groups) || []);
+      if (reference) {
+        return reference;
+      }
+    }
+    var groupedReference = firstBibleStudyReference((candidate.reference_groups || []));
+    if (groupedReference) {
+      return groupedReference;
+    }
+    return firstParseableBibleStudyReference(candidate.references || []);
+  }
+
+  function bibleStudyStrongDetailUrl(strongsNumber, reference) {
+    var parsed = parseBibleStudyDeeplinkReference(reference);
+    if (!strongsNumber || !parsed) {
+      return '';
+    }
+    var params = new URLSearchParams();
+    params.set('book', String(parsed.book || ''));
+    params.set('chapter', String(parsed.chapter || '1'));
+    params.set('start_verse', String(parsed.startVerse || '1'));
+    params.set('end_verse', String(parsed.endVerse || parsed.startVerse || '1'));
+    params.set('show_original', '1');
+    params.set('selected_verse', String(parsed.startVerse || '1'));
+    params.set('selected_strongs', String(strongsNumber || ''));
+    var currentState = currentBibleStudyState();
+    $.each((currentState && currentState.bibles) || [], function(_, bible) {
+      if (bible && bible.id) {
+        params.append('bible_id', bible.id);
+      }
+    });
+    return window.location.pathname + '?' + params.toString();
+  }
+
+  function bibleStudyRelatedWordCardHtml(item, options) {
+    options = options || {};
+    var strongsNumber = String((item && (item.strongs_number || item.strong)) || '');
+    var reference = String((item && (item.first_reference || item.reference)) || '');
+    var detailUrl = bibleStudyStrongDetailUrl(strongsNumber, reference);
+    var meanings = (item && item.possible_meanings) || [];
+    var metaBits = [];
+    if (options.showCountMeta && item && item.count) {
+      metaBits.push(escapeHtml(String(item.count)) + 'x');
+    }
+    if (options.showCountMeta && item && item.percentage) {
+      metaBits.push(escapeHtml(String(item.percentage)) + '%');
+    }
+    if (options.showCountMeta && item && item.confidence) {
+      metaBits.push('{% trans "confidence" %} ' + escapeHtml(String(item.confidence)));
+    }
+      var meaningsHtml = meanings.length
+        ? '<ul class="bs-original-meaning-list">' + meanings.map(function(meaning) {
+            return '<li><span class="bs-translatable-text">' + escapeHtml(meaning) + '</span></li>';
+          }).join('') + '</ul>'
+        : '';
+      return '<div class="bs-original-root-word">' +
+        '<div class="bs-original-root-head">' +
+          (detailUrl ? '<a class="bs-original-strong-link" href="' + escapeHtml(detailUrl) + '"><strong>' + escapeHtml(strongsNumber) + '</strong></a>' : '<strong>' + escapeHtml(strongsNumber) + '</strong>') +
+          ((item && item.lemma) ? '<span>' + escapeHtml(item.lemma) + '</span>' : '') +
+          ((item && item.transliteration) ? '<span class="text-muted">' + escapeHtml(item.transliteration) + '</span>' : '') +
+          (metaBits.length ? '<span class="bs-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
+          ((item && item.blueletter_url) ? '<a class="bs-original-root-link" href="' + escapeHtml(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">{% trans "Open" %} ' + escapeHtml(strongsNumber) + ' {% trans "in Blue Letter Bible" as bsi18n_strongs_detail_link %}{{ bsi18n_strongs_detail_link|escapejs }}</a>' : '') +
+        '</div>' +
+        ((item && item.definition) ? '<p class="mb-1 bs-translatable-text">' + escapeHtml(item.definition) + '</p>' : '') +
+        meaningsHtml +
+      '</div>';
+  }
+
+  function bibleStudyRootWordsHtml(rootWords) {
+    return (rootWords || []).map(function(rootWord) {
+      return bibleStudyRelatedWordCardHtml(rootWord, { showCountMeta: false });
+    }).join('');
+  }
+
+  function bibleStudyLxxHebrewEquivalentsHtml(items) {
+    return (items || []).map(function(item) {
+      return bibleStudyRelatedWordCardHtml(item, { showCountMeta: true });
+    }).join('');
+  }
+
+  function bibleStudyUsageSectionHtml(candidate) {
+    var translationCounts = ((candidate && candidate.translation_counts) || []).filter(function(item) {
+      return item && (String(item.label || '').trim() || ((item.reference_groups || []).length > 0));
+    });
+    var outlineMeanings = (candidate && candidate.outline_meanings) || [];
+    var referenceGroups = (candidate && candidate.reference_groups) || [];
+    if (!translationCounts.length && !outlineMeanings.length && !referenceGroups.length) {
+      return '';
+    }
+
+    var totalCount = 0;
+    if (translationCounts.length) {
+      translationCounts.forEach(function(item) {
+        totalCount += parseInt((item && item.count) || 0, 10) || 0;
+      });
+    } else {
+      referenceGroups.forEach(function(group) {
+        totalCount += (group || []).length;
+      });
+    }
+
+    var heading = '{% trans "Outline of Biblical Usage" %}' + (totalCount ? ' (' + escapeHtml(String(totalCount)) + 'x)' : '');
+    var contentHtml = '';
+
+    if (translationCounts.length) {
+      contentHtml = '<ol class="bs-original-meaning-list">' + translationCounts.map(function(item) {
+        var count = parseInt((item && item.count) || 0, 10) || 0;
+        var label = String((item && item.label) || '').trim() || String((candidate && candidate.definition) || '').trim();
+        var referencesHtml = bibleStudyReferenceButtons((item && item.reference_groups) || [], '{% trans "Preview this passage" %}');
+        return '<li><div class="bs-original-usage-item">' +
+          '<div class="bs-original-usage-copy">' +
+            (label ? '<span class="bs-translatable-text">' + escapeHtml(label) + '</span>' : '<span>{% trans "Occurrences" %}</span>') +
+            (count ? ' <span class="bs-original-usage-count">(' + escapeHtml(String(count)) + 'x)</span>' : '') +
+          '</div>' +
+          (referencesHtml ? '<div class="bs-original-reference-list">' + referencesHtml + '</div>' : '') +
+        '</div></li>';
+      }).join('') + '</ol>';
+    } else if (outlineMeanings.length) {
+      contentHtml = '<ol class="bs-original-meaning-list">' + outlineMeanings.map(function(meaning) {
+        return '<li><span class="bs-translatable-text">' + escapeHtml(meaning) + '</span></li>';
+      }).join('') + '</ol>';
+      if (referenceGroups.length) {
+        contentHtml += '<div class="bs-original-reference-list mt-2">' + bibleStudyReferenceButtons(referenceGroups, '{% trans "Preview this passage" %}') + '</div>';
+      }
+    } else {
+      contentHtml = '<div class="bs-original-reference-list">' + bibleStudyReferenceButtons(referenceGroups, '{% trans "Preview this passage" %}') + '</div>';
+    }
+
+    return '<div class="bs-original-detail-section"><span class="bs-original-detail-label">' + heading + '</span>' + contentHtml + '</div>';
+  }
+
+  function bibleStudyAbbreviationForDisplay(displayName) {
+    var parts = String(displayName || '').split(' - ');
+    if (parts.length >= 2 && $.trim(parts[1])) {
+      return $.trim(parts[1]).toLowerCase();
+    }
+    return $.trim(String(displayName || '')).toLowerCase();
+  }
+
+  function bibleStudyPassageLabel(state, verseNumber) {
+    return $.trim(String((state && state.bookLabel) || '')) + ' ' + String((state && state.chapter) || '') + ':' + String(verseNumber || '');
+  }
+
+  function jumpToBibleStudyReference(parsed) {
+    if (!parsed) {
+      return;
+    }
+    $('#bs-book').val(parsed.book);
+    var bsFoundBook = bsBookList.filter(function(b) { return b.n === parsed.book; })[0];
+    if (bsFoundBook) {
+      $('#bs-book').data('book-label', bsFoundBook.l);
+    }
+    $('#bs-chapter').val(parsed.chapter);
+    $('#bs-start').val(parsed.startVerse);
+    $('#bs-end').val(parsed.endVerse);
+    bsInitPassageInput();
+    $('#bibleStudyForm').trigger('submit');
+  }
+
+  function applyPendingStrongsSelectionToVerse(verseNumber, versePayload) {
+    if (!bsPendingStrongsSelection || String(bsPendingStrongsSelection.verse || '') !== String(verseNumber || '')) {
+      return false;
+    }
+    var targetStrongs = String(bsPendingStrongsSelection.strongs || '').toUpperCase();
+    if (!targetStrongs) {
+      return false;
+    }
+
+    var words = (versePayload && versePayload.words) || [];
+    for (var wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
+      var candidates = (words[wordIndex] && words[wordIndex].candidates) || [];
+      for (var candidateIndex = 0; candidateIndex < candidates.length; candidateIndex += 1) {
+        var strongsNumber = String((candidates[candidateIndex] && candidates[candidateIndex].strongs_number) || '').toUpperCase();
+        if (strongsNumber === targetStrongs) {
+          selectBibleStudyOriginalWord(String(verseNumber), wordIndex);
+          bsPendingStrongsSelection = {
+            verse: String(verseNumber),
+            strongs: targetStrongs
+          };
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function closeBibleStudyReferencePreview() {
+    $('#bs-reference-preview').attr('hidden', true);
+  }
+
+  function bibleStudyVerseTextHtml(text) {
+    return escapeHtml(String(text || '—')).replace(/\n/g, '<br>');
+  }
+
+  function renderBibleStudyReferencePreview(reference, previewState, bible, payload) {
+    var verses = (payload && payload.verses) || {};
+    var verseNumbers = [];
+    for (var verseNumber = previewState.startVerse; verseNumber <= previewState.endVerse; verseNumber += 1) {
+      verseNumbers.push(verseNumber);
+    }
+
+    var contentHtml = verseNumbers.map(function(verseNumber) {
+      return '<p class="bs-reference-preview-verse">' +
+        '<span class="bs-reference-preview-verse-num">' + escapeHtml(String(verseNumber)) + '</span>' +
+        bibleStudyVerseTextHtml(verses[String(verseNumber)] || '—') +
+      '</p>';
+    }).join('');
+
+    var $preview = $('#bs-reference-preview');
+    $preview.find('.bs-reference-preview-reference').text(reference || '');
+    $preview.find('.bs-reference-preview-translation').text((payload && payload.bible_display_name) || (bible && bible.displayName) || '');
+    $preview.find('.bs-reference-preview-content').html(contentHtml || '<p class="mb-0 text-muted">{% trans "No passage text available for this reference in the selected translation." %}</p>');
+    $preview.find('.bible-study-preview-study-btn').attr('data-bible-study-reference', reference || '');
+    $preview.removeAttr('hidden');
+  }
+
+  function showBibleStudyReferencePreview(reference) {
+    var parsed = parseBibleStudyDeeplinkReference(reference);
+    if (!parsed) {
+      return;
+    }
+
+    var state = currentBibleStudyState();
+    var bible = state.bibles[0] || null;
+    if (!bible || !bible.id) {
+      jumpToBibleStudyReference(parsed);
+      return;
+    }
+
+    var previewState = {
+      book: parsed.book,
+      bookLabel: bibleStudyBookLabel(parsed.book),
+      chapter: parseInt(parsed.chapter, 10) || 1,
+      startVerse: parseInt(parsed.startVerse, 10) || 1,
+      endVerse: parseInt(parsed.endVerse, 10) || parseInt(parsed.startVerse, 10) || 1,
+      bibles: [bible]
+    };
+    var previewCacheKey = bibleStudyPreviewCacheKey(bible.id, reference);
+    var $preview = $('#bs-reference-preview');
+    $preview.find('.bs-reference-preview-reference').text(reference || '');
+    $preview.find('.bs-reference-preview-translation').text(bible.displayName || '');
+    $preview.find('.bs-reference-preview-content').html('<p class="mb-0 text-muted">{% trans "Loading passage preview…" %}</p>');
+    $preview.find('.bible-study-preview-study-btn').attr('data-bible-study-reference', reference || '');
+    $preview.removeAttr('hidden');
+
+    if (bsReferencePreviewCache[previewCacheKey]) {
+      renderBibleStudyReferencePreview(reference, previewState, bible, bsReferencePreviewCache[previewCacheKey]);
+      return;
+    }
+
+    bsReferencePreviewToken += 1;
+    var token = bsReferencePreviewToken;
+    fetchBibleStudyRange(previewState, bible, function(payload) {
+      if (token !== bsReferencePreviewToken) {
+        return;
+      }
+      bsReferencePreviewCache[previewCacheKey] = payload || {};
+      renderBibleStudyReferencePreview(reference, previewState, bible, payload || {});
+    });
+  }
+
+  function ensureBibleStudyCopyButtons(state) {
+    $('.bible-study-translation-card').each(function() {
+      var $card = $(this);
+      var verseNumber = String($card.data('verse') || '');
+      var displayName = $.trim($card.find('.bible-study-translation-title').first().text());
+      var $button = $card.find('.bible-study-copy-btn');
+      if (!$button.length) {
+        $button = $('<button type="button" class="bible-study-copy-btn"><i class="fa fa-copy" aria-hidden="true"></i> {% trans "Copy" %}</button>');
+        $card.append($button);
+      }
+      $button
+        .attr('data-copy-reference', bibleStudyPassageLabel(state, verseNumber))
+        .attr('data-copy-abbreviation', bibleStudyAbbreviationForDisplay(displayName));
+    });
+  }
+
+  function bibleStudyVerseTextForCopy($card) {
+    var $clone = $card.find('.bs-verse-text').first().clone();
+    $clone.find('br').replaceWith('\n');
+    return $.trim($clone.text());
+  }
+
+  function writeBibleStudyCopyText(text, onDone) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        if (onDone) { onDone(true); }
+      }).catch(function() {
+        if (onDone) { onDone(false); }
+      });
+      return;
+    }
+
+    var $temp = $('<textarea></textarea>').css({
+      left: '-9999px',
+      position: 'fixed',
+      top: '0'
+    }).val(text).appendTo('body');
+    $temp.trigger('focus').trigger('select');
+    var copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch (error) {
+      copied = false;
+    }
+    $temp.remove();
+    if (onDone) { onDone(copied); }
+  }
+
   function buildOriginalSentenceHtml(words, languageCode) {
     var itemClass = languageCode === 'hbo' ? 'bs-original-sentence-words bs-original-language-hbo' : 'bs-original-sentence-words bs-original-language-grc';
     var parts = (words || []).map(function(word, index) {
@@ -1497,19 +2185,33 @@
       if (!tokenText) {
         return '';
       }
-      return '<span class="bs-original-sentence-token ' + (languageCode === 'hbo' ? 'bs-original-language-hbo' : 'bs-original-language-grc') + '" data-word-index="' + escapeHtml(String(index)) + '">' + escapeHtml(tokenText) + '</span>';
+      return '<span class="bs-original-sentence-token ' + (languageCode === 'hbo' ? 'bs-original-language-hbo' : 'bs-original-language-grc') + '" data-word-index="' + escapeHtml(String(index)) + '" data-clickable="' + (word && word.clickable ? '1' : '0') + '"' + (word && word.clickable ? ' tabindex="0" role="button"' : '') + '>' + escapeHtml(tokenText) + '</span>';
     }).join('');
     return '<div class="' + itemClass + '">' + parts + '</div>';
   }
 
   function syncOriginalSentenceSelection($shell, wordIndex) {
-    $shell.find('.bs-original-sentence-token').removeClass('active');
+    $shell.find('.bs-original-sentence-token, .bs-original-word-btn, .bs-original-word-translation').removeClass('active');
     $shell.find('.bs-original-sentence-token[data-word-index="' + wordIndex + '"]').addClass('active');
+    $shell.find('.bs-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
+    $shell.find('.bs-original-word-translation[data-word-index="' + wordIndex + '"]').addClass('active');
   }
 
   function syncOriginalSentenceHover($shell, wordIndex, hovering) {
-    var $token = $shell.find('.bs-original-sentence-token[data-word-index="' + wordIndex + '"]');
-    $token.toggleClass('is-hovered', !!hovering);
+    $shell.find('.bs-original-sentence-token[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+    $shell.find('.bs-original-word-btn[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+    $shell.find('.bs-original-word-translation[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+  }
+
+  function selectBibleStudyOriginalWord(verseNumber, wordIndex) {
+    var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
+    var $detailCard = $('.bible-study-original-detail-card[data-verse="' + verseNumber + '"]');
+    var versePayload = $shell.data('versePayload') || null;
+    if (!$shell.length || !$detailCard.length || !versePayload || isNaN(wordIndex)) {
+      return;
+    }
+    syncOriginalSentenceSelection($shell, wordIndex);
+    renderOriginalWordDetail($detailCard, versePayload, wordIndex);
   }
 
   function renderOriginalWordDetail($detailCard, versePayload, wordIndex) {
@@ -1523,45 +2225,120 @@
     }
 
     var html = '<div class="bs-original-detail-meta"><strong>' + escapeHtml(selectedWord.text) + '</strong> · ' + escapeHtml(String((versePayload && versePayload.language_label) || '')) + '</div>';
+
     if (selectedWord.translation_label) {
       html += '<p class="mb-2"><small>{% trans "Direct gloss" %}: ' + escapeHtml(selectedWord.translation_label) + '</small></p>';
     }
+
     if (selectedWord.grammar) {
       html += '<p class="mb-2"><small>{% trans "Grammar" %}: <code>' + escapeHtml(selectedWord.grammar) + '</code></small></p>';
     }
+
     if (!selectedWord.has_candidates) {
       html += '<div class="bs-original-candidate">' +
         '<div class="bs-original-candidate-head"><strong>{% trans "Lookup note" %}</strong></div>' +
         '<p class="mb-1">' + escapeHtml(String(selectedWord.detail_note || '')) + '</p>' +
-        (selectedWord.lookup_key ? '<p class="mb-0"><small>{% trans "Normalized lookup form" %}: ' + escapeHtml(String(selectedWord.lookup_key)) + '</small></p>' : '') +
+        (selectedWord.lookup_key
+          ? '<p class="mb-0"><small>{% trans "Normalized lookup form" %}: ' + escapeHtml(String(selectedWord.lookup_key)) + '</small></p>'
+          : '') +
         '</div>';
+
       $detail.html(html);
       return;
     }
+
     $.each(selectedWord.candidates || [], function(_, candidate) {
-      var meaningsHtml = ((candidate && candidate.possible_translations) || []).map(function(meaning) {
-        return '<li>' + escapeHtml(meaning) + '</li>';
-      }).join('');
-      var references = (candidate && candidate.references) || [];
-      var referencesHtml = references.slice(0, 24).map(function(reference) {
-        return '<a class="bs-original-reference-item bible-study-deeplink" href="#" data-bible-study-reference="' + escapeHtml(reference) + '" title="{% trans "Study deeper in our Bible Study page" %}">' + escapeHtml(reference) + '</a>';
-      }).join('');
+      var usageHtml = bibleStudyUsageSectionHtml(candidate || {});
+      var candidateReference = firstBibleStudyReferenceForCandidate(candidate || {});
+      var strongDetailUrl = bibleStudyStrongDetailUrl(
+        (candidate && candidate.strongs_number) || '',
+        candidateReference
+      );
+
+      var rootWords = ((candidate && candidate.root_words) || []).map(function(rootWord) {
+        var mapped = $.extend({}, rootWord || {});
+        mapped.first_reference = candidateReference;
+        return mapped;
+      });
+
+      var lxxHebrewItems = ((candidate && candidate.lxx_hebrew_equivalents) || []).map(function(item) {
+        var mapped = $.extend({}, item || {});
+        mapped.first_reference = candidateReference;
+        return mapped;
+      });
+
+      var rootWordsHtml = bibleStudyRootWordsHtml(rootWords);
+      var lxxHebrewHtml = bibleStudyLxxHebrewEquivalentsHtml(lxxHebrewItems);
+
       html += '<div class="bs-original-candidate">' +
         '<div class="bs-original-candidate-head">' +
-        '<strong>' + escapeHtml(String((candidate && candidate.strongs_number) || '')) + '</strong>' +
-        ((candidate && candidate.lemma) ? '<span>' + escapeHtml(candidate.lemma) + '</span>' : '') +
-        ((candidate && candidate.transliteration) ? '<span class="text-muted">' + escapeHtml(candidate.transliteration) + '</span>' : '') +
+
+        (strongDetailUrl
+          ? '<a class="bs-original-strong-link" href="' + escapeHtml(strongDetailUrl) + '"><strong>' +
+              escapeHtml(String((candidate && candidate.strongs_number) || '')) +
+            '</strong></a>'
+          : '<strong>' +
+              escapeHtml(String((candidate && candidate.strongs_number) || '')) +
+            '</strong>') +
+
+        ((candidate && candidate.lemma)
+          ? '<span>' + escapeHtml(candidate.lemma) + '</span>'
+          : '') +
+
+        ((candidate && candidate.blueletter_url)
+          ? '<span class="ms-2"><small><a class="bs-original-root-link" href="' +
+              escapeHtml(candidate.blueletter_url) +
+              '" target="_blank" rel="noopener noreferrer">' +
+              '{% trans "Open" %} ' +
+              escapeHtml(String((candidate && candidate.strongs_number) || '')) +
+              ' {% trans "in Blue Letter Bible" %}' +
+            '</a></small></span>'
+          : '') +
+
         '</div>' +
-        ((candidate && candidate.pronunciation) ? '<p class="mb-1"><small>{% trans "Pronunciation" %}: ' + escapeHtml(candidate.pronunciation) + '</small></p>' : '') +
-        ((candidate && candidate.definition) ? '<p class="mb-1">' + escapeHtml(candidate.definition) + '</p>' : '') +
-        (meaningsHtml ? '<div class="bs-original-detail-section"><span class="bs-original-detail-label">{% trans "Possible meanings" %}</span><ul class="bs-original-meaning-list">' + meaningsHtml + '</ul></div>' : '') +
-        (referencesHtml ? '<div class="bs-original-detail-section"><span class="bs-original-detail-label">{% trans "Where it occurs" %}</span><div class="bs-original-reference-list">' + referencesHtml + '</div></div>' : '') +
-        ((references.length > 24) ? '<p class="mt-1 mb-0"><small>{% trans "Showing the first" %} 24 {% trans "references out of" %} ' + escapeHtml(String(references.length)) + '.</small></p>' : '') +
-        ((candidate && candidate.derivation) ? '<p class="mb-0"><small>{% trans "Derivation" %}: ' + escapeHtml(candidate.derivation) + '</small></p>' : '') +
-        ((candidate && candidate.blueletter_url) ? '<p class="mb-0 mt-2 bs-original-detail-links"><small><a href="' + escapeHtml(candidate.blueletter_url) + '" target="_blank" rel="noopener noreferrer">{% trans "Open in Blue Letter Bible" %}</a></small></p>' : '') +
+
+        ((candidate && candidate.transliteration)
+          ? '<p class="mb-1"><small>{% trans "Transliteration" %}: ' +
+              escapeHtml(candidate.transliteration) +
+            '</small></p>'
+          : '') +
+
+        ((candidate && candidate.pronunciation)
+          ? '<p class="mb-1"><small>{% trans "Pronunciation" %}: ' +
+              escapeHtml(candidate.pronunciation) +
+            '</small></p>'
+          : '') +
+
+        usageHtml +
+
+        ((candidate && candidate.definition)
+          ? '<div class="bs-original-detail-section"><span class="bs-original-detail-label">{% trans "Strongs Definitions" %}</span><p class="mb-0 bs-translatable-text">' +
+              escapeHtml(candidate.definition) +
+            '</p></div>'
+          : '') +
+
+        ((rootWordsHtml || (candidate && candidate.derivation))
+          ? '<div class="bs-original-detail-section"><span class="bs-original-detail-label">{% trans "Root Word" %}</span>' +
+              rootWordsHtml +
+              ((candidate && candidate.derivation && !rootWordsHtml)
+                ? '<p class="mb-0 bs-translatable-text">' +
+                    escapeHtml(candidate.derivation) +
+                  '</p>'
+                : '') +
+            '</div>'
+          : '') +
+
+        (lxxHebrewHtml
+          ? '<div class="bs-original-detail-section"><span class="bs-original-detail-label">{% trans "Most likely Hebrew equivalent based on Septuagint usage" %}</span>' +
+              lxxHebrewHtml +
+            '</div>'
+          : '') +
+
         '</div>';
     });
+
     $detail.html(html);
+    maybeApplyStrongsTranslation($detailCard);
   }
 
   function applyBibleStudyOriginalPayloadToDom(state, payload) {
@@ -1579,12 +2356,12 @@
         var languageClass = languageCode === 'hbo' ? 'bs-original-language-hbo' : 'bs-original-language-grc';
         var itemClass = languageCode === 'hbo' ? 'bs-original-word-item bs-original-word-item-hbo' : 'bs-original-word-item';
         if (!word || !word.clickable) {
-          return '<span class="' + itemClass + '"><span class="bs-original-word-punct ' + languageClass + '">' + escapeHtml(String((word && word.text) || '')) + '</span><span class="bs-original-word-translation bs-original-word-translation-empty"></span></span>';
+          return '<span class="' + itemClass + '"><span class="bs-original-word-punct ' + languageClass + '">' + escapeHtml(String((word && word.text) || '')) + '</span><span class="bs-original-word-translation bs-original-word-translation-empty" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '"></span></span>';
         }
         var translationLabel = buildOriginalWordTranslation(word);
         return '<span class="' + itemClass + '">' +
           '<button type="button" class="bs-original-word-btn ' + languageClass + (word.has_candidates ? '' : ' bs-original-word-btn-missing') + '" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '" title="' + escapeHtml(buildOriginalWordTitle(word)) + '">' + escapeHtml(String(word.text || '')) + '</button>' +
-          '<span class="bs-original-word-translation' + (word.translation_label ? '' : ' bs-original-word-translation-empty') + '">' + escapeHtml(translationLabel) + '</span>' +
+          '<span class="bs-original-word-translation' + (word.translation_label ? '' : ' bs-original-word-translation-empty') + '" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '">' + escapeHtml(translationLabel) + '</span>' +
           '</span>';
       }).join('');
       var sentenceClass = languageCode === 'hbo' ? 'bs-original-sentence bs-original-language-hbo' : 'bs-original-sentence bs-original-language-grc';
@@ -1598,6 +2375,7 @@
 
       renderOriginalWordDetail($detailCard, versePayload || {}, firstSelectableOriginalWordIndex(words));
       syncOriginalSentenceSelection($shell, firstSelectableOriginalWordIndex(words));
+      applyPendingStrongsSelectionToVerse(verseNumber, versePayload || {});
     });
   }
 
@@ -2137,7 +2915,16 @@
 
   function parseBibleStudyDeeplinkReference(reference) {
     var normalized = String(reference || '').trim();
+    var numberedOtMatch = normalized.match(/^([1-3]?[A-Za-z]{1,4})\.(\d+)\.(\d+(?:-\d+)?)\((?:(\d+)\.)?(\d+(?:-\d+)?)\)$/);
+    if (numberedOtMatch) {
+      normalized = numberedOtMatch[1] + '.' + String(numberedOtMatch[4] || numberedOtMatch[2]) + ':' + numberedOtMatch[5];
+    } else {
+      normalized = normalized.replace(/^([1-3]?[A-Za-z]{1,4})\.(\d+)\.(\d+(?:-\d+)?)$/, '$1.$2:$3');
+    }
     var match = normalized.match(/^(.*?)\s+(\d+):(\d+)(?:-(?:(\d+):)?(\d+))?$/);
+    if (!match) {
+      match = normalized.match(/^([1-3]?[A-Za-z]{1,4})\.(\d+):(\d+)(?:-(?:(\d+):)?(\d+))?$/);
+    }
     if (!match) {
       return null;
     }
@@ -2158,9 +2945,23 @@
       '1 Thessalonians': 'ThessaloniansFirstBook', '2 Thessalonians': 'ThessaloniansSecondBook', '1 Timothy': 'TimothyFirstBook',
       '2 Timothy': 'TimothySecondBook', 'Titus': 'Titus', 'Philemon': 'Philemon', 'Hebrews': 'Hebrews', 'James': 'James',
       '1 Peter': 'PeterFirstBook', '2 Peter': 'PeterSecondBook', '1 John': 'JohnFirstBook', '2 John': 'JohnSecondBook',
-      '3 John': 'JohnThirdBook', 'Jude': 'Jude', 'Revelation': 'Revelation'
+      '3 John': 'JohnThirdBook', 'Jude': 'Jude', 'Revelation': 'Revelation',
+      'Gen': 'Genesis', 'Exo': 'Exodus', 'Lev': 'Leviticus', 'Num': 'Numbers', 'Deu': 'Deuteronomy',
+      'Jos': 'Joshua', 'Jdg': 'Judges', 'Rut': 'Ruth', '1Sa': 'SamuelFirstBook', '2Sa': 'SamuelSecondBook',
+      '1Ki': 'KingsFirstBook', '2Ki': 'KingsSecondBook', '1Ch': 'ChroniclesFirstBook', '2Ch': 'ChroniclesSecondBook',
+      'Ezr': 'Ezra', 'Neh': 'Nehemiah', 'Est': 'Esther', 'Psa': 'Psalms', 'Pro': 'Proverbs', 'Ecc': 'Ecclesiastes',
+      'Sng': 'SongOfSolomon', 'Sos': 'SongOfSolomon', 'Isa': 'Isaiah', 'Jer': 'Jeremiah', 'Lam': 'Lamentations',
+      'Ezk': 'Ezekiel', 'Dan': 'Daniel', 'Hos': 'Hosea', 'Jol': 'Joel', 'Amo': 'Amos', 'Oba': 'Obadiah',
+      'Obd': 'Obadiah', 'Jon': 'Jonah', 'Mic': 'Micah', 'Nah': 'Nahum', 'Hab': 'Habakkuk', 'Zep': 'Zephaniah',
+      'Hag': 'Haggai', 'Zec': 'Zechariah', 'Mal': 'Malachi', 'Mat': 'Matthew', 'Mrk': 'Mark', 'Luk': 'Luke',
+      'Jhn': 'John', 'Joh': 'John', 'Act': 'Acts', 'Rom': 'Romans', '1Co': 'CorinthiansFirstBook',
+      '2Co': 'CorinthiansSecondBook', 'Gal': 'Galatians', 'Eph': 'Ephesians', 'Php': 'Philippians', 'Col': 'Colossians',
+      '1Th': 'ThessaloniansFirstBook', '2Th': 'ThessaloniansSecondBook', '1Ti': 'TimothyFirstBook',
+      '2Ti': 'TimothySecondBook', 'Tit': 'Titus', 'Phm': 'Philemon', 'Heb': 'Hebrews', 'Jas': 'James',
+      '1Pe': 'PeterFirstBook', '2Pe': 'PeterSecondBook', '1Jn': 'JohnFirstBook', '2Jn': 'JohnSecondBook',
+      '3Jn': 'JohnThirdBook', 'Jud': 'Jude', 'Ju': 'Jude', 'Rev': 'Revelation'
     };
-    var book = lookup[match[1]] || '';
+    var book = lookup[match[1]] || lookup[String(match[1] || '').replace(/\.$/, '')] || '';
     if (!book) {
       return null;
     }
@@ -2250,31 +3051,57 @@
       return;
     }
     event.preventDefault();
-    $('#bs-book').val(parsed.book);
-    var bsFoundBook = bsBookList.filter(function(b) { return b.n === parsed.book; })[0];
-    if (bsFoundBook) { $('#bs-book').data('book-label', bsFoundBook.l); }
-    $('#bs-chapter').val(parsed.chapter);
-    $('#bs-start').val(parsed.startVerse);
-    $('#bs-end').val(parsed.endVerse);
-    bsInitPassageInput();
-    $('#bibleStudyForm').trigger('submit');
+    showBibleStudyReferencePreview(reference);
+  });
+
+  $(document).on('click', '.bible-study-shell .bible-study-preview-study-btn', function(event) {
+    var reference = String($(this).attr('data-bible-study-reference') || '').trim();
+    var parsed = parseBibleStudyDeeplinkReference(reference);
+    if (!parsed) {
+      return;
+    }
+    event.preventDefault();
+    closeBibleStudyReferencePreview();
+    jumpToBibleStudyReference(parsed);
+  });
+
+  $(document).on('click', '.bible-study-shell .bs-original-reference-toggle', function(event) {
+    event.preventDefault();
+    var $button = $(this);
+    var $extra = $button.siblings('.bs-original-reference-extra').first();
+    if (!$extra.length) {
+      return;
+    }
+    var expanded = !$extra.attr('hidden');
+    if (expanded) {
+      $extra.attr('hidden', true);
+      $button.text(String($button.data('expand-label') || '{% trans "See more" %}'));
+    } else {
+      $extra.removeAttr('hidden');
+      $button.text(String($button.data('collapse-label') || '{% trans "See less" %}'));
+    }
+  });
+
+  $(document).on('click', '.bible-study-shell [data-preview-close="1"]', function(event) {
+    event.preventDefault();
+    closeBibleStudyReferencePreview();
+  });
+
+  $(document).on('click', '.bible-study-shell #bs-reference-preview', function(event) {
+    if (event.target === this) {
+      closeBibleStudyReferencePreview();
+    }
+  });
+
+  $(document).on('keydown', function(event) {
+    if (event.key === 'Escape' && !$('#bs-reference-preview').attr('hidden')) {
+      closeBibleStudyReferencePreview();
+    }
   });
 
   $(document).on('click', '.bible-study-shell .bs-original-word-btn', function(event) {
     event.preventDefault();
-    var $btn = $(this);
-    var verseNumber = String($btn.data('verse') || '');
-    var wordIndex = parseInt($btn.data('word-index'), 10);
-    var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
-    var $detailCard = $('.bible-study-original-detail-card[data-verse="' + verseNumber + '"]');
-    var versePayload = $shell.data('versePayload') || null;
-    if (!$shell.length || !$detailCard.length || !versePayload) {
-      return;
-    }
-    $shell.find('.bs-original-word-btn').removeClass('active');
-    $btn.addClass('active');
-    syncOriginalSentenceSelection($shell, wordIndex);
-    renderOriginalWordDetail($detailCard, versePayload, wordIndex);
+    selectBibleStudyOriginalWord(String($(this).data('verse') || ''), parseInt($(this).data('word-index'), 10));
   });
 
   $(document).on('mouseenter focusin', '.bible-study-shell .bs-original-word-btn', function() {
@@ -2299,17 +3126,91 @@
     syncOriginalSentenceHover($shell, wordIndex, false);
   });
 
+  $(document).on('click', '.bible-study-shell .bs-original-word-translation[data-word-index]', function(event) {
+    event.preventDefault();
+    selectBibleStudyOriginalWord(String($(this).data('verse') || ''), parseInt($(this).data('word-index'), 10));
+  });
+
+  $(document).on('mouseenter focusin', '.bible-study-shell .bs-original-word-translation[data-word-index], .bible-study-shell .bs-original-sentence-token[data-clickable="1"]', function() {
+    var $target = $(this);
+    var $shell = $target.closest('.bible-study-original-shell');
+    if (!$shell.length) {
+      return;
+    }
+    syncOriginalSentenceHover($shell, String($target.data('word-index') || ''), true);
+  });
+
+  $(document).on('mouseleave focusout', '.bible-study-shell .bs-original-word-translation[data-word-index], .bible-study-shell .bs-original-sentence-token[data-clickable="1"]', function() {
+    var $target = $(this);
+    var $shell = $target.closest('.bible-study-original-shell');
+    if (!$shell.length) {
+      return;
+    }
+    syncOriginalSentenceHover($shell, String($target.data('word-index') || ''), false);
+  });
+
+  $(document).on('click', '.bible-study-shell .bs-original-sentence-token[data-clickable="1"]', function(event) {
+    event.preventDefault();
+    var $token = $(this);
+    var verseNumber = String($token.closest('.bible-study-original-shell').data('verse') || '');
+    selectBibleStudyOriginalWord(verseNumber, parseInt($token.data('word-index'), 10));
+  });
+
+  $(document).on('keydown', '.bible-study-shell .bs-original-word-translation[data-word-index], .bible-study-shell .bs-original-sentence-token[data-clickable="1"]', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+    event.preventDefault();
+    $(this).trigger('click');
+  });
+
+  $(document).on('click', '.bible-study-shell .bible-study-copy-btn', function(event) {
+    event.preventDefault();
+    var $btn = $(this);
+    var $card = $btn.closest('.bible-study-translation-card');
+    if (!$card.length) {
+      return;
+    }
+    var verseText = bibleStudyVerseTextForCopy($card);
+    if (!verseText) {
+      return;
+    }
+    var footer = $.trim(String($btn.attr('data-copy-reference') || '')) + ' ' + $.trim(String($btn.attr('data-copy-abbreviation') || ''));
+    var copyText = verseText + '\n\n' + $.trim(footer);
+    writeBibleStudyCopyText(copyText, function(copied) {
+      if (!copied) {
+        return;
+      }
+      var $verseText = $card.find('.bs-verse-text').first();
+      $verseText.addClass('is-copied');
+      window.setTimeout(function() {
+        $verseText.removeClass('is-copied');
+      }, 1400);
+    });
+  });
+
   seedBibleStudyRequestCache();
+
+  var bsInitialParams = new URLSearchParams(window.location.search || '');
+  var bsSelectedVerseParam = $.trim(String(bsInitialParams.get('selected_verse') || ''));
+  var bsSelectedStrongsParam = $.trim(String(bsInitialParams.get('selected_strongs') || ''));
+  if (bsSelectedVerseParam && bsSelectedStrongsParam) {
+    bsPendingStrongsSelection = {
+      verse: bsSelectedVerseParam,
+      strongs: bsSelectedStrongsParam.toUpperCase()
+    };
+  }
 
   syncBibleStudyOriginalToggleButtons();
   updateBibleStudyScripturaVisibility();
+  ensureBibleStudyCopyButtons(currentBibleStudyState());
   bsInitPassageInput();
   enforceBibleSlotLimit();
   refreshBibleSlots();
   bsSuppressAutoApply = false;
   if ($('#bs-show-original').is(':checked') && $('#bs-verse-area').length) {
     var initialState = currentBibleStudyState();
-    bsOriginalOpenVerses[String(initialState.startVerse || 1)] = true;
+    bsOriginalOpenVerses[String((bsPendingStrongsSelection && bsPendingStrongsSelection.verse) || initialState.startVerse || 1)] = true;
     initialState.showOriginalText = true;
     loadBibleStudyOriginalText(initialState);
     syncBibleStudyOriginalToggleButtons();

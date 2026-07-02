@@ -256,15 +256,20 @@ $(document).ready(function(){
   }
 
   function currentBibleCopyAbbreviation() {
+    var selectedAbbreviation = $.trim(String($('#drpBibleTranslation option:selected').data('abbreviation') || ''));
+    if (selectedAbbreviation) {
+      return selectedAbbreviation.toUpperCase();
+    }
+
     var selectedText = $.trim($('#drpBibleTranslation option:selected').text() || '');
     if (!selectedText) {
       return '';
     }
     var parts = selectedText.split(' - ');
     if (parts.length >= 2 && $.trim(parts[1])) {
-      return $.trim(parts[1]).toLowerCase();
+      return $.trim(parts[1]).toUpperCase();
     }
-    return selectedText.toLowerCase();
+    return selectedText.toUpperCase();
   }
 
   function cleanVerseReferenceLabel(rawText) {
@@ -300,7 +305,11 @@ $(document).ready(function(){
     if (!verseText) {
       return '';
     }
-    var footer = $.trim(extractVerseReferenceLabel($element) + ' ' + currentBibleCopyAbbreviation());
+    var abbreviation = currentBibleCopyAbbreviation();
+    var footer = $.trim(extractVerseReferenceLabel($element));
+    if (footer && abbreviation) {
+      footer += ' (' + abbreviation + ')';
+    }
     return footer ? verseText + '\n\n' + footer : verseText;
   }
 

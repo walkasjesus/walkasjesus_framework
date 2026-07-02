@@ -1489,12 +1489,20 @@ p {
     padding: 0.1rem 0.5rem;
 }
 .bible-verse-text {
-    display: inline-block;
+    align-items: flex-start;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
     max-width: 100%;
-    padding-bottom: 1.5rem;
-    position: relative;
+    width: 100%;
+    vertical-align: top;
+}
+.bible-verse-text .verse-loading-spinner {
+    margin-top: 0.2rem;
 }
 .bible-verse-text-content {
+    flex: 1 1 auto;
+    min-width: 0;
     text-decoration: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 0.08em;
@@ -1508,23 +1516,23 @@ p {
 }
 .bible-verse-copy-btn {
     align-items: center;
-    background: transparent;
-    border: 0;
-    border-radius: 999px;
-    bottom: 0;
+    background: #fffdf7;
+    border: 1px solid #dfd2aa;
+    border-radius: 4px;
     color: #6a5520;
     cursor: pointer;
     display: inline-flex;
+    flex: 0 0 auto;
     font-size: 0.76rem;
     gap: 0.3rem;
-    padding: 0.16rem 0.42rem;
-    position: absolute;
-    right: 0;
-    transition: background 0.15s ease, color 0.15s ease;
+    margin-left: 0.25rem;
+    padding: 0.18rem 0.5rem;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .bible-verse-copy-btn:hover,
 .bible-verse-copy-btn:focus {
     background: #f2ead1;
+    border-color: #c8a84b;
     color: #3f3110;
     outline: none;
 }

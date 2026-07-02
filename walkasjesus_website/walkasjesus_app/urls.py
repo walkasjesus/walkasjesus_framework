@@ -32,6 +32,7 @@ from walkasjesus_app.views.bible_study_view import (
     BibleStudyVersesView,
     BibleStudyOriginalTextView,
     BibleStudyChapterMetaView,
+    BibleStudySearchView,
 )
 
 app_name = 'commandments'
@@ -52,6 +53,7 @@ urlpatterns = [
     path(_('bible-study/verses/'), BibleStudyVersesView.as_view(), name='bible_study_verses'),
     path(_('bible-study/chapter-meta/'), BibleStudyChapterMetaView.as_view(), name='bible_study_chapter_meta'),
     path(_('bible-study/original-text/'), BibleStudyOriginalTextView.as_view(), name='bible_study_original_text'),
+    path(_('bible-study/search/'), BibleStudySearchView.as_view(), name='bible_study_search'),
     path(_('law_of_messiah/'), LawOfMessiahListingView.as_view(), name='law_of_messiah_listing'),
     path(_('law_of_messiah/<str:law_id>/'), LawOfMessiahDetailView.as_view(), name='law_of_messiah_detail'),
     path(_('law_of_messiah/<str:law_id>/verses/'), LawOfMessiahBibleVersesView.as_view(), name='law_of_messiah_verses'),

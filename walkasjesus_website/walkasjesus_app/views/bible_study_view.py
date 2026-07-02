@@ -1,9 +1,12 @@
 import logging
+import hashlib
 import json
+import requests
 import threading
 import time
 from contextlib import contextmanager
 from pathlib import Path
+from urllib.parse import quote
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.conf import settings
@@ -20,6 +23,7 @@ from walkasjesus_app.models.bible_books import BibleBooks
 logger = logging.getLogger(__name__)
 
 VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
+BIBLE_SEARCH_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_STUDY_SEARCH_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 7))
 
 _CHAPTER_INDEX_LOCK = threading.Lock()
 
@@ -113,6 +117,33 @@ def _safe_int(value, default, minimum=1):
         return max(minimum, int(value))
     except (ValueError, TypeError):
         return default
+
+
+def _safe_search_limit(value):
+    try:
+        return max(1, min(25, int(value)))
+    except (ValueError, TypeError):
+        return 10
+
+
+def _api_bible_search_url(bible_id, query, limit):
+    encoded_query = quote(str(query or '').strip())
+    return f'https://api.scripture.api.bible/v1/bibles/{bible_id}/search?query={encoded_query}&limit={limit}&sort=relevance'
+
+
+def _api_bible_search_payload(bible_id, query, limit):
+    query_hash = hashlib.sha256(str(query or '').strip().encode('utf-8')).hexdigest()[:24]
+    cache_key = f'bible_study:search:v1:{bible_id}:{limit}:{query_hash}'
+    cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    url = _api_bible_search_url(bible_id, query, limit)
+    response = requests.get(url, headers={'api-key': settings.BIBLE_API_KEY}, timeout=15)
+    response.raise_for_status()
+    payload = response.json()
+    cache.set(cache_key, payload, BIBLE_SEARCH_CACHE_TIMEOUT)
+    return payload
 
 
 def _chapter_index_path():
@@ -366,13 +397,13 @@ class BibleStudyView(View):
             key=_bible_dropdown_sort_key,
         )
 
-        book = request.GET.get('book', 'John')
+        book = request.GET.get('book', 'JohnFirstBook')
         if book not in _VALID_BOOK_NAMES:
-            book = 'John'
+            book = 'JohnFirstBook'
 
-        chapter = _safe_int(request.GET.get('chapter'), 3)
-        start_verse = _safe_int(request.GET.get('start_verse'), 16)
-        end_verse = _safe_int(request.GET.get('end_verse'), start_verse)
+        chapter = _safe_int(request.GET.get('chapter'), 2)
+        start_verse = _safe_int(request.GET.get('start_verse'), 3)
+        end_verse = _safe_int(request.GET.get('end_verse'), 6)
         end_verse = max(start_verse, end_verse)
         end_verse = min(end_verse, start_verse + max_verses - 1)
 
@@ -516,6 +547,55 @@ class BibleStudyVersesView(View):
             'bible_name': getattr(bible, 'name', bible_id),
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),
+        })
+
+
+class BibleStudySearchView(View):
+    """AJAX endpoint: proxies API.Bible search for the first selected translation."""
+
+    def get(self, request):
+        bible_id = str(request.GET.get('bible_id', '')).strip()
+        query = str(request.GET.get('query', '')).strip()
+        limit = _safe_search_limit(request.GET.get('limit'))
+
+        if not query:
+            return JsonResponse({'error': 'Enter words to search for.'}, status=400)
+        if len(query) > 120:
+            return JsonResponse({'error': 'Search text is too long.'}, status=400)
+
+        if not is_bible_id_visible_for_request(request, bible_id):
+            return JsonResponse({'error': 'Bible not available'}, status=403)
+
+        bible = BibleTranslation().get(bible_id)
+        if not bible:
+            return JsonResponse({'error': 'Bible not found'}, status=404)
+
+        try:
+            api_payload = _api_bible_search_payload(bible_id, query, limit)
+        except Exception:
+            logger.exception('Bible Study API.Bible search failed for bible=%s query=%s', bible_id, query)
+            return JsonResponse({'error': 'Search is not available for this translation right now.'}, status=502)
+
+        data = api_payload.get('data', {}) if isinstance(api_payload, dict) else {}
+        verses = data.get('verses', []) if isinstance(data, dict) else []
+        results = []
+        for verse in verses[:limit]:
+            if not isinstance(verse, dict):
+                continue
+            results.append({
+                'id': verse.get('id', ''),
+                'reference': verse.get('reference', ''),
+                'text': verse.get('text', ''),
+            })
+
+        language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+        display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)
+        return JsonResponse({
+            'query': query,
+            'bible_id': bible_id,
+            'bible_display_name': display_name,
+            'total': data.get('total', len(results)) if isinstance(data, dict) else len(results),
+            'results': results,
         })
 
 

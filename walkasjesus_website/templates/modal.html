@@ -36,13 +36,13 @@
                     <div class="select">
                     <select name="bible_id" class="drpBibleTranslation selectpicker" id="drpBibleTranslation" data-live-search="true" data-width="100%" data-size="10">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
-                        <option value="{{ user_preferences.bible.id }}" selected>
+                        <option value="{{ user_preferences.bible.id }}" data-abbreviation="{{ user_preferences.bible.abbreviation|default:user_preferences.bible.name|upper }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
                         </option>
                         {% for bible_item in bible_translation.all_in_user_language %}
                             {% if bible_item.id != user_preferences.bible.id %}
                             {% if bible_item.id != cjb_bible_id or cjb_bible_visible %}
-                            <option value="{{ bible_item.id }}">
+                            <option value="{{ bible_item.id }}" data-abbreviation="{{ bible_item.abbreviation|default:bible_item.name|upper }}">
                                 {{ bible_item.name }}
                             </option>
                             {% endif %}

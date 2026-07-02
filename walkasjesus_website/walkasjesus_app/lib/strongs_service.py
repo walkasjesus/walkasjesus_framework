@@ -333,6 +333,248 @@ def _parse_structured_definitions(full_entry_html):
     return results
 
 
+def _clean_outline_label(value):
+    text = _strip_html(value)
+    text = re.sub(r'\s+', ' ', text).strip(' .;:')
+    return text
+
+
+def _grammar_label(value):
+    grammar = str(value or '').strip()
+    if not grammar:
+        return ''
+
+    if grammar.startswith('H:A'):
+        return 'adjective'
+    if grammar.startswith('H:V'):
+        return 'verb'
+    if grammar.startswith('H:N-M'):
+        return 'masculine noun'
+    if grammar.startswith('H:N-F'):
+        return 'feminine noun'
+    if grammar.startswith('H:N'):
+        return 'noun'
+    if grammar.startswith('G:V'):
+        return 'verb'
+    if grammar.startswith('G:N'):
+        return 'noun'
+    if grammar.startswith('G:A'):
+        return 'adjective'
+    return ''
+
+
+def _outline_signature(nodes):
+    return tuple(
+        (
+            str(node.get('label') or '').lower(),
+            _outline_signature(node.get('children') or []),
+        )
+        for node in nodes or []
+    )
+
+
+def _strip_outline_grammar_labels(nodes):
+    stripped = []
+    for node in nodes or []:
+        cleaned = dict(node)
+        cleaned.pop('grammar_label', None)
+        cleaned['children'] = _strip_outline_grammar_labels(cleaned.get('children') or [])
+        stripped.append(cleaned)
+    return stripped
+
+
+def _parse_hebrew_outline_nodes(full_entry_html):
+    raw = str(full_entry_html or '')
+    if not raw:
+        return []
+
+    segments = re.split(r'<br\s*/?>', raw, flags=re.IGNORECASE)
+    has_numbered_outline = any(re.match(r'\s*\d+[a-z]?\d*\)', _strip_html(segment)) for segment in segments)
+    if not has_numbered_outline:
+        label = _clean_outline_label(raw)
+        if not label or label.lower().startswith('aramaic equivalent'):
+            return []
+        return [{
+            'label': label,
+            'children': [],
+            'count': 0,
+            'references': [],
+            'reference_groups': [],
+        }]
+
+    roots = []
+    stack = []
+    for segment in segments:
+        text = _clean_outline_label(segment)
+        if not text or text.lower().startswith('aramaic equivalent'):
+            continue
+        match = re.match(r'^(\d+)([a-z]?)(\d*)\)\s*(.+)$', text, flags=re.IGNORECASE)
+        if not match:
+            continue
+
+        letter = match.group(2)
+        sub_number = match.group(3)
+        if letter and sub_number:
+            depth = 3
+        elif letter:
+            depth = 2
+        else:
+            depth = 1
+
+        label = match.group(4).strip(' .;:')
+        if not label:
+            continue
+        node = {
+            'label': label,
+            'children': [],
+            'count': 0,
+            'references': [],
+            'reference_groups': [],
+        }
+
+        while len(stack) >= depth:
+            stack.pop()
+        if stack:
+            stack[-1]['children'].append(node)
+        else:
+            roots.append(node)
+        stack.append(node)
+
+    return roots
+
+
+def _greek_outline_label(marker_body, marker_depth):
+    body = re.sub(r'<re>.*?</re>', '', str(marker_body or ''), flags=re.DOTALL)
+    body = re.split(r'<br\s*/?>', body, maxsplit=1, flags=re.IGNORECASE)[0]
+    body = re.split(r'<ref=', body, maxsplit=1)[0]
+
+    bold_match = re.match(r'\s*<b>(.*?)</b>\s*:?', body, flags=re.DOTALL)
+    if bold_match:
+        return _clean_outline_label(bold_match.group(1))
+
+    plain = _clean_outline_label(body)
+    if marker_depth == 1:
+        plain = re.split(r'\s*[;:]\s*', plain, maxsplit=1)[0]
+    else:
+        plain = re.split(r'\s*:\s*', plain, maxsplit=1)[0]
+    return plain.strip(' .;:')
+
+
+def _parse_greek_bold_outline_nodes(full_entry_html):
+    raw = str(full_entry_html or '')
+    if not raw:
+        return []
+
+    labels = []
+    for bold_text in re.findall(r'<b>(.*?)</b>', raw, flags=re.DOTALL):
+        label = _clean_outline_label(bold_text)
+        if not label or re.search(r'[\u0370-\u03FF\u1F00-\u1FFF]', label):
+            continue
+        if label.lower() in {item.lower() for item in labels}:
+            continue
+        labels.append(label)
+
+    if not labels:
+        return []
+
+    first_label = labels[0]
+    children = [
+        {
+            'label': label,
+            'children': [],
+            'count': 0,
+            'references': [],
+            'reference_groups': [],
+        }
+        for label in labels[1:]
+    ]
+    return [{
+        'label': first_label,
+        'children': children,
+        'count': 0,
+        'references': [],
+        'reference_groups': [],
+    }]
+
+
+def _parse_greek_outline_nodes(full_entry_html):
+    raw = str(full_entry_html or '')
+    if not raw:
+        return []
+
+    roots = []
+    stack = []
+    parts = re.split(r'(?=__\d+\.|__\([a-z]\))', raw, flags=re.IGNORECASE)
+    for part in parts:
+        top_match = re.match(r'__(\d+)\.\s*(.*)', part, flags=re.DOTALL)
+        sub_match = re.match(r'__\(([a-z])\)\s*(.*)', part, flags=re.DOTALL | re.IGNORECASE)
+        if top_match:
+            depth = 1
+            body = top_match.group(2)
+        elif sub_match:
+            depth = 2
+            body = sub_match.group(2)
+        else:
+            continue
+
+        label = _greek_outline_label(body, depth)
+        if not label:
+            continue
+        refs = []
+        for ref_text in re.findall(r"<ref='[^']*'>([^<]+)</ref>", body):
+            refs.extend(_expand_reference_blob(ref_text))
+        refs = _dedupe_preserve_order(refs)
+        node = {
+            'label': label,
+            'children': [],
+            'count': 0,
+            'references': refs,
+            'reference_groups': _chunked(refs, 3),
+        }
+
+        while len(stack) >= depth:
+            stack.pop()
+        if stack:
+            stack[-1]['children'].append(node)
+        else:
+            roots.append(node)
+        stack.append(node)
+
+    return roots or _parse_greek_bold_outline_nodes(full_entry_html)
+
+
+def _lexicon_outline_nodes(strongs_number, language, lexicon_entry):
+    if language == 'greek':
+        return _parse_greek_outline_nodes((lexicon_entry or {}).get('full_entry') or '')
+
+    base_match = re.search(r'H\d+', str(strongs_number or ''))
+    base_code = base_match.group(0) if base_match else _normalize_step_code(strongs_number)
+    variant_codes = _variant_step_codes(base_code, 'hebrew') or [base_code]
+    outline = []
+    seen = set()
+    for variant_code in variant_codes:
+        entry = _lookup_step_lexicon_entry(variant_code, 'hebrew') or {}
+        relation = str(entry.get('relation') or '').lower()
+        if 'name of' in relation or 'part of' in relation:
+            continue
+        nodes = _parse_hebrew_outline_nodes(entry.get('full_entry') or '')
+        if not nodes:
+            continue
+        signature = _outline_signature(nodes)
+        if signature in seen:
+            continue
+        seen.add(signature)
+        grammar_label = _grammar_label(entry.get('grammar') or '')
+        if grammar_label:
+            nodes = [dict(node) for node in nodes]
+            nodes[0]['grammar_label'] = grammar_label
+        outline.extend(nodes)
+
+    if len(outline) <= 1:
+        return _strip_outline_grammar_labels(outline)
+    return outline
+
+
 def _extract_refs_from_html(raw_html):
     text = _strip_html(raw_html)
     refs = []
@@ -365,10 +607,18 @@ def _chunked(values, size):
 
 
 def _normalize_step_code(raw_code):
-    code = str(raw_code or '').strip().strip('{}[]()')
+    code = str(raw_code or '').strip().strip('{}[](),.;:')
     if not code:
         return ''
     return code.replace('=', '').strip()
+
+
+def _normalize_strongs_base_code(raw_code):
+    code = _normalize_step_code(raw_code).upper()
+    match = re.match(r'^([GH])0*(\d+)', code)
+    if not match:
+        return code
+    return f'{match.group(1)}{int(match.group(2))}'
 
 
 def _extract_step_codes(value):
@@ -438,6 +688,9 @@ def _stepbible_usage_index(language):
                     exact_usage.setdefault(code, []).append(reference)
                     base_code = re.sub(r'([A-Za-z]+)$', '', code) or code
                     base_usage.setdefault(base_code, []).append(reference)
+                    normalized_base_code = _normalize_strongs_base_code(base_code)
+                    if normalized_base_code and normalized_base_code != base_code:
+                        base_usage.setdefault(normalized_base_code, []).append(reference)
 
     return {
         'exact': {code: _dedupe_preserve_order(refs) for code, refs in exact_usage.items()},
@@ -452,6 +705,9 @@ def _clean_hebrew_surface(value):
 
 def _clean_translation_label(value):
     normalized = str(value or '').replace('/', ' ').strip()
+    normalized = normalized.split('»', 1)[0]
+    normalized = normalized.split('|', 1)[0]
+    normalized = normalized.split('@', 1)[0]
     normalized = normalized.replace('<', '[').replace('>', ']')
     return re.sub(r'\s+', ' ', normalized)
 
@@ -474,11 +730,17 @@ def _stepbible_lexicon(language):
             columns = line.split('\t')
             if len(columns) < 8:
                 continue
-            display_code = _normalize_step_code(columns[2] or columns[0])
+            variant_codes = _extract_step_codes(columns[1] if len(columns) > 1 else '')
+            display_code = _normalize_step_code(
+                (variant_codes[0] if variant_codes else '')
+                or columns[2]
+                or columns[0]
+            )
             if not display_code:
                 continue
             entry = {
                 'strongs_number': display_code,
+                'relation': str(columns[1] if len(columns) > 1 else '').strip(),
                 'lemma': str(columns[3] or '').strip(),
                 'transliteration': str(columns[4] or '').strip(),
                 'grammar': str(columns[5] or '').strip(),
@@ -514,11 +776,16 @@ def _lookup_open_scriptures_entry(code, language):
         return None
 
     dictionary = _open_scriptures_dictionary(language)
-    if normalized in dictionary:
-        return dictionary[normalized]
+    candidates = [normalized, _normalize_strongs_base_code(normalized)]
 
     base = re.sub(r'([A-Za-z_]+)$', '', normalized)
-    return dictionary.get(base) if base else None
+    if base:
+        candidates.extend([base, _normalize_strongs_base_code(base)])
+
+    for candidate in _dedupe_preserve_order(candidates):
+        if candidate in dictionary:
+            return dictionary[candidate]
+    return None
 
 
 def _lookup_step_lexicon_entry(code, language):
@@ -549,6 +816,30 @@ def _variant_step_codes(base_code, language):
         key for key in lexicon.keys()
         if pattern.match(key)
     )
+
+
+def _first_usage_reference(strongs_number, language):
+    normalized = _normalize_step_code(strongs_number)
+    if not normalized:
+        return ''
+
+    lookup_language = language
+    if normalized.startswith('H'):
+        lookup_language = 'hebrew'
+    elif normalized.startswith('G'):
+        lookup_language = 'greek'
+
+    usage_index = _stepbible_usage_index(lookup_language)
+    exact_references = usage_index['exact'].get(normalized) or []
+    if exact_references:
+        return exact_references[0]
+
+    base_code = re.sub(r'([A-Za-z_]+)$', '', normalized) or normalized
+    for candidate in _dedupe_preserve_order([base_code, _normalize_strongs_base_code(base_code)]):
+        base_references = usage_index['base'].get(candidate) or []
+        if base_references:
+            return base_references[0]
+    return ''
 
 
 def _variant_label(value):
@@ -628,6 +919,74 @@ def _candidate_translation_counts(structured_definitions):
     return counts
 
 
+def _displayable_usage_summary(summary):
+    text = re.sub(r'\s+', ' ', str(summary or '')).strip(' ,;:')
+    if not text:
+        return ''
+    if re.search(r'[\u0370-\u03FF\u1F00-\u1FFF\u0590-\u05FF\uFB1D-\uFB4F]', text):
+        return ''
+    if re.search(r'\b(?:Mat|Mrk|Mar|Luk|Jhn|Joh|Act|Rom|Cor|Gal|Eph|Php|Col|Th|Tim|Tit|Phm|Heb|Jas|Jam|Pet|Pe|Jn|Jude|Ju|Rev)\.?\s*\d', text):
+        return ''
+    return text
+
+
+def _candidate_usage_outline(candidate):
+    lexicon_outline = candidate.get('lexicon_outline') or []
+    if lexicon_outline:
+        return lexicon_outline
+
+    outline = []
+    for definition in candidate.get('structured_definitions') or []:
+        label = str(definition.get('heading') or '').strip()
+        references = _dedupe_preserve_order(definition.get('references') or [])
+        summary = str(definition.get('summary') or '').strip()
+        if references and summary:
+            reference_text = '|'.join(re.escape(reference) for reference in references)
+            summary = re.sub(r'\b(?:' + reference_text + r')\b[,;:\s]*', '', summary).strip(' ,;:')
+        summary = _displayable_usage_summary(summary)
+        if not label and not summary and not references:
+            continue
+        outline.append({
+            'number': definition.get('number') or len(outline) + 1,
+            'label': label,
+            'summary': summary,
+            'count': len(references),
+            'references': references,
+            'reference_groups': _chunked(references, 3),
+        })
+
+    if outline:
+        return outline
+
+    translation_counts = candidate.get('translation_counts') or []
+    if translation_counts:
+        return [
+            {
+                'number': index + 1,
+                'label': str(item.get('label') or '').strip(),
+                'summary': '',
+                'count': int(item.get('count') or 0),
+                'references': list(item.get('references') or []),
+                'reference_groups': list(item.get('reference_groups') or []),
+            }
+            for index, item in enumerate(translation_counts)
+            if str(item.get('label') or '').strip() or item.get('references') or item.get('reference_groups')
+        ]
+
+    return [
+        {
+            'number': index + 1,
+            'label': str(label or '').strip(),
+            'summary': '',
+            'count': 0,
+            'references': [],
+            'reference_groups': [],
+        }
+        for index, label in enumerate(candidate.get('outline_meanings') or [])
+        if str(label or '').strip()
+    ]
+
+
 def _candidate_core_payload(strongs_number, language, row_data, primary=False):
     lexicon_entry = _lookup_step_lexicon_entry(strongs_number, language) or {}
     os_entry = _lookup_open_scriptures_entry(strongs_number, language) or {}
@@ -640,8 +999,10 @@ def _candidate_core_payload(strongs_number, language, row_data, primary=False):
     kjv_definition = str(os_entry.get('kjv_def') or short_gloss)
     possible_translations = _meaning_list(short_gloss, kjv_definition, lexicon_entry.get('short_gloss') or '')
     structured_definitions = _parse_structured_definitions(lexicon_entry.get('full_entry') or '')
+    lexicon_outline = _lexicon_outline_nodes(strongs_number, language, lexicon_entry)
     return {
         'strongs_number': normalized_code,
+        'first_reference': _first_usage_reference(normalized_code, language),
         'language': 'Hebrew' if language == 'hebrew' else 'Greek',
         'lemma': lemma,
         'transliteration': transliteration,
@@ -652,6 +1013,7 @@ def _candidate_core_payload(strongs_number, language, row_data, primary=False):
         'glosses': possible_translations[:12],
         'possible_translations': possible_translations,
         'structured_definitions': structured_definitions,
+        'lexicon_outline': lexicon_outline,
         'grammar': str(row_data.get('grammar') or lexicon_entry.get('grammar') or ''),
         'references': _dedupe_preserve_order(lexicon_entry.get('references') or []),
         'lexicon_summary': _strip_html(lexicon_entry.get('full_entry') or ''),
@@ -674,6 +1036,7 @@ def _related_root_words(derivation, language, exclude_code):
         related = _candidate_core_payload(normalized_code, language, {}, primary=False)
         root_words.append({
             'strongs_number': related['strongs_number'],
+            'first_reference': related.get('first_reference') or _first_usage_reference(related['strongs_number'], language),
             'lemma': related['lemma'],
             'transliteration': related['transliteration'],
             'definition': related['definition'],
@@ -723,6 +1086,7 @@ def _lxx_hebrew_equivalents(strongs_number, language):
         structured_definitions = _parse_structured_definitions(lexicon_entry.get('full_entry') or '')
         normalized_candidates.append({
             'strong': strongs_code,
+            'first_reference': _first_usage_reference(strongs_code, 'hebrew'),
             'lemma': str(item.get('lemma') or lexicon_entry.get('lemma') or '').strip(),
             'transliteration': str(
                 item.get('transliteration')
@@ -764,6 +1128,7 @@ def _candidate_payload(strongs_number, language, row_data, primary=False):
                 item['label'] for item in candidate['translation_counts']
                 if str(item.get('label') or '').strip()
             ]
+    candidate['usage_outline'] = _candidate_usage_outline(candidate)
     candidate['root_words'] = _related_root_words(
         candidate.get('derivation') or '',
         language,
@@ -782,20 +1147,24 @@ def _primary_translation_label(candidates):
 
     primary = candidates[0]
 
-    # Prefer the first heading from the structured TBESG outline (richest source)
-    structured = list(primary.get('structured_definitions') or [])
-    if structured and structured[0].get('heading'):
-        return str(structured[0]['heading'])
-
-    glosses = list(primary.get('glosses') or [])
-    if glosses:
-        return str(glosses[0])
-
     kjv_definition = str(primary.get('kjv_definition') or '').strip()
     if kjv_definition:
         first = re.split(r'[;,/]', kjv_definition)[0].strip(' .')
         if first:
-            return first
+            return _clean_translation_label(first)
+
+    outline = list(primary.get('usage_outline') or primary.get('lexicon_outline') or [])
+    if outline and outline[0].get('label'):
+        return _clean_translation_label(outline[0]['label'])
+
+    # Prefer the first heading from the structured TBESG outline (richest source)
+    structured = list(primary.get('structured_definitions') or [])
+    if structured and structured[0].get('heading'):
+        return _clean_translation_label(structured[0]['heading'])
+
+    glosses = list(primary.get('glosses') or [])
+    if glosses:
+        return _clean_translation_label(glosses[0])
 
     definition = str(primary.get('definition') or '').strip()
     if definition:
@@ -898,8 +1267,8 @@ def _token_payload_from_step_row(row_data, language):
         if gloss_text:
             hover_lines.append(gloss_text)
 
-    # Prefer the TBESG structured heading (first sense) as the word-cloud label.
-    # Fall back to the TAGNT direct gloss only when no structured entry is available.
+    # Prefer the Open Scriptures KJV definition as the word-cloud label.
+    # Fall back to the richer STEP/outline data only when no local Strong's KJV definition is available.
     primary_label = _primary_translation_label(candidates) or str(row_data.get('translation_label') or '')
 
     return {
@@ -919,7 +1288,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v8:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v12:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

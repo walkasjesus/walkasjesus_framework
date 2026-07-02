@@ -305,9 +305,13 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
     },
 ]
 
-# Local Complete Jewish Bible (David H. Stern, NT source) selector settings.
-CJB_BIBLE_ID = 'jnt-stern-en'
-CJB_BIBLE_NAME = 'Complete Jewish Bible (David H. Stern, NT)'
+# Local Complete Jewish Bible selector settings. The CJB OT file supplies Tanakh
+# text; the JNT-compatible file supplies New Testament verse text and also keeps
+# its commentary fields available for David Stern commentary features.
+CJB_BIBLE_ID = 'cjb-bible-com'
+CJB_BIBLE_NAME = 'Complete Jewish Bible'
+CJB_BIBLE_SOURCE_FILE = 'cjb_ot.json'
+CJB_BIBLE_SOURCE_FILES = ['cjb_ot.json', 'jnt_bible_lib_compatible.json']
 CJB_BIBLE_ENABLED = True
 CJB_BIBLE_LOGGED_IN_ONLY = False
 # Verse count above which passages are manual "Click to retrieve"

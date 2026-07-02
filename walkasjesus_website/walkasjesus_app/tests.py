@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
-from bible_lib import BibleBooks
+from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.core.management import call_command
@@ -16,7 +16,7 @@ from django.utils import translation
 
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
-from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation
+from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
 from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
@@ -318,11 +318,80 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertGreater(len(candidate['translation_counts']), 0)
         self.assertEqual(candidate['translation_counts'][0]['label'], 'to watch over, guard, keep, preserve')
         self.assertGreater(candidate['translation_counts'][0]['count'], 0)
+        self.assertGreater(len(candidate['usage_outline']), 0)
+        self.assertEqual(candidate['usage_outline'][0]['label'], 'to watch over, guard, keep, preserve')
+        self.assertEqual(candidate['usage_outline'][0]['count'], 0)
+        self.assertTrue(all(len(group) <= 3 for group in candidate['usage_outline'][0]['reference_groups']))
+        self.assertTrue(candidate['kjv_definition'])
         self.assertTrue(any(root_word['strongs_number'] == 'G5083' for root_word in derived_candidate['root_words']))
         self.assertGreater(len(hebrew_candidate['translation_counts']), 0)
         self.assertGreater(hebrew_candidate['translation_counts'][0]['count'], 0)
+        self.assertGreater(len(hebrew_candidate['usage_outline']), 0)
         self.assertGreater(len(hebrew_candidate['references']), 0)
         self.assertTrue(any(reference.startswith('Gen.') for reference in hebrew_candidate['references']))
+
+    def test_candidate_payload_uses_nested_lexicon_outline_for_hebrew_examples(self):
+        peace_candidate = _candidate_payload('H7965', 'hebrew', {})
+        life_candidate = _candidate_payload('H2416', 'hebrew', {})
+        tree_candidate = _candidate_payload('H6086', 'hebrew', {})
+        knowledge_candidate = _candidate_payload('H1847', 'hebrew', {})
+
+        self.assertEqual(peace_candidate['usage_outline'][0]['label'], 'completeness, soundness, welfare, peace')
+        self.assertIn('peace, friendship', [child['label'] for child in peace_candidate['usage_outline'][0]['children']])
+        friendship = next(child for child in peace_candidate['usage_outline'][0]['children'] if child['label'] == 'peace, friendship')
+        self.assertIn('with God especially in covenant relationship', [child['label'] for child in friendship['children']])
+
+        life_labels = [item['label'] for item in life_candidate['usage_outline']]
+        self.assertIn('living, alive', life_labels)
+        self.assertIn('kinsfolk', life_labels)
+        self.assertIn('living thing, animal', life_labels)
+        self.assertIn('life (abstract emphatic)', life_labels)
+        living = next(item for item in life_candidate['usage_outline'] if item['label'] == 'living, alive')
+        self.assertIn('green (of vegetation)', [child['label'] for child in living['children']])
+        self.assertEqual(living['grammar_label'], 'adjective')
+
+        self.assertEqual(tree_candidate['usage_outline'][0]['label'], 'tree, wood, timber, stock, plank, stalk, stick, gallows')
+        self.assertIn('wood, pieces of wood, gallows, firewood, cedar-wood, woody flax', [child['label'] for child in tree_candidate['usage_outline'][0]['children']])
+
+        self.assertEqual(knowledge_candidate['usage_outline'][0]['label'], 'knowledge')
+        self.assertIn('discernment, understanding, wisdom', [child['label'] for child in knowledge_candidate['usage_outline'][0]['children']])
+
+    def test_candidate_payload_uses_marker_outline_for_greek_example(self):
+        candidate = _candidate_payload('G4137', 'greek', {})
+
+        self.assertEqual(candidate['usage_outline'][0]['label'], 'to fill, make full, fill to the full, with accusative')
+        self.assertIn('of things', [child['label'] for child in candidate['usage_outline'][0]['children']])
+        self.assertEqual(candidate['usage_outline'][1]['label'], 'to complete')
+        self.assertIn('to execute, accomplish, carry out to the full', [child['label'] for child in candidate['usage_outline'][1]['children']])
+        execute = next(child for child in candidate['usage_outline'][1]['children'] if child['label'] == 'to execute, accomplish, carry out to the full')
+        self.assertEqual(execute['count'], 0)
+        self.assertGreater(len(execute['references']), 20)
+
+    def test_candidate_payload_normalizes_leading_zero_greek_strongs_and_avoids_step_artifacts(self):
+        candidate = _candidate_payload('G0906', 'greek', {})
+
+        self.assertEqual(candidate['usage_outline'][0]['label'], 'to throw, cast, put, place')
+        self.assertNotIn('»', candidate['kjv_definition'])
+        self.assertIn('throw', candidate['kjv_definition'])
+        self.assertEqual(candidate['first_reference'], 'Mat.3:10')
+
+    def test_original_text_word_label_prefers_kjv_definition(self):
+        payload = original_text_payload('Matthew', 1, 1)
+        first_word = payload['words'][0]
+        abraham = next(word for word in payload['words'] if word['text'].startswith('Ἀβρα'))
+
+        self.assertEqual(first_word['translation_label'], 'book')
+        self.assertEqual(first_word['candidates'][0]['kjv_definition'], 'book')
+        self.assertNotEqual(first_word['translation_label'], first_word['candidates'][0]['usage_outline'][0]['label'])
+        self.assertEqual(abraham['translation_label'], 'Abraham')
+        self.assertNotIn('»', abraham['translation_label'])
+        self.assertEqual(abraham['candidates'][0]['strongs_number'], 'G0011')
+
+    def test_candidate_payload_skips_name_only_hebrew_variants_in_outline(self):
+        candidate = _candidate_payload('H6965', 'hebrew', {})
+
+        self.assertEqual(candidate['usage_outline'][0]['label'], 'to rise, arise, stand, rise up, stand up')
+        self.assertNotIn('Combined with lev', candidate['usage_outline'][0]['label'])
 
     @patch('walkasjesus_app.lib.strongs_service._lxx_greek_to_hebrew_index')
     def test_candidate_payload_exposes_lxx_hebrew_equivalents_when_index_exists(self, mock_lxx_index):
@@ -355,6 +424,7 @@ class StrongsServiceFallbackTestCase(TestCase):
 
         self.assertEqual(candidate['lxx_hebrew_equivalents'][0]['strong'], 'H1697')
         self.assertEqual(candidate['lxx_hebrew_equivalents'][0]['confidence'], 94)
+        self.assertTrue(candidate['lxx_hebrew_equivalents'][0]['first_reference'])
         self.assertEqual(candidate['lxx_hebrew_equivalents'][1]['transliteration'], 'amar')
         self.assertTrue(candidate['lxx_hebrew_equivalents'][0]['definition'])
         self.assertGreater(len(candidate['lxx_hebrew_equivalents'][0]['possible_meanings']), 0)
@@ -394,6 +464,24 @@ class StrongsServiceFallbackTestCase(TestCase):
 
         self.assertEqual(candidate['translation_counts'][0]['label'], 'to test')
         self.assertIn('to test', candidate['outline_meanings'])
+        self.assertEqual(candidate['usage_outline'][0]['label'], 'to test')
+        self.assertEqual(candidate['usage_outline'][0]['count'], 2)
+
+
+class LocalCompleteJewishBibleTestCase(SimpleTestCase):
+    def tearDown(self):
+        LocalCompleteJewishBible._index = None
+        super().tearDown()
+
+    def test_local_cjb_translation_uses_cjb_ot_and_jnt_verse_text(self):
+        LocalCompleteJewishBible._index = None
+        bible = LocalCompleteJewishBible('cjb-bible-com')
+
+        genesis = bible.verses(BibleLibBibleBooks.Genesis, 1, 1, 1, 1)
+        matthew = bible.verses(BibleLibBibleBooks.Matthew, 1, 1, 1, 1)
+
+        self.assertEqual(genesis, 'In the beginning God created the heavens and the earth.')
+        self.assertEqual(matthew, 'This is the genealogy of Yeshua the Messiah, son of David, son of Avraham:')
 
 
 class LxxGreekToHebrewIndexCommandTestCase(SimpleTestCase):
@@ -918,6 +1006,47 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
                     self.assertEqual(response.status_code, 200)
                     payload = json.loads(response.content.decode('utf-8'))
                     self.assertEqual(payload['verses'], expected_verses)
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_bible_study_search_endpoint_uses_api_bible_for_first_translation(self, mock_bible_translation, mock_requests_get):
+        cache.clear()
+        mock_bible_translation.return_value.get.return_value = SimpleNamespace(
+            id='en-kjv',
+            name='King James Version',
+            language='en',
+        )
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {
+            'data': {
+                'total': 1,
+                'verses': [
+                    {
+                        'id': 'REV.22.2',
+                        'reference': 'Revelation 22:2',
+                        'text': 'In the midst of the street of it, and on either side of the river, was there the tree of life.',
+                    }
+                ],
+            }
+        }
+        mock_requests_get.return_value = mock_response
+
+        with self.settings(DISABLED_BIBLE_TRANSLATIONS=[], CJB_BIBLE_ENABLED=False, BIBLE_API_KEY='test-key', DISABLE_CACHE_FOR_DEBUG=True):
+            response = self.client.get(
+                reverse('commandments:bible_study_search'),
+                {'bible_id': 'en-kjv', 'query': 'Tree of life'},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['query'], 'Tree of life')
+        self.assertEqual(payload['bible_display_name'], 'EN - King James Version')
+        self.assertEqual(payload['results'][0]['reference'], 'Revelation 22:2')
+        called_url = mock_requests_get.call_args.args[0]
+        self.assertIn('/v1/bibles/en-kjv/search?', called_url)
+        self.assertIn('query=Tree%20of%20life', called_url)
+        self.assertEqual(mock_requests_get.call_args.kwargs['headers']['api-key'], 'test-key')
 
 
 class CommentaryTranslationViewTestCase(SimpleTestCase):

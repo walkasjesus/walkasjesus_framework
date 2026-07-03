@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-19 04:50+0000\n"
+"POT-Creation-Date: 2026-07-03 05:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,99 +17,124 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: account_app/templates/account/change_password.html:8
 #: account_app/templates/account/profile.html:55
 msgid "Save changes"
-msgstr ""
+msgstr "Wijzigingen opslaan"
 
 #: account_app/templates/account/index.html:6
 #: account_app/templates/account/login.html:10
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: account_app/templates/account/index.html:9
 msgid "Logout"
-msgstr ""
+msgstr "Uitloggen"
 
 #: account_app/templates/account/index.html:12
 msgid "Profile"
-msgstr ""
+msgstr "Profiel"
 
 #: account_app/templates/account/index.html:13
 msgid "Change password"
-msgstr ""
+msgstr "Wachtwoord wijzigen"
 
 #: account_app/templates/account/login.html:9
 msgid "Contribute"
-msgstr ""
+msgstr "Bijdragen"
 
 #: account_app/templates/account/login.html:11
 msgid ""
 "Thank you for helping in teaching the words and steps of Jesus all around "
 "the world!"
 msgstr ""
+"Bedankt voor je hulp bij het onderwijzen van de woorden en stappen van Jezus"
+" over de hele wereld!"
 
 #: account_app/templates/account/login.html:15
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
+"Uw gebruikersnaam en wachtwoord komen niet overeen. Probeer het opnieuw."
 
 #: account_app/templates/account/login.html:22
 msgid ""
-"Your account doesn't have access to this page. To proceed, please login with "
-"an account that has access."
+"Your account doesn't have access to this page. To proceed, please login with"
+" an account that has access."
 msgstr ""
+"Uw account heeft geen toegang tot deze pagina. Om verder te gaan, logt u in "
+"met een account dat toegang heeft."
 
 #: account_app/templates/account/login.html:25
 msgid "Please login to see this page."
-msgstr ""
+msgstr "Log in om deze pagina te bekijken."
 
 #: account_app/templates/account/profile.html:10
 msgid "My profile"
-msgstr ""
+msgstr "Mijn profiel"
 
 #: account_app/templates/account/profile.html:11
 msgid "My Profile"
-msgstr ""
+msgstr "Mijn profiel"
 
 #: account_app/templates/account/profile.html:22
 msgid "You can change your profile settings on this page."
-msgstr ""
+msgstr "Op deze pagina kunt u uw profielinstellingen wijzigen."
 
 #: account_app/templates/account/profile.html:32
 #: account_app/templates/registration/signup.html:34
 msgid "I agree with the Terms and Conditions"
-msgstr ""
+msgstr "Ik ga akkoord met de Algemene Voorwaarden"
 
 #: account_app/templates/registration/signup.html:10
 msgid "Signup"
-msgstr ""
+msgstr "Aanmelden"
 
 #: account_app/templates/registration/signup.html:11
 msgid "Register for a new account"
-msgstr ""
+msgstr "Registreer voor een nieuw account"
 
 #: account_app/templates/registration/signup.html:12
 msgid ""
 "The content of this website is made possible by contributors around the "
 "world. You can help improving by:"
 msgstr ""
+"De inhoud van deze website wordt mogelijk gemaakt door bijdragers over de "
+"hele wereld. Jij kunt helpen verbeteren door:"
 
 #: account_app/templates/registration/signup.html:16
 msgid ""
 "Translating to your language, since most translation is done automatically, "
 "corrections are very welcome!"
 msgstr ""
+"Bij het vertalen naar uw taal zijn correcties zeer welkom, aangezien de "
+"meeste vertalingen automatisch worden uitgevoerd!"
 
 #: account_app/templates/registration/signup.html:19
 msgid "Adding or correcting steps along with their Bible references"
-msgstr ""
+msgstr "Stappen toevoegen of corrigeren samen met hun Bijbelverwijzingen"
 
 #: account_app/templates/registration/signup.html:22
 msgid ""
 "Adding resources like movies, books, testimonies, blogs, songs, pictures, "
 "illustrations and sermons which are related to the corresponding steps"
 msgstr ""
+"Het toevoegen van bronnen zoals films, boeken, getuigenissen, blogs, "
+"liedjes, afbeeldingen, illustraties en preken die gerelateerd zijn aan de "
+"overeenkomstige stappen"
 
 #: account_app/templates/registration/signup.html:57
 msgid "Sign up"
-msgstr ""
+msgstr "Schrijf je in"
+
+#: account_app/views.py:22
+msgid "Your profile was successfully updated!"
+msgstr "Je profiel is succesvol bijgewerkt!"
+
+#: account_app/views.py:25 account_app/views.py:43
+msgid "Please correct the error below."
+msgstr "Corrigeer de onderstaande fout."
+
+#: account_app/views.py:40
+msgid "Your password was successfully updated!"
+msgstr "Uw wachtwoord is succesvol bijgewerkt!"

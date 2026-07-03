@@ -295,6 +295,11 @@ def _apply_shared_media_to_lesson_display(lesson, grouped):
     lesson.background_drawing = lesson.drawings[0] if lesson.drawings else ''
 
 
+def clean_bible_verse_text(text):
+    lines = [line.strip() for line in str(text or '').replace('\r\n', '\n').replace('\r', '\n').replace('¶', '').split('\n')]
+    return '\n'.join(line for line in lines if line)
+
+
 def _collect_verses(bible, references, key_builder=None, verse_sources=None):
     """Fetch verse texts for a list of references using the given bible."""
     if key_builder is None:
@@ -342,10 +347,10 @@ def _get_or_fetch_verse_text_with_source(bible, ref):
 
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached, 'cache'
+        return clean_bible_verse_text(cached), 'cache'
 
     ref.set_bible(bible)
-    text = ref.text() or ''
+    text = clean_bible_verse_text(ref.text() or '')
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
         cache.set(_bible_copyright_cache_key(bible), bible.copyright, VERSE_CACHE_TIMEOUT)

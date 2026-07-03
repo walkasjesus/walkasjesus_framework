@@ -1450,6 +1450,11 @@ p {
     font-size: 0.92rem;
     margin-bottom: 0.45rem;
 }
+
+.bs-strongs-translate-btn {
+    border-radius: 6px;
+}
+
 .detail-inline-original-candidate {
     background: #fff;
     border: 1px solid #eadfbe;

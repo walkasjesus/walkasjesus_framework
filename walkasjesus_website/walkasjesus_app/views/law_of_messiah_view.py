@@ -20,6 +20,7 @@ from walkasjesus_app.views.detail_view import (
     _allowed_target_audiences,
     _filter_grouped_media_by_audience,
     _step_to_law_mapping,
+    clean_bible_verse_text,
 )
 
 
@@ -528,11 +529,11 @@ def _reference_text_with_source(ref, bible):
 
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached, 'cache'
+        return clean_bible_verse_text(cached), 'cache'
 
     end_chapter = ref.end_chapter if ref.end_chapter else ref.begin_chapter
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
-    text = bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse)
+    text = clean_bible_verse_text(bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse))
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
         cache.set(copyright_cache_key, bible.copyright, VERSE_CACHE_TIMEOUT)

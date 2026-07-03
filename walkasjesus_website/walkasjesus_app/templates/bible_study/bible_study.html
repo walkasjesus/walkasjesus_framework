@@ -487,6 +487,7 @@
       border: 1px solid #d8c89d;
       border-radius: 999px;
       color: #4e3f1b;
+      border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
       justify-content: center;
@@ -852,6 +853,7 @@
       color: #6e5a28;
       display: inline-flex;
       font-size: 0.72rem;
+      border-radius: 6px;
       font-weight: 700;
       letter-spacing: 0.03em;
       margin-bottom: 0.55rem;
@@ -892,6 +894,40 @@
       padding: 0.85rem 1rem;
     }
 
+    .bible-study-shell .bs-word-search-panel-head {
+      align-items: flex-start;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+    }
+
+    .bible-study-shell .bs-word-search-panel-head .bible-study-translation-title {
+      margin-bottom: 0;
+    }
+
+    .bible-study-shell .bs-word-search-close-btn {
+      align-items: center;
+      background: #fff5f5;
+      border: 1px solid #d44646;
+      border-radius: 999px;
+      color: #b42323;
+      display: inline-flex;
+      flex: 0 0 auto;
+      height: 30px;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      width: 30px;
+    }
+
+    .bible-study-shell .bs-word-search-close-btn:hover,
+    .bible-study-shell .bs-word-search-close-btn:focus {
+      background: #b42323;
+      color: #fff;
+      outline: 0;
+    }
+
     .bible-study-shell .bs-word-search-row {
       align-items: stretch;
       display: flex;
@@ -914,6 +950,7 @@
       align-items: center;
       display: inline-flex;
       gap: 0.35rem;
+      border-radius: 6px;
       justify-content: center;
       min-width: 92px;
     }
@@ -1019,9 +1056,6 @@
                          autocomplete="off" placeholder="{% trans 'e.g. Tree of life' %}">
                   <button type="button" class="btn commentary-action-btn bs-word-search-btn" id="bs-word-search-btn">
                     <i class="fa fa-search" aria-hidden="true"></i> {% trans 'Search' %}
-                  </button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary bs-word-search-clear-btn" id="bs-word-search-clear-btn">
-                    <i class="fa fa-times" aria-hidden="true"></i> {% trans 'Clear' %}
                   </button>
                 </div>
                 <small class="text-muted d-block mt-2">{% trans 'Search uses the first selected translation. Matching words are shown in bold.' %}</small>
@@ -1620,7 +1654,7 @@
 
     $target.html(
       '<div class="bs-word-search-panel">' +
-      '<span class="bible-study-translation-title">{% trans "Search results" %}' + (bibleName ? ' · ' + escapeHtml(bibleName) : '') + '</span>' +
+      '<div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}' + (bibleName ? ' · ' + escapeHtml(bibleName) : '') + '</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div>' +
       itemsHtml +
       '</div>'
     );
@@ -1640,7 +1674,7 @@
       return;
     }
 
-    $target.html('<div class="bs-word-search-panel"><span class="bible-study-translation-title">{% trans "Search results" %}</span><p class="mb-0 text-muted"><i class="fa fa-spinner fa-spin mr-1"></i>{% trans "Searching the first selected translation…" %}</p></div>');
+    $target.html('<div class="bs-word-search-panel"><div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div><p class="mb-0 text-muted"><i class="fa fa-spinner fa-spin mr-1"></i>{% trans "Searching the first selected translation…" %}</p></div>');
     $.ajax({
       type: 'GET',
       url: endpoint,
@@ -1660,6 +1694,10 @@
       $target.html('<div class="alert alert-warning mb-0">' + escapeHtml(message) + '</div>');
     });
   }
+
+  $(document).on('click', '.bible-study-shell .bs-word-search-close-btn', function() {
+    $('#bs-word-search-results').empty();
+  });
 
   function verseSpinnerHtml(source) {
     var spinnerClass = source === 'api' ? 'verse-loading-spinner verse-loading-spinner-api' : 'verse-loading-spinner verse-loading-spinner-cache';

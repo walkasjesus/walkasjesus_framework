@@ -323,10 +323,21 @@ $(document).ready(function(){
     $element.append('<button type="button" class="bible-verse-copy-btn"><i class="fa fa-copy" aria-hidden="true"></i> Copy</button>');
   }
 
+  function cleanRenderedVerseText(text) {
+    return String(text || '')
+      .replace(/\r\n?/g, '\n')
+      .replace(/\u00b6/g, '')
+      .split('\n')
+      .map(function(line) { return $.trim(line); })
+      .filter(function(line) { return line.length > 0; })
+      .join('\n');
+  }
+
   function renderVerseText($elements, text) {
+    var cleanText = cleanRenderedVerseText(text);
     $elements.each(function() {
       var $element = $(this);
-      $element.empty().append($('<span class="bible-verse-text-content"></span>').text(text));
+      $element.empty().append($('<span class="bible-verse-text-content"></span>').text(cleanText));
       attachVerseCopyButton($element);
     });
   }

@@ -13,6 +13,7 @@ from django.views import View
 
 from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, Maimonides, MaimonidesBibleReference, UserPreferences
+from walkasjesus_app.views.detail_view import clean_bible_verse_text
 
 
 VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
@@ -144,11 +145,11 @@ def _reference_text_with_source(ref, bible):
 
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached, 'cache'
+        return clean_bible_verse_text(cached), 'cache'
 
     end_chapter = ref.end_chapter if ref.end_chapter else ref.begin_chapter
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
-    text = bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse)
+    text = clean_bible_verse_text(bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse))
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
         cache.set(copyright_cache_key, bible.copyright, VERSE_CACHE_TIMEOUT)

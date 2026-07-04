@@ -1469,6 +1469,39 @@ p {
     gap: 0.45rem;
     margin-bottom: 0.35rem;
 }
+.detail-inline-original-detail-section {
+    border-top: 1px solid #f0e6c8;
+    margin-top: 0.55rem;
+    padding-top: 0.55rem;
+}
+.detail-inline-original-detail-section:first-of-type {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+}
+.detail-inline-original-root-word {
+    background: #fffdf7;
+    border: 1px solid #eadfbe;
+    border-radius: 5px;
+    margin-top: 0.45rem;
+    padding: 0.55rem 0.65rem;
+}
+.detail-inline-original-count-badge,
+.detail-inline-original-usage-count {
+    background: #f5efda;
+    border: 1px solid #dfd1a6;
+    border-radius: 999px;
+    color: #6e5a28;
+    display: inline-block;
+    font-size: 0.72rem;
+    padding: 0.05rem 0.45rem;
+}
+.detail-inline-original-usage-grammar {
+    color: #806d3c;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 .detail-inline-original-meaning-list {
     list-style: disc outside;
     margin: 0;

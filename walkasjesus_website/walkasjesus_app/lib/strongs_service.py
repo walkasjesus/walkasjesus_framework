@@ -1084,6 +1084,7 @@ def _lxx_hebrew_equivalents(strongs_number, language):
             definition,
         )
         structured_definitions = _parse_structured_definitions(lexicon_entry.get('full_entry') or '')
+        usage_outline = _lexicon_outline_nodes(strongs_code, 'hebrew', lexicon_entry)
         normalized_candidates.append({
             'strong': strongs_code,
             'first_reference': _first_usage_reference(strongs_code, 'hebrew'),
@@ -1097,6 +1098,7 @@ def _lxx_hebrew_equivalents(strongs_number, language):
             ).strip(),
             'definition': definition,
             'possible_meanings': _candidate_outline_meanings(structured_definitions, possible_translations),
+            'usage_outline': usage_outline,
             'blueletter_url': 'https://www.blueletterbible.org/lexicon/{}/kjv/wlc/0-1/'.format(
                 strongs_code.lower(),
             ),
@@ -1198,9 +1200,12 @@ def _parse_stepbible_row(line, language):
         translation_label = _clean_translation_label(columns[9] if len(columns) > 9 and columns[9] else (columns[2] if len(columns) > 2 else gloss))
         grammar = dstrong_grammar.split('=', 1)[1].strip() if '=' in dstrong_grammar else ''
         strongs_numbers = []
+        seen_strongs = set()
         for source in [columns[11] if len(columns) > 11 else '', dstrong_grammar, columns[12] if len(columns) > 12 else '']:
             for code in _extract_step_codes(source):
-                if code not in strongs_numbers:
+                dedupe_key = _normalize_strongs_base_code(code)
+                if dedupe_key and dedupe_key not in seen_strongs:
+                    seen_strongs.add(dedupe_key)
                     strongs_numbers.append(code)
         return {
             'surface_text': surface_text,
@@ -1216,9 +1221,12 @@ def _parse_stepbible_row(line, language):
     surface_text = _clean_hebrew_surface(columns[1] if len(columns) > 1 else '')
     translation_label = _clean_translation_label(columns[3] if len(columns) > 3 else '')
     strongs_numbers = []
+    seen_strongs = set()
     for source in [columns[8] if len(columns) > 8 else '', columns[4] if len(columns) > 4 else '', columns[9] if len(columns) > 9 else '', columns[11] if len(columns) > 11 else '']:
         for code in _extract_step_codes(source):
-            if code not in strongs_numbers:
+            dedupe_key = _normalize_strongs_base_code(code)
+            if dedupe_key and dedupe_key not in seen_strongs:
+                seen_strongs.add(dedupe_key)
                 strongs_numbers.append(code)
     return {
         'surface_text': surface_text,
@@ -1288,7 +1296,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v12:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v13:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

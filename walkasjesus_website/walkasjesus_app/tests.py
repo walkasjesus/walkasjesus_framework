@@ -428,7 +428,25 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertEqual(candidate['lxx_hebrew_equivalents'][1]['transliteration'], 'amar')
         self.assertTrue(candidate['lxx_hebrew_equivalents'][0]['definition'])
         self.assertGreater(len(candidate['lxx_hebrew_equivalents'][0]['possible_meanings']), 0)
+        self.assertGreater(len(candidate['lxx_hebrew_equivalents'][0]['usage_outline']), 0)
         self.assertIn('/lexicon/h1697/', candidate['lxx_hebrew_equivalents'][0]['blueletter_url'])
+
+    def test_original_text_payload_dedupes_normalized_strongs_candidates(self):
+        payload = original_text_payload('JohnFirstBook', 2, 3)
+
+        for word in payload['words']:
+            codes = [candidate['strongs_number'] for candidate in word['candidates']]
+            self.assertEqual(codes, list(dict.fromkeys(codes)))
+
+        g1097_words = [
+            word for word in payload['words']
+            if any(candidate['strongs_number'] == 'G1097' for candidate in word['candidates'])
+        ]
+        self.assertEqual(len(g1097_words), 2)
+        self.assertTrue(all(
+            [candidate['strongs_number'] for candidate in word['candidates']].count('G1097') == 1
+            for word in g1097_words
+        ))
 
     @patch('walkasjesus_app.lib.strongs_service._variant_step_codes')
     @patch('walkasjesus_app.lib.strongs_service._stepbible_usage_index')

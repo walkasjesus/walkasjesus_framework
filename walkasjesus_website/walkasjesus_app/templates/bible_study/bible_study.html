@@ -2207,7 +2207,9 @@
     var strongsNumber = String((item && (item.strongs_number || item.strong)) || '');
     var reference = String((item && (item.first_reference || item.reference)) || '');
     var detailUrl = bibleStudyStrongDetailUrl(strongsNumber, reference);
-    var meanings = (item && item.possible_meanings) || [];
+    var meanings = options.showUsageOutline ? [] : ((item && item.possible_meanings) || []);
+    var usageOutline = options.showUsageOutline ? ((item && item.usage_outline) || []) : [];
+    var definitionHtml = options.showUsageOutline ? '' : ((item && item.definition) ? '<p class="mb-1 bs-translatable-text">' + escapeHtml(item.definition) + '</p>' : '');
     var metaBits = [];
     if (options.showCountMeta && item && item.count) {
       metaBits.push(escapeHtml(String(item.count)) + 'x');
@@ -2223,6 +2225,9 @@
             return '<li><span class="bs-translatable-text">' + escapeHtml(meaning) + '</span></li>';
           }).join('') + '</ul>'
         : '';
+      var usageOutlineHtml = usageOutline.length
+        ? '<div class="bs-original-detail-section mb-0"><span class="bs-original-detail-label">{% trans "Outline of Biblical Usage" %}</span>' + bibleStudyUsageOutlineItemsHtml(usageOutline) + '</div>'
+        : '';
       return '<div class="bs-original-root-word">' +
         '<div class="bs-original-root-head">' +
           (detailUrl ? '<a class="bs-original-strong-link" href="' + escapeHtml(detailUrl) + '"><strong>' + escapeHtml(strongsNumber) + '</strong></a>' : '<strong>' + escapeHtml(strongsNumber) + '</strong>') +
@@ -2231,8 +2236,9 @@
           (metaBits.length ? '<span class="bs-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
           ((item && item.blueletter_url) ? '<a class="bs-original-root-link" href="' + escapeHtml(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">{% trans "Open" %} ' + escapeHtml(strongsNumber) + ' {% trans "in Blue Letter Bible" as bsi18n_strongs_detail_link %}{{ bsi18n_strongs_detail_link|escapejs }}</a>' : '') +
         '</div>' +
-        ((item && item.definition) ? '<p class="mb-1 bs-translatable-text">' + escapeHtml(item.definition) + '</p>' : '') +
+        definitionHtml +
         meaningsHtml +
+        usageOutlineHtml +
       '</div>';
   }
 
@@ -2244,7 +2250,7 @@
 
   function bibleStudyLxxHebrewEquivalentsHtml(items) {
     return (items || []).map(function(item) {
-      return bibleStudyRelatedWordCardHtml(item, { showCountMeta: true });
+      return bibleStudyRelatedWordCardHtml(item, { showCountMeta: true, showUsageOutline: true });
     }).join('');
   }
 

@@ -878,6 +878,7 @@
       border: 1px solid #e0d5b0;
       border-radius: 8px;
       color: #675831;
+      margin-left: 22px;
       margin-top: 1rem;
       padding: 1rem 1.15rem;
     }
@@ -1073,6 +1074,69 @@
       font-weight: 800;
     }
 
+    .bible-study-shell .bs-passage-mode-toggle {
+      background: #fffdf7;
+      border: 1px solid #eadfbc;
+      border-radius: 6px;
+      margin-top: 0.15rem;
+      padding: 0.55rem 0.7rem;
+    }
+
+    .bible-study-shell .bs-passage-mode-toggle .form-check-label {
+      color: #4b3a12;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      text-transform: none;
+    }
+
+    .bible-study-shell .bs-passage-nav-shell {
+      align-items: center;
+      background: #fffdf7;
+      border: 1px solid #eadfbc;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      justify-content: space-between;
+      margin-bottom: 0.55rem;
+      margin-left: 22px;
+      padding: 0.55rem 0.7rem;
+    }
+
+    .bible-study-shell .bs-results-head-badges {
+      margin-left: 22px;
+    }
+
+    .bible-study-shell .bs-passage-nav-btn {
+      align-items: center;
+      display: inline-flex;
+      font-weight: 700;
+      min-height: 34px;
+      white-space: nowrap;
+    }
+
+    .bible-study-shell .bs-passage-pill {
+      align-items: center;
+      background: #f5efda;
+      border: 1px solid #dfd1a6;
+      border-radius: 6px;
+      color: #4e3f1b;
+      display: inline-flex;
+      font-size: 0.95rem;
+      font-weight: 700;
+      justify-content: center;
+      line-height: 1.2;
+      margin: 0;
+      padding: 0.45rem 0.85rem;
+      text-align: center;
+    }
+
+    .bible-study-shell .bs-combined-text {
+      line-height: 1.55;
+      margin-bottom: 0;
+      white-space: pre-line;
+    }
+
     @media (max-width: 767.98px) {
       .bible-study-shell .bs-search-option-row {
         gap: 0.45rem;
@@ -1103,6 +1167,25 @@
 
       .bible-study-shell .bs-search-custom-range-row {
         grid-template-columns: 1fr;
+      }
+
+      .bible-study-shell .bs-passage-nav-shell {
+        align-items: stretch;
+        flex-direction: column;
+        margin-left: 0;
+      }
+
+      .bible-study-shell .bs-passage-nav-btn {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .bible-study-shell .bs-passage-pill {
+        width: 100%;
+      }
+
+      .bible-study-shell .bs-results-head-badges {
+        margin-left: 0;
       }
     }
   </style>
@@ -1164,6 +1247,17 @@
             </div>
           </div>
 
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="bs-passage-mode-toggle">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" id="bs-combine-verses" name="combine_verses" value="1" checked>
+                  <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses for easier reading (turn off to divide Bible texts by verse for thorough word study).' %}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="row" id="bs-bible-selectors">
             {% for slot in "1234" %}
             <div class="col-md-3 mb-3 bs-bible-selector-col" id="bs-col-{{ forloop.counter }}"{% if forloop.counter > visible_bible_slots %} style="display:none;"{% endif %}>
@@ -1209,11 +1303,11 @@
               <div class="bs-search-option-row">
                 <div class="bs-search-option-copy">
                   <label for="bs-search-scope" class="form-label">{% trans 'Search in' %}</label>
-                  <p class="small text-muted">{% trans 'Pick the Bible section to search. Choose custom to limit from one book to another.' %}</p>
+                  <p class="small text-muted">{% trans 'Pick the Bible section to search. Choose custom Bible books to limit from one book to another.' %}</p>
                 </div>
                 <div class="bs-search-option-control">
                   <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select" id="bs-search-scope">
+                    <select class="form-control law-filter-select selectpicker" id="bs-search-scope" data-live-search="false" data-width="100%" data-size="30">
                       <option value="whole">{% trans 'The Whole Bible' %}</option>
                       <option value="ot">{% trans 'Old Testament' %}</option>
                       <option value="nt">{% trans 'New Testament' %}</option>
@@ -1223,7 +1317,7 @@
                       <option value="gospels">{% trans 'Gospels' %}</option>
                       <option value="pauline">{% trans 'Pauline Epistles' %}</option>
                       <option value="general">{% trans 'General Epistles' %}</option>
-                      <option value="custom">{% trans 'Select a range of biblical books' %}</option>
+                      <option value="custom_books">{% trans 'Custom Bible books' %}</option>
                     </select>
                   </div>
                   <div class="bs-search-custom-range">
@@ -1309,7 +1403,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            <button type="button" class="btn commentary-action-btn" data-dismiss="modal"><i class="fa fa-times mr-1" aria-hidden="true"></i>{% trans 'Cancel' %}</button>
             <button type="button" class="btn commentary-action-btn" id="bs-search-advanced-apply"><i class="fa fa-search mr-1" aria-hidden="true"></i>{% trans 'Apply and search' %}</button>
           </div>
         </div>
@@ -1351,8 +1445,16 @@
   {% if selected_bibles %}
   <div class="row mb-2">
     <div class="col-12">
-      <h5 class="mb-1">{{ selected_book_label }} {{ selected_chapter }}:{{ selected_start_verse }}{% if selected_end_verse != selected_start_verse %}&ndash;{{ selected_end_verse }}{% endif %}</h5>
-      <p class="text-muted small mb-0">
+      <div class="bs-passage-nav-shell">
+        <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="prev" data-step="{{ max_verses }}">
+          <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>{% trans 'Previous' %} {{ max_verses }} {% trans 'verses' %}
+        </button>
+        <h5 class="bs-passage-pill">{{ selected_book_label }} {{ selected_chapter }}:{{ selected_start_verse }}{% if selected_end_verse != selected_start_verse %}&ndash;{{ selected_end_verse }}{% endif %}</h5>
+        <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="next" data-step="{{ max_verses }}">
+          {% trans 'Next' %} {{ max_verses }} {% trans 'verses' %}<i class="fa fa-angle-right ml-1" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p class="text-muted small mb-0 bs-results-head-badges">
         {% for bible in selected_bibles %}
         <span class="badge badge-secondary mr-1">{{ bible.display_name }}</span>
         {% endfor %}
@@ -1388,9 +1490,8 @@
                 <div class="bible-study-translation-card" data-verse="{{ verse.verse_num }}" data-bible-id="{{ bible.id }}">
                   <div class="bible-study-translation-head">
                     <span class="bible-study-translation-title">{{ bible.display_name }}</span>
-                    <button type="button" class="btn btn-sm bible-study-copy-btn" data-verse="{{ verse.verse_num }}" title="{% trans 'Copy this verse. Click a neighboring verse next to copy a range.' %}"><i class="fa fa-copy mr-1" aria-hidden="true"></i> {% trans 'Copy' %}</button>
                   </div>
-                  <p class="bs-verse-text">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>
+                  <p class="bs-verse-text js-copy-selectable-line" data-copy-footer="{{ selected_book_label }} {{ selected_chapter }}:{{ verse.verse_num }}" data-copy-group="bs|{{ bible.id }}|{{ selected_book }}|{{ selected_chapter }}" data-copy-book-label="{{ selected_book_label|escape }}" data-copy-chapter="{{ selected_chapter }}" data-copy-verse="{{ verse.verse_num }}" data-copy-text="{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|striptags|escape }}">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>
                   {% comment %} {% if forloop.parentloop.last and bible.copyright %} {% endcomment %}
                   <p class="bible-study-copyright mb-0"><small>{{ bible.copyright }}</small></p>
                   {% comment %} {% endif %} {% endcomment %}
@@ -1467,6 +1568,7 @@
   var bsPendingStrongsSelection = null;
   var bsCopySelection = null;
   var bsLastWordSearch = null;
+  var bsCombineVerses = false;
 
   // ---- Smart passage search data ----
   var bsBookList = [{% for book_name, book_label in bible_books %}{'n':'{{ book_name }}','l':'{{ book_label|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}];
@@ -1869,6 +1971,24 @@
     return html.replace(new RegExp('(' + pattern + ')', 'gi'), '<strong class="bs-search-highlight">$1</strong>');
   }
 
+  function bsNormalizeExactText(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/["'“”‘’]/g, '')
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function bsMatchesExactPhrase(text, phrase) {
+    var normalizedPhrase = bsNormalizeExactText(phrase);
+    if (!normalizedPhrase) {
+      return true;
+    }
+    var normalizedText = bsNormalizeExactText(text);
+    return normalizedText.indexOf(normalizedPhrase) !== -1;
+  }
+
   function bsSearchBookRange(fromBook, toBook) {
     var fromMeta = bsSearchBookMeta[fromBook];
     var toMeta = bsSearchBookMeta[toBook];
@@ -1880,7 +2000,7 @@
 
   function bsSearchScopeRange() {
     var scope = String($('#bs-search-scope').val() || 'whole');
-    if (scope === 'custom') {
+    if (scope === 'custom' || scope === 'custom_books') {
       return bsSearchBookRange($('#bs-search-from-book').val(), $('#bs-search-to-book').val());
     }
     if (scope === 'writings') {
@@ -1899,14 +2019,15 @@
 
   function bsSearchScopeLabel() {
     var $option = $('#bs-search-scope option:selected');
-    if ($('#bs-search-scope').val() !== 'custom') {
+    if ($('#bs-search-scope').val() !== 'custom' && $('#bs-search-scope').val() !== 'custom_books') {
       return $.trim($option.text());
     }
     return $.trim($('#bs-search-from-book option:selected').text()) + ' - ' + $.trim($('#bs-search-to-book option:selected').text());
   }
 
   function bsSyncAdvancedSearchControls() {
-    $('.bs-search-custom-range').toggle(String($('#bs-search-scope').val() || '') === 'custom');
+    var scope = String($('#bs-search-scope').val() || '');
+    $('.bs-search-custom-range').toggle(scope === 'custom' || scope === 'custom_books');
   }
 
   function bsSearchEffectiveQuery(query) {
@@ -1933,6 +2054,11 @@
     var $target = $('#bs-word-search-results');
     var results = (payload && payload.results) || [];
     var query = String((bsLastWordSearch && bsLastWordSearch.query) || (payload && payload.query) || $('#bs-word-search-input').val() || '');
+    if (bsLastWordSearch && bsLastWordSearch.exactPhrase) {
+      results = results.filter(function(result) {
+        return bsMatchesExactPhrase(String((result && result.text) || ''), query);
+      });
+    }
     var bibleName = String((payload && payload.bible_display_name) || '');
     var total = parseInt((payload && payload.total) || 0, 10) || results.length;
     var verseCount = parseInt((payload && payload.verse_count) || total, 10) || total;
@@ -2100,6 +2226,7 @@
 
   function currentBibleStudyState() {
     var range = clampBibleStudyRange();
+    bsCombineVerses = $('#bs-combine-verses').is(':checked');
     return {
       book: String($('#bs-book').val() || ''),
       bookLabel: selectedBookLabel(),
@@ -2107,7 +2234,8 @@
       startVerse: range.startVerse,
       endVerse: range.endVerse,
       bibles: selectedBibleDescriptors(),
-      showOriginalText: $('#bs-show-original').is(':checked')
+      showOriginalText: $('#bs-show-original').is(':checked'),
+      combineVerses: bsCombineVerses
     };
   }
 
@@ -2132,6 +2260,7 @@
     if (state.showOriginalText) {
       params.set('show_original', '1');
     }
+    params.set('combine_verses', state.combineVerses ? '1' : '0');
     $.each(state.bibles, function(_, bible) {
       if (bible.id) {
         params.append('bible_id', bible.id);
@@ -2210,7 +2339,38 @@
     if (state.endVerse !== state.startVerse) {
       heading += '&ndash;' + escapeHtml(String(state.endVerse));
     }
-    return '<div class="row mb-2"><div class="col-12"><h5 class="mb-1">' + heading + '</h5><p class="text-muted small mb-0">' + badges + '</p></div></div>';
+    return '<div class="row mb-2"><div class="col-12">' +
+      '<div class="bs-passage-nav-shell">' +
+      '<button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="prev" data-step="' + escapeHtml(String(bsMaxVersesConst)) + '"><i class="fa fa-angle-left mr-1" aria-hidden="true"></i>{% trans "Previous" %} ' + escapeHtml(String(bsMaxVersesConst)) + ' {% trans "verses" %}</button>' +
+      '<h5 class="bs-passage-pill">' + heading + '</h5>' +
+      '<button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="next" data-step="' + escapeHtml(String(bsMaxVersesConst)) + '">{% trans "Next" %} ' + escapeHtml(String(bsMaxVersesConst)) + ' {% trans "verses" %}<i class="fa fa-angle-right ml-1" aria-hidden="true"></i></button>' +
+      '</div>' +
+      '<p class="text-muted small mb-0 bs-results-head-badges">' + badges + '</p></div></div>';
+  }
+
+  function bibleStudyCombinedTranslationCardHtml(state, bible) {
+    return '<div class="' + bibleStudyColumnClass(state.bibles.length) + ' mb-2">' +
+      '<div class="bible-study-translation-card" data-bible-id="' + escapeHtml(bible.id) + '">' +
+      '<div class="bible-study-translation-head">' +
+      '<span class="bible-study-translation-title">' + escapeHtml(bible.displayName) + '</span>' +
+      '</div>' +
+      '<p class="bs-verse-text bs-combined-text" data-bible-verse-text="1">' + verseSpinnerHtml('api') + '</p>' +
+      (bible.copyright ? '<p class="bible-study-copyright mb-0"><small>' + escapeHtml(bible.copyright) + '</small></p>' : '') +
+      '</div></div>';
+  }
+
+  function buildCombinedBibleStudyText(state, bibleId, displayName, verses) {
+    var lines = [];
+    var abbreviation = bibleStudyAbbreviationForSelection(bibleId, displayName || '').toUpperCase();
+    bibleStudyVerseNumbers(state).forEach(function(verseNumber) {
+      var text = String(verses[String(verseNumber)] || '—');
+      var footer = $.trim(String((state && state.bookLabel) || '')) + ' ' + String((state && state.chapter) || '') + ':' + String(verseNumber || '');
+      if (abbreviation) {
+        footer += ' (' + abbreviation + ')';
+      }
+      lines.push('<span class="js-copy-selectable-line bs-copy-line" data-copy-group="' + escapeHtml('bs|' + String(bibleId || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(verseNumber || '')) + '" data-copy-abbreviation="' + escapeHtml(abbreviation) + '" data-copy-text="' + escapeHtml(text.replace(/\s+/g, ' ').trim()) + '" data-copy-footer="' + escapeHtml(footer) + '">' + escapeHtml(String(verseNumber) + ' ' + text).replace(/\n/g, '<br>') + '</span>');
+    });
+    return lines.join('<br>');
   }
 
   function bibleStudyTranslationCardHtml(state, verseNumber, bible, isLastVerse) {
@@ -2224,9 +2384,8 @@
       '<div class="bible-study-translation-card" data-verse="' + escapeHtml(String(verseNumber)) + '" data-bible-id="' + escapeHtml(bible.id) + '">' +
       '<div class="bible-study-translation-head">' +
       '<span class="bible-study-translation-title">' + escapeHtml(bible.displayName) + '</span>' +
-      '<button type="button" class="btn btn-sm bible-study-copy-btn" data-verse="' + escapeHtml(String(verseNumber)) + '" title="{% trans "Copy this verse. Click a neighboring verse next to copy a range." %}"><i class="fa fa-copy mr-1" aria-hidden="true"></i> {% trans "Copy" %}</button>' +
       '</div>' +
-      '<p class="bs-verse-text" data-bible-verse-text="1">' + verseSpinnerHtml(spinnerSource) + '</p>' +
+      '<p class="bs-verse-text js-copy-selectable-line" data-bible-verse-text="1" data-copy-group="' + escapeHtml('bs|' + String(bible.id || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(verseNumber || '')) + '">' + verseSpinnerHtml(spinnerSource) + '</p>' +
       copyrightHtml +
       '</div></div>';
   }
@@ -2285,9 +2444,49 @@
       '</div></div></div></div>';
   }
 
+  function bibleStudyCombinedVerseActionHtml(state, verseNumber) {
+    var isOt = isOtBibleStudyBook(state.book);
+    var originalPanelsHtml = state.showOriginalText ? bibleStudyOriginalPanelsHtml(state, verseNumber) : '';
+    var commentaryButtonHtml =
+      '<button type="button" class="btn btn-sm commentary-action-btn scriptura-commentary-btn mr-2 mb-1" data-scriptura-book="' + escapeHtml(scripturaBookName(state.book)) + '" data-scriptura-chapter="' + escapeHtml(String(state.chapter)) + '" data-scriptura-verse="' + escapeHtml(String(verseNumber)) + '"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "Other Commentary" %}</button>' +
+      (isOt
+        ? '<button type="button" class="btn btn-sm sefaria-commentary-btn sefaria-commentary-btn-secondary mr-2 mb-1" data-sefaria-ref="' + escapeHtml(sefariaRefName(state.book) + ' ' + state.chapter + ':' + verseNumber) + '"><img src="https://www.sefaria.org/favicon.ico" alt="Sefaria" class="commentary-favicon"> {% trans "Jewish Commentary" %}</button>'
+        : '') +
+      '<button type="button" class="btn btn-sm commentary-action-btn bible-study-original-toggle-btn mr-2 mb-1' + (state.showOriginalText ? ' active' : '') + '" data-verse="' + escapeHtml(String(verseNumber)) + '"><i class="fa fa-language mr-1"></i> {% trans "Original text" %}</button>';
+    var commentaryPanelHtml = '<div class="scriptura-commentary-panel w-100 mb-1"></div>' + (isOt ? '<div class="sefaria-commentary-panel w-100 mb-1"></div>' : '');
+
+    return '<div class="our-services-wrapper mb-2 bible-study-verse-card bible-study-combined-verse-actions" data-verse="' + escapeHtml(String(verseNumber)) + '">' +
+      '<div class="services-inner" style="padding:0.75rem 1rem; align-items:flex-start;">' +
+      '<div class="our-services-text w-100">' +
+      '<div class="d-flex align-items-center flex-wrap mb-2 bible-study-verse-actions">' +
+      '<span class="badge badge-light border mr-2 bible-study-reference-chip" style="font-size:0.9rem; min-width:2.8rem;">' + escapeHtml(state.bookLabel) + ' ' + escapeHtml(String(state.chapter)) + ':' + escapeHtml(String(verseNumber)) + '</span>' +
+      commentaryButtonHtml +
+      '<div class="w-100"></div>' +
+        originalPanelsHtml +
+      '<div class="w-100 bible-study-commentary-slot">' + commentaryPanelHtml + '</div>' +
+      '</div></div></div></div>';
+  }
+
   function renderBibleStudySkeleton(state) {
     if (!state.bibles.length) {
       $('#bs-results-region').html('<div class="row"><div class="col-12"><div class="alert alert-info">{% trans "Select at least one Bible translation in the Settings panel above. Verses load automatically after changing passage or translations." %}</div></div></div>');
+      return;
+    }
+
+    if (state.combineVerses) {
+      var combinedCards = state.bibles.map(function(bible) {
+        return bibleStudyCombinedTranslationCardHtml(state, bible);
+      }).join('');
+      var combinedVerseActions = bibleStudyVerseNumbers(state).map(function(verseNumber) {
+        return bibleStudyCombinedVerseActionHtml(state, verseNumber);
+      }).join('');
+
+      $('#bs-results-region').html(
+        bibleStudySummaryHtml(state) +
+        '<div class="row bible-study-results" id="bs-verse-area" data-book="' + escapeHtml(state.book) + '" data-chapter="' + escapeHtml(String(state.chapter)) + '" data-start-verse="' + escapeHtml(String(state.startVerse)) + '" data-end-verse="' + escapeHtml(String(state.endVerse)) + '"><div class="col-12"><div class="our-services-wrapper mb-3 bible-study-verse-card"><div class="services-inner" style="padding:1rem 1.2rem; align-items:flex-start;"><div class="our-services-text w-100"><div class="row w-100">' + combinedCards + '</div></div></div></div>' + combinedVerseActions + '</div></div>'
+      );
+      ensureBibleStudyCopyButtons(state);
+      updateBibleStudyScripturaVisibility();
       return;
     }
 
@@ -2307,13 +2506,43 @@
     var displayName = String((payload && payload.bible_display_name) || '').trim();
     var verses = (payload && payload.verses) ? payload.verses : {};
     var copyrights = String((payload && payload.copyright) || '');
+    if (state.combineVerses) {
+      var $combinedCard = $('.bible-study-translation-card[data-bible-id="' + bibleId + '"]').first();
+      if (!$combinedCard.length) {
+        return;
+      }
+      if (displayName) {
+        $combinedCard.find('.bible-study-translation-title').text(displayName);
+      }
+      $combinedCard.find('[data-bible-verse-text="1"]').html(buildCombinedBibleStudyText(state, bibleId, displayName || (bibleStudyAbbreviationForSelection(bibleId, $combinedCard.find('.bible-study-translation-title').text()) || ''), verses));
+      if (copyrights) {
+        if (!$combinedCard.find('.bible-study-copyright').length) {
+          $combinedCard.append('<p class="bible-study-copyright mb-0"><small></small></p>');
+        }
+        $combinedCard.find('.bible-study-copyright small').text(copyrights);
+      }
+      ensureBibleStudyCopyButtons(state);
+      return;
+    }
     $('.bible-study-translation-card[data-bible-id="' + bibleId + '"]').each(function() {
       var $card = $(this);
       var verseNumber = String($card.data('verse') || '');
+      var copyFooter = $.trim(String((state && state.bookLabel) || '')) + ' ' + String((state && state.chapter) || '') + ':' + verseNumber;
+      var abbr = bibleStudyAbbreviationForSelection(bibleId, displayName || $card.find('.bible-study-translation-title').text()).toUpperCase();
+      if (abbr) {
+        copyFooter += ' (' + abbr + ')';
+      }
       if (displayName) {
         $card.find('.bible-study-translation-title').text(displayName);
       }
-      $card.find('[data-bible-verse-text="1"]').html(escapeHtml(String(verses[verseNumber] || '—')).replace(/\n/g, '<br>'));
+      $card.find('[data-bible-verse-text="1"]').html(escapeHtml(String(verses[verseNumber] || '—')).replace(/\n/g, '<br>'))
+        .attr('data-copy-footer', copyFooter)
+        .attr('data-copy-group', ['bs', bibleId, state.book, state.chapter].join('|'))
+        .attr('data-copy-book-label', String(state.bookLabel || ''))
+        .attr('data-copy-chapter', String(state.chapter || ''))
+        .attr('data-copy-verse', verseNumber)
+        .attr('data-copy-abbreviation', abbr)
+        .attr('data-copy-text', String(verses[verseNumber] || '—').replace(/\s+/g, ' ').trim());
       if (verseNumber === String(state.endVerse) && copyrights) {
         if (!$card.find('.bible-study-copyright').length) {
           $card.append('<p class="bible-study-copyright mb-0"><small></small></p>');
@@ -2712,6 +2941,17 @@
       return $.trim(parts[1]).toUpperCase();
     }
     return $.trim(String(displayName || '')).toUpperCase();
+  }
+
+  function bibleStudyAbbreviationForSelection(bibleId, displayName) {
+    var optionText = $.trim(String($('.bs-bible-select option[value="' + bibleId + '"]').first().text() || ''));
+    if (optionText) {
+      var optionParts = optionText.split(' - ');
+      if (optionParts.length >= 2 && $.trim(optionParts[1])) {
+        return $.trim(optionParts[1]).toUpperCase();
+      }
+    }
+    return bibleStudyAbbreviationForDisplay(displayName || '');
   }
 
   function clearBibleStudyWordSearch() {
@@ -3146,6 +3386,21 @@
   function ensureOriginalTextPanels(state) {
     if (!state.showOriginalText) {
       $('.bible-study-original-row').remove();
+      return;
+    }
+
+    if (state.combineVerses) {
+      $('.bible-study-combined-verse-actions').each(function() {
+        var $card = $(this);
+        if ($card.find('.bible-study-original-row').length) {
+          return;
+        }
+        var verseNumber = String($card.data('verse') || '');
+        if (!verseNumber) {
+          return;
+        }
+        $card.find('.bible-study-commentary-slot').first().before(bibleStudyOriginalPanelsHtml(state, verseNumber));
+      });
       return;
     }
 
@@ -3779,6 +4034,24 @@
     }
   }
 
+  function bsInitSearchScopePicker() {
+    if (!$.fn.selectpicker) {
+      return;
+    }
+    var $scope = $('#bs-search-scope');
+    if (!$scope.length) {
+      return;
+    }
+    if ($scope.data('selectpicker')) {
+      $scope.selectpicker('refresh');
+    } else {
+      $scope.selectpicker({
+        liveSearch: false,
+        size: 20
+      });
+    }
+  }
+
   function updateBibleStudyScripturaVisibility() {
     $('.bible-study-shell .scriptura-commentary-btn').toggle(bibleStudyHasScripturaCommentators());
   }
@@ -3933,6 +4206,22 @@
     var $btn = $(this);
     var bibleId = String($btn.attr('data-copy-bible-id') || '');
     var verseNumber = parseInt(String($btn.attr('data-copy-verse') || $btn.data('verse') || ''), 10);
+    var isCombined = String($btn.attr('data-copy-combined') || '') === '1';
+    if (isCombined) {
+      var combinedRange = {
+        bibleId: bibleId,
+        startVerse: parseInt(String($btn.attr('data-copy-start') || ''), 10) || (currentBibleStudyState().startVerse || 1),
+        endVerse: parseInt(String($btn.attr('data-copy-end') || ''), 10) || (currentBibleStudyState().endVerse || 1)
+      };
+      var combinedText = bibleStudyCopyTextForRange(combinedRange);
+      if (!combinedText) {
+        return;
+      }
+      var combinedAbbreviation = $.trim(String($btn.attr('data-copy-abbreviation') || '')).toUpperCase();
+      var combinedCopyText = combinedText + '\n\n' + bibleStudyCopyFooter(currentBibleStudyState(), combinedRange, combinedAbbreviation);
+      writeBibleStudyCopyText(combinedCopyText, function() {});
+      return;
+    }
     var range = bibleStudyCopyRangeForClick(bibleId, verseNumber);
     if (!range) {
       return;
@@ -3968,6 +4257,10 @@
     clearBibleStudyWordSearch();
   });
 
+  $(document).on('shown.bs.modal', '#bsWordSearchAdvancedModal', function() {
+    bsInitSearchScopePicker();
+  });
+
   $(document).on('keydown', '.bible-study-shell #bs-word-search-input', function(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -3988,6 +4281,8 @@
   var bsInitialParams = new URLSearchParams(window.location.search || '');
   var bsSelectedVerseParam = $.trim(String(bsInitialParams.get('selected_verse') || ''));
   var bsSelectedStrongsParam = $.trim(String(bsInitialParams.get('selected_strongs') || ''));
+  bsCombineVerses = String(bsInitialParams.get('combine_verses') || '1') !== '0';
+  $('#bs-combine-verses').prop('checked', bsCombineVerses);
   if (bsSelectedVerseParam && bsSelectedStrongsParam) {
     bsPendingStrongsSelection = {
       verse: bsSelectedVerseParam,
@@ -3995,14 +4290,144 @@
     };
   }
 
+  $(document).on('change', '#bs-combine-verses', function() {
+    queueBibleStudyAutoApply(0);
+  });
+
+  function bsApplyRangeAndSubmit(startVerse, endVerse) {
+    startVerse = parseInt(startVerse, 10) || 1;
+    endVerse = parseInt(endVerse, 10) || startVerse;
+    $('#bs-start').val(startVerse);
+    $('#bs-end').val(endVerse);
+    bsInitPassageInput();
+    $('#bibleStudyForm').trigger('submit');
+  }
+
+  function bsCanonicalBookNames() {
+    return bsBookList.map(function(book) { return String(book.n || ''); });
+  }
+
+  function bsBookChapterCount(bookName) {
+    var meta = bsSearchBookMeta[String(bookName || '')];
+    return meta ? (parseInt(meta[1], 10) || 1) : 1;
+  }
+
+  function bsBookByOffset(bookName, delta) {
+    var books = bsCanonicalBookNames();
+    var index = books.indexOf(String(bookName || ''));
+    if (index < 0) {
+      return '';
+    }
+    var target = index + delta;
+    if (target < 0 || target >= books.length) {
+      return '';
+    }
+    return books[target];
+  }
+
+  function bsApplyTargetPassage(bookName, chapter, startVerse, endVerse) {
+    var nextBook = String(bookName || '');
+    var nextChapter = parseInt(chapter, 10) || 1;
+    var bookMeta = bsBookList.filter(function(book) { return String(book.n) === nextBook; })[0];
+    $('#bs-book').val(nextBook);
+    if (bookMeta) {
+      $('#bs-book').data('book-label', String(bookMeta.l || nextBook));
+    }
+    $('#bs-chapter').val(nextChapter);
+    bsApplyRangeAndSubmit(startVerse, endVerse);
+  }
+
+  function bsNavigateRange(direction, step) {
+    var state = currentBibleStudyState();
+    var jump = Math.max(1, parseInt(step, 10) || bsMaxVersesConst || 1);
+    if (direction === 'prev') {
+      if (state.startVerse > 1) {
+        var prevEnd = state.startVerse - 1;
+        var prevStart = Math.max(1, prevEnd - jump + 1);
+        bsApplyRangeAndSubmit(prevStart, prevEnd);
+        return;
+      }
+
+      if (state.chapter > 1) {
+        var previousChapter = state.chapter - 1;
+        var preferredBibleIdPrev = bsMetaBibleId();
+        bsFetchChapterMax(state.book, previousChapter, preferredBibleIdPrev, function(maxVersePrevChapter) {
+          var prevChapterMax = parseInt(maxVersePrevChapter || 0, 10);
+          if (!prevChapterMax) {
+            return;
+          }
+          var prevStartInPrevChapter = Math.max(1, prevChapterMax - jump + 1);
+          bsApplyTargetPassage(state.book, previousChapter, prevStartInPrevChapter, prevChapterMax);
+        });
+        return;
+      }
+
+      var previousBook = bsBookByOffset(state.book, -1);
+      if (!previousBook) {
+        return;
+      }
+      var previousBookChapter = bsBookChapterCount(previousBook);
+      var preferredBibleIdPrevBook = bsMetaBibleId();
+      bsFetchChapterMax(previousBook, previousBookChapter, preferredBibleIdPrevBook, function(maxVersePrevBook) {
+        var prevBookChapterMax = parseInt(maxVersePrevBook || 0, 10);
+        if (!prevBookChapterMax) {
+          return;
+        }
+        var prevStartInPrevBook = Math.max(1, prevBookChapterMax - jump + 1);
+        bsApplyTargetPassage(previousBook, previousBookChapter, prevStartInPrevBook, prevBookChapterMax);
+      });
+      return;
+    }
+
+    var nextStart = state.endVerse + 1;
+    var preferredBibleId = bsMetaBibleId();
+    bsFetchChapterMax(state.book, state.chapter, preferredBibleId, function(maxVerse) {
+      var currentChapterMax = parseInt(maxVerse || 0, 10);
+      if (currentChapterMax && nextStart <= currentChapterMax) {
+        var nextEndSameChapter = Math.min(nextStart + jump - 1, currentChapterMax);
+        bsApplyRangeAndSubmit(nextStart, nextEndSameChapter);
+        return;
+      }
+
+      var nextBook = state.book;
+      var nextChapter = state.chapter + 1;
+      if (nextChapter > bsBookChapterCount(state.book)) {
+        nextBook = bsBookByOffset(state.book, 1);
+        nextChapter = 1;
+      }
+      if (!nextBook) {
+        return;
+      }
+
+      var preferredBibleIdNext = bsMetaBibleId();
+      bsFetchChapterMax(nextBook, nextChapter, preferredBibleIdNext, function(maxVerseNextChapter) {
+        var nextChapterMax = parseInt(maxVerseNextChapter || 0, 10);
+        if (!nextChapterMax) {
+          return;
+        }
+        var nextEnd = Math.min(1 + jump - 1, nextChapterMax);
+        bsApplyTargetPassage(nextBook, nextChapter, 1, nextEnd);
+      });
+    });
+  }
+
+  $(document).on('click', '.bible-study-shell [data-bs-nav]', function(event) {
+    event.preventDefault();
+    bsNavigateRange(String($(this).attr('data-bs-nav') || ''), parseInt($(this).attr('data-step'), 10) || bsMaxVersesConst);
+  });
+
   syncBibleStudyOriginalToggleButtons();
   updateBibleStudyScripturaVisibility();
   ensureBibleStudyCopyButtons(currentBibleStudyState());
   bsInitPassageInput();
+  bsInitSearchScopePicker();
   bsSyncAdvancedSearchControls();
   enforceBibleSlotLimit();
   refreshBibleSlots();
   bsSuppressAutoApply = false;
+  if (bsCombineVerses && $('#bs-verse-area').length) {
+    $('#bibleStudyForm').trigger('submit');
+  }
   if ($('#bs-show-original').is(':checked') && $('#bs-verse-area').length) {
     var initialState = currentBibleStudyState();
     bsOriginalOpenVerses[String((bsPendingStrongsSelection && bsPendingStrongsSelection.verse) || initialState.startVerse || 1)] = true;

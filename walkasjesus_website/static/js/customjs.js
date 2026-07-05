@@ -300,27 +300,13 @@ $(document).ready(function(){
     return '';
   }
 
-  function buildVerseCopyText($element) {
-    var verseText = $.trim($element.find('.bible-verse-text-content').first().text() || '');
-    if (!verseText) {
-      return '';
-    }
+  function copyFooterForVerseElement($element) {
     var abbreviation = currentBibleCopyAbbreviation();
     var footer = $.trim(extractVerseReferenceLabel($element));
     if (footer && abbreviation) {
       footer += ' (' + abbreviation + ')';
     }
-    return footer ? verseText + '\n\n' + footer : verseText;
-  }
-
-  function attachVerseCopyButton($element) {
-    if (!$element.find('.bible-verse-text-content').length) {
-      return;
-    }
-    if ($element.find('.bible-verse-copy-btn').length) {
-      return;
-    }
-    $element.append('<button type="button" class="bible-verse-copy-btn"><i class="fa fa-copy" aria-hidden="true"></i> Copy</button>');
+    return footer;
   }
 
   function cleanRenderedVerseText(text) {
@@ -337,8 +323,12 @@ $(document).ready(function(){
     var cleanText = cleanRenderedVerseText(text);
     $elements.each(function() {
       var $element = $(this);
-      $element.empty().append($('<span class="bible-verse-text-content"></span>').text(cleanText));
-      attachVerseCopyButton($element);
+      var footer = copyFooterForVerseElement($element);
+      var $line = $('<span class="bible-verse-text-content js-copy-selectable-line"></span>').text(cleanText);
+      if (footer) {
+        $line.attr('data-copy-footer', footer);
+      }
+      $element.empty().append($line);
     });
   }
 
@@ -366,6 +356,119 @@ $(document).ready(function(){
     }
     $temp.remove();
     if (onDone) onDone(copied);
+  }
+
+  function ensureCopySelectionBar() {
+    if ($('#global-copy-selection-bar').length) {
+      return;
+    }
+    $('body').append(
+      '<div id="global-copy-selection-bar" class="copy-selection-bar" hidden>' +
+      '<div class="copy-selection-bar-inner">' +
+      '<span class="copy-selection-count"></span>' +
+      '<div class="copy-selection-actions">' +
+      '<button type="button" class="btn btn-sm commentary-action-btn" data-copy-selected-lines="1"><i class="fa fa-copy mr-1" aria-hidden="true"></i>Copy</button>' +
+      '<button type="button" class="btn btn-sm commentary-action-btn" data-clear-selected-lines="1"><i class="fa fa-times mr-1" aria-hidden="true"></i>Clear</button>' +
+      '</div></div></div>'
+    );
+  }
+
+  function selectedCopyLines() {
+    return $('.js-copy-selectable-line.is-copy-selected');
+  }
+
+  function clearSelectedCopyLines() {
+    selectedCopyLines().removeClass('is-copy-selected');
+    updateCopySelectionBar();
+  }
+
+  function updateCopySelectionBar() {
+    ensureCopySelectionBar();
+    var $bar = $('#global-copy-selection-bar');
+    var count = selectedCopyLines().length;
+    if (!count) {
+      $bar.attr('hidden', true);
+      return;
+    }
+    $bar.find('.copy-selection-count').text(String(count) + ' selected');
+    $bar.removeAttr('hidden');
+  }
+
+  function buildSelectedCopyText() {
+    var $lines = selectedCopyLines();
+    if (!$lines.length) {
+      return '';
+    }
+
+    var firstGroup = $.trim(String($lines.first().attr('data-copy-group') || ''));
+    var sameGroup = !!firstGroup;
+    $lines.each(function() {
+      if ($.trim(String($(this).attr('data-copy-group') || '')) !== firstGroup) {
+        sameGroup = false;
+        return false;
+      }
+      return undefined;
+    });
+
+    if (sameGroup) {
+      var mergedLines = [];
+      var verseNumbers = [];
+      var first = $lines.first();
+      var bookLabel = $.trim(String(first.attr('data-copy-book-label') || ''));
+      var chapter = $.trim(String(first.attr('data-copy-chapter') || ''));
+      var abbreviation = $.trim(String(first.attr('data-copy-abbreviation') || ''));
+      if (!abbreviation && /^bs\|/.test(firstGroup)) {
+        var groupParts = firstGroup.split('|');
+        var groupBibleId = $.trim(String(groupParts[1] || ''));
+        if (groupBibleId) {
+          var optionText = $.trim(String($('.bs-bible-select option[value="' + groupBibleId + '"]').first().text() || ''));
+          if (optionText) {
+            var optionParts = optionText.split(' - ');
+            if (optionParts.length >= 2 && $.trim(optionParts[1])) {
+              abbreviation = $.trim(optionParts[1]).toUpperCase();
+            }
+          }
+        }
+      }
+
+      $lines.each(function() {
+        var $line = $(this);
+        var copyText = $.trim(String($line.attr('data-copy-text') || $line.text() || ''));
+        if (copyText) {
+          mergedLines.push(copyText.replace(/\s+/g, ' ').trim());
+        }
+        var verse = parseInt(String($line.attr('data-copy-verse') || ''), 10);
+        if (verse) {
+          verseNumbers.push(verse);
+        }
+      });
+
+      if (mergedLines.length) {
+        var mergedText = mergedLines.join(' ').replace(/\s+/g, ' ').trim();
+        if (bookLabel && chapter && verseNumbers.length) {
+          var startVerse = Math.min.apply(null, verseNumbers);
+          var endVerse = Math.max.apply(null, verseNumbers);
+          var footer = bookLabel + ' ' + chapter + ':' + startVerse + (endVerse > startVerse ? '-' + endVerse : '');
+          if (abbreviation) {
+            footer += ' (' + abbreviation + ')';
+          }
+          return mergedText + '\n\n' + footer;
+        }
+        return mergedText;
+      }
+    }
+
+    var chunks = [];
+    $lines.each(function() {
+      var $line = $(this);
+      var lineText = $.trim(String($line.attr('data-copy-text') || $line.text() || ''));
+      if (!lineText) {
+        return;
+      }
+      var footer = $.trim(String($line.attr('data-copy-footer') || ''));
+      chunks.push(footer ? (lineText + '\n\n' + footer) : lineText);
+    });
+    return chunks.join('\n\n');
   }
 
   function getCsrfToken() {
@@ -955,14 +1058,24 @@ $(document).ready(function(){
     }
   });
 
-  $(document).on('click', '.bible-verse-copy-btn', function(event) {
+  $(document).on('click', '.js-copy-selectable-line', function(event) {
     event.preventDefault();
-    var $button = $(this);
-    var $container = $button.closest('.bible-verse-text');
-    if (!$container.length) {
+    var $line = $(this);
+    if (!$line.text()) {
       return;
     }
-    var copyText = buildVerseCopyText($container);
+    $line.toggleClass('is-copy-selected');
+    updateCopySelectionBar();
+  });
+
+  $(document).on('click', '[data-clear-selected-lines="1"]', function(event) {
+    event.preventDefault();
+    clearSelectedCopyLines();
+  });
+
+  $(document).on('click', '[data-copy-selected-lines="1"]', function(event) {
+    event.preventDefault();
+    var copyText = buildSelectedCopyText();
     if (!copyText) {
       return;
     }
@@ -970,11 +1083,7 @@ $(document).ready(function(){
       if (!copied) {
         return;
       }
-      var $content = $container.find('.bible-verse-text-content').first();
-      $content.addClass('is-copied');
-      window.setTimeout(function() {
-        $content.removeClass('is-copied');
-      }, 1400);
+      clearSelectedCopyLines();
     });
   });
 

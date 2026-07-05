@@ -2052,19 +2052,30 @@
 
   function renderBibleStudySearchResults(payload) {
     var $target = $('#bs-word-search-results');
-    var results = (payload && payload.results) || [];
+    var originalResults = (payload && payload.results) || [];
+    var results = originalResults.slice();
     var query = String((bsLastWordSearch && bsLastWordSearch.query) || (payload && payload.query) || $('#bs-word-search-input').val() || '');
     if (bsLastWordSearch && bsLastWordSearch.exactPhrase) {
       results = results.filter(function(result) {
         return bsMatchesExactPhrase(String((result && result.text) || ''), query);
       });
     }
+    var exactPhraseFiltered = !!(bsLastWordSearch && bsLastWordSearch.exactPhrase && results.length !== originalResults.length);
     var bibleName = String((payload && payload.bible_display_name) || '');
     var total = parseInt((payload && payload.total) || 0, 10) || results.length;
     var verseCount = parseInt((payload && payload.verse_count) || total, 10) || total;
     var page = parseInt((payload && payload.page) || 1, 10) || 1;
     var pageCount = parseInt((payload && payload.page_count) || 1, 10) || 1;
-    var currentPage = ((payload && payload.pages) || []).filter(function(item) { return item && item.current; })[0] || null;
+    var pages = (payload && payload.pages) || [];
+    if (exactPhraseFiltered) {
+      // Keep summary consistent with what is visibly rendered after strict phrase filtering.
+      total = results.length;
+      verseCount = results.length;
+      page = 1;
+      pageCount = 1;
+      pages = [];
+    }
+    var currentPage = pages.filter(function(item) { return item && item.current; })[0] || null;
     var pageRange = String((currentPage && currentPage.range_label) || '');
     if (!results.length) {
       $target.html('<div class="alert alert-info mb-0">{% trans "No matching verses found in the first selected translation." %}</div>');
@@ -2094,7 +2105,6 @@
         '</' + tag + '>';
     }).join('');
 
-    var pages = (payload && payload.pages) || [];
     var pagesHtml = pages.length > 1
       ? '<div class="bs-word-search-pages">' + pages.map(function(pageItem) {
           var label = String(pageItem.page || '') + '. ' + (pageItem.range_label ? pageItem.range_label : '{% trans "Page" %} ' + String(pageItem.page || ''));

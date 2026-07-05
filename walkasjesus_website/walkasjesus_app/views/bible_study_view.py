@@ -1,12 +1,13 @@
 import logging
 import hashlib
 import json
+import re
 import requests
 import threading
 import time
 from contextlib import contextmanager
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import urlencode
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.conf import settings
@@ -99,6 +100,17 @@ _CANONICAL_CHAPTER_COUNTS = {
     'JohnFirstBook': 5, 'JohnSecondBook': 1, 'JohnThirdBook': 1, 'Jude': 1, 'Revelation': 22,
 }
 
+_API_BIBLE_BOOK_ORDER = {
+    code: index for index, code in enumerate((
+        'GEN', 'EXO', 'LEV', 'NUM', 'DEU', 'JOS', 'JDG', 'RUT', '1SA', '2SA', '1KI', '2KI',
+        '1CH', '2CH', 'EZR', 'NEH', 'EST', 'JOB', 'PSA', 'PRO', 'ECC', 'SNG', 'ISA', 'JER',
+        'LAM', 'EZK', 'DAN', 'HOS', 'JOL', 'AMO', 'OBA', 'JON', 'MIC', 'NAM', 'HAB', 'ZEP',
+        'HAG', 'ZEC', 'MAL', 'MAT', 'MRK', 'LUK', 'JHN', 'ACT', 'ROM', '1CO', '2CO', 'GAL',
+        'EPH', 'PHP', 'COL', '1TH', '2TH', '1TI', '2TI', 'TIT', 'PHM', 'HEB', 'JAS', '1PE',
+        '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV',
+    ))
+}
+
 
 def _bible_dropdown_label(bible):
     language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
@@ -121,29 +133,90 @@ def _safe_int(value, default, minimum=1):
 
 def _safe_search_limit(value):
     try:
-        return max(1, min(25, int(value)))
+        return max(1, min(50, int(value)))
     except (ValueError, TypeError):
         return 10
 
 
-def _api_bible_search_url(bible_id, query, limit):
-    encoded_query = quote(str(query or '').strip())
-    return f'https://api.scripture.api.bible/v1/bibles/{bible_id}/search?query={encoded_query}&limit={limit}&sort=relevance'
+def _safe_search_offset(value):
+    try:
+        return max(0, int(value))
+    except (ValueError, TypeError):
+        return 0
 
 
-def _api_bible_search_payload(bible_id, query, limit):
-    query_hash = hashlib.sha256(str(query or '').strip().encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:search:v1:{bible_id}:{limit}:{query_hash}'
+def _safe_search_sort(value):
+    sort = str(value or '').strip()
+    return sort if sort in {'relevance', 'canonical', 'reverse-canonical'} else 'canonical'
+
+
+def _safe_search_fuzziness(value):
+    fuzziness = str(value or '').strip().upper()
+    return fuzziness if fuzziness in {'0', '1', '2', 'AUTO'} else 'AUTO'
+
+
+def _safe_search_range(value):
+    search_range = str(value or '').strip().upper()
+    return search_range if len(search_range) <= 200 and re.match(r'^[A-Z0-9.,\-]+$', search_range) else ''
+
+
+def _api_bible_search_url(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range=''):
+    params = {
+        'query': str(query or '').strip(),
+        'limit': limit,
+        'offset': offset,
+        'sort': sort,
+        'fuzziness': fuzziness,
+    }
+    if search_range:
+        params['range'] = search_range
+    return f'https://api.scripture.api.bible/v1/bibles/{bible_id}/search?{urlencode(params)}'
+
+
+def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range=''):
+    cache_payload = json.dumps({
+        'query': str(query or '').strip(),
+        'limit': limit,
+        'offset': offset,
+        'sort': sort,
+        'fuzziness': fuzziness,
+        'range': search_range,
+    }, sort_keys=True)
+    query_hash = hashlib.sha256(cache_payload.encode('utf-8')).hexdigest()[:24]
+    cache_key = f'bible_study:search:v2:{bible_id}:{query_hash}'
     cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
     if cached is not None:
         return cached
 
-    url = _api_bible_search_url(bible_id, query, limit)
+    url = _api_bible_search_url(bible_id, query, limit, offset, sort, fuzziness, search_range)
     response = requests.get(url, headers={'api-key': settings.BIBLE_API_KEY}, timeout=15)
     response.raise_for_status()
     payload = response.json()
     cache.set(cache_key, payload, BIBLE_SEARCH_CACHE_TIMEOUT)
     return payload
+
+
+def _search_result_canonical_key(verse):
+    verse_id = str(verse.get('id') or '').strip().upper() if isinstance(verse, dict) else ''
+    parts = verse_id.split('.')
+    if len(parts) >= 3 and parts[0] in _API_BIBLE_BOOK_ORDER:
+        try:
+            return (_API_BIBLE_BOOK_ORDER[parts[0]], int(parts[1]), int(parts[2]))
+        except (TypeError, ValueError):
+            pass
+    return (len(_API_BIBLE_BOOK_ORDER) + 1, 0, 0)
+
+
+def _search_result_reference_span(verses):
+    references = [
+        (_search_result_canonical_key(verse), str(verse.get('reference') or '').strip())
+        for verse in verses or []
+        if isinstance(verse, dict) and str(verse.get('reference') or '').strip()
+    ]
+    if not references:
+        return ''
+    references.sort(key=lambda item: item[0])
+    return references[0][1] if len(references) == 1 else f'{references[0][1]}–{references[-1][1]}'
 
 
 def _chapter_index_path():
@@ -557,6 +630,10 @@ class BibleStudySearchView(View):
         bible_id = str(request.GET.get('bible_id', '')).strip()
         query = str(request.GET.get('query', '')).strip()
         limit = _safe_search_limit(request.GET.get('limit'))
+        offset = _safe_search_offset(request.GET.get('offset'))
+        sort = _safe_search_sort(request.GET.get('sort'))
+        fuzziness = _safe_search_fuzziness(request.GET.get('fuzziness'))
+        search_range = _safe_search_range(request.GET.get('range'))
 
         if not query:
             return JsonResponse({'error': 'Enter words to search for.'}, status=400)
@@ -571,7 +648,7 @@ class BibleStudySearchView(View):
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
         try:
-            api_payload = _api_bible_search_payload(bible_id, query, limit)
+            api_payload = _api_bible_search_payload(bible_id, query, limit, offset, sort, fuzziness, search_range)
         except Exception:
             logger.exception('Bible Study API.Bible search failed for bible=%s query=%s', bible_id, query)
             return JsonResponse({'error': 'Search is not available for this translation right now.'}, status=502)
@@ -588,13 +665,45 @@ class BibleStudySearchView(View):
                 'text': verse.get('text', ''),
             })
 
+        total = int(data.get('total', len(results)) or len(results)) if isinstance(data, dict) else len(results)
+        verse_count = int(data.get('verseCount', total) or total) if isinstance(data, dict) else total
+        page = (offset // limit) + 1
+        page_count = max(1, ((total + limit - 1) // limit) if total else 1)
+        page_summary_count = min(page_count, int(getattr(settings, 'BIBLE_STUDY_SEARCH_PAGE_SUMMARY_LIMIT', 12)))
+        pages = []
+        for page_number in range(1, page_summary_count + 1):
+            page_offset = (page_number - 1) * limit
+            page_verses = verses if page_offset == offset else []
+            if page_offset != offset:
+                try:
+                    summary_payload = _api_bible_search_payload(bible_id, query, limit, page_offset, sort, fuzziness, search_range)
+                    summary_data = summary_payload.get('data', {}) if isinstance(summary_payload, dict) else {}
+                    page_verses = summary_data.get('verses', []) if isinstance(summary_data, dict) else []
+                except Exception:
+                    page_verses = []
+            pages.append({
+                'page': page_number,
+                'offset': page_offset,
+                'range_label': _search_result_reference_span(page_verses),
+                'current': page_number == page,
+            })
+
         language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
         display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)
         return JsonResponse({
             'query': query,
             'bible_id': bible_id,
             'bible_display_name': display_name,
-            'total': data.get('total', len(results)) if isinstance(data, dict) else len(results),
+            'limit': limit,
+            'offset': offset,
+            'sort': sort,
+            'fuzziness': fuzziness,
+            'range': search_range,
+            'total': total,
+            'verse_count': verse_count,
+            'page': page,
+            'page_count': page_count,
+            'pages': pages,
             'results': results,
         })
 

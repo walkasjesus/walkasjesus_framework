@@ -3,6 +3,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
+from urllib.parse import parse_qs, urlparse
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.contrib.auth.models import AnonymousUser
@@ -1063,8 +1064,101 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
         self.assertEqual(payload['results'][0]['reference'], 'Revelation 22:2')
         called_url = mock_requests_get.call_args.args[0]
         self.assertIn('/v1/bibles/en-kjv/search?', called_url)
-        self.assertIn('query=Tree%20of%20life', called_url)
+        called_params = parse_qs(urlparse(called_url).query)
+        self.assertEqual(called_params['query'][0], 'Tree of life')
+        self.assertEqual(called_params['limit'][0], '10')
+        self.assertEqual(called_params['offset'][0], '0')
+        self.assertEqual(called_params['sort'][0], 'canonical')
+        self.assertEqual(called_params['fuzziness'][0], 'AUTO')
         self.assertEqual(mock_requests_get.call_args.kwargs['headers']['api-key'], 'test-key')
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_bible_study_search_endpoint_accepts_advanced_api_bible_options(self, mock_bible_translation, mock_requests_get):
+        cache.clear()
+        mock_bible_translation.return_value.get.return_value = SimpleNamespace(
+            id='en-kjv',
+            name='King James Version',
+            language='en',
+        )
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {
+            'data': {
+                'total': 75,
+                'verseCount': 64,
+                'verses': [
+                    {
+                        'id': 'GEN.1.11',
+                        'reference': 'Genesis 1:11',
+                        'text': 'Let the earth bring forth grass, the herb yielding seed, and the fruit tree yielding fruit.',
+                    }
+                ],
+            }
+        }
+        mock_requests_get.return_value = mock_response
+
+        with self.settings(DISABLED_BIBLE_TRANSLATIONS=[], CJB_BIBLE_ENABLED=False, BIBLE_API_KEY='test-key', DISABLE_CACHE_FOR_DEBUG=True):
+            response = self.client.get(
+                reverse('commandments:bible_study_search'),
+                {
+                    'bible_id': 'en-kjv',
+                    'query': 'tree',
+                    'limit': '25',
+                    'offset': '50',
+                    'sort': 'canonical',
+                    'fuzziness': '0',
+                    'range': 'GEN.1.1-MAL.4.6',
+                },
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['limit'], 25)
+        self.assertEqual(payload['offset'], 50)
+        self.assertEqual(payload['sort'], 'canonical')
+        self.assertEqual(payload['fuzziness'], '0')
+        self.assertEqual(payload['range'], 'GEN.1.1-MAL.4.6')
+        self.assertEqual(payload['page'], 3)
+        self.assertEqual(payload['page_count'], 3)
+        called_params = parse_qs(urlparse(mock_requests_get.call_args_list[0].args[0]).query)
+        self.assertEqual(called_params['range'][0], 'GEN.1.1-MAL.4.6')
+        self.assertEqual(called_params['offset'][0], '50')
+        self.assertEqual(called_params['sort'][0], 'canonical')
+        self.assertEqual(called_params['fuzziness'][0], '0')
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_bible_study_search_page_labels_use_bible_order(self, mock_bible_translation, mock_requests_get):
+        cache.clear()
+        mock_bible_translation.return_value.get.return_value = SimpleNamespace(
+            id='en-kjv',
+            name='King James Version',
+            language='en',
+        )
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = {
+            'data': {
+                'total': 2,
+                'verseCount': 2,
+                'verses': [
+                    {'id': 'EZK.31.9', 'reference': 'Ezekiel 31:9', 'text': 'tree'},
+                    {'id': 'DEU.6.11', 'reference': 'Deuteronomy 6:11', 'text': 'tree'},
+                ],
+            }
+        }
+        mock_requests_get.return_value = mock_response
+
+        with self.settings(DISABLED_BIBLE_TRANSLATIONS=[], CJB_BIBLE_ENABLED=False, BIBLE_API_KEY='test-key', DISABLE_CACHE_FOR_DEBUG=True):
+            response = self.client.get(
+                reverse('commandments:bible_study_search'),
+                {'bible_id': 'en-kjv', 'query': 'tree', 'limit': '2'},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['pages'][0]['range_label'], 'Deuteronomy 6:11–Ezekiel 31:9')
 
 
 class CommentaryTranslationViewTestCase(SimpleTestCase):

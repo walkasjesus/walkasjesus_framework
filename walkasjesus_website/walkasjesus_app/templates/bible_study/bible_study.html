@@ -955,8 +955,87 @@
       min-width: 92px;
     }
 
+    .bible-study-shell .bs-word-search-advanced-btn {
+      align-items: center;
+      border-radius: 6px;
+      display: inline-flex;
+      gap: 0.35rem;
+      justify-content: center;
+      min-width: 108px;
+    }
+
     .bible-study-shell .bs-word-search-results {
       margin-top: 0.85rem;
+    }
+
+    .bible-study-shell .bs-word-search-summary {
+      background: #fffdf7;
+      border: 1px solid #eadfbc;
+      border-radius: 6px;
+      color: #4b3a12;
+      margin-bottom: 0.75rem;
+      padding: 0.7rem 0.8rem;
+    }
+
+    .bible-study-shell .bs-word-search-pages {
+      border-bottom: 1px solid #eadfbc;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.55rem;
+    }
+
+    .bible-study-shell .bs-search-options-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .bible-study-shell .bs-search-option-row {
+      align-items: start;
+      display: grid;
+      gap: 0.85rem;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+      padding: 0.35rem 0;
+    }
+
+    .bible-study-shell .bs-search-option-copy {
+      min-width: 0;
+    }
+
+    .bible-study-shell .bs-search-option-copy .form-label {
+      margin-bottom: 0.2rem;
+    }
+
+    .bible-study-shell .bs-search-option-copy p {
+      margin-bottom: 0;
+    }
+
+    .bible-study-shell .bs-search-option-control {
+      min-width: 0;
+    }
+
+    .bible-study-shell .bs-search-custom-range {
+      background: #fffdf7;
+      border: 1px solid #eadfbc;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+      padding: 0.55rem;
+    }
+
+    .bible-study-shell .bs-search-custom-range-row {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bible-study-shell .bs-word-search-page-btn {
+      margin: 0 0.35rem 0.35rem 0;
+      text-align: left;
+    }
+
+    .bible-study-shell .bs-word-search-page-btn.active {
+      background: #e2b900;
+      border-color: #c8a84b;
+      color: #3d2f08;
     }
 
     .bible-study-shell .bs-word-search-result {
@@ -994,6 +1073,17 @@
       font-weight: 800;
     }
 
+    @media (max-width: 767.98px) {
+      .bible-study-shell .bs-search-option-row {
+        gap: 0.45rem;
+        grid-template-columns: 1fr;
+      }
+
+      .bible-study-shell .bs-search-option-copy .form-label {
+        margin-bottom: 0.1rem;
+      }
+    }
+
     @media (max-width: 575.98px) {
       .bible-study-shell .bs-word-search-row {
         flex-direction: column;
@@ -1005,6 +1095,14 @@
 
       .bible-study-shell .bs-word-search-clear-btn {
         width: 100%;
+      }
+
+      .bible-study-shell .bs-word-search-advanced-btn {
+        width: 100%;
+      }
+
+      .bible-study-shell .bs-search-custom-range-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1057,6 +1155,9 @@
                   <button type="button" class="btn commentary-action-btn bs-word-search-btn" id="bs-word-search-btn">
                     <i class="fa fa-search" aria-hidden="true"></i> {% trans 'Search' %}
                   </button>
+                  <button type="button" class="btn commentary-action-btn bs-word-search-advanced-btn" id="bs-word-search-advanced-btn" data-toggle="modal" data-target="#bsWordSearchAdvancedModal" title="{% trans 'Search options' %}" aria-label="{% trans 'Search options' %}">
+                    <i class="fa fa-sliders" aria-hidden="true"></i> {% trans 'Options' %}
+                  </button>
                 </div>
                 <small class="text-muted d-block mt-2">{% trans 'Search uses the first selected translation. Matching words are shown in bold.' %}</small>
               </div>
@@ -1093,6 +1194,125 @@
 
         </form>
         <div id="bs-word-search-results" class="bs-word-search-results" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="bsWordSearchAdvancedModal" tabindex="-1" role="dialog" aria-labelledby="bsWordSearchAdvancedTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bsWordSearchAdvancedTitle">{% trans 'Search options' %}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="bs-search-options-stack">
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-scope" class="form-label">{% trans 'Search in' %}</label>
+                  <p class="small text-muted">{% trans 'Pick the Bible section to search. Choose custom to limit from one book to another.' %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select" id="bs-search-scope">
+                      <option value="whole">{% trans 'The Whole Bible' %}</option>
+                      <option value="ot">{% trans 'Old Testament' %}</option>
+                      <option value="nt">{% trans 'New Testament' %}</option>
+                      <option value="torah">{% trans 'Torah' %}</option>
+                      <option value="prophets">{% trans "Prophets (Nevi'im)" %}</option>
+                      <option value="writings">{% trans 'Writings (Ketuvim)' %}</option>
+                      <option value="gospels">{% trans 'Gospels' %}</option>
+                      <option value="pauline">{% trans 'Pauline Epistles' %}</option>
+                      <option value="general">{% trans 'General Epistles' %}</option>
+                      <option value="custom">{% trans 'Select a range of biblical books' %}</option>
+                    </select>
+                  </div>
+                  <div class="bs-search-custom-range">
+                    <div class="bs-search-custom-range-row">
+                      <div>
+                        <label for="bs-search-from-book" class="form-label">{% trans 'From' %}</label>
+                        <div class="select law-filter-select-wrap">
+                          <select class="form-control law-filter-select" id="bs-search-from-book">
+                            {% for book_name, book_label in bible_books %}<option value="{{ book_name }}">{{ book_label }}</option>{% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label for="bs-search-to-book" class="form-label">{% trans 'To' %}</label>
+                        <div class="select law-filter-select-wrap">
+                          <select class="form-control law-filter-select" id="bs-search-to-book">
+                            {% for book_name, book_label in bible_books %}<option value="{{ book_name }}"{% if book_name == 'Revelation' %} selected{% endif %}>{{ book_label }}</option>{% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-limit" class="form-label">{% trans 'Results per page' %}</label>
+                  <p class="small text-muted">{% trans 'Choose how many verses to show on each result page.' %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select" id="bs-search-limit">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50" selected>50</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-sort" class="form-label">{% trans 'Result order' %}</label>
+                  <p class="small text-muted">{% trans 'Keep canonical Bible order or prioritize best matches first.' %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select" id="bs-search-sort">
+                      <option value="canonical" selected>{% trans 'Bible order' %}</option>
+                      <option value="relevance">{% trans 'Best matches first' %}</option>
+                      <option value="reverse-canonical">{% trans 'Reverse Bible order' %}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-fuzziness" class="form-label">{% trans 'Match strictness' %}</label>
+                  <p class="small text-muted">{% trans 'Set how strict spelling should be while searching.' %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select" id="bs-search-fuzziness">
+                      <option value="AUTO">{% trans 'Automatic' %}</option>
+                      <option value="0">{% trans 'Exact spelling only' %}</option>
+                      <option value="1">{% trans 'Allow close spelling' %}</option>
+                      <option value="2">{% trans 'Allow broader spelling' %}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-exact-phrase" class="form-label">{% trans 'Exact phrase mode' %}</label>
+                  <p class="small text-muted">{% trans 'Enable this to search the full query as one exact phrase.' %}</p>
+                </div>
+                <div class="bs-search-option-control d-flex align-items-center">
+                  <div class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox" value="1" id="bs-search-exact-phrase">
+                    <label class="form-check-label" for="bs-search-exact-phrase">{% trans 'Search as one exact phrase' %}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            <button type="button" class="btn commentary-action-btn" id="bs-search-advanced-apply"><i class="fa fa-search mr-1" aria-hidden="true"></i>{% trans 'Apply and search' %}</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1246,10 +1466,30 @@
   var bsOriginalOpenVerses = {};
   var bsPendingStrongsSelection = null;
   var bsCopySelection = null;
+  var bsLastWordSearch = null;
 
   // ---- Smart passage search data ----
   var bsBookList = [{% for book_name, book_label in bible_books %}{'n':'{{ book_name }}','l':'{{ book_label|escapejs }}'}{% if not forloop.last %},{% endif %}{% endfor %}];
   var bsMaxVersesConst = {{ max_verses }};
+  var bsSearchBookMeta = {
+    Genesis: ['GEN', 50, 26], Exodus: ['EXO', 40, 38], Leviticus: ['LEV', 27, 34], Numbers: ['NUM', 36, 13], Deuteronomy: ['DEU', 34, 12],
+    Joshua: ['JOS', 24, 33], Judges: ['JDG', 21, 25], Ruth: ['RUT', 4, 22], SamuelFirstBook: ['1SA', 31, 13], SamuelSecondBook: ['2SA', 24, 25],
+    KingsFirstBook: ['1KI', 22, 53], KingsSecondBook: ['2KI', 25, 30], ChroniclesFirstBook: ['1CH', 29, 30], ChroniclesSecondBook: ['2CH', 36, 23],
+    Ezra: ['EZR', 10, 44], Nehemiah: ['NEH', 13, 31], Esther: ['EST', 10, 3], Job: ['JOB', 42, 17], Psalms: ['PSA', 150, 6], Proverbs: ['PRO', 31, 31],
+    Ecclesiastes: ['ECC', 12, 14], SongOfSolomon: ['SNG', 8, 14], Isaiah: ['ISA', 66, 24], Jeremiah: ['JER', 52, 34], Lamentations: ['LAM', 5, 22],
+    Ezekiel: ['EZK', 48, 35], Daniel: ['DAN', 12, 13], Hosea: ['HOS', 14, 9], Joel: ['JOL', 3, 21], Amos: ['AMO', 9, 15], Obadiah: ['OBA', 1, 21],
+    Jonah: ['JON', 4, 11], Micah: ['MIC', 7, 20], Nahum: ['NAM', 3, 19], Habakkuk: ['HAB', 3, 19], Zephaniah: ['ZEP', 3, 20],
+    Haggai: ['HAG', 2, 23], Zechariah: ['ZEC', 14, 21], Malachi: ['MAL', 4, 6], Matthew: ['MAT', 28, 20], Mark: ['MRK', 16, 20],
+    Luke: ['LUK', 24, 53], John: ['JHN', 21, 25], Acts: ['ACT', 28, 31], Romans: ['ROM', 16, 27], CorinthiansFirstBook: ['1CO', 16, 24],
+    CorinthiansSecondBook: ['2CO', 13, 14], Galatians: ['GAL', 6, 18], Ephesians: ['EPH', 6, 24], Philippians: ['PHP', 4, 23], Colossians: ['COL', 4, 18],
+    ThessaloniansFirstBook: ['1TH', 5, 28], ThessaloniansSecondBook: ['2TH', 3, 18], TimothyFirstBook: ['1TI', 6, 21], TimothySecondBook: ['2TI', 4, 22],
+    Titus: ['TIT', 3, 15], Philemon: ['PHM', 1, 25], Hebrews: ['HEB', 13, 25], James: ['JAS', 5, 20], PeterFirstBook: ['1PE', 5, 14],
+    PeterSecondBook: ['2PE', 3, 18], JohnFirstBook: ['1JN', 5, 21], JohnSecondBook: ['2JN', 1, 13], JohnThirdBook: ['3JN', 1, 14], Jude: ['JUD', 1, 25], Revelation: ['REV', 22, 21]
+  };
+  var bsSearchScopeRanges = {
+    whole: ['Genesis', 'Revelation'], ot: ['Genesis', 'Malachi'], nt: ['Matthew', 'Revelation'], torah: ['Genesis', 'Deuteronomy'],
+    prophets: ['Joshua', 'Malachi'], writings: ['Psalms', 'SongOfSolomon'], gospels: ['Matthew', 'John'], pauline: ['Romans', 'Philemon'], general: ['Hebrews', 'Jude']
+  };
 
   function bsNormalizeQ(q) { return String(q || '').trim().toLowerCase(); }
 
@@ -1629,15 +1869,91 @@
     return html.replace(new RegExp('(' + pattern + ')', 'gi'), '<strong class="bs-search-highlight">$1</strong>');
   }
 
+  function bsSearchBookRange(fromBook, toBook) {
+    var fromMeta = bsSearchBookMeta[fromBook];
+    var toMeta = bsSearchBookMeta[toBook];
+    if (!fromMeta || !toMeta) {
+      return '';
+    }
+    return fromMeta[0] + '.1.1-' + toMeta[0] + '.' + toMeta[1] + '.' + toMeta[2];
+  }
+
+  function bsSearchScopeRange() {
+    var scope = String($('#bs-search-scope').val() || 'whole');
+    if (scope === 'custom') {
+      return bsSearchBookRange($('#bs-search-from-book').val(), $('#bs-search-to-book').val());
+    }
+    if (scope === 'writings') {
+      return [
+        bsSearchBookRange('Ruth', 'Ruth'),
+        bsSearchBookRange('ChroniclesFirstBook', 'ChroniclesSecondBook'),
+        bsSearchBookRange('Ezra', 'Esther'),
+        bsSearchBookRange('Job', 'SongOfSolomon'),
+        bsSearchBookRange('Lamentations', 'Lamentations'),
+        bsSearchBookRange('Daniel', 'Daniel')
+      ].filter(Boolean).join(',');
+    }
+    var preset = bsSearchScopeRanges[scope] || bsSearchScopeRanges.whole;
+    return bsSearchBookRange(preset[0], preset[1]);
+  }
+
+  function bsSearchScopeLabel() {
+    var $option = $('#bs-search-scope option:selected');
+    if ($('#bs-search-scope').val() !== 'custom') {
+      return $.trim($option.text());
+    }
+    return $.trim($('#bs-search-from-book option:selected').text()) + ' - ' + $.trim($('#bs-search-to-book option:selected').text());
+  }
+
+  function bsSyncAdvancedSearchControls() {
+    $('.bs-search-custom-range').toggle(String($('#bs-search-scope').val() || '') === 'custom');
+  }
+
+  function bsSearchEffectiveQuery(query) {
+    var text = $.trim(String(query || ''));
+    if ($('#bs-search-exact-phrase').is(':checked') && text && text.charAt(0) !== '"') {
+      return '"' + text + '"';
+    }
+    return text;
+  }
+
+  function bsCurrentSearchOptions(offset) {
+    return {
+      limit: parseInt($('#bs-search-limit').val(), 10) || 50,
+      offset: parseInt(offset || 0, 10) || 0,
+      sort: String($('#bs-search-sort').val() || 'canonical'),
+      fuzziness: String($('#bs-search-fuzziness').val() || 'AUTO'),
+      range: bsSearchScopeRange(),
+      scopeLabel: bsSearchScopeLabel(),
+      exactPhrase: $('#bs-search-exact-phrase').is(':checked')
+    };
+  }
+
   function renderBibleStudySearchResults(payload) {
     var $target = $('#bs-word-search-results');
     var results = (payload && payload.results) || [];
-    var query = String((payload && payload.query) || $('#bs-word-search-input').val() || '');
+    var query = String((bsLastWordSearch && bsLastWordSearch.query) || (payload && payload.query) || $('#bs-word-search-input').val() || '');
     var bibleName = String((payload && payload.bible_display_name) || '');
+    var total = parseInt((payload && payload.total) || 0, 10) || results.length;
+    var verseCount = parseInt((payload && payload.verse_count) || total, 10) || total;
+    var page = parseInt((payload && payload.page) || 1, 10) || 1;
+    var pageCount = parseInt((payload && payload.page_count) || 1, 10) || 1;
+    var currentPage = ((payload && payload.pages) || []).filter(function(item) { return item && item.current; })[0] || null;
+    var pageRange = String((currentPage && currentPage.range_label) || '');
     if (!results.length) {
       $target.html('<div class="alert alert-info mb-0">{% trans "No matching verses found in the first selected translation." %}</div>');
       return;
     }
+
+    var summaryHtml = '<div class="bs-word-search-summary">' +
+      '<div><strong>' + escapeHtml(query) + '</strong></div>' +
+      '<div>{% trans "occurs" %} ' + escapeHtml(String(total)) + ' {% trans "times in" %} <strong>' + escapeHtml(String(verseCount)) + '</strong> {% trans "verses in" %} ' + escapeHtml(bibleName || '{% trans "the selected Bible" %}') + '.</div>' +
+      '<div class="mt-1">{% trans "Page" %} ' + escapeHtml(String(page)) + ' / ' + escapeHtml(String(pageCount)) + ': ' +
+        '<em>' + (bsLastWordSearch && bsLastWordSearch.exactPhrase ? '{% trans "exact phrase" %}' : '{% trans "all keywords" %}') + '</em>' +
+        (pageRange ? ' (' + escapeHtml(pageRange) + ')' : '') +
+        (bsLastWordSearch && bsLastWordSearch.scopeLabel ? ' · ' + escapeHtml(bsLastWordSearch.scopeLabel) : '') +
+      '</div>' +
+    '</div>';
 
     var itemsHtml = results.map(function(result) {
       var reference = String((result && result.reference) || '');
@@ -1652,17 +1968,28 @@
         '</' + tag + '>';
     }).join('');
 
+    var pages = (payload && payload.pages) || [];
+    var pagesHtml = pages.length > 1
+      ? '<div class="bs-word-search-pages">' + pages.map(function(pageItem) {
+          var label = String(pageItem.page || '') + '. ' + (pageItem.range_label ? pageItem.range_label : '{% trans "Page" %} ' + String(pageItem.page || ''));
+          return '<button type="button" class="btn btn-sm commentary-action-btn bs-word-search-page-btn' + (pageItem.current ? ' active' : '') + '" data-search-offset="' + escapeHtml(String(pageItem.offset || 0)) + '">' + escapeHtml(label) + '</button>';
+        }).join('') + '</div>'
+      : '';
+
     $target.html(
       '<div class="bs-word-search-panel">' +
       '<div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}' + (bibleName ? ' · ' + escapeHtml(bibleName) : '') + '</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div>' +
+      summaryHtml +
+      pagesHtml +
       itemsHtml +
       '</div>'
     );
   }
 
-  function runBibleStudyWordSearch() {
+  function runBibleStudyWordSearch(offset) {
     var endpoint = bibleStudySearchUrl();
     var query = $.trim($('#bs-word-search-input').val());
+    var options = bsCurrentSearchOptions(offset || 0);
     var firstBible = selectedBibleDescriptors()[0] || null;
     var $target = $('#bs-word-search-results');
     if (!query) {
@@ -1675,14 +2002,22 @@
     }
 
     $target.html('<div class="bs-word-search-panel"><div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div><p class="mb-0 text-muted"><i class="fa fa-spinner fa-spin mr-1"></i>{% trans "Searching the first selected translation…" %}</p></div>');
+    bsLastWordSearch = $.extend({
+      bibleId: firstBible.id,
+      query: query
+    }, options);
     $.ajax({
       type: 'GET',
       url: endpoint,
       dataType: 'json',
       data: {
         bible_id: firstBible.id,
-        query: query,
-        limit: 10
+        query: bsSearchEffectiveQuery(query),
+        limit: options.limit,
+        offset: options.offset,
+        sort: options.sort,
+        fuzziness: options.fuzziness,
+        range: options.range
       }
     }).done(function(payload) {
       renderBibleStudySearchResults(payload || {});
@@ -1697,6 +2032,19 @@
 
   $(document).on('click', '.bible-study-shell .bs-word-search-close-btn', function() {
     $('#bs-word-search-results').empty();
+  });
+
+  $(document).on('change', '.bible-study-shell #bs-search-scope', function() {
+    bsSyncAdvancedSearchControls();
+  });
+
+  $(document).on('click', '.bible-study-shell #bs-search-advanced-apply', function() {
+    $('#bsWordSearchAdvancedModal').modal('hide');
+    runBibleStudyWordSearch(0);
+  });
+
+  $(document).on('click', '.bible-study-shell .bs-word-search-page-btn', function() {
+    runBibleStudyWordSearch(parseInt($(this).data('searchOffset'), 10) || 0);
   });
 
   function verseSpinnerHtml(source) {
@@ -3651,6 +3999,7 @@
   updateBibleStudyScripturaVisibility();
   ensureBibleStudyCopyButtons(currentBibleStudyState());
   bsInitPassageInput();
+  bsSyncAdvancedSearchControls();
   enforceBibleSlotLimit();
   refreshBibleSlots();
   bsSuppressAutoApply = false;

@@ -3626,10 +3626,15 @@
     function closeNativeComboMenu() {
       $wrap.removeClass('native-combo-open');
       $menu.removeClass('is-open');
+      syncNativeComboInput();
     }
 
-    function refreshNativeComboMenu() {
-      var typed = $.trim(String($input.val() || '')).toLowerCase();
+    function refreshNativeComboMenu(filterText) {
+      var typed = filterText;
+      if (typeof typed === 'undefined') {
+        typed = $input.val();
+      }
+      typed = $.trim(String(typed || '')).toLowerCase();
       var selectedValue = String($select.val() || '');
       var items = [];
 
@@ -3662,15 +3667,45 @@
       });
     }
 
+    function syncNativeComboInput() {
+      var selectedLabel = $.trim($select.find('option:selected').text());
+      $input.val(selectedLabel).prop('disabled', $select.prop('disabled'));
+      if ($select.prop('disabled')) {
+        closeNativeComboMenuSilently();
+        return;
+      }
+      refreshNativeComboMenu('');
+    }
+
+    function closeNativeComboMenuSilently() {
+      $wrap.removeClass('native-combo-open');
+      $menu.removeClass('is-open');
+    }
+
+    function closeOpenNativeComboWraps($exceptWrap) {
+      $('.bible-study-select-wrap.native-combo-open').not($exceptWrap || $()).each(function() {
+        var $openWrap = $(this);
+        var $openSelect = $openWrap.find('select').first();
+        var $openInput = $openWrap.children('.native-combo-input').first();
+        var $openMenu = $openWrap.children('.bs-native-combo-menu').first();
+        var selectedLabel = $.trim($openSelect.find('option:selected').text());
+        $openInput.val(selectedLabel);
+        $openWrap.removeClass('native-combo-open');
+        $openMenu.removeClass('is-open');
+      });
+    }
+
     function openNativeComboMenu() {
       if ($select.prop('disabled')) {
         return;
       }
-      $('.bible-study-select-wrap.native-combo-open').not($wrap).removeClass('native-combo-open')
-        .find('.bs-native-combo-menu').removeClass('is-open');
-      refreshNativeComboMenu();
+      closeOpenNativeComboWraps($wrap);
+      refreshNativeComboMenu('');
       $wrap.addClass('native-combo-open');
       $menu.addClass('is-open');
+      window.setTimeout(function() {
+        $input.trigger('select');
+      }, 0);
     }
 
     if (!$input.length) {
@@ -3708,7 +3743,8 @@
         });
         $select.val(selectedValue).trigger('change');
         refreshNativeComboMenu();
-        openNativeComboMenu();
+        $wrap.addClass('native-combo-open');
+        $menu.addClass('is-open');
       });
     }
 
@@ -3725,13 +3761,7 @@
       });
     }
 
-    var selectedLabel = $.trim($select.find('option:selected').text());
-    $input.val(selectedLabel).prop('disabled', $select.prop('disabled'));
-    if ($select.prop('disabled')) {
-      closeNativeComboMenu();
-    } else {
-      refreshNativeComboMenu();
-    }
+    syncNativeComboInput();
     $wrap.addClass('native-combo-enabled');
   }
 
@@ -3739,8 +3769,16 @@
     if ($(event.target).closest('.bible-study-select-wrap.native-combo-enabled').length) {
       return;
     }
-    $('.bible-study-select-wrap.native-combo-open').removeClass('native-combo-open')
-      .find('.bs-native-combo-menu').removeClass('is-open');
+    $('.bible-study-select-wrap.native-combo-open').each(function() {
+      var $openWrap = $(this);
+      var $openSelect = $openWrap.find('select').first();
+      var $openInput = $openWrap.children('.native-combo-input').first();
+      var $openMenu = $openWrap.children('.bs-native-combo-menu').first();
+      var selectedLabel = $.trim($openSelect.find('option:selected').text());
+      $openInput.val(selectedLabel);
+      $openWrap.removeClass('native-combo-open');
+      $openMenu.removeClass('is-open');
+    });
   });
 
   function setPickerValue($select, value) {

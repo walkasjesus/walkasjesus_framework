@@ -62,10 +62,15 @@ $(document).ready(function(){
 
     function closeMenu() {
       $wrap.removeClass('native-combo-open');
+      syncInputValue();
     }
 
-    function renderMenu() {
-      var typed = $.trim(String($input.val() || '')).toLowerCase();
+    function renderMenu(filterText) {
+      var typed = filterText;
+      if (typeof typed === 'undefined') {
+        typed = $input.val();
+      }
+      typed = $.trim(String(typed || '')).toLowerCase();
       var selectedValue = String($select.val() || '');
       var items = [];
 
@@ -100,7 +105,33 @@ $(document).ready(function(){
       var selectedLabel = $.trim($select.find('option:selected').text());
       $input.val(selectedLabel);
       $input.prop('disabled', !!$select.prop('disabled'));
-      renderMenu();
+      renderMenu('');
+    }
+
+    function closeOpenNativeCombos($exceptWrap) {
+      $('.select.native-combo-open').not($exceptWrap || $()).each(function() {
+        var $openWrap = $(this);
+        var $openSelect = $openWrap.children('select').first();
+        var $openInput = $openWrap.children('.native-combo-input').first();
+        var selectedLabel = $.trim($openSelect.find('option:selected').text());
+        $openInput.val(selectedLabel);
+        $openWrap.removeClass('native-combo-open');
+      });
+    }
+
+    function openMenu() {
+      if ($select.prop('disabled')) {
+        return;
+      }
+      closeOpenNativeCombos($wrap);
+      renderMenu('');
+      $wrap.addClass('native-combo-open');
+
+      if (liveSearch) {
+        window.setTimeout(function() {
+          $input.trigger('select');
+        }, 0);
+      }
     }
 
     if (!$input.length) {
@@ -113,12 +144,7 @@ $(document).ready(function(){
       }
 
       $input.on('focus click', function() {
-        if ($select.prop('disabled')) {
-          return;
-        }
-        $('.select.native-combo-open').not($wrap).removeClass('native-combo-open');
-        renderMenu();
-        $wrap.addClass('native-combo-open');
+        openMenu();
       });
 
       $input.on('input', function() {
@@ -142,6 +168,17 @@ $(document).ready(function(){
         }
         renderMenu();
         $wrap.addClass('native-combo-open');
+      });
+
+      $input.on('keydown', function(event) {
+        if (event.key === 'Escape') {
+          closeMenu();
+          return;
+        }
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          openMenu();
+        }
       });
     }
 
@@ -179,7 +216,14 @@ $(document).ready(function(){
       if ($(event.target).closest('.select.native-combo-enabled').length) {
         return;
       }
-      $('.select.native-combo-open').removeClass('native-combo-open');
+      $('.select.native-combo-open').each(function() {
+        var $openWrap = $(this);
+        var $openSelect = $openWrap.children('select').first();
+        var $openInput = $openWrap.children('.native-combo-input').first();
+        var selectedLabel = $.trim($openSelect.find('option:selected').text());
+        $openInput.val(selectedLabel);
+        $openWrap.removeClass('native-combo-open');
+      });
     });
 
     $(document).off('jc:native-select-refresh.jcNativeCombo').on('jc:native-select-refresh.jcNativeCombo', 'select', function() {

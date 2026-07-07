@@ -943,6 +943,42 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
 
 class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
+    databases = {'default'}
+
+    @patch('walkasjesus_app.context_processors.available_sword_commentators_json', return_value='[]')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_bible_study_page_renders_settings_and_results(self, mock_bible_translation, _mock_sword_commentators):
+        english_bible = MockBibleStudyBible(
+            'en-kjv',
+            'King James Version',
+            'en',
+            {
+                ('JohnFirstBook', 2, 3): 'That which we have seen and heard declare we unto you.',
+                ('JohnFirstBook', 2, 4): 'And these things write we unto you, that your joy may be full.',
+                ('JohnFirstBook', 2, 5): 'This then is the message which we have heard of him.',
+                ('JohnFirstBook', 2, 6): 'If we say that we have fellowship with him, and walk in darkness.',
+            },
+            copyright='Public domain',
+        )
+        mock_bible_translation.return_value.all_in_supported_languages.return_value = [english_bible]
+        mock_bible_translation.return_value.get.side_effect = lambda bible_id: english_bible if bible_id == english_bible.id else None
+
+        with self.settings(
+            DEFAULT_BIBLE_ANY_LANGUAGE='en-kjv',
+            DEFAULT_BIBLE_PER_LANGUAGE={'en': 'en-kjv'},
+            DISABLED_BIBLE_TRANSLATIONS=[],
+            CJB_BIBLE_ENABLED=False,
+            DISABLE_CACHE_FOR_DEBUG=True,
+        ):
+            response = self.client.get(reverse('commandments:bible_study'))
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode('utf-8')
+        self.assertIn('id="bibleStudyForm"', html)
+        self.assertIn('id="bs-results-region"', html)
+        self.assertIn('King James Version', html)
+        self.assertIn('That which we have seen and heard declare we unto you.', html)
+
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_bible_translations_endpoint_returns_bibles_for_each_language(self, mock_bible_translation):
         mock_bible_translation.return_value.all_enabled.return_value = [

@@ -624,6 +624,12 @@ $(document).ready(function(){
     if (details.showOriginalText) {
       params.set('show_original', '1');
     }
+    if (details.selectedVerse) {
+      params.set('selected_verse', String(details.selectedVerse));
+    }
+    if (details.selectedStrongs) {
+      params.set('selected_strongs', String(details.selectedStrongs));
+    }
     return baseUrl + '?' + params.toString();
   }
 
@@ -953,6 +959,106 @@ $(document).ready(function(){
       }
     });
   }
+
+  function sharedOriginalWordTitle(word) {
+    var lines = [];
+    if (word && word.translation_label) {
+      lines.push(String(word.translation_label));
+    }
+    $.each((word && word.candidates) || [], function(index, candidate) {
+      if (index >= 4) {
+        return false;
+      }
+      var gloss = ((candidate && candidate.glosses) || []).slice(0, 3).join(', ');
+      var definition = gloss || String((candidate && candidate.definition) || '');
+      lines.push(String((candidate && candidate.strongs_number) || '') + ': ' + definition);
+    });
+    if (!lines.length && word && word.detail_note) {
+      lines.push(String(word.detail_note));
+    }
+    return lines.join('\n');
+  }
+
+  function sharedOriginalWordTranslation(word, emptyLabel) {
+    if (!word || !word.clickable) {
+      return '';
+    }
+    if (word.translation_label) {
+      return String(word.translation_label);
+    }
+    return String(emptyLabel || '');
+  }
+
+  function sharedOriginalFlattenReferences(referenceGroups) {
+    return (referenceGroups || []).reduce(function(all, group) {
+      (group || []).forEach(function(reference) {
+        if (reference) {
+          all.push(reference);
+        }
+      });
+      return all;
+    }, []);
+  }
+
+  function sharedOriginalFirstReference(referenceGroups) {
+    var references = sharedOriginalFlattenReferences(referenceGroups);
+    return references.length ? String(references[0]) : '';
+  }
+
+  function sharedOriginalFirstParseableReference(references, parseReference) {
+    for (var index = 0; index < (references || []).length; index += 1) {
+      var reference = $.trim(String(references[index] || ''));
+      if (reference && (!parseReference || parseReference(reference))) {
+        return reference;
+      }
+    }
+    return '';
+  }
+
+  function sharedOriginalFirstReferenceForCandidate(candidate, parseReference) {
+    if (!candidate) {
+      return '';
+    }
+    var translationCounts = (candidate.translation_counts || []);
+    for (var index = 0; index < translationCounts.length; index += 1) {
+      var reference = sharedOriginalFirstReference((translationCounts[index] && translationCounts[index].reference_groups) || []);
+      if (reference) {
+        return reference;
+      }
+    }
+    var groupedReference = sharedOriginalFirstReference((candidate.reference_groups || []));
+    if (groupedReference) {
+      return groupedReference;
+    }
+    return sharedOriginalFirstParseableReference(candidate.references || [], parseReference);
+  }
+
+  function sharedOriginalNormalizeStrongsCode(value) {
+    var code = String(value || '').toUpperCase().replace(/[{}\[\](),.;:]/g, '').trim();
+    return code.replace(/^([GH])0+(\d+)/, function(_, prefix, digits) {
+      return prefix + String(parseInt(digits, 10));
+    });
+  }
+
+  function sharedOriginalUsageOutlineCount(items) {
+    var total = 0;
+    (items || []).forEach(function(item) {
+      total += parseInt((item && item.count) || 0, 10) || 0;
+      total += sharedOriginalUsageOutlineCount((item && item.children) || []);
+    });
+    return total;
+  }
+
+  window.WAJOriginalTextShared = {
+    buildWordTitle: sharedOriginalWordTitle,
+    buildWordTranslation: sharedOriginalWordTranslation,
+    flattenReferences: sharedOriginalFlattenReferences,
+    firstReference: sharedOriginalFirstReference,
+    firstParseableReference: sharedOriginalFirstParseableReference,
+    firstReferenceForCandidate: sharedOriginalFirstReferenceForCandidate,
+    normalizeStrongsCode: sharedOriginalNormalizeStrongsCode,
+    usageOutlineCount: sharedOriginalUsageOutlineCount
+  };
 
   function sanitizeSefariaHtml(html) {
     if (!html) {
@@ -1935,27 +2041,66 @@ $(document).ready(function(){
       return -1;
     }
 
-    function detailOriginalWordTitle(word) {
-      var lines = [];
-      if (word && word.translation_label) {
-        lines.push(String(word.translation_label));
+    function originalTextShared() {
+      return window.WAJOriginalTextShared || {};
+    }
+
+    function detailOriginalUiText(key) {
+      var lang = getCommentaryLanguage() === 'nl' ? 'nl' : 'en';
+      var labels = {
+        noTagYet: { en: 'No tag yet', nl: 'Nog geen tag' },
+        directGloss: { en: 'Direct gloss', nl: 'Directe gloss' },
+        grammar: { en: 'Grammar', nl: 'Grammatica' },
+        lookupNote: { en: 'Lookup note', nl: 'Opzoeknotitie' },
+        normalizedLookup: { en: 'Normalized lookup form', nl: 'Genormaliseerde zoekvorm' },
+        strongsDefinitions: { en: 'Strongs Definitions', nl: 'Strongs-definities' },
+        rootWord: { en: 'Root Word', nl: 'Wortelwoord' },
+        lxxEquivalent: { en: 'Most likely Hebrew equivalent based on Septuagint usage', nl: 'Meest waarschijnlijke Hebreeuwse equivalent op basis van Septuaginta-gebruik' },
+        outlineUsage: { en: 'Outline of Biblical Usage', nl: 'Overzicht van Bijbels gebruik' },
+        kjvTranslation: { en: 'KJV Translation', nl: 'KJV-vertaling' },
+        occurrences: { en: 'Occurrences', nl: 'Voorkomens' },
+        sourceTitle: { en: 'Original text', nl: 'Originele tekst' },
+        detailTitle: { en: "Strong's details", nl: "Strong's details" },
+        hoverWords: { en: 'Hover / click words', nl: 'Beweeg / klik woorden' },
+        translate: { en: 'Translate', nl: 'Vertalen' },
+        showOriginal: { en: 'Show original', nl: 'Toon origineel' },
+        openBlueLetter: { en: 'Open {code} in Blue Letter Bible', nl: 'Open {code} in Blue Letter Bible' },
+        previewPassage: { en: 'Preview this passage', nl: 'Bekijk deze passage' },
+        noWordData: { en: 'No original-language word data found for this verse.', nl: 'Geen originele woorddata gevonden voor dit vers.' },
+        hoverPrompt: { en: 'Hover or click an original-language word to inspect Strong\'s numbers, lemma data, and possible translations.', nl: 'Beweeg over of klik op een woord uit de brontekst om Strong\'s-nummers, lemma-data en mogelijke vertalingen te bekijken.' }
+      };
+      return (labels[key] && labels[key][lang]) || (labels[key] && labels[key].en) || key;
+    }
+
+    function detailOriginalNormalizeStrongsCode(value) {
+      return originalTextShared().normalizeStrongsCode(value);
+    }
+
+    function detailOriginalStrongDetailUrl(details, strongsNumber) {
+      if (!details || !details.book || !strongsNumber) {
+        return '';
       }
-      $.each((word && word.candidates) || [], function(index, candidate) {
-        if (index >= 4) {
-          return false;
-        }
-        var gloss = ((candidate && candidate.glosses) || []).slice(0, 3).join(', ');
-        var definition = gloss || String((candidate && candidate.definition) || '');
-        lines.push(String((candidate && candidate.strongs_number) || '') + ': ' + definition);
+      return buildBibleStudyUrl({
+        book: details.book,
+        chapter: details.chapter,
+        startVerse: details.startVerse,
+        endVerse: details.endVerse,
+        showOriginalText: true,
+        selectedVerse: details.startVerse,
+        selectedStrongs: detailOriginalNormalizeStrongsCode(strongsNumber)
       });
-      return lines.join('\n');
+    }
+
+    function detailOriginalFlattenReferences(referenceGroups) {
+      return originalTextShared().flattenReferences(referenceGroups);
+    }
+
+    function detailOriginalWordTitle(word) {
+      return originalTextShared().buildWordTitle(word);
     }
 
     function detailOriginalWordTranslation(word) {
-      if (!word || !word.clickable) {
-        return '';
-      }
-      return word.translation_label ? String(word.translation_label) : 'No tag yet';
+      return originalTextShared().buildWordTranslation(word, detailOriginalUiText('noTagYet'));
     }
 
     function detailOriginalEscape(value) {
@@ -1963,26 +2108,24 @@ $(document).ready(function(){
     }
 
     function detailOriginalReferenceItemsHtml(referenceGroups) {
-      var references = [];
-      (referenceGroups || []).forEach(function(group) {
-        (group || []).forEach(function(reference) {
-          if (reference) {
-            references.push(reference);
-          }
-        });
-      });
-      return references.slice(0, 24).map(function(reference) {
+      return detailOriginalFlattenReferences(referenceGroups).slice(0, 24).map(function(reference) {
+        var parsed = parseBibleStudyReference(reference);
+        var href = parsed ? buildBibleStudyUrl({
+          book: parsed.book,
+          chapter: parsed.chapter,
+          startVerse: parsed.startVerse,
+          endVerse: parsed.endVerse,
+          showOriginalText: false
+        }) : '';
+        if (href) {
+          return '<a class="detail-inline-original-ref-item detail-inline-original-ref-link" href="' + detailOriginalEscape(href) + '" title="' + detailOriginalEscape(detailOriginalUiText('previewPassage')) + '">' + detailOriginalEscape(reference) + '</a>';
+        }
         return '<span class="detail-inline-original-ref-item">' + detailOriginalEscape(reference) + '</span>';
       }).join('');
     }
 
     function detailOriginalUsageOutlineCount(items) {
-      var total = 0;
-      (items || []).forEach(function(item) {
-        total += parseInt((item && item.count) || 0, 10) || 0;
-        total += detailOriginalUsageOutlineCount((item && item.children) || []);
-      });
-      return total;
+      return originalTextShared().usageOutlineCount(items);
     }
 
     function detailOriginalUsageOutlineItemsHtml(items) {
@@ -2002,9 +2145,9 @@ $(document).ready(function(){
         var childrenHtml = detailOriginalUsageOutlineItemsHtml((item && item.children) || []);
         return '<li>' +
           (grammar ? '<div class="detail-inline-original-usage-grammar">' + detailOriginalEscape(grammar) + '</div>' : '') +
-          (label ? '<span>' + detailOriginalEscape(label) + '</span>' : '<span>Occurrences</span>') +
+          (label ? '<span class="detail-inline-original-translatable">' + detailOriginalEscape(label) + '</span>' : '<span>' + detailOriginalEscape(detailOriginalUiText('occurrences')) + '</span>') +
           (count ? ' <span class="detail-inline-original-usage-count">(' + detailOriginalEscape(count) + 'x)</span>' : '') +
-          (summary ? '<p class="mb-1">' + detailOriginalEscape(summary) + '</p>' : '') +
+          (summary ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(summary) + '</p>' : '') +
           (refsHtml ? '<div class="detail-inline-original-ref-list">' + refsHtml + '</div>' : '') +
           childrenHtml +
         '</li>';
@@ -2022,10 +2165,10 @@ $(document).ready(function(){
       var totalCount = usageOutline.length ? detailOriginalUsageOutlineCount(usageOutline) : 0;
       var refsHtml = !usageOutline.length ? detailOriginalReferenceItemsHtml(referenceGroups) : '';
       var contentHtml = usageOutline.length ? detailOriginalUsageOutlineItemsHtml(usageOutline) : '<div class="detail-inline-original-ref-list">' + refsHtml + '</div>';
-      return '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">Outline of Biblical Usage' + (totalCount ? ' (' + detailOriginalEscape(totalCount) + 'x)' : '') + '</small>' + contentHtml + '</div>';
+      return '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('outlineUsage')) + (totalCount ? ' (' + detailOriginalEscape(totalCount) + 'x)' : '') + '</small>' + contentHtml + '</div>';
     }
 
-    function detailOriginalRelatedWordCardHtml(item, showUsageOutline) {
+    function detailOriginalRelatedWordCardHtml(item, showUsageOutline, details) {
       var strongsNumber = String((item && (item.strongs_number || item.strong)) || '');
       var meanings = showUsageOutline ? [] : ((item && item.possible_meanings) || []);
       var usageOutline = showUsageOutline ? ((item && item.usage_outline) || []) : [];
@@ -2045,33 +2188,40 @@ $(document).ready(function(){
         }).join('') + '</ul>'
         : '';
       var usageOutlineHtml = usageOutline.length
-        ? '<div class="detail-inline-original-detail-section mb-0"><small class="font-weight-bold d-block mb-1">Outline of Biblical Usage</small>' + detailOriginalUsageOutlineItemsHtml(usageOutline) + '</div>'
+        ? '<div class="detail-inline-original-detail-section mb-0"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('outlineUsage')) + '</small>' + detailOriginalUsageOutlineItemsHtml(usageOutline) + '</div>'
         : '';
+      var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
+      var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
       return '<div class="detail-inline-original-root-word">' +
         '<div class="detail-inline-original-candidate-head">' +
-          '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>' +
+          (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
           ((item && item.lemma) ? '<span>' + detailOriginalEscape(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="detail-inline-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
-          ((item && item.blueletter_url) ? '<a href="' + detailOriginalEscape(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">Open ' + detailOriginalEscape(strongsNumber) + ' in Blue Letter Bible</a>' : '') +
+          ((item && item.blueletter_url) ? '<a href="' + detailOriginalEscape(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">' + detailOriginalEscape(blueLetterLabel) + '</a>' : '') +
         '</div>' +
-        (!showUsageOutline && item && item.definition ? '<p class="mb-1">' + detailOriginalEscape(item.definition) + '</p>' : '') +
+        (!showUsageOutline && item && item.definition ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(item.definition) + '</p>' : '') +
         meaningsHtml +
         usageOutlineHtml +
       '</div>';
     }
 
-    function detailOriginalSentenceHtml(words) {
-      return '<div class="detail-inline-original-sentence-words">' + (words || []).map(function(word, index) {
+    function detailOriginalSentenceHtml(words, languageCode) {
+      var sentenceClass = languageCode === 'hbo'
+        ? 'detail-inline-original-sentence-words detail-inline-original-language-hbo'
+        : 'detail-inline-original-sentence-words detail-inline-original-language-grc';
+      return '<div class="' + sentenceClass + '">' + (words || []).map(function(word, index) {
         var tokenText = String((word && (word.sentence_text || word.text)) || '').trim();
         if (!tokenText) {
           return '';
         }
-        return '<span class="detail-inline-original-token" data-word-index="' + $('<span>').text(String(index)).html() + '">' + $('<span>').text(tokenText).html() + '</span>';
+        var clickable = !!(word && word.clickable);
+        var languageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
+        return '<span class="detail-inline-original-token' + languageClass + '" data-word-index="' + $('<span>').text(String(index)).html() + '" data-clickable="' + (clickable ? '1' : '0') + '"' + (clickable ? ' tabindex="0" role="button"' : '') + '>' + $('<span>').text(tokenText).html() + '</span>';
       }).join('') + '</div>';
     }
 
-    function detailOriginalRenderWordDetail($panel, versePayload, wordIndex) {
+    function detailOriginalRenderWordDetail($panel, details, versePayload, wordIndex) {
       var words = (versePayload && versePayload.words) || [];
       var selectedWord = (wordIndex >= 0 && wordIndex < words.length) ? words[wordIndex] : null;
       var $detail = $panel.find('.detail-inline-original-detail-body');
@@ -2080,77 +2230,134 @@ $(document).ready(function(){
       }
 
       if (!selectedWord || !selectedWord.clickable) {
-        $detail.html('<p class="mb-0 text-muted">Hover or click an original-language word to inspect Strong\'s numbers, lemma data, and possible translations.</p>');
+        $detail.html('<p class="mb-0 text-muted detail-inline-original-translatable">' + detailOriginalEscape(detailOriginalUiText('hoverPrompt')) + '</p>');
         return;
       }
 
-      var html = '<div class="detail-inline-original-meta"><strong>' + detailOriginalEscape(selectedWord.text || '') + '</strong></div>';
+      var html = '<div class="detail-inline-original-meta"><strong>' + detailOriginalEscape(selectedWord.text || '') + '</strong> · ' + detailOriginalEscape(String((versePayload && versePayload.language_label) || '')) + '</div>';
       if (selectedWord.translation_label) {
-        html += '<p class="mb-2"><small>Direct gloss: ' + detailOriginalEscape(selectedWord.translation_label) + '</small></p>';
+        html += '<p class="mb-2"><small>' + detailOriginalEscape(detailOriginalUiText('directGloss')) + ': ' + detailOriginalEscape(selectedWord.translation_label) + '</small></p>';
       }
       if (selectedWord.grammar) {
-        html += '<p class="mb-2"><small>Grammar: <code>' + detailOriginalEscape(selectedWord.grammar) + '</code></small></p>';
+        html += '<p class="mb-2"><small>' + detailOriginalEscape(detailOriginalUiText('grammar')) + ': <code>' + detailOriginalEscape(selectedWord.grammar) + '</code></small></p>';
+      }
+
+      if (!selectedWord.has_candidates) {
+        html += '<div class="detail-inline-original-candidate">' +
+          '<div class="detail-inline-original-candidate-head"><strong>' + detailOriginalEscape(detailOriginalUiText('lookupNote')) + '</strong></div>' +
+          '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(String(selectedWord.detail_note || '')) + '</p>' +
+          (selectedWord.lookup_key ? '<p class="mb-0"><small>' + detailOriginalEscape(detailOriginalUiText('normalizedLookup')) + ': ' + detailOriginalEscape(String(selectedWord.lookup_key)) + '</small></p>' : '') +
+        '</div>';
+        $detail.html(html);
+        detailOriginalMaybeApplyTranslation($panel);
+        return;
       }
 
       $.each(selectedWord.candidates || [], function(_, candidate) {
         var usageHtml = detailOriginalUsageSectionHtml(candidate || {});
         var rootWordsHtml = ((candidate && candidate.root_words) || []).map(function(rootWord) {
-          return detailOriginalRelatedWordCardHtml(rootWord || {}, false);
+          return detailOriginalRelatedWordCardHtml(rootWord || {}, false, details);
         }).join('');
         var lxxHebrewHtml = ((candidate && candidate.lxx_hebrew_equivalents) || []).map(function(item) {
-          return detailOriginalRelatedWordCardHtml(item || {}, true);
+          return detailOriginalRelatedWordCardHtml(item || {}, true, details);
         }).join('');
+        var strongsNumber = String((candidate && candidate.strongs_number) || '');
+        var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
+        var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
         html += '<div class="detail-inline-original-candidate">' +
           '<div class="detail-inline-original-candidate-head">' +
-          '<strong>' + detailOriginalEscape(String((candidate && candidate.strongs_number) || '')) + '</strong>' +
+          (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
           ((candidate && candidate.lemma) ? '<span>' + detailOriginalEscape(candidate.lemma) + '</span>' : '') +
           ((candidate && candidate.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(candidate.transliteration) + '</span>' : '') +
           '</div>' +
           usageHtml +
-          ((candidate && candidate.kjv_definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">KJV Translation</small><p class="mb-0">' + detailOriginalEscape(candidate.kjv_definition) + '</p></div>' : '') +
-          ((candidate && candidate.definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">Strongs Definitions</small><p class="mb-0">' + detailOriginalEscape(candidate.definition) + '</p></div>' : '') +
-          ((rootWordsHtml || (candidate && candidate.derivation)) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">Root Word</small>' + rootWordsHtml + (!rootWordsHtml && candidate && candidate.derivation ? '<p class="mb-0">' + detailOriginalEscape(candidate.derivation) + '</p>' : '') + '</div>' : '') +
-          (lxxHebrewHtml ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">Most likely Hebrew equivalent based on Septuagint usage</small>' + lxxHebrewHtml + '</div>' : '') +
-          ((candidate && candidate.blueletter_url) ? '<p class="mb-0 mt-2"><small><a href="' + detailOriginalEscape(candidate.blueletter_url) + '" target="_blank" rel="noopener noreferrer">Open in Blue Letter Bible</a></small></p>' : '') +
+          ((candidate && candidate.kjv_definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('kjvTranslation')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.kjv_definition) + '</p></div>' : '') +
+          ((candidate && candidate.definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('strongsDefinitions')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.definition) + '</p></div>' : '') +
+          ((rootWordsHtml || (candidate && candidate.derivation)) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('rootWord')) + '</small>' + rootWordsHtml + (!rootWordsHtml && candidate && candidate.derivation ? '<p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.derivation) + '</p>' : '') + '</div>' : '') +
+          (lxxHebrewHtml ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('lxxEquivalent')) + '</small>' + lxxHebrewHtml + '</div>' : '') +
+          ((candidate && candidate.blueletter_url) ? '<p class="mb-0 mt-2"><small><a href="' + detailOriginalEscape(candidate.blueletter_url) + '" target="_blank" rel="noopener noreferrer">' + detailOriginalEscape(blueLetterLabel) + '</a></small></p>' : '') +
           '</div>';
       });
 
       $detail.html(html);
+      detailOriginalMaybeApplyTranslation($panel);
     }
 
     function detailOriginalSyncSelection($panel, wordIndex) {
-      $panel.find('.detail-inline-original-token').removeClass('active');
+      $panel.find('.detail-inline-original-token, .detail-inline-original-word-btn, .detail-inline-original-word-translation').removeClass('active');
       $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').addClass('active');
+      $panel.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
+      $panel.find('.detail-inline-original-word-translation[data-word-index="' + wordIndex + '"]').addClass('active');
     }
 
     function detailOriginalSyncHover($panel, wordIndex, hovering) {
       $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+      $panel.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+      $panel.find('.detail-inline-original-word-translation[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
     }
 
-    function detailOriginalVerseHtml(referenceLabel, verseKey, versePayload) {
+    function detailOriginalApplyTranslation($panel) {
+      $panel.find('.detail-inline-original-translatable').each(function() {
+        var $el = $(this);
+        var originalText = String($el.data('originalText') || $el.text() || '');
+        if (!$el.data('originalText')) {
+          $el.data('originalText', originalText);
+        }
+        translateCommentaryText(originalText, function(translated) {
+          $el.text(translated || originalText);
+        });
+      });
+    }
+
+    function detailOriginalRevertTranslation($panel) {
+      $panel.find('.detail-inline-original-translatable').each(function() {
+        var $el = $(this);
+        if ($el.data('originalText')) {
+          $el.text(String($el.data('originalText')));
+        }
+      });
+    }
+
+    function detailOriginalMaybeApplyTranslation($panel) {
+      if ($panel.data('detailOriginalTranslated')) {
+        detailOriginalApplyTranslation($panel);
+      }
+    }
+
+    function detailOriginalVerseHtml(details, referenceLabel, verseKey, versePayload) {
       var firstWordIndex = detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []);
+      var languageCode = String((versePayload && versePayload.language_code) || '');
+      var uiLang = getCommentaryLanguage();
+      var translateButtonHtml = uiLang !== 'en'
+        ? '<button type="button" class="btn btn-sm btn-outline-secondary detail-inline-original-translate-btn mt-1 mb-1"><i class="fa fa-language mr-1" aria-hidden="true"></i><span class="detail-inline-original-translate-label">' + detailOriginalEscape(detailOriginalUiText('translate')) + '</span></button>'
+        : '';
       var wordButtons = ((versePayload && versePayload.words) || []).map(function(word, index) {
         if (!word || !word.clickable) {
-          return '<span class="detail-inline-original-word-item"><span>' + $('<span>').text(String((word && word.text) || '')).html() + '</span><span class="detail-inline-original-word-translation">&nbsp;</span></span>';
+          var punctLanguageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
+          return '<span class="detail-inline-original-word-item' + (languageCode === 'hbo' ? ' detail-inline-original-word-item-hbo' : '') + '"><span class="detail-inline-original-word-strongs"></span><span class="detail-inline-original-word-punct' + punctLanguageClass + '">' + $('<span>').text(String((word && word.text) || '')).html() + '</span><span class="detail-inline-original-word-translation detail-inline-original-word-translation-empty" data-word-index="' + $('<span>').text(String(index)).html() + '"></span></span>';
         }
+        var strongsLabel = String((((word.candidates || [])[0] || {}).strongs_number) || '');
+        var languageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
         return '<span class="detail-inline-original-word-item">' +
-          '<button type="button" class="detail-inline-original-word-btn' + (index === firstWordIndex ? ' active' : '') + '" data-word-index="' + $('<span>').text(String(index)).html() + '" title="' + $('<span>').text(detailOriginalWordTitle(word)).html() + '">' + $('<span>').text(String(word.text || '')).html() + '</button>' +
-          '<span class="detail-inline-original-word-translation">' + $('<span>').text(detailOriginalWordTranslation(word)).html() + '</span>' +
+          '<span class="detail-inline-original-word-strongs">' + $('<span>').text(strongsLabel).html() + '</span>' +
+          '<button type="button" class="detail-inline-original-word-btn' + languageClass + (index === firstWordIndex ? ' active' : '') + (word.has_candidates ? '' : ' detail-inline-original-word-btn-missing') + '" data-word-index="' + $('<span>').text(String(index)).html() + '" title="' + $('<span>').text(detailOriginalWordTitle(word)).html() + '">' + $('<span>').text(String(word.text || '')).html() + '</button>' +
+          '<span class="detail-inline-original-word-translation' + (detailOriginalWordTranslation(word) ? '' : ' detail-inline-original-word-translation-empty') + '" data-word-index="' + $('<span>').text(String(index)).html() + '">' + $('<span>').text(detailOriginalWordTranslation(word)).html() + '</span>' +
           '</span>';
       }).join('');
 
       return '<div class="detail-inline-original-verse" data-verse="' + $('<span>').text(String(verseKey)).html() + '">' +
-        '<div class="detail-inline-original-title">Original text · ' + $('<span>').text(referenceLabel).html() + '</div>' +
         '<div class="row">' +
           '<div class="col-lg-6 mb-2">' +
             '<div class="detail-inline-original-sentence">' +
-              detailOriginalSentenceHtml((versePayload && versePayload.words) || []) +
-              '<div class="detail-inline-original-word-cloud">' + wordButtons + '</div>' +
+              '<div class="detail-inline-original-head"><span class="detail-inline-original-title">' + detailOriginalEscape(detailOriginalUiText('sourceTitle')) + ' · ' + $('<span>').text(referenceLabel).html() + '</span><span class="badge badge-light border">' + detailOriginalEscape(detailOriginalUiText('hoverWords')) + '</span></div>' +
+              '<div class="detail-inline-original-source-badge">' + detailOriginalEscape(String((versePayload && versePayload.source_bible_name) || '')) + '</div>' +
+              detailOriginalSentenceHtml((versePayload && versePayload.words) || [], languageCode) +
+              '<div class="detail-inline-original-word-cloud">' + (wordButtons || '<p class="mb-0 text-muted">' + detailOriginalEscape(detailOriginalUiText('noWordData')) + '</p>') + '</div>' +
             '</div>' +
           '</div>' +
           '<div class="col-lg-6 mb-2">' +
             '<div class="detail-inline-original-detail">' +
-              '<span class="detail-inline-original-title">Strong\'s details</span>' +
+              '<div class="detail-inline-original-head"><span class="detail-inline-original-title">' + detailOriginalEscape(detailOriginalUiText('detailTitle')) + '</span>' + translateButtonHtml + '</div>' +
               '<div class="detail-inline-original-detail-body"></div>' +
             '</div>' +
           '</div>' +
@@ -2166,10 +2373,15 @@ $(document).ready(function(){
       Object.keys(verses).sort(function(a, b) { return Number(a) - Number(b); }).forEach(function(verseKey) {
         var referenceLabel = scripturaBookLabelFromKey(details.book) + ' ' + details.chapter + ':' + verseKey;
         var versePayload = verses[verseKey] || {};
-        var $verse = $(detailOriginalVerseHtml(referenceLabel, verseKey, versePayload));
+        var verseDetails = $.extend({}, details, {
+          startVerse: Number(verseKey),
+          endVerse: Number(verseKey)
+        });
+        var $verse = $(detailOriginalVerseHtml(verseDetails, referenceLabel, verseKey, versePayload));
+        $verse.data('verseDetails', verseDetails);
         $verse.data('versePayload', versePayload);
         $grid.append($verse);
-        detailOriginalRenderWordDetail($verse, versePayload, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
+        detailOriginalRenderWordDetail($verse, verseDetails, versePayload, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
         detailOriginalSyncSelection($verse, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
       });
     }
@@ -2515,11 +2727,59 @@ $(document).ready(function(){
       var wordIndex = Number($btn.data('wordIndex'));
       var $verse = $btn.closest('.detail-inline-original-verse');
       var versePayload = $verse.data('versePayload') || {};
+      var verseDetails = $verse.data('verseDetails') || {};
 
       $verse.find('.detail-inline-original-word-btn').removeClass('active');
       $btn.addClass('active');
       detailOriginalSyncSelection($verse, wordIndex);
-      detailOriginalRenderWordDetail($verse, versePayload, wordIndex);
+      detailOriginalRenderWordDetail($verse, verseDetails, versePayload, wordIndex);
+    });
+
+    $(document).on('mouseenter focus', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function() {
+      var $target = $(this);
+      detailOriginalSyncHover($target.closest('.detail-inline-original-verse'), Number($target.data('wordIndex')), true);
+    });
+
+    $(document).on('mouseleave blur', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function() {
+      var $target = $(this);
+      detailOriginalSyncHover($target.closest('.detail-inline-original-verse'), Number($target.data('wordIndex')), false);
+    });
+
+    $(document).on('click', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function(event) {
+      event.preventDefault();
+      var $target = $(this);
+      var wordIndex = Number($target.data('wordIndex'));
+      var $verse = $target.closest('.detail-inline-original-verse');
+      var versePayload = $verse.data('versePayload') || {};
+      var verseDetails = $verse.data('verseDetails') || {};
+
+      $verse.find('.detail-inline-original-word-btn').removeClass('active');
+      $verse.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
+      detailOriginalSyncSelection($verse, wordIndex);
+      detailOriginalRenderWordDetail($verse, verseDetails, versePayload, wordIndex);
+    });
+
+    $(document).on('keydown', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function(event) {
+      if (event.key !== 'Enter' && event.key !== ' ') {
+        return;
+      }
+      event.preventDefault();
+      $(this).trigger('click');
+    });
+
+    $(document).on('click', '.detail-inline-original-translate-btn', function() {
+      var $btn = $(this);
+      var $panel = $btn.closest('.detail-inline-original-verse');
+      var isTranslated = !!$panel.data('detailOriginalTranslated');
+      var nextTranslated = !isTranslated;
+      $panel.data('detailOriginalTranslated', nextTranslated);
+      $btn.toggleClass('active', nextTranslated);
+      $btn.find('.detail-inline-original-translate-label').text(nextTranslated ? detailOriginalUiText('showOriginal') : detailOriginalUiText('translate'));
+      if (nextTranslated) {
+        detailOriginalApplyTranslation($panel);
+      } else {
+        detailOriginalRevertTranslation($panel);
+      }
     });
 
     // ----- Sefaria Jewish Commentary END ------ \\

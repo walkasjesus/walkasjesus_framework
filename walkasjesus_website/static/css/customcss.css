@@ -6,6 +6,20 @@
     font-weight: normal;
     font-style: normal;
   }
+
+@font-face {
+    font-family: 'BibleStudySBLGreek';
+    src: url('../fonts/sblgrk/SBL_grk.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'BibleStudySBLHebrew';
+    src: url('../fonts/sblhbrw/SBL_Hbrw.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
   
 .btnBibleTranslation {
     width: 100%;
@@ -1389,6 +1403,14 @@ p {
     margin-bottom: 6px;
     text-transform: uppercase;
 }
+.detail-inline-original-head {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
 .detail-inline-original-sentence,
 .detail-inline-original-detail {
     background: #fffdf7;
@@ -1404,6 +1426,9 @@ p {
     line-height: 1.6;
     margin-bottom: 0.75rem;
 }
+.detail-inline-original-sentence-words.detail-inline-original-language-hbo {
+    justify-content: flex-end;
+}
 .detail-inline-original-word-cloud {
     display: flex;
     flex-wrap: wrap;
@@ -1413,6 +1438,17 @@ p {
     align-items: center;
     display: inline-flex;
     flex-direction: column;
+}
+.detail-inline-original-word-item.detail-inline-original-word-item-hbo {
+    align-items: flex-end;
+}
+.detail-inline-original-word-strongs {
+    color: #9a8551;
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1;
+    min-height: 0.7rem;
+    text-align: center;
 }
 .detail-inline-original-word-btn {
     background: #f7f1de;
@@ -1424,8 +1460,13 @@ p {
     line-height: 1.2;
     padding: 0.18rem 0.42rem;
 }
+.detail-inline-original-word-btn.detail-inline-original-word-btn-missing {
+    background: #fbf8ee;
+    border-style: dashed;
+}
 .detail-inline-original-word-btn:hover,
 .detail-inline-original-word-btn:focus,
+.detail-inline-original-word-btn.is-hovered,
 .detail-inline-original-word-btn.active {
     background: #e2b900;
     border-color: #c8a84b;
@@ -1434,16 +1475,53 @@ p {
 }
 .detail-inline-original-word-translation {
     color: #6f5d2f;
+    cursor: pointer;
     font-size: 0.75rem;
     margin-top: 0.2rem;
 }
+.detail-inline-original-word-translation.is-hovered,
+.detail-inline-original-word-translation.active {
+    background: rgba(226, 185, 0, 0.18);
+    border-radius: 0.35rem;
+    color: #4b3a12;
+}
+.detail-inline-original-word-translation.detail-inline-original-word-translation-empty {
+    color: #b2a685;
+    font-style: italic;
+}
+.detail-inline-original-language-grc {
+    font-family: 'BibleStudySBLGreek', Georgia, serif;
+}
+.detail-inline-original-language-hbo {
+    direction: rtl;
+    font-family: 'BibleStudySBLHebrew', Georgia, serif;
+    text-align: right;
+}
+.detail-inline-original-word-punct {
+    color: #867855;
+    padding: 0.22rem 0;
+}
 .detail-inline-original-token {
     border-radius: 4px;
+    cursor: pointer;
     padding: 0 0.12rem;
 }
 .detail-inline-original-token.is-hovered,
 .detail-inline-original-token.active {
     background: #fff1b8;
+}
+.detail-inline-original-source-badge {
+    background: #f5efda;
+    border: 1px solid #dfd1a6;
+    border-radius: 6px;
+    color: #6e5a28;
+    display: inline-flex;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.55rem;
+    padding: 0.1rem 0.55rem;
+    text-transform: uppercase;
 }
 .detail-inline-original-meta {
     color: #5c4a1e;
@@ -1468,6 +1546,17 @@ p {
     flex-wrap: wrap;
     gap: 0.45rem;
     margin-bottom: 0.35rem;
+}
+.detail-inline-original-strong-link,
+.detail-inline-original-ref-link {
+    color: #765b12;
+    text-decoration: underline;
+}
+.detail-inline-original-strong-link:hover,
+.detail-inline-original-strong-link:focus,
+.detail-inline-original-ref-link:hover,
+.detail-inline-original-ref-link:focus {
+    color: #4d3d16;
 }
 .detail-inline-original-detail-section {
     border-top: 1px solid #f0e6c8;
@@ -1525,6 +1614,14 @@ p {
     display: inline-block;
     font-size: 0.74rem;
     padding: 0.1rem 0.5rem;
+}
+.detail-inline-original-ref-link {
+    text-decoration: none;
+}
+.detail-inline-original-ref-link:hover,
+.detail-inline-original-ref-link:focus {
+    background: #e9ddb9;
+    text-decoration: none;
 }
 .bible-verse-text {
     align-items: flex-start;

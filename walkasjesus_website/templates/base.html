@@ -44,6 +44,7 @@
     <link href="{% static 'cookielaw/css/cookielaw.css' %}" rel="stylesheet">
     <!-- Customcss which needs presedence -->
     <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
+    {% block extra_head_assets %}{% endblock %}
   {% endcache %}
   {% block head_meta %}
     <meta name="description" content="{% block meta_description %}{% trans 'Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.' %}{% endblock %}">

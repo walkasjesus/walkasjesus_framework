@@ -1,3 +1,107 @@
+(function(global) {
+  function sharedOriginalWordTitle(word) {
+    if (!word) {
+      return '';
+    }
+    var parts = [];
+    if (word.text) {
+      parts.push(String(word.text));
+    }
+    if (word.translation_label) {
+      parts.push(String(word.translation_label));
+    }
+    if (word.grammar) {
+      parts.push(String(word.grammar));
+    }
+    return parts.join(' • ');
+  }
+
+  function sharedOriginalWordTranslation(word, fallbackLabel) {
+    if (!word) {
+      return '';
+    }
+    var label = String(word.translation_label || '').trim();
+    if (label) {
+      return label;
+    }
+    return String(fallbackLabel || '').trim();
+  }
+
+  function sharedOriginalFlattenReferences(referenceGroups) {
+    var flat = [];
+    (referenceGroups || []).forEach(function(group) {
+      (group || []).forEach(function(reference) {
+        var normalized = String(reference || '').trim();
+        if (normalized) {
+          flat.push(normalized);
+        }
+      });
+    });
+    return flat;
+  }
+
+  function sharedOriginalFirstReference(referenceGroups) {
+    var flattened = sharedOriginalFlattenReferences(referenceGroups);
+    return flattened.length ? flattened[0] : '';
+  }
+
+  function sharedOriginalFirstParseableReference(references, parseReference) {
+    var parser = typeof parseReference === 'function' ? parseReference : function() { return null; };
+    for (var index = 0; index < (references || []).length; index += 1) {
+      var reference = String(references[index] || '').trim();
+      if (reference && parser(reference)) {
+        return reference;
+      }
+    }
+    return '';
+  }
+
+  function sharedOriginalFirstReferenceForCandidate(candidate, parseReference) {
+    if (!candidate) {
+      return '';
+    }
+    var translationCounts = (candidate.translation_counts || []);
+    for (var index = 0; index < translationCounts.length; index += 1) {
+      var reference = sharedOriginalFirstReference((translationCounts[index] && translationCounts[index].reference_groups) || []);
+      if (reference) {
+        return reference;
+      }
+    }
+    var groupedReference = sharedOriginalFirstReference((candidate.reference_groups || []));
+    if (groupedReference) {
+      return groupedReference;
+    }
+    return sharedOriginalFirstParseableReference(candidate.references || [], parseReference);
+  }
+
+  function sharedOriginalNormalizeStrongsCode(value) {
+    var code = String(value || '').toUpperCase().replace(/[{}\[\](),.;:]/g, '').trim();
+    return code.replace(/^([GH])0+(\d+)/, function(_, prefix, digits) {
+      return prefix + String(parseInt(digits, 10));
+    });
+  }
+
+  function sharedOriginalUsageOutlineCount(items) {
+    var total = 0;
+    (items || []).forEach(function(item) {
+      total += parseInt((item && item.count) || 0, 10) || 0;
+      total += sharedOriginalUsageOutlineCount((item && item.children) || []);
+    });
+    return total;
+  }
+
+  global.WAJOriginalTextShared = global.WAJOriginalTextShared || {
+    buildWordTitle: sharedOriginalWordTitle,
+    buildWordTranslation: sharedOriginalWordTranslation,
+    flattenReferences: sharedOriginalFlattenReferences,
+    firstReference: sharedOriginalFirstReference,
+    firstParseableReference: sharedOriginalFirstParseableReference,
+    firstReferenceForCandidate: sharedOriginalFirstReferenceForCandidate,
+    normalizeStrongsCode: sharedOriginalNormalizeStrongsCode,
+    usageOutlineCount: sharedOriginalUsageOutlineCount
+  };
+})(window);
+
 $(document).ready(function(){
 
   // Normalize YouTube iframe permissions to avoid browser policy warnings.

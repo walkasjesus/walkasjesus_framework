@@ -1108,8 +1108,125 @@
     });
   });
 
+  function fallbackOriginalWordTitle(word) {
+    if (!word) {
+      return '';
+    }
+    var parts = [];
+    if (word.text) {
+      parts.push(String(word.text));
+    }
+    if (word.translation_label) {
+      parts.push(String(word.translation_label));
+    }
+    if (word.grammar) {
+      parts.push(String(word.grammar));
+    }
+    return parts.join(' • ');
+  }
+
+  function fallbackOriginalWordTranslation(word, fallbackLabel) {
+    if (!word) {
+      return '';
+    }
+    var label = String(word.translation_label || '').trim();
+    if (label) {
+      return label;
+    }
+    return String(fallbackLabel || '').trim();
+  }
+
+  function fallbackOriginalFlattenReferences(referenceGroups) {
+    var flat = [];
+    (referenceGroups || []).forEach(function(group) {
+      (group || []).forEach(function(reference) {
+        var normalized = String(reference || '').trim();
+        if (normalized) {
+          flat.push(normalized);
+        }
+      });
+    });
+    return flat;
+  }
+
+  function fallbackOriginalFirstReference(referenceGroups) {
+    var flattened = fallbackOriginalFlattenReferences(referenceGroups);
+    return flattened.length ? flattened[0] : '';
+  }
+
+  function fallbackOriginalFirstParseableReference(references, parseReference) {
+    var parser = typeof parseReference === 'function' ? parseReference : function() { return null; };
+    for (var index = 0; index < (references || []).length; index += 1) {
+      var reference = String(references[index] || '').trim();
+      if (reference && parser(reference)) {
+        return reference;
+      }
+    }
+    return '';
+  }
+
+  function fallbackOriginalFirstReferenceForCandidate(candidate, parseReference) {
+    if (!candidate) {
+      return '';
+    }
+    var translationCounts = (candidate.translation_counts || []);
+    for (var index = 0; index < translationCounts.length; index += 1) {
+      var reference = fallbackOriginalFirstReference((translationCounts[index] && translationCounts[index].reference_groups) || []);
+      if (reference) {
+        return reference;
+      }
+    }
+    var groupedReference = fallbackOriginalFirstReference((candidate.reference_groups || []));
+    if (groupedReference) {
+      return groupedReference;
+    }
+    return fallbackOriginalFirstParseableReference(candidate.references || [], parseReference);
+  }
+
+  function fallbackOriginalNormalizeStrongsCode(value) {
+    var code = String(value || '').toUpperCase().replace(/[{}\[\](),.;:]/g, '').trim();
+    return code.replace(/^([GH])0+(\d+)/, function(_, prefix, digits) {
+      return prefix + String(parseInt(digits, 10));
+    });
+  }
+
+  function fallbackOriginalUsageOutlineCount(items) {
+    var total = 0;
+    (items || []).forEach(function(item) {
+      total += parseInt((item && item.count) || 0, 10) || 0;
+      total += fallbackOriginalUsageOutlineCount((item && item.children) || []);
+    });
+    return total;
+  }
+
   function originalTextShared() {
-    return window.WAJOriginalTextShared || {};
+    var shared = window.WAJOriginalTextShared || {};
+    if (typeof shared.buildWordTitle !== 'function') {
+      shared.buildWordTitle = fallbackOriginalWordTitle;
+    }
+    if (typeof shared.buildWordTranslation !== 'function') {
+      shared.buildWordTranslation = fallbackOriginalWordTranslation;
+    }
+    if (typeof shared.flattenReferences !== 'function') {
+      shared.flattenReferences = fallbackOriginalFlattenReferences;
+    }
+    if (typeof shared.firstReference !== 'function') {
+      shared.firstReference = fallbackOriginalFirstReference;
+    }
+    if (typeof shared.firstParseableReference !== 'function') {
+      shared.firstParseableReference = fallbackOriginalFirstParseableReference;
+    }
+    if (typeof shared.firstReferenceForCandidate !== 'function') {
+      shared.firstReferenceForCandidate = fallbackOriginalFirstReferenceForCandidate;
+    }
+    if (typeof shared.normalizeStrongsCode !== 'function') {
+      shared.normalizeStrongsCode = fallbackOriginalNormalizeStrongsCode;
+    }
+    if (typeof shared.usageOutlineCount !== 'function') {
+      shared.usageOutlineCount = fallbackOriginalUsageOutlineCount;
+    }
+    window.WAJOriginalTextShared = shared;
+    return shared;
   }
 
   function buildOriginalWordTitle(word) {
@@ -2870,14 +2987,19 @@
   enforceBibleSlotLimit();
   refreshBibleSlots();
   bsSuppressAutoApply = false;
-  if (bsCombineVerses && $('#bs-verse-area').length) {
-    $('#bibleStudyForm').trigger('submit');
-  }
-  if ($('#bs-show-original').is(':checked') && $('#bs-verse-area').length) {
+  var hasInitialVerseArea = $('#bs-verse-area').length > 0;
+  var shouldRestoreOriginalOnLoad = $('#bs-show-original').is(':checked') && hasInitialVerseArea;
+  if (shouldRestoreOriginalOnLoad) {
     var initialState = currentBibleStudyState();
     bsOriginalOpenVerses[String((bsPendingStrongsSelection && bsPendingStrongsSelection.verse) || initialState.startVerse || 1)] = true;
-    initialState.showOriginalText = true;
-    loadBibleStudyOriginalText(initialState);
+    syncBibleStudyOriginalToggleButtons();
+  }
+  if (bsCombineVerses && hasInitialVerseArea) {
+    $('#bibleStudyForm').trigger('submit');
+  } else if (shouldRestoreOriginalOnLoad) {
+    var initialOriginalState = currentBibleStudyState();
+    initialOriginalState.showOriginalText = true;
+    loadBibleStudyOriginalText(initialOriginalState);
     syncBibleStudyOriginalToggleButtons();
   } else {
     $('#bs-show-original').prop('checked', false);

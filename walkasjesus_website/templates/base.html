@@ -6,7 +6,7 @@
 <html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
   <head>
     <title>{% block title_content %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}</title>
-  {% cache cache_timeout head cache_on_language %}
+  {% cache cache_timeout head cache_on_language request.path %}
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
     <meta charset="utf-8">

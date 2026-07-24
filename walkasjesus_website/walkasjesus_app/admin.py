@@ -16,6 +16,8 @@ from walkasjesus_app.models.commandment_question import Question
 from walkasjesus_app.models.lesson_question import LessonQuestion
 from walkasjesus_app.models.lesson_media import *
 from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
+from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
+from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
 from walkasjesus_website.settings import BASE_DIR
 
 
@@ -33,6 +35,26 @@ class BibleAdmin(admin.ModelAdmin):
         view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
         return [
             path('', AdminBibleView.as_view(), name=view_name),
+        ]
+
+
+class BibleTranslationUsageDailyAdmin(admin.ModelAdmin):
+    model = BibleTranslationUsageDaily
+
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [
+            path('', AdminBibleUsageView.as_view(), name=view_name),
+        ]
+
+
+class PageVisitDailyAdmin(admin.ModelAdmin):
+    model = PageVisitDaily
+
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [
+            path('', AdminPageUsageView.as_view(), name=view_name),
         ]
 
 class MediaTargetAudienceFilter(SimpleListFilter):
@@ -998,6 +1020,8 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Bible, BibleAdmin)
+admin.site.register(BibleTranslationUsageDaily, BibleTranslationUsageDailyAdmin)
+admin.site.register(PageVisitDaily, PageVisitDailyAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(LawOfMessiah, LawOfMessiahAdmin)

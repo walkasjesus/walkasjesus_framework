@@ -17,3 +17,4 @@ from .law_of_messiah import *
 from .law_of_messiah_media import *
 from .maimonides import *
 from .sword_commentary import *
+from .bible_usage import *

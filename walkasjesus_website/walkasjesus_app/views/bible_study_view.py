@@ -8,17 +8,20 @@ import time
 from contextlib import contextmanager
 from pathlib import Path
 from urllib.parse import urlencode
+from collections import Counter
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.conf import settings
 from django.core.cache import cache
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.views import View
 
 from walkasjesus_app.lib.access_policy import filter_visible_bibles_for_request, is_bible_id_visible_for_request
 from walkasjesus_app.lib.strongs_service import original_text_payload
-from walkasjesus_app.models import BibleTranslation, UserPreferences
+from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
 
 logger = logging.getLogger(__name__)
@@ -158,6 +161,89 @@ def _safe_search_fuzziness(value):
 def _safe_search_range(value):
     search_range = str(value or '').strip().upper()
     return search_range if len(search_range) <= 200 and re.match(r'^[A-Z0-9.,\-]+$', search_range) else ''
+
+
+def _bible_usage_user_identity(request):
+    user = getattr(request, 'user', None)
+    if user is not None and getattr(user, 'is_authenticated', False):
+        raw_identifier = f'auth:{getattr(user, "pk", "")}'
+        return BibleTranslationUsageDaily.USER_AUTHENTICATED, hashlib.sha256(raw_identifier.encode('utf-8')).hexdigest()[:32]
+
+    session_key = getattr(getattr(request, 'session', None), 'session_key', None)
+    if not session_key and hasattr(request, 'session'):
+        request.session.save()
+        session_key = request.session.session_key
+
+    remote_addr = str(request.META.get('REMOTE_ADDR', '') or '').strip()
+    user_agent = str(request.META.get('HTTP_USER_AGENT', '') or '').strip()
+    raw_identifier = f'anon:{session_key or "no-session"}:{remote_addr}:{user_agent}'
+    return BibleTranslationUsageDaily.USER_ANONYMOUS, hashlib.sha256(raw_identifier.encode('utf-8')).hexdigest()[:32]
+
+
+def _record_bible_usage(request, bible, source, endpoint, verse_count=1, request_count=1):
+    source = str(source or '').strip().lower()
+    if source not in {BibleTranslationUsageDaily.SOURCE_API, BibleTranslationUsageDaily.SOURCE_CACHE}:
+        return
+
+    usage_date = timezone.now().date()
+    user_kind, user_key = _bible_usage_user_identity(request)
+    bible_id = str(getattr(bible, 'id', '') or '')
+    if not bible_id:
+        return
+
+    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:8]
+    bible_name = str(getattr(bible, 'name', '') or '').strip()
+    verse_count = max(0, int(verse_count or 0))
+    request_count = max(0, int(request_count or 0))
+
+    if verse_count == 0 and request_count == 0:
+        return
+
+    try:
+        with transaction.atomic():
+            row = BibleTranslationUsageDaily.objects.select_for_update().filter(
+                usage_date=usage_date,
+                bible_id=bible_id,
+                source=source,
+                endpoint=endpoint,
+                user_key=user_key,
+            ).first()
+            if row:
+                row.request_count += request_count
+                row.verse_count += verse_count
+                row.user_kind = user_kind
+                row.bible_name = bible_name
+                row.bible_language = language_code
+                row.save(update_fields=['request_count', 'verse_count', 'user_kind', 'bible_name', 'bible_language', 'updated_at'])
+            else:
+                BibleTranslationUsageDaily.objects.create(
+                    usage_date=usage_date,
+                    bible_id=bible_id,
+                    bible_name=bible_name,
+                    bible_language=language_code,
+                    source=source,
+                    endpoint=endpoint,
+                    user_kind=user_kind,
+                    user_key=user_key,
+                    request_count=request_count,
+                    verse_count=verse_count,
+                )
+    except Exception:
+        logger.exception('Failed to record bible usage metric for bible=%s source=%s endpoint=%s', bible_id, source, endpoint)
+
+
+def _record_bible_usage_for_sources(request, bible, verse_sources, endpoint):
+    counts = Counter(str(source or '').strip().lower() for source in (verse_sources or {}).values())
+    for source, verse_count in counts.items():
+        if source in {BibleTranslationUsageDaily.SOURCE_API, BibleTranslationUsageDaily.SOURCE_CACHE}:
+            _record_bible_usage(
+                request=request,
+                bible=bible,
+                source=source,
+                endpoint=endpoint,
+                verse_count=verse_count,
+                request_count=1,
+            )
 
 
 def _api_bible_search_url(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range=''):
@@ -534,6 +620,14 @@ class BibleStudyView(View):
                     verse_sources[str(v)] = 'api'
                     if text:
                         cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
+
+                _record_bible_usage_for_sources(
+                    request=request,
+                    bible=bible_obj,
+                    verse_sources=verse_sources,
+                    endpoint=BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE,
+                )
+
                 verse_texts_by_bible[bid] = verse_texts
                 selected_bibles.append({
                     'id': bid,
@@ -611,6 +705,13 @@ class BibleStudyVersesView(View):
             verse_sources[str(v)] = 'api'
             if text:
                 cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
+
+        _record_bible_usage_for_sources(
+            request=request,
+            bible=bible,
+            verse_sources=verse_sources,
+            endpoint=BibleTranslationUsageDaily.ENDPOINT_VERSES_API,
+        )
 
         language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
         display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)

@@ -20,6 +20,18 @@
     font-style: normal;
     font-weight: 400;
 }
+
+.bible-study-top-banner {
+    background-position: center top;
+    min-height: 96px;
+    padding: 0;
+}
+
+@media (max-width: 991.98px) {
+    .bible-study-top-banner {
+        min-height: 72px;
+    }
+}
   
 .btnBibleTranslation {
     width: 100%;

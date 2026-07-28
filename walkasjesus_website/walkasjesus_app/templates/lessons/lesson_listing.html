@@ -10,8 +10,10 @@
 {% block twitter_description %}{% trans 'Find engaging Bible lessons for children with stories, memory-focused steps, and practical activities that help families and ministry teams disciple the next generation.' %}{% endblock %}
 {% block content %}
 {% cache cache_timeout lessons_listing cache_on_language %}
-<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
-    <!-- Header section -->
+<section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
+  <div class="overlay"></div>
+ </section>
+        <!-- Header section -->
     <div class="ftco-section bg-light" id="sermons-section">
         <div class="container">
             <div class="row justify-content-center pb-5">
@@ -311,6 +313,5 @@
             </div>
         </div>
     </div>
-</section>
 {% endcache %}
 {% endblock %}

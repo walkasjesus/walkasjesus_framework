@@ -12,8 +12,10 @@
 
 {% block content %}
 {% cache cache_timeout commandments_listing cache_on_language %}
-<section class="ftco-daily-verse img" style="background-image:url({% static 'images/bg_2.jpg' %});">
-    <div class="ftco-section bg-light" id="sermons-section">
+<section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
+  <div class="overlay"></div>
+ </section>
+        <div class="ftco-section bg-light" id="sermons-section">
         <div class="container">
             <div class="row justify-content-center pb-5">
                 <div class="col-md-12 heading-section text-center ftco-animate">
@@ -34,6 +36,5 @@
             </div>
         </div>
     </div>
-</section>
 {% endcache %}
 {% endblock %}

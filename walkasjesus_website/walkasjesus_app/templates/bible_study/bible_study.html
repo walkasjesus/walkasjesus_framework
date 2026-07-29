@@ -5,7 +5,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block title_content %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
-{% block meta_description %}{% trans 'Compare multiple Bible translations side by side, with verse commentary from Lightfoot, King, and Jewish Commentaries.' %}{% endblock %}
+{% block meta_description %}{% trans 'Compare multiple Bible translations side by side, with verse commentary from David Stern, John Lightfoot, King, and Rabbinical Jewish Commentaries.' %}{% endblock %}
 {% block og_title %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
 {% block extra_head_assets %}{% include "bible_study/_bible_study_styles.html" %}{% endblock %}
 
@@ -39,7 +39,7 @@
           {% trans 'Select up to 4 Bible translations and display them side by side. Choose a book, chapter, and up to' %}
           <strong>{{ max_verses }}</strong> {% trans 'consecutive verses.' %}
           {% trans 'You can also search for words or phrases in the first selected translation and jump straight to a matching verse.' %}
-          {% trans 'Use the commentary buttons next to each verse to open notes from Lightfoot, King, or Jewish Commentaries.' %}
+          {% trans 'Use the commentary buttons next to each verse to open notes from David Stern, John Lightfoot, King, or Rabbinical Jewish Commentaries.' %}
           {% trans 'You can also enable the original Hebrew/Greek text with Strong\'s details below.' %}
         </p>
         <button class="btn law-filter-legend-toggle law-filter-legend-btn btn-sm" type="button"

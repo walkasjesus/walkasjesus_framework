@@ -1,8 +1,17 @@
 import json
+from collections import defaultdict
 
 from django.conf import settings
 
-from walkasjesus_app.models import SwordCommentarySource
+from walkasjesus_app.models import SwordCommentaryEntry, SwordCommentarySource
+
+
+NT_BOOK_KEYS = {
+    'matthew', 'mark', 'luke', 'john', 'acts', 'romans',
+    '1corinthians', '2corinthians', 'galatians', 'ephesians', 'philippians', 'colossians',
+    '1thessalonians', '2thessalonians', '1timothy', '2timothy', 'titus', 'philemon',
+    'hebrews', 'james', '1peter', '2peter', '1john', '2john', '3john', 'jude', 'revelation',
+}
 
 
 def normalize_book_key(value):
@@ -47,6 +56,19 @@ def available_sword_commentators(language_code):
     disabled_ids = sword_disabled_source_ids()
     sources = SwordCommentarySource.objects.filter(is_enabled=True).order_by('sort_order', 'display_name', 'source_id')
 
+    source_book_keys = defaultdict(set)
+    source_ids = [str(source.source_id or '').strip() for source in sources if str(source.source_id or '').strip()]
+    if source_ids:
+        for source_id, book_key in (
+            SwordCommentaryEntry.objects
+            .filter(source__source_id__in=source_ids)
+            .values_list('source__source_id', 'book_key')
+            .distinct()
+        ):
+            normalized_book_key = normalize_book_key(book_key)
+            if normalized_book_key:
+                source_book_keys[str(source_id).strip()].add(normalized_book_key)
+
     commentators = []
     for source in sources:
         source_id = str(source.source_id or '').strip()
@@ -62,6 +84,18 @@ def available_sword_commentators(language_code):
         if not is_native_match and not is_auto_translate_match:
             continue
 
+        available_book_keys = sorted(source_book_keys.get(source_id, set()))
+        supports_old_testament = True
+        supports_new_testament = True
+        if available_book_keys:
+            supports_old_testament = any(book_key not in NT_BOOK_KEYS for book_key in available_book_keys)
+            supports_new_testament = any(book_key in NT_BOOK_KEYS for book_key in available_book_keys)
+
+        if 'supports_old_testament' in source_config:
+            supports_old_testament = bool(source_config.get('supports_old_testament'))
+        if 'supports_new_testament' in source_config:
+            supports_new_testament = bool(source_config.get('supports_new_testament'))
+
         commentators.append({
             'id': source_id,
             'label': str(source.display_name or source.module_name or source_id).strip(),
@@ -70,6 +104,9 @@ def available_sword_commentators(language_code):
             'api_sources': [source_id],
             'auto_translate': auto_translate,
             'native_language': native_language,
+            'supports_old_testament': supports_old_testament,
+            'supports_new_testament': supports_new_testament,
+            'available_book_keys': available_book_keys,
         })
 
     return commentators

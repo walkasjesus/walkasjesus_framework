@@ -1585,13 +1585,20 @@ $(document).ready(function(){
 
       var swordCommentators = getSwordCommentators().map(function(item) {
         var sourceId = String(item.id || '').trim();
+        var supportsOldTestament = typeof item.supports_old_testament === 'boolean' ? item.supports_old_testament : true;
+        var supportsNewTestament = typeof item.supports_new_testament === 'boolean' ? item.supports_new_testament : true;
+        var availableBookKeys = Array.isArray(item.available_book_keys)
+          ? item.available_book_keys.map(function(key) { return normalizeCommentaryBookKey(key); }).filter(Boolean)
+          : [];
         return {
           id: sourceId,
           label: String(item.label || sourceId),
           apiSources: Array.isArray(item.api_sources) && item.api_sources.length ? item.api_sources : [sourceId],
           autoTranslate: !!item.auto_translate,
           sourceType: 'sword',
-          supportsOldTestament: true,
+          supportsOldTestament: supportsOldTestament,
+          supportsNewTestament: supportsNewTestament,
+          availableBookKeys: availableBookKeys,
           attribution: {
             showProvider: false,
             showApiResponse: false,
@@ -1621,7 +1628,7 @@ $(document).ready(function(){
     }
 
     function isNewTestamentBook(book) {
-      var normalized = String(book || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      var normalized = normalizeCommentaryBookKey(book);
       var ntBooks = {
         matthew: true,
         mark: true,
@@ -1649,13 +1656,59 @@ $(document).ready(function(){
         '2john': true,
         '3john': true,
         jude: true,
-        revelation: true
+        revelation: true,
+        corinthiansfirstbook: true,
+        corinthianssecondbook: true,
+        thessaloniansfirstbook: true,
+        thessalonianssecondbook: true,
+        timothyfirstbook: true,
+        timothysecondbook: true,
+        peterfirstbook: true,
+        petersecondbook: true,
+        johnfirstbook: true,
+        johnsecondbook: true,
+        johnthirdbook: true
       };
       return !!ntBooks[normalized];
     }
 
+    function normalizeCommentaryBookKey(book) {
+      var normalized = String(scripturaBookLabelFromKey(book) || book || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      return normalized;
+    }
+
+    function commentatorSupportsBook(commentator, book) {
+      if (!commentator) {
+        return false;
+      }
+      var normalizedBook = normalizeCommentaryBookKey(book);
+      if (!normalizedBook) {
+        return true;
+      }
+
+      var isNtBook = isNewTestamentBook(book);
+      if (!isNtBook && commentator.supportsOldTestament === false) {
+        return false;
+      }
+      if (isNtBook && commentator.supportsNewTestament === false) {
+        return false;
+      }
+
+      if (Array.isArray(commentator.availableBookKeys) && commentator.availableBookKeys.length > 0) {
+        return commentator.availableBookKeys.indexOf(normalizedBook) !== -1;
+      }
+
+      return true;
+    }
+
+    function availableScripturaCommentatorsForBook(book) {
+      return getScripturaCommentators().filter(function(commentator) {
+        return commentatorSupportsBook(commentator, book);
+      });
+    }
+
     function getDefaultScripturaCommentatorId(book) {
-      var commentators = getScripturaCommentators();
+      var commentators = availableScripturaCommentatorsForBook(book);
 
       if (isNewTestamentBook(book)) {
         for (var i = 0; i < commentators.length; i += 1) {
@@ -1753,11 +1806,12 @@ $(document).ready(function(){
       return getCommentaryLanguage() === 'nl' ? ('Vers ' + entryKey) : ('Verse ' + entryKey);
     }
 
-    function buildScripturaSourceButtons(activeCommentatorId) {
+    function buildScripturaSourceButtons(activeCommentatorId, book) {
+      var commentators = availableScripturaCommentatorsForBook(book);
       var html = '<div class="scriptura-commentary-sources">' +
         '<p class="sefaria-select-label">' + uiMessage('select_commentator') + '</p>';
 
-      getScripturaCommentators().forEach(function(commentator) {
+      commentators.forEach(function(commentator) {
         var activeClass = commentator.id === activeCommentatorId ? ' active' : '';
         html += '<button class="btn btn-sm sefaria-commentator-btn scriptura-commentary-source-btn mr-1 mb-1' + activeClass + '" data-scriptura-commentator="' + $('<span>').text(commentator.id).html() + '">' +
           $('<span>').text(commentator.label).html() +
@@ -1845,11 +1899,18 @@ $(document).ready(function(){
         var $reference = $context.find('b').first();
         var referenceLabel = $.trim($reference.text());
         var $verseTarget = $context.find('.bible-verse-load-link, .bible-verse-text').first();
+        var hasScripturaForBook = availableScripturaCommentatorsForBook(details.book).length > 0;
+
+        if (!hasScripturaForBook) {
+          $context.find('.scriptura-commentary-btn').remove();
+          $context.find('.scriptura-commentary-panel').remove();
+        }
+
         var $actionButtons = $context.find('.scriptura-commentary-btn, .sefaria-commentary-btn-secondary').filter(function() {
           return !$(this).hasClass('bible-verse-load-link');
         });
 
-        if (getScripturaCommentators().length > 0 && !$context.find('.scriptura-commentary-btn').length) {
+        if (hasScripturaForBook && !$context.find('.scriptura-commentary-btn').length) {
           var $scripturaBtn = $('<button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn"></button>');
           $scripturaBtn.attr('data-scriptura-book', scripturaBookLabelFromKey(details.book));
           $scripturaBtn.attr('data-scriptura-chapter', details.chapter);
@@ -2615,6 +2676,11 @@ $(document).ready(function(){
       if (!$panel.length) {
         return;
       }
+      if (availableScripturaCommentatorsForBook(book).length === 0) {
+        $btn.hide();
+        $panel.hide();
+        return;
+      }
       var preferredCommentatorId = getDefaultScripturaCommentatorId(book);
       if (!preferredCommentatorId) {
         $panel.html('<p class="sefaria-no-result"><em>' + uiMessage('no_scriptura_commentators_enabled') + '</em></p>').slideDown(200);
@@ -2628,7 +2694,7 @@ $(document).ready(function(){
       }
 
       setCommentaryButtonActive($btn, true);
-      $panel.html(buildScripturaSourceButtons(preferredCommentatorId) + '<div class="scriptura-commentary-source-content">' + commentarySpinnerHtml('api', uiMessage('loading_commentary')) + '</div>').slideDown(200);
+      $panel.html(buildScripturaSourceButtons(preferredCommentatorId, book) + '<div class="scriptura-commentary-source-content">' + commentarySpinnerHtml('api', uiMessage('loading_commentary')) + '</div>').slideDown(200);
       $panel.data('scripturaBook', book);
       $panel.data('scripturaChapter', chapter);
       $panel.data('scripturaVerse', verse);
@@ -2955,10 +3021,15 @@ $(document).ready(function(){
 
     // ----- Sefaria Jewish Commentary END ------ \\
 
-    // Hide NT Commentary buttons when no Scriptura commentators are enabled.
-    if (getScripturaCommentators().length === 0) {
-      $('.scriptura-commentary-btn').hide();
-    }
+    // Hide Commentary buttons when no suitable Scriptura commentator exists for the reference book.
+    $('.scriptura-commentary-btn').each(function() {
+      var $button = $(this);
+      var scripturaBook = String($button.data('scriptura-book') || '').trim();
+      if (availableScripturaCommentatorsForBook(scripturaBook).length === 0) {
+        $button.hide();
+        resolveCommentaryPanel($button, '.scriptura-commentary-panel').hide();
+      }
+    });
 
     enhanceDetailBibleStudyLinks();
 

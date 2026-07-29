@@ -396,7 +396,7 @@ $(document).ready(function(){
     }
 
     renderVerseText($('.bible-verse-text[data-verse-ref="' + pk + '"][data-verse-manual="1"]'), text);
-    // Hide the line breaks around the now-hidden "Click to retrieve" button.
+    // Hide the line breaks around the now-hidden "Study this passage" button.
     $link.prev('br').hide();
     $link.nextAll('br').first().hide();
     $link.hide();
@@ -422,7 +422,8 @@ $(document).ready(function(){
 
   function cleanVerseReferenceLabel(rawText) {
     var text = $.trim(String(rawText || '').replace(/\s+/g, ' '));
-    text = text.replace(/^click to retrieve\s*/i, '');
+    text = text.replace(/^(study this passage on the bible study page|bestudeer deze passage op de bijbelstudie-pagina)\s*:?\s*/i, '');
+    text = text.replace(/^:\s*/, '');
     return $.trim(text);
   }
 
@@ -737,6 +738,57 @@ $(document).ready(function(){
     return baseUrl + '?' + params.toString();
   }
 
+  function shouldRedirectLongPassageToBibleStudy($link) {
+    return $link.closest('[data-long-passage-bible-study-only="1"]').length > 0;
+  }
+
+  function longPassageVerseLimit($link) {
+    var rawValue = String($link.closest('[data-bible-auto-load-verse-limit]').attr('data-bible-auto-load-verse-limit') || '').trim();
+    var parsed = parseInt(rawValue, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      return parsed;
+    }
+    return 5;
+  }
+
+  function buildLongPassageBibleStudyUrl($link) {
+    var $context = $link.closest('li, .our-services-text');
+    var details = extractBibleStudyDetails($context);
+    if (!details || !details.book) {
+      return '';
+    }
+
+    var chapter = Number(details.chapter || 1);
+    var startVerse = Number(details.startVerse || 1);
+    var endChapter = Number(details.endChapter || chapter);
+    var endVerse = Number(details.endVerse || startVerse);
+    var verseLimit = longPassageVerseLimit($link);
+    var cappedEndVerse = startVerse + verseLimit - 1;
+
+    if (endChapter === chapter && endVerse >= startVerse) {
+      cappedEndVerse = Math.min(cappedEndVerse, endVerse);
+    }
+
+    return buildBibleStudyUrl({
+      book: details.book,
+      chapter: chapter,
+      startVerse: startVerse,
+      endVerse: cappedEndVerse
+    });
+  }
+
+  function updateLongPassageButtonLabels() {
+    $('[data-long-passage-bible-study-only="1"] .bible-verse-load-link').each(function() {
+      var $link = $(this);
+      var referenceLabel = cleanVerseReferenceLabel($link.text());
+      var label = uiMessage('study_this_passage_on_bible_study_page');
+      if (referenceLabel) {
+        label += ': ' + referenceLabel;
+      }
+      $link.html('<i class="fa fa-book" aria-hidden="true"></i><span class="bible-study-link-label">' + $('<span>').text(label).html() + '</span>');
+    });
+  }
+
   function scripturaBookLabelFromKey(book) {
     var mapping = {
       SamuelFirstBook: '1 Samuel', SamuelSecondBook: '2 Samuel', KingsFirstBook: '1 Kings', KingsSecondBook: '2 Kings',
@@ -921,6 +973,10 @@ $(document).ready(function(){
       bible_study_link_tooltip: {
         en: 'Explore this passage in the interactive Bible Study page.',
         nl: 'Verken deze passage op de interactieve Bijbelstudie-pagina.'
+      },
+      study_this_passage_on_bible_study_page: {
+        en: 'Study this passage on the Bible Study page',
+        nl: 'Bestudeer deze passage op de Bijbelstudie-pagina'
       }
     };
 
@@ -1280,10 +1336,21 @@ $(document).ready(function(){
   }
     initStyledNativeSelectCombos();
 
+  updateLongPassageButtonLabels();
+
   $(document).on('click', '.bible-verse-load-link', function(event) {
     event.preventDefault();
     var $link = $(this);
     var pk = String($link.attr('data-verse-ref') || '').trim();
+
+    if (shouldRedirectLongPassageToBibleStudy($link)) {
+      var bibleStudyUrl = buildLongPassageBibleStudyUrl($link);
+      if (bibleStudyUrl) {
+        window.location.href = bibleStudyUrl;
+        return;
+      }
+    }
+
     var requestVersesUrl = resolveVersesUrl($link);
     var $manualTarget = ensureManualVerseTarget($link, pk);
 

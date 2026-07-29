@@ -144,7 +144,7 @@
                                 {% endif %}
                                 <b>{% trans 'Related Step Bible text' %}:</b>
                                 {% if primary_ref.is_long_passage %}
-                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Click to retrieve" %} {{ primary_ref.display_reference }}</a>
+                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ primary_ref.display_reference }}</a>
                                     <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}" data-verse-manual="1"></span>
                                 {% else %}
                                     <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
@@ -154,7 +154,7 @@
                                 <b>{% trans 'Lesson text to learn' %}:</b> {{ lesson.title }}<br>
                                 <b>{% trans 'Related Bible text' %}:</b>
                                 {% if primary_ref.is_long_passage %}
-                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Click to retrieve" %} {{ primary_ref.display_reference }}</a>
+                                    <a href="#" class="bible-verse-load-link" data-verse-ref="{{ primary_ref.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ primary_ref.display_reference }}</a>
                                     <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}" data-verse-manual="1"></span>
                                 {% else %}
                                     <span class="bible-verse-text" data-verse-ref="{{ primary_ref.pk }}"><i class="fa fa-spinner fa-spin"></i></span>
@@ -359,13 +359,13 @@
                             <ul>
                             {% for bible_reference in lesson.direct_bible_references %}
                                 {% if bible_reference.positive_negative == "negative" %}
-                                <li class="negative_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
+                                <li class="negative_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% elif bible_reference.positive_negative == "both" %}
-                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
+                                <li class="pos_neg_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% elif bible_reference.positive_negative == "positive" %}
-                                <li class="positive_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
+                                <li class="positive_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% else %}
-                                <li class="unknown_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Click to retrieve" %} {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
+                                <li class="unknown_list"><b>{{ bible_reference }}</b> {% if bible_reference.is_long_passage %}<a href="#" class="bible-verse-load-link" data-verse-ref="{{ bible_reference.pk }}">{% trans "Study this passage on the Bible Study page" %}: {{ bible_reference.display_reference }}</a><span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}" data-verse-manual="1"></span>{% else %}<span class="bible-verse-text" data-verse-ref="{{ bible_reference.pk }}"><i class="fa fa-spinner fa-spin"></i></span>{% endif %}</li>
                                 {% endif %}
                             {% endfor %}
                             </ul>

@@ -1251,6 +1251,11 @@ p {
     padding: 4px 9px;
     vertical-align: middle;
 }
+
+/* Keep a guaranteed visual gap between the book icon and its label text. */
+.bible-verse-load-link .fa-book {
+    margin-right: 0.25rem;
+}
 .commentary-action-btn:hover,
 .sefaria-commentary-btn:hover {
     background: #ede3cc;

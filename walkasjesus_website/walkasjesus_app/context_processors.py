@@ -50,6 +50,7 @@ def cache_settings(request):
         'cache_on_multi_language': UserPreferences(request.session).languages,
         'cache_on_bible': translation.get_language() + '_' + UserPreferences(request.session).bible.id,
         'cache_on_kids_mode': 'kids' if request.COOKIES.get('jc_kids_mode') else 'default',
+        'bible_auto_load_verse_limit': max(1, int(getattr(settings, 'BIBLE_AUTO_LOAD_VERSE_LIMIT', 5))),
         'commentary_cache_timeout_seconds': int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6)),
         'david_stern_commentary_footer_text': str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip(),
         'david_stern_commentary_available': david_stern_available,

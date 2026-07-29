@@ -315,7 +315,7 @@ CJB_BIBLE_SOURCE_FILE = 'cjb_ot.json'
 CJB_BIBLE_SOURCE_FILES = ['cjb_ot.json', 'jnt_bible_lib_compatible.json']
 CJB_BIBLE_ENABLED = True
 CJB_BIBLE_LOGGED_IN_ONLY = False
-# Verse count above which passages are manual "Click to retrieve"
+# Verse count above which passages are manual "Study this passage" links instead of auto-loading the text on the page.
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
 # Maximum number of verses the user can select simultaneously on the Bible Study page.
 BIBLE_STUDY_MAX_VERSES = 5

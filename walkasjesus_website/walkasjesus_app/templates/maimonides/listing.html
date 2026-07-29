@@ -171,7 +171,7 @@
                                                         <div class="font-weight-bold small mb-1">{{ entry.usage_title }}</div>
                                                         <strong>{{ entry.reference.display_reference }}</strong>
                                                         <div class="mt-1">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary commentary-action-btn bible-verse-load-link" data-verse-ref="{{ entry.reference.pk }}"><i class="fa fa-book"></i> {% trans 'Click to retrieve' %} {{ entry.reference.display_reference }}</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary commentary-action-btn bible-verse-load-link" data-verse-ref="{{ entry.reference.pk }}"><i class="fa fa-book"></i> {% trans 'Study this passage on the Bible Study page' %}: {{ entry.reference.display_reference }}</button>
                                                         </div>
                                                         <span class="bible-verse-text" data-verse-ref="{{ entry.reference.pk }}" data-verse-manual="1"></span>
                                                         {% if not entry.reference.is_ot %}

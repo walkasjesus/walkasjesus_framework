@@ -768,6 +768,17 @@ $(document).ready(function(){
   function buildLongPassageBibleStudyUrl($link) {
     var $context = $link.closest('li, .our-services-text');
     var details = extractBibleStudyDetails($context);
+
+    // Lesson pages can place the verse label only inside the link text,
+    // so fallback to parsing the cleaned label when contextual extraction fails.
+    if (!details || !details.book) {
+      var fallbackReference = cleanVerseReferenceLabel($link.text());
+      var parsedFallback = parseBibleStudyReference(fallbackReference);
+      if (parsedFallback && parsedFallback.book) {
+        details = parsedFallback;
+      }
+    }
+
     if (!details || !details.book) {
       return '';
     }

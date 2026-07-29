@@ -121,7 +121,7 @@
                 </div>
             </div>
         </div>                               
-        <div class="row">
+        <div class="row" data-long-passage-bible-study-only="1" data-bible-auto-load-verse-limit="{{ bible_auto_load_verse_limit }}">
             <div id="bible_lesson_details" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-verses-url="{% url 'commandments:lesson_verses' lesson.id %}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
@@ -347,7 +347,7 @@
             </div>
             {% endif %}
             {% if lesson.direct_bible_references %}
-            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div id="biblereferences" class="col-xl-12 col-lg-12 col-md-12 col-sm-12" data-long-passage-bible-study-only="1" data-bible-auto-load-verse-limit="{{ bible_auto_load_verse_limit }}">
                 <div class="our-services-wrapper mb-60">
                     <div class="services-inner">
                         <div class="our-services-img">

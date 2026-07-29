@@ -147,13 +147,41 @@
     display: none;
     left: 0;
     margin-top: 4px;
-    max-height: 260px;
-    overflow-y: auto;
+    max-height: 320px;
+    overflow-y: scroll;
     position: absolute;
     right: 0;
     top: 100%;
     width: 100%;
     z-index: 12;
+}
+
+.select .native-combo-menu::-webkit-scrollbar,
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar,
+.multiselect-container.dropdown-menu::-webkit-scrollbar {
+    width: 10px;
+}
+
+.select .native-combo-menu::-webkit-scrollbar-track,
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar-track,
+.multiselect-container.dropdown-menu::-webkit-scrollbar-track {
+    background: #f3e6bd;
+    border-radius: 8px;
+}
+
+.select .native-combo-menu::-webkit-scrollbar-thumb,
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar-thumb,
+.multiselect-container.dropdown-menu::-webkit-scrollbar-thumb {
+    background: #c8a84b;
+    border: 2px solid #f3e6bd;
+    border-radius: 8px;
+}
+
+.select .native-combo-menu,
+.bootstrap-select .dropdown-menu .inner,
+.multiselect-container.dropdown-menu {
+    scrollbar-color: #c8a84b #f3e6bd;
+    scrollbar-width: auto;
 }
 
 .select.native-combo-open .native-combo-menu {
@@ -729,6 +757,13 @@ p {
 
 .bootstrap-select .dropdown-menu .inner {
     background: #fff7dc;
+    max-height: 320px !important;
+    overflow-y: auto !important;
+}
+
+.multiselect-container.dropdown-menu {
+    max-height: 320px;
+    overflow-y: auto;
 }
 
 .bootstrap-select .dropdown-menu .dropdown-item,

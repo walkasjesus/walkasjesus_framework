@@ -335,6 +335,20 @@ $(document).ready(function(){
     });
   }
 
+  function ensureMinimumVisibleSelectItems() {
+    $('select').each(function() {
+      var $select = $(this);
+      var dataSize = parseInt(String($select.attr('data-size') || ''), 10);
+      if ((isNaN(dataSize) || dataSize < 10) && ($select.hasClass('selectpicker') || $select.hasClass('law-filter-select'))) {
+        $select.attr('data-size', '10');
+      }
+
+      if ($.fn && $.fn.selectpicker && $select.data('selectpicker')) {
+        $select.selectpicker('refresh');
+      }
+    });
+  }
+
   function verseSpinnerHtml(source) {
     var spinnerClass = source === 'api' ? 'verse-loading-spinner verse-loading-spinner-api' : 'verse-loading-spinner verse-loading-spinner-cache';
     return '<i class="fa fa-spinner fa-spin ' + spinnerClass + '"></i>';
@@ -1335,6 +1349,7 @@ $(document).ready(function(){
     }
   }
     initStyledNativeSelectCombos();
+    ensureMinimumVisibleSelectItems();
 
   updateLongPassageButtonLabels();
 

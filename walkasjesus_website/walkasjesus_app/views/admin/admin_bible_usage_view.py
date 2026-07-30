@@ -135,6 +135,8 @@ class AdminBibleUsageView(View):
         if export_csv:
             return self._export_csv(selected_year, selected_month, per_bible_rows, totals, selected_bible_ids, monthly_rows)
 
+        requests_chart_markup = self._build_svg_chart(monthly_rows, 'total_requests', 'Requests')
+
         return render(request, 'admin/bible_usage_report.html', {
             'available_years': available_years,
             'month_choices': month_choices,
@@ -144,10 +146,38 @@ class AdminBibleUsageView(View):
             'selected_bible_ids': selected_bible_ids,
             'bible_choices': bible_choices,
             'monthly_rows': monthly_rows,
+            'requests_chart_markup': requests_chart_markup,
             'per_bible_rows': per_bible_rows,
             'user_rows': user_rows,
             'totals': totals,
         })
+
+    def _build_svg_chart(self, monthly_rows, value_key, title):
+        values = [row.get(value_key, 0) or 0 for row in monthly_rows]
+        max_value = max(values) if values else 1
+        width = 620
+        height = 180
+        chart_height = 120
+        bar_width = 34
+        gap = 16
+        offset_left = 36
+        offset_top = 24
+        svg_parts = [
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+            f'<rect x="0" y="0" width="{width}" height="{height}" fill="#f8fafc" rx="8" ry="8"/>',
+            f'<text x="24" y="20" fill="#334155" font-size="14" font-family="Arial, sans-serif">{title}</text>',
+        ]
+        for index, value in enumerate(values):
+            bar_height = int(round((value / max_value) * chart_height)) if max_value else 0
+            bar_height = max(bar_height, 2 if value else 0)
+            x = offset_left + index * (bar_width + gap)
+            y = offset_top + chart_height - bar_height
+            svg_parts.append(f'<rect x="{x}" y="{y}" width="{bar_width}" height="{bar_height}" fill="#16a34a" rx="3" ry="3"/>')
+            svg_parts.append(f'<text x="{x + 6}" y="{offset_top + chart_height + 18}" fill="#475569" font-size="11" font-family="Arial, sans-serif">{month_name[index + 1][:3]}</text>')
+            if value:
+                svg_parts.append(f'<text x="{x + 4}" y="{y - 6}" fill="#0f172a" font-size="10" font-family="Arial, sans-serif">{value}</text>')
+        svg_parts.append('</svg>')
+        return ''.join(svg_parts)
 
     def _export_csv(self, selected_year, selected_month, per_bible_rows, totals, selected_bible_ids, monthly_rows):
         response = HttpResponse(content_type='text/csv; charset=utf-8')

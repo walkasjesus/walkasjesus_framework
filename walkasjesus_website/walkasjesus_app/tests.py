@@ -6,6 +6,7 @@ from unittest.mock import Mock, patch
 from urllib.parse import parse_qs, urlparse
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.core.management import call_command
@@ -19,8 +20,11 @@ from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference,
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
+from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageVisitDaily
 from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
+from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
+from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
 from walkasjesus_app.views.detail_view import (
     _allowed_media_languages,
     _allowed_target_audiences,
@@ -297,6 +301,41 @@ class MediaLanguagePolicyTestCase(TestCase):
         with translation.override('nl'):
             request = self.factory.get('/')
             self.assertEqual(_allowed_media_languages(request), {'any', 'unknown', 'nl', 'en'})
+
+
+class AdminUsageReportViewTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = self._create_staff_user()
+
+    def _create_staff_user(self):
+        return get_user_model().objects.create_user(username='admin-reports', email='admin@example.com', password='secret', is_staff=True, is_active=True)
+
+    def _request(self, path='/?year=2024'):
+        request = self.factory.get(path)
+        request.user = self.user
+        request.session = self.client.session
+        return request
+
+    def test_page_usage_view_includes_monthly_breakdown_and_chart(self):
+        PageVisitDaily.objects.create(usage_date='2024-01-02', page_path='/home', page_label='Home', language_code='en', user_kind='authenticated', user_key='u1', visit_count=3)
+        PageVisitDaily.objects.create(usage_date='2024-02-05', page_path='/home', page_label='Home', language_code='en', user_kind='anonymous', user_key='u2', visit_count=5)
+
+        response = AdminPageUsageView.as_view()(self._request())
+        content = response.content.decode('utf-8')
+        self.assertIn('January', content)
+        self.assertIn('February', content)
+        self.assertIn('<svg', content)
+
+    def test_bible_usage_view_includes_monthly_breakdown_and_chart(self):
+        BibleTranslationUsageDaily.objects.create(usage_date='2024-01-03', bible_id='eng-1', bible_name='English', bible_language='en', source='api', endpoint='verses_api', user_kind='authenticated', user_key='u1', request_count=4, verse_count=10)
+        BibleTranslationUsageDaily.objects.create(usage_date='2024-02-04', bible_id='eng-1', bible_name='English', bible_language='en', source='cache', endpoint='study_page', user_kind='anonymous', user_key='u2', request_count=6, verse_count=8)
+
+        response = AdminBibleUsageView.as_view()(self._request())
+        content = response.content.decode('utf-8')
+        self.assertIn('January', content)
+        self.assertIn('February', content)
+        self.assertIn('<svg', content)
 
 
 class StrongsServiceFallbackTestCase(TestCase):

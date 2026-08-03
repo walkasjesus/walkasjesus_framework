@@ -1,7 +1,10 @@
 import json
+import hashlib
 from collections import defaultdict
 
 from django.conf import settings
+from django.core.cache import cache
+from django.db.models import Count, Max
 
 from walkasjesus_app.models import SwordCommentaryEntry, SwordCommentarySource
 
@@ -119,4 +122,36 @@ def available_sword_commentators(language_code):
 
 
 def available_sword_commentators_json(language_code):
-    return json.dumps(available_sword_commentators(language_code), ensure_ascii=True)
+    signature = _sword_commentary_cache_signature(language_code)
+    cache_key = f'sword-commentators-json:v1:{hashlib.sha256(signature.encode("utf-8")).hexdigest()}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    payload = json.dumps(available_sword_commentators(language_code), ensure_ascii=True)
+    cache.set(cache_key, payload, timeout=60 * 60)
+    return payload
+
+
+def _sword_commentary_cache_signature(language_code):
+    normalized_language = str(language_code or '').strip().lower()[:2]
+    source_stats = SwordCommentarySource.objects.aggregate(count=Count('id'), max_id=Max('id'))
+    entry_stats = SwordCommentaryEntry.objects.aggregate(count=Count('id'), max_id=Max('id'))
+    disabled_ids = sorted(sword_disabled_source_ids())
+    import_sources = getattr(settings, 'SWORD_COMMENTARY_IMPORT_SOURCES', []) or []
+    source_config_ids = sorted(
+        str(source.get('id', '') or '').strip().lower()
+        for source in import_sources
+        if isinstance(source, dict) and str(source.get('id', '') or '').strip()
+    )
+    signature = {
+        'language': normalized_language,
+        'enabled': sword_commentary_enabled(),
+        'disabled': disabled_ids,
+        'source_config_ids': source_config_ids,
+        'source_count': source_stats.get('count') or 0,
+        'source_max_id': source_stats.get('max_id') or 0,
+        'entry_count': entry_stats.get('count') or 0,
+        'entry_max_id': entry_stats.get('max_id') or 0,
+    }
+    return json.dumps(signature, sort_keys=True, separators=(',', ':'))

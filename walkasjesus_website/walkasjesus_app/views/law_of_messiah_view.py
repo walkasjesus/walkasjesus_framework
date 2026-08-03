@@ -56,8 +56,8 @@ def _is_http_url(value):
 
 
 def _find_primary_drawing(law):
-    for related_step in law.related_steps.all().order_by('id'):
-        step_drawing = related_step.background_drawing()
+    for related_step in sorted(law.related_steps.all(), key=lambda step: step.id):
+        step_drawing = _prefetched_commandment_background_drawing(related_step)
         if step_drawing and step_drawing.img_url and media_file_exists(step_drawing.img_url):
             return step_drawing
 
@@ -65,6 +65,25 @@ def _find_primary_drawing(law):
         if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.img_url and media_file_exists(drawing.img_url):
             return drawing
     return None
+
+
+def _prefetched_commandment_background_drawing(commandment):
+    legacy_drawings = list(commandment.drawing_set.all())
+    shared_drawings = [
+        drawing for drawing in commandment.shared_media_resources.all()
+        if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.is_public
+    ]
+
+    for drawing in legacy_drawings:
+        if drawing.is_public and drawing.img_url and media_file_exists(drawing.img_url):
+            return drawing
+    for drawing in shared_drawings:
+        if drawing.img_url and media_file_exists(drawing.img_url):
+            return drawing
+    for drawing in legacy_drawings:
+        if drawing.is_public:
+            return drawing
+    return shared_drawings[0] if shared_drawings else ''
 
 
 def _law_media_type_order():

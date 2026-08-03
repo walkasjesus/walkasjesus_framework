@@ -158,9 +158,10 @@ class BibleTranslation:
 
     def all_disabled(self) -> list[Bible]:
         """ This will return all bibles that are explicitly disabled. """
-        return [BibleTranslation._bible_factory.create(m.bible_id)
-                for m in BibleTranslationMetaData.objects.all()
-                if m.is_enabled is False]
+        disabled_ids = BibleTranslationMetaData.objects.filter(is_enabled=False).values_list('bible_id', flat=True)
+        return [BibleTranslation._all_bibles[bible_id]
+            for bible_id in disabled_ids
+            if bible_id in BibleTranslation._all_bibles]
 
     def all_in_user_language(self) -> list[Bible]:
         """" Get all bibles in the user main language. """

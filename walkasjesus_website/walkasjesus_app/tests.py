@@ -87,6 +87,14 @@ class BibleTranslationTestCase(TestCase):
         after_count = len(BibleTranslation().all_disabled())
         self.assertEqual(before_count+1, after_count)
 
+    def test_all_disabled_uses_loaded_bibles_without_rebuilding_factory(self):
+        self._disable('de4e12af7f28f599-01')
+
+        with patch.object(BibleTranslation._bible_factory, 'create', side_effect=AssertionError('factory create should not be called')):
+            disabled_ids = {bible.id for bible in BibleTranslation().all_disabled()}
+
+        self.assertIn('de4e12af7f28f599-01', disabled_ids)
+
     def _disable(self, bible_id: str):
         meta_data = BibleTranslationMetaData()
         meta_data.is_enabled = False

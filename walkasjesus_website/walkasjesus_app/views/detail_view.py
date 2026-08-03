@@ -146,9 +146,11 @@ def _shared_media_types():
 
 
 def _allowed_target_audiences(request):
-    # The media filtering should keep audience-neutral content visible while also
-    # allowing both kids-focused and adults-focused content to be considered.
-    return {'any', 'kids', 'adults'}
+    # Kids-only media must not be present in the server-rendered HTML unless
+    # kids mode is active, so it never leaks to non-JS clients (curl, bots, etc.).
+    if _is_kids_mode(request):
+        return {'any', 'kids', 'adults'}
+    return {'any', 'adults'}
 
 
 def _is_kids_mode(request):

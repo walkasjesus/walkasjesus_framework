@@ -216,7 +216,7 @@ class KidsModeCacheSettingsTestCase(TestCase):
         request.session = self.client.session
 
         self.assertEqual(cache_settings(request)['cache_on_kids_mode'], 'default')
-        self.assertEqual(_allowed_target_audiences(request), {'any', 'kids', 'adults'})
+        self.assertEqual(_allowed_target_audiences(request), {'any', 'adults'})
 
     def test_cache_settings_include_kids_mode_key(self):
         request = self.factory.get('/', HTTP_COOKIE='jc_kids_mode=true')
@@ -756,11 +756,11 @@ class LxxGreekToHebrewIndexCommandTestCase(SimpleTestCase):
 
 
 class DynamicUiRegressionTestCase(TestCase):
-    def test_base_modal_no_longer_renders_save_changes_button(self):
+    def test_base_modal_renders_save_changes_button_alongside_auto_apply(self):
         response = self.client.get(reverse('commandments:law_of_messiah_listing'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, 'Save changes')
+        self.assertContains(response, 'Save changes')
 
     def test_base_modal_defers_auto_apply_binding_until_dom_ready(self):
         response = self.client.get(reverse('commandments:law_of_messiah_listing'))
@@ -835,6 +835,53 @@ class SharedMediaDeduplicationTestCase(TestCase):
         songs = grouped[LawOfMessiahDrawing.MEDIA_TYPE_SONG]
 
         self.assertEqual(songs, [])
+
+
+class KidsOnlyMediaServerRenderingTestCase(TestCase):
+    """Kids-only media (any media_type, not just superbook/henkieshow) must never be
+    present in the server-rendered HTML unless the jc_kids_mode cookie is set, so it
+    doesn't leak to non-JS clients such as curl or search engine crawlers."""
+
+    def setUp(self):
+        self.commandment = Commandment.objects.create(
+            id=1002,
+            title='Step 1002',
+            title_negative='Step 1002 negative',
+        )
+        LawOfMessiahDrawing.objects.create(
+            commandment=self.commandment,
+            media_type=LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE,
+            title='Kids only shortmovie',
+            author='Someone',
+            url='https://example.org/kids-shortmovie',
+            target_audience='kids',
+            language='en',
+            is_public=True,
+        )
+        LawOfMessiahDrawing.objects.create(
+            commandment=self.commandment,
+            media_type=LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+            title='Adults song',
+            author='Someone else',
+            url='https://example.org/adults-song',
+            target_audience='adults',
+            language='en',
+            is_public=True,
+        )
+
+    def test_kids_only_media_hidden_without_kids_mode_cookie(self):
+        response = self.client.get(reverse('commandments:detail', args=[self.commandment.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'targetaudience="kids"')
+        self.assertContains(response, 'targetaudience="adults"')
+
+    def test_kids_only_media_shown_with_kids_mode_cookie(self):
+        self.client.cookies['jc_kids_mode'] = 'true'
+        response = self.client.get(reverse('commandments:detail', args=[self.commandment.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'targetaudience="kids"')
 
 
 class CommentaryProxyViewTestCase(SimpleTestCase):

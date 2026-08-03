@@ -54,9 +54,6 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 d-flex align-items-end">
-                                            <button type="submit" class="btn law-filter-button law-filter-cta">{% trans 'Apply Filter' %}</button>
-                                        </div>
                                     </div>
                                     <div class="row mb-3 align-items-center law-filter-action-row">
                                         <div class="col-auto ml-md-auto mb-2 mb-md-0 law-filter-legend-wrap">
@@ -219,3 +216,17 @@
     </div>
 </section>
 {% endblock %}
+
+{% block extra_body_scripts %}
+<script>
+  (function ($) {
+    if (!$) {
+      return;
+    }
+    $('.law-filter-select').on('changed.bs.select.jcLawFilterAutoApply change', function () {
+      this.form.submit();
+    });
+  })(window.jQuery);
+</script>
+{% endblock %}
+

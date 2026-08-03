@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.core.cache import cache
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import override
 
@@ -22,6 +22,7 @@ def _mocked_api_bible_verses(api_bible, _book, _start_chapter, _start_verse, _en
     return f'MOCK_VERSE_FOR_{api_bible.id}'
 
 
+@override_settings(GEO_REDIRECT_NL_DOMAIN='', GEO_REDIRECT_EN_DOMAIN='')
 class LanguageBibleSwitchFlowTest(TestCase):
     step_id = 54
     law_id = 'GB70'
@@ -167,7 +168,9 @@ class LanguageBibleSwitchFlowTest(TestCase):
         self._assert_verse_fetch_uses_bible(step_verses_url, en_custom.id)
 
         redirect_url = self._switch_language('nl', redirect_url, nl_default.id)
-        self._assert_verse_fetch_uses_bible(step_verses_url, nl_default.id)
+        with override('nl'):
+            nl_step_verses_url = reverse('commandments:commandment_verses', args=[self.step_id])
+        self._assert_verse_fetch_uses_bible(nl_step_verses_url, nl_default.id)
 
         redirect_url = self._switch_language('en', redirect_url)
         self._assert_verse_fetch_uses_bible(step_verses_url, en_custom.id)

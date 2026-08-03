@@ -398,6 +398,13 @@ $(document).ready(function(){
       },
       error: function(xhr) {
         console.error('Failed to load bible verses:', xhr.status, xhr.responseText);
+        var message = 'Could not load Bible verses.';
+        if (xhr && xhr.responseJSON && xhr.responseJSON.error) {
+          message = xhr.responseJSON.error;
+        }
+        $.each(refIds, function(_, pk) {
+          renderVerseText($('.bible-verse-text[data-verse-ref="' + pk + '"]'), message);
+        });
         if (onDone) onDone({});
       }
     });

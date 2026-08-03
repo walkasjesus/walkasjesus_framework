@@ -19,6 +19,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views import View
 
+from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.access_policy import filter_visible_bibles_for_request, is_bible_id_visible_for_request
 from walkasjesus_app.lib.strongs_service import original_text_payload
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
@@ -259,7 +260,7 @@ def _api_bible_search_url(bible_id, query, limit, offset=0, sort='canonical', fu
     return f'https://api.scripture.api.bible/v1/bibles/{bible_id}/search?{urlencode(params)}'
 
 
-def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range=''):
+def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range='', request=None, bible=None):
     cache_payload = json.dumps({
         'query': str(query or '').strip(),
         'limit': limit,
@@ -275,6 +276,8 @@ def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical'
         return cached
 
     url = _api_bible_search_url(bible_id, query, limit, offset, sort, fuzziness, search_range)
+    if request is not None and bible is not None:
+        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_SEARCH_API)
     response = requests.get(url, headers={'api-key': settings.BIBLE_API_KEY}, timeout=15)
     response.raise_for_status()
     payload = response.json()
@@ -598,7 +601,11 @@ class BibleStudyView(View):
 
         bt = BibleTranslation()
         selected_bibles = []
+        bible_api_rate_limit_error = ''
+        rate_limit_exceeded = False
         for bid in bible_ids:
+            if rate_limit_exceeded:
+                break
             bible_obj = bt.get(bid)
             if bible_obj:
                 bible_book = BibleLibBibleBooks[book]
@@ -612,7 +619,12 @@ class BibleStudyView(View):
                         verse_sources[str(v)] = 'cache'
                         continue
                     try:
+                        consume_bible_api_quota(request, bible_obj, BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
                         text = bible_obj.verses(bible_book, chapter, v, chapter, v)
+                    except BibleApiRateLimitExceeded as ex:
+                        bible_api_rate_limit_error = ex.message
+                        rate_limit_exceeded = True
+                        break
                     except Exception:
                         logger.exception('Failed to load verse text for bible=%s book=%s chapter=%s verse=%s', bid, book, chapter, v)
                         text = ''
@@ -658,6 +670,7 @@ class BibleStudyView(View):
             'visible_bible_slots': visible_bible_slots,
             'is_ot_book': is_ot_book,
             'show_original_text': show_original_text,
+            'bible_api_rate_limit_error': bible_api_rate_limit_error,
         })
 
 
@@ -698,7 +711,10 @@ class BibleStudyVersesView(View):
                 verse_sources[str(v)] = 'cache'
                 continue
             try:
+                consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
                 text = bible.verses(bible_lib_book, chapter, v, chapter, v)
+            except BibleApiRateLimitExceeded as ex:
+                return JsonResponse({'error': ex.message}, status=429)
             except Exception:
                 text = ''
             verses[str(v)] = text or ''
@@ -749,7 +765,9 @@ class BibleStudySearchView(View):
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
         try:
-            api_payload = _api_bible_search_payload(bible_id, query, limit, offset, sort, fuzziness, search_range)
+            api_payload = _api_bible_search_payload(bible_id, query, limit, offset, sort, fuzziness, search_range, request=request, bible=bible)
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
         except Exception:
             logger.exception('Bible Study API.Bible search failed for bible=%s query=%s', bible_id, query)
             return JsonResponse({'error': 'Search is not available for this translation right now.'}, status=502)
@@ -777,9 +795,12 @@ class BibleStudySearchView(View):
             page_verses = verses if page_offset == offset else []
             if page_offset != offset:
                 try:
-                    summary_payload = _api_bible_search_payload(bible_id, query, limit, page_offset, sort, fuzziness, search_range)
+                    summary_payload = _api_bible_search_payload(bible_id, query, limit, page_offset, sort, fuzziness, search_range, request=request, bible=bible)
                     summary_data = summary_payload.get('data', {}) if isinstance(summary_payload, dict) else {}
                     page_verses = summary_data.get('verses', []) if isinstance(summary_data, dict) else []
+                except BibleApiRateLimitExceeded:
+                    page_verses = []
+                    break
                 except Exception:
                     page_verses = []
             pages.append({

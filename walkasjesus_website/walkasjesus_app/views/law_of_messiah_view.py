@@ -12,7 +12,9 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
 
+from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
+from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily
 from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, LawOfMessiahDrawing, Lesson, Maimonides, UserPreferences
 from walkasjesus_app.views.detail_view import (
@@ -516,7 +518,7 @@ def _reference_text(ref, bible):
     return text
 
 
-def _reference_text_with_source(ref, bible):
+def _reference_text_with_source(ref, bible, request=None, endpoint=None):
     bible_cache_id = str(getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible)
     copyright_cache_key = f"bible_copyright:v1:{bible_cache_id}"
     cache_key = (
@@ -533,6 +535,8 @@ def _reference_text_with_source(ref, bible):
 
     end_chapter = ref.end_chapter if ref.end_chapter else ref.begin_chapter
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
+    if request is not None:
+        consume_bible_api_quota(request, bible, endpoint or BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
     text = clean_bible_verse_text(bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse))
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
@@ -754,7 +758,9 @@ class LawOfMessiahDetailView(View):
             first_ref = law.bible_reference_rows.first()
             if first_ref is not None:
                 try:
-                    _reference_text_with_source(first_ref, selected_bible)
+                    _reference_text_with_source(first_ref, selected_bible, request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
+                except BibleApiRateLimitExceeded:
+                    pass
                 except Exception:
                     pass
         law.primary_drawing = _find_primary_drawing(law)
@@ -851,7 +857,10 @@ class LawOfMessiahBibleVersesView(View):
                 refs = refs.filter(pk__in=requested_ref_ids)
 
             for ref in refs:
-                text, source = _reference_text_with_source(ref, bible)
+                try:
+                    text, source = _reference_text_with_source(ref, bible, request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
+                except BibleApiRateLimitExceeded as ex:
+                    return JsonResponse({'error': ex.message}, status=429)
                 ref_key = str(ref.pk)
                 verses[ref_key] = text
                 verse_sources[ref_key] = source

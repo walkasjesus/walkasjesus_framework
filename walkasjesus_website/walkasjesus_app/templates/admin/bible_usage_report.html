@@ -3,7 +3,7 @@
 
 {% block content %}
 <h1>{% trans 'Bible usage report' %}</h1>
-<p>{% trans 'This report supports annual license reporting and shows usage per Bible translation, split by API vs cache, including unique users.' %}</p>
+<p>{% trans 'This report supports annual license reporting and shows usage per Bible translation, split by API, cache, and blocked rate-limit attempts, including unique users.' %}</p>
 
 <form method="get" style="margin-bottom: 1rem;">
   <label for="report-year"><strong>{% trans 'Year' %}</strong></label>
@@ -43,24 +43,28 @@
     <th>{% trans 'Metric' %}</th>
     <th>{% trans 'API' %}</th>
     <th>{% trans 'Cache' %}</th>
+    <th>{% trans 'Blocked' %}</th>
     <th>{% trans 'Total' %}</th>
   </tr>
   <tr>
     <td>{% trans 'Requests' %}</td>
     <td>{{ totals.api_requests }}</td>
     <td>{{ totals.cache_requests }}</td>
+    <td>{{ totals.blocked_requests }}</td>
     <td>{{ totals.total_requests }}</td>
   </tr>
   <tr>
     <td>{% trans 'Verses delivered' %}</td>
     <td>{{ totals.api_verses }}</td>
     <td>{{ totals.cache_verses }}</td>
+    <td>0</td>
     <td>{{ totals.total_verses }}</td>
   </tr>
   <tr>
     <td>{% trans 'Unique users' %}</td>
     <td>{{ totals.api_unique_users }}</td>
     <td>{{ totals.cache_unique_users }}</td>
+    <td>{{ totals.blocked_unique_users }}</td>
     <td>{{ totals.total_unique_users }}</td>
   </tr>
 </table>
@@ -73,12 +77,14 @@
     <th>{% trans 'Month' %}</th>
     <th>{% trans 'API requests' %}</th>
     <th>{% trans 'Cache requests' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
     <th>{% trans 'Total requests' %}</th>
     <th>{% trans 'API verses' %}</th>
     <th>{% trans 'Cache verses' %}</th>
     <th>{% trans 'Total verses' %}</th>
     <th>{% trans 'API unique users' %}</th>
     <th>{% trans 'Cache unique users' %}</th>
+    <th>{% trans 'Blocked unique users' %}</th>
     <th>{% trans 'Total unique users' %}</th>
   </tr>
   {% for row in monthly_rows %}
@@ -86,12 +92,14 @@
     <td>{{ row.month_label }}</td>
     <td>{{ row.api_requests }}</td>
     <td>{{ row.cache_requests }}</td>
+    <td>{{ row.blocked_requests }}</td>
     <td><strong>{{ row.total_requests }}</strong></td>
     <td>{{ row.api_verses }}</td>
     <td>{{ row.cache_verses }}</td>
     <td><strong>{{ row.total_verses }}</strong></td>
     <td>{{ row.api_unique_users }}</td>
     <td>{{ row.cache_unique_users }}</td>
+    <td>{{ row.blocked_unique_users }}</td>
     <td><strong>{{ row.total_unique_users }}</strong></td>
   </tr>
   {% endfor %}
@@ -108,6 +116,8 @@
     <th>{% trans 'Cache requests' %}</th>
     <th>{% trans 'Cache verses' %}</th>
     <th>{% trans 'Cache unique users' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
+    <th>{% trans 'Blocked unique users' %}</th>
     <th>{% trans 'Total requests' %}</th>
     <th>{% trans 'Total verses' %}</th>
     <th>{% trans 'Total unique users' %}</th>
@@ -121,13 +131,15 @@
     <td>{{ row.cache_requests|default:0 }}</td>
     <td>{{ row.cache_verses|default:0 }}</td>
     <td>{{ row.cache_unique_users|default:0 }}</td>
+    <td>{{ row.blocked_requests|default:0 }}</td>
+    <td>{{ row.blocked_unique_users|default:0 }}</td>
     <td><strong>{{ row.total_requests|default:0 }}</strong></td>
     <td><strong>{{ row.total_verses|default:0 }}</strong></td>
     <td><strong>{{ row.total_unique_users|default:0 }}</strong></td>
   </tr>
   {% empty %}
   <tr>
-    <td colspan="10">{% trans 'No usage found for this selection.' %}</td>
+    <td colspan="12">{% trans 'No usage found for this selection.' %}</td>
   </tr>
   {% endfor %}
 </table>
@@ -142,6 +154,7 @@
     <th>{% trans 'User key' %}</th>
     <th>{% trans 'API requests' %}</th>
     <th>{% trans 'Cache requests' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
     <th>{% trans 'Total requests' %}</th>
     <th>{% trans 'Total verses' %}</th>
   </tr>
@@ -152,12 +165,13 @@
     <td><code>{{ row.user_key }}</code></td>
     <td>{{ row.api_requests|default:0 }}</td>
     <td>{{ row.cache_requests|default:0 }}</td>
+    <td>{{ row.blocked_requests|default:0 }}</td>
     <td>{{ row.total_requests|default:0 }}</td>
     <td>{{ row.total_verses|default:0 }}</td>
   </tr>
   {% empty %}
   <tr>
-    <td colspan="7">{% trans 'No user usage rows for this selection.' %}</td>
+    <td colspan="8">{% trans 'No user usage rows for this selection.' %}</td>
   </tr>
   {% endfor %}
 </table>

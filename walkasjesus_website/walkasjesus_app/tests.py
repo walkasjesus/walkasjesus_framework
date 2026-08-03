@@ -26,6 +26,7 @@ from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordC
 from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageVisitDaily
 from walkasjesus_app.models.law_of_messiah_media import MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
+from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
@@ -341,6 +342,43 @@ class AdminUsageReportViewTestCase(TestCase):
         self.assertIn('January', content)
         self.assertIn('February', content)
         self.assertIn('<svg', content)
+
+
+class BibleApiRateLimitTestCase(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.factory = RequestFactory()
+
+    def _request(self, remote_addr='203.0.113.10'):
+        request = self.factory.get('/', REMOTE_ADDR=remote_addr, HTTP_USER_AGENT='rate-limit-test')
+        request.user = AnonymousUser()
+        request.session = self.client.session
+        return request
+
+    @override_settings(BIBLE_API_RATE_LIMIT_ENABLED=True, BIBLE_API_DAILY_CALL_LIMIT=1, BIBLE_API_RATE_LIMIT_WHITELIST=[])
+    def test_rate_limit_blocks_and_records_usage(self):
+        bible = SimpleNamespace(id='eng-1', name='English', language='en')
+        request = self._request()
+
+        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+
+        with self.assertRaises(BibleApiRateLimitExceeded):
+            consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+
+        blocked = BibleTranslationUsageDaily.objects.get(source=BibleTranslationUsageDaily.SOURCE_BLOCKED)
+        self.assertEqual(blocked.bible_id, 'eng-1')
+        self.assertEqual(blocked.endpoint, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+        self.assertEqual(blocked.request_count, 1)
+
+    @override_settings(BIBLE_API_RATE_LIMIT_ENABLED=True, BIBLE_API_DAILY_CALL_LIMIT=1, BIBLE_API_RATE_LIMIT_WHITELIST=['10.80.80.0/24'])
+    def test_rate_limit_skips_whitelisted_ip(self):
+        bible = SimpleNamespace(id='eng-1', name='English', language='en')
+        request = self._request(remote_addr='10.80.80.140')
+
+        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+
+        self.assertFalse(BibleTranslationUsageDaily.objects.filter(source=BibleTranslationUsageDaily.SOURCE_BLOCKED).exists())
 
 
 class MediaReviewWorkflowTestCase(TestCase):

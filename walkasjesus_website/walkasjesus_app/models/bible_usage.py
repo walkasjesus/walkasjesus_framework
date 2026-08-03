@@ -4,16 +4,28 @@ from django.db import models
 class BibleTranslationUsageDaily(models.Model):
     SOURCE_API = 'api'
     SOURCE_CACHE = 'cache'
+    SOURCE_BLOCKED = 'blocked'
     SOURCE_CHOICES = (
         (SOURCE_API, 'API'),
         (SOURCE_CACHE, 'Cache'),
+        (SOURCE_BLOCKED, 'Blocked'),
     )
 
     ENDPOINT_STUDY_PAGE = 'study_page'
     ENDPOINT_VERSES_API = 'verses_api'
+    ENDPOINT_SEARCH_API = 'search_api'
+    ENDPOINT_COMMANDMENT_VERSES = 'commandment_verses'
+    ENDPOINT_LESSON_VERSES = 'lesson_verses'
+    ENDPOINT_LAW_OF_MESSIAH_VERSES = 'law_of_messiah_verses'
+    ENDPOINT_MAIMONIDES_VERSES = 'maimonides_verses'
     ENDPOINT_CHOICES = (
         (ENDPOINT_STUDY_PAGE, 'Bible Study page'),
         (ENDPOINT_VERSES_API, 'Bible Study verses API'),
+        (ENDPOINT_SEARCH_API, 'Bible Study search API'),
+        (ENDPOINT_COMMANDMENT_VERSES, 'Commandment verses API'),
+        (ENDPOINT_LESSON_VERSES, 'Lesson verses API'),
+        (ENDPOINT_LAW_OF_MESSIAH_VERSES, 'Law of Messiah verses API'),
+        (ENDPOINT_MAIMONIDES_VERSES, 'Maimonides verses API'),
     )
 
     USER_AUTHENTICATED = 'authenticated'

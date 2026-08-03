@@ -56,6 +56,8 @@ class AdminBibleUsageView(View):
                 cache_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
                 cache_verses=Sum('verse_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
                 cache_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE), distinct=True),
+                blocked_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED)),
+                blocked_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED), distinct=True),
                 total_requests=Sum('request_count'),
                 total_verses=Sum('verse_count'),
                 total_unique_users=Count('user_key', distinct=True),
@@ -70,6 +72,8 @@ class AdminBibleUsageView(View):
             cache_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
             cache_verses=Sum('verse_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
             cache_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE), distinct=True),
+            blocked_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED)),
+            blocked_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED), distinct=True),
             total_requests=Sum('request_count'),
             total_verses=Sum('verse_count'),
             total_unique_users=Count('user_key', distinct=True),
@@ -87,6 +91,8 @@ class AdminBibleUsageView(View):
                 cache_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
                 cache_verses=Sum('verse_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
                 cache_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE), distinct=True),
+                blocked_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED)),
+                blocked_unique_users=Count('user_key', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED), distinct=True),
                 total_requests=Sum('request_count'),
                 total_verses=Sum('verse_count'),
                 total_unique_users=Count('user_key', distinct=True),
@@ -106,6 +112,8 @@ class AdminBibleUsageView(View):
                 'cache_requests': row.get('cache_requests', 0) or 0,
                 'cache_verses': row.get('cache_verses', 0) or 0,
                 'cache_unique_users': row.get('cache_unique_users', 0) or 0,
+                'blocked_requests': row.get('blocked_requests', 0) or 0,
+                'blocked_unique_users': row.get('blocked_unique_users', 0) or 0,
                 'total_requests': row.get('total_requests', 0) or 0,
                 'total_verses': row.get('total_verses', 0) or 0,
                 'total_unique_users': row.get('total_unique_users', 0) or 0,
@@ -116,6 +124,7 @@ class AdminBibleUsageView(View):
             .annotate(
                 api_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_API)),
                 cache_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
+                blocked_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_BLOCKED)),
                 total_requests=Sum('request_count'),
                 total_verses=Sum('verse_count'),
             )
@@ -192,24 +201,26 @@ class AdminBibleUsageView(View):
         writer.writerow(['Selected translations', ', '.join(selected_bible_ids) if selected_bible_ids else 'All'])
         writer.writerow([])
         writer.writerow(['Totals'])
-        writer.writerow(['Metric', 'API', 'Cache', 'Total'])
-        writer.writerow(['Requests', totals.get('api_requests', 0), totals.get('cache_requests', 0), totals.get('total_requests', 0)])
-        writer.writerow(['Verses delivered', totals.get('api_verses', 0), totals.get('cache_verses', 0), totals.get('total_verses', 0)])
-        writer.writerow(['Unique users', totals.get('api_unique_users', 0), totals.get('cache_unique_users', 0), totals.get('total_unique_users', 0)])
+        writer.writerow(['Metric', 'API', 'Cache', 'Blocked', 'Total'])
+        writer.writerow(['Requests', totals.get('api_requests', 0), totals.get('cache_requests', 0), totals.get('blocked_requests', 0), totals.get('total_requests', 0)])
+        writer.writerow(['Verses delivered', totals.get('api_verses', 0), totals.get('cache_verses', 0), 0, totals.get('total_verses', 0)])
+        writer.writerow(['Unique users', totals.get('api_unique_users', 0), totals.get('cache_unique_users', 0), totals.get('blocked_unique_users', 0), totals.get('total_unique_users', 0)])
         writer.writerow([])
         writer.writerow(['Year breakdown per month'])
-        writer.writerow(['Month', 'API requests', 'Cache requests', 'Total requests', 'API verses', 'Cache verses', 'Total verses', 'API unique users', 'Cache unique users', 'Total unique users'])
+        writer.writerow(['Month', 'API requests', 'Cache requests', 'Blocked requests', 'Total requests', 'API verses', 'Cache verses', 'Total verses', 'API unique users', 'Cache unique users', 'Blocked unique users', 'Total unique users'])
         for month_row in monthly_rows:
             writer.writerow([
                 month_row.get('month_label', ''),
                 month_row.get('api_requests', 0),
                 month_row.get('cache_requests', 0),
+                month_row.get('blocked_requests', 0),
                 month_row.get('total_requests', 0),
                 month_row.get('api_verses', 0),
                 month_row.get('cache_verses', 0),
                 month_row.get('total_verses', 0),
                 month_row.get('api_unique_users', 0),
                 month_row.get('cache_unique_users', 0),
+                month_row.get('blocked_unique_users', 0),
                 month_row.get('total_unique_users', 0),
             ])
         writer.writerow([])
@@ -223,6 +234,8 @@ class AdminBibleUsageView(View):
             'Cache requests',
             'Cache verses',
             'Cache unique users',
+            'Blocked requests',
+            'Blocked unique users',
             'Total requests',
             'Total verses',
             'Total unique users',
@@ -238,6 +251,8 @@ class AdminBibleUsageView(View):
                 row.get('cache_requests', 0) or 0,
                 row.get('cache_verses', 0) or 0,
                 row.get('cache_unique_users', 0) or 0,
+                row.get('blocked_requests', 0) or 0,
+                row.get('blocked_unique_users', 0) or 0,
                 row.get('total_requests', 0) or 0,
                 row.get('total_verses', 0) or 0,
                 row.get('total_unique_users', 0) or 0,

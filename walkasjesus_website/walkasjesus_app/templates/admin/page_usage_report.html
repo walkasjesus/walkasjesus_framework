@@ -1,0 +1,112 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans 'Page usage report' %}</h1>
+<p>{% trans 'Usage report for non-admin pages: visits and unique users.' %}</p>
+
+<form method="get" style="margin-bottom: 1rem;">
+  <label for="report-year"><strong>{% trans 'Year' %}</strong></label>
+  <select name="year" id="report-year">
+    {% for year in available_years %}
+      <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="report-pages" style="margin-left: 1rem;"><strong>{% trans 'Pages (for report/export)' %}</strong></label>
+  <select name="page_paths" id="report-pages" multiple size="8" style="min-width: 560px; vertical-align: top;">
+    {% for item in page_choices %}
+      <option value="{{ item.page_path }}"{% if item.page_path in selected_paths %} selected{% endif %}>
+        {{ item.page_path }} ({{ item.language_code|lower }})
+      </option>
+    {% endfor %}
+  </select>
+
+  <button type="submit" class="button" style="margin-left: 1rem;">{% trans 'Apply' %}</button>
+  <button type="submit" class="button" name="export" value="csv" style="margin-left: 0.5rem;">{% trans 'Export CSV' %}</button>
+</form>
+
+<h2>{% trans 'Totals' %}</h2>
+<table>
+  <tr>
+    <th>{% trans 'Metric' %}</th>
+    <th>{% trans 'Value' %}</th>
+  </tr>
+  <tr>
+    <td>{% trans 'Total visits' %}</td>
+    <td>{{ totals.total_visits }}</td>
+  </tr>
+  <tr>
+    <td>{% trans 'Unique users' %}</td>
+    <td>{{ totals.unique_users }}</td>
+  </tr>
+</table>
+
+<br>
+<h2>{% trans 'Year overview per month' %} ({{ selected_year }})</h2>
+<div style="margin-bottom: 1rem;">{{ visits_chart_markup|safe }}</div>
+<table>
+  <tr>
+    <th>{% trans 'Month' %}</th>
+    <th>{% trans 'Visits' %}</th>
+    <th>{% trans 'Unique users' %}</th>
+  </tr>
+  {% for row in monthly_rows %}
+  <tr>
+    <td>{{ row.month_label }}</td>
+    <td>{{ row.total_visits }}</td>
+    <td>{{ row.unique_users }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<h2>{% trans 'Per page' %}</h2>
+<table>
+  <tr>
+    <th>{% trans 'Path' %}</th>
+    <th>{% trans 'Label' %}</th>
+    <th>{% trans 'Language' %}</th>
+    <th>{% trans 'Visits' %}</th>
+    <th>{% trans 'Unique users' %}</th>
+  </tr>
+  {% for row in page_rows %}
+  <tr>
+    <td><code>{{ row.page_path }}</code></td>
+    <td>{{ row.page_label }}</td>
+    <td>{{ row.language_code }}</td>
+    <td>{{ row.total_visits|default:0 }}</td>
+    <td>{{ row.unique_users|default:0 }}</td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="5">{% trans 'No page usage found for this selection.' %}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<h2>{% trans 'Per unique user (pseudonymous)' %}</h2>
+<table>
+  <tr>
+    <th>{% trans 'Path' %}</th>
+    <th>{% trans 'Language' %}</th>
+    <th>{% trans 'User type' %}</th>
+    <th>{% trans 'User key' %}</th>
+    <th>{% trans 'Visits' %}</th>
+  </tr>
+  {% for row in user_rows %}
+  <tr>
+    <td><code>{{ row.page_path }}</code></td>
+    <td>{{ row.language_code }}</td>
+    <td>{{ row.user_kind }}</td>
+    <td><code>{{ row.user_key }}</code></td>
+    <td>{{ row.total_visits|default:0 }}</td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="5">{% trans 'No page user rows for this selection.' %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

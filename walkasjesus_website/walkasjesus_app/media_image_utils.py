@@ -1,4 +1,5 @@
 from pathlib import Path
+from functools import lru_cache
 
 from django.conf import settings
 from sorl.thumbnail import get_thumbnail
@@ -22,14 +23,23 @@ def normalize_media_relative_path(img_url):
 
 
 def media_path_candidates(img_url):
+    return list(_media_path_candidates_cached(
+        str(img_url or '').strip(),
+        str(settings.MEDIA_ROOT),
+        str(settings.MEDIA_URL or ''),
+    ))
+
+
+@lru_cache(maxsize=8192)
+def _media_path_candidates_cached(img_url, media_root, media_url):
     normalized_path = normalize_media_relative_path(img_url)
     if not normalized_path:
-        return []
+        return ()
 
     candidates = [normalized_path]
     path = Path(normalized_path)
     basename = path.name
-    parent = Path(settings.MEDIA_ROOT) / path.parent
+    parent = Path(media_root) / path.parent
 
     if basename and parent.exists() and parent.is_dir():
         suffix_matches = sorted(
@@ -47,12 +57,21 @@ def media_path_candidates(img_url):
         if candidate not in seen:
             seen.add(candidate)
             deduped.append(candidate)
-    return deduped
+    return tuple(deduped)
 
 
 def resolve_media_relative_path(img_url):
-    for candidate in media_path_candidates(img_url):
-        if (Path(settings.MEDIA_ROOT) / candidate).is_file():
+    return _resolve_media_relative_path_cached(
+        str(img_url or '').strip(),
+        str(settings.MEDIA_ROOT),
+        str(settings.MEDIA_URL or ''),
+    )
+
+
+@lru_cache(maxsize=8192)
+def _resolve_media_relative_path_cached(img_url, media_root, media_url):
+    for candidate in _media_path_candidates_cached(img_url, media_root, media_url):
+        if (Path(media_root) / candidate).is_file():
             return candidate
     return ''
 

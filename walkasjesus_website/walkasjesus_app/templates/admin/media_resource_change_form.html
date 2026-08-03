@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+{% block content %}
+<div style="margin-bottom:1rem; padding:0.75rem; background:#f8fafc; border:1px solid #ddd;">
+  <strong>Media review helper</strong><br>
+  {% if original %}
+    {% if original.is_public %}
+      This resource is currently public.
+    {% else %}
+      This resource is private and can be reviewed from the <a href="{% url 'admin:media_review_dashboard' %}">media review dashboard</a>.
+    {% endif %}
+  {% endif %}
+</div>
+{{ block.super }}
+{% endblock %}

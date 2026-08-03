@@ -32,7 +32,7 @@ def _has_permission(request, permission_name):
 
 
 def cjb_bible_id():
-    return str(getattr(settings, 'CJB_BIBLE_ID', 'jnt-stern-en')).strip()
+    return str(getattr(settings, 'CJB_BIBLE_ID', 'cjb-bible-com')).strip()
 
 
 def is_cjb_bible_id(bible_id):

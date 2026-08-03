@@ -7,6 +7,7 @@ import requests
 
 class PoTranslator:
     MASK_PATTERN = re.compile(r'%(?:\([^)]+\))?[#0\- +]?(?:\d+|\*)?(?:\.\d+)?[hlL]?[diouxXeEfFgGcrs]|\{\{.*?\}\}|\{%.*?%\}|<[^>]+>', re.DOTALL)
+    MAX_CHUNK_LENGTH = 5500
 
     def _mask_tokens(self, text):
         replacements = []
@@ -53,20 +54,52 @@ class PoTranslator:
                 translated_paragraphs.append('')
                 continue
 
-            translated_paragraphs.append(self._translate_chunk(paragraph, source_language, destination_language))
-            time.sleep(0.05)
+            translated_chunks = []
+            for chunk in self._split_chunks(paragraph):
+                translated_chunks.append(self._translate_chunk(chunk, source_language, destination_language))
+                time.sleep(0.05)
+            translated_paragraphs.append(' '.join(translated_chunks))
 
         translated = '\n\n'.join(translated_paragraphs)
         return self._unmask_tokens(translated, replacements)
 
+    def _split_chunks(self, text):
+        text = text.strip()
+        if len(text) <= self.MAX_CHUNK_LENGTH:
+            return [text]
+
+        chunks = []
+        current = []
+        current_length = 0
+
+        for word in text.split():
+            projected_length = current_length + len(word) + (1 if current else 0)
+            if current and projected_length > self.MAX_CHUNK_LENGTH:
+                chunks.append(' '.join(current))
+                current = [word]
+                current_length = len(word)
+            else:
+                current.append(word)
+                current_length = projected_length
+
+        if current:
+            chunks.append(' '.join(current))
+
+        return chunks
+
     def translate(self, po_file_path, source_language, destination_language):
         po = polib.pofile(po_file_path)
 
-        for entry in po.untranslated_entries():
+        entries = [
+            entry for entry in po
+            if not entry.obsolete and ('fuzzy' in entry.flags or (not entry.msgstr and not entry.msgstr_plural))
+        ]
+
+        for entry in entries:
             try:
-                if 'fuzzy' not in entry.flags:
-                    entry.flags.append('fuzzy')
                 entry.msgstr = self._translate_text(entry.msgid, source_language, destination_language)
+                if entry.msgstr and 'fuzzy' in entry.flags:
+                    entry.flags.remove('fuzzy')
             except Exception as ex:
                 print(ex)
                 print(f'Could not translate entry: {entry.msgid[:120]}')

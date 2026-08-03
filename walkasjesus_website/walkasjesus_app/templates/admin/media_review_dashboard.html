@@ -1,0 +1,107 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>Media review dashboard</h1>
+<p>Review new media submissions before they become public, and see how many private resources are still waiting.</p>
+<p><strong>How to test the flow:</strong> log in as a reviewer, open the Media Resources admin, create or edit a resource with <code>is_public</code> unchecked, and then return here to approve or reject it. The review report is available at <code>/admin_portal/commandments_app/mediaresource/review-report/</code>.</p>
+
+<div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+  <div style="border:1px solid #ddd; padding:0.75rem 1rem; background:#f8fafc;">
+    <strong>Private resources:</strong> {{ counts.private_resources }}
+  </div>
+  <div style="border:1px solid #ddd; padding:0.75rem 1rem; background:#f8fafc;">
+    <strong>Pending reviews:</strong> {{ counts.pending_reviews }}
+  </div>
+  <div style="border:1px solid #ddd; padding:0.75rem 1rem; background:#f8fafc;">
+    <strong>Total resources:</strong> {{ counts.total_resources }}
+  </div>
+</div>
+
+<h2>Pending review</h2>
+<table>
+  <tr><th>ID</th><th>Resource</th><th>Applicant</th><th>Requested</th><th>Status</th><th>Action</th></tr>
+  {% for review in pending_requests %}
+  <tr>
+    <td>{{ review.pk }}</td>
+    <td><strong>{{ review.resource.title }}</strong><br><small>{{ review.resource.media_type }} / {{ review.resource.language }}</small></td>
+    <td>{{ review.applicant.username|default:'-' }}</td>
+    <td>{{ review.requested_at }}</td>
+    <td>Pending</td>
+    <td>
+      <form method="post" style="display:block; max-width:720px;">
+        {% csrf_token %}
+        <input type="hidden" name="request_id" value="{{ review.pk }}">
+        <div style="display:grid; gap:0.5rem;">
+          <label><strong>Title</strong><br><input type="text" name="title" value="{{ review.resource.title|default:'' }}" style="width:100%;"></label>
+          <label><strong>Description</strong><br><textarea name="description" rows="3" style="width:100%;">{{ review.resource.description|default:'' }}</textarea></label>
+          <label><strong>Author</strong><br><input type="text" name="author" value="{{ review.resource.author|default:'' }}" style="width:100%;"></label>
+          <label><strong>Media type</strong><br><select name="media_type" style="width:100%;">
+            {% for value, label in media_type_choices %}
+            <option value="{{ value }}" {% if review.resource.media_type == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select></label>
+          <label><strong>Target audience</strong><br><select name="target_audience" style="width:100%;">
+            {% for value, label in target_audience_choices %}
+            <option value="{{ value }}" {% if review.resource.target_audience == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select></label>
+          <label><strong>Language</strong><br><select name="language" style="width:100%;">
+            {% for value, label in language_choices %}
+            <option value="{{ value }}" {% if review.resource.language == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select></label>
+          <label><strong>Image URL</strong><br><input type="text" name="img_url" value="{{ review.resource.img_url|default:'' }}" style="width:100%;"></label>
+          <label><strong>URL</strong><br><input type="text" name="url" value="{{ review.resource.url|default:'' }}" style="width:100%;"></label>
+          <label><strong>Review notes</strong><br><textarea name="review_notes" rows="2" style="width:100%;" placeholder="Optional review notes"></textarea></label>
+          <label><strong>Rejection reason</strong><br><select name="rejection_reason" style="width:100%;">
+            <option value="">Choose rejection reason</option>
+            {% for value, label in review.REJECTION_REASON_CHOICES %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+          </select></label>
+        </div>
+        <div style="margin-top:0.75rem;">
+          <button type="submit" name="action" value="approve">Approve</button>
+          <button type="submit" name="action" value="reject">Reject</button>
+        </div>
+      </form>
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="6">No pending review requests.</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Private resources overview</h2>
+<table>
+  <tr><th>Resource</th><th>Linked step/law/lesson</th><th>Type</th><th>Status</th></tr>
+  {% for resource in resources %}
+  <tr>
+    <td>{{ resource.title }}</td>
+    <td>{% if resource.commandment %}Step {{ resource.commandment.id }}{% elif resource.law_of_messiah %}Law {{ resource.law_of_messiah.id }}{% elif resource.lesson %}Lesson {{ resource.lesson.id }}{% else %}-{% endif %}</td>
+    <td>{{ resource.media_type }}</td>
+    <td>Private</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="4">No private resources waiting review.</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Recent review history</h2>
+<table>
+  <tr><th>Resource</th><th>Applicant</th><th>Reviewer</th><th>Status</th><th>Reason</th><th>Notes</th></tr>
+  {% for review in reviewed_requests %}
+  <tr>
+    <td>{{ review.resource.title }}</td>
+    <td>{{ review.applicant.username|default:'-' }}</td>
+    <td>{{ review.reviewed_by.username|default:'-' }}</td>
+    <td>{{ review.get_status_display }}</td>
+    <td>{{ review.get_rejection_reason_display|default:'-' }}</td>
+    <td>{{ review.review_notes|default:'-' }}</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="6">No review history yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

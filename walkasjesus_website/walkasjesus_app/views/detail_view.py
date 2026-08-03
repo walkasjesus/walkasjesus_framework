@@ -11,8 +11,10 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import translation
 from django.views import View
 
+from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
 from walkasjesus_app.models import Commandment, UserPreferences, Lesson, BibleTranslation, LawOfMessiah, LawOfMessiahDrawing
+from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily
 
 
 LOGGER = logging.getLogger(__name__)
@@ -144,8 +146,10 @@ def _shared_media_types():
 
 
 def _allowed_target_audiences(request):
+    # Kids-only media must not be present in the server-rendered HTML unless
+    # kids mode is active, so it never leaks to non-JS clients (curl, bots, etc.).
     if _is_kids_mode(request):
-        return {'any', 'kids'}
+        return {'any', 'kids', 'adults'}
     return {'any', 'adults'}
 
 
@@ -191,6 +195,9 @@ def _is_displayable_media(item, media_type):
     url = _media_attr(item, 'url')
     img_url = _media_attr(item, 'img_url')
 
+    if title or description:
+        return True
+
     if media_type in {
         LawOfMessiahDrawing.MEDIA_TYPE_SONG,
         LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK,
@@ -209,7 +216,7 @@ def _is_displayable_media(item, media_type):
     }:
         return bool(img_url)
 
-    return bool(title or description or url or img_url)
+    return bool(url or img_url)
 
 
 def _filter_grouped_media_by_audience(grouped, allowed_target_audiences, allowed_languages=None):
@@ -259,7 +266,7 @@ def _collect_shared_media_by_type(commandment=None, lesson=None):
     if lesson is not None:
         query = query | LawOfMessiahDrawing.objects.filter(lesson=lesson)
 
-    for media in query.distinct().order_by('media_type', 'id'):
+    for media in query.filter(is_public=True).distinct().order_by('media_type', 'id'):
         key = media_key(media)
         if key in seen:
             continue
@@ -295,14 +302,19 @@ def _apply_shared_media_to_lesson_display(lesson, grouped):
     lesson.background_drawing = lesson.drawings[0] if lesson.drawings else ''
 
 
-def _collect_verses(bible, references, key_builder=None, verse_sources=None):
+def clean_bible_verse_text(text):
+    lines = [line.strip() for line in str(text or '').replace('\r\n', '\n').replace('\r', '\n').replace('¶', '').split('\n')]
+    return '\n'.join(line for line in lines if line)
+
+
+def _collect_verses(bible, references, key_builder=None, verse_sources=None, request=None, endpoint=None):
     """Fetch verse texts for a list of references using the given bible."""
     if key_builder is None:
         key_builder = lambda ref: str(ref.pk)
 
     verses = {}
     for ref in references:
-        text, source = _get_or_fetch_verse_text_with_source(bible, ref)
+        text, source = _get_or_fetch_verse_text_with_source(bible, ref, request=request, endpoint=endpoint)
         ref_key = key_builder(ref)
         verses[ref_key] = text if text else ''
         if verse_sources is not None:
@@ -334,7 +346,7 @@ def _get_or_fetch_verse_text(bible, ref):
     return text
 
 
-def _get_or_fetch_verse_text_with_source(bible, ref):
+def _get_or_fetch_verse_text_with_source(bible, ref, request=None, endpoint=None):
     cache_key = _verse_cache_key(bible, ref)
     cached_copyright = cache.get(_bible_copyright_cache_key(bible))
     if cached_copyright:
@@ -342,10 +354,13 @@ def _get_or_fetch_verse_text_with_source(bible, ref):
 
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached, 'cache'
+        return clean_bible_verse_text(cached), 'cache'
+
+    if request is not None:
+        consume_bible_api_quota(request, bible, endpoint or BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
 
     ref.set_bible(bible)
-    text = ref.text() or ''
+    text = clean_bible_verse_text(ref.text() or '')
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
         cache.set(_bible_copyright_cache_key(bible), bible.copyright, VERSE_CACHE_TIMEOUT)
@@ -385,29 +400,35 @@ class BibleVersesCommandmentView(View):
         verses = {}
         verse_sources = {}
         primary = commandment.primary_bible_reference()
-        if primary:
-            text, source = _get_or_fetch_verse_text_with_source(new_bible, primary)
-            primary_key = _reference_client_key(primary)
-            verses[primary_key] = text if text else ''
-            verse_sources[primary_key] = source
+        try:
+            endpoint = BibleTranslationUsageDaily.ENDPOINT_COMMANDMENT_VERSES
+            if primary:
+                text, source = _get_or_fetch_verse_text_with_source(new_bible, primary, request=request, endpoint=endpoint)
+                primary_key = _reference_client_key(primary)
+                verses[primary_key] = text if text else ''
+                verse_sources[primary_key] = source
 
-        for method_name in [
-            'direct_bible_references',
-            'indirect_bible_references',
-            'example_bible_references',
-            'otlaw_bible_references',
-            'wisdom_bible_references',
-            'duplicate_bible_references',
-            'study_bible_references',
-        ]:
-            verses.update(
-                _collect_verses(
-                    new_bible,
-                    getattr(commandment, method_name)(),
-                    key_builder=_reference_client_key,
-                    verse_sources=verse_sources,
+            for method_name in [
+                'direct_bible_references',
+                'indirect_bible_references',
+                'example_bible_references',
+                'otlaw_bible_references',
+                'wisdom_bible_references',
+                'duplicate_bible_references',
+                'study_bible_references',
+            ]:
+                verses.update(
+                    _collect_verses(
+                        new_bible,
+                        getattr(commandment, method_name)(),
+                        key_builder=_reference_client_key,
+                        verse_sources=verse_sources,
+                        request=request,
+                        endpoint=endpoint,
+                    )
                 )
-            )
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
 
         requested_ref_ids = _requested_ref_ids(request)
 
@@ -439,13 +460,17 @@ class BibleVersesLessonView(View):
         verses = {}
         verse_sources = {}
         primary = lesson.primary_bible_reference()
-        if primary:
-            text, source = _get_or_fetch_verse_text_with_source(new_bible, primary)
-            primary_key = str(primary.pk)
-            verses[primary_key] = text if text else ''
-            verse_sources[primary_key] = source
+        try:
+            endpoint = BibleTranslationUsageDaily.ENDPOINT_LESSON_VERSES
+            if primary:
+                text, source = _get_or_fetch_verse_text_with_source(new_bible, primary, request=request, endpoint=endpoint)
+                primary_key = str(primary.pk)
+                verses[primary_key] = text if text else ''
+                verse_sources[primary_key] = source
 
-        verses.update(_collect_verses(new_bible, lesson.direct_bible_references(), verse_sources=verse_sources))
+            verses.update(_collect_verses(new_bible, lesson.direct_bible_references(), verse_sources=verse_sources, request=request, endpoint=endpoint))
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
 
         requested_ref_ids = _requested_ref_ids(request)
 

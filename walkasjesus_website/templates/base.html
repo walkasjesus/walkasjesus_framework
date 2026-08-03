@@ -6,7 +6,7 @@
 <html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
   <head>
     <title>{% block title_content %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}</title>
-  {% cache cache_timeout head cache_on_language %}
+  {% cache cache_timeout head cache_on_language request.path %}
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
     <meta charset="utf-8">
@@ -44,6 +44,7 @@
     <link href="{% static 'cookielaw/css/cookielaw.css' %}" rel="stylesheet">
     <!-- Customcss which needs presedence -->
     <link href="{% static 'css/customcss.css' %}" rel="stylesheet">
+    {% block extra_head_assets %}{% endblock %}
   {% endcache %}
   {% block head_meta %}
     <meta name="description" content="{% block meta_description %}{% trans 'Walk as Jesus helps people follow Jesus (Yeshua) in daily life through 77 steps, and continue with the Law of Messiah: biblical commandments and mitzvot for discipleship, groups, and families.' %}{% endblock %}">
@@ -130,7 +131,7 @@
             <li class="nav-item kids-mode-hide"><a href="{% url 'admin:index' %}" class="nav-link"><span>{% trans 'Admin Portal' %}</span></a></li>
             {% endif %}
             {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-            <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>Wettiscisme?!</span></a></li>
+            <li class="nav-item kids-mode-hide"><a href="{% url 'commandments:legalism' %}" class="nav-link"><span>{% trans 'Legalism?!' %}</span></a></li>
             {% endif %}
             <li class="nav-item d-lg-none nav-item-mobile-utility"><a href="javascript:void(0);" class="nav-link nav-link-mobile-utility" data-toggle="modal" data-target="#changeLanguageModal"><span>{% trans 'Change language / Bible' %}</span></a></li>
           </ul>
@@ -176,7 +177,7 @@
                 <li><a href="{% url 'commandments:maimonides_listing' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Classical Commandments' %}</a></li>
                 <li><a href="{% url 'commandments:vision' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Vision' %}</a></li>
                 {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}
-                <li><a href="{% url 'commandments:legalism' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Wettiscisme?!</a></li>
+                <li><a href="{% url 'commandments:legalism' %}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>{% trans 'Legalism?!' %}</a></li>
                 {% endif %}
               </ul>
             </div>
@@ -253,6 +254,12 @@
   <script type="text/javascript" src="{% static 'js/gtag.js' %}"></script>
 
   <script src="{% static 'js/customjs.js' %}"></script>
+
+  <script>
+    if (window.jcInitChangeLanguageModal) {
+      window.jcInitChangeLanguageModal();
+    }
+  </script>
 
   {% endcache %}
   {% block extra_body_scripts %}{% endblock %}

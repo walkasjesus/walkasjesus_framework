@@ -1,0 +1,178 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans 'Bible usage report' %}</h1>
+<p>{% trans 'This report supports annual license reporting and shows usage per Bible translation, split by API, cache, and blocked rate-limit attempts, including unique users.' %}</p>
+
+<form method="get" style="margin-bottom: 1rem;">
+  <label for="report-year"><strong>{% trans 'Year' %}</strong></label>
+  <select name="year" id="report-year">
+    {% for year in available_years %}
+      <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="report-month" style="margin-left: 1rem;"><strong>{% trans 'Month' %}</strong></label>
+  <select name="month" id="report-month">
+    <option value="">{% trans 'All months' %}</option>
+    {% for item in month_choices %}
+      <option value="{{ item.value }}"{% if item.value == selected_month %} selected{% endif %}>{{ item.label }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="report-bible" style="margin-left: 1rem;"><strong>{% trans 'Bible translations (for report/export)' %}</strong></label>
+  <select name="bible_ids" id="report-bible" multiple size="8" style="min-width: 420px; vertical-align: top;">
+    {% for item in bible_choices %}
+      <option value="{{ item.bible_id }}"{% if item.bible_id in selected_bible_ids %} selected{% endif %}>
+        {{ item.bible_language|upper }} - {{ item.bible_name }} ({{ item.bible_id }})
+      </option>
+    {% endfor %}
+  </select>
+  <div style="display: inline-block; margin-left: 0.5rem; color: #666;">
+    <small>{% trans 'Tip: hold Cmd/Ctrl to select multiple translations. Leave empty for all.' %}</small>
+  </div>
+
+  <button type="submit" class="button" style="margin-left: 1rem;">{% trans 'Apply' %}</button>
+  <button type="submit" class="button" name="export" value="csv" style="margin-left: 0.5rem;">{% trans 'Export CSV' %}</button>
+</form>
+
+<h2>{% trans 'Totals' %} ({{ report_period_label }})</h2>
+<table>
+  <tr>
+    <th>{% trans 'Metric' %}</th>
+    <th>{% trans 'API' %}</th>
+    <th>{% trans 'Cache' %}</th>
+    <th>{% trans 'Blocked' %}</th>
+    <th>{% trans 'Total' %}</th>
+  </tr>
+  <tr>
+    <td>{% trans 'Requests' %}</td>
+    <td>{{ totals.api_requests }}</td>
+    <td>{{ totals.cache_requests }}</td>
+    <td>{{ totals.blocked_requests }}</td>
+    <td>{{ totals.total_requests }}</td>
+  </tr>
+  <tr>
+    <td>{% trans 'Verses delivered' %}</td>
+    <td>{{ totals.api_verses }}</td>
+    <td>{{ totals.cache_verses }}</td>
+    <td>0</td>
+    <td>{{ totals.total_verses }}</td>
+  </tr>
+  <tr>
+    <td>{% trans 'Unique users' %}</td>
+    <td>{{ totals.api_unique_users }}</td>
+    <td>{{ totals.cache_unique_users }}</td>
+    <td>{{ totals.blocked_unique_users }}</td>
+    <td>{{ totals.total_unique_users }}</td>
+  </tr>
+</table>
+
+<br>
+<h2>{% trans 'Year overview per month' %} ({{ selected_year }})</h2>
+<div style="margin-bottom: 1rem;">{{ requests_chart_markup|safe }}</div>
+<table>
+  <tr>
+    <th>{% trans 'Month' %}</th>
+    <th>{% trans 'API requests' %}</th>
+    <th>{% trans 'Cache requests' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
+    <th>{% trans 'Total requests' %}</th>
+    <th>{% trans 'API verses' %}</th>
+    <th>{% trans 'Cache verses' %}</th>
+    <th>{% trans 'Total verses' %}</th>
+    <th>{% trans 'API unique users' %}</th>
+    <th>{% trans 'Cache unique users' %}</th>
+    <th>{% trans 'Blocked unique users' %}</th>
+    <th>{% trans 'Total unique users' %}</th>
+  </tr>
+  {% for row in monthly_rows %}
+  <tr>
+    <td>{{ row.month_label }}</td>
+    <td>{{ row.api_requests }}</td>
+    <td>{{ row.cache_requests }}</td>
+    <td>{{ row.blocked_requests }}</td>
+    <td><strong>{{ row.total_requests }}</strong></td>
+    <td>{{ row.api_verses }}</td>
+    <td>{{ row.cache_verses }}</td>
+    <td><strong>{{ row.total_verses }}</strong></td>
+    <td>{{ row.api_unique_users }}</td>
+    <td>{{ row.cache_unique_users }}</td>
+    <td>{{ row.blocked_unique_users }}</td>
+    <td><strong>{{ row.total_unique_users }}</strong></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<h2>{% trans 'Per translation' %}</h2>
+<table>
+  <tr>
+    <th>{% trans 'Bible' %}</th>
+    <th>{% trans 'API requests' %}</th>
+    <th>{% trans 'API verses' %}</th>
+    <th>{% trans 'API unique users' %}</th>
+    <th>{% trans 'Cache requests' %}</th>
+    <th>{% trans 'Cache verses' %}</th>
+    <th>{% trans 'Cache unique users' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
+    <th>{% trans 'Blocked unique users' %}</th>
+    <th>{% trans 'Total requests' %}</th>
+    <th>{% trans 'Total verses' %}</th>
+    <th>{% trans 'Total unique users' %}</th>
+  </tr>
+  {% for row in per_bible_rows %}
+  <tr>
+    <td>{{ row.bible_language|upper }} - {{ row.bible_name }}<br><code>{{ row.bible_id }}</code></td>
+    <td>{{ row.api_requests|default:0 }}</td>
+    <td>{{ row.api_verses|default:0 }}</td>
+    <td>{{ row.api_unique_users|default:0 }}</td>
+    <td>{{ row.cache_requests|default:0 }}</td>
+    <td>{{ row.cache_verses|default:0 }}</td>
+    <td>{{ row.cache_unique_users|default:0 }}</td>
+    <td>{{ row.blocked_requests|default:0 }}</td>
+    <td>{{ row.blocked_unique_users|default:0 }}</td>
+    <td><strong>{{ row.total_requests|default:0 }}</strong></td>
+    <td><strong>{{ row.total_verses|default:0 }}</strong></td>
+    <td><strong>{{ row.total_unique_users|default:0 }}</strong></td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="12">{% trans 'No usage found for this selection.' %}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+<h2>{% trans 'Per unique user (pseudonymous)' %}</h2>
+<p>{% trans 'User keys are anonymized hashes. Use this section to evidence unique-user usage without exposing personal data.' %}</p>
+<table>
+  <tr>
+    <th>{% trans 'Bible' %}</th>
+    <th>{% trans 'User type' %}</th>
+    <th>{% trans 'User key' %}</th>
+    <th>{% trans 'API requests' %}</th>
+    <th>{% trans 'Cache requests' %}</th>
+    <th>{% trans 'Blocked requests' %}</th>
+    <th>{% trans 'Total requests' %}</th>
+    <th>{% trans 'Total verses' %}</th>
+  </tr>
+  {% for row in user_rows %}
+  <tr>
+    <td>{{ row.bible_language|upper }} - {{ row.bible_name }}<br><code>{{ row.bible_id }}</code></td>
+    <td>{{ row.user_kind }}</td>
+    <td><code>{{ row.user_key }}</code></td>
+    <td>{{ row.api_requests|default:0 }}</td>
+    <td>{{ row.cache_requests|default:0 }}</td>
+    <td>{{ row.blocked_requests|default:0 }}</td>
+    <td>{{ row.total_requests|default:0 }}</td>
+    <td>{{ row.total_verses|default:0 }}</td>
+  </tr>
+  {% empty %}
+  <tr>
+    <td colspan="8">{% trans 'No user usage rows for this selection.' %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

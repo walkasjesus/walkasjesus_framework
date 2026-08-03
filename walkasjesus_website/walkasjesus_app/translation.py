@@ -1,19 +1,20 @@
 import vinaigrette
 
 
-def register_translations(app_config):
-    translatable_model_fields = {
-        'Commandment': ['title', 'title_negative', 'quote'],
-        'Drawing': ['description'],
-        'Picture': ['description'],
-        'Question': ['text'],
-        'Lesson': ['title', 'related_step_description', 'story', 'activities'],
-        'LessonDrawing': ['description'],
-        'LessonPicture': ['description'],
-        'LessonQuestion': ['text'],
-        'LawOfMessiah': ['title', 'commandment', 'commentary_rudolph', 'commentary_juster', 'classical_commentators'],
-    }
+TRANSLATABLE_MODEL_FIELDS = {
+    'Commandment': ['title', 'title_negative', 'quote'],
+    'Drawing': ['description'],
+    'Picture': ['description'],
+    'Question': ['text'],
+    'Lesson': ['title', 'related_step_description', 'story', 'activities'],
+    'LessonDrawing': ['description'],
+    'LessonPicture': ['description'],
+    'LessonQuestion': ['text'],
+    'LawOfMessiah': ['title', 'commandment', 'commentary_rudolph', 'commentary_juster', 'classical_commentators'],
+}
 
+
+def register_translations(app_config):
     # Register fields to translate
-    for model, fields in translatable_model_fields.items():
+    for model, fields in TRANSLATABLE_MODEL_FIELDS.items():
         vinaigrette.register(app_config.get_model(model), fields)

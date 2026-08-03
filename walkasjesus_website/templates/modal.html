@@ -36,13 +36,13 @@
                     <div class="select">
                     <select name="bible_id" class="drpBibleTranslation selectpicker" id="drpBibleTranslation" data-live-search="true" data-width="100%" data-size="10">
                         <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
-                        <option value="{{ user_preferences.bible.id }}" selected>
+                        <option value="{{ user_preferences.bible.id }}" data-abbreviation="{{ user_preferences.bible.abbreviation|default:user_preferences.bible.name|upper }}" selected>
                             {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
                         </option>
                         {% for bible_item in bible_translation.all_in_user_language %}
                             {% if bible_item.id != user_preferences.bible.id %}
                             {% if bible_item.id != cjb_bible_id or cjb_bible_visible %}
-                            <option value="{{ bible_item.id }}">
+                            <option value="{{ bible_item.id }}" data-abbreviation="{{ bible_item.abbreviation|default:bible_item.name|upper }}">
                                 {{ bible_item.name }}
                             </option>
                             {% endif %}
@@ -80,8 +80,8 @@
                             {% endfor %}
                         </select>
                         <div class="modal-footer">
-                            <button class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
-                        </div>                  
+                            <button type="button" class="btn btnSaveLanguages">{% trans 'Save changes' %}</button>
+                        </div>
                     </form>
                 </div>
                 <p><i>{% blocktrans %}Within a step, you can find related resources to that step. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see resources for specific languages.{% endblocktrans %}</i></p>
@@ -91,13 +91,11 @@
     </div>
   </div>
 <script>
-(function () {
+window.jcInitChangeLanguageModal = function () {
     var languageForm = document.getElementById('frmSiteLanguage');
-    var bibleForm = document.getElementById('frmBibleTranslation');
     var mediaLanguagesForm = document.getElementById('frmLanguages');
     var languageSelect = document.querySelector('.drpSelectLanguage');
     var bibleSelect = document.getElementById('drpBibleTranslation');
-    var saveButton = document.querySelector('.btnSaveLanguages');
     var bibleTranslationsUrl = "{% url 'commandments:bible_translations_for_language' %}";
     var bibleRefreshPromise = Promise.resolve();
 
@@ -198,44 +196,73 @@
         });
     }
 
+    function switchSiteLanguageAndBible() {
+        return Promise.resolve(bibleRefreshPromise).then(function () {
+            return postLanguageSwitch(languageSelect.value);
+        });
+    }
+
+    function navigateAfterApply(data) {
+        if (window.jQuery && jQuery.removeCookie) {
+            jQuery.removeCookie('jc_bible_trans_settings');
+        }
+        var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+        var target = (data && data.redirect_url) ? data.redirect_url : currentUrl;
+        window.location.href = target;
+    }
+
+    function reloadAfterApplyFailure() {
+        if (window.jQuery && jQuery.removeCookie) {
+            jQuery.removeCookie('jc_bible_trans_settings');
+        }
+        window.location.reload();
+    }
+
+    function applySiteLanguageAndBible() {
+        switchSiteLanguageAndBible().then(navigateAfterApply).catch(reloadAfterApplyFailure);
+    }
+
+    function applyMediaLanguages() {
+        postForm(mediaLanguagesForm)
+            .then(function () {
+                window.location.reload();
+            })
+            .catch(function () {
+                window.location.reload();
+            });
+    }
+
+    function applyAllChanges() {
+        Promise.resolve(postForm(mediaLanguagesForm))
+            .then(switchSiteLanguageAndBible)
+            .then(navigateAfterApply)
+            .catch(reloadAfterApplyFailure);
+    }
+
     languageSelect.addEventListener('change', function () {
         var selectedLanguage = this.value;
         bibleRefreshPromise = refreshBibleDropdown(selectedLanguage);
+        applySiteLanguageAndBible();
     });
 
     refreshPicker(languageSelect, { liveSearch: false });
     refreshPicker(bibleSelect, { liveSearch: true });
 
-    saveButton.addEventListener('click', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+    var saveButton = document.querySelector('.btnSaveLanguages');
+    if (saveButton) {
+        // Explicit fallback in case a select's change/changed.bs.select event didn't fire.
+        saveButton.addEventListener('click', applyAllChanges);
+    }
 
-        saveButton.disabled = true;
+    // bibleSelect uses bootstrap-select, whose 'changed.bs.select' also triggers a
+    // native 'change' on the underlying <select> — bind only one to avoid double-apply.
+    if (window.jQuery && jQuery.fn && jQuery.fn.selectpicker) {
+        jQuery(bibleSelect).on('changed.bs.select.jcAutoApply', applySiteLanguageAndBible);
+    } else {
+        bibleSelect.addEventListener('change', applySiteLanguageAndBible);
+    }
 
-        Promise.resolve(bibleRefreshPromise)
-            .then(function () {
-                return postForm(mediaLanguagesForm);
-            })
-            .then(function () {
-                return postLanguageSwitch(languageSelect.value);
-            })
-            .then(function (data) {
-                if (window.jQuery && jQuery.removeCookie) {
-                    jQuery.removeCookie('jc_bible_trans_settings');
-                }
-                var currentUrl = window.location.pathname + window.location.search + window.location.hash;
-                var target = (data && data.redirect_url) ? data.redirect_url : currentUrl;
-                window.location.href = target;
-            })
-            .catch(function () {
-                if (window.jQuery && jQuery.removeCookie) {
-                    jQuery.removeCookie('jc_bible_trans_settings');
-                }
-                window.location.reload();
-            })
-            .finally(function () {
-                saveButton.disabled = false;
-            });
-    });
-})();
+    // Media languages uses bootstrap-multiselect, which syncs via a plain 'change' event.
+    jQuery(mediaLanguagesForm).find('select[name="languages"]').on('change.jcAutoApply', applyMediaLanguages);
+};
 </script>  

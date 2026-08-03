@@ -11,15 +11,16 @@ from walkasjesus_website import settings
 
 
 class LocalCompleteJewishBible(Bible):
-    """Local NT-only CJB data source based on the bundled David Stern dataset."""
+    """Local Complete Jewish Bible data source backed by the bundled CJB JSON."""
 
     _index = None
 
     def __init__(self, bible_id):
         super().__init__(bible_id=bible_id)
-        self.name = str(getattr(settings, 'CJB_BIBLE_NAME', 'Complete Jewish Bible (David H. Stern, NT)')).strip()
+        self.name = str(getattr(settings, 'CJB_BIBLE_NAME', 'Complete Jewish Bible')).strip()
         self.language = 'en'
-        self.copyright = str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip()
+        self.copyright = str(getattr(settings, 'COMPLETE_JEWISH_BIBLE_FOOTER_TEXT', '')).strip()
+        self.abbreviation = 'CJB'
 
     @staticmethod
     def _normalize_book_key(value):
@@ -31,54 +32,65 @@ class LocalCompleteJewishBible(Bible):
             return cls._index
 
         cls._index = {}
-        data_path = Path(__file__).resolve().parents[3] / 'bible_lib' / 'sources' / 'jnt_bible_lib_compatible.json'
+        source_filename = str(getattr(settings, 'CJB_BIBLE_SOURCE_FILE', 'cjb_ot.json') or '').strip() or 'cjb_ot.json'
+        source_filenames = list(getattr(settings, 'CJB_BIBLE_SOURCE_FILES', []) or [])
+        if not source_filenames:
+            source_filenames = [source_filename]
+        elif source_filename not in source_filenames:
+            source_filenames.insert(0, source_filename)
 
-        if not data_path.exists():
-            return cls._index
+        source_dir = Path(__file__).resolve().parents[3] / 'bible_lib' / 'sources'
 
-        try:
-            with data_path.open('r', encoding='utf-8') as handle:
-                payload = json.load(handle)
-        except Exception:
-            logging.getLogger().warning('Could not load local CJB source data.')
-            return cls._index
+        for filename in source_filenames:
+            data_path = source_dir / str(filename or '').strip()
 
-        for book in payload.get('books', []):
-            aliases = {
-                book.get('bible_book'),
-                book.get('bible_book_enum_name'),
-                book.get('bible_book_abbreviation'),
-                book.get('book_title_source'),
-            }
-            chapter_index = {}
+            if not data_path.exists():
+                continue
 
-            for chapter in book.get('chapters', []):
-                try:
-                    chapter_number = int(chapter.get('chapter_number'))
-                except Exception:
-                    continue
+            try:
+                with data_path.open('r', encoding='utf-8') as handle:
+                    payload = json.load(handle)
+            except Exception:
+                logging.getLogger().warning('Could not load local CJB source data from %s.', data_path.name)
+                continue
 
-                verse_index = {}
-                for verse in chapter.get('verses', []):
+            for book in payload.get('books', []):
+                aliases = {
+                    book.get('bible_book'),
+                    book.get('bible_book_enum_name'),
+                    book.get('bible_book_abbreviation'),
+                    book.get('book_slug'),
+                    book.get('book_title_source'),
+                }
+                chapter_index = {}
+
+                for chapter in book.get('chapters', []):
                     try:
-                        verse_number = int(verse.get('verse'))
+                        chapter_number = int(chapter.get('chapter_number'))
                     except Exception:
                         continue
 
-                    text = str(verse.get('text', '')).strip()
-                    if text:
-                        verse_index[verse_number] = text
+                    verse_index = {}
+                    for verse in chapter.get('verses', []):
+                        try:
+                            verse_number = int(verse.get('verse'))
+                        except Exception:
+                            continue
 
-                if verse_index:
-                    chapter_index[chapter_number] = verse_index
+                        text = str(verse.get('text', '')).strip()
+                        if text:
+                            verse_index[verse_number] = text
 
-            if not chapter_index:
-                continue
+                    if verse_index:
+                        chapter_index[chapter_number] = verse_index
 
-            for alias in aliases:
-                normalized_alias = cls._normalize_book_key(alias)
-                if normalized_alias:
-                    cls._index[normalized_alias] = chapter_index
+                if not chapter_index:
+                    continue
+
+                for alias in aliases:
+                    normalized_alias = cls._normalize_book_key(alias)
+                    if normalized_alias:
+                        cls._index[normalized_alias] = chapter_index
 
         return cls._index
 
@@ -123,15 +135,19 @@ class BibleTranslation:
         local_cjb_id = cjb_bible_id()
         if local_cjb_id and local_cjb_id not in bibles:
             bibles[local_cjb_id] = LocalCompleteJewishBible(local_cjb_id)
+        overrides = getattr(settings, 'BIBLE_ABBREVIATION_OVERRIDES', {})
+        for bible_id, abbreviation in overrides.items():
+            if bible_id in bibles:
+                bibles[bible_id].abbreviation = str(abbreviation)
         return bibles
 
     _all_bibles = {}
 
-    def all(self) -> [Bible]:
+    def all(self) -> list[Bible]:
         """" Get all bible translations (including languages not supported this website). """
         return list(BibleTranslation._all_bibles.values())
 
-    def all_enabled(self) -> [Bible]:
+    def all_enabled(self) -> list[Bible]:
         """ This will list all bibles that are not explicitly disabled,
         so if information is missing it will assume them to be enabled. """
         enabled = set(self.all()) - set(self.all_disabled())
@@ -140,13 +156,14 @@ class BibleTranslation:
                 enabled.add(self.get(bible_id))
         return enabled
 
-    def all_disabled(self) -> [Bible]:
+    def all_disabled(self) -> list[Bible]:
         """ This will return all bibles that are explicitly disabled. """
-        return [BibleTranslation._bible_factory.create(m.bible_id)
-                for m in BibleTranslationMetaData.objects.all()
-                if m.is_enabled is False]
+        disabled_ids = BibleTranslationMetaData.objects.filter(is_enabled=False).values_list('bible_id', flat=True)
+        return [BibleTranslation._all_bibles[bible_id]
+            for bible_id in disabled_ids
+            if bible_id in BibleTranslation._all_bibles]
 
-    def all_in_user_language(self) -> [Bible]:
+    def all_in_user_language(self) -> list[Bible]:
         """" Get all bibles in the user main language. """
         current_user_language = translation.get_language()
         return [b for b in self.all_enabled() if b.language == current_user_language]

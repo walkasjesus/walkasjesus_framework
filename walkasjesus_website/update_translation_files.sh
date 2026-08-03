@@ -8,8 +8,12 @@ if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 
 	source ./venv/bin/activate
+elif [[ -f ./.venv/bin/activate ]]; then
+	source ./.venv/bin/activate
 elif [[ -f ../venv/bin/activate ]]; then
 	source ../venv/bin/activate
+elif [[ -f ../.venv/bin/activate ]]; then
+	source ../.venv/bin/activate
 else
 	echo "ERROR: cannot find environment binary"
 	exit 1
@@ -33,12 +37,16 @@ cmd.run_from_argv([
 	'manage.py',
 	'makemessages',
 	'-l', 'nl',
-	'--extension=html',
+	'--extension=html,py',
 	'--ignore=venv',
 	'--ignore=data/*',
 	'--ignore=static/*',
 ])
 PY
+
+	echo "Keeping database-backed model text translations active." | tee -a ${log}
+	python3 manage.py sync_model_translations --locale nl | tee -a ${log}
+
 	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
 	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
 
@@ -65,12 +73,16 @@ cmd.run_from_argv([
 	'manage.py',
 	'makemessages',
 	'-l', 'nl',
-	'--extension=html',
+	'--extension=html,py',
 	'--ignore=venv',
 	'--ignore=data/*',
 	'--ignore=static/*',
 ])
 PY
+
+	echo "Keeping database-backed model text translations active."
+	python3 manage.py sync_model_translations --locale nl
+
 	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/*
 	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/*
 

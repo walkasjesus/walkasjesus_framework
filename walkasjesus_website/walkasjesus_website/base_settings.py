@@ -144,6 +144,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'walkasjesus_app.middleware.PageUsageTrackingMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -305,12 +306,16 @@ SWORD_COMMENTARY_IMPORT_SOURCES = [
     },
 ]
 
-# Local Complete Jewish Bible (David H. Stern, NT source) selector settings.
-CJB_BIBLE_ID = 'jnt-stern-en'
-CJB_BIBLE_NAME = 'Complete Jewish Bible (David H. Stern, NT)'
+# Local Complete Jewish Bible selector settings. The CJB OT file supplies Tanakh
+# text; the JNT-compatible file supplies New Testament verse text and also keeps
+# its commentary fields available for David Stern commentary features.
+CJB_BIBLE_ID = 'cjb-bible-com'
+CJB_BIBLE_NAME = 'Complete Jewish Bible'
+CJB_BIBLE_SOURCE_FILE = 'cjb_ot.json'
+CJB_BIBLE_SOURCE_FILES = ['cjb_ot.json', 'jnt_bible_lib_compatible.json']
 CJB_BIBLE_ENABLED = True
 CJB_BIBLE_LOGGED_IN_ONLY = False
-# Verse count above which passages are manual "Click to retrieve"
+# Verse count above which passages are manual "Study this passage" links instead of auto-loading the text on the page.
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
 # Maximum number of verses the user can select simultaneously on the Bible Study page.
 BIBLE_STUDY_MAX_VERSES = 5
@@ -334,3 +339,9 @@ BIBLE_STUDY_CHAPTER_INDEX_ALLOW_LIVE_FETCH = False
 BIBLE_STUDY_CHAPTER_INDEX_RETRY_ATTEMPTS = 3
 # Set to True only for debugging: disables Django cache usage (forces fresh loads)
 DISABLE_CACHE_FOR_DEBUG = False
+
+# Override the auto-detected abbreviation for specific Bible IDs.
+# Key: bible_id (string), Value: desired abbreviation (string)
+BIBLE_ABBREVIATION_OVERRIDES = {
+    '87f620660790371b-01': 'HSV',  # Herziene Statenvertaling (HSVU -> HSV)
+}

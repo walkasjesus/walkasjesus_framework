@@ -16,6 +16,9 @@ from walkasjesus_app.models.commandment_question import Question
 from walkasjesus_app.models.lesson_question import LessonQuestion
 from walkasjesus_app.models.lesson_media import *
 from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
+from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
+from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
+from walkasjesus_app.views.admin.media_review_views import MediaReviewDashboardView, MediaReviewReportView, user_can_review_media_resources
 from walkasjesus_website.settings import BASE_DIR
 
 
@@ -33,6 +36,26 @@ class BibleAdmin(admin.ModelAdmin):
         view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
         return [
             path('', AdminBibleView.as_view(), name=view_name),
+        ]
+
+
+class BibleTranslationUsageDailyAdmin(admin.ModelAdmin):
+    model = BibleTranslationUsageDaily
+
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [
+            path('', AdminBibleUsageView.as_view(), name=view_name),
+        ]
+
+
+class PageVisitDailyAdmin(admin.ModelAdmin):
+    model = PageVisitDaily
+
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [
+            path('', AdminPageUsageView.as_view(), name=view_name),
         ]
 
 class MediaTargetAudienceFilter(SimpleListFilter):
@@ -796,7 +819,54 @@ class LawOfMessiahAdmin(VersionAdmin):
         }
 
 
+class MediaReviewDashboardProxy(MediaResource):
+    class Meta:
+        proxy = True
+        app_label = 'commandments_app'
+        verbose_name = 'Media review dashboard'
+        verbose_name_plural = 'Media review dashboard'
+
+
+class MediaReviewReportProxy(MediaResource):
+    class Meta:
+        proxy = True
+        app_label = 'commandments_app'
+        verbose_name = 'Media review report'
+        verbose_name_plural = 'Media review report'
+
+
+class MediaReviewDashboardProxyAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [path('', MediaReviewDashboardView.as_view(), name=view_name)]
+
+    def has_module_permission(self, request):
+        return user_can_review_media_resources(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+
+class MediaReviewReportProxyAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [path('', MediaReviewReportView.as_view(), name=view_name)]
+
+    def has_module_permission(self, request):
+        return user_can_review_media_resources(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+
 class MediaResourceAdmin(admin.ModelAdmin):
+    change_form_template = 'admin/media_resource_change_form.html'
     list_display = [
         'id',
         'law_item_display',
@@ -944,6 +1014,37 @@ class MediaResourceAdmin(admin.ModelAdmin):
 
     lesson_media_count.short_description = 'Lesson media count'
 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('review-dashboard/', MediaReviewDashboardView.as_view(), name='media_review_dashboard'),
+            path('review-report/', MediaReviewReportView.as_view(), name='media_review_report'),
+        ]
+        return custom_urls + urls
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if getattr(request, 'user', None) and not user_can_review_media_resources(request.user):
+            form.base_fields['is_public'].disabled = True
+            form.base_fields['is_public'].help_text = 'This stays private until a reviewer approves it.'
+        return form
+
+    def has_view_permission(self, request, obj=None):
+        return super().has_view_permission(request, obj) or user_can_review_media_resources(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return super().has_change_permission(request, obj) or user_can_review_media_resources(request.user)
+
+    def save_model(self, request, obj, form, change):
+        if getattr(request, 'user', None) and not user_can_review_media_resources(request.user):
+            obj.is_public = False
+
+        super().save_model(request, obj, form, change)
+
+        if getattr(request, 'user', None) and not user_can_review_media_resources(request.user):
+            if not MediaReviewRequest.objects.filter(resource=obj, status=MediaReviewRequest.STATUS_PENDING).exists():
+                MediaReviewRequest.objects.create(resource=obj, applicant=request.user, status=MediaReviewRequest.STATUS_PENDING)
+
 
 class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
@@ -998,10 +1099,14 @@ class LogEntryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Bible, BibleAdmin)
+admin.site.register(BibleTranslationUsageDaily, BibleTranslationUsageDailyAdmin)
+admin.site.register(PageVisitDaily, PageVisitDailyAdmin)
 admin.site.register(Commandment, CommandmentAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(LawOfMessiah, LawOfMessiahAdmin)
 admin.site.register(MediaResource, MediaResourceAdmin)
+admin.site.register(MediaReviewDashboardProxy, MediaReviewDashboardProxyAdmin)
+admin.site.register(MediaReviewReportProxy, MediaReviewReportProxyAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)
 

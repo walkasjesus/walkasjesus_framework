@@ -12,7 +12,9 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views import View
 
+from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.access_policy import is_bible_id_visible_for_request
+from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily
 from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models import BibleTranslation, LawOfMessiah, LawOfMessiahDrawing, Lesson, Maimonides, UserPreferences
 from walkasjesus_app.views.detail_view import (
@@ -20,6 +22,7 @@ from walkasjesus_app.views.detail_view import (
     _allowed_target_audiences,
     _filter_grouped_media_by_audience,
     _step_to_law_mapping,
+    clean_bible_verse_text,
 )
 
 
@@ -53,8 +56,8 @@ def _is_http_url(value):
 
 
 def _find_primary_drawing(law):
-    for related_step in law.related_steps.all().order_by('id'):
-        step_drawing = related_step.background_drawing()
+    for related_step in sorted(law.related_steps.all(), key=lambda step: step.id):
+        step_drawing = _prefetched_commandment_background_drawing(related_step)
         if step_drawing and step_drawing.img_url and media_file_exists(step_drawing.img_url):
             return step_drawing
 
@@ -62,6 +65,25 @@ def _find_primary_drawing(law):
         if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.img_url and media_file_exists(drawing.img_url):
             return drawing
     return None
+
+
+def _prefetched_commandment_background_drawing(commandment):
+    legacy_drawings = list(commandment.drawing_set.all())
+    shared_drawings = [
+        drawing for drawing in commandment.shared_media_resources.all()
+        if drawing.media_type == LawOfMessiahDrawing.MEDIA_TYPE_DRAWING and drawing.is_public
+    ]
+
+    for drawing in legacy_drawings:
+        if drawing.is_public and drawing.img_url and media_file_exists(drawing.img_url):
+            return drawing
+    for drawing in shared_drawings:
+        if drawing.img_url and media_file_exists(drawing.img_url):
+            return drawing
+    for drawing in legacy_drawings:
+        if drawing.is_public:
+            return drawing
+    return shared_drawings[0] if shared_drawings else ''
 
 
 def _law_media_type_order():
@@ -515,7 +537,7 @@ def _reference_text(ref, bible):
     return text
 
 
-def _reference_text_with_source(ref, bible):
+def _reference_text_with_source(ref, bible, request=None, endpoint=None):
     bible_cache_id = str(getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible)
     copyright_cache_key = f"bible_copyright:v1:{bible_cache_id}"
     cache_key = (
@@ -528,11 +550,13 @@ def _reference_text_with_source(ref, bible):
 
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached, 'cache'
+        return clean_bible_verse_text(cached), 'cache'
 
     end_chapter = ref.end_chapter if ref.end_chapter else ref.begin_chapter
     end_verse = ref.end_verse if ref.end_verse else ref.begin_verse
-    text = bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse)
+    if request is not None:
+        consume_bible_api_quota(request, bible, endpoint or BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
+    text = clean_bible_verse_text(bible.verses(BibleLibBibleBooks[ref.book], ref.begin_chapter, ref.begin_verse, end_chapter, end_verse))
     cache.set(cache_key, text, VERSE_CACHE_TIMEOUT)
     if getattr(bible, 'copyright', ''):
         cache.set(copyright_cache_key, bible.copyright, VERSE_CACHE_TIMEOUT)
@@ -753,7 +777,9 @@ class LawOfMessiahDetailView(View):
             first_ref = law.bible_reference_rows.first()
             if first_ref is not None:
                 try:
-                    _reference_text_with_source(first_ref, selected_bible)
+                    _reference_text_with_source(first_ref, selected_bible, request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
+                except BibleApiRateLimitExceeded:
+                    pass
                 except Exception:
                     pass
         law.primary_drawing = _find_primary_drawing(law)
@@ -850,7 +876,10 @@ class LawOfMessiahBibleVersesView(View):
                 refs = refs.filter(pk__in=requested_ref_ids)
 
             for ref in refs:
-                text, source = _reference_text_with_source(ref, bible)
+                try:
+                    text, source = _reference_text_with_source(ref, bible, request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_LAW_OF_MESSIAH_VERSES)
+                except BibleApiRateLimitExceeded as ex:
+                    return JsonResponse({'error': ex.message}, status=429)
                 ref_key = str(ref.pk)
                 verses[ref_key] = text
                 verse_sources[ref_key] = source

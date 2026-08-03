@@ -6,9 +6,11 @@ from unittest.mock import Mock, patch
 from urllib.parse import parse_qs, urlparse
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Permission
 from django.core.cache import cache
+from django.core import mail
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.db import IntegrityError
@@ -16,11 +18,14 @@ from django.test import RequestFactory, SimpleTestCase, TestCase, override_setti
 from django.urls import reverse
 from django.utils import translation
 
+from walkasjesus_app.admin import MediaResourceAdmin
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
 from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageVisitDaily
+from walkasjesus_app.models.law_of_messiah_media import MediaResource
+from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
@@ -336,6 +341,117 @@ class AdminUsageReportViewTestCase(TestCase):
         self.assertIn('January', content)
         self.assertIn('February', content)
         self.assertIn('<svg', content)
+
+
+class MediaReviewWorkflowTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.reviewer = get_user_model().objects.create_user(
+            username='media-reviewer',
+            email='reviewer@example.com',
+            password='secret',
+            is_staff=True,
+            is_active=True,
+        )
+        self.reviewer.user_permissions.add(
+            Permission.objects.get(codename='can_review_media_resources'),
+            Permission.objects.get(codename='change_mediaresource'),
+        )
+        self.reviewer.save()
+        self.applicant = get_user_model().objects.create_user(
+            username='media-applicant',
+            email='applicant@example.com',
+            password='secret',
+            is_staff=True,
+            is_active=True,
+        )
+
+    def test_approval_sets_resource_public_and_sends_mail(self):
+        resource = MediaResource.objects.create(
+            title='New video',
+            author='Test author',
+            media_type='movie',
+            description='A test media resource',
+            is_public=False,
+        )
+        review_request = MediaReviewRequest.objects.create(resource=resource, applicant=self.applicant)
+
+        self.client.force_login(self.reviewer)
+        response = self.client.post(
+            reverse('admin:media_review_dashboard'),
+            {'request_id': review_request.pk, 'action': 'approve', 'review_notes': 'Looks good'}
+        )
+
+        review_request.refresh_from_db()
+        resource.refresh_from_db()
+        self.assertEqual(review_request.status, 'approved')
+        self.assertTrue(resource.is_public)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('approved', mail.outbox[0].subject.lower())
+
+    def test_contributor_save_forces_private_and_creates_review_request(self):
+        contributor = get_user_model().objects.create_user(
+            username='media-contributor',
+            email='contributor@example.com',
+            password='secret',
+            is_staff=True,
+            is_active=True,
+        )
+        contributor.user_permissions.add(
+            Permission.objects.get(codename='add_mediaresource', content_type__app_label='commandments_app'),
+            Permission.objects.get(codename='change_mediaresource', content_type__app_label='commandments_app'),
+            Permission.objects.get(codename='view_mediaresource', content_type__app_label='commandments_app'),
+            Permission.objects.get(codename='view_commandment', content_type__app_label='commandments_app'),
+            Permission.objects.get(codename='view_lesson', content_type__app_label='commandments_app'),
+            Permission.objects.get(codename='view_lawofmessiah', content_type__app_label='commandments_app'),
+        )
+        contributor.save()
+
+        request = self.factory.get('/')
+        request.user = contributor
+        request.session = self.client.session
+
+        resource = MediaResource(title='Contributor video', author='Tester', media_type='movie', description='Needs review')
+        admin_instance = MediaResourceAdmin(MediaResource, admin.site)
+        admin_instance.save_model(request, resource, form=None, change=False)
+
+        resource.refresh_from_db()
+        self.assertFalse(resource.is_public)
+        self.assertTrue(MediaReviewRequest.objects.filter(resource=resource, applicant=contributor, status='pending').exists())
+
+    def test_approval_saves_reviewed_resource_fields(self):
+        resource = MediaResource.objects.create(
+            title='Needs editing',
+            author='Original author',
+            media_type='movie',
+            description='Original description',
+            is_public=False,
+        )
+        review_request = MediaReviewRequest.objects.create(resource=resource, applicant=self.applicant)
+
+        self.client.force_login(self.reviewer)
+        response = self.client.post(
+            reverse('admin:media_review_dashboard'),
+            {
+                'request_id': review_request.pk,
+                'action': 'approve',
+                'review_notes': 'Looks good',
+                'title': 'Edited title',
+                'description': 'Edited description',
+                'author': 'Updated author',
+                'media_type': 'shortmovie',
+                'language': 'en',
+                'target_audience': 'adults',
+            },
+        )
+
+        resource.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(resource.title, 'Edited title')
+        self.assertEqual(resource.description, 'Edited description')
+        self.assertEqual(resource.author, 'Updated author')
+        self.assertEqual(resource.media_type, 'shortmovie')
+        self.assertTrue(resource.is_public)
 
 
 class StrongsServiceFallbackTestCase(TestCase):
@@ -656,6 +772,23 @@ class SharedMediaDeduplicationTestCase(TestCase):
 
         self.assertEqual(len(songs), 1)
         self.assertEqual(songs[0].title, 'Create in me a clean heart')
+
+    def test_collect_shared_media_omits_private_items(self):
+        LawOfMessiahDrawing.objects.create(
+            commandment=self.commandment,
+            media_type=LawOfMessiahDrawing.MEDIA_TYPE_SONG,
+            title='Private song',
+            author='Unknown',
+            url='https://example.org/private-song',
+            target_audience='any',
+            language='en',
+            is_public=False,
+        )
+
+        grouped = _collect_shared_media_by_type(commandment=self.commandment, lesson=self.lesson)
+        songs = grouped[LawOfMessiahDrawing.MEDIA_TYPE_SONG]
+
+        self.assertEqual(songs, [])
 
 
 class CommentaryProxyViewTestCase(SimpleTestCase):

@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>Media review usage report</h1>
+<p>Track every review request from submission to approval or rejection, including the reason and reviewer.</p>
+<table>
+  <tr>
+    <th>ID</th><th>Resource</th><th>Applicant</th><th>Requested</th><th>Reviewer</th><th>Status</th><th>Reason</th><th>Notes</th><th>History</th>
+  </tr>
+  {% for review in requests %}
+  <tr>
+    <td>{{ review.pk }}</td>
+    <td>{{ review.resource.title }}</td>
+    <td>{{ review.applicant.username|default:'-' }}</td>
+    <td>{{ review.requested_at }}</td>
+    <td>{{ review.reviewed_by.username|default:'-' }}</td>
+    <td>{{ review.get_status_display }}</td>
+    <td>{{ review.get_rejection_reason_display|default:'-' }}</td>
+    <td>{{ review.review_notes|default:'-' }}</td>
+    <td style="white-space:pre-line;">{{ review.history|default:'-' }}</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="9">No review requests found.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

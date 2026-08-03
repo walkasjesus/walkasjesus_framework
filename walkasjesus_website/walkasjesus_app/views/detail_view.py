@@ -144,9 +144,9 @@ def _shared_media_types():
 
 
 def _allowed_target_audiences(request):
-    if _is_kids_mode(request):
-        return {'any', 'kids'}
-    return {'any', 'adults'}
+    # The media filtering should keep audience-neutral content visible while also
+    # allowing both kids-focused and adults-focused content to be considered.
+    return {'any', 'kids', 'adults'}
 
 
 def _is_kids_mode(request):
@@ -191,6 +191,9 @@ def _is_displayable_media(item, media_type):
     url = _media_attr(item, 'url')
     img_url = _media_attr(item, 'img_url')
 
+    if title or description:
+        return True
+
     if media_type in {
         LawOfMessiahDrawing.MEDIA_TYPE_SONG,
         LawOfMessiahDrawing.MEDIA_TYPE_SUPERBOOK,
@@ -209,7 +212,7 @@ def _is_displayable_media(item, media_type):
     }:
         return bool(img_url)
 
-    return bool(title or description or url or img_url)
+    return bool(url or img_url)
 
 
 def _filter_grouped_media_by_audience(grouped, allowed_target_audiences, allowed_languages=None):
@@ -259,7 +262,7 @@ def _collect_shared_media_by_type(commandment=None, lesson=None):
     if lesson is not None:
         query = query | LawOfMessiahDrawing.objects.filter(lesson=lesson)
 
-    for media in query.distinct().order_by('media_type', 'id'):
+    for media in query.filter(is_public=True).distinct().order_by('media_type', 'id'):
         key = media_key(media)
         if key in seen:
             continue

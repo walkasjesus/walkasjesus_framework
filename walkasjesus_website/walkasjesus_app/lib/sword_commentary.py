@@ -77,9 +77,15 @@ def available_sword_commentators(language_code):
 
         source_config = get_sword_source_config(source_id)
         native_language = str(source_config.get('native_language', getattr(source, 'language', '') or '')).strip().lower()[:2]
-        auto_translate = bool(source_config.get('auto_translate', False))
-
+        auto_translate_raw = source_config.get('auto_translate', None)
         is_native_match = native_language == normalized_language
+        if auto_translate_raw is None:
+            auto_translate = is_native_match
+        else:
+            auto_translate = bool(auto_translate_raw)
+            if is_native_match:
+                auto_translate = True
+
         is_auto_translate_match = auto_translate and native_language == 'en' and normalized_language != 'en'
         if not is_native_match and not is_auto_translate_match:
             continue

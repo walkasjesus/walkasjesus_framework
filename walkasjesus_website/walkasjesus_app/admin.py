@@ -15,6 +15,7 @@ from walkasjesus_app.models import *
 from walkasjesus_app.models.commandment_question import Question
 from walkasjesus_app.models.lesson_question import LessonQuestion
 from walkasjesus_app.models.lesson_media import *
+from walkasjesus_app.lib.youtube_embed_validation import ensure_youtube_is_embeddable, normalize_youtube_embed_url
 from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
 from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
@@ -865,7 +866,22 @@ class MediaReviewReportProxyAdmin(admin.ModelAdmin):
         return user_can_review_media_resources(request.user)
 
 
+class MediaResourceAdminForm(forms.ModelForm):
+    class Meta:
+        model = MediaResource
+        fields = '__all__'
+
+    def clean_url(self):
+        url = str(self.cleaned_data.get('url') or '').strip()
+        if not url:
+            return ''
+
+        ensure_youtube_is_embeddable(url)
+        return normalize_youtube_embed_url(url)
+
+
 class MediaResourceAdmin(admin.ModelAdmin):
+    form = MediaResourceAdminForm
     change_form_template = 'admin/media_resource_change_form.html'
     list_display = [
         'id',

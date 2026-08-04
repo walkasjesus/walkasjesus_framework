@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from walkasjesus_app.lib.youtube_embed_validation import ensure_youtube_is_embeddable, normalize_youtube_embed_url
 from walkasjesus_app.models import MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.models.law_of_messiah_media import LawOfMessiahDrawing
@@ -70,7 +72,14 @@ class MediaReviewDashboardView(View):
             if value != '' or field_name in request.POST:
                 setattr(resource, field_name, value)
 
-        resource.save()
+        try:
+            if resource.url:
+                ensure_youtube_is_embeddable(resource.url)
+                resource.url = normalize_youtube_embed_url(resource.url)
+            resource.save()
+        except ValidationError as exc:
+            messages.error(request, ' '.join(exc.messages))
+            return redirect('admin:media_review_dashboard')
 
         if action == 'approve':
             review_request.approve(request.user, review_notes)

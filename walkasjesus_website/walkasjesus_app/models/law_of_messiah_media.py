@@ -3,6 +3,8 @@ from django.db import models
 from url_or_relative_url_field.fields import URLOrRelativeURLField
 
 from django.utils.translation import gettext_lazy
+from walkasjesus_app.lib.media_cache_version import bump_media_cache_version
+from walkasjesus_app.lib.youtube_embed_validation import normalize_youtube_embed_url
 from walkasjesus_app.media_image_utils import resolved_media_url, thumbnail_url_or_placeholder
 from .law_of_messiah import LawOfMessiah
 
@@ -100,6 +102,18 @@ class LawOfMessiahMedia(models.Model):
 
 class LawOfMessiahDrawing(LawOfMessiahMedia):
     """Drawing media for Law of Messiah items."""
+
+    def save(self, *args, **kwargs):
+        if self.url:
+            self.url = normalize_youtube_embed_url(self.url)
+        result = super().save(*args, **kwargs)
+        bump_media_cache_version()
+        return result
+
+    def delete(self, *args, **kwargs):
+        result = super().delete(*args, **kwargs)
+        bump_media_cache_version()
+        return result
 
     def thumbnail_url(self):
         return thumbnail_url_or_placeholder(self.img_url)

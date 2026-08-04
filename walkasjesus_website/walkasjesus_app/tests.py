@@ -29,6 +29,8 @@ from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
+from walkasjesus_app.lib.media_cache_version import MEDIA_CACHE_VERSION_KEY, get_media_cache_version
+from walkasjesus_app.templatetags.media_extras import youtube_captions_url
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
 from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
 from walkasjesus_app.views.detail_view import (
@@ -785,6 +787,124 @@ class DynamicUiRegressionTestCase(TestCase):
         self.assertContains(response, 'changed.bs.select.jcLawFilterAutoApply')
         # No DOMContentLoaded guard needed since script is after jQuery
         self.assertNotContains(response, 'initLawOfMessiahFilterAutoApply')
+
+
+class MediaTemplateFilterTestCase(SimpleTestCase):
+    def test_youtube_captions_url_converts_watch_url_to_embed(self):
+        rendered = youtube_captions_url('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw', 'nl')
+        parsed = urlparse(rendered)
+        query = parse_qs(parsed.query)
+
+        self.assertEqual(parsed.netloc, 'www.youtube.com')
+        self.assertEqual(parsed.path, '/embed/Ilbh6Dv_8Yw')
+        self.assertEqual(query.get('cc_load_policy'), ['1'])
+        self.assertEqual(query.get('cc_lang_pref'), ['nl'])
+
+    def test_youtube_captions_url_keeps_embed_and_adds_captions(self):
+        rendered = youtube_captions_url('https://www.youtube.com/embed/tLae0OzoF_w', 'en')
+        parsed = urlparse(rendered)
+        query = parse_qs(parsed.query)
+
+        self.assertEqual(parsed.path, '/embed/tLae0OzoF_w')
+        self.assertEqual(query.get('cc_load_policy'), ['1'])
+        self.assertEqual(query.get('cc_lang_pref'), ['en'])
+
+
+class MediaResourceAdminValidationTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = get_user_model().objects.create_user(
+            username='media-admin',
+            email='media-admin@example.com',
+            password='secret',
+            is_staff=True,
+            is_superuser=True,
+        )
+
+    def _resource_form(self):
+        request = self.factory.get('/')
+        request.user = self.user
+        request.session = self.client.session
+        admin_instance = MediaResourceAdmin(MediaResource, admin.site)
+        return admin_instance.get_form(request)
+
+    def _resource_form_data(self, url):
+        return {
+            'law_of_messiah': '',
+            'commandment': '',
+            'lesson': '',
+            'media_type': 'shortmovie',
+            'title': 'Test video',
+            'description': 'Test description',
+            'img_url': '',
+            'url': url,
+            'author': 'Tester',
+            'target_audience': 'any',
+            'language': 'en',
+            'is_public': 'on',
+        }
+
+    def test_media_resource_admin_form_blocks_unembeddable_youtube_video(self):
+        FormClass = self._resource_form()
+        with patch('walkasjesus_app.lib.youtube_embed_validation.requests.get', return_value=Mock(status_code=403)):
+            form = FormClass(data=self._resource_form_data('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw'))
+            is_valid = form.is_valid()
+
+        self.assertFalse(is_valid)
+        self.assertIn('cannot be embedded', str(form.errors.get('url', '')))
+
+    def test_media_resource_admin_form_accepts_and_normalizes_embeddable_youtube_video(self):
+        FormClass = self._resource_form()
+        with patch('walkasjesus_app.lib.youtube_embed_validation.requests.get', return_value=Mock(status_code=200)):
+            form = FormClass(data=self._resource_form_data('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw'))
+            is_valid = form.is_valid()
+
+        self.assertTrue(is_valid, form.errors)
+        self.assertEqual(form.cleaned_data['url'], 'https://www.youtube.com/embed/Ilbh6Dv_8Yw')
+
+
+class MediaResourceCacheInvalidationTestCase(TestCase):
+    def setUp(self):
+        self.commandment = Commandment.objects.create(
+            id=2026,
+            title='Cache refresh test',
+            title_negative='Cache refresh test negative',
+        )
+
+    def test_media_save_bumps_cache_version_and_normalizes_youtube_url(self):
+        cache.set(MEDIA_CACHE_VERSION_KEY, 1)
+        before = get_media_cache_version()
+
+        resource = MediaResource.objects.create(
+            commandment=self.commandment,
+            media_type='shortmovie',
+            title='New resource',
+            author='Tester',
+            url='https://youtu.be/Ilbh6Dv_8Yw',
+            is_public=True,
+        )
+        resource.refresh_from_db()
+        after = get_media_cache_version()
+
+        self.assertGreater(after, before)
+        self.assertEqual(resource.url, 'https://www.youtube.com/embed/Ilbh6Dv_8Yw')
+
+    def test_media_delete_bumps_cache_version(self):
+        resource = MediaResource.objects.create(
+            commandment=self.commandment,
+            media_type='shortmovie',
+            title='Delete resource',
+            author='Tester',
+            url='https://example.org/video',
+            is_public=True,
+        )
+        cache.set(MEDIA_CACHE_VERSION_KEY, 5)
+        before = get_media_cache_version()
+
+        resource.delete()
+        after = get_media_cache_version()
+
+        self.assertGreater(after, before)
 
 
 class SharedMediaDeduplicationTestCase(TestCase):

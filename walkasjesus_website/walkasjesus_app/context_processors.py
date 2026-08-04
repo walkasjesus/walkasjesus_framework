@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils import translation
 
+from walkasjesus_app.lib.media_cache_version import get_media_cache_version
 from walkasjesus_app.lib.access_policy import is_david_stern_commentary_allowed, cjb_bible_id, is_bible_id_visible_for_request
 from walkasjesus_app.lib.sword_commentary import available_sword_commentators_json, sword_commentary_enabled
 from walkasjesus_app.models import BibleTranslation, UserPreferences
@@ -50,6 +51,7 @@ def cache_settings(request):
         'cache_on_multi_language': UserPreferences(request.session).languages,
         'cache_on_bible': translation.get_language() + '_' + UserPreferences(request.session).bible.id,
         'cache_on_kids_mode': 'kids' if request.COOKIES.get('jc_kids_mode') else 'default',
+        'cache_on_media_version': get_media_cache_version(),
         'bible_auto_load_verse_limit': max(1, int(getattr(settings, 'BIBLE_AUTO_LOAD_VERSE_LIMIT', 5))),
         'commentary_cache_timeout_seconds': int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6)),
         'david_stern_commentary_footer_text': str(getattr(settings, 'DAVID_STERN_COMMENTARY_FOOTER_TEXT', '')).strip(),

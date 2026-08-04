@@ -2,17 +2,9 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from django import template
 from django.utils.translation import get_language
+from walkasjesus_app.lib.youtube_embed_validation import is_youtube_url, normalize_youtube_embed_url
 
 register = template.Library()
-
-
-def _is_youtube_url(url):
-    hostname = urlparse(url).netloc.lower()
-    return (
-        "youtube.com" in hostname
-        or "youtu.be" in hostname
-        or "youtube-nocookie.com" in hostname
-    )
 
 
 def _normalize_language_code(language_code):
@@ -29,9 +21,10 @@ def youtube_captions_url(url, language_code=None):
         return url
 
     url = str(url)
-    if not _is_youtube_url(url):
+    if not is_youtube_url(url):
         return url
 
+    url = normalize_youtube_embed_url(url)
     parsed = urlparse(url)
     query = parse_qs(parsed.query, keep_blank_values=True)
     query["cc_load_policy"] = ["1"]

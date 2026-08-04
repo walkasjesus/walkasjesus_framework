@@ -585,6 +585,15 @@ def _normalize_law_id(law_id):
     return f'{prefix}{int(number)}'
 
 
+def _normalize_classical_code(code):
+    normalized = str(code or '').strip().upper()
+    match = re.match(r'^([A-Z]+)(\d+)$', normalized)
+    if not match:
+        return normalized
+    prefix, number = match.groups()
+    return f'{prefix}{int(number)}'
+
+
 def _requested_ref_ids(request):
     requested = []
     requested.extend(request.POST.getlist('verse_refs[]'))
@@ -834,6 +843,29 @@ class LawOfMessiahDetailView(View):
                     'step_ids': current_law_steps if is_one_to_one else [],
                 })
 
+        # Resolve Meir codes (e.g. MN107) to matching Maimonides entries (e.g. RN215)
+        # so we can show title + positive/negative styling consistently.
+        unique_meir_codes = list(dict.fromkeys(law.meir or []))
+        enriched_meir = []
+        if unique_meir_codes:
+            normalized_lookup = {_normalize_classical_code(code): str(code).strip() for code in unique_meir_codes if str(code).strip()}
+            maimonides_rows = list(Maimonides.objects.exclude(meir=[]).only('id', 'commandment', 'commandment_type', 'meir'))
+            meir_to_maimonides = {}
+            for row in maimonides_rows:
+                for meir_code in row.meir or []:
+                    normalized = _normalize_classical_code(meir_code)
+                    if normalized and normalized not in meir_to_maimonides:
+                        meir_to_maimonides[normalized] = row
+
+            for normalized_code, display_code in normalized_lookup.items():
+                mapped = meir_to_maimonides.get(normalized_code)
+                enriched_meir.append({
+                    'meir_code': display_code,
+                    'maimonides_id': mapped.id if mapped else '',
+                    'commandment': mapped.commandment if mapped else '',
+                    'commandment_type': mapped.commandment_type if mapped else 'positive',
+                })
+
         context = {
             'law': law,
             'bible': selected_bible,
@@ -841,6 +873,7 @@ class LawOfMessiahDetailView(View):
             'law_media_by_type': media_by_type,
             'related_steps': related_steps,
             'enriched_maimonides': enriched_maimonides,
+            'enriched_meir': enriched_meir,
             'related_lawofmessiah': [related_law_map[item_id] for item_id in related_law_ids if item_id in related_law_map],
             'ncla_human': [_ncla_label_map().get(code, code) for code in _extract_ncla_codes(law.ncla or [])],
             'ncla_summary': _ncla_summary(law.ncla or []),

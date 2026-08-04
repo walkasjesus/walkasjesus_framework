@@ -179,6 +179,11 @@
 
                                     <!-- Action Row -->
                                     <div class="row mb-3 align-items-center law-filter-action-row">
+                                        <div class="col-auto mb-2 mb-md-0">
+                                            <button id="law-filter-apply-btn" type="submit" class="btn btnSaveLanguages">
+                                                {% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Filter toepassen{% else %}Apply filter{% endif %}
+                                            </button>
+                                        </div>
                                         <div class="col-auto ml-md-auto mb-2 mb-md-0 law-filter-legend-wrap">
                                             <button class="btn law-filter-legend-toggle law-filter-legend-btn" type="button" data-toggle="collapse" data-target="#filter-legend" aria-expanded="false" aria-controls="filter-legend">
                                         <span class="ion-ios-information-circle-outline mr-1"></span> {% trans 'Legend — what do the icons and filters mean?' %} <span class="ion-ios-arrow-down ml-1"></span>
@@ -285,9 +290,17 @@
     if (!$) {
       return;
     }
+
     $('.law-filter-select').on('changed.bs.select.jcLawFilterAutoApply change', function () {
       this.form.submit();
     });
+
+        $(document).on('keydown', '.law-filter-form #filter-q', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.form.submit();
+            }
+        });
   })(window.jQuery);
 </script>
 {% endblock %}

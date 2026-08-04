@@ -771,11 +771,11 @@ class DynamicUiRegressionTestCase(TestCase):
         self.assertContains(response, 'jcInitChangeLanguageModal()')
         self.assertContains(response, 'changed.bs.select.jcAutoApply')
 
-    def test_law_of_messiah_listing_no_longer_renders_apply_filter_button(self):
+    def test_law_of_messiah_listing_renders_apply_filter_button(self):
         response = self.client.get(reverse('commandments:law_of_messiah_listing'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, 'Apply Filter')
+        self.assertContains(response, 'id="law-filter-apply-btn"')
 
     def test_law_of_messiah_listing_defers_filter_auto_apply_binding_until_dom_ready(self):
         response = self.client.get(reverse('commandments:law_of_messiah_listing'))

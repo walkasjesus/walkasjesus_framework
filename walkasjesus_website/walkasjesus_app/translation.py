@@ -10,7 +10,8 @@ TRANSLATABLE_MODEL_FIELDS = {
     'LessonDrawing': ['description'],
     'LessonPicture': ['description'],
     'LessonQuestion': ['text'],
-    'LawOfMessiah': ['title', 'commandment', 'commentary_rudolph', 'commentary_juster', 'classical_commentators'],
+    # Keep concise labels translatable via PO, but keep long commentary bodies out of PO.
+    'LawOfMessiah': ['title', 'commandment'],
 }
 
 

@@ -47,6 +47,9 @@ PY
 	echo "Keeping database-backed model text translations active." | tee -a ${log}
 	python3 manage.py sync_model_translations --locale nl | tee -a ${log}
 
+	echo "Removing long Law of Messiah commentary bodies from PO files (machine-translated at runtime)." | tee -a ${log}
+	python3 manage.py prune_law_commentary_po_entries --locale nl | tee -a ${log}
+
 	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
 	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/* | tee -a ${log}
 
@@ -82,6 +85,9 @@ PY
 
 	echo "Keeping database-backed model text translations active."
 	python3 manage.py sync_model_translations --locale nl
+
+	echo "Removing long Law of Messiah commentary bodies from PO files (machine-translated at runtime)."
+	python3 manage.py prune_law_commentary_po_entries --locale nl
 
 	#python3 -m django makemessages -l fr --extension=html --ignore=venv --ignore=data/* --ignore=static/*
 	#python3 -m django makemessages -l de --extension=html --ignore=venv --ignore=data/* --ignore=static/*

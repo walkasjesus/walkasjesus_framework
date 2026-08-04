@@ -1857,6 +1857,41 @@ p {
     margin-bottom: 0;
     margin-top: 6px;
 }
+
+.commentary-original-toggle {
+    appearance: none;
+    background: none;
+    border: 0;
+    color: #8b6f1f;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: italic;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+    vertical-align: baseline;
+}
+
+.commentary-original-toggle:hover,
+.commentary-original-toggle:focus {
+    color: #8b6f1f;
+    text-decoration: underline;
+}
+
+.commentary-original-toggle:focus-visible {
+    outline: 1px dotted #8b6f1f;
+    outline-offset: 2px;
+}
+
+.lom-commentary-machine-translation .sefaria-commentary-body {
+    font-size: 16px;
+}
+
+.lom-commentary-machine-translation .sefaria-commentary-body p {
+    color: #222;
+}
 .sefaria-no-result {
     color: #888;
     font-size: 12px;

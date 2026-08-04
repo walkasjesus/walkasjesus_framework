@@ -83,32 +83,79 @@ def _translate_en_to_language(text, target_language):
 
 
 def _translated_dynamic_commentary(text):
+    payload = _translated_dynamic_commentary_payload(text)
+    return payload.get('text', '')
+
+
+def _translated_dynamic_commentary_payload(text):
     source_text = str(text or '').strip()
     if not source_text:
-        return ''
+        return {
+            'text': '',
+            'source_text': '',
+            'machine_translated': False,
+            'language': 'en',
+        }
 
-    translated_text = _(source_text)
     language = (get_language() or 'en').lower()[:2]
 
-    # If a PO translation exists (or UI language is English), prefer that path.
-    if language == 'en' or translated_text != source_text:
-        return translated_text
+    if language == 'en':
+        return {
+            'text': source_text,
+            'source_text': source_text,
+            'machine_translated': False,
+            'language': language,
+        }
 
     digest = hashlib.sha256(f'{language}:{source_text}'.encode('utf-8')).hexdigest()
     cache_key = f'law_of_messiah_commentary_translation:v1:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
-        return cached
+        if isinstance(cached, dict):
+            text_value = str(cached.get('text') or source_text)
+            machine_translated = bool(cached.get('machine_translated', text_value != source_text))
+            return {
+                'text': text_value,
+                'source_text': source_text,
+                'machine_translated': machine_translated,
+                'language': language,
+            }
+        text_value = str(cached)
+        return {
+            'text': text_value,
+            'source_text': source_text,
+            'machine_translated': text_value != source_text,
+            'language': language,
+        }
 
     try:
         machine_translated = _translate_en_to_language(source_text, language)
         if machine_translated:
-            cache.set(cache_key, machine_translated, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
-            return machine_translated
+            text_value = str(machine_translated)
+            payload = {
+                'text': text_value,
+                'source_text': source_text,
+                'machine_translated': text_value != source_text,
+                'language': language,
+            }
+            cache.set(cache_key, payload, COMMENTARY_TRANSLATION_CACHE_TIMEOUT)
+            return payload
     except Exception:
         pass
 
-    return translated_text
+    return {
+        'text': source_text,
+        'source_text': source_text,
+        'machine_translated': False,
+        'language': language,
+    }
+
+
+def _raw_model_text(instance, field_name):
+    # Read the raw DB-backed field value and avoid language-descriptor swapping.
+    if field_name in instance.__dict__:
+        return str(instance.__dict__.get(field_name) or '')
+    return str(getattr(instance, field_name, '') or '')
 
 
 class LawOfMessiah(models.Model):
@@ -229,15 +276,27 @@ class LawOfMessiah(models.Model):
 
     @property
     def translated_commentary_rudolph(self):
-        return _translated_dynamic_commentary(self.commentary_rudolph)
+        return _translated_dynamic_commentary(_raw_model_text(self, 'commentary_rudolph'))
+
+    @property
+    def translated_commentary_rudolph_payload(self):
+        return _translated_dynamic_commentary_payload(_raw_model_text(self, 'commentary_rudolph'))
 
     @property
     def translated_commentary_juster(self):
-        return _translated_dynamic_commentary(self.commentary_juster)
+        return _translated_dynamic_commentary(_raw_model_text(self, 'commentary_juster'))
+
+    @property
+    def translated_commentary_juster_payload(self):
+        return _translated_dynamic_commentary_payload(_raw_model_text(self, 'commentary_juster'))
 
     @property
     def translated_classical_commentators(self):
-        return _translated_dynamic_commentary(self.classical_commentators)
+        return _translated_dynamic_commentary(_raw_model_text(self, 'classical_commentators'))
+
+    @property
+    def translated_classical_commentators_payload(self):
+        return _translated_dynamic_commentary_payload(_raw_model_text(self, 'classical_commentators'))
 
     def __str__(self):
         if self.title:

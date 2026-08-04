@@ -970,6 +970,14 @@ $(document).ready(function(){
         en: 'Machine translated from English.',
         nl: 'Automatisch vertaald vanuit het Engels.'
       },
+      show_original_text: {
+        en: 'Show original text',
+        nl: 'Toon originele tekst'
+      },
+      show_translated_text: {
+        en: 'Show translation',
+        nl: 'Toon vertaling'
+      },
       view_on_sefaria: {
         en: 'View on Sefaria',
         nl: 'Bekijk op Sefaria'
@@ -1046,6 +1054,68 @@ $(document).ready(function(){
       return parsed;
     }
     return 60 * 60 * 24 * 30 * 6;
+  }
+
+  function commentaryParagraphsForDisplay(text) {
+    var paragraphs = String(text || '')
+      .split(/\n{2,}/)
+      .map(function(paragraph) {
+        return paragraph.trim();
+      })
+      .filter(Boolean);
+
+    if (paragraphs.length > 1) {
+      return paragraphs;
+    }
+
+    if (!text || text.length < 240) {
+      return [text];
+    }
+
+    var sentences = String(text).match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [text];
+    if (sentences.length < 3) {
+      return [text];
+    }
+
+    paragraphs = [];
+    var buffer = [];
+    var bufferLength = 0;
+    $.each(sentences, function(_, sentence) {
+      sentence = String(sentence || '').trim();
+      if (!sentence) {
+        return;
+      }
+
+      buffer.push(sentence);
+      bufferLength += sentence.length;
+      if (buffer.length >= 2 || bufferLength >= 260) {
+        paragraphs.push(buffer.join(' '));
+        buffer = [];
+        bufferLength = 0;
+      }
+    });
+
+    if (buffer.length) {
+      paragraphs.push(buffer.join(' '));
+    }
+
+    return paragraphs.length ? paragraphs : [text];
+  }
+
+  function commentaryDisplayHtml(rawText) {
+    var normalizedText = String(rawText || '')
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    var containsHtml = /<[^>]+>/.test(String(rawText || ''));
+    var displayHtml = containsHtml
+      ? sanitizeScripturaCommentaryHtml(rawText)
+      : sanitizeSefariaHtml(commentaryParagraphsForDisplay(normalizedText).map(function(paragraph) {
+          return '<p>' + $('<span>').text(paragraph).html().replace(/\n/g, '<br>') + '</p>';
+        }).join(''));
+    return displayHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
   }
 
   function getDavidSternCommentaryFooterText($contextPanel) {
@@ -2029,75 +2099,21 @@ $(document).ready(function(){
       $panel.find('.scriptura-commentary-entry-btn[data-entry-key="' + entryKey + '"]').addClass('active');
       $panel.find('.scriptura-commentary-text').html(commentarySpinnerHtml('api', uiMessage('loading_commentary')));
 
-      function renderCommentaryBody(rawText, isMachineTranslated) {
+      function renderCommentaryBody(rawText, isMachineTranslated, originalText) {
         if ($panel.data('scripturaRenderToken') !== renderToken) {
           return;
         }
-
-        var normalizedText = String(rawText || '')
-          .replace(/\r\n/g, '\n')
-          .replace(/\r/g, '\n')
-          .replace(/[ \t]+\n/g, '\n')
-          .replace(/\n{3,}/g, '\n\n')
-          .trim();
-
-        function commentaryParagraphs(text) {
-          var paragraphs = String(text || '')
-            .split(/\n{2,}/)
-            .map(function(paragraph) {
-              return paragraph.trim();
-            })
-            .filter(Boolean);
-
-          if (paragraphs.length > 1) {
-            return paragraphs;
-          }
-
-          if (!text || text.length < 240) {
-            return [text];
-          }
-
-          var sentences = String(text).match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) || [text];
-          if (sentences.length < 3) {
-            return [text];
-          }
-
-          paragraphs = [];
-          var buffer = [];
-          var bufferLength = 0;
-          $.each(sentences, function(_, sentence) {
-            sentence = String(sentence || '').trim();
-            if (!sentence) {
-              return;
-            }
-
-            buffer.push(sentence);
-            bufferLength += sentence.length;
-            if (buffer.length >= 2 || bufferLength >= 260) {
-              paragraphs.push(buffer.join(' '));
-              buffer = [];
-              bufferLength = 0;
-            }
-          });
-
-          if (buffer.length) {
-            paragraphs.push(buffer.join(' '));
-          }
-
-          return paragraphs.length ? paragraphs : [text];
-        }
-
-        var containsHtml = /<[^>]+>/.test(String(rawText || ''));
-        var displayHtml = containsHtml
-          ? sanitizeScripturaCommentaryHtml(rawText)
-          : sanitizeSefariaHtml(commentaryParagraphs(normalizedText).map(function(paragraph) {
-              return '<p>' + $('<span>').text(paragraph).html().replace(/\n/g, '<br>') + '</p>';
-            }).join(''));
-        displayHtml = displayHtml || $('<span>').text(normalizedText).html().replace(/\n/g, '<br>');
+        var displayHtml = commentaryDisplayHtml(rawText);
+        var originalHtml = commentaryDisplayHtml(originalText || '');
+        var canShowOriginal = isMachineTranslated && !!String(originalText || '').trim() && originalHtml !== displayHtml;
         var attribution = (commentator && commentator.attribution) ? commentator.attribution : { showProvider: true, showApiResponse: true };
         var translationNote = '';
         if (isMachineTranslated) {
-          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em></p>';
+          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em>';
+          if (canShowOriginal) {
+            translationNote += ' <button type="button" class="commentary-original-toggle">' + uiMessage('show_original_text') + '</button>';
+          }
+          translationNote += '</p>';
         }
 
         var attributionParts = [];
@@ -2124,15 +2140,24 @@ $(document).ready(function(){
           attributionHtml +
           '</div>'
         );
+
+        if (canShowOriginal) {
+          var $toggle = $panel.find('.scriptura-commentary-text .commentary-original-toggle').first();
+          if ($toggle.length) {
+            $toggle.data('translatedHtml', displayHtml);
+            $toggle.data('originalHtml', originalHtml);
+            $toggle.data('showingOriginal', false);
+          }
+        }
       }
 
       if (!shouldTranslate) {
-        renderCommentaryBody(commentaryText || '', false);
+        renderCommentaryBody(commentaryText || '', false, commentaryText || '');
         return;
       }
 
       translateCommentaryText(String(commentaryText || ''), function(translatedText, isMachineTranslated) {
-        renderCommentaryBody(translatedText, isMachineTranslated);
+        renderCommentaryBody(translatedText, isMachineTranslated, commentaryText || '');
       });
     }
 
@@ -2327,7 +2352,7 @@ $(document).ready(function(){
         sourceTitle: { en: 'Original text', nl: 'Originele tekst' },
         detailTitle: { en: "Strong's details", nl: "Strong's details" },
         hoverWords: { en: 'Hover / click words', nl: 'Beweeg / klik woorden' },
-        translate: { en: 'Translate', nl: 'Vertalen' },
+        translate: { en: 'Auto Translate', nl: 'Automatisch Vertalen' },
         showOriginal: { en: 'Show original', nl: 'Toon origineel' },
         openBlueLetter: { en: 'Open {code} in Blue Letter Bible', nl: 'Open {code} in Blue Letter Bible' },
         previewPassage: { en: 'Preview this passage', nl: 'Bekijk deze passage' },
@@ -2863,12 +2888,17 @@ $(document).ready(function(){
 
       var escapedName = $('<span>').text(commentator).html();
 
-      function renderCommentaryText(bodyText, sefariaUrl, isMachineTranslated) {
-        var sanitizedHtml = sanitizeSefariaHtml(bodyText || '');
-        var displayText = sanitizedHtml || $('<span>').text(bodyText || '').html().replace(/\n/g, '<br>');
+      function renderCommentaryText(bodyText, sefariaUrl, isMachineTranslated, originalText) {
+        var displayText = commentaryDisplayHtml(bodyText || '');
+        var originalDisplayText = commentaryDisplayHtml(originalText || '');
+        var canShowOriginal = isMachineTranslated && !!String(originalText || '').trim() && originalDisplayText !== displayText;
         var translationNote = '';
         if (isMachineTranslated) {
-          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em></p>';
+          translationNote = '<p class="sefaria-attribution"><em>' + uiMessage('machine_translated_from_en') + '</em>';
+          if (canShowOriginal) {
+            translationNote += ' <button type="button" class="commentary-original-toggle">' + uiMessage('show_original_text') + '</button>';
+          }
+          translationNote += '</p>';
         }
 
         $textDiv.html(
@@ -2879,11 +2909,20 @@ $(document).ready(function(){
           '<p class="sefaria-attribution"><a href="' + sefariaUrl + '" target="_blank" rel="noopener noreferrer">' + uiMessage('view_on_sefaria') + '</a></p>' +
           '</div>'
         );
+
+        if (canShowOriginal) {
+          var $toggle = $textDiv.find('.commentary-original-toggle').first();
+          if ($toggle.length) {
+            $toggle.data('translatedHtml', displayText);
+            $toggle.data('originalHtml', originalDisplayText);
+            $toggle.data('showingOriginal', false);
+          }
+        }
       }
 
       if (cachedCommentary) {
         var cached = cachedCommentary;
-        renderCommentaryText(cached.text, cached.url, cached.machine);
+        renderCommentaryText(cached.text, cached.url, cached.machine, cached.original || '');
         return;
       }
 
@@ -2900,8 +2939,8 @@ $(document).ready(function(){
           if (text) {
             var sefariaUrl = 'https://www.sefaria.org/' + encodeURIComponent(fullRef).replace(/%20/g, '_');
             translateCommentaryText(text, function(translatedText, isMachineTranslated) {
-              setCommentaryCachedValue(sefariaTextCache, 'sefaria_text', fullRef, { text: translatedText, url: sefariaUrl, machine: isMachineTranslated });
-              renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated);
+              setCommentaryCachedValue(sefariaTextCache, 'sefaria_text', fullRef, { text: translatedText, url: sefariaUrl, machine: isMachineTranslated, original: text });
+              renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated, text);
             });
           } else {
             $textDiv.html('<p class="sefaria-no-result"><em>' + uiMessage('no_english_text_available', { name: escapedName }) + '</em></p>');
@@ -2921,8 +2960,8 @@ $(document).ready(function(){
               if (text) {
                 var sefariaUrl = 'https://www.sefaria.org/' + encodeURIComponent(fullRef).replace(/%20/g, '_');
                 translateCommentaryText(text, function(translatedText, isMachineTranslated) {
-                  setCommentaryCachedValue(sefariaTextCache, 'sefaria_text', fullRef, { text: translatedText, url: sefariaUrl, machine: isMachineTranslated });
-                  renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated);
+                  setCommentaryCachedValue(sefariaTextCache, 'sefaria_text', fullRef, { text: translatedText, url: sefariaUrl, machine: isMachineTranslated, original: text });
+                  renderCommentaryText(translatedText, sefariaUrl, isMachineTranslated, text);
                 });
               } else {
                 $textDiv.html('<p class="sefaria-no-result"><em>' + uiMessage('no_english_text_available', { name: escapedName }) + '</em></p>');
@@ -2978,6 +3017,54 @@ $(document).ready(function(){
         }
         detailOriginalApplyPayload($panel, details, payload);
       });
+    });
+
+    $(document).on('click', '.commentary-original-toggle', function(event) {
+      event.preventDefault();
+      var $btn = $(this);
+
+      var $lomBlock = $btn.closest('.lom-commentary-machine-translation');
+      if ($lomBlock.length) {
+        var $translated = $lomBlock.find('.lom-commentary-body-translated').first();
+        var $original = $lomBlock.find('.lom-commentary-body-original').first();
+        if (!$translated.length || !$original.length) {
+          return;
+        }
+
+        var showingOriginalLom = !$original.hasClass('d-none');
+        if (showingOriginalLom) {
+          $original.addClass('d-none');
+          $translated.removeClass('d-none');
+          $btn.text(String($btn.attr('data-show-original-label') || uiMessage('show_original_text')));
+        } else {
+          $translated.addClass('d-none');
+          $original.removeClass('d-none');
+          $btn.text(String($btn.attr('data-show-translation-label') || uiMessage('show_translated_text')));
+        }
+        return;
+      }
+
+      var translatedHtml = String($btn.data('translatedHtml') || '');
+      var originalHtml = String($btn.data('originalHtml') || '');
+      if (!translatedHtml || !originalHtml) {
+        return;
+      }
+
+      var showingOriginal = !!$btn.data('showingOriginal');
+      var $content = $btn.closest('.sefaria-commentary-content');
+      var $body = $content.find('.sefaria-commentary-body').first();
+      if (!$body.length) {
+        return;
+      }
+
+      if (showingOriginal) {
+        $body.html(translatedHtml);
+        $btn.text(uiMessage('show_original_text'));
+      } else {
+        $body.html(originalHtml);
+        $btn.text(uiMessage('show_translated_text'));
+      }
+      $btn.data('showingOriginal', !showingOriginal);
     });
 
     $(document).on('mouseenter focus', '.detail-inline-original-word-btn', function() {

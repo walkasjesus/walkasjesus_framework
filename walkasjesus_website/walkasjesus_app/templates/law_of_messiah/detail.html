@@ -406,15 +406,69 @@
                             <h4>{% trans 'Commentary' %}</h4>
                             {% if law.commentary_rudolph %}
                             <h5>{% trans 'Rabbi Michael Rudolph' %}</h5>
-                            <p>{{ law.translated_commentary_rudolph|linebreaksbr }}</p>
+                            {% with payload=law.translated_commentary_rudolph_payload %}
+                                {% if payload.machine_translated %}
+                                    <div class="lom-commentary-machine-translation">
+                                        <p class="sefaria-attribution">
+                                            <em>{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Automatisch vertaald vanuit het Engels.{% else %}Machine translated from English.{% endif %}</em>
+                                            <button type="button"
+                                                    class="commentary-original-toggle"
+                                                    data-show-original-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}"
+                                                    data-show-translation-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon vertaling{% else %}Show translation{% endif %}">{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}</button>
+                                        </p>
+                                        <div class="sefaria-commentary-body mt-1">
+                                            <div class="lom-commentary-body-translated">{{ payload.text|linebreaksbr }}</div>
+                                            <div class="lom-commentary-body-original d-none">{{ payload.source_text|linebreaksbr }}</div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p>{{ payload.text|linebreaksbr }}</p>
+                                {% endif %}
+                            {% endwith %}
                             {% endif %}
                             {% if law.commentary_juster %}
                             <h5>{% trans 'Rabbi Daniel Juster' %}</h5>
-                            <p>{{ law.translated_commentary_juster|linebreaksbr }}</p>
+                            {% with payload=law.translated_commentary_juster_payload %}
+                                {% if payload.machine_translated %}
+                                    <div class="lom-commentary-machine-translation">
+                                        <p class="sefaria-attribution">
+                                            <em>{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Automatisch vertaald vanuit het Engels.{% else %}Machine translated from English.{% endif %}</em>
+                                            <button type="button"
+                                                    class="commentary-original-toggle"
+                                                    data-show-original-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}"
+                                                    data-show-translation-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon vertaling{% else %}Show translation{% endif %}">{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}</button>
+                                        </p>
+                                        <div class="sefaria-commentary-body mt-1">
+                                            <div class="lom-commentary-body-translated">{{ payload.text|linebreaksbr }}</div>
+                                            <div class="lom-commentary-body-original d-none">{{ payload.source_text|linebreaksbr }}</div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p>{{ payload.text|linebreaksbr }}</p>
+                                {% endif %}
+                            {% endwith %}
                             {% endif %}
                             {% if law.classical_commentators %}
                             <h5>{% trans 'Classical commentators' %}</h5>
-                            <p>{{ law.translated_classical_commentators|linebreaksbr }}</p>
+                            {% with payload=law.translated_classical_commentators_payload %}
+                                {% if payload.machine_translated %}
+                                    <div class="lom-commentary-machine-translation">
+                                        <p class="sefaria-attribution">
+                                            <em>{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Automatisch vertaald vanuit het Engels.{% else %}Machine translated from English.{% endif %}</em>
+                                            <button type="button"
+                                                    class="commentary-original-toggle"
+                                                    data-show-original-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}"
+                                                    data-show-translation-label="{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon vertaling{% else %}Show translation{% endif %}">{% if request.LANGUAGE_CODE|slice:':2' == 'nl' %}Toon originele tekst{% else %}Show original text{% endif %}</button>
+                                        </p>
+                                        <div class="sefaria-commentary-body mt-1">
+                                            <div class="lom-commentary-body-translated">{{ payload.text|linebreaksbr }}</div>
+                                            <div class="lom-commentary-body-original d-none">{{ payload.source_text|linebreaksbr }}</div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p>{{ payload.text|linebreaksbr }}</p>
+                                {% endif %}
+                            {% endwith %}
                             {% endif %}
                             </br>
                             {% if law.copyright %}<p><b><i>{{ law.copyright }}</i></b></p>{% endif %}
@@ -756,12 +810,21 @@
                                 {% endfor %}
                             </ul>
                             {% endif %}
-                            {% if law.meir %}
+                            {% if enriched_meir %}
                             <h5>{% trans 'Meir of Rothenburg' %}</h5>
                             <p><small>{% blocktrans %}Rabbi Meir of Rothenburg (13th century, Germany) was a leading Talmudic authority. These reference numbers link this commandment to his halachic rulings.{% endblocktrans %}</small></p>
                             <ul class="lom-related-links mb-2">
-                                {% for item in law.meir %}
-                                <li><a href="{% url 'commandments:maimonides_listing' %}?q={{ item }}">{{ item }}</a></li>
+                                {% for item in enriched_meir %}
+                                <li>
+                                    <a href="{% url 'commandments:maimonides_listing' %}?q={% if item.maimonides_id %}{{ item.maimonides_id }}{% else %}{{ item.meir_code }}{% endif %}"
+                                       class="lom-related-link {% if item.commandment_type == 'negative' %}lom-related-link-negative{% else %}lom-related-link-positive{% endif %}">
+                                        {% if item.maimonides_id and item.commandment %}
+                                            <strong>{{ item.meir_code }}</strong> ({{ item.maimonides_id }}) - {{ item.commandment }}
+                                        {% else %}
+                                            <strong>{{ item.meir_code }}</strong>
+                                        {% endif %}
+                                    </a>
+                                </li>
                                 {% endfor %}
                             </ul>
                             {% endif %}

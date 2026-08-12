@@ -34,7 +34,7 @@ _This will import the following repositories into the database:_
   _Repository for the Walk as Jesus Framework where all the lessons are stored in a CSV_
 
 * [lawofmessiah](https://github.com/walkasjesus/LawofMessiah/collected_ids_titles.yaml)
-  _Digitalized version for all Law of Messiah commandments from the book 'Torah from a New Covenant Perspective* by Michael Rudolph and Daniel C. Juster'_
+  _Digitalized version for all Law of Messiah commandments from the book 'Torah from a New Covenant Perspective* by Michael Rudolph with Daniel C. Juster'_
 
 4. Create admin user  
 _This will create an admin user_  
@@ -117,4 +117,4 @@ This repository contains all translation files from English to other languages. 
 
 ### LawofMessiah
 
-This repository contains the structured content and scripts for processing the commandments (*mitzvot*) derived from the Bible, as presented in the book series *The Law of Messiah - Torah from a New Covenant Perspective* by Michael Rudolph and Daniel C. Juster. The goal of this project is to make the commandments more accessible by organizing them into structured formats (e.g., YAML) and providing tools for filtering, searching, and studying them.
+This repository contains the structured content and scripts for processing the commandments (*mitzvot*) derived from the Bible, as presented in the book series *The Law of Messiah - Torah from a New Covenant Perspective* by Michael Rudolph with Daniel C. Juster. The goal of this project is to make the commandments more accessible by organizing them into structured formats (e.g., YAML) and providing tools for filtering, searching, and studying them.

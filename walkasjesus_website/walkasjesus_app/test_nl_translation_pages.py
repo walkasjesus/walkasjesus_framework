@@ -88,7 +88,7 @@ class DutchTranslationPagesTest(TestCase):
                 'args': [self.law_id],
                 'must_not_contain': [
                     'Source and License',
-                    'Based on <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph and Daniel C. Juster.',
+                    'Based on <em>The Law of Messiah - Torah from a New Covenant Perspective</em> by Michael Rudolph with Daniel C. Juster.',
                     'License: CC BY-ND 4.0 (Attribution required, NoDerivatives).',
                     'Volume 1 & 2',
                     'Volume 3',

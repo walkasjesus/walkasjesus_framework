@@ -39,7 +39,11 @@ class ApiBibles(object):
                 bible.id = bible_entry['id']
                 bible.name = self.create_unique_name(bible_entry, bible_entries)
                 bible.language = self._get_language_code(bible_entry)
-                bible.abbreviation = bible_entry.get('abbreviationLocal', '') or ''
+                bible.abbreviation = (
+                    str(bible_entry.get('abbreviationLocal', '') or '').strip()
+                    or str(bible_entry.get('abbreviation', '') or '').strip()
+                    or bible.name
+                )
                 bibles[bible.id] = bible
 
         except Exception as ex:

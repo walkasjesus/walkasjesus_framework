@@ -455,6 +455,13 @@ class UserPreferencesLanguagesView(View):
         return redirect
 
 
+def _bible_display_name(bible):
+    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').strip() or str(getattr(bible, 'name', '') or '').strip()
+    name = str(getattr(bible, 'name', '') or '').strip()
+    return f"{language_code} - {abbreviation} - {name}" if language_code and abbreviation and name else name or abbreviation or ''
+
+
 class BibleTranslationsForLanguageView(View):
     """Returns JSON with Bible translations available for the given language code."""
     def get(self, request):
@@ -483,8 +490,8 @@ class BibleTranslationsForLanguageView(View):
                 'id': b.id,
                 'name': b.name,
                 'language': getattr(b, 'language', ''),
-                'abbreviation': getattr(b, 'abbreviation', '') or b.name,
-                'display_name': f"{str(getattr(b, 'language', '') or '').strip().upper()[:2]} - {getattr(b, 'abbreviation', '') or b.name} - {b.name}",
+                'abbreviation': str(getattr(b, 'abbreviation', '') or '').strip() or str(getattr(b, 'name', '') or '').strip(),
+                'display_name': _bible_display_name(b),
             } for b in bibles],
             'default_bible_id': default_bible_id,
         })

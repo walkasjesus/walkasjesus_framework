@@ -4,9 +4,20 @@ from pathlib import Path
 from bible_lib.simple_cache import SimpleCache
 
 
+def _project_root() -> Path:
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if parent.name == 'walkasjesus_website':
+            return parent.parent
+    for parent in current.parents:
+        if (parent / 'walkasjesus_website').exists():
+            return parent
+    return current.parent
+
+
 def _project_cache_path() -> Path:
-    project_root = Path(__file__).resolve().parents[3]
-    cache_dir = project_root / 'walkasjesus_website' / '.bible_cache'
+    project_root = _project_root()
+    cache_dir = project_root / 'walkasjesus_website'
     cache_dir.mkdir(parents=True, exist_ok=True)
     return cache_dir / 'bible_api_cache.json'
 

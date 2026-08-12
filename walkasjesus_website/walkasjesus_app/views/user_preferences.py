@@ -458,13 +458,34 @@ class UserPreferencesLanguagesView(View):
 class BibleTranslationsForLanguageView(View):
     """Returns JSON with Bible translations available for the given language code."""
     def get(self, request):
-        language_code = request.GET.get('language', 'en')
-        bibles = _available_bibles_for_language(request, language_code)
+        language_code = str(request.GET.get('language', 'en') or '').strip().lower()[:2]
+        supported_language_codes = {
+            str(code).strip().lower()[:2]
+            for code, _ in getattr(settings, 'LANGUAGES', [])
+            if str(code).strip()
+        }
+        bible_translation = BibleTranslation()
+        bibles = filter_visible_bibles_for_request(request, bible_translation.all_in_supported_languages())
+        primary_language = language_code if language_code in supported_language_codes else ''
+        bibles = sorted(bibles, key=lambda b: (
+            0 if str(getattr(b, 'language', '') or '').strip().lower()[:2] == primary_language else 1,
+            str(getattr(b, 'language', '') or '').strip().lower()[:2],
+            str(getattr(b, 'abbreviation', '') or '').strip().lower() or str(getattr(b, 'name', '') or '').strip().lower(),
+            str(getattr(b, 'name', '') or '').strip().lower(),
+        ))
+
         default_bible_id = _resolve_default_bible_id_for_language(request, language_code)
         if default_bible_id and not any(b.id == default_bible_id for b in bibles):
             default_bible_id = bibles[0].id if bibles else ''
+
         return JsonResponse({
-            'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
+            'bibles': [{
+                'id': b.id,
+                'name': b.name,
+                'language': getattr(b, 'language', ''),
+                'abbreviation': getattr(b, 'abbreviation', '') or b.name,
+                'display_name': f"{str(getattr(b, 'language', '') or '').strip().upper()[:2]} - {getattr(b, 'abbreviation', '') or b.name} - {b.name}",
+            } for b in bibles],
             'default_bible_id': default_bible_id,
         })
 

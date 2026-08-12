@@ -147,21 +147,38 @@ class BibleTranslation:
         """" Get all bible translations (including languages not supported this website). """
         return list(BibleTranslation._all_bibles.values())
 
+    @staticmethod
+    def _disabled_bible_ids():
+        disabled_ids = {
+            str(item).strip()
+            for item in getattr(settings, 'DISABLED_BIBLE_TRANSLATIONS', [])
+            if str(item).strip()
+        }
+        disabled_ids.update(
+            str(meta_data.bible_id).strip()
+            for meta_data in BibleTranslationMetaData.objects.filter(is_enabled=False)
+            if str(meta_data.bible_id).strip()
+        )
+        return {bible_id for bible_id in disabled_ids if bible_id}
+
     def all_enabled(self) -> list[Bible]:
         """ This will list all bibles that are not explicitly disabled,
         so if information is missing it will assume them to be enabled. """
-        enabled = set(self.all()) - set(self.all_disabled())
+        disabled_ids = self._disabled_bible_ids()
+        enabled = [b for b in self.all() if str(getattr(b, 'id', '')).strip() not in disabled_ids]
         for bible_id in getattr(settings, 'FORCE_ENABLED_BIBLE_TRANSLATIONS', []):
-            if self.contains(bible_id):
-                enabled.add(self.get(bible_id))
+            normalized_id = str(bible_id or '').strip()
+            if not normalized_id or not self.contains(normalized_id):
+                continue
+            bible = self.get(normalized_id)
+            if bible not in enabled:
+                enabled.append(bible)
         return enabled
 
     def all_disabled(self) -> list[Bible]:
         """ This will return all bibles that are explicitly disabled. """
-        disabled_ids = BibleTranslationMetaData.objects.filter(is_enabled=False).values_list('bible_id', flat=True)
-        return [BibleTranslation._all_bibles[bible_id]
-            for bible_id in disabled_ids
-            if bible_id in BibleTranslation._all_bibles]
+        disabled_ids = self._disabled_bible_ids()
+        return [b for b in self.all() if str(getattr(b, 'id', '')).strip() in disabled_ids]
 
     def all_in_user_language(self) -> list[Bible]:
         """" Get all bibles in the user main language. """

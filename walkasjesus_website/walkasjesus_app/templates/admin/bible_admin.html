@@ -26,6 +26,7 @@
 <table>
 
     <tr>
+        <th>{% trans 'API ID' %}</th>
         <th>{% trans 'Bible' %}</th>
         <th>{% trans 'Language' %}</th>
         <th>{% trans 'Enabled' %}</th>
@@ -34,6 +35,7 @@
     </tr>
     {% for bible in bibles %}
     <tr>
+        <td>{{ bible.id }}</td>
         <td>{{ bible.name }}</td>
         <td>{{ bible.language }}</td>
         <td>{{ bible.enabled }}</td>

@@ -354,6 +354,37 @@ $(document).ready(function(){
     return '<i class="fa fa-spinner fa-spin ' + spinnerClass + '"></i>';
   }
 
+  function getVerseSpinnerSource(pk) {
+    if (verseSourceCache[pk] === 'cache') {
+      return 'cache';
+    }
+    if (verseSourceCache[pk] === 'api') {
+      return 'api';
+    }
+    if (typeof verseCache[pk] !== 'undefined') {
+      return 'cache';
+    }
+    return 'api';
+  }
+
+  function normalizeVerseText(rawText) {
+    if (rawText === null || typeof rawText === 'undefined') {
+      return '';
+    }
+
+    var text = String(rawText).trim();
+    if (!text) {
+      return '';
+    }
+
+    var lowered = text.toLowerCase();
+    if (lowered === 'not found' || lowered === 'could not read text' || lowered === 'could not load bible verse for this reference.' || lowered === 'could not load bible verses.') {
+      return '';
+    }
+
+    return text;
+  }
+
   function commentarySpinnerHtml(source, label) {
     var spinnerClass = source === 'api' ? 'commentary-loading-spinner commentary-loading-spinner-api' : 'commentary-loading-spinner commentary-loading-spinner-cache';
     var text = label ? (' ' + label) : '';
@@ -388,13 +419,28 @@ $(document).ready(function(){
       success: function(data) {
         var verses = (data && data.verses) ? data.verses : {};
         var verseSources = (data && data.verse_sources) ? data.verse_sources : {};
+        var normalizedVerses = {};
         $.each(verses, function(pk, text) {
-          verseCache[String(pk)] = text;
+          var normalizedText = normalizeVerseText(text);
+          if (!normalizedText) {
+            verseSourceCache[String(pk)] = 'error';
+            return;
+          }
+          normalizedVerses[String(pk)] = normalizedText;
+          verseCache[String(pk)] = normalizedText;
         });
         $.each(verseSources, function(pk, source) {
-          verseSourceCache[String(pk)] = String(source || '');
+          var normalizedSource = String(source || '').trim().toLowerCase();
+          if (!normalizedSource) {
+            normalizedSource = 'api';
+          }
+          verseSourceCache[String(pk)] = normalizedSource;
         });
-        if (onDone) onDone(verses, verseSources);
+        if (Object.keys(normalizedVerses).length === 0 && Object.keys(verseSources).length > 0) {
+          if (onDone) onDone({}, {}, 'Not found');
+          return;
+        }
+        if (onDone) onDone(normalizedVerses, verseSources);
       },
       error: function(xhr) {
         console.error('Failed to load bible verses:', xhr.status, xhr.responseText);
@@ -402,10 +448,7 @@ $(document).ready(function(){
         if (xhr && xhr.responseJSON && xhr.responseJSON.error) {
           message = xhr.responseJSON.error;
         }
-        $.each(refIds, function(_, pk) {
-          renderVerseText($('.bible-verse-text[data-verse-ref="' + pk + '"]'), message);
-        });
-        if (onDone) onDone({});
+        if (onDone) onDone({}, {}, message);
       }
     });
   }
@@ -1429,7 +1472,11 @@ $(document).ready(function(){
       // Show API spinner style while the first fetch for this page is pending.
       $('.bible-verse-text[data-verse-ref]:not([data-verse-manual="1"])').html(verseSpinnerHtml('api'));
       console.debug('Loading bible verses from:', versesUrl, 'refs:', autoRefIds.length);
-      fetchVerses(versesUrl, autoRefIds, function(verses) {
+      fetchVerses(versesUrl, autoRefIds, function(verses, verseSources, errorMessage) {
+        if (errorMessage) {
+          $('.bible-verse-text[data-verse-ref]:not([data-verse-manual="1"])').text(errorMessage);
+          return;
+        }
         $.each(verses, function(pk, text) {
           renderVerseText($('.bible-verse-text[data-verse-ref="' + pk + '"]:not([data-verse-manual="1"])'), text);
         });
@@ -1468,13 +1515,13 @@ $(document).ready(function(){
 
       verseFetchInFlight[pk] = true;
       if ($manualTarget.length) {
-        var spinnerSource = verseSourceCache[pk] || (typeof verseCache[pk] === 'undefined' ? 'api' : 'cache');
+        var spinnerSource = getVerseSpinnerSource(pk);
         $manualTarget.html(verseSpinnerHtml(spinnerSource));
       }
-      fetchVerses(requestVersesUrl, [pk], function() {
+      fetchVerses(requestVersesUrl, [pk], function(_, __, errorMessage) {
         if (!revealManualVerse($link, pk)) {
           if ($manualTarget.length) {
-            $manualTarget.text(uiMessage('could_not_load_verse_text'));
+            $manualTarget.text(errorMessage || uiMessage('could_not_load_verse_text'));
           }
         }
         verseFetchInFlight[pk] = false;

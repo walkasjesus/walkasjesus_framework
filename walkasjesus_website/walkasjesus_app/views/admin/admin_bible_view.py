@@ -14,7 +14,14 @@ from walkasjesus_website import settings
 class AdminBibleView(View):
     @method_decorator(staff_member_required)
     def get(self, request):
-        bibles = BibleTranslation().all()
+        supported_language_codes = {
+            str(code).strip().lower() for code, _ in getattr(settings, 'LANGUAGES', [])
+            if str(code).strip()
+        }
+        bibles = [
+            bible for bible in BibleTranslation().all()
+            if str(getattr(bible, 'language', '') or '').strip().lower() in supported_language_codes
+        ]
         cache = Services().cache
         cache_controller = CacheController(cache)
 
@@ -34,7 +41,9 @@ class AdminBibleView(View):
             else:
                 meta_data = BibleTranslationMetaData.objects.get(bible_id=bible.id)
 
-            bible.enabled = meta_data.is_enabled
+            bible.enabled = meta_data.is_enabled and str(bible.id).strip() not in {
+                str(item).strip() for item in getattr(settings, 'DISABLED_BIBLE_TRANSLATIONS', []) if str(item).strip()
+            }
 
         bibles.sort(key=lambda b: (b.enabled, b.percentage_cached), reverse=True)
 

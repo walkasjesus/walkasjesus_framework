@@ -2,14 +2,21 @@ from django.conf import settings
 from django.utils import translation
 
 from walkasjesus_app.lib.media_cache_version import get_media_cache_version
-from walkasjesus_app.lib.access_policy import is_david_stern_commentary_allowed, cjb_bible_id, is_bible_id_visible_for_request
+from walkasjesus_app.lib.access_policy import (
+    is_david_stern_commentary_allowed,
+    cjb_bible_id,
+    is_bible_id_visible_for_request,
+    filter_visible_bibles_for_request,
+)
 from walkasjesus_app.lib.sword_commentary import available_sword_commentators_json, sword_commentary_enabled
 from walkasjesus_app.models import BibleTranslation, UserPreferences
 
 
 def bible_translation(request):
+    supported_bibles = BibleTranslation().all_in_supported_languages()
     return {
         'bible_translation': BibleTranslation(),
+        'bible_translations_for_request': filter_visible_bibles_for_request(request, supported_bibles),
         'cjb_bible_id': cjb_bible_id(),
         'cjb_bible_visible': is_bible_id_visible_for_request(request, cjb_bible_id()),
     }

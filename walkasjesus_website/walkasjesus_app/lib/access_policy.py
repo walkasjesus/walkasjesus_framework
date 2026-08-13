@@ -65,8 +65,6 @@ def is_bible_id_visible_for_request(request, bible_id):
         if bool(getattr(settings, 'CJB_BIBLE_LOGGED_IN_ONLY', False)):
             if not _is_authenticated(request):
                 return False
-            if not _has_permission(request, CJB_RESTRICTED_PERMISSION):
-                return False
 
     return True
 

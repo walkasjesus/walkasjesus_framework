@@ -147,7 +147,10 @@ def _local_sword_commentary(source_id, book, chapter):
 
 def _available_bibles_for_language(request, language_code):
     bible_translation = BibleTranslation()
-    bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
+    bibles = [
+        b for b in bible_translation.all()
+        if str(getattr(b, 'language', '') or '').strip().lower() == str(language_code or '').strip().lower()
+    ]
     return filter_visible_bibles_for_request(request, bibles)
 
 
@@ -455,16 +458,44 @@ class UserPreferencesLanguagesView(View):
         return redirect
 
 
+def _bible_display_name(bible):
+    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').strip() or str(getattr(bible, 'name', '') or '').strip()
+    name = str(getattr(bible, 'name', '') or '').strip()
+    return f"{language_code} - {abbreviation} - {name}" if language_code and abbreviation and name else name or abbreviation or ''
+
+
 class BibleTranslationsForLanguageView(View):
     """Returns JSON with Bible translations available for the given language code."""
     def get(self, request):
-        language_code = request.GET.get('language', 'en')
-        bibles = _available_bibles_for_language(request, language_code)
+        language_code = str(request.GET.get('language', 'en') or '').strip().lower()[:2]
+        supported_language_codes = {
+            str(code).strip().lower()[:2]
+            for code, _ in getattr(settings, 'LANGUAGES', [])
+            if str(code).strip()
+        }
+        bible_translation = BibleTranslation()
+        bibles = filter_visible_bibles_for_request(request, bible_translation.all_in_supported_languages())
+        primary_language = language_code if language_code in supported_language_codes else ''
+        bibles = sorted(bibles, key=lambda b: (
+            0 if str(getattr(b, 'language', '') or '').strip().lower()[:2] == primary_language else 1,
+            str(getattr(b, 'language', '') or '').strip().lower()[:2],
+            str(getattr(b, 'abbreviation', '') or '').strip().lower() or str(getattr(b, 'name', '') or '').strip().lower(),
+            str(getattr(b, 'name', '') or '').strip().lower(),
+        ))
+
         default_bible_id = _resolve_default_bible_id_for_language(request, language_code)
         if default_bible_id and not any(b.id == default_bible_id for b in bibles):
             default_bible_id = bibles[0].id if bibles else ''
+
         return JsonResponse({
-            'bibles': [{'id': b.id, 'name': b.name} for b in bibles],
+            'bibles': [{
+                'id': b.id,
+                'name': b.name,
+                'language': getattr(b, 'language', ''),
+                'abbreviation': str(getattr(b, 'abbreviation', '') or '').strip() or str(getattr(b, 'name', '') or '').strip(),
+                'display_name': _bible_display_name(b),
+            } for b in bibles],
             'default_bible_id': default_bible_id,
         })
 

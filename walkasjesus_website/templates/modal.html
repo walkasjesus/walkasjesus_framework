@@ -35,18 +35,10 @@
                     <input name="next" type="hidden" value="{{ request.get_full_path }}">
                     <div class="select">
                     <select name="bible_id" class="drpBibleTranslation selectpicker" id="drpBibleTranslation" data-live-search="true" data-width="100%" data-size="10">
-                        <!-- In case we switched languages, the currently selected bible might not be present, so add it here -->
-                        <option value="{{ user_preferences.bible.id }}" data-abbreviation="{{ user_preferences.bible.abbreviation|default:user_preferences.bible.name|upper }}" selected>
-                            {{ user_preferences.bible.name }} ({{ user_preferences.bible.language }})
+                        {% for bible_item in bible_translation.all_in_supported_languages %}
+                        <option value="{{ bible_item.id }}" data-abbreviation="{{ bible_item.abbreviation|default:bible_item.name|upper }}" {% if bible_item.id == user_preferences.bible.id %}selected{% endif %}>
+                            {{ bible_item.language|slice:':2'|upper }} - {{ bible_item.abbreviation|upper }} - {{ bible_item.name }}
                         </option>
-                        {% for bible_item in bible_translation.all_in_user_language %}
-                            {% if bible_item.id != user_preferences.bible.id %}
-                            {% if bible_item.id != cjb_bible_id or cjb_bible_visible %}
-                            <option value="{{ bible_item.id }}" data-abbreviation="{{ bible_item.abbreviation|default:bible_item.name|upper }}">
-                                {{ bible_item.name }}
-                            </option>
-                            {% endif %}
-                            {% endif %}
                         {% endfor %}
                     </select>
                     </div>
@@ -144,7 +136,10 @@ window.jcInitChangeLanguageModal = function () {
                     data.bibles.forEach(function (bible) {
                         var opt = document.createElement('option');
                         opt.value = bible.id;
-                        opt.textContent = bible.name;
+                        opt.dataset.abbreviation = String(bible.abbreviation || bible.name || '').toUpperCase();
+                        var languageCode = String(bible.language || '').trim().slice(0, 2).toUpperCase();
+                        var label = bible.display_name || ((languageCode ? languageCode + ' - ' : '') + (bible.abbreviation || bible.name || '').toUpperCase() + ' - ' + (bible.name || ''));
+                        opt.textContent = label;
                         bibleSelect.appendChild(opt);
                     });
                 }

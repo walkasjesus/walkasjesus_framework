@@ -113,6 +113,7 @@
                                                 <select id="filter-unique" name="is_unique" class="form-control law-filter-select">
                                                     <option value="true"{% if selected_is_unique == 'true' %} selected{% endif %}>{% trans 'Unique only' %}</option>
                                                     <option value="false"{% if selected_is_unique == 'false' %} selected{% endif %}>{% trans 'Non-unique only' %}</option>
+                                                    <option value="both"{% if selected_is_unique == 'both' %} selected{% endif %}>{% trans 'Both' %}</option>
                                                     <option value=""{% if selected_is_unique == '' %} selected{% endif %}>{% trans 'All' %}</option>
                                                 </select>
                                             </div>

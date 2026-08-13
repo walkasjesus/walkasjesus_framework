@@ -61,6 +61,25 @@ class BibleTranslationTestCase(TestCase):
     # This just gives an indication.
     approximate_bible_count = 100
 
+    def _available_bible_id(self):
+        disabled_ids = {
+            str(item).strip()
+            for item in getattr(settings, 'DISABLED_BIBLE_TRANSLATIONS', [])
+            if str(item).strip()
+        }
+        disabled_ids.update(
+            str(meta_data.bible_id).strip()
+            for meta_data in BibleTranslationMetaData.objects.all()
+            if str(meta_data.bible_id).strip()
+        )
+
+        for bible in BibleTranslation().all():
+            bible_id = str(getattr(bible, 'id', '')).strip()
+            if bible_id and bible_id not in disabled_ids:
+                return bible_id
+
+        self.fail('No non-disabled Bible translation available for this test.')
+
     def test_all(self):
         all_bibles = BibleTranslation().all()
         self.assertGreaterEqual(len(all_bibles), self.approximate_bible_count)
@@ -72,30 +91,42 @@ class BibleTranslationTestCase(TestCase):
         self.assertLess(all_in_supported_languages, all_bibles)
 
     def test_all_enabled_with_no_explicit_disabled_ones(self):
-        all_bibles = len(BibleTranslation().all())
-        all_enabled = len(BibleTranslation().all_enabled())
-        self.assertEqual(all_enabled, all_bibles)
+        with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
+            all_bibles = len(BibleTranslation().all())
+            all_enabled = len(BibleTranslation().all_enabled())
+            self.assertEqual(all_enabled, all_bibles)
 
     def test_all_enabled_with_disabled_one(self):
-        all_bibles = len(BibleTranslation().all())
-        self.assertGreaterEqual(all_bibles, self.approximate_bible_count)
-        self._disable('de4e12af7f28f599-01')
-        all_enabled = len(BibleTranslation().all_enabled())
-        self.assertEqual(all_enabled, all_bibles-1)
+        with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
+            all_bibles = len(BibleTranslation().all())
+            self.assertGreaterEqual(all_bibles, self.approximate_bible_count)
+            target_id = self._available_bible_id()
+            self._disable(target_id)
+            all_enabled = len(BibleTranslation().all_enabled())
+            self.assertEqual(all_enabled, all_bibles-1)
+
+    @override_settings(DISABLED_BIBLE_TRANSLATIONS=['de4e12af7f28f599-01'])
+    def test_all_enabled_respects_settings_disabled_ids(self):
+        enabled_ids = {b.id for b in BibleTranslation().all_enabled()}
+        self.assertNotIn('de4e12af7f28f599-01', enabled_ids)
 
     def test_all_disabled(self):
-        before_count = len(BibleTranslation().all_disabled())
-        self._disable('de4e12af7f28f599-01')
-        after_count = len(BibleTranslation().all_disabled())
-        self.assertEqual(before_count+1, after_count)
+        with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
+            before_count = len(BibleTranslation().all_disabled())
+            target_id = self._available_bible_id()
+            self._disable(target_id)
+            after_count = len(BibleTranslation().all_disabled())
+            self.assertEqual(before_count+1, after_count)
 
     def test_all_disabled_uses_loaded_bibles_without_rebuilding_factory(self):
-        self._disable('de4e12af7f28f599-01')
+        with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
+            target_id = self._available_bible_id()
+            self._disable(target_id)
 
-        with patch.object(BibleTranslation._bible_factory, 'create', side_effect=AssertionError('factory create should not be called')):
-            disabled_ids = {bible.id for bible in BibleTranslation().all_disabled()}
+            with patch.object(BibleTranslation._bible_factory, 'create', side_effect=AssertionError('factory create should not be called')):
+                disabled_ids = {bible.id for bible in BibleTranslation().all_disabled()}
 
-        self.assertIn('de4e12af7f28f599-01', disabled_ids)
+        self.assertIn(target_id, disabled_ids)
 
     def _disable(self, bible_id: str):
         meta_data = BibleTranslationMetaData()
@@ -1252,7 +1283,7 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
     def test_hides_cjb_for_anonymous_when_login_required(self, mock_bible_translation):
         mock_bible_translation.return_value.all_enabled.return_value = [
             SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
-            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern, NT)', language='en'),
+            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern)', language='en'),
         ]
 
         request = self.factory.get('/bible-translations/?language=en')
@@ -1274,42 +1305,14 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
         self.assertEqual(payload['default_bible_id'], 'de4e12af7f28f599-01')
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
-    def test_hides_cjb_for_authenticated_without_permission_when_login_required(self, mock_bible_translation):
+    def test_shows_cjb_for_any_authenticated_user_when_login_required(self, mock_bible_translation):
         mock_bible_translation.return_value.all_enabled.return_value = [
             SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
-            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern, NT)', language='en'),
+            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern)', language='en'),
         ]
 
         request = self.factory.get('/bible-translations/?language=en')
         request.user = SimpleNamespace(is_authenticated=True, has_perm=lambda perm: False)
-
-        with self.settings(
-            DEFAULT_BIBLE_ANY_LANGUAGE='de4e12af7f28f599-01',
-            DEFAULT_BIBLE_PER_LANGUAGE={'en': 'jnt-stern-en'},
-            CJB_BIBLE_ID='jnt-stern-en',
-            CJB_BIBLE_ENABLED=True,
-            CJB_BIBLE_LOGGED_IN_ONLY=True,
-            DISABLED_BIBLE_TRANSLATIONS=[],
-        ):
-            response = BibleTranslationsForLanguageView.as_view()(request)
-
-        payload = json.loads(response.content.decode('utf-8'))
-        returned_ids = [entry['id'] for entry in payload['bibles']]
-        self.assertEqual(returned_ids, ['de4e12af7f28f599-01'])
-        self.assertEqual(payload['default_bible_id'], 'de4e12af7f28f599-01')
-
-    @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
-    def test_shows_cjb_for_authenticated_user_with_permission_when_login_required(self, mock_bible_translation):
-        mock_bible_translation.return_value.all_enabled.return_value = [
-            SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
-            SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern, NT)', language='en'),
-        ]
-
-        request = self.factory.get('/bible-translations/?language=en')
-        request.user = SimpleNamespace(
-            is_authenticated=True,
-            has_perm=lambda perm: perm == 'walkasjesus_app.view_restricted_cjb_translation',
-        )
 
         with self.settings(
             DEFAULT_BIBLE_ANY_LANGUAGE='de4e12af7f28f599-01',

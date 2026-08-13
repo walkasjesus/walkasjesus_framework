@@ -1,6 +1,7 @@
 from bible_lib import BibleBooks
 from bible_lib.bible_api.cache_controller import CacheController
 from bible_lib.bible_api.services import Services
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -8,13 +9,19 @@ from django.views import View
 
 from walkasjesus_app.models import BibleTranslation, BibleReferences
 from walkasjesus_app.models.bibles import BibleTranslationMetaData
-from walkasjesus_website import settings
 
 
 class AdminBibleView(View):
     @method_decorator(staff_member_required)
     def get(self, request):
-        bibles = BibleTranslation().all()
+        supported_language_codes = {
+            str(code).strip().lower() for code, _ in getattr(settings, 'LANGUAGES', [])
+            if str(code).strip()
+        }
+        bibles = [
+            bible for bible in BibleTranslation().all()
+            if str(getattr(bible, 'language', '') or '').strip().lower() in supported_language_codes
+        ]
         cache = Services().cache
         cache_controller = CacheController(cache)
 
@@ -27,14 +34,16 @@ class AdminBibleView(View):
             if not BibleTranslationMetaData.objects.filter(bible_id=bible.id).exists():
                 meta_data = BibleTranslationMetaData()
                 meta_data.bible_id = bible.id
-                # Default enable only in supported languages
-                languages = [code for code, name in settings.LANGUAGES]
-                meta_data.is_enabled = bible.language in languages
+                # Newly discovered translations are enabled by default; supported-language
+                # filtering happens at the view / queryset level, not by mutating DB state.
+                meta_data.is_enabled = True
                 meta_data.save()
             else:
                 meta_data = BibleTranslationMetaData.objects.get(bible_id=bible.id)
 
-            bible.enabled = meta_data.is_enabled
+            bible.enabled = meta_data.is_enabled and str(bible.id).strip() not in {
+                str(item).strip() for item in getattr(settings, 'DISABLED_BIBLE_TRANSLATIONS', []) if str(item).strip()
+            }
 
         bibles.sort(key=lambda b: (b.enabled, b.percentage_cached), reverse=True)
 

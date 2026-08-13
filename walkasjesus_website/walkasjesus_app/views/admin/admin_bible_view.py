@@ -34,9 +34,9 @@ class AdminBibleView(View):
             if not BibleTranslationMetaData.objects.filter(bible_id=bible.id).exists():
                 meta_data = BibleTranslationMetaData()
                 meta_data.bible_id = bible.id
-                # Default enable only in supported languages
-                languages = [code for code, name in settings.LANGUAGES]
-                meta_data.is_enabled = bible.language in languages
+                # Newly discovered translations are enabled by default; supported-language
+                # filtering happens at the view / queryset level, not by mutating DB state.
+                meta_data.is_enabled = True
                 meta_data.save()
             else:
                 meta_data = BibleTranslationMetaData.objects.get(bible_id=bible.id)

@@ -188,7 +188,7 @@ class BibleTranslation:
     def all_in_supported_languages(self):
         """" Get all bibles in translations supported by this website. """
         languages = [code for code, name in settings.LANGUAGES]
-        return [b for b in self.all_enabled() if b.language in languages]
+        return [b for b in self.all() if str(getattr(b, 'language', '') or '').strip() in languages]
 
     def count(self):
         return len(self.all_enabled())

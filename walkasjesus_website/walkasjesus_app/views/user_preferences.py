@@ -147,7 +147,10 @@ def _local_sword_commentary(source_id, book, chapter):
 
 def _available_bibles_for_language(request, language_code):
     bible_translation = BibleTranslation()
-    bibles = [b for b in bible_translation.all_enabled() if b.language == language_code]
+    bibles = [
+        b for b in bible_translation.all()
+        if str(getattr(b, 'language', '') or '').strip().lower() == str(language_code or '').strip().lower()
+    ]
     return filter_visible_bibles_for_request(request, bibles)
 
 

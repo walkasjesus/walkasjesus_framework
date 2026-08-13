@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.utils import translation
 from walkasjesus_app.models import BibleTranslation
-from walkasjesus_website import settings
 
 class UserPreferences:
     PER_LANGUAGE_BIBLE_SESSION_KEY = 'bible_id_per_language'

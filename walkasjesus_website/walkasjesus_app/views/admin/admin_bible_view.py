@@ -1,6 +1,7 @@
 from bible_lib import BibleBooks
 from bible_lib.bible_api.cache_controller import CacheController
 from bible_lib.bible_api.services import Services
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -8,7 +9,6 @@ from django.views import View
 
 from walkasjesus_app.models import BibleTranslation, BibleReferences
 from walkasjesus_app.models.bibles import BibleTranslationMetaData
-from walkasjesus_website import settings
 
 
 class AdminBibleView(View):

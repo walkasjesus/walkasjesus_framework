@@ -3,11 +3,11 @@ import json
 from pathlib import Path
 
 from bible_lib import BibleFactory, Bible, BibleBooks as BibleLibBibleBooks
+from django.conf import settings
 from django.db import models
 from django.utils import translation
 
 from walkasjesus_app.lib.access_policy import cjb_bible_id
-from walkasjesus_website import settings
 
 
 class LocalCompleteJewishBible(Bible):

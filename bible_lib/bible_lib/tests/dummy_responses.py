@@ -3,7 +3,7 @@ from pathlib import Path
 
 class DummyResponses:
     def __init__(self):
-        self.directory = Path('data')
+        self.directory = Path(__file__).resolve().parent / 'data'
 
     def bibles(self):
         return self._load('bibles_response.txt')

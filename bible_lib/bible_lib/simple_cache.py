@@ -123,8 +123,13 @@ class SimpleCache:
             self.logger.info(f'Could not find cache at {self.cache_path}')
             return
 
-        with self.cache_path.open() as file:
-            loaded = json.load(file)
+        try:
+            with self.cache_path.open() as file:
+                loaded = json.load(file)
+        except (OSError, PermissionError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            self.logger.warning('Could not load cache state from %s: %s', self.cache_path, exc)
+            self._cache = {}
+            return
 
         if not isinstance(loaded, dict):
             self._cache = {}
@@ -143,6 +148,9 @@ class SimpleCache:
         """" Store the cache content to disk. """
         self._prune_expired()
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        with self.cache_path.open('w+') as file:
-            json.dump(self._cache, file, indent=4)
+        try:
+            with self.cache_path.open('w+') as file:
+                json.dump(self._cache, file, indent=4)
             self.cache_items_not_persisted = 0
+        except (OSError, PermissionError) as exc:
+            self.logger.warning('Could not persist cache state to %s: %s', self.cache_path, exc)

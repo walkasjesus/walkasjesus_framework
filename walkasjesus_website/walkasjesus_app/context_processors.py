@@ -7,6 +7,7 @@ from walkasjesus_app.lib.access_policy import (
     cjb_bible_id,
     is_bible_id_visible_for_request,
     filter_visible_bibles_for_request,
+    sort_bibles_for_language,
 )
 from walkasjesus_app.lib.sword_commentary import available_sword_commentators_json, sword_commentary_enabled
 from walkasjesus_app.models import BibleTranslation, UserPreferences
@@ -14,9 +15,11 @@ from walkasjesus_app.models import BibleTranslation, UserPreferences
 
 def bible_translation(request):
     supported_bibles = BibleTranslation().all_in_supported_languages()
+    visible_bibles = filter_visible_bibles_for_request(request, supported_bibles)
+    language_code = getattr(request, 'LANGUAGE_CODE', None) or translation.get_language()
     return {
         'bible_translation': BibleTranslation(),
-        'bible_translations_for_request': filter_visible_bibles_for_request(request, supported_bibles),
+        'bible_translations_for_request': sort_bibles_for_language(visible_bibles, language_code),
         'cjb_bible_id': cjb_bible_id(),
         'cjb_bible_visible': is_bible_id_visible_for_request(request, cjb_bible_id()),
     }

@@ -21,6 +21,7 @@ from walkasjesus_app.lib.access_policy import (
     is_bible_id_visible_for_request,
     is_david_stern_commentary_allowed,
     is_david_stern_source,
+    sort_bibles_for_language,
 )
 from walkasjesus_app.lib.sword_commentary import get_sword_source_config, normalize_book_key, sword_commentary_enabled, sword_disabled_source_ids
 from walkasjesus_app.models import UserPreferences, BibleTranslation
@@ -477,12 +478,7 @@ class BibleTranslationsForLanguageView(View):
         bible_translation = BibleTranslation()
         bibles = filter_visible_bibles_for_request(request, bible_translation.all_in_supported_languages())
         primary_language = language_code if language_code in supported_language_codes else ''
-        bibles = sorted(bibles, key=lambda b: (
-            0 if str(getattr(b, 'language', '') or '').strip().lower()[:2] == primary_language else 1,
-            str(getattr(b, 'language', '') or '').strip().lower()[:2],
-            str(getattr(b, 'abbreviation', '') or '').strip().lower() or str(getattr(b, 'name', '') or '').strip().lower(),
-            str(getattr(b, 'name', '') or '').strip().lower(),
-        ))
+        bibles = sort_bibles_for_language(bibles, primary_language)
 
         default_bible_id = _resolve_default_bible_id_for_language(request, language_code)
         if default_bible_id and not any(b.id == default_bible_id for b in bibles):

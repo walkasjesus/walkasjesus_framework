@@ -1387,6 +1387,9 @@ p {
     opacity: 1;
     transition-delay: 0.5s;
 }
+.jc-tooltip-host.jc-tooltip-immediate:hover::after {
+    transition-delay: 0s;
+}
 
 /* ---- Bible Study passage search ---- */
 .bs-passage-wrap {
@@ -1598,6 +1601,22 @@ p {
     flex-wrap: wrap;
     gap: 0.45rem;
     margin-bottom: 0.35rem;
+}
+.original-lexicon-links {
+    align-items: center;
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: 0.45rem;
+    margin-left: auto;
+}
+.original-lexicon-links a {
+    display: inline-flex;
+}
+.original-lexicon-icon {
+    display: block;
+    height: 30px;
+    object-fit: contain;
+    width: auto;
 }
 .detail-inline-original-strong-link,
 .detail-inline-original-ref-link {

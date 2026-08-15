@@ -105,9 +105,15 @@
       border: 1px solid #e2b900;
       border-radius: 4px;
       min-height: 33px;
-      overflow: hidden;
+      overflow: visible;
       position: relative;
       width: 100%;
+    }
+
+    .bible-study-shell #bs-bible-selectors,
+    .bible-study-shell .bible-study-select-wrap .bootstrap-select.show {
+      position: relative;
+      z-index: 30;
     }
 
     .bible-study-shell .bible-study-select-wrap::after {
@@ -727,6 +733,10 @@
       font-size: 0.78rem;
       font-weight: 600;
       text-decoration: underline;
+    }
+
+    .bible-study-shell .original-lexicon-links {
+      margin-left: auto;
     }
 
     .bible-study-shell .bs-reference-preview-overlay {

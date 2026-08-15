@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load bible_extras %}
+{% load static %}
 <script>
 (function($) {
   'use strict';
@@ -1346,12 +1347,25 @@
           ((item && item.lemma) ? '<span>' + escapeHtml(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + escapeHtml(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="bs-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
-          ((item && item.blueletter_url) ? '<a class="bs-original-root-link" href="' + escapeHtml(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">{% trans "Open" %} ' + escapeHtml(strongsNumber) + ' {% trans "in Blue Letter Bible" as bsi18n_strongs_detail_link %}{{ bsi18n_strongs_detail_link|escapejs }}</a>' : '') +
+          bibleStudyExternalLexiconLinksHtml(item, strongsNumber) +
         '</div>' +
         definitionHtml +
         meaningsHtml +
         usageOutlineHtml +
       '</div>';
+  }
+
+  function bibleStudyExternalLexiconLinksHtml(item, strongsNumber) {
+    if (!strongsNumber) {
+      return '';
+    }
+    var stepLabel = '{% trans "Open" %} ' + strongsNumber + ' {% trans "in StepBible" %}';
+    var blueLetterLabel = '{% trans "Open" %} ' + strongsNumber + ' {% trans "in Blue Letter Bible" %}';
+    var stepUrl = 'https://www.stepbible.org/?q=version=KJV@strong=' + encodeURIComponent(strongsNumber + 'G') + '&clickvocab';
+    return '<span class="original-lexicon-links">' +
+      '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + escapeHtml(stepLabel) + '" href="' + escapeHtml(stepUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(stepLabel) + '"><img class="original-lexicon-icon" src="{% static "images/StepBible.png" %}" alt=""></a>' +
+      ((item && item.blueletter_url) ? '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + escapeHtml(blueLetterLabel) + '" href="' + escapeHtml(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(blueLetterLabel) + '"><img class="original-lexicon-icon" src="{% static "images/BLB.png" %}" alt=""></a>' : '') +
+      '</span>';
   }
 
   function bibleStudyRootWordsHtml(rootWords) {
@@ -1815,15 +1829,7 @@
           ? '<span>' + escapeHtml(candidate.lemma) + '</span>'
           : '') +
 
-        ((candidate && candidate.blueletter_url)
-          ? '<span class="ms-2"><small><a class="bs-original-root-link" href="' +
-              escapeHtml(candidate.blueletter_url) +
-              '" target="_blank" rel="noopener noreferrer">' +
-              '{% trans "Open" %} ' +
-              escapeHtml(String((candidate && candidate.strongs_number) || '')) +
-              ' {% trans "in Blue Letter Bible" %}' +
-            '</a></small></span>'
-          : '') +
+        bibleStudyExternalLexiconLinksHtml(candidate, String((candidate && candidate.strongs_number) || '')) +
 
         '</div>' +
 

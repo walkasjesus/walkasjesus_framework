@@ -6,6 +6,7 @@ from unittest.mock import Mock, patch
 from urllib.parse import parse_qs, urlparse
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, Permission
@@ -89,6 +90,14 @@ class BibleTranslationTestCase(TestCase):
         all_in_supported_languages = len(BibleTranslation().all_in_supported_languages())
         self.assertGreater(all_in_supported_languages, 10)
         self.assertLess(all_in_supported_languages, all_bibles)
+
+    def test_all_in_supported_languages_excludes_database_disabled_bibles(self):
+        with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
+            target_bible = BibleTranslation().all_in_supported_languages()[0]
+            self._disable(target_bible.id)
+            supported_ids = {bible.id for bible in BibleTranslation().all_in_supported_languages()}
+
+        self.assertNotIn(target_bible.id, supported_ids)
 
     def test_all_enabled_with_no_explicit_disabled_ones(self):
         with override_settings(DISABLED_BIBLE_TRANSLATIONS=[], FORCE_ENABLED_BIBLE_TRANSLATIONS=[]):
@@ -1281,7 +1290,7 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_hides_cjb_for_anonymous_when_login_required(self, mock_bible_translation):
-        mock_bible_translation.return_value.all_enabled.return_value = [
+        mock_bible_translation.return_value.all_in_supported_languages.return_value = [
             SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
             SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern)', language='en'),
         ]
@@ -1306,7 +1315,7 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_shows_cjb_for_any_authenticated_user_when_login_required(self, mock_bible_translation):
-        mock_bible_translation.return_value.all_enabled.return_value = [
+        mock_bible_translation.return_value.all_in_supported_languages.return_value = [
             SimpleNamespace(id='de4e12af7f28f599-01', name='KJV', language='en'),
             SimpleNamespace(id='jnt-stern-en', name='Complete Jewish Bible (David H. Stern)', language='en'),
         ]
@@ -1326,7 +1335,7 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
         payload = json.loads(response.content.decode('utf-8'))
         returned_ids = [entry['id'] for entry in payload['bibles']]
-        self.assertEqual(returned_ids, ['de4e12af7f28f599-01', 'jnt-stern-en'])
+        self.assertEqual(returned_ids, ['jnt-stern-en', 'de4e12af7f28f599-01'])
         self.assertEqual(payload['default_bible_id'], 'jnt-stern-en')
 
 
@@ -1366,10 +1375,15 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
         self.assertIn('id="bs-results-region"', html)
         self.assertIn('King James Version', html)
         self.assertIn('That which we have seen and heard declare we unto you.', html)
+        self.assertIn('/static/images/StepBible.png', html)
+        self.assertIn('/static/images/BLB.png', html)
+        self.assertIn('https://www.stepbible.org/?q=version=KJV@strong=', html)
+        self.assertIn('class="jc-tooltip-host jc-tooltip-immediate"', html)
+        self.assertIn('data-jc-tooltip=', html)
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_bible_translations_endpoint_returns_bibles_for_each_language(self, mock_bible_translation):
-        mock_bible_translation.return_value.all_enabled.return_value = [
+        mock_bible_translation.return_value.all_in_supported_languages.return_value = [
             SimpleNamespace(id='en-kjv', name='KJV', language='en'),
             SimpleNamespace(id='en-nkjv', name='NKJV', language='en'),
             SimpleNamespace(id='nl-hsv', name='HSV', language='nl'),
@@ -1383,8 +1397,8 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
             CJB_BIBLE_ENABLED=False,
         ):
             cases = [
-                ('en', ['en-kjv', 'en-nkjv'], 'en-kjv'),
-                ('nl', ['nl-hsv', 'nl-svv'], 'nl-hsv'),
+                ('en', ['en-kjv', 'en-nkjv', 'nl-hsv', 'nl-svv'], 'en-kjv'),
+                ('nl', ['nl-hsv', 'nl-svv', 'en-kjv', 'en-nkjv'], 'nl-hsv'),
             ]
             for language_code, expected_ids, expected_default in cases:
                 with self.subTest(language_code=language_code):

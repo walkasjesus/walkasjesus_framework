@@ -20,7 +20,11 @@ from django.utils import timezone
 from django.views import View
 
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
-from walkasjesus_app.lib.access_policy import filter_visible_bibles_for_request, is_bible_id_visible_for_request
+from walkasjesus_app.lib.access_policy import (
+    filter_visible_bibles_for_request,
+    is_bible_id_visible_for_request,
+    sort_bibles_for_language,
+)
 from walkasjesus_app.lib.strongs_service import original_text_payload
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
@@ -120,12 +124,6 @@ def _bible_dropdown_label(bible):
     language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
     bible_name = str(getattr(bible, 'name', '') or '').strip()
     return f'{language_code} - {bible_name}' if language_code else bible_name
-
-
-def _bible_dropdown_sort_key(bible):
-    language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
-    bible_name = str(getattr(bible, 'name', '') or '').strip()
-    return f'{bible_name} - {language_code}'.casefold()
 
 
 def _safe_int(value, default, minimum=1):
@@ -554,9 +552,9 @@ class BibleStudyView(View):
         bible_books = [(b.name, str(b.value)) for b in BibleBooks]
 
         all_bibles = BibleTranslation().all_in_supported_languages()
-        enabled_bibles = sorted(
+        enabled_bibles = sort_bibles_for_language(
             filter_visible_bibles_for_request(request, all_bibles),
-            key=_bible_dropdown_sort_key,
+            getattr(request, 'LANGUAGE_CODE', None) or translation.get_language(),
         )
 
         book = request.GET.get('book', 'JohnFirstBook')

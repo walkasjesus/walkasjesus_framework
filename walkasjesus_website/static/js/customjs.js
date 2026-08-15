@@ -2402,6 +2402,7 @@ $(document).ready(function(){
         translate: { en: 'Auto Translate', nl: 'Automatisch Vertalen' },
         showOriginal: { en: 'Show original', nl: 'Toon origineel' },
         openBlueLetter: { en: 'Open {code} in Blue Letter Bible', nl: 'Open {code} in Blue Letter Bible' },
+        openStepBible: { en: 'Open {code} in StepBible', nl: 'Open {code} in StepBible' },
         previewPassage: { en: 'Preview this passage', nl: 'Bekijk deze passage' },
         noWordData: { en: 'No original-language word data found for this verse.', nl: 'Geen originele woorddata gevonden voor dit vers.' },
         hoverPrompt: { en: 'Hover or click an original-language word to inspect Strong\'s numbers, lemma data, and possible translations.', nl: 'Beweeg over of klik op een woord uit de brontekst om Strong\'s-nummers, lemma-data en mogelijke vertalingen te bekijken.' }
@@ -2528,19 +2529,31 @@ $(document).ready(function(){
         ? '<div class="detail-inline-original-detail-section mb-0"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('outlineUsage')) + '</small>' + detailOriginalUsageOutlineItemsHtml(usageOutline) + '</div>'
         : '';
       var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
-      var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
       return '<div class="detail-inline-original-root-word">' +
         '<div class="detail-inline-original-candidate-head">' +
           (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
           ((item && item.lemma) ? '<span>' + detailOriginalEscape(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="detail-inline-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
-          ((item && item.blueletter_url) ? '<a href="' + detailOriginalEscape(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer">' + detailOriginalEscape(blueLetterLabel) + '</a>' : '') +
+          detailOriginalExternalLexiconLinksHtml(item, strongsNumber) +
         '</div>' +
         (!showUsageOutline && item && item.definition ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(item.definition) + '</p>' : '') +
         meaningsHtml +
         usageOutlineHtml +
       '</div>';
+    }
+
+    function detailOriginalExternalLexiconLinksHtml(item, strongsNumber) {
+      if (!strongsNumber) {
+        return '';
+      }
+      var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
+      var stepBibleLabel = detailOriginalUiText('openStepBible').replace('{code}', strongsNumber);
+      var stepUrl = 'https://www.stepbible.org/?q=version=KJV@strong=' + encodeURIComponent(strongsNumber + 'G') + '&clickvocab';
+      return '<span class="original-lexicon-links">' +
+        '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + detailOriginalEscape(stepBibleLabel) + '" href="' + detailOriginalEscape(stepUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="' + detailOriginalEscape(stepBibleLabel) + '"><img class="original-lexicon-icon" src="/static/images/StepBible.png" alt=""></a>' +
+        ((item && item.blueletter_url) ? '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + detailOriginalEscape(blueLetterLabel) + '" href="' + detailOriginalEscape(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer" aria-label="' + detailOriginalEscape(blueLetterLabel) + '"><img class="original-lexicon-icon" src="/static/images/BLB.png" alt=""></a>' : '') +
+        '</span>';
     }
 
     function detailOriginalSentenceHtml(words, languageCode) {
@@ -2600,19 +2613,18 @@ $(document).ready(function(){
         }).join('');
         var strongsNumber = String((candidate && candidate.strongs_number) || '');
         var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
-        var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
         html += '<div class="detail-inline-original-candidate">' +
           '<div class="detail-inline-original-candidate-head">' +
           (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
           ((candidate && candidate.lemma) ? '<span>' + detailOriginalEscape(candidate.lemma) + '</span>' : '') +
           ((candidate && candidate.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(candidate.transliteration) + '</span>' : '') +
+          detailOriginalExternalLexiconLinksHtml(candidate, strongsNumber) +
           '</div>' +
           usageHtml +
           ((candidate && candidate.kjv_definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('kjvTranslation')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.kjv_definition) + '</p></div>' : '') +
           ((candidate && candidate.definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('strongsDefinitions')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.definition) + '</p></div>' : '') +
           ((rootWordsHtml || (candidate && candidate.derivation)) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('rootWord')) + '</small>' + rootWordsHtml + (!rootWordsHtml && candidate && candidate.derivation ? '<p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.derivation) + '</p>' : '') + '</div>' : '') +
           (lxxHebrewHtml ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('lxxEquivalent')) + '</small>' + lxxHebrewHtml + '</div>' : '') +
-          ((candidate && candidate.blueletter_url) ? '<p class="mb-0 mt-2"><small><a href="' + detailOriginalEscape(candidate.blueletter_url) + '" target="_blank" rel="noopener noreferrer">' + detailOriginalEscape(blueLetterLabel) + '</a></small></p>' : '') +
           '</div>';
       });
 

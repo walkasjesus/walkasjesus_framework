@@ -71,3 +71,14 @@ def is_bible_id_visible_for_request(request, bible_id):
 
 def filter_visible_bibles_for_request(request, bibles):
     return [b for b in bibles if is_bible_id_visible_for_request(request, getattr(b, 'id', ''))]
+
+
+def sort_bibles_for_language(bibles, language_code):
+    active_language = str(language_code or '').strip().lower()[:2]
+    return sorted(bibles, key=lambda bible: (
+        0 if str(getattr(bible, 'language', '') or '').strip().lower()[:2] == active_language else 1,
+        str(getattr(bible, 'language', '') or '').strip().lower()[:2],
+        str(getattr(bible, 'abbreviation', '') or '').strip().casefold()
+        or str(getattr(bible, 'name', '') or '').strip().casefold(),
+        str(getattr(bible, 'name', '') or '').strip().casefold(),
+    ))

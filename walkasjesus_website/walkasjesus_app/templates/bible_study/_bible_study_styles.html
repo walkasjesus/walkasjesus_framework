@@ -110,6 +110,13 @@
       width: 100%;
     }
 
+    /* Opacity here would form a stacking context that hides the open dropdown behind later cards, and would make it see-through. */
+    .bible-study-shell .bible-study-settings-card > .services-inner {
+      background: rgba(255, 255, 255, 0.8);
+      opacity: 1;
+      z-index: 20;
+    }
+
     .bible-study-shell #bs-bible-selectors,
     .bible-study-shell .bible-study-select-wrap .bootstrap-select.show {
       position: relative;

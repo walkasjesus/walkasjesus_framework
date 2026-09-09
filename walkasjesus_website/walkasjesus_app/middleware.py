@@ -109,6 +109,10 @@ class PageUsageTrackingMiddleware:
         raw_identifier = f'anon:{session_key or "no-session"}:{remote_addr}:{user_agent}'
         return PageVisitDaily.USER_ANONYMOUS, hashlib.sha256(raw_identifier.encode('utf-8')).hexdigest()[:32]
 
+    def _client_ip(self, request):
+        value = str(request.META.get('REMOTE_ADDR', '') or '').strip()
+        return value or None
+
     def _track_request(self, request, response):
         if request.method != 'GET':
             return
@@ -124,6 +128,7 @@ class PageUsageTrackingMiddleware:
         resolver_match = getattr(request, 'resolver_match', None)
         page_label = str(getattr(resolver_match, 'view_name', '') or '').strip() or path
         user_kind, user_key = self._user_identity(request)
+        ip_address = self._client_ip(request)
 
         with transaction.atomic():
             row = PageVisitDaily.objects.select_for_update().filter(
@@ -136,7 +141,8 @@ class PageUsageTrackingMiddleware:
                 row.visit_count += 1
                 row.user_kind = user_kind
                 row.page_label = page_label
-                row.save(update_fields=['visit_count', 'user_kind', 'page_label', 'updated_at'])
+                row.ip_address = ip_address
+                row.save(update_fields=['visit_count', 'user_kind', 'page_label', 'ip_address', 'updated_at'])
             else:
                 PageVisitDaily.objects.create(
                     usage_date=usage_date,
@@ -145,5 +151,6 @@ class PageUsageTrackingMiddleware:
                     language_code=language_code,
                     user_kind=user_kind,
                     user_key=user_key,
+                    ip_address=ip_address,
                     visit_count=1,
                 )

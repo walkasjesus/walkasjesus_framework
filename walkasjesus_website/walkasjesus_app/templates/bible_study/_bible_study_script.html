@@ -46,6 +46,12 @@
 
   function bsNormalizeQ(q) { return String(q || '').trim().toLowerCase(); }
 
+  // The passage input displays ranges with an en dash (e.g. "John 2:3\u20136"); normalize
+  // en/em dashes back to a plain hyphen so edited text keeps matching the range regexes.
+  function bsNormalizeDashInput(text) {
+    return String(text || '').replace(/[\u2012\u2013\u2014\u2015]/g, '-');
+  }
+
   function bibleStudyChapterMetaUrl() {
     return String($('.bible-study-shell').data('chapter-meta-url') || '').trim();
   }
@@ -128,7 +134,7 @@
   }
 
   function bsGenerateSuggestions(rawInput) {
-    var text = $.trim(String(rawInput || ''));
+    var text = $.trim(bsNormalizeDashInput(rawInput));
     if (!text) return [];
     var suggestions = [];
     var preferredBibleId = bsMetaBibleId();
@@ -241,7 +247,7 @@
   }
 
   function bsParseBookAndChapter(rawInput) {
-    var text = $.trim(String(rawInput || ''));
+    var text = $.trim(bsNormalizeDashInput(rawInput));
     var matchVerse = text.match(/^(.*?)\s+(\d+):(\d+)(?:\s*-\s*(\d+))?\s*$/);
     if (matchVerse) {
       var bookMatch = bsMatchBooks($.trim(matchVerse[1]))[0];
@@ -278,7 +284,7 @@
   }
 
   function bsParseSingleVerse(rawInput) {
-    var text = $.trim(String(rawInput || ''));
+    var text = $.trim(bsNormalizeDashInput(rawInput));
     var matchVerse = text.match(/^(.*?)\s+(\d+):(\d+)\s*$/);
     if (!matchVerse) {
       return null;

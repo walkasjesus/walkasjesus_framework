@@ -2,19 +2,38 @@ from calendar import month_name
 from datetime import date
 import csv
 
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Count, Sum
-from django.db.models.functions import ExtractMonth
+from django.db.models import CharField, Count, Sum
+from django.db.models.functions import Cast, Coalesce, ExtractMonth
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
 from walkasjesus_app.models import PageVisitDaily
+from walkasjesus_app.lib.usage_report_cleanup import consolidate_rows_by_ip, delete_legacy_hash_only_rows
 
 
 class AdminPageUsageView(View):
     @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        action = request.POST.get('action')
+        if action == 'cleanup_legacy':
+            deleted = delete_legacy_hash_only_rows(PageVisitDaily)
+            messages.success(request, f'Removed {deleted} legacy hash-only page usage rows (no IP address on record).')
+        elif action == 'consolidate_by_ip':
+            merged = consolidate_rows_by_ip(
+                PageVisitDaily,
+                group_fields=['usage_date', 'page_path', 'language_code'],
+                count_fields=['visit_count'],
+            )
+            messages.success(request, f'Merged {merged} duplicate rows sharing the same IP address (totals unchanged).')
+        return redirect(request.POST.get('return_qs') or request.path)
+
     def get(self, request):
         available_years = [value.year for value in PageVisitDaily.objects.dates('usage_date', 'year', order='DESC')]
 
@@ -71,9 +90,22 @@ class AdminPageUsageView(View):
         visits_chart_markup = self._build_svg_chart(monthly_rows, 'total_visits', 'Visits')
 
         user_rows = list(
-            base_qs.values('page_path', 'page_label', 'language_code', 'user_kind', 'user_key')
+            base_qs
+            .annotate(usage_group_key=Coalesce(Cast('ip_address', output_field=CharField()), 'user_key'))
+            .values('page_path', 'page_label', 'language_code', 'user_kind', 'usage_group_key')
             .annotate(total_visits=Sum('visit_count'))
-            .order_by('page_path', 'language_code', '-total_visits', 'user_kind', 'user_key')[:1500]
+            .order_by('page_path', 'language_code', '-total_visits', 'user_kind', 'usage_group_key')[:1500]
+        )
+
+        legacy_count = base_qs.filter(ip_address__isnull=True).count()
+        consolidatable_count = sum(
+            row['group_size'] - 1
+            for row in (
+                base_qs.filter(ip_address__isnull=False)
+                .values('usage_date', 'page_path', 'language_code', 'ip_address')
+                .annotate(group_size=Count('id'))
+                .filter(group_size__gt=1)
+            )
         )
 
         page_choices = list(
@@ -98,6 +130,8 @@ class AdminPageUsageView(View):
             'visits_chart_markup': visits_chart_markup,
             'user_rows': user_rows,
             'totals': totals,
+            'legacy_count': legacy_count,
+            'consolidatable_count': consolidatable_count,
         })
 
     def _build_svg_chart(self, monthly_rows, value_key, title):

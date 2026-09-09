@@ -2,19 +2,38 @@ from calendar import month_name
 from datetime import date
 import csv
 
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Count, Q, Sum
-from django.db.models.functions import ExtractMonth
+from django.db.models import CharField, Count, Q, Sum
+from django.db.models.functions import Cast, Coalesce, ExtractMonth
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
 from walkasjesus_app.models import BibleTranslationUsageDaily
+from walkasjesus_app.lib.usage_report_cleanup import consolidate_rows_by_ip, delete_legacy_hash_only_rows
 
 
 class AdminBibleUsageView(View):
     @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        action = request.POST.get('action')
+        if action == 'cleanup_legacy':
+            deleted = delete_legacy_hash_only_rows(BibleTranslationUsageDaily)
+            messages.success(request, f'Removed {deleted} legacy hash-only bible usage rows (no IP address on record).')
+        elif action == 'consolidate_by_ip':
+            merged = consolidate_rows_by_ip(
+                BibleTranslationUsageDaily,
+                group_fields=['usage_date', 'bible_id', 'source', 'endpoint'],
+                count_fields=['request_count', 'verse_count'],
+            )
+            messages.success(request, f'Merged {merged} duplicate rows sharing the same IP address (totals unchanged).')
+        return redirect(request.POST.get('return_qs') or request.path)
+
     def get(self, request):
         available_years = [value.year for value in BibleTranslationUsageDaily.objects.dates('usage_date', 'year', order='DESC')]
         month_choices = [{'value': month, 'label': month_name[month]} for month in range(1, 13)]
@@ -120,7 +139,11 @@ class AdminBibleUsageView(View):
             })
 
         user_rows = list(
-            base_qs.values('bible_id', 'bible_name', 'bible_language', 'user_kind', 'user_key')
+            base_qs
+            .annotate(
+                usage_group_key=Coalesce(Cast('ip_address', output_field=CharField()), 'user_key'),
+            )
+            .values('bible_id', 'bible_name', 'bible_language', 'user_kind', 'usage_group_key')
             .annotate(
                 api_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_API)),
                 cache_requests=Sum('request_count', filter=Q(source=BibleTranslationUsageDaily.SOURCE_CACHE)),
@@ -128,7 +151,7 @@ class AdminBibleUsageView(View):
                 total_requests=Sum('request_count'),
                 total_verses=Sum('verse_count'),
             )
-            .order_by('bible_name', 'bible_id', '-total_requests', 'user_kind', 'user_key')[:1500]
+            .order_by('bible_name', 'bible_id', '-total_requests', 'user_kind', 'usage_group_key')[:1500]
         )
 
         bible_choices = list(
@@ -145,6 +168,16 @@ class AdminBibleUsageView(View):
             return self._export_csv(selected_year, selected_month, per_bible_rows, totals, selected_bible_ids, monthly_rows)
 
         requests_chart_markup = self._build_svg_chart(monthly_rows, 'total_requests', 'Requests')
+        legacy_count = base_qs.filter(ip_address__isnull=True).count()
+        consolidatable_count = sum(
+            row['group_size'] - 1
+            for row in (
+                base_qs.filter(ip_address__isnull=False)
+                .values('usage_date', 'bible_id', 'source', 'endpoint', 'ip_address')
+                .annotate(group_size=Count('id'))
+                .filter(group_size__gt=1)
+            )
+        )
 
         return render(request, 'admin/bible_usage_report.html', {
             'available_years': available_years,
@@ -159,6 +192,8 @@ class AdminBibleUsageView(View):
             'per_bible_rows': per_bible_rows,
             'user_rows': user_rows,
             'totals': totals,
+            'legacy_count': legacy_count,
+            'consolidatable_count': consolidatable_count,
         })
 
     def _build_svg_chart(self, monthly_rows, value_key, title):

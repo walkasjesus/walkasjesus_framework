@@ -8,30 +8,7 @@
                 <h3>{{ law.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% for person_icon in law.ncla_person_icons %}
-                    {% if person_icon.code == 'JEW' %}
-                        <img
-                            class="lom-person-icon"
-                            src="{% static 'images/s_jew.png' %}"
-                            alt="{{ person_icon.label }}"
-                            title="{{ person_icon.label }}"
-                        >
-                    {% elif person_icon.code == 'MESSIANIC' %}
-                        <img
-                            class="lom-person-icon"
-                            src="{% static 'images/s_messianic.png' %}"
-                            alt="{{ person_icon.label }}"
-                            title="{{ person_icon.label }}"
-                        >
-                    {% elif person_icon.code == 'GENTILE' %}
-                        <img
-                            class="lom-person-icon"
-                            src="{% static 'images/s_gentile.png' %}"
-                            alt="{{ person_icon.label }}"
-                            title="{{ person_icon.label }}"
-                        >
-                    {% endif %}
-                {% endfor %}
+                {% include "commandments/_media_type_badges.html" with media_type_badges=law.media_type_badge_list %}
             </div>
             <div class="text-content p-4 text-center">
                 <h3>{{ law.translated_title }}</h3>

@@ -86,13 +86,30 @@
 </table>
 
 <br>
-<h2>{% trans 'Per unique user (pseudonymous)' %}</h2>
+<h2>{% trans 'Per IP address' %}</h2>
+<p>{% trans 'Grouped by IP address instead of individual sessions to keep this list shorter. The IP address is never included in the CSV export, so the export stays anonymous.' %}</p>
+{% if legacy_count %}
+<form method="post" style="margin-bottom: 1rem;" onsubmit="return confirm('{% trans 'Remove all legacy hash-only rows (no IP address on record)? This cannot be undone.' %}');">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="cleanup_legacy">
+  <input type="hidden" name="return_qs" value="{{ request.get_full_path }}">
+  <button type="submit" class="button">{% blocktrans count count=legacy_count %}Remove {{ count }} legacy hash-only row (no IP address){% plural %}Remove {{ count }} legacy hash-only rows (no IP address){% endblocktrans %}</button>
+</form>
+{% endif %}
+{% if consolidatable_count %}
+<form method="post" style="margin-bottom: 1rem;" onsubmit="return confirm('{% trans 'Merge rows that share the same IP address? Totals stay the same, this only reduces the number of rows shown.' %}');">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="consolidate_by_ip">
+  <input type="hidden" name="return_qs" value="{{ request.get_full_path }}">
+  <button type="submit" class="button">{% blocktrans count count=consolidatable_count %}Merge {{ count }} duplicate row sharing the same IP address{% plural %}Merge {{ count }} duplicate rows sharing the same IP address{% endblocktrans %}</button>
+</form>
+{% endif %}
 <table>
   <tr>
     <th>{% trans 'Path' %}</th>
     <th>{% trans 'Language' %}</th>
     <th>{% trans 'User type' %}</th>
-    <th>{% trans 'User key' %}</th>
+    <th>{% trans 'IP address' %}</th>
     <th>{% trans 'Visits' %}</th>
   </tr>
   {% for row in user_rows %}
@@ -100,7 +117,7 @@
     <td><code>{{ row.page_path }}</code></td>
     <td>{{ row.language_code }}</td>
     <td>{{ row.user_kind }}</td>
-    <td><code>{{ row.user_key }}</code></td>
+    <td><code>{{ row.usage_group_key }}</code></td>
     <td>{{ row.total_visits|default:0 }}</td>
   </tr>
   {% empty %}

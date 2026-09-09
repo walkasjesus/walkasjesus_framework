@@ -179,6 +179,11 @@ def _bible_usage_user_identity(request):
     return BibleTranslationUsageDaily.USER_ANONYMOUS, hashlib.sha256(raw_identifier.encode('utf-8')).hexdigest()[:32]
 
 
+def _bible_usage_client_ip(request):
+    value = str(request.META.get('REMOTE_ADDR', '') or '').strip()
+    return value or None
+
+
 def _record_bible_usage(request, bible, source, endpoint, verse_count=1, request_count=1):
     source = str(source or '').strip().lower()
     if source not in {BibleTranslationUsageDaily.SOURCE_API, BibleTranslationUsageDaily.SOURCE_CACHE}:
@@ -186,6 +191,7 @@ def _record_bible_usage(request, bible, source, endpoint, verse_count=1, request
 
     usage_date = timezone.now().date()
     user_kind, user_key = _bible_usage_user_identity(request)
+    ip_address = _bible_usage_client_ip(request)
     bible_id = str(getattr(bible, 'id', '') or '')
     if not bible_id:
         return
@@ -213,7 +219,8 @@ def _record_bible_usage(request, bible, source, endpoint, verse_count=1, request
                 row.user_kind = user_kind
                 row.bible_name = bible_name
                 row.bible_language = language_code
-                row.save(update_fields=['request_count', 'verse_count', 'user_kind', 'bible_name', 'bible_language', 'updated_at'])
+                row.ip_address = ip_address
+                row.save(update_fields=['request_count', 'verse_count', 'user_kind', 'bible_name', 'bible_language', 'ip_address', 'updated_at'])
             else:
                 BibleTranslationUsageDaily.objects.create(
                     usage_date=usage_date,
@@ -224,6 +231,7 @@ def _record_bible_usage(request, bible, source, endpoint, verse_count=1, request
                     endpoint=endpoint,
                     user_kind=user_kind,
                     user_key=user_key,
+                    ip_address=ip_address,
                     request_count=request_count,
                     verse_count=verse_count,
                 )

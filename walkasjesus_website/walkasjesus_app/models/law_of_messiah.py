@@ -315,6 +315,40 @@ class LawOfMessiah(models.Model):
     def supportive_ot_scriptures(self):
         return self.bible_reference_rows.filter(reference_type=LawOfMessiahBibleReference.TYPE_SUPPORTIVE_OT)
 
+    def media_type_badges(self, allowed_target_audiences=None, allowed_languages=None):
+        """Media type counts for this law (own media + related steps' media), used for card icons.
+
+        Pass the request's allowed target audiences/languages so counts match what the
+        detail page actually shows (e.g. fewer items when only English media is allowed).
+        """
+        from walkasjesus_app.models.commandment import matching_media_badge_resources, media_badge_tooltip
+
+        counts = {}
+        seen = set()
+
+        def add_resources(resources):
+            for resource in matching_media_badge_resources(resources, allowed_target_audiences, allowed_languages):
+                key = (
+                    resource.media_type,
+                    str(resource.title or '').strip().lower(),
+                    str(resource.url or '').strip().lower(),
+                    str(resource.img_url or '').strip().lower(),
+                    str(resource.author or '').strip().lower(),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                counts[resource.media_type] = counts.get(resource.media_type, 0) + 1
+
+        add_resources(self.media.all())
+        for step in self.related_steps.all():
+            add_resources(step.shared_media_resources.all())
+
+        return [
+            {'media_type': media_type, 'count': counts[media_type], 'tooltip': media_badge_tooltip(media_type, counts[media_type])}
+            for media_type in ['movie', 'shortmovie', 'wajvideo', 'sermon', 'testimony', 'blog', 'book'] if media_type in counts
+        ]
+
 
 class LawOfMessiahBibleReference(models.Model):
     TYPE_KEY_NT = 'key_nt_scriptures'

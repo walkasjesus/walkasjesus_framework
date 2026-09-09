@@ -2,7 +2,6 @@ import csv
 from pathlib import Path
 
 from django.contrib import admin
-from django.contrib.admin import SimpleListFilter
 from django.contrib.admin.models import LogEntry, DELETION
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
@@ -19,7 +18,7 @@ from walkasjesus_app.lib.youtube_embed_validation import ensure_youtube_is_embed
 from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
 from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
-from walkasjesus_app.views.admin.media_review_views import MediaReviewDashboardView, MediaReviewReportView, user_can_review_media_resources
+from walkasjesus_app.views.admin.media_review_views import MediaCoverageReportView, MediaReviewDashboardView, MediaReviewReportView, user_can_review_media_resources
 from walkasjesus_website.settings import BASE_DIR
 
 
@@ -58,52 +57,6 @@ class PageVisitDailyAdmin(admin.ModelAdmin):
         return [
             path('', AdminPageUsageView.as_view(), name=view_name),
         ]
-
-class MediaTargetAudienceFilter(SimpleListFilter):
-    title = 'media target audience'
-    parameter_name = 'media_target_audience'
-
-    def lookups(self, request, model_admin):
-        audiences = set()
-        for model in [Song, Movie, Superbook, Henkieshow, ShortMovie, WaJVideo, Drawing, Testimony, Blog, Picture, Sermon, Book]:
-            audiences.update(model.objects.values_list('target_audience', flat=True))
-        return [(a, a) for a in audiences if a]
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if not value:
-            return queryset
-        from django.db.models import Q
-        q = Q()
-        for rel in [
-            'song', 'movie', 'superbook', 'henkieshow', 'shortmovie', 'wajvideo',
-            'drawing', 'testimony', 'blog', 'picture', 'sermon', 'book'
-        ]:
-            q |= Q(**{f"{rel}__target_audience": value})
-        return queryset.filter(q).distinct()
-
-class MediaLanguageFilter(SimpleListFilter):
-    title = 'media language'
-    parameter_name = 'media_language'
-
-    def lookups(self, request, model_admin):
-        languages = set()
-        for model in [Song, Movie, Superbook, Henkieshow, ShortMovie, WaJVideo, Drawing, Testimony, Blog, Picture, Sermon, Book]:
-            languages.update(model.objects.values_list('language', flat=True))
-        return [(l, l) for l in languages if l]
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if not value:
-            return queryset
-        from django.db.models import Q
-        q = Q()
-        for rel in [
-            'song', 'movie', 'superbook', 'henkieshow', 'shortmovie', 'wajvideo',
-            'drawing', 'testimony', 'blog', 'picture', 'sermon', 'book'
-        ]:
-            q |= Q(**{f"{rel}__language": value})
-        return queryset.filter(q).distinct()
 
 class PrimaryBibleReferencesInline(admin.TabularInline):
     model = PrimaryBibleReference
@@ -253,16 +206,8 @@ class CommandmentAdmin(VersionAdmin):
         'title',
         'category',
         'quote',
-        'song_count',
-        'shortmovie_count',
-        'testimony_count',
-        'sermon_count',
-        'movie_count',
-        'blog_count',
-        'superbook_count',
-        'henkieshow_count',        
     ]
-    list_filter = ['category', MediaTargetAudienceFilter, MediaLanguageFilter]
+    list_filter = ['category']
     search_fields = ['=id', 'title', 'quote']
     inlines = [
         PrimaryBibleReferencesInline,
@@ -275,91 +220,6 @@ class CommandmentAdmin(VersionAdmin):
         WisdomBibleReferenceInline,
         QuestionInline,
     ]
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        # Get filter values from request.GET
-        target_audience = request.GET.get('media_target_audience')
-        media_language = request.GET.get('media_language')
-
-        # Annotate counts based on filters
-        song_filter = Q()
-        movie_filter = Q()
-        shortmovie_filter = Q()
-        testimony_filter = Q()
-        blog_filter = Q()
-        sermon_filter = Q()
-        superbook_filter = Q()
-        henkieshow_filter = Q()
-        if target_audience:
-            song_filter &= Q(song__target_audience=target_audience)
-            movie_filter &= Q(movie__target_audience=target_audience)
-            shortmovie_filter &= Q(shortmovie__target_audience=target_audience)
-            testimony_filter &= Q(testimony__target_audience=target_audience)
-            blog_filter &= Q(blog__target_audience=target_audience)
-            sermon_filter &= Q(sermon__target_audience=target_audience)
-            superbook_filter &= Q(superbook__target_audience=target_audience)
-            henkieshow_filter &= Q(henkieshow__target_audience=target_audience)
-        if media_language:
-            song_filter &= Q(song__language=media_language)
-            movie_filter &= Q(movie__language=media_language)
-            shortmovie_filter &= Q(shortmovie__language=media_language)
-            testimony_filter &= Q(testimony__language=media_language)
-            blog_filter &= Q(blog__language=media_language)
-            sermon_filter &= Q(sermon__language=media_language)
-            superbook_filter &= Q(superbook__language=media_language)
-            henkieshow_filter &= Q(henkieshow__language=media_language)
-
-        return qs.annotate(
-            song_count=Count('song', filter=song_filter, distinct=True),
-            movie_count=Count('movie', filter=movie_filter, distinct=True),
-            shortmovie_count=Count('shortmovie', filter=shortmovie_filter, distinct=True),
-            testimony_count=Count('testimony', filter=testimony_filter, distinct=True),
-            blog_count=Count('blog', filter=blog_filter, distinct=True),
-            sermon_count=Count('sermon', filter=sermon_filter, distinct=True),
-            superbook_count=Count('superbook', filter=superbook_filter, distinct=True),
-            henkieshow_count=Count('henkieshow', filter=henkieshow_filter, distinct=True),
-        )
-    
-    def song_count(self, obj):
-        return obj.song_count
-    song_count.admin_order_field = 'song_count'
-    song_count.short_description = "Songs"
-
-    def movie_count(self, obj):
-        return obj.movie_count
-    movie_count.admin_order_field = 'movie_count'
-    movie_count.short_description = "Movies"
-
-    def shortmovie_count(self, obj):
-        return obj.shortmovie_count
-    shortmovie_count.admin_order_field = 'shortmovie_count'
-    shortmovie_count.short_description = "ShortMovies"
-
-    def testimony_count(self, obj):
-        return obj.testimony_count
-    testimony_count.admin_order_field = "testimony_count"
-    testimony_count.short_description = "Testimonies"
-
-    def blog_count(self, obj):
-        return obj.blog_count
-    blog_count.admin_order_field = "blog_count"
-    blog_count.short_description = "Blogs"
-
-    def sermon_count(self, obj):
-        return obj.sermon_count
-    sermon_count.admin_order_field = "sermon_count"
-    sermon_count.short_description = "Sermons"
-
-    def superbook_count(self, obj):
-        return obj.superbook_count
-    superbook_count.admin_order_field = 'superbook_count'
-    superbook_count.short_description = "Superbooks"
-
-    def henkieshow_count(self, obj):
-        return obj.henkieshow_count
-    henkieshow_count.admin_order_field = 'henkieshow_count'
-    henkieshow_count.short_description = "Henkieshows"
 
 class PrimaryLessonBibleReferencesInline(admin.TabularInline):
     model = PrimaryLessonBibleReference
@@ -836,6 +696,14 @@ class MediaReviewReportProxy(MediaResource):
         verbose_name_plural = 'Media review report'
 
 
+class MediaCoverageReportProxy(MediaResource):
+    class Meta:
+        proxy = True
+        app_label = 'commandments_app'
+        verbose_name = 'Media coverage report'
+        verbose_name_plural = 'Media coverage report'
+
+
 class MediaReviewDashboardProxyAdmin(admin.ModelAdmin):
     def get_urls(self):
         view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
@@ -855,6 +723,21 @@ class MediaReviewReportProxyAdmin(admin.ModelAdmin):
     def get_urls(self):
         view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
         return [path('', MediaReviewReportView.as_view(), name=view_name)]
+
+    def has_module_permission(self, request):
+        return user_can_review_media_resources(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return user_can_review_media_resources(request.user)
+
+
+class MediaCoverageReportProxyAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        view_name = '{}_{}_changelist'.format(self.model._meta.app_label, self.model._meta.model_name)
+        return [path('', MediaCoverageReportView.as_view(), name=view_name)]
 
     def has_module_permission(self, request):
         return user_can_review_media_resources(request.user)
@@ -1123,6 +1006,7 @@ admin.site.register(LawOfMessiah, LawOfMessiahAdmin)
 admin.site.register(MediaResource, MediaResourceAdmin)
 admin.site.register(MediaReviewDashboardProxy, MediaReviewDashboardProxyAdmin)
 admin.site.register(MediaReviewReportProxy, MediaReviewReportProxyAdmin)
+admin.site.register(MediaCoverageReportProxy, MediaCoverageReportProxyAdmin)
 admin.site.register(File)
 admin.site.register(LogEntry, LogEntryAdmin)
 

@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry, DELETION
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
+from django.http import JsonResponse
 from django.urls import path, reverse
 from django.utils.html import escape, mark_safe
 from reversion.admin import VersionAdmin
@@ -754,6 +755,56 @@ class MediaResourceAdminForm(forms.ModelForm):
         model = MediaResource
         fields = '__all__'
 
+    def clean(self):
+        cleaned_data = super().clean()
+        commandment = cleaned_data.get('commandment')
+        law_of_messiah = cleaned_data.get('law_of_messiah')
+        lesson = cleaned_data.get('lesson')
+
+        # If commandment (step) is set, resolve 1-to-1 counterparts if not already set
+        if commandment:
+            if not law_of_messiah:
+                matching_laws = LawOfMessiah.objects.filter(related_steps=commandment)
+                if matching_laws.count() == 1:
+                    law_of_messiah = matching_laws.first()
+                    cleaned_data['law_of_messiah'] = law_of_messiah
+            if not lesson:
+                matching_lessons = Lesson.objects.filter(commandment=commandment)
+                if matching_lessons.count() == 1:
+                    lesson = matching_lessons.first()
+                    cleaned_data['lesson'] = lesson
+
+        # If law_of_messiah is set, resolve 1-to-1 counterparts if not already set
+        if law_of_messiah:
+            if not commandment:
+                matching_steps = law_of_messiah.related_steps.all()
+                if matching_steps.count() == 1:
+                    commandment = matching_steps.first()
+                    cleaned_data['commandment'] = commandment
+                    if not lesson:
+                        matching_lessons = Lesson.objects.filter(commandment=commandment)
+                        if matching_lessons.count() == 1:
+                            lesson = matching_lessons.first()
+                            cleaned_data['lesson'] = lesson
+
+        # If lesson is set, resolve 1-to-1 counterparts if not already set
+        if lesson:
+            if not commandment and lesson.commandment:
+                commandment = lesson.commandment
+                cleaned_data['commandment'] = commandment
+                if not law_of_messiah:
+                    matching_laws = LawOfMessiah.objects.filter(related_steps=commandment)
+                    if matching_laws.count() == 1:
+                        law_of_messiah = matching_laws.first()
+                        cleaned_data['law_of_messiah'] = law_of_messiah
+            elif commandment and not law_of_messiah:
+                matching_laws = LawOfMessiah.objects.filter(related_steps=commandment)
+                if matching_laws.count() == 1:
+                    law_of_messiah = matching_laws.first()
+                    cleaned_data['law_of_messiah'] = law_of_messiah
+
+        return cleaned_data
+
     def clean_url(self):
         url = str(self.cleaned_data.get('url') or '').strip()
         if not url:
@@ -790,6 +841,67 @@ class MediaResourceAdmin(admin.ModelAdmin):
     fields = ['law_of_messiah', 'commandment', 'lesson', 'media_type', 'title', 'description', 'img_url', 'url', 'author', 'target_audience', 'language', 'is_public']
     autocomplete_fields = ['law_of_messiah', 'commandment', 'lesson']
     ordering = ['law_of_messiah__id', 'commandment__id', 'lesson__id', 'media_type', 'title']
+
+    def get_urls(self):
+        urls = super().get_urls()
+        view_name = '{}_{}_related_targets'.format(self.model._meta.app_label, self.model._meta.model_name)
+        custom_urls = [
+            path('related-targets/', self.admin_site.admin_view(self.related_targets_view), name=view_name),
+            path('review-dashboard/', MediaReviewDashboardView.as_view(), name='media_review_dashboard'),
+            path('review-report/', MediaReviewReportView.as_view(), name='media_review_report'),
+        ]
+        return custom_urls + urls
+
+    def related_targets_view(self, request):
+        commandment_id = request.GET.get('commandment')
+        law_of_messiah_id = request.GET.get('law_of_messiah')
+        lesson_id = request.GET.get('lesson')
+
+        data = {}
+
+        if commandment_id:
+            try:
+                commandment = Commandment.objects.get(pk=commandment_id)
+                data['commandment'] = {'id': str(commandment.id), 'text': str(commandment)}
+                matching_laws = LawOfMessiah.objects.filter(related_steps=commandment)
+                if matching_laws.count() == 1:
+                    law = matching_laws.first()
+                    data['law_of_messiah'] = {'id': str(law.id), 'text': str(law)}
+                matching_lessons = Lesson.objects.filter(commandment=commandment)
+                if matching_lessons.count() == 1:
+                    lesson = matching_lessons.first()
+                    data['lesson'] = {'id': str(lesson.id), 'text': str(lesson)}
+            except (Commandment.DoesNotExist, ValueError):
+                pass
+        elif law_of_messiah_id:
+            try:
+                law = LawOfMessiah.objects.get(pk=law_of_messiah_id)
+                data['law_of_messiah'] = {'id': str(law.id), 'text': str(law)}
+                matching_steps = law.related_steps.all()
+                if matching_steps.count() == 1:
+                    step = matching_steps.first()
+                    data['commandment'] = {'id': str(step.id), 'text': str(step)}
+                    matching_lessons = Lesson.objects.filter(commandment=step)
+                    if matching_lessons.count() == 1:
+                        lesson = matching_lessons.first()
+                        data['lesson'] = {'id': str(lesson.id), 'text': str(lesson)}
+            except (LawOfMessiah.DoesNotExist, ValueError):
+                pass
+        elif lesson_id:
+            try:
+                lesson = Lesson.objects.get(pk=lesson_id)
+                data['lesson'] = {'id': str(lesson.id), 'text': str(lesson)}
+                if lesson.commandment:
+                    step = lesson.commandment
+                    data['commandment'] = {'id': str(step.id), 'text': str(step)}
+                    matching_laws = LawOfMessiah.objects.filter(related_steps=step)
+                    if matching_laws.count() == 1:
+                        law = matching_laws.first()
+                        data['law_of_messiah'] = {'id': str(law.id), 'text': str(law)}
+            except (Lesson.DoesNotExist, ValueError):
+                pass
+
+        return JsonResponse(data)
 
     def law_item_display(self, obj):
         if not obj.law_of_messiah:
@@ -912,14 +1024,6 @@ class MediaResourceAdmin(admin.ModelAdmin):
         return MediaResource.objects.filter(lesson=obj.lesson).count()
 
     lesson_media_count.short_description = 'Lesson media count'
-
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path('review-dashboard/', MediaReviewDashboardView.as_view(), name='media_review_dashboard'),
-            path('review-report/', MediaReviewReportView.as_view(), name='media_review_report'),
-        ]
-        return custom_urls + urls
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

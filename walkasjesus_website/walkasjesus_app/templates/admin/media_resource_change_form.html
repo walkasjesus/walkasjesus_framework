@@ -12,3 +12,70 @@
 </div>
 {{ block.super }}
 {% endblock %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script>
+(function($) {
+  'use strict';
+  $(function() {
+    var $law = $('#id_law_of_messiah');
+    var $step = $('#id_commandment');
+    var $lesson = $('#id_lesson');
+    var isAutoPopulating = false;
+
+    function setSelect2Val($elem, id, text) {
+      if (!$elem.length || !id) return;
+      if ($elem.find("option[value='" + id + "']").length === 0) {
+        var opt = new Option(text, id, true, true);
+        $elem.append(opt);
+      }
+      $elem.val(id).trigger('change');
+    }
+
+    function fetchAndFill(params) {
+      if (isAutoPopulating) return;
+      var query = $.param(params);
+      var endpoint = "{% url 'admin:commandments_app_mediaresource_related_targets' %}?" + query;
+      $.getJSON(endpoint, function(data) {
+        isAutoPopulating = true;
+        try {
+          if (data.law_of_messiah && !$law.val()) {
+            setSelect2Val($law, data.law_of_messiah.id, data.law_of_messiah.text);
+          }
+          if (data.commandment && !$step.val()) {
+            setSelect2Val($step, data.commandment.id, data.commandment.text);
+          }
+          if (data.lesson && !$lesson.val()) {
+            setSelect2Val($lesson, data.lesson.id, data.lesson.text);
+          }
+        } finally {
+          isAutoPopulating = false;
+        }
+      });
+    }
+
+    $step.on('change', function() {
+      var val = $(this).val();
+      if (val && !isAutoPopulating) {
+        fetchAndFill({commandment: val});
+      }
+    });
+
+    $law.on('change', function() {
+      var val = $(this).val();
+      if (val && !isAutoPopulating) {
+        fetchAndFill({law_of_messiah: val});
+      }
+    });
+
+    $lesson.on('change', function() {
+      var val = $(this).val();
+      if (val && !isAutoPopulating) {
+        fetchAndFill({lesson: val});
+      }
+    });
+  });
+})(django.jQuery || jQuery || window.$);
+</script>
+{% endblock %}

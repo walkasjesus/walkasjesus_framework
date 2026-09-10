@@ -495,7 +495,7 @@
 }
 .services-inner {
     background: #ffffff none repeat scroll 0 0;
-    opacity: 0.8;
+    opacity: 0.9;
     border: 2px solid #e2b900;
     margin-left: 22px;
     transition: .3s;
@@ -566,13 +566,15 @@
     position: absolute;
     width: 35px;
 }
-.our-services-wrapper:hover .services-inner {
+/* Disabled the hover effect for services-inner */
+/* .our-services-wrapper:hover .services-inner {
     background: #ffffff none repeat scroll 0 0;
     opacity: 1.0;
     border: 2px solid #000000;
     box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-}
+} */
+
 .our-services-text p {
     margin-bottom: 0;
 }
@@ -2043,12 +2045,15 @@ p {
 bottom: 16px;
 position: absolute;
 right: 16px;
+/* Icons sit inside a .ftco-animate card; don't wait for its scroll-reveal animation. */
+visibility: visible;
 }
 
 .commandment-media-items img {
 width: 40px;
 height: 40px;
 opacity: .8;
+visibility: visible;
 }
 
 .commandment-media-items .lom-person-icon {
@@ -2068,6 +2073,22 @@ opacity: .8;
 
 .commandment-media-items .lom-person-icon span {
     align-self: center;
+}
+
+/* Media badge tooltips: <img> is a replaced element and can't render ::after,
+   so the tooltip host is a wrapping <span> instead of the icon itself. */
+.commandment-media-items .media-badge-tooltip {
+    display: inline-block;
+    margin-left: 2px;
+    vertical-align: middle;
+    visibility: visible;
+}
+.commandment-media-items .media-badge-tooltip .lom-person-icon {
+    margin-left: 0;
+}
+.commandment-media-items .jc-tooltip-host::after {
+    bottom: calc(100% + 6px);
+    top: auto;
 }
 
 /* Frontpage media resources */

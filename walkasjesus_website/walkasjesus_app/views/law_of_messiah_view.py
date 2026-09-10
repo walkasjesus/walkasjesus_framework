@@ -706,11 +706,14 @@ class LawOfMessiahListingView(View):
 
         ncla_labels = _ncla_label_map()
         person_labels = _person_label_map()
+        allowed_target_audiences = _allowed_target_audiences(request)
+        allowed_media_languages = _allowed_media_languages(request)
         for law in laws:
             law.primary_drawing = _find_primary_drawing(law)
             law.primary_drawing_url = _normalize_image_url(law.primary_drawing.img_url) if law.primary_drawing else ''
             law.ncla_human = [ncla_labels.get(code, code) for code in _extract_ncla_codes(law.ncla or [])]
             law.ncla_summary = _ncla_summary(law.ncla or [])
+            law.media_type_badge_list = law.media_type_badges(allowed_target_audiences, allowed_media_languages)
             law.ncla_person_icons = [
                 {
                     'code': code,

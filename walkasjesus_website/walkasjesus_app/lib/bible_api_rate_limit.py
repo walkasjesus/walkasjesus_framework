@@ -96,6 +96,7 @@ def _seconds_until_tomorrow():
 
 def _record_blocked_usage(request, bible, endpoint):
     user_kind, user_key = _user_identity(request)
+    ip_address = _client_ip(request) or None
     usage_date = timezone.now().date()
     bible_id = str(getattr(bible, 'id', '') or getattr(bible, 'bible_id', '') or bible or '').strip() or 'unknown'
     bible_name = str(getattr(bible, 'name', '') or '').strip()
@@ -115,7 +116,8 @@ def _record_blocked_usage(request, bible, endpoint):
                 row.user_kind = user_kind
                 row.bible_name = bible_name
                 row.bible_language = bible_language
-                row.save(update_fields=['request_count', 'user_kind', 'bible_name', 'bible_language', 'updated_at'])
+                row.ip_address = ip_address
+                row.save(update_fields=['request_count', 'user_kind', 'bible_name', 'bible_language', 'ip_address', 'updated_at'])
             else:
                 BibleTranslationUsageDaily.objects.create(
                     usage_date=usage_date,
@@ -126,6 +128,7 @@ def _record_blocked_usage(request, bible, endpoint):
                     endpoint=endpoint,
                     user_kind=user_kind,
                     user_key=user_key,
+                    ip_address=ip_address,
                     request_count=1,
                     verse_count=0,
                 )

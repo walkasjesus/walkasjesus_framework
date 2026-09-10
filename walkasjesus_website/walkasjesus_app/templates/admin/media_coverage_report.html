@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>Media coverage report</h1>
+<p>
+  Shows, per step and per Law of Messiah item, how many public Short Movies / Sermons / Testimonies (and other media) exist.
+  Sorted with the least covered items first.
+  {{ missing_count }} of {{ total_count }} items are still missing at least one Short Movie, Sermon or Testimony.
+</p>
+<p>
+  {% if only_missing %}
+    <a href="?only_missing=0">{% trans 'Show all items' %}</a>
+  {% else %}
+    <a href="?only_missing=1">{% trans 'Show only items with missing media' %}</a>
+  {% endif %}
+</p>
+<table style="background:#fff;color:#111;">
+  <tr>
+    <th>Type</th>
+    <th>ID</th>
+    <th>Title</th>
+    {% for media_type in priority_types %}<th>{{ media_type }}</th>{% endfor %}
+    {% for media_type in extra_types %}<th>{{ media_type }}</th>{% endfor %}
+    <th>Total</th>
+  </tr>
+  {% for row in rows %}
+  <tr style="background-color:{% if row.missing_priority %}#fdecea{% else %}#fff{% endif %};color:#111;">
+    <td>{{ row.kind }}</td>
+    <td>{{ row.id }}</td>
+    <td><a href="{{ row.change_url }}">{{ row.title }}</a></td>
+    {% for column in row.columns %}
+      <td style="color:{% if column.missing %}#b71c1c{% else %}#111{% endif %};{% if column.missing %}font-weight:bold;{% endif %}">{{ column.count }}</td>
+    {% endfor %}
+    <td><strong>{{ row.total }}</strong></td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="{{ priority_types|length|add:extra_types|length|add:4 }}">No items found.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
+

@@ -1,8 +1,58 @@
 from django.db import models
 from django.utils import translation
+from django.utils.translation import ngettext
 
 from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models.commandment_categories import CommandmentCategories
+
+# Media types shown as card icons, in display order.
+MEDIA_BADGE_TYPES = ['movie', 'shortmovie', 'wajvideo', 'sermon', 'testimony', 'blog', 'book']
+
+# Singular/plural display labels for each media badge type.
+MEDIA_BADGE_LABELS = {
+    'movie': ('Movie', 'Movies'),
+    'shortmovie': ('Short Movie', 'Short Movies'),
+    'wajvideo': ('WaJVideo', 'WaJVideos'),
+    'sermon': ('Sermon', 'Sermons'),
+    'testimony': ('Testimony', 'Testimonies'),
+    'blog': ('Blog', 'Blogs'),
+    'book': ('Book', 'Books'),
+}
+
+
+def media_badge_tooltip(media_type, count):
+    singular, plural = MEDIA_BADGE_LABELS.get(media_type, (media_type, media_type))
+    label = singular if count == 1 else plural
+    return ngettext(
+        '%(count)s %(label)s resource found',
+        '%(count)s %(label)s resources found',
+        count,
+    ) % {'count': count, 'label': label}
+
+
+def is_displayable_media_resource(resource):
+    """Mirrors detail_view._is_displayable_media so badge counts match what the detail page shows."""
+    if resource.title or resource.description:
+        return True
+    if resource.media_type in {'song', 'superbook', 'henkieshow', 'movie', 'shortmovie', 'wajvideo', 'testimony', 'sermon'}:
+        return bool(resource.url)
+    if resource.media_type in {'drawing', 'picture'}:
+        return bool(resource.img_url)
+    return bool(resource.url or resource.img_url)
+
+
+def matching_media_badge_resources(resources, allowed_target_audiences=None, allowed_languages=None):
+    for resource in resources:
+        if not resource.is_public or resource.media_type not in MEDIA_BADGE_TYPES:
+            continue
+        if allowed_target_audiences is not None and (resource.target_audience or 'any') not in allowed_target_audiences:
+            continue
+        language = str(resource.language or 'any').strip().lower() or 'any'
+        if allowed_languages is not None and language not in allowed_languages:
+            continue
+        if not is_displayable_media_resource(resource):
+            continue
+        yield resource
 
 
 class CommandmentManager(models.Manager):
@@ -13,7 +63,10 @@ class CommandmentManager(models.Manager):
         but it preloads the drawings therefor reducing the number of queries
         (at least it reduces queries if we do need the drawings)
         """
-        return (c for c in Commandment.objects.all().prefetch_related('drawing_set') if c.background_drawing())
+        return (
+            c for c in Commandment.objects.all().prefetch_related('drawing_set', 'shared_media_resources')
+            if c.background_drawing()
+        )
 
 
 class Commandment(models.Model):
@@ -140,6 +193,20 @@ class Commandment(models.Model):
 
     def questions(self):
         return self.question_set.all()
+
+    def media_type_badges(self, allowed_target_audiences=None, allowed_languages=None):
+        """Media type counts for this step, used for card icons (relies on prefetched shared_media_resources).
+
+        Pass the request's allowed target audiences/languages so counts match what the
+        detail page actually shows (e.g. fewer items when only English media is allowed).
+        """
+        counts = {}
+        for resource in matching_media_badge_resources(self.shared_media_resources.all(), allowed_target_audiences, allowed_languages):
+            counts[resource.media_type] = counts.get(resource.media_type, 0) + 1
+        return [
+            {'media_type': media_type, 'count': counts[media_type], 'tooltip': media_badge_tooltip(media_type, counts[media_type])}
+            for media_type in MEDIA_BADGE_TYPES if media_type in counts
+        ]
 
     def _filter_on_language(self, query):
         filter_languages = ['any'] + self.languages

@@ -1,0 +1,20 @@
+{% load static %}
+{% load i18n %}
+{% for badge in media_type_badges %}
+    {% if badge.media_type == 'movie' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/movie.png' %}" alt="{% trans 'Movie' %}"></span>
+    {% elif badge.media_type == 'shortmovie' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/shortmovie.png' %}" alt="{% trans 'Short Movie' %}"></span>
+    {% elif badge.media_type == 'wajvideo' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/wajvideo.png' %}" alt="{% trans 'WaJVideo' %}"></span>
+    {% elif badge.media_type == 'sermon' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/sermon.png' %}" alt="{% trans 'Sermon' %}"></span>
+    {% elif badge.media_type == 'testimony' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/testimony.png' %}" alt="{% trans 'Testimony' %}"></span>
+    {% elif badge.media_type == 'blog' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/blog.png' %}" alt="{% trans 'Blog' %}"></span>
+    {% elif badge.media_type == 'book' %}
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/book.png' %}" alt="{% trans 'Book' %}"></span>
+    {% endif %}
+{% endfor %}
+

@@ -5,13 +5,27 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db.models import Count, Q
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 
 from walkasjesus_app.lib.youtube_embed_validation import ensure_youtube_is_embeddable, normalize_youtube_embed_url
-from walkasjesus_app.models import MediaResource
+from walkasjesus_app.models import Commandment, LawOfMessiah, MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.models.law_of_messiah_media import LawOfMessiahDrawing
+
+# Media types every step should have at least one of; shown first in the coverage report.
+MEDIA_COVERAGE_PRIORITY_TYPES = [
+    LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE,
+    LawOfMessiahDrawing.MEDIA_TYPE_SERMON,
+    LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY,
+]
+MEDIA_COVERAGE_EXTRA_TYPES = [
+    LawOfMessiahDrawing.MEDIA_TYPE_MOVIE,
+    LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO,
+    LawOfMessiahDrawing.MEDIA_TYPE_BLOG,
+    LawOfMessiahDrawing.MEDIA_TYPE_BOOK,
+]
 
 
 def user_can_review_media_resources(user):
@@ -130,3 +144,83 @@ class MediaReviewReportView(View):
     def get(self, request):
         requests = MediaReviewRequest.objects.select_related('resource', 'applicant', 'reviewed_by').order_by('-requested_at')
         return render(request, 'admin/media_review_report.html', {'requests': requests})
+
+
+class MediaCoverageReportView(View):
+    """Overview of which media types are still missing per step and per Law of Messiah item (public resources only)."""
+
+    @method_decorator(staff_member_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        only_missing = request.GET.get('only_missing', '1') != '0'
+        all_types = MEDIA_COVERAGE_PRIORITY_TYPES + MEDIA_COVERAGE_EXTRA_TYPES
+
+        def _counts_by(field_name):
+            counts = {}
+            for row in (
+                MediaResource.objects
+                .filter(**{f'{field_name}__isnull': False}, is_public=True, media_type__in=all_types)
+                .values(field_name, 'media_type')
+                .annotate(total=Count('id'))
+            ):
+                counts.setdefault(row[field_name], {})[row['media_type']] = row['total']
+            return counts
+
+        counts_by_commandment = _counts_by('commandment_id')
+        counts_by_law = _counts_by('law_of_messiah_id')
+
+        def _build_row(item_id, title, admin_url_name, counts, kind):
+            missing_priority = [
+                media_type for media_type in MEDIA_COVERAGE_PRIORITY_TYPES
+                if not counts.get(media_type)
+            ]
+            columns = [
+                {'count': counts.get(media_type, 0), 'missing': media_type in missing_priority}
+                for media_type in all_types
+            ]
+            return {
+                'kind': kind,
+                'id': item_id,
+                'title': title,
+                'change_url': reverse(admin_url_name, args=[item_id]),
+                'columns': columns,
+                'total': sum(column['count'] for column in columns),
+                'missing_priority': missing_priority,
+            }
+
+        all_rows = []
+        missing_total = 0
+        for commandment in Commandment.objects.order_by('id'):
+            row = _build_row(
+                commandment.id, commandment.title, 'admin:commandments_app_commandment_change',
+                counts_by_commandment.get(commandment.id, {}), 'Step',
+            )
+            if row['missing_priority']:
+                missing_total += 1
+            all_rows.append(row)
+
+        for law in LawOfMessiah.objects.order_by('id'):
+            row = _build_row(
+                law.id, law.title, 'admin:commandments_app_lawofmessiah_change',
+                counts_by_law.get(law.id, {}), 'Law',
+            )
+            if row['missing_priority']:
+                missing_total += 1
+            all_rows.append(row)
+
+        if only_missing:
+            all_rows = [row for row in all_rows if row['missing_priority']]
+
+        # Least covered items first by default, so gaps are easy to spot.
+        all_rows.sort(key=lambda row: row['total'])
+
+        return render(request, 'admin/media_coverage_report.html', {
+            'rows': all_rows,
+            'priority_types': MEDIA_COVERAGE_PRIORITY_TYPES,
+            'extra_types': MEDIA_COVERAGE_EXTRA_TYPES,
+            'only_missing': only_missing,
+            'missing_count': missing_total,
+            'total_count': Commandment.objects.count() + LawOfMessiah.objects.count(),
+        })

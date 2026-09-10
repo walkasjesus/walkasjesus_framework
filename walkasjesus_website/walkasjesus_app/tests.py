@@ -20,7 +20,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from walkasjesus_app.admin import MediaResourceAdmin
-from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiahDrawing
+from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiah, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
@@ -901,6 +901,84 @@ class MediaResourceAdminValidationTestCase(TestCase):
 
         self.assertTrue(is_valid, form.errors)
         self.assertEqual(form.cleaned_data['url'], 'https://www.youtube.com/embed/Ilbh6Dv_8Yw')
+
+    def test_media_resource_admin_form_auto_populates_1_to_1_counterparts(self):
+        step = Commandment.objects.create(id=101, title='Test Step 101')
+        law = LawOfMessiah.objects.create(id='L101', title='Test Law 101')
+        law.related_steps.add(step)
+        lesson = Lesson.objects.create(id=101, title='Test Lesson 101', commandment=step)
+
+        FormClass = self._resource_form()
+
+        # 1. Given commandment only -> auto-populates law_of_messiah and lesson
+        data = self._resource_form_data('')
+        data['commandment'] = str(step.id)
+        form = FormClass(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data.get('law_of_messiah'), law)
+        self.assertEqual(form.cleaned_data.get('lesson'), lesson)
+
+        # 2. Given law_of_messiah only -> auto-populates commandment and lesson
+        data = self._resource_form_data('')
+        data['law_of_messiah'] = law.id
+        form = FormClass(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data.get('commandment'), step)
+        self.assertEqual(form.cleaned_data.get('lesson'), lesson)
+
+        # 3. Given lesson only -> auto-populates commandment and law_of_messiah
+        data = self._resource_form_data('')
+        data['lesson'] = str(lesson.id)
+        form = FormClass(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data.get('commandment'), step)
+        self.assertEqual(form.cleaned_data.get('law_of_messiah'), law)
+
+    def test_media_resource_admin_does_not_auto_populate_when_not_1_to_1(self):
+        step = Commandment.objects.create(id=102, title='Test Step 102')
+        law1 = LawOfMessiah.objects.create(id='L102A', title='Test Law 102A')
+        law2 = LawOfMessiah.objects.create(id='L102B', title='Test Law 102B')
+        law1.related_steps.add(step)
+        law2.related_steps.add(step)
+
+        FormClass = self._resource_form()
+        data = self._resource_form_data('')
+        data['commandment'] = str(step.id)
+        form = FormClass(data=data)
+        self.assertTrue(form.is_valid(), form.errors)
+        # Should not auto-populate law_of_messiah since there are 2 matches
+        self.assertIsNone(form.cleaned_data.get('law_of_messiah'))
+
+    def test_media_resource_related_targets_ajax_endpoint(self):
+        step = Commandment.objects.create(id=103, title='Test Step 103')
+        law = LawOfMessiah.objects.create(id='L103', title='Test Law 103')
+        law.related_steps.add(step)
+        lesson = Lesson.objects.create(id=103, title='Test Lesson 103', commandment=step)
+
+        self.client.force_login(self.user)
+        url = reverse('admin:commandments_app_mediaresource_related_targets')
+
+        # Query by commandment
+        resp = self.client.get(url, {'commandment': str(step.id)})
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get('commandment', {}).get('id'), str(step.id))
+        self.assertEqual(data.get('law_of_messiah', {}).get('id'), law.id)
+        self.assertEqual(data.get('lesson', {}).get('id'), str(lesson.id))
+
+        # Query by law_of_messiah
+        resp = self.client.get(url, {'law_of_messiah': law.id})
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get('commandment', {}).get('id'), str(step.id))
+        self.assertEqual(data.get('lesson', {}).get('id'), str(lesson.id))
+
+        # Query by lesson
+        resp = self.client.get(url, {'lesson': str(lesson.id)})
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get('commandment', {}).get('id'), str(step.id))
+        self.assertEqual(data.get('law_of_messiah', {}).get('id'), law.id)
 
 
 class MediaResourceCacheInvalidationTestCase(TestCase):

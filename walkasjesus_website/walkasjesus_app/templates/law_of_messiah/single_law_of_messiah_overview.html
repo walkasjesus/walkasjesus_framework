@@ -4,6 +4,7 @@
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
         <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if law.primary_drawing %}{{ law.primary_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
+            <a href="{% url 'commandments:law_of_messiah_detail' law.id %}" class="drawing-link-overlay" aria-label="{{ law.translated_title }}"></a>
             <div class="number-content law-number-content">
                 <h3>{{ law.id }}</h3>
             </div>

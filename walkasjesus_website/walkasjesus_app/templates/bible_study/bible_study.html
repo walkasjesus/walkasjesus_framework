@@ -23,6 +23,7 @@
   data-search-url="{% url 'commandments:bible_study_search' %}"
   data-chapter-meta-url="{% url 'commandments:bible_study_chapter_meta' %}"
   data-original-text-url="{% url 'commandments:bible_study_original_text' %}"
+  data-word-alignment-url="{% url 'commandments:bible_study_word_alignment' %}"
   data-commentary-cache-timeout="{{ commentary_cache_timeout_seconds }}"
   data-david-stern-commentary-footer="{{ david_stern_commentary_footer_text }}"
   data-david-stern-commentary-available="{% if david_stern_commentary_available %}1{% else %}0{% endif %}"
@@ -336,7 +337,7 @@
                   <div class="bible-study-translation-head">
                     <span class="bible-study-translation-title">{{ bible.display_name }}</span>
                   </div>
-                  <p class="bs-verse-text js-copy-selectable-line" data-copy-footer="{{ selected_book_label }} {{ selected_chapter }}:{{ verse.verse_num }}" data-copy-group="bs|{{ bible.id }}|{{ selected_book }}|{{ selected_chapter }}" data-copy-book-label="{{ selected_book_label|escape }}" data-copy-chapter="{{ selected_chapter }}" data-copy-verse="{{ verse.verse_num }}" data-copy-text="{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|striptags|escape }}">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>
+                  <p class="bs-verse-text js-copy-selectable-line" data-bible-verse-text="1" data-copy-footer="{{ selected_book_label }} {{ selected_chapter }}:{{ verse.verse_num }}" data-copy-group="bs|{{ bible.id }}|{{ selected_book }}|{{ selected_chapter }}" data-copy-book-label="{{ selected_book_label|escape }}" data-copy-chapter="{{ selected_chapter }}" data-copy-verse="{{ verse.verse_num }}" data-copy-text="{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|striptags|escape }}">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>
                   {% comment %} {% if forloop.parentloop.last and bible.copyright %} {% endcomment %}
                   <p class="bible-study-copyright mb-0"><small>{{ bible.copyright }}</small></p>
                   {% comment %} {% endif %} {% endcomment %}

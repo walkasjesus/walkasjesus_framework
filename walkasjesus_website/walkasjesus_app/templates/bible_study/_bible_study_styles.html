@@ -420,6 +420,25 @@
       color: #2e250d;
     }
 
+    .bible-study-shell .bs-aligned-word {
+      cursor: pointer;
+      border-radius: 0.45rem;
+      padding: 0 0.12rem;
+      border-bottom: 1px dotted rgba(200, 168, 75, 0.55);
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .bible-study-shell .bs-aligned-word:focus {
+      outline: none;
+    }
+
+    .bible-study-shell .bs-aligned-word.is-hovered,
+    .bible-study-shell .bs-aligned-word.active {
+      background: rgba(226, 185, 0, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(200, 168, 75, 0.45);
+      color: #2e250d;
+    }
+
     .bible-study-shell .bs-original-language-grc {
       font-family: 'BibleStudySBLGreek', Georgia, serif;
     }

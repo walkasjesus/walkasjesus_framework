@@ -28,7 +28,7 @@ from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageV
 from walkasjesus_app.models.law_of_messiah_media import MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
-from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
+from walkasjesus_app.lib.strongs_service import _candidate_payload, english_alignment_payload, original_text_payload
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.lib.media_cache_version import MEDIA_CACHE_VERSION_KEY, get_media_cache_version
 from walkasjesus_app.templatetags.media_extras import youtube_captions_url
@@ -540,6 +540,53 @@ class MediaReviewWorkflowTestCase(TestCase):
         self.assertEqual(resource.author, 'Updated author')
         self.assertEqual(resource.media_type, 'shortmovie')
         self.assertTrue(resource.is_public)
+
+
+class EnglishWordAlignmentTestCase(TestCase):
+    def _word_index_for(self, tokens, english_word):
+        for token in tokens:
+            if token['text'].lower() == english_word:
+                return token['word_index']
+        return None
+
+    def test_hebrew_verse_aligns_kjv_words_to_original_tokens(self):
+        payload = english_alignment_payload(
+            'Exodus', 1, 1,
+            'Now these are the names of the children of Israel, which came into Egypt; '
+            'every man and his household came with Jacob.',
+        )
+        original = original_text_payload('Exodus', 1, 1)
+        tokens = payload['tokens']
+
+        self.assertGreater(payload['aligned_count'], 10)
+        children_index = self._word_index_for(tokens, 'children')
+        self.assertIsNotNone(children_index)
+        self.assertIn('H1121', [
+            candidate['strongs_number']
+            for candidate in original['words'][children_index]['candidates']
+        ])
+        self.assertEqual(self._word_index_for(tokens, 'now'), -1)
+        self.assertEqual(
+            ''.join(token['text'] for token in tokens),
+            'Now these are the names of the children of Israel, which came into Egypt; '
+            'every man and his household came with Jacob.',
+        )
+
+    def test_greek_verse_aligns_kjv_words_to_original_tokens(self):
+        payload = english_alignment_payload(
+            'John', 3, 16,
+            'For God so loved the world, that he gave his only begotten Son, that whosoever '
+            'believeth in him should not perish, but have everlasting life.',
+        )
+        original = original_text_payload('John', 3, 16)
+
+        self.assertGreater(payload['aligned_count'], 10)
+        loved_index = self._word_index_for(payload['tokens'], 'loved')
+        self.assertIsNotNone(loved_index)
+        self.assertIn('G0025', [
+            candidate['strongs_number']
+            for candidate in original['words'][loved_index]['candidates']
+        ])
 
 
 class StrongsServiceFallbackTestCase(TestCase):

@@ -1,3 +1,4 @@
+import hashlib
 import html
 import json
 import re
@@ -1212,6 +1213,7 @@ def _parse_stepbible_row(line, language):
             'sentence_text': surface_text,
             'transliteration': transliteration,
             'translation_label': translation_label,
+            'context_translation': _clean_translation_label(columns[2] if len(columns) > 2 else ''),
             'lemma': str(lemma or '').strip(),
             'definition': _clean_translation_label(gloss),
             'grammar': grammar,
@@ -1233,6 +1235,7 @@ def _parse_stepbible_row(line, language):
         'sentence_text': surface_text,
         'transliteration': str(columns[2] if len(columns) > 2 else '').strip(),
         'translation_label': translation_label,
+        'context_translation': translation_label,
         'lemma': '',
         'definition': translation_label,
         'grammar': str(columns[5] if len(columns) > 5 else '').strip(),
@@ -1287,6 +1290,11 @@ def _token_payload_from_step_row(row_data, language):
         'has_candidates': bool(candidates),
         'strongs_count': len(candidates),
         'translation_label': primary_label,
+        # Contextual STEPBible gloss for this exact occurrence; drives English word alignment.
+        'context_gloss': ' '.join(_dedupe_preserve_order([
+            str(row_data.get('context_translation') or '').strip(),
+            str(row_data.get('translation_label') or '').strip(),
+        ])).strip(),
         'detail_note': '' if candidates else 'This word is aligned in STEPBible, but no lexicon entry was resolved from its Strong\'s tag.',
         'hover_summary': ' | '.join(hover_lines),
         'candidates': candidates,
@@ -1296,7 +1304,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v13:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v15:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1326,6 +1334,219 @@ def original_text_payload(book_name, chapter, verse):
         'tagging_source_license': 'CC BY 4.0',
         'words': words,
         'selected_word': first_clickable,
+    }
+    cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
+    return payload
+
+
+# --- English <-> original language word alignment -------------------------------------------------
+
+# Splits an English verse into alternating filler / word tokens so the original spacing and
+# punctuation can be re-rendered verbatim around the clickable words.
+_ENGLISH_SPLIT_RE = re.compile(r"([A-Za-z]+(?:[\u2019']?[A-Za-z]+)*)")
+
+# Words that occur in almost every Strong's KJV definition list; matching on them via the
+# lexicon produces noise, so they may only align through the contextual STEPBible gloss.
+_ENGLISH_FUNCTION_WORDS = {
+    'a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'with', 'from',
+    'as', 'that', 'this', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'am',
+    'it', 'its', 'he', 'she', 'they', 'them', 'him', 'her', 'his', 'their', 'thy', 'thine',
+    'thou', 'thee', 'ye', 'you', 'your', 'we', 'us', 'our', 'i', 'my', 'me', 'not', 'no',
+    'so', 'then', 'there', 'which', 'who', 'whom', 'shall', 'will', 'did', 'do', 'doth',
+    'unto', 'up', 'out', 'into', 'upon', 'one', 'all', 'any', 'every', 'more', 'very',
+}
+
+_ENGLISH_IRREGULAR_STEMS = {
+    'children': 'child', 'men': 'man', 'women': 'woman', 'people': 'people', 'feet': 'foot',
+    'teeth': 'tooth', 'mice': 'mouse', 'geese': 'goose', 'oxen': 'ox', 'brethren': 'brother',
+    'wives': 'wife', 'lives': 'life', 'knives': 'knife', 'leaves': 'leaf', 'thieves': 'thief',
+    'calves': 'calf', 'halves': 'half', 'loaves': 'loaf', 'selves': 'self', 'staves': 'staff',
+    'went': 'go', 'gone': 'go', 'came': 'come', 'said': 'say', 'saith': 'say', 'made': 'make',
+    'took': 'take', 'taken': 'take', 'gave': 'give', 'given': 'give', 'saw': 'see', 'seen': 'see',
+    'spake': 'speak', 'spoken': 'speak', 'begat': 'beget', 'begotten': 'beget', 'heard': 'hear',
+    'knew': 'know', 'known': 'know', 'brought': 'bring', 'bare': 'bear', 'born': 'bear',
+    'sons': 'son', 'sat': 'sit', 'stood': 'stand', 'found': 'find', 'built': 'build',
+}
+
+_ENGLISH_STEM_SUFFIXES = ('iest', 'ieth', 'ies', 'ied', 'est', 'eth', 'ing', 'ed', 'es', 's')
+
+
+def _english_stem(word):
+    value = str(word or '').lower().replace('\u2019', "'").strip("'")
+    if not value:
+        return ''
+    if value in _ENGLISH_IRREGULAR_STEMS:
+        return _ENGLISH_IRREGULAR_STEMS[value]
+    for suffix in _ENGLISH_STEM_SUFFIXES:
+        if len(value) - len(suffix) >= 3 and value.endswith(suffix):
+            base = value[:-len(suffix)]
+            if suffix in {'ies', 'ied', 'iest', 'ieth'}:
+                base += 'y'
+            return base
+    return value
+
+
+def _english_similar(left, right):
+    if left == right:
+        return True
+    left_stem = _english_stem(left)
+    right_stem = _english_stem(right)
+    if not left_stem or not right_stem:
+        return False
+    if left_stem == right_stem:
+        return True
+    shorter, longer = (left_stem, right_stem) if len(left_stem) <= len(right_stem) else (right_stem, left_stem)
+    return len(shorter) >= 4 and longer.startswith(shorter) and len(longer) - len(shorter) <= 3
+
+
+def _english_words_from(raw):
+    return [match.lower() for match in re.findall(r'[A-Za-z]+', str(raw or ''))]
+
+
+def _alignment_spec_for_word(word):
+    """Collect the English surface forms a single original-language token may appear as."""
+    gloss_words = set()
+    for source in (word.get('context_gloss'), word.get('translation_label')):
+        gloss_words.update(_english_words_from(source))
+
+    lexicon_words = set()
+    for candidate in word.get('candidates') or []:
+        lexicon_words.update(_english_words_from(candidate.get('kjv_definition')))
+        for gloss in candidate.get('glosses') or []:
+            lexicon_words.update(_english_words_from(gloss))
+    lexicon_words -= gloss_words
+
+    return {
+        'gloss_words': gloss_words,
+        'gloss_stems': {_english_stem(item) for item in gloss_words},
+        'lexicon_words': {item for item in lexicon_words if item not in _ENGLISH_FUNCTION_WORDS},
+        'lexicon_stems': {_english_stem(item) for item in lexicon_words if item not in _ENGLISH_FUNCTION_WORDS},
+    }
+
+
+def _alignment_score(english_word, spec):
+    if english_word in spec['gloss_words']:
+        return 6.0
+    if any(_english_similar(english_word, gloss) for gloss in spec['gloss_words']):
+        return 4.0
+    if english_word in _ENGLISH_FUNCTION_WORDS:
+        return 0.0
+    if english_word in spec['lexicon_words']:
+        return 3.0
+    if any(_english_similar(english_word, item) for item in spec['lexicon_words']):
+        return 2.0
+    return 0.0
+
+
+def _align_english_words(english_words, specs):
+    """Monotonic (order preserving) best-score alignment of English words onto original tokens.
+
+    KJV-style English follows the Hebrew/Greek word order closely enough that an order
+    preserving alignment avoids the false matches a greedy per-word lookup would produce.
+    """
+    word_count = len(english_words)
+    token_count = len(specs)
+    if not word_count or not token_count:
+        return [-1] * word_count
+
+    scores = [[_alignment_score(word, spec) for spec in specs] for word in english_words]
+
+    # best[i][j] = best achievable score using english words i.. and original tokens j..
+    best = [[0.0] * (token_count + 1) for _ in range(word_count + 1)]
+    # 0 = skip english word, 1 = map english word to token j, 2 = advance to token j + 1
+    choice = [[0] * (token_count + 1) for _ in range(word_count + 1)]
+    for i in range(word_count - 1, -1, -1):
+        row = scores[i]
+        for j in range(token_count - 1, -1, -1):
+            best_value = best[i + 1][j]
+            best_choice = 0
+            if row[j] > 0 and row[j] + best[i + 1][j] > best_value:
+                best_value = row[j] + best[i + 1][j]
+                best_choice = 1
+            if best[i][j + 1] > best_value:
+                best_value = best[i][j + 1]
+                best_choice = 2
+            best[i][j] = best_value
+            choice[i][j] = best_choice
+
+    mapping = [-1] * word_count
+    i = 0
+    j = 0
+    while i < word_count and j < token_count:
+        step = choice[i][j]
+        if step == 1:
+            mapping[i] = j
+            i += 1
+        elif step == 0:
+            i += 1
+        else:
+            j += 1
+
+    _align_reordered_leftovers(english_words, scores, mapping)
+    return mapping
+
+
+def _align_reordered_leftovers(english_words, scores, mapping):
+    """Rescue words the translator moved out of original order (e.g. a trailing proper name).
+
+    Only an unambiguous exact gloss hit on a still unused token is accepted, so this cannot
+    introduce the noisy matches that a fully unordered alignment would.
+    """
+    used_tokens = {index for index in mapping if index >= 0}
+    for word_position, token_index in enumerate(mapping):
+        if token_index >= 0 or english_words[word_position] in _ENGLISH_FUNCTION_WORDS:
+            continue
+        matches = [
+            index for index, score in enumerate(scores[word_position])
+            if score >= 6.0 and index not in used_tokens
+        ]
+        if len(matches) == 1:
+            mapping[word_position] = matches[0]
+            used_tokens.add(matches[0])
+
+
+def english_alignment_payload(book_name, chapter, verse, english_text):
+    """Map every English word of a verse onto the index of the original-language word it renders."""
+    text = re.sub(r'\s+', ' ', str(english_text or '')).strip()
+    if not text:
+        return {'tokens': [], 'aligned_count': 0}
+
+    digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
+    cache_key = f'bible_study:alignment:v2:{book_name}:{chapter}:{verse}:{digest}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        original = original_text_payload(book_name, chapter, verse)
+    except Exception:
+        original = None
+
+    words = (original or {}).get('words') or []
+    specs = [_alignment_spec_for_word(word or {}) for word in words]
+
+    parts = _ENGLISH_SPLIT_RE.split(text)
+    english_positions = [index for index in range(1, len(parts), 2)]
+    english_words = [parts[index].lower() for index in english_positions]
+    mapping = _align_english_words(english_words, specs)
+
+    word_index_by_part = {}
+    for position, token_index in zip(english_positions, mapping):
+        if token_index >= 0 and words[token_index].get('clickable'):
+            word_index_by_part[position] = token_index
+
+    tokens = []
+    for index, part in enumerate(parts):
+        if not part:
+            continue
+        tokens.append({
+            'text': part,
+            'word_index': word_index_by_part.get(index, -1),
+        })
+
+    payload = {
+        'tokens': tokens,
+        'aligned_count': len(word_index_by_part),
     }
     cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
     return payload

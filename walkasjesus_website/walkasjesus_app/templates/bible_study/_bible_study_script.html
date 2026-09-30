@@ -17,6 +17,8 @@
   var bsSuppressAutoApply = true;
   var bsOriginalOpenVerses = {};
   var bsPendingStrongsSelection = null;
+  var bsPendingAlignedSelection = null;
+  var bibleStudyAlignmentCache = {};
   var bsCopySelection = null;
   var bsLastWordSearch = null;
   var bsCombineVerses = false;
@@ -389,6 +391,10 @@
 
   function bibleStudyOriginalTextUrl() {
     return String($('.bible-study-shell').data('original-text-url') || '').trim();
+  }
+
+  function bibleStudyWordAlignmentUrl() {
+    return String($('.bible-study-shell').data('word-alignment-url') || '').trim();
   }
 
   function bibleStudySearchUrl() {
@@ -1032,8 +1038,147 @@
     ensureBibleStudyCopyButtons(state);
   }
 
-  function firstSelectableOriginalWordIndex(words) {
-    var foundIndex = -1;
+  // ---- English <-> original language word alignment ----
+
+  function bibleStudyIsEnglishBible(displayName) {
+    return /^\s*en\s*-/i.test(String(displayName || ''));
+  }
+
+  function bibleStudyVerseTextNode(bibleId, verseNumber) {
+    return $('.bible-study-translation-card[data-bible-id="' + bibleId + '"][data-verse="' + verseNumber + '"]')
+      .find('.bs-verse-text')
+      .first();
+  }
+
+  function bibleStudyAlignedVerseHtml(alignment, verseNumber) {
+    var tokens = (alignment && alignment.tokens) || [];
+    if (!tokens.length || !alignment.aligned_count) {
+      return '';
+    }
+    var parts = [];
+    tokens.forEach(function(token) {
+      var text = escapeHtml(String((token && token.text) || '')).replace(/\n/g, '<br>');
+      var wordIndex = parseInt((token && token.word_index), 10);
+      if (isNaN(wordIndex) || wordIndex < 0) {
+        parts.push(text);
+        return;
+      }
+      parts.push('<span class="bs-aligned-word" data-verse="' + escapeHtml(String(verseNumber)) +
+        '" data-word-index="' + escapeHtml(String(wordIndex)) +
+        '" tabindex="0" role="button" title="{% trans "Show the original word and its Strong&#39;s details" as bsi18n_aligned_hint %}{{ bsi18n_aligned_hint|escapejs }}">' + text + '</span>');
+    });
+    return parts.join('');
+  }
+
+  function applyBibleStudyAlignmentToDom(bibleId, alignmentPayload) {
+    var verses = (alignmentPayload && alignmentPayload.verses) || {};
+    $.each(verses, function(verseNumber, alignment) {
+      var html = bibleStudyAlignedVerseHtml(alignment, verseNumber);
+      if (!html) {
+        return;
+      }
+      var $text = bibleStudyVerseTextNode(bibleId, verseNumber);
+      if (!$text.length || $text.find('.bs-verse-spinner').length) {
+        return;
+      }
+      $text.html(html);
+    });
+  }
+
+  function collectBibleStudyVerseTexts(state, bibleId) {
+    var verses = {};
+    bibleStudyVerseNumbers(state).forEach(function(verseNumber) {
+      var $text = bibleStudyVerseTextNode(bibleId, verseNumber);
+      if (!$text.length || $text.find('.bs-verse-spinner').length) {
+        return;
+      }
+      var text = $.trim($text.text());
+      if (text && text !== '—') {
+        verses[String(verseNumber)] = text;
+      }
+    });
+    return verses;
+  }
+
+  function loadBibleStudyWordAlignment(state, bible) {
+    var url = bibleStudyWordAlignmentUrl();
+    if (!url || !state || state.combineVerses || !bible || !bibleStudyIsEnglishBible(bible.displayName)) {
+      return;
+    }
+
+    var rangeKey = bibleStudyRangeKey(bible.id, state.book, state.chapter, state.startVerse, state.endVerse);
+    if (bibleStudyAlignmentCache[rangeKey]) {
+      applyBibleStudyAlignmentToDom(bible.id, bibleStudyAlignmentCache[rangeKey]);
+      return;
+    }
+
+    var verses = collectBibleStudyVerseTexts(state, bible.id);
+    if (!Object.keys(verses).length) {
+      return;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: url,
+      timeout: 20000,
+      dataType: 'json',
+      data: {
+        csrfmiddlewaretoken: (document.cookie.match(/csrftoken=([^;]+)/) || [null, ''])[1] || '',
+        bible_id: bible.id,
+        book: state.book,
+        chapter: state.chapter,
+        verses: JSON.stringify(verses)
+      },
+      success: function(payload) {
+        if (!payload || payload.supported === false) {
+          return;
+        }
+        bibleStudyAlignmentCache[rangeKey] = payload;
+        applyBibleStudyAlignmentToDom(bible.id, payload);
+      }
+    });
+  }
+
+  function loadBibleStudyWordAlignments(state) {
+    if (!state || state.combineVerses) {
+      return;
+    }
+    $.each(state.bibles || [], function(_, bible) {
+      loadBibleStudyWordAlignment(state, bible);
+    });
+  }
+
+  function syncBibleStudyAlignedHover(verseNumber, wordIndex, hovering) {
+    $('.bs-aligned-word[data-verse="' + verseNumber + '"][data-word-index="' + wordIndex + '"]')
+      .toggleClass('is-hovered', !!hovering);
+  }
+
+  function syncBibleStudyAlignedSelection(verseNumber, wordIndex) {
+    $('.bs-aligned-word[data-verse="' + verseNumber + '"]').removeClass('active');
+    $('.bs-aligned-word[data-verse="' + verseNumber + '"][data-word-index="' + wordIndex + '"]').addClass('active');
+  }
+
+  function openBibleStudyOriginalWordFromEnglish(verseNumber, wordIndex) {
+    if (!verseNumber || isNaN(wordIndex) || wordIndex < 0) {
+      return;
+    }
+    syncBibleStudyAlignedSelection(verseNumber, wordIndex);
+
+    var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
+    if (bsOriginalOpenVerses[String(verseNumber)] && $shell.length && $shell.data('versePayload')) {
+      selectBibleStudyOriginalWord(verseNumber, wordIndex);
+      return;
+    }
+
+    bsPendingAlignedSelection = { verse: String(verseNumber), wordIndex: wordIndex };
+    bsOriginalOpenVerses[String(verseNumber)] = true;
+    var state = currentBibleStudyState();
+    state.showOriginalText = normalizeOpenOriginalVersesForState(state);
+    syncBibleStudyOriginalToggleButtons();
+    loadBibleStudyOriginalText(state);
+  }
+
+  function firstSelectableOriginalWordIndex(words) {    var foundIndex = -1;
     $.each(words || [], function(index, word) {
       if (word && word.clickable) {
         foundIndex = index;
@@ -1741,12 +1886,14 @@
     $shell.find('.bs-original-sentence-token[data-word-index="' + wordIndex + '"]').addClass('active');
     $shell.find('.bs-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
     $shell.find('.bs-original-word-translation[data-word-index="' + wordIndex + '"]').addClass('active');
+    syncBibleStudyAlignedSelection(String($shell.data('verse') || ''), wordIndex);
   }
 
   function syncOriginalSentenceHover($shell, wordIndex, hovering) {
     $shell.find('.bs-original-sentence-token[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
     $shell.find('.bs-original-word-btn[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
     $shell.find('.bs-original-word-translation[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
+    syncBibleStudyAlignedHover(String($shell.data('verse') || ''), wordIndex, hovering);
   }
 
   function selectBibleStudyOriginalWord(verseNumber, wordIndex) {
@@ -1772,8 +1919,10 @@
 
     var html = '<div class="bs-original-detail-meta"><strong>' + escapeHtml(selectedWord.text) + '</strong> · ' + escapeHtml(String((versePayload && versePayload.language_label) || '')) + '</div>';
 
-    if (selectedWord.translation_label) {
-      html += '<p class="mb-2"><small>{% trans "Direct gloss" %}: ' + escapeHtml(selectedWord.translation_label) + '</small></p>';
+    // Prefer the STEPBible gloss for this exact occurrence over the generic lexicon label.
+    var directGloss = String(selectedWord.context_gloss || selectedWord.translation_label || '');
+    if (directGloss) {
+      html += '<p class="mb-2"><small>{% trans "Direct gloss" %}: ' + escapeHtml(directGloss) + '</small></p>';
     }
 
     if (selectedWord.grammar) {
@@ -1922,7 +2071,21 @@
       renderOriginalWordDetail($detailCard, versePayload || {}, firstSelectableOriginalWordIndex(words));
       syncOriginalSentenceSelection($shell, firstSelectableOriginalWordIndex(words));
       applyPendingStrongsSelectionToVerse(verseNumber, versePayload || {});
+      applyPendingAlignedSelectionToVerse(verseNumber);
     });
+  }
+
+  function applyPendingAlignedSelectionToVerse(verseNumber) {
+    if (!bsPendingAlignedSelection || String(bsPendingAlignedSelection.verse || '') !== String(verseNumber || '')) {
+      return;
+    }
+    var wordIndex = bsPendingAlignedSelection.wordIndex;
+    bsPendingAlignedSelection = null;
+    selectBibleStudyOriginalWord(String(verseNumber), wordIndex);
+    var shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]').get(0);
+    if (shell && shell.scrollIntoView) {
+      shell.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
   function ensureOriginalTextPanels(state) {
@@ -2502,6 +2665,7 @@
     $.each(state.bibles, function(_, bible) {
       fetchBibleStudyRange(state, bible, function(payload) {
         applyBibleStudyPayloadToDom(state, bible.id, payload || {});
+        loadBibleStudyWordAlignment(state, bible);
       });
     });
 
@@ -2754,6 +2918,42 @@
   $(document).on('click', '.bible-study-shell .bs-original-word-btn', function(event) {
     event.preventDefault();
     selectBibleStudyOriginalWord(String($(this).data('verse') || ''), parseInt($(this).data('word-index'), 10));
+  });
+
+  $(document).on('mouseenter focusin', '.bible-study-shell .bs-aligned-word', function() {
+    var $word = $(this);
+    var verseNumber = String($word.data('verse') || '');
+    var wordIndex = String($word.data('word-index') || '');
+    syncBibleStudyAlignedHover(verseNumber, wordIndex, true);
+    var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
+    if ($shell.length) {
+      syncOriginalSentenceHover($shell, wordIndex, true);
+    }
+  });
+
+  $(document).on('mouseleave focusout', '.bible-study-shell .bs-aligned-word', function() {
+    var $word = $(this);
+    var verseNumber = String($word.data('verse') || '');
+    var wordIndex = String($word.data('word-index') || '');
+    syncBibleStudyAlignedHover(verseNumber, wordIndex, false);
+    var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
+    if ($shell.length) {
+      syncOriginalSentenceHover($shell, wordIndex, false);
+    }
+  });
+
+  $(document).on('click', '.bible-study-shell .bs-aligned-word', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    openBibleStudyOriginalWordFromEnglish(String($(this).data('verse') || ''), parseInt($(this).data('word-index'), 10));
+  });
+
+  $(document).on('keydown', '.bible-study-shell .bs-aligned-word', function(event) {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+    event.preventDefault();
+    $(this).trigger('click');
   });
 
   $(document).on('mouseenter focusin', '.bible-study-shell .bs-original-word-btn', function() {
@@ -3056,6 +3256,9 @@
     syncBibleStudyOriginalToggleButtons();
   } else {
     $('#bs-show-original').prop('checked', false);
+  }
+  if (!bsCombineVerses && hasInitialVerseArea) {
+    loadBibleStudyWordAlignments(currentBibleStudyState());
   }
 })(jQuery);
 </script>

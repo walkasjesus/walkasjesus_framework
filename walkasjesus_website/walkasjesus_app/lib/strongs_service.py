@@ -1,3 +1,4 @@
+import gzip
 import hashlib
 import html
 import json
@@ -1505,14 +1506,19 @@ def _align_reordered_leftovers(english_words, scores, mapping):
             used_tokens.add(matches[0])
 
 
-def english_alignment_payload(book_name, chapter, verse, english_text):
-    """Map every English word of a verse onto the index of the original-language word it renders."""
+def english_alignment_payload(book_name, chapter, verse, english_text, tagged_source=''):
+    """Map every English word of a verse onto the index of the original-language word it renders.
+
+    When the translation has a word-level Strong's tagging (currently the KJV) the mapping is a
+    direct lookup; otherwise it falls back to the lexicon-scoring alignment.
+    """
     text = re.sub(r'\s+', ' ', str(english_text or '')).strip()
     if not text:
-        return {'tokens': [], 'aligned_count': 0}
+        return {'tokens': [], 'aligned_count': 0, 'method': ''}
 
+    tagged_source = str(tagged_source or '').strip().lower()
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:alignment:v2:{book_name}:{chapter}:{verse}:{digest}'
+    cache_key = f'bible_study:alignment:v3:{tagged_source}:{book_name}:{chapter}:{verse}:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1523,12 +1529,21 @@ def english_alignment_payload(book_name, chapter, verse, english_text):
         original = None
 
     words = (original or {}).get('words') or []
-    specs = [_alignment_spec_for_word(word or {}) for word in words]
 
     parts = _ENGLISH_SPLIT_RE.split(text)
     english_positions = [index for index in range(1, len(parts), 2)]
     english_words = [parts[index].lower() for index in english_positions]
-    mapping = _align_english_words(english_words, specs)
+
+    mapping = None
+    method = 'lexicon'
+    if tagged_source == 'kjv':
+        mapping = _tagged_mapping(book_name, chapter, verse, english_words, words)
+        if mapping is not None:
+            method = 'tagged'
+
+    if mapping is None:
+        specs = [_alignment_spec_for_word(word or {}) for word in words]
+        mapping = _align_english_words(english_words, specs)
 
     word_index_by_part = {}
     for position, token_index in zip(english_positions, mapping):
@@ -1547,6 +1562,140 @@ def english_alignment_payload(book_name, chapter, verse, english_text):
     payload = {
         'tokens': tokens,
         'aligned_count': len(word_index_by_part),
+        'method': method,
+        'tagging_source': TAGGED_KJV_SOURCE_NAME if method == 'tagged' else '',
     }
     cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
     return payload
+
+
+# --- Word-level tagged translations (direct Strong's lookup) --------------------------------------
+
+TAGGED_KJV_SOURCE_NAME = "CrossWire KJV (1769) with Strong's Numbers"
+
+# Share of displayed words that must be recovered from the tagged text before we trust it;
+# below this the API.Bible edition differs too much and the lexicon alignment is used instead.
+_TAGGED_COVERAGE_THRESHOLD = 0.6
+
+
+def tagged_bible_root():
+    return Path(__file__).resolve().parents[2] / 'data' / 'tagged_bibles'
+
+
+@lru_cache(maxsize=8)
+def _tagged_kjv_book(book_name):
+    path = tagged_bible_root() / 'kjv_strongs' / f'{book_name}.json.gz'
+    if not path.exists():
+        return {}
+    try:
+        with gzip.open(path, 'rt', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError, TypeError):
+        return {}
+    chapters = payload.get('chapters') if isinstance(payload, dict) else None
+    return chapters if isinstance(chapters, dict) else {}
+
+
+def _tagged_kjv_segments(book_name, chapter, verse):
+    return (_tagged_kjv_book(book_name).get(str(chapter)) or {}).get(str(verse)) or []
+
+
+def _original_token_indexes_by_code(words):
+    """Ordered list of original-language token positions for every Strong's code in the verse."""
+    occurrences = {}
+    for index, word in enumerate(words or []):
+        seen = set()
+        for candidate in (word or {}).get('candidates') or []:
+            code = _normalize_strongs_base_code(candidate.get('strongs_number'))
+            if not code or code in seen:
+                continue
+            seen.add(code)
+            occurrences.setdefault(code, []).append(index)
+    return occurrences
+
+
+def _transfer_alignment_by_lcs(source_words, source_mapping, target_words):
+    """Carry a mapping from the tagged KJV word sequence onto the displayed word sequence."""
+    source_count = len(source_words)
+    target_count = len(target_words)
+    lengths = [[0] * (target_count + 1) for _ in range(source_count + 1)]
+    for i in range(source_count - 1, -1, -1):
+        for j in range(target_count - 1, -1, -1):
+            if source_words[i] == target_words[j]:
+                lengths[i][j] = lengths[i + 1][j + 1] + 1
+            else:
+                lengths[i][j] = max(lengths[i + 1][j], lengths[i][j + 1])
+
+    mapping = [-1] * target_count
+    matched = 0
+    i = 0
+    j = 0
+    while i < source_count and j < target_count:
+        if source_words[i] == target_words[j]:
+            mapping[j] = source_mapping[i]
+            matched += 1
+            i += 1
+            j += 1
+        elif lengths[i + 1][j] >= lengths[i][j + 1]:
+            i += 1
+        else:
+            j += 1
+    return mapping, matched
+
+
+# Grammatical markers (object marker, article) that a tagged word group only points at when it
+# carries no content word; otherwise the content word wins.
+_LOW_PRIORITY_STRONGS = {'H853', 'H854', 'G3588'}
+
+
+def _pick_tagged_token(code, occurrences, consumed, last_assigned):
+    """Pick which occurrence of a repeated Strong's number this tagged word group refers to."""
+    positions = occurrences.get(code)
+    if not positions:
+        return None
+    free = [position for position in positions if position not in consumed[code]]
+    if not free:
+        return positions[-1]
+    # Nearest still unused occurrence, preferring the forward direction on a tie.
+    return min(free, key=lambda position: (abs(position - last_assigned), 0 if position >= last_assigned else 1))
+
+
+def _tagged_mapping(book_name, chapter, verse, english_words, words):
+    segments = _tagged_kjv_segments(book_name, chapter, verse)
+    if not segments or not english_words or not words:
+        return None
+
+    occurrences = _original_token_indexes_by_code(words)
+    if not occurrences:
+        return None
+
+    consumed = {code: set() for code in occurrences}
+    last_assigned = 0
+    source_words = []
+    source_mapping = []
+    for segment in segments:
+        codes = str((segment or [''])[0] or '').split()
+        segment_words = (segment or ['', []])[1] or []
+        ordered_codes = (
+            [code for code in codes if code not in _LOW_PRIORITY_STRONGS]
+            + [code for code in codes if code in _LOW_PRIORITY_STRONGS]
+        )
+
+        token_index = -1
+        for code in ordered_codes:
+            picked = _pick_tagged_token(code, occurrences, consumed, last_assigned)
+            if picked is None:
+                continue
+            consumed[code].add(picked)
+            token_index = picked
+            last_assigned = picked
+            break
+
+        for segment_word in segment_words:
+            source_words.append(str(segment_word).lower())
+            source_mapping.append(token_index)
+
+    mapping, matched = _transfer_alignment_by_lcs(source_words, source_mapping, english_words)
+    if matched < len(english_words) * _TAGGED_COVERAGE_THRESHOLD:
+        return None
+    return mapping

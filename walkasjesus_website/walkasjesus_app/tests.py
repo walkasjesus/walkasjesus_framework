@@ -588,6 +588,28 @@ class EnglishWordAlignmentTestCase(TestCase):
             for candidate in original['words'][loved_index]['candidates']
         ])
 
+    def test_tagged_kjv_source_uses_direct_strongs_lookup(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In the beginning God created the heaven and the earth.',
+            tagged_source='kjv',
+        )
+
+        self.assertEqual(payload['method'], 'tagged')
+        # The KJV reorders "God created" relative to the Hebrew, which only a tag lookup resolves.
+        self.assertEqual(self._word_index_for(payload['tokens'], 'created'), 1)
+        self.assertEqual(self._word_index_for(payload['tokens'], 'god'), 2)
+
+    def test_unknown_tagged_source_falls_back_to_lexicon_alignment(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In the beginning God created the heaven and the earth.',
+            tagged_source='does-not-exist',
+        )
+
+        self.assertEqual(payload['method'], 'lexicon')
+        self.assertGreater(payload['aligned_count'], 5)
+
 
 class StrongsServiceFallbackTestCase(TestCase):
     def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self):

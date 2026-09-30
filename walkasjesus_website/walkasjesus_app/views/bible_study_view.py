@@ -120,6 +120,18 @@ _API_BIBLE_BOOK_ORDER = {
 }
 
 
+# Editions covered by the word-level Strong's tagging built from the CrossWire KJV module.
+_TAGGED_KJV_ABBREVIATIONS = {'KJV', 'KJVCPB', 'AKJV', 'AV'}
+
+
+def _tagged_source_for_bible(bible):
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').strip().upper()
+    name = str(getattr(bible, 'name', '') or '').strip().lower()
+    if abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name:
+        return 'kjv'
+    return ''
+
+
 def _bible_dropdown_label(bible):
     language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
     bible_name = str(getattr(bible, 'name', '') or '').strip()
@@ -939,7 +951,9 @@ class BibleStudyWordAlignmentView(View):
                 continue
             text = str(verse_text or '')[:self.MAX_VERSE_TEXT_LENGTH]
             try:
-                alignments[str(verse_number)] = english_alignment_payload(book_name, chapter, verse_number, text)
+                alignments[str(verse_number)] = english_alignment_payload(
+                    book_name, chapter, verse_number, text, tagged_source=_tagged_source_for_bible(bible),
+                )
             except Exception:
                 logger.exception(
                     'Bible Study word alignment failed for %s %s:%s', book_name, chapter, verse_number

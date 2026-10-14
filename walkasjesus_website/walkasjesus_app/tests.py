@@ -22,13 +22,23 @@ from django.utils import translation
 from walkasjesus_app.admin import MediaResourceAdmin
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiah, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
-from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
+from walkasjesus_app.models.bibles import (
+    BibleTranslationMetaData,
+    BibleTranslation,
+    LocalCompleteJewishBible,
+    LocalStatenvertalingBible,
+)
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
 from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageVisitDaily
 from walkasjesus_app.models.law_of_messiah_media import MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
-from walkasjesus_app.lib.strongs_service import _candidate_payload, english_alignment_payload, original_text_payload
+from walkasjesus_app.lib.strongs_service import (
+    _candidate_payload,
+    english_alignment_payload,
+    localized_original_text_payload,
+    original_text_payload,
+)
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.lib.media_cache_version import MEDIA_CACHE_VERSION_KEY, get_media_cache_version
 from walkasjesus_app.templatetags.media_extras import youtube_captions_url
@@ -41,7 +51,11 @@ from walkasjesus_app.views.detail_view import (
     _filter_grouped_media_by_audience,
     _lesson_allowed_target_audiences,
 )
-from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView, _append_unique_commentary
+from walkasjesus_app.views.user_preferences import (
+    ScripturaCommentaryProxyView,
+    _append_unique_commentary,
+    _translate_commentary_text,
+)
 from walkasjesus_app.views.user_preferences import BibleTranslationsForLanguageView
 
 
@@ -609,6 +623,74 @@ class EnglishWordAlignmentTestCase(TestCase):
 
         self.assertEqual(payload['method'], 'lexicon')
         self.assertGreater(payload['aligned_count'], 5)
+
+    def test_dutch_verse_uses_statenvertaling_tagging(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In het begin schiep God de hemel en de aarde.',
+            tagged_source='svv',
+            allow_scoring=False,
+        )
+
+        self.assertEqual(payload['method'], 'tagged')
+        self.assertEqual(self._word_index_for(payload['tokens'], 'schiep'), 1)
+        self.assertEqual(self._word_index_for(payload['tokens'], 'god'), 2)
+
+    def test_untagged_non_english_verse_returns_no_alignment(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'Am Anfang schuf Gott Himmel und Erde.',
+            allow_scoring=False,
+        )
+
+        self.assertEqual(payload['aligned_count'], 0)
+        self.assertEqual(payload['tokens'], [])
+
+
+class DutchOriginalTextTestCase(TestCase):
+    def test_dutch_payload_adds_statenvertaling_glosses_and_usage(self):
+        payload = localized_original_text_payload('Exodus', 1, 1, 'nl')
+        words = payload['words']
+
+        self.assertEqual(payload['local_language'], 'nl')
+        self.assertEqual(words[2]['local_gloss'], 'zonen')
+        # Untagged words still fall back to the most common Statenvertaling rendering.
+        self.assertTrue(all(word['local_gloss'] for word in words if word['has_candidates']))
+
+        candidate = words[2]['candidates'][0]
+        usage = candidate['local_usage']
+        self.assertGreater(len(usage), 3)
+        self.assertIn('zoon', [item['label'] for item in usage])
+        self.assertGreater(usage[0]['count'], usage[-1]['count'])
+        self.assertGreater(len(usage[0]['references']), 100)
+
+        # Hebrew usage outline nodes have non-zero counts and references
+        self.assertGreater(candidate['usage_outline'][0]['count'], 0)
+        self.assertGreater(len(candidate['usage_outline'][0]['references']), 0)
+
+    def test_english_payload_is_unchanged(self):
+        payload = localized_original_text_payload('Exodus', 1, 1, 'en')
+
+        self.assertNotIn('local_language', payload)
+        self.assertNotIn('local_gloss', payload['words'][2])
+
+
+class LocalStatenvertalingBibleTestCase(SimpleTestCase):
+    def test_serves_verses_from_bundled_data(self):
+        bible = LocalStatenvertalingBible('svv-statenvertaling')
+
+        self.assertEqual(bible.language, 'nl')
+        self.assertEqual(bible.abbreviation, 'SV')
+        self.assertTrue(bible.is_local_source)
+        self.assertEqual(
+            bible.verses(BibleLibBibleBooks['Genesis'], 1, 1, 1, 1),
+            'In den beginne schiep God den hemel en de aarde.',
+        )
+
+    def test_is_registered_as_a_selectable_translation(self):
+        bible_ids = {getattr(bible, 'id', '') for bible in BibleTranslation().all()}
+
+        self.assertIn('svv-statenvertaling', bible_ids)
 
 
 class StrongsServiceFallbackTestCase(TestCase):
@@ -1763,6 +1845,33 @@ class CommentaryTranslationViewTestCase(SimpleTestCase):
         self.assertEqual(payload['language'], 'nl')
         self.assertTrue(payload['machine_translated'])
         mock_translate_commentary_text.assert_called_once_with('In the beginning', 'nl')
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @patch('walkasjesus_app.views.user_preferences.requests.post')
+    def test_translation_provider_failure_returns_original_text(self, mock_requests_post, mock_requests_get):
+        mock_requests_post.side_effect = RuntimeError('primary provider unavailable')
+        mock_requests_get.side_effect = RuntimeError('fallback provider unavailable')
+
+        self.assertEqual(
+            _translate_commentary_text('In the beginning', 'nl'),
+            'In the beginning',
+        )
+
+    @patch('walkasjesus_app.views.user_preferences._translate_google_batch')
+    def test_translation_endpoint_supports_batch_texts(self, mock_translate_batch):
+        cache.clear()
+        mock_translate_batch.return_value = ['zaad', 'zaaien']
+
+        response = self.client.post(
+            reverse('commandments:commentary_translate'),
+            {'texts': json.dumps(['seed', 'sowing']), 'target_language': 'nl'},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['translations']['seed'], 'zaad')
+        self.assertEqual(payload['translations']['sowing'], 'zaaien')
+        mock_translate_batch.assert_called_once_with(['seed', 'sowing'], 'nl')
 
 
 class CommentaryCoverageForGenesisTestCase(TestCase):

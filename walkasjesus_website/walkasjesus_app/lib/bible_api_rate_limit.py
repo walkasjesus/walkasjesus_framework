@@ -140,6 +140,10 @@ def consume_bible_api_quota(request, bible, endpoint, amount=1):
     if not bool(getattr(settings, 'BIBLE_API_RATE_LIMIT_ENABLED', False)):
         return
 
+    # Bibles served from bundled data never hit the external API.
+    if bool(getattr(bible, 'is_local_source', False)):
+        return
+
     client_ip = _client_ip(request)
     if _is_whitelisted_ip(client_ip):
         return

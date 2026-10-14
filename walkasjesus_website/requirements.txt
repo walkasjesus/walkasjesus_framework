@@ -26,7 +26,7 @@ sentry-sdk>=2.57.0
 
 # Debug and Development
 django-debug-toolbar>=6.3.0
-# Only needed to regenerate data/tagged_bibles via `manage.py build_kjv_strongs_index`
+# Only needed to regenerate data/tagged_bibles via `manage.py build_tagged_strongs_index`
 pysword>=0.2.8
 
 # Used to communicate with youtube

@@ -25,7 +25,10 @@ from walkasjesus_app.lib.access_policy import (
     is_bible_id_visible_for_request,
     sort_bibles_for_language,
 )
-from walkasjesus_app.lib.strongs_service import english_alignment_payload, original_text_payload
+from walkasjesus_app.lib.strongs_service import (
+    english_alignment_payload,
+    localized_original_text_payload,
+)
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
 
@@ -120,15 +123,18 @@ _API_BIBLE_BOOK_ORDER = {
 }
 
 
-# Editions covered by the word-level Strong's tagging built from the CrossWire KJV module.
+# Editions covered by the word-level Strong's tagging built from the CrossWire SWORD modules.
 _TAGGED_KJV_ABBREVIATIONS = {'KJV', 'KJVCPB', 'AKJV', 'AV'}
 
 
 def _tagged_source_for_bible(bible):
     abbreviation = str(getattr(bible, 'abbreviation', '') or '').strip().upper()
     name = str(getattr(bible, 'name', '') or '').strip().lower()
+    language = str(getattr(bible, 'language', '') or '').strip().lower()[:2]
     if abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name:
         return 'kjv'
+    if language == 'nl':
+        return 'svv'
     return ''
 
 
@@ -904,13 +910,15 @@ class BibleStudyOriginalTextView(View):
 
         verses = {}
         for verse in range(start_verse, end_verse + 1):
-            verses[str(verse)] = original_text_payload(book_name, chapter, verse)
+            verses[str(verse)] = localized_original_text_payload(
+                book_name, chapter, verse, getattr(request, 'LANGUAGE_CODE', 'en'),
+            )
 
         return JsonResponse({'verses': verses})
 
 
 class BibleStudyWordAlignmentView(View):
-    """AJAX endpoint: maps the words of an English verse onto original-language word indexes."""
+    """AJAX endpoint: maps the words of a translated verse onto original-language word indexes."""
 
     MAX_VERSE_TEXT_LENGTH = 4000
 
@@ -929,7 +937,9 @@ class BibleStudyWordAlignmentView(View):
         if not bible:
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
-        if str(getattr(bible, 'language', '') or '').strip().lower()[:2] != 'en':
+        tagged_source = _tagged_source_for_bible(bible)
+        is_english = str(getattr(bible, 'language', '') or '').strip().lower()[:2] == 'en'
+        if not tagged_source and not is_english:
             return JsonResponse({'verses': {}, 'supported': False})
 
         try:
@@ -952,7 +962,9 @@ class BibleStudyWordAlignmentView(View):
             text = str(verse_text or '')[:self.MAX_VERSE_TEXT_LENGTH]
             try:
                 alignments[str(verse_number)] = english_alignment_payload(
-                    book_name, chapter, verse_number, text, tagged_source=_tagged_source_for_bible(bible),
+                    book_name, chapter, verse_number, text,
+                    tagged_source=tagged_source,
+                    allow_scoring=is_english,
                 )
             except Exception:
                 logger.exception(

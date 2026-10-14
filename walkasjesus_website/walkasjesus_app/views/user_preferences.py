@@ -1,6 +1,7 @@
 from gettext import gettext
 import hashlib
 import json
+import logging
 import re
 from pathlib import Path
 from functools import lru_cache
@@ -26,6 +27,8 @@ from walkasjesus_app.lib.access_policy import (
 from walkasjesus_app.lib.sword_commentary import get_sword_source_config, normalize_book_key, sword_commentary_enabled, sword_disabled_source_ids
 from walkasjesus_app.models import UserPreferences, BibleTranslation
 from walkasjesus_app.models import SwordCommentarySource, SwordCommentaryEntry
+
+logger = logging.getLogger(__name__)
 
 
 COMMENTARY_TRANSLATION_CACHE_TIMEOUT = int(getattr(settings, 'COMMENTARY_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
@@ -398,27 +401,78 @@ class UserPreferencesLanguageSwitchView(View):
         return response
 
 
-def _translate_commentary_text(text, target_language):
+_BROWSER_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+}
+
+
+def _translate_google_batch(texts, target_language):
+    """Translate a list of texts using Google Translate's extension endpoint (supports multiple q)."""
+    if not texts:
+        return []
+    target = str(target_language or 'en').strip().lower()[:2]
+    if not target or target == 'en':
+        return list(texts)
+
+    # 1. Primary: clients5.google.com/translate_a/t with client=dict-chrome-ex (supports POST with multiple q)
     try:
-        translator = Translator()
-        return translator.translate(text, src='en', dest=target_language).text
-    except Exception:
-        response = requests.get(
-            'https://translate.googleapis.com/translate_a/single',
-            params={
-                'client': 'gtx',
-                'sl': 'en',
-                'tl': target_language,
-                'dt': 't',
-                'q': text,
-            },
+        data = [('q', t) for t in texts]
+        response = requests.post(
+            'https://clients5.google.com/translate_a/t',
+            params={'client': 'dict-chrome-ex', 'sl': 'en', 'tl': target},
+            data=data,
+            headers=_BROWSER_HEADERS,
             timeout=15,
         )
         response.raise_for_status()
-        data = response.json()
-        segments = data[0] if isinstance(data, list) and data else []
-        translated_parts = [segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0]]
-        return ''.join(translated_parts)
+        res = response.json()
+        if isinstance(res, list):
+            if len(texts) == 1:
+                return [' '.join(str(x) for x in res)]
+            elif len(res) == len(texts):
+                return [str(x) for x in res]
+    except Exception as exc:
+        logger.warning('clients5 batch translation failed: %s', exc)
+
+    # 2. Fallback: translate.googleapis.com/translate_a/single (item by item)
+    results = []
+    for text in texts:
+        trans = None
+        for client in ('dict-chrome-ex', 'gtx'):
+            try:
+                response = requests.get(
+                    'https://clients5.google.com/translate_a/t' if client == 'dict-chrome-ex' else 'https://translate.googleapis.com/translate_a/single',
+                    params={
+                        'client': client,
+                        'sl': 'en',
+                        'tl': target,
+                        **({'dt': 't'} if client == 'gtx' else {}),
+                        'q': text,
+                    },
+                    headers=_BROWSER_HEADERS,
+                    timeout=10,
+                )
+                response.raise_for_status()
+                data = response.json()
+                if isinstance(data, list):
+                    if client == 'dict-chrome-ex':
+                        trans = ' '.join(str(x) for x in data)
+                        break
+                    elif data and isinstance(data[0], list):
+                        parts = [s[0] for s in data[0] if isinstance(s, list) and s and s[0]]
+                        if parts:
+                            trans = ''.join(parts)
+                            break
+            except Exception:
+                continue
+        results.append(trans if trans is not None else text)
+
+    return results
+
+
+def _translate_commentary_text(text, target_language):
+    res = _translate_google_batch([text], target_language)
+    return res[0] if res else text
 
 class UserPreferencesBibleView(View):
     def post(self, request):
@@ -497,11 +551,57 @@ class BibleTranslationsForLanguageView(View):
 
 
 class CommentaryTranslationView(View):
-    """Machine-translates commentary text for the current UI language."""
+    """Machine-translates commentary or Strong's text for the current UI language."""
 
     def post(self, request):
-        text = str(request.POST.get('text', '')).strip()
         target_language = str(request.POST.get('target_language', 'en')).strip().lower()[:2]
+        raw_texts = request.POST.get('texts')
+
+        if raw_texts:
+            try:
+                texts = json.loads(raw_texts)
+            except Exception:
+                texts = []
+            if not isinstance(texts, list):
+                texts = []
+
+            if not target_language or target_language == 'en' or not texts:
+                return JsonResponse({'translations': {t: t for t in texts}})
+
+            translations = {}
+            needed = []
+            for t in texts:
+                t_str = str(t or '').strip()
+                if not t_str:
+                    continue
+                digest = hashlib.sha256(f'{target_language}:{t_str}'.encode('utf-8')).hexdigest()
+                cached = cache.get(f'commentary_translation:v1:{digest}')
+                if cached is not None and isinstance(cached, dict) and cached.get('translated_text'):
+                    translations[t_str] = cached['translated_text']
+                else:
+                    needed.append(t_str)
+
+            if needed:
+                unique_needed = []
+                seen = set()
+                for t in needed:
+                    if t not in seen:
+                        seen.add(t)
+                        unique_needed.append(t)
+
+                batch_results = _translate_google_batch(unique_needed, target_language)
+                for orig, trans in zip(unique_needed, batch_results):
+                    translations[orig] = trans
+                    digest = hashlib.sha256(f'{target_language}:{orig}'.encode('utf-8')).hexdigest()
+                    cache.set(
+                        f'commentary_translation:v1:{digest}',
+                        {'translated_text': trans, 'language': target_language, 'machine_translated': True},
+                        COMMENTARY_TRANSLATION_CACHE_TIMEOUT,
+                    )
+
+            return JsonResponse({'translations': translations})
+
+        text = str(request.POST.get('text', '')).strip()
 
         if not text:
             return JsonResponse({'translated_text': ''})

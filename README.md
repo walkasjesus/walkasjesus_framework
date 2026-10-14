@@ -62,7 +62,8 @@ The following extra information might be helpfull when helping to improve this a
 ### Feature documentation
 
 - [Bible Study tool](walkasjesus_website/walkasjesus_app/BIBLE_STUDY.md) — data sources, the
-  Strong's/original-language engine and the English↔Hebrew/Greek word alignment.
+  Strong's/original-language engine and the word-by-word link between a translation and the
+  Hebrew/Greek.
 
 ### Scripts
 

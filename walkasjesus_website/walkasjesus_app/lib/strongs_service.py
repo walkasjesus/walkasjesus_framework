@@ -1,3 +1,4 @@
+import copy
 import gzip
 import hashlib
 import html
@@ -529,7 +530,7 @@ def _parse_greek_outline_nodes(full_entry_html):
         node = {
             'label': label,
             'children': [],
-            'count': 0,
+            'count': len(refs),
             'references': refs,
             'reference_groups': _chunked(refs, 3),
         }
@@ -1111,6 +1112,78 @@ def _lxx_hebrew_equivalents(strongs_number, language):
     return normalized_candidates
 
 
+def _attach_hebrew_outline_counts(outline, translation_counts):
+    if not outline or not translation_counts:
+        return outline
+
+    def find_best_node(nodes, target_label):
+        target = target_label.lower().strip()
+        best = None
+        best_score = 0
+
+        def walk(node):
+            nonlocal best, best_score
+            n_lbl = str(node.get('label') or '').lower().strip()
+            score = 0
+            if target == n_lbl:
+                score = 10
+            elif target in n_lbl or n_lbl in target:
+                score = 5
+            elif any(len(w) >= 3 and w in n_lbl for w in re.findall(r'[a-z]+', target)):
+                score = 2
+            if score > best_score:
+                best_score = score
+                best = node
+            for child in node.get('children', []):
+                walk(child)
+
+        for root in nodes:
+            walk(root)
+        return best if best_score > 0 else None
+
+    if len(outline) == len(translation_counts):
+        for node, item in zip(outline, translation_counts):
+            node['count'] = int(item.get('count') or 0)
+            node['references'] = list(item.get('references') or [])
+            node['reference_groups'] = list(item.get('reference_groups') or [])
+    else:
+        for item in translation_counts:
+            matched_node = find_best_node(outline, str(item.get('label') or ''))
+            if matched_node and not matched_node.get('count'):
+                matched_node['count'] = int(item.get('count') or 0)
+                matched_node['references'] = list(item.get('references') or [])
+                matched_node['reference_groups'] = list(item.get('reference_groups') or [])
+
+        def rollup(node):
+            if node.get('children'):
+                child_refs = []
+                child_count = 0
+                for child in node['children']:
+                    rollup(child)
+                    child_count += child.get('count', 0)
+                    child_refs.extend(child.get('references', []))
+                if child_count > 0:
+                    node['count'] = child_count
+                    node['references'] = _dedupe_preserve_order(child_refs)
+                    node['reference_groups'] = _chunked(node['references'], 3)
+
+        for root in outline:
+            rollup(root)
+
+    total_count = sum(node.get('count', 0) for node in outline)
+    if total_count == 0 and outline:
+        merged_refs = []
+        for item in translation_counts:
+            total_count += int(item.get('count') or 0)
+            merged_refs.extend(item.get('references') or [])
+        if total_count > 0:
+            outline[0]['count'] = total_count
+            outline[0]['references'] = _dedupe_preserve_order(merged_refs)
+            outline[0]['reference_groups'] = _chunked(outline[0]['references'], 3)
+
+    return outline
+
+
 def _candidate_payload(strongs_number, language, row_data, primary=False):
     candidate = _candidate_core_payload(strongs_number, language, row_data, primary=primary)
     candidate['source_strongs_number'] = _normalize_step_code(strongs_number)
@@ -1120,19 +1193,42 @@ def _candidate_payload(strongs_number, language, row_data, primary=False):
     )
     candidate['reference_groups'] = _chunked(candidate.get('references') or [], 3)
     candidate['translation_counts'] = _candidate_translation_counts(candidate.get('structured_definitions') or [])
-    if language == 'hebrew' and not candidate['translation_counts']:
-        candidate['translation_counts'] = _hebrew_translation_counts(strongs_number)
-        if candidate['translation_counts']:
-            merged_references = []
-            for item in candidate['translation_counts']:
-                merged_references.extend(item.get('references') or [])
-            candidate['references'] = _dedupe_preserve_order(merged_references)
-            candidate['reference_groups'] = _chunked(candidate['references'], 3)
-            candidate['outline_meanings'] = [
-                item['label'] for item in candidate['translation_counts']
-                if str(item.get('label') or '').strip()
-            ]
+    if language == 'hebrew':
+        if not candidate['translation_counts']:
+            candidate['translation_counts'] = _hebrew_translation_counts(strongs_number)
+            if candidate['translation_counts']:
+                merged_references = []
+                for item in candidate['translation_counts']:
+                    merged_references.extend(item.get('references') or [])
+                candidate['references'] = _dedupe_preserve_order(merged_references)
+                candidate['reference_groups'] = _chunked(candidate['references'], 3)
+                candidate['outline_meanings'] = [
+                    item['label'] for item in candidate['translation_counts']
+                    if str(item.get('label') or '').strip()
+                ]
+        if candidate.get('lexicon_outline') and candidate.get('translation_counts'):
+            candidate['lexicon_outline'] = _attach_hebrew_outline_counts(
+                candidate['lexicon_outline'], candidate['translation_counts']
+            )
+
     candidate['usage_outline'] = _candidate_usage_outline(candidate)
+
+    if language == 'greek' and candidate.get('usage_outline'):
+        total_greek_count = sum(node.get('count', 0) for node in candidate['usage_outline'])
+        if total_greek_count == 0:
+            usage_index = _stepbible_usage_index('greek')
+            base_code = re.sub(r'([A-Za-z_]+)$', '', candidate['source_strongs_number']) or candidate['source_strongs_number']
+            greek_refs = []
+            for k in [candidate['source_strongs_number'], base_code, _normalize_strongs_base_code(base_code)]:
+                refs = usage_index['exact'].get(k) or usage_index['base'].get(k) or []
+                if refs:
+                    greek_refs = refs
+                    break
+            if greek_refs:
+                candidate['usage_outline'][0]['count'] = len(greek_refs)
+                candidate['usage_outline'][0]['references'] = greek_refs
+                candidate['usage_outline'][0]['reference_groups'] = _chunked(greek_refs, 3)
+
     candidate['root_words'] = _related_root_words(
         candidate.get('derivation') or '',
         language,
@@ -1305,7 +1401,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v15:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v16:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1342,9 +1438,9 @@ def original_text_payload(book_name, chapter, verse):
 
 # --- English <-> original language word alignment -------------------------------------------------
 
-# Splits an English verse into alternating filler / word tokens so the original spacing and
+# Splits a translated verse into alternating filler / word tokens so the original spacing and
 # punctuation can be re-rendered verbatim around the clickable words.
-_ENGLISH_SPLIT_RE = re.compile(r"([A-Za-z]+(?:[\u2019']?[A-Za-z]+)*)")
+_WORD_SPLIT_RE = re.compile(r"([^\W\d_]+(?:[\u2019']?[^\W\d_]+)*)", re.UNICODE)
 
 # Words that occur in almost every Strong's KJV definition list; matching on them via the
 # lexicon produces noise, so they may only align through the contextual STEPBible gloss.
@@ -1506,19 +1602,19 @@ def _align_reordered_leftovers(english_words, scores, mapping):
             used_tokens.add(matches[0])
 
 
-def english_alignment_payload(book_name, chapter, verse, english_text, tagged_source=''):
-    """Map every English word of a verse onto the index of the original-language word it renders.
+def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_source='', allow_scoring=True):
+    """Map every word of a translated verse onto the index of the original word it renders.
 
-    When the translation has a word-level Strong's tagging (currently the KJV) the mapping is a
-    direct lookup; otherwise it falls back to the lexicon-scoring alignment.
+    When the translation has a word-level Strong's tagging the mapping is a direct lookup;
+    English translations without tags fall back to the lexicon-scoring alignment.
     """
-    text = re.sub(r'\s+', ' ', str(english_text or '')).strip()
+    text = re.sub(r'\s+', ' ', str(verse_text or '')).strip()
     if not text:
         return {'tokens': [], 'aligned_count': 0, 'method': ''}
 
     tagged_source = str(tagged_source or '').strip().lower()
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:alignment:v3:{tagged_source}:{book_name}:{chapter}:{verse}:{digest}'
+    cache_key = f'bible_study:alignment:v4:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1530,23 +1626,24 @@ def english_alignment_payload(book_name, chapter, verse, english_text, tagged_so
 
     words = (original or {}).get('words') or []
 
-    parts = _ENGLISH_SPLIT_RE.split(text)
-    english_positions = [index for index in range(1, len(parts), 2)]
-    english_words = [parts[index].lower() for index in english_positions]
+    parts = _WORD_SPLIT_RE.split(text)
+    word_positions = [index for index in range(1, len(parts), 2)]
+    display_words = [parts[index].lower() for index in word_positions]
 
     mapping = None
-    method = 'lexicon'
-    if tagged_source == 'kjv':
-        mapping = _tagged_mapping(book_name, chapter, verse, english_words, words)
+    method = ''
+    if tagged_source in TAGGED_BIBLE_SOURCES:
+        mapping = _tagged_mapping(tagged_source, book_name, chapter, verse, display_words, words)
         if mapping is not None:
             method = 'tagged'
 
-    if mapping is None:
+    if mapping is None and allow_scoring:
         specs = [_alignment_spec_for_word(word or {}) for word in words]
-        mapping = _align_english_words(english_words, specs)
+        mapping = _align_english_words(display_words, specs)
+        method = 'lexicon'
 
     word_index_by_part = {}
-    for position, token_index in zip(english_positions, mapping):
+    for position, token_index in zip(word_positions, mapping or []):
         if token_index >= 0 and words[token_index].get('clickable'):
             word_index_by_part[position] = token_index
 
@@ -1560,10 +1657,10 @@ def english_alignment_payload(book_name, chapter, verse, english_text, tagged_so
         })
 
     payload = {
-        'tokens': tokens,
+        'tokens': tokens if word_index_by_part else [],
         'aligned_count': len(word_index_by_part),
-        'method': method,
-        'tagging_source': TAGGED_KJV_SOURCE_NAME if method == 'tagged' else '',
+        'method': method if word_index_by_part else '',
+        'tagging_source': TAGGED_BIBLE_SOURCES[tagged_source]['label'] if method == 'tagged' else '',
     }
     cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
     return payload
@@ -1571,10 +1668,29 @@ def english_alignment_payload(book_name, chapter, verse, english_text, tagged_so
 
 # --- Word-level tagged translations (direct Strong's lookup) --------------------------------------
 
-TAGGED_KJV_SOURCE_NAME = "CrossWire KJV (1769) with Strong's Numbers"
+# Public-domain SWORD modules that carry a Strong's number on (nearly) every content word.
+TAGGED_BIBLE_SOURCES = {
+    'kjv': {
+        'label': "CrossWire KJV (1769) with Strong's Numbers",
+        'module': 'KJV',
+        'url': 'https://www.crosswire.org/ftpmirror/pub/sword/packages/rawzip/KJV.zip',
+    },
+    'svv': {
+        'label': 'Statenvertaling met Strong-nummers',
+        'module': 'DutSVVA',
+        'url': 'https://www.crosswire.org/ftpmirror/pub/sword/packages/rawzip/DutSVVA.zip',
+        # Also exported as a selectable local Bible translation.
+        'local_bible': 'statenvertaling',
+    },
+}
 
-# Share of displayed words that must be recovered from the tagged text before we trust it;
-# below this the API.Bible edition differs too much and the lexicon alignment is used instead.
+# Which tagged edition supplies the word glosses when the site is shown in that language.
+GLOSS_SOURCE_BY_LANGUAGE = {
+    'nl': 'svv',
+}
+
+# Share of displayed words that must be recovered from the tagged text before we trust it; below
+# this the shown edition differs too much (e.g. a modern revision) and the tagging is discarded.
 _TAGGED_COVERAGE_THRESHOLD = 0.6
 
 
@@ -1582,9 +1698,9 @@ def tagged_bible_root():
     return Path(__file__).resolve().parents[2] / 'data' / 'tagged_bibles'
 
 
-@lru_cache(maxsize=8)
-def _tagged_kjv_book(book_name):
-    path = tagged_bible_root() / 'kjv_strongs' / f'{book_name}.json.gz'
+@lru_cache(maxsize=16)
+def _tagged_book(source, book_name):
+    path = tagged_bible_root() / source / f'{book_name}.json.gz'
     if not path.exists():
         return {}
     try:
@@ -1596,8 +1712,8 @@ def _tagged_kjv_book(book_name):
     return chapters if isinstance(chapters, dict) else {}
 
 
-def _tagged_kjv_segments(book_name, chapter, verse):
-    return (_tagged_kjv_book(book_name).get(str(chapter)) or {}).get(str(verse)) or []
+def _tagged_segments(source, book_name, chapter, verse):
+    return (_tagged_book(source, book_name).get(str(chapter)) or {}).get(str(verse)) or []
 
 
 def _original_token_indexes_by_code(words):
@@ -1614,14 +1730,28 @@ def _original_token_indexes_by_code(words):
     return occurrences
 
 
+def _loose_word_key(value):
+    return _strip_marks(str(value or '').lower())
+
+
+def _loose_words_match(left, right):
+    """Tolerate spelling drift between a tagged edition and its modern revision."""
+    if left == right:
+        return True
+    shorter, longer = (left, right) if len(left) <= len(right) else (right, left)
+    return len(shorter) >= 4 and longer.startswith(shorter) and len(longer) - len(shorter) <= 3
+
+
 def _transfer_alignment_by_lcs(source_words, source_mapping, target_words):
-    """Carry a mapping from the tagged KJV word sequence onto the displayed word sequence."""
-    source_count = len(source_words)
-    target_count = len(target_words)
+    """Carry a mapping from the tagged edition's word sequence onto the displayed word sequence."""
+    source_keys = [_loose_word_key(word) for word in source_words]
+    target_keys = [_loose_word_key(word) for word in target_words]
+    source_count = len(source_keys)
+    target_count = len(target_keys)
     lengths = [[0] * (target_count + 1) for _ in range(source_count + 1)]
     for i in range(source_count - 1, -1, -1):
         for j in range(target_count - 1, -1, -1):
-            if source_words[i] == target_words[j]:
+            if _loose_words_match(source_keys[i], target_keys[j]):
                 lengths[i][j] = lengths[i + 1][j + 1] + 1
             else:
                 lengths[i][j] = max(lengths[i + 1][j], lengths[i][j + 1])
@@ -1631,7 +1761,7 @@ def _transfer_alignment_by_lcs(source_words, source_mapping, target_words):
     i = 0
     j = 0
     while i < source_count and j < target_count:
-        if source_words[i] == target_words[j]:
+        if _loose_words_match(source_keys[i], target_keys[j]):
             mapping[j] = source_mapping[i]
             matched += 1
             i += 1
@@ -1660,19 +1790,19 @@ def _pick_tagged_token(code, occurrences, consumed, last_assigned):
     return min(free, key=lambda position: (abs(position - last_assigned), 0 if position >= last_assigned else 1))
 
 
-def _tagged_mapping(book_name, chapter, verse, english_words, words):
-    segments = _tagged_kjv_segments(book_name, chapter, verse)
-    if not segments or not english_words or not words:
-        return None
+def _tagged_run_assignments(source, book_name, chapter, verse, words):
+    """Resolve every tagged word group of a verse to the original-language token it renders."""
+    segments = _tagged_segments(source, book_name, chapter, verse)
+    if not segments or not words:
+        return []
 
     occurrences = _original_token_indexes_by_code(words)
     if not occurrences:
-        return None
+        return []
 
     consumed = {code: set() for code in occurrences}
     last_assigned = 0
-    source_words = []
-    source_mapping = []
+    assignments = []
     for segment in segments:
         codes = str((segment or [''])[0] or '').split()
         segment_words = (segment or ['', []])[1] or []
@@ -1691,11 +1821,103 @@ def _tagged_mapping(book_name, chapter, verse, english_words, words):
             last_assigned = picked
             break
 
+        assignments.append((token_index, list(segment_words)))
+    return assignments
+
+
+def _tagged_mapping(source, book_name, chapter, verse, display_words, words):
+    assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    if not assignments or not display_words:
+        return None
+
+    source_words = []
+    source_mapping = []
+    for token_index, segment_words in assignments:
         for segment_word in segment_words:
             source_words.append(str(segment_word).lower())
             source_mapping.append(token_index)
 
-    mapping, matched = _transfer_alignment_by_lcs(source_words, source_mapping, english_words)
-    if matched < len(english_words) * _TAGGED_COVERAGE_THRESHOLD:
+    mapping, matched = _transfer_alignment_by_lcs(source_words, source_mapping, display_words)
+    if matched < len(display_words) * _TAGGED_COVERAGE_THRESHOLD:
         return None
     return mapping
+
+
+@lru_cache(maxsize=4)
+def _tagged_usage_index(source):
+    """Concordance of how the tagged edition renders each Strong's number, most frequent first."""
+    path = tagged_bible_root() / source / '_usage.json.gz'
+    if not path.exists():
+        return {}
+    try:
+        with gzip.open(path, 'rt', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError, TypeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def localized_original_text_payload(book_name, chapter, verse, language_code='en'):
+    """Original-language payload enriched with glosses from a tagged edition in the UI language."""
+    source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code or '').strip().lower()[:2])
+    payload = original_text_payload(book_name, chapter, verse)
+    if not source:
+        return payload
+
+    cache_key = f'bible_study:original-local:v3:{source}:{book_name}:{chapter}:{verse}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    words = payload.get('words') or []
+    phrases_by_token = {}
+    for token_index, segment_words in _tagged_run_assignments(source, book_name, chapter, verse, words):
+        if token_index < 0 or not segment_words:
+            continue
+        phrases_by_token.setdefault(token_index, []).append(' '.join(segment_words))
+
+    usage_index = _tagged_usage_index(source)
+    enriched = copy.deepcopy(payload)
+
+    unresolved_words = []
+    for index, word in enumerate(enriched.get('words') or []):
+        word['local_gloss'] = ' '.join(_dedupe_preserve_order(phrases_by_token.get(index) or []))
+        for candidate in word.get('candidates') or []:
+            code = _normalize_strongs_base_code(candidate.get('strongs_number'))
+            candidate['local_usage'] = [
+                {
+                    'label': str(entry[0]),
+                    'count': int(entry[1]),
+                    'references': list(entry[2]) if len(entry) > 2 and isinstance(entry[2], list) else [],
+                }
+                for entry in (usage_index.get(code) or [])[:12]
+                if isinstance(entry, (list, tuple)) and len(entry) >= 2
+            ]
+        # Words the tagged edition left untagged still get its most common rendering.
+        if not word['local_gloss']:
+            primary_usage = ((word.get('candidates') or [{}])[0] or {}).get('local_usage') or []
+            word['local_gloss'] = str(primary_usage[0]['label']) if primary_usage else ''
+
+        if not word['local_gloss'] and word.get('clickable'):
+            raw_en = str(word.get('context_gloss') or word.get('translation_label') or '').strip()
+            clean_en = re.sub(r'\[.*?\]|<.*?>', '', raw_en)
+            clean_en = re.sub(r'\s+', ' ', clean_en).strip(' -.,;:')
+            unresolved_words.append((word, clean_en or raw_en))
+
+    if unresolved_words:
+        try:
+            from walkasjesus_app.views.user_preferences import _translate_google_batch
+            texts_to_translate = [t for _, t in unresolved_words if t]
+            if texts_to_translate:
+                translated = _translate_google_batch(texts_to_translate, language_code)
+                for (w, _), trans in zip(unresolved_words, translated):
+                    if trans and trans.strip():
+                        w['local_gloss'] = trans.strip()
+        except Exception:
+            pass
+
+    enriched['local_language'] = str(language_code or '')[:2]
+    enriched['local_source_name'] = TAGGED_BIBLE_SOURCES[source]['label']
+    enriched['selected_word'] = next((word for word in enriched['words'] if word['clickable']), None)
+    cache.set(cache_key, enriched, ORIGINAL_TEXT_CACHE_TIMEOUT)
+    return enriched

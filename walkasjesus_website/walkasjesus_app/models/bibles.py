@@ -1,5 +1,7 @@
+import gzip
 import logging
 import json
+from functools import lru_cache
 from pathlib import Path
 
 from bible_lib import BibleFactory, Bible, BibleBooks as BibleLibBibleBooks
@@ -10,10 +12,72 @@ from django.utils import translation
 from walkasjesus_app.lib.access_policy import cjb_bible_id
 
 
+def local_bible_root():
+    return Path(__file__).resolve().parents[2] / 'data' / 'local_bibles'
+
+
+class LocalStatenvertalingBible(Bible):
+    """Dutch Statenvertaling served from the bundled public-domain CrossWire text."""
+
+    DATA_KEY = 'statenvertaling'
+    is_local_source = True
+
+    def __init__(self, bible_id):
+        super().__init__(bible_id=bible_id)
+        self.name = 'Statenvertaling'
+        self.language = 'nl'
+        self.abbreviation = 'SV'
+        self.copyright = (
+            'Statenvertaling (publiek domein). Tekst en Strong-nummers via CrossWire Bible Society.'
+        )
+
+    @staticmethod
+    @lru_cache(maxsize=8)
+    def _chapters(book_name):
+        path = local_bible_root() / LocalStatenvertalingBible.DATA_KEY / f'{book_name}.json.gz'
+        if not path.exists():
+            return {}
+        try:
+            with gzip.open(path, 'rt', encoding='utf-8') as handle:
+                payload = json.load(handle)
+        except (OSError, ValueError, TypeError):
+            logging.getLogger().warning('Could not load Statenvertaling data from %s.', path.name)
+            return {}
+        chapters = payload.get('chapters') if isinstance(payload, dict) else None
+        return chapters if isinstance(chapters, dict) else {}
+
+    def verses(self, book: BibleLibBibleBooks, start_chapter: int, start_verse: int, end_chapter: int, end_verse: int) -> str:
+        chapters = self._chapters(getattr(book, 'name', str(book)))
+        if not chapters:
+            return ''
+
+        snippets = []
+        for chapter in range(int(start_chapter), int(end_chapter) + 1):
+            chapter_verses = chapters.get(str(chapter)) or {}
+            if not chapter_verses:
+                continue
+
+            verse_numbers = sorted(int(number) for number in chapter_verses)
+            first_verse = int(start_verse) if chapter == int(start_chapter) else verse_numbers[0]
+            last_verse = int(end_verse) if chapter == int(end_chapter) else verse_numbers[-1]
+
+            for verse_nr in range(first_verse, last_verse + 1):
+                text = chapter_verses.get(str(verse_nr))
+                if text:
+                    snippets.append((chapter, verse_nr, text))
+
+        if not snippets:
+            return ''
+        if len(snippets) == 1:
+            return snippets[0][2]
+        return '\n'.join(f'{chapter}:{verse} {text}' for chapter, verse, text in snippets)
+
+
 class LocalCompleteJewishBible(Bible):
     """Local Complete Jewish Bible data source backed by the bundled CJB JSON."""
 
     _index = None
+    is_local_source = True
 
     def __init__(self, bible_id):
         super().__init__(bible_id=bible_id)
@@ -135,6 +199,9 @@ class BibleTranslation:
         local_cjb_id = cjb_bible_id()
         if local_cjb_id and local_cjb_id not in bibles:
             bibles[local_cjb_id] = LocalCompleteJewishBible(local_cjb_id)
+        statenvertaling_id = str(getattr(settings, 'STATENVERTALING_BIBLE_ID', 'svv-statenvertaling')).strip()
+        if statenvertaling_id and statenvertaling_id not in bibles:
+            bibles[statenvertaling_id] = LocalStatenvertalingBible(statenvertaling_id)
         overrides = getattr(settings, 'BIBLE_ABBREVIATION_OVERRIDES', {})
         for bible_id, abbreviation in overrides.items():
             if bible_id in bibles:

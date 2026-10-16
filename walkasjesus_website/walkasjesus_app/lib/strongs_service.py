@@ -715,6 +715,255 @@ def _clean_translation_label(value):
     return re.sub(r'\s+', ' ', normalized)
 
 
+_HEBREW_LETTER_INFO = {
+    'א': ('Aleph', 'silent / glottal', 1, 'ox'),
+    'ב': ('Bet', 'b / v', 2, 'house'),
+    'ג': ('Gimel', 'g', 3, 'camel'),
+    'ד': ('Dalet', 'd', 4, 'door'),
+    'ה': ('He', 'h', 5, 'window / breath'),
+    'ו': ('Vav', 'v / w', 6, 'hook'),
+    'ז': ('Zayin', 'z', 7, 'weapon'),
+    'ח': ('Chet', 'ch', 8, 'fence'),
+    'ט': ('Tet', 't', 9, 'traditional image varies'),
+    'י': ('Yod', 'y', 10, 'hand'),
+    'כ': ('Kaf', 'k / ch', 20, 'palm'),
+    'ך': ('Final Kaf', 'ch', 20, 'palm'),
+    'ל': ('Lamed', 'l', 30, 'goad'),
+    'מ': ('Mem', 'm', 40, 'water'),
+    'ם': ('Final Mem', 'm', 40, 'water'),
+    'נ': ('Nun', 'n', 50, 'fish'),
+    'ן': ('Final Nun', 'n', 50, 'fish'),
+    'ס': ('Samekh', 's', 60, 'support'),
+    'ע': ('Ayin', 'silent / glottal', 70, 'eye'),
+    'פ': ('Pe', 'p / f', 80, 'mouth'),
+    'ף': ('Final Pe', 'f', 80, 'mouth'),
+    'צ': ('Tsadi', 'ts', 90, 'traditional image varies'),
+    'ץ': ('Final Tsadi', 'ts', 90, 'traditional image varies'),
+    'ק': ('Qof', 'q / k', 100, 'traditional image varies'),
+    'ר': ('Resh', 'r', 200, 'head'),
+    'ש': ('Shin / Sin', 'sh / s', 300, 'tooth'),
+    'ת': ('Tav', 't', 400, 'mark'),
+}
+
+_HEBREW_LETTER_RE = re.compile(r'[\u05D0-\u05EA]')
+_HEBREW_COMPONENT_RE = re.compile(
+    r'(?P<strong>[GH]\d+[A-Za-z]?)(?:=(?P<value>[^=/{}/\\]+))?(?:=(?P<gloss>[^/{}/\\]+))?'
+)
+_HEBREW_TRADITIONAL_IMAGES_NL = {
+    'ox': 'os', 'house': 'huis', 'camel': 'kameel', 'door': 'deur',
+    'window / breath': 'raam / adem', 'hook': 'haak', 'weapon': 'wapen',
+    'fence': 'omheining', 'traditional image varies': 'traditioneel verschillend',
+    'hand': 'hand', 'palm': 'handpalm', 'goad': 'ossenprikkel', 'water': 'water',
+    'fish': 'vis', 'support': 'steun', 'eye': 'oog', 'mouth': 'mond',
+    'tooth': 'tand', 'head': 'hoofd', 'mark': 'teken',
+}
+_HEBREW_LETTER_NAMES_NL = {
+    'Aleph': 'Alef', 'Final Kaf': 'Eind-Kaf', 'Final Mem': 'Eind-Mem',
+    'Final Nun': 'Eind-Noen', 'Final Pe': 'Eind-Pe', 'Final Tsadi': 'Eind-Tsadi',
+    'Samekh': 'Samech', 'Qof': 'Kof', 'Resh': 'Resj', 'Shin': 'Sjin', 'Sin': 'Sin',
+}
+
+
+def _hebrew_letter_data(text):
+    letters = []
+    text = str(text or '')
+    for character in text:
+        if character in _HEBREW_LETTER_INFO:
+            name, sound, value, image = _HEBREW_LETTER_INFO[character]
+            letters.append({
+                'glyph': character,
+                'name': name,
+                'sound': sound,
+                'value': value,
+                'traditional_image': image,
+            })
+        elif unicodedata.category(character).startswith('M') and letters:
+            letters[-1]['glyph'] += character
+    vowels = {
+        '\u05b0': 'ə / ∅', '\u05b1': 'ĕ', '\u05b2': 'ă', '\u05b3': 'ŏ',
+        '\u05b4': 'i', '\u05b5': 'ē', '\u05b6': 'e', '\u05b7': 'a',
+        '\u05b8': 'ā', '\u05b9': 'ō', '\u05ba': 'ō', '\u05bb': 'u', '\u05c7': 'o',
+    }
+    for letter in letters:
+        glyph = letter['glyph']
+        if glyph[0] == 'ש':
+            if '\u05c2' in glyph:
+                letter['name'], letter['sound'] = 'Sin', 's'
+            elif '\u05c1' in glyph:
+                letter['name'], letter['sound'] = 'Shin', 'sh'
+        if '\u05bc' in glyph:
+            hard_sounds = {'ב': 'b', 'כ': 'k', 'ך': 'k', 'פ': 'p', 'ף': 'p'}
+            letter['sound'] = hard_sounds.get(glyph[0], letter['sound'])
+        vowel = next((vowels[mark] for mark in glyph if mark in vowels), '')
+        if glyph[0] == 'ו' and (vowel == 'ō' or ('\u05bc' in glyph and not vowel)):
+            letter['sound'] = vowel or 'ū'
+        else:
+            letter['sound'] += vowel
+    return letters
+
+
+def _parse_hebrew_word_components(raw_components, raw_surface=''):
+    components = []
+    for match in _HEBREW_COMPONENT_RE.finditer(str(raw_components or '')):
+        strongs_number = _normalize_step_code(match.group('strong'))
+        value = str(match.group('value') or '').strip()
+        gloss = str(match.group('gloss') or '').strip(' :;')
+        value_is_hebrew = bool(_HEBREW_LETTER_RE.search(value))
+        component = {
+            'strongs_number': strongs_number,
+            'surface': value if value_is_hebrew else '',
+            'morphology_code': '' if value_is_hebrew else value,
+            'gloss': _clean_translation_label(gloss).strip(' :;\t'),
+        }
+        component['morphology_description'] = _hebrew_morphology_description(component['morphology_code'])
+
+        numeric_match = re.match(r'^H(\d+)', strongs_number)
+        numeric_code = int(numeric_match.group(1)) if numeric_match else 0
+        if 9001 <= numeric_code <= 9016:
+            component['role'] = 'prefix'
+        elif 9020 <= numeric_code <= 9039:
+            component['role'] = 'suffix'
+        elif strongs_number in {'H0853', 'H0854'}:
+            component['role'] = 'grammatical'
+        elif component['surface']:
+            component['role'] = 'root'
+        else:
+            component['role'] = 'grammatical'
+        component['letters'] = _hebrew_letter_data(component['surface'])
+        component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+        components.append(component)
+
+    surface_parts = [
+        _clean_hebrew_surface(part)
+        for part in str(raw_surface or '').split('/')
+        if _HEBREW_LETTER_RE.search(part)
+    ]
+    if len(surface_parts) == len(components):
+        for component, surface in zip(components, surface_parts):
+            component['surface'] = surface
+            component['letters'] = _hebrew_letter_data(surface)
+            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+    return components
+
+
+@lru_cache(maxsize=1)
+def _hebrew_morphology_descriptions():
+    path = _stepbible_root() / 'Morphology codes' / (
+        'TEHMC - Translators Expansion of Hebrew Morphology Codes - STEPBible.org CC BY.txt'
+    )
+    if not path.exists():
+        return {}
+
+    descriptions = {}
+    current_code = ''
+    awaiting_description = False
+    try:
+        with path.open('r', encoding='utf-8') as handle:
+            for raw_line in handle:
+                line = raw_line.rstrip('\n')
+                stripped = line.strip()
+                if stripped == '$':
+                    current_code = ''
+                    awaiting_description = False
+                    continue
+
+                full_match = re.match(r'^([A-Z][A-Za-z0-9]*)\s+Function=(.*)$', stripped)
+                if full_match:
+                    current_code = full_match.group(1)
+                    description = _format_hebrew_morphology_attributes(full_match.group(2))
+                    if description:
+                        descriptions[current_code] = description
+                    awaiting_description = not bool(description)
+                    continue
+
+                tab_columns = stripped.split('\t')
+                if len(tab_columns) >= 3:
+                    brief_code = re.match(r'^(?:\d+:)?([A-Za-z][A-Za-z0-9]*)$', tab_columns[0].strip())
+                    if brief_code:
+                        descriptions.setdefault(brief_code.group(1), tab_columns[2].strip())
+                        continue
+
+                brief_match = re.match(r'^\d+:([A-Za-z][A-Za-z0-9]*)\s+\S+\s+(.+)$', stripped)
+                if brief_match:
+                    descriptions.setdefault(brief_match.group(1), brief_match.group(2).strip())
+                    continue
+
+                if current_code and awaiting_description and stripped and not stripped.startswith(('Example:', '"')):
+                    descriptions[current_code] = stripped
+                    awaiting_description = False
+    except OSError:
+        return {}
+    return descriptions
+
+
+def _format_hebrew_morphology_attributes(raw_attributes):
+    attributes = {}
+    for field in str(raw_attributes or '').split(';'):
+        key, separator, value = field.partition('=')
+        if separator:
+            attributes[key.strip()] = value.strip()
+        elif field.strip() and 'Function' not in attributes:
+            attributes['Function'] = field.strip()
+    function = attributes.get('Function', '')
+    form = attributes.get('Form', '')
+    if not function:
+        return ''
+
+    names = {
+        'Noun': 'noun', 'Verb': 'verb', 'Preposition': 'preposition',
+        'Suffix': 'suffix', 'Prefix': 'prefix', 'Particle': 'particle',
+        'Conjunction': 'conjunction', 'Adjective': 'adjective', 'Pronoun': 'pronoun',
+        'Punctuation': 'punctuation', 'Article': 'article', 'Numeral': 'numeral',
+    }
+    function_name = names.get(function, function.lower())
+    if function == 'Noun' and form == 'Proper':
+        parts = ['proper noun']
+    elif function == 'Noun' and form == 'Common':
+        parts = ['common noun']
+    elif form:
+        form_names = {
+            'Definite': 'definite', 'Personal': 'personal', 'Directional': 'directional',
+            'Demonstrative': 'demonstrative', 'Interrogative': 'interrogative',
+        }
+        parts = [form_names.get(form, form.lower()), function_name]
+    else:
+        parts = [function_name]
+
+    for key, label in (
+        ('Person', {'First': 'first person', 'Second': 'second person', 'Third': 'third person'}),
+        ('Gender', {'Masculine': 'masculine', 'Feminine': 'feminine', 'Common': 'common gender'}),
+        ('Number', {'Singular': 'singular', 'Plural': 'plural', 'Dual': 'dual'}),
+        ('State', {'Absolute': 'absolute', 'Construct': 'construct'}),
+        ('Tense', {'Perfect': 'perfect', 'Imperfect': 'imperfect', 'Participle': 'participle'}),
+        ('Stem', {}),
+    ):
+        value = attributes.get(key)
+        if value:
+            parts.append(label.get(value, value.lower()))
+    return ', '.join(parts)
+
+
+def _hebrew_morphology_description(code):
+    normalized = str(code or '').strip()
+    if not normalized:
+        return ''
+    descriptions = _hebrew_morphology_descriptions()
+    return descriptions.get(normalized) or descriptions.get('H' + normalized, '')
+
+
+def _hebrew_morphology_details(raw_grammar):
+    details = []
+    for code in str(raw_grammar or '').split('/'):
+        code = code.strip()
+        if not code:
+            continue
+        details.append({
+            'code': code,
+            'description': _hebrew_morphology_description(code),
+        })
+    return details
+
+
 @lru_cache(maxsize=2)
 def _stepbible_lexicon(language):
     base = _stepbible_root() / 'Lexicons'
@@ -1317,8 +1566,14 @@ def _parse_stepbible_row(line, language):
             'strongs_numbers': strongs_numbers,
         }
 
-    surface_text = _clean_hebrew_surface(columns[1] if len(columns) > 1 else '')
+    raw_surface = str(columns[1] if len(columns) > 1 else '')
+    surface_text = _clean_hebrew_surface(raw_surface)
     translation_label = _clean_translation_label(columns[3] if len(columns) > 3 else '')
+    grammar = str(columns[5] if len(columns) > 5 else '').strip()
+    word_components = _parse_hebrew_word_components(
+        columns[11] if len(columns) > 11 else '',
+        raw_surface,
+    )
     strongs_numbers = []
     seen_strongs = set()
     for source in [columns[8] if len(columns) > 8 else '', columns[4] if len(columns) > 4 else '', columns[9] if len(columns) > 9 else '', columns[11] if len(columns) > 11 else '']:
@@ -1335,7 +1590,9 @@ def _parse_stepbible_row(line, language):
         'context_translation': translation_label,
         'lemma': '',
         'definition': translation_label,
-        'grammar': str(columns[5] if len(columns) > 5 else '').strip(),
+        'grammar': grammar,
+        'grammar_details': _hebrew_morphology_details(grammar),
+        'word_components': word_components,
         'strongs_numbers': strongs_numbers,
     }
 
@@ -1355,6 +1612,10 @@ def _fallback_token_payload(raw_token, language):
         'hover_summary': '',
         'candidates': [],
         'grammar': '',
+        'grammar_details': [],
+        'word_components': [],
+        'hebrew_letters': [],
+        'gematria_value': 0,
         'tagging_source': '',
     }
 
@@ -1396,12 +1657,16 @@ def _token_payload_from_step_row(row_data, language):
         'hover_summary': ' | '.join(hover_lines),
         'candidates': candidates,
         'grammar': str(row_data.get('grammar') or ''),
+        'grammar_details': list(row_data.get('grammar_details') or []),
+        'word_components': list(row_data.get('word_components') or []),
+        'hebrew_letters': _hebrew_letter_data(row_data.get('surface_text') or '') if language == 'hebrew' else [],
+        'gematria_value': sum(letter['value'] for letter in _hebrew_letter_data(row_data.get('surface_text') or '')) if language == 'hebrew' else 0,
         'tagging_source': 'STEPBible',
     }
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v16:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v19:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1864,22 +2129,31 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v3:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v9:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
     words = payload.get('words') or []
     phrases_by_token = {}
-    for token_index, segment_words in _tagged_run_assignments(source, book_name, chapter, verse, words):
+    phrases_by_component = {}
+    tagged_segments = _tagged_segments(source, book_name, chapter, verse)
+    assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    for segment, (token_index, segment_words) in zip(tagged_segments, assignments):
         if token_index < 0 or not segment_words:
             continue
-        phrases_by_token.setdefault(token_index, []).append(' '.join(segment_words))
+        phrase = ' '.join(segment_words)
+        phrases_by_token.setdefault(token_index, []).append(phrase)
+        for code in _extract_step_codes((segment or [''])[0]):
+            base_code = _normalize_strongs_base_code(code)
+            phrases_by_component.setdefault((token_index, base_code), []).append(phrase)
 
     usage_index = _tagged_usage_index(source)
     enriched = copy.deepcopy(payload)
 
     unresolved_words = []
+    unresolved_components = []
+    unresolved_morphology = []
     for index, word in enumerate(enriched.get('words') or []):
         word['local_gloss'] = ' '.join(_dedupe_preserve_order(phrases_by_token.get(index) or []))
         for candidate in word.get('candidates') or []:
@@ -1904,20 +2178,66 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
             clean_en = re.sub(r'\s+', ' ', clean_en).strip(' -.,;:')
             unresolved_words.append((word, clean_en or raw_en))
 
-    if unresolved_words:
+        for component in word.get('word_components') or []:
+            component_code = _normalize_strongs_base_code(component.get('strongs_number'))
+            exact_phrases = _dedupe_preserve_order(phrases_by_component.get((index, component_code)) or [])
+            if exact_phrases:
+                component['local_gloss'] = ' '.join(exact_phrases)
+            else:
+                local_renderings = usage_index.get(component_code) or []
+                component['local_gloss'] = str(local_renderings[0][0]) if local_renderings else ''
+            if not component['local_gloss'] and component.get('gloss'):
+                raw_component_gloss = str(component.get('gloss') or '').strip()
+                clean_component_gloss = re.sub(r'\[.*?\]|<.*?>', '', raw_component_gloss)
+                clean_component_gloss = re.sub(r'\s+', ' ', clean_component_gloss).strip(' -.,;:')
+                if source == 'svv' and component.get('morphology_code') in {'Op2m', 'Op2f', 'Pp2m', 'Pp2f'} and clean_component_gloss.lower() == 'you':
+                    component['local_gloss'] = 'jullie'
+                else:
+                    unresolved_components.append((component, clean_component_gloss or raw_component_gloss))
+
+            if component.get('morphology_description'):
+                unresolved_morphology.append((component, str(component['morphology_description']).strip()))
+
+        for morphology in word.get('grammar_details') or []:
+            if morphology.get('description'):
+                unresolved_morphology.append((morphology, str(morphology['description']).strip()))
+
+    if unresolved_words or unresolved_components or unresolved_morphology:
         try:
             from walkasjesus_app.views.user_preferences import _translate_google_batch
-            texts_to_translate = [t for _, t in unresolved_words if t]
+            texts_to_translate = _dedupe_preserve_order(
+                text for _, text in unresolved_words + unresolved_components + unresolved_morphology if text
+            )
             if texts_to_translate:
                 translated = _translate_google_batch(texts_to_translate, language_code)
-                for (w, _), trans in zip(unresolved_words, translated):
-                    if trans and trans.strip():
-                        w['local_gloss'] = trans.strip()
+                translated_by_text = dict(zip(texts_to_translate, translated))
+                for word, text in unresolved_words:
+                    if translated_by_text.get(text):
+                        word['local_gloss'] = translated_by_text[text].strip()
+                for component, text in unresolved_components:
+                    if translated_by_text.get(text):
+                        component['local_gloss'] = translated_by_text[text].strip()
+                for morphology, text in unresolved_morphology:
+                    if translated_by_text.get(text):
+                        morphology['local_description'] = translated_by_text[text].strip()
         except Exception:
             pass
 
     enriched['local_language'] = str(language_code or '')[:2]
     enriched['local_source_name'] = TAGGED_BIBLE_SOURCES[source]['label']
+    if str(language_code or '').strip().lower()[:2] == 'nl':
+        for word in enriched.get('words') or []:
+            for letter in word.get('hebrew_letters') or []:
+                letter['name_local'] = _HEBREW_LETTER_NAMES_NL.get(letter.get('name'), letter.get('name', ''))
+                letter['traditional_image_local'] = _HEBREW_TRADITIONAL_IMAGES_NL.get(
+                    letter.get('traditional_image'), letter.get('traditional_image', '')
+                )
+            for component in word.get('word_components') or []:
+                for letter in component.get('letters') or []:
+                    letter['name_local'] = _HEBREW_LETTER_NAMES_NL.get(letter.get('name'), letter.get('name', ''))
+                    letter['traditional_image_local'] = _HEBREW_TRADITIONAL_IMAGES_NL.get(
+                        letter.get('traditional_image'), letter.get('traditional_image', '')
+                    )
     enriched['selected_word'] = next((word for word in enriched['words'] if word['clickable']), None)
     cache.set(cache_key, enriched, ORIGINAL_TEXT_CACHE_TIMEOUT)
     return enriched

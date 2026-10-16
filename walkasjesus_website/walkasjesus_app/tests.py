@@ -647,7 +647,69 @@ class EnglishWordAlignmentTestCase(TestCase):
         self.assertEqual(payload['tokens'], [])
 
 
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'dutch-original-text-tests',
+    },
+})
 class DutchOriginalTextTestCase(TestCase):
+    def test_hebrew_letter_sounds_include_vowels_and_shin_dot(self):
+        from walkasjesus_app.lib.strongs_service import _hebrew_letter_data
+
+        for glyph, name, sound in (
+            ('שָׁ', 'Shin', 'shā'), ('שָׁ', 'Shin', 'shā'),
+            ('שָׂ', 'Sin', 'sā'), ('בַּ', 'Bet', 'ba'),
+            ('וּ', 'Vav', 'ū'), ('וֹ', 'Vav', 'ō'),
+        ):
+            with self.subTest(glyph=glyph):
+                letter = _hebrew_letter_data(glyph)[0]
+                self.assertEqual(letter['name'], name)
+                self.assertEqual(letter['sound'], sound)
+
+    def test_hebrew_word_details_include_affixes_letters_and_gematria(self):
+        leviticus_word = original_text_payload('Leviticus', 26, 36)['words'][1]
+
+        self.assertEqual(leviticus_word['gematria_value'], 62)
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in leviticus_word['word_components']],
+            [('prefix', 'בָּ'), ('suffix', 'כֶ֔ם')],
+        )
+        self.assertEqual(
+            leviticus_word['word_components'][1]['morphology_description'],
+            'Object suffix: 2nd person masculine plural',
+        )
+        self.assertEqual([letter['value'] for letter in leviticus_word['hebrew_letters']], [2, 20, 40])
+
+        genesis_word = original_text_payload('Genesis', 1, 1)['words'][0]
+        self.assertEqual(genesis_word['gematria_value'], 913)
+        self.assertEqual([part['role'] for part in genesis_word['word_components']], ['prefix', 'root'])
+        self.assertEqual(
+            [item['description'] for item in genesis_word['grammar_details']],
+            ['preposition', 'common noun, feminine, singular, absolute'],
+        )
+
+        dutch_genesis_word = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
+        self.assertEqual(dutch_genesis_word['word_components'][1]['local_gloss'], 'beginne')
+
+    @patch('walkasjesus_app.views.user_preferences._translate_google_batch')
+    def test_dutch_payload_localizes_grammatical_component_glosses(self, mock_translate_batch):
+        cache.clear()
+        mock_translate_batch.side_effect = lambda texts, language: [f'NL: {text}' for text in texts]
+        word = localized_original_text_payload('Leviticus', 26, 36, 'nl')['words'][1]
+
+        self.assertEqual([part['local_gloss'] for part in word['word_components']], ['NL: in', 'jullie'])
+        self.assertTrue(word['word_components'][1]['local_description'].startswith('NL: '))
+        self.assertNotEqual(
+            word['word_components'][1]['local_description'],
+            word['word_components'][1]['morphology_description'],
+        )
+        self.assertTrue(all(item['local_description'].startswith('NL: ') for item in word['grammar_details']))
+
+        genesis = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
+        self.assertEqual(genesis['local_gloss'], 'beginne')
+        self.assertEqual(genesis['word_components'][1]['local_gloss'], 'beginne')
+
     def test_dutch_payload_adds_statenvertaling_glosses_and_usage(self):
         payload = localized_original_text_payload('Exodus', 1, 1, 'nl')
         words = payload['words']

@@ -65,7 +65,7 @@ the pinned revision and print the data version currently in use.
 ## 3. The original-language panel
 
 `original_text_payload(book, chapter, verse)` in `lib/strongs_service.py` builds one payload per
-verse, cached 30 days under `bible_study:original:v15:…`:
+verse, cached 30 days under `bible_study:original:v19:…`:
 
 1. Scan the TAHOT/TAGNT file for the book and pull every row whose reference matches the verse.
 2. `_parse_stepbible_row` extracts per original word:
@@ -114,7 +114,29 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The existing **Translate** button still machine-translates lexicon definitions. Translation requests
   are versioned and queued sequentially to avoid provider rate-limit bursts.
 
-Cached 30 days under `bible_study:original-local:v1:<source>:<book>:<ch>:<v>`.
+Cached 30 days under `bible_study:original-local:v9:<source>:<book>:<ch>:<v>`.
+
+### Hebrew composition and letter information
+
+For Hebrew TAHOT rows, column 11 encodes the tagged pieces of a word, for example
+`H9003=ב=in/{H9036=Op2m=you}`. The parser aligns those pieces with the slash-separated Hebrew
+surface in column 1 and labels the STEPBible grammatical codes as prefixes, roots or suffixes.
+TEHMC supplies explanations for morphology codes such as `HRd` (definite preposition) and `Op2m`
+(object suffix, second-person masculine plural). For Dutch, each piece uses its exact Statenvertaling
+rendering when available; otherwise its short gloss is localized. A word can consist only of
+attached grammatical parts, with no separate lexical root tagged.
+
+The large Hebrew word distinguishes lexical roots from attached grammatical parts by color.
+Clicking the word or its question-mark icon expands the parts-and-letters panel.
+Hovering or focusing a Hebrew letter uses the shared brown tooltip to show its name, approximate
+pointed sound, standard numerical value, and a traditional pictorial association. Vowels are
+included (for example, shin with qamats is `shā`); macrons describe vowels, not word stress.
+Sheva is shown as `ə / ∅` because its pronunciation depends on context. This is a letter-level
+reading aid, not a complete phonological transcription. The association is explicitly labeled as interpretive background, not the
+meaning or translation of that letter. The word total uses standard Hebrew gematria (mispar
+hechrechi): consonants count, vowel points and cantillation marks do not, and final forms use the
+same values as their regular forms (for example, final mem ם = 40). Gematria is a letter-value sum,
+not a method for deriving the word's translation.
 
 ---
 

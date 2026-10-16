@@ -1475,6 +1475,80 @@
     return originalTextShared().buildWordTranslation(word, '{% trans "No tag yet" %}');
   }
 
+  function hebrewLetterDetailsHtml(letters) {
+    var isDutch = String($('.bible-study-shell').data('commentary-language') || '').slice(0, 2) === 'nl';
+    return (letters || []).map(function(letter) {
+      var letterName = isDutch ? (letter.name_local || letter.name || '') : (letter.name || '');
+      var traditionalImage = isDutch ? (letter.traditional_image_local || letter.traditional_image || '') : (letter.traditional_image || '');
+      var title = String(letterName) + ' · {% trans "Sound" %}: ' + String(letter.sound || '') +
+        ' · {% trans "Value" %}: ' + String(letter.value || 0) +
+        ' · {% trans "Traditional image, not word meaning" %}: ' + String(traditionalImage);
+      return '<span class="bs-hebrew-letter-info jc-tooltip-host" tabindex="0" data-jc-tooltip="' + escapeHtml(title) + '" aria-label="' +
+        escapeHtml(title) + '">' + escapeHtml(String(letter.glyph || '')) + '</span>';
+    }).join('');
+  }
+
+  function hebrewWordStudyHtml(word) {
+    var components = (word && word.word_components) || [];
+    var letters = (word && word.hebrew_letters) || [];
+    if (!components.length && !letters.length) {
+      return '';
+    }
+
+    var hasRoot = components.some(function(component) { return component.role === 'root'; });
+    var roleLabels = {
+      prefix: '{% trans "Prefix / service word" %}',
+      root: '{% trans "Root word" %}',
+      suffix: '{% trans "Suffix" %}',
+      grammatical: '{% trans "Grammatical element" %}'
+    };
+    var componentRows = components.map(function(component) {
+      var surface = String(component.surface || '');
+      var localGloss = String(component.local_gloss || '').trim();
+      var gloss = localGloss || String(component.gloss || '').trim();
+      var glossClass = localGloss ? '' : ' bs-translatable-text';
+      var localMorphology = String(component.local_description || '').trim();
+      var morphology = localMorphology || String(component.morphology_description || '').trim();
+      var morphologyClass = localMorphology ? '' : ' bs-translatable-text';
+      return '<div class="bs-hebrew-component-row bs-hebrew-part-' + escapeHtml(component.role || 'grammatical') + '">' +
+        '<span class="bs-hebrew-component-role">' + escapeHtml(roleLabels[component.role] || roleLabels.grammatical) + '</span>' +
+        (surface ? '<span class="bs-hebrew-component-letters bs-original-language-hbo">' +
+          hebrewLetterDetailsHtml(component.letters || []) + '</span>' : '<span></span>') +
+        '<code>' + escapeHtml(String(component.strongs_number || '')) + '</code>' +
+        (gloss ? '<span class="bs-hebrew-component-gloss' + glossClass + '">' + escapeHtml(gloss) + '</span>' : '<span></span>') +
+        (morphology ? '<small class="bs-hebrew-component-morphology' + morphologyClass + '">' + escapeHtml(morphology) + '</small>' : '') +
+      '</div>';
+    }).join('');
+
+    var grammarDetails = ((word && word.grammar_details) || []).filter(function(item) {
+      return item && item.description;
+    }).map(function(item) {
+      var localDescription = String(item.local_description || '').trim();
+      var description = localDescription || String(item.description || '');
+      var descriptionClass = localDescription ? '' : ' bs-translatable-text';
+      return '<li><code>' + escapeHtml(String(item.code || '')) + '</code>: <span class="' + descriptionClass.trim() + '">' +
+        escapeHtml(description) + '</span></li>';
+    }).join('');
+
+    var total = parseInt((word && word.gematria_value) || 0, 10) || 0;
+    var letterValues = letters.map(function(letter) {
+      return '<span class="bs-hebrew-value-item">' + hebrewLetterDetailsHtml([letter]) +
+        '<small>' + escapeHtml(String(letter.value || 0)) + '</small></span>';
+    }).join(' + ');
+
+    return '<div class="bs-original-detail-section bs-hebrew-word-study">' +
+      '<span class="bs-original-detail-label">{% trans "Hebrew word: parts and letters" %}</span>' +
+      (componentRows ? '<div class="bs-hebrew-components">' + componentRows + '</div>' : '') +
+      (!hasRoot && components.length ? '<p class="small text-muted mb-2">{% trans "No separate lexical root is tagged here; this form consists of attached grammatical parts." %}</p>' : '') +
+      (grammarDetails ? '<div class="bs-hebrew-morphology"><strong>{% trans "Grammar explained" %}</strong><ul class="mb-2">' + grammarDetails + '</ul></div>' : '') +
+      '<div class="bs-hebrew-gematria"><strong>{% trans "Letter values (standard gematria)" %}: ' + escapeHtml(String(total)) + '</strong>' +
+        (letterValues ? '<div class="bs-hebrew-value-breakdown">' + letterValues + '</div>' : '') +
+        '<small class="text-muted">{% trans "Counts consonants only; vowel points and cantillation marks do not count. Final letters use their standard letter values." %}</small>' +
+      '</div>' +
+      '<p class="small text-muted mb-0 mt-2">{% trans "Traditional picture associations are interpretive background, not a translation of the word." %}</p>' +
+    '</div>';
+  }
+
   function bibleStudyPreviewCacheKey(bibleId, reference) {
     return [String(bibleId || ''), String(reference || '')].join('|');
   }
@@ -1652,7 +1726,7 @@
       return '<div class="bs-original-root-word">' +
         '<div class="bs-original-root-head">' +
           (detailUrl ? '<a class="bs-original-strong-link" href="' + escapeHtml(detailUrl) + '"><strong>' + escapeHtml(strongsNumber) + '</strong></a>' : '<strong>' + escapeHtml(strongsNumber) + '</strong>') +
-          ((item && item.lemma) ? '<span>' + escapeHtml(item.lemma) + '</span>' : '') +
+          ((item && item.lemma) ? '<span class="bs-unique-hebrew-css">' + escapeHtml(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + escapeHtml(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="bs-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
           bibleStudyExternalLexiconLinksHtml(item, strongsNumber) +
@@ -2106,7 +2180,43 @@
       return;
     }
 
-    var html = '<div class="bs-original-detail-meta"><strong>' + escapeHtml(selectedWord.text) + '</strong> · ' + escapeHtml(String((versePayload && versePayload.language_label) || '')) + '</div>';
+    var isHebrew = String((versePayload && versePayload.language_code) || '') === 'hbo';
+    var selectedWordHtml = isHebrew && selectedWord.hebrew_letters && selectedWord.hebrew_letters.length
+      ? hebrewLetterDetailsHtml(selectedWord.hebrew_letters)
+      : escapeHtml(selectedWord.text);
+    if (isHebrew) {
+      var parts = selectedWord.word_components || [];
+      var wordLetters = selectedWord.hebrew_letters || [];
+      var partConsonants = parts.map(function(part) {
+        return String(part.surface || '').replace(/[^\u05d0-\u05ea]/g, '');
+      });
+      var wordConsonants = wordLetters.map(function(letter) {
+        return String(letter.glyph || '').replace(/[^\u05d0-\u05ea]/g, '');
+      }).join('');
+      if (parts.length && wordConsonants && partConsonants.join('') === wordConsonants) {
+        var letterOffset = 0;
+        selectedWordHtml = parts.map(function(part) {
+          var letterCount = String(part.surface || '').replace(/[^\u05d0-\u05ea]/g, '').length;
+          var partLetters = wordLetters.slice(letterOffset, letterOffset + letterCount);
+          letterOffset += letterCount;
+          if (!partLetters.length) {
+            return '';
+          }
+          return '<span class="bs-hebrew-part-' + escapeHtml(part.role || 'grammatical') + '">' +
+            hebrewLetterDetailsHtml(partLetters) + '</span>';
+        }).join('');
+      }
+    }
+    var languageLabel = String((versePayload && versePayload.language_label) || '');
+    var html = '<div class="bs-original-detail-meta"><strong' + (isHebrew ? ' class="bs-original-language-hbo bs-hebrew-detail-word"' : '') + '>' +
+      selectedWordHtml + '</strong>' + (isHebrew ? '' : ' · ' + escapeHtml(languageLabel)) + '</div>';
+
+    if (isHebrew) {
+      html = '<details class="bs-hebrew-study-disclosure"><summary class="bs-hebrew-study-toggle">' +
+        '<strong class="bs-original-language-hbo bs-hebrew-detail-word">' + selectedWordHtml + '</strong>' +
+        '<span class="bs-hebrew-study-help jc-tooltip-host" data-jc-tooltip="{% trans "Hebrew word: parts and letters" %}" aria-label="{% trans "Hebrew word: parts and letters" %}">' +
+        '<i class="icon-question-circle" aria-hidden="true"></i></span></summary>' + hebrewWordStudyHtml(selectedWord) + '</details>';
+    }
 
     // Prefer the STEPBible gloss for this exact occurrence over the generic lexicon label.
     var directGloss = String(selectedWord.local_gloss || selectedWord.context_gloss || selectedWord.translation_label || '');
@@ -2170,7 +2280,7 @@
             '</strong>') +
 
         ((candidate && candidate.lemma)
-          ? '<span>' + escapeHtml(candidate.lemma) + '</span>'
+          ? '<span' + (/[\u0590-\u05ff]/.test(candidate.lemma) ? ' class="bs-original-language-hbo"' : '') + '>' + escapeHtml(candidate.lemma) + '</span>'
           : '') +
 
         bibleStudyExternalLexiconLinksHtml(candidate, String((candidate && candidate.strongs_number) || '')) +

@@ -19,3 +19,6 @@
 [submodule "walkasjesus_website/data/tagged_bibles"]
 	path = walkasjesus_website/data/tagged_bibles
 	url = https://github.com/walkasjesus/walkasjesus_tagged_bibles.git
+[submodule "walkasjesus_website/data/local_bibles"]
+	path = walkasjesus_website/data/local_bibles
+	url = https://github.com/walkasjesus/walkasjesus_local_bibles.git

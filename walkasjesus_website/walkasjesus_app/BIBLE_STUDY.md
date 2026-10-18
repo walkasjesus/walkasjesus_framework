@@ -65,7 +65,7 @@ the pinned revision and print the data version currently in use.
 ## 3. The original-language panel
 
 `original_text_payload(book, chapter, verse)` in `lib/strongs_service.py` builds one payload per
-verse, cached 30 days under `bible_study:original:v19:…`:
+verse, cached 30 days under `bible_study:original:v20:…`:
 
 1. Scan the TAHOT/TAGNT file for the book and pull every row whose reference matches the verse.
 2. `_parse_stepbible_row` extracts per original word:
@@ -114,7 +114,7 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The existing **Translate** button still machine-translates lexicon definitions. Translation requests
   are versioned and queued sequentially to avoid provider rate-limit bursts.
 
-Cached 30 days under `bible_study:original-local:v9:<source>:<book>:<ch>:<v>`.
+Cached 30 days under `bible_study:original-local:v10:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
 
@@ -125,6 +125,14 @@ TEHMC supplies explanations for morphology codes such as `HRd` (definite preposi
 (object suffix, second-person masculine plural). For Dutch, each piece uses its exact Statenvertaling
 rendering when available; otherwise its short gloss is localized. A word can consist only of
 attached grammatical parts, with no separate lexical root tagged.
+
+Punctuation markers do not participate in alignment to the inflected surface. The dictionary
+lemma is retained separately while the component shows the actual pointed form in the verse.
+For Hitpael verbs, morphology plus an exact consonantal lemma match identifies the regular
+two-letter stem prefix (for example `הִתְ`, `מִתְ`, or `יִתְ`). This prefix has no separate
+Strong's number: it is verb-stem formation, not an independent service word or a fixed translation.
+Uncertain forms, including consonant changes that prevent an exact match, remain unsplit rather
+than inferring a root boundary from spelling alone.
 
 The large Hebrew word distinguishes lexical roots from attached grammatical parts by color.
 Clicking the word or its question-mark icon expands the parts-and-letters panel.

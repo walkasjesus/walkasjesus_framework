@@ -802,7 +802,7 @@ def _hebrew_letter_data(text):
     return letters
 
 
-def _parse_hebrew_word_components(raw_components, raw_surface=''):
+def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''):
     components = []
     for match in _HEBREW_COMPONENT_RE.finditer(str(raw_components or '')):
         strongs_number = _normalize_step_code(match.group('strong'))
@@ -838,10 +838,47 @@ def _parse_hebrew_word_components(raw_components, raw_surface=''):
         for part in str(raw_surface or '').split('/')
         if _HEBREW_LETTER_RE.search(part)
     ]
-    if len(surface_parts) == len(components):
-        for component, surface in zip(components, surface_parts):
+    surface_components = [
+        component for component in components
+        if component['surface'] or re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', component['morphology_code'])
+    ]
+    if len(surface_parts) == len(surface_components):
+        for component, surface in zip(surface_components, surface_parts):
+            component['lemma'] = component['surface']
             component['surface'] = surface
             component['letters'] = _hebrew_letter_data(surface)
+            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+
+    verb_code = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.match(r'^H?Vt', code)
+    ), '')
+    if verb_code:
+        for component in list(components):
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = ''.join(letter['glyph'][0] for letter in component['letters'])
+            lemma_consonants = ''.join(letter['glyph'][0] for letter in _hebrew_letter_data(component['lemma']))
+            prefix_consonants = consonants[:2]
+            if prefix_consonants not in {'הת', 'מת', 'ית', 'תת', 'את', 'נת'} or consonants[2:] != lemma_consonants:
+                continue
+            prefix_letters = component['letters'][:2]
+            prefix = {
+                'strongs_number': '',
+                'role': 'prefix',
+                'surface': ''.join(letter['glyph'] for letter in prefix_letters),
+                'letters': prefix_letters,
+                'gematria_value': sum(letter['value'] for letter in prefix_letters),
+                'morphology_code': verb_code,
+                'gloss': 'Hitpael stem prefix',
+                'morphology_description': (
+                    'Hitpael (Hithpael) verb-stem formation, not a separate word or a fixed translation. '
+                    'This stem often expresses reflexive or repeated action; its meaning depends on the verb and context.'
+                ),
+            }
+            components.insert(components.index(component), prefix)
+            component['letters'] = component['letters'][2:]
+            component['surface'] = ''.join(letter['glyph'] for letter in component['letters'])
             component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
     return components
 
@@ -1573,6 +1610,7 @@ def _parse_stepbible_row(line, language):
     word_components = _parse_hebrew_word_components(
         columns[11] if len(columns) > 11 else '',
         raw_surface,
+        grammar,
     )
     strongs_numbers = []
     seen_strongs = set()
@@ -1666,7 +1704,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v19:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v20:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2129,7 +2167,7 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v9:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v10:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

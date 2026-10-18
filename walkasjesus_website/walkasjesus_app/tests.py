@@ -654,6 +654,38 @@ class EnglishWordAlignmentTestCase(TestCase):
     },
 })
 class DutchOriginalTextTestCase(TestCase):
+    def test_hitpael_word_components_explain_stem_prefix(self):
+        word = original_text_payload('Genesis', 6, 9)['words'][11]
+
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+            [('prefix', 'הִֽתְ'), ('root', 'הַלֶּךְ')],
+        )
+        prefix, root = word['word_components'][:2]
+        self.assertEqual(prefix['strongs_number'], '')
+        self.assertIn('Hitpael', prefix['morphology_description'])
+        self.assertIn('not a separate word', prefix['morphology_description'])
+        self.assertEqual(root['strongs_number'], 'H1980I')
+
+    def test_hitpael_components_cover_participles_and_attached_conjunctions(self):
+        words = original_text_payload('Genesis', 3, 8)['words']
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in words[5]['word_components']],
+            [('prefix', 'מִתְ'), ('root', 'הַלֵּ֥ךְ')],
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in words[9]['word_components']],
+            [('prefix', 'וַ'), ('prefix', 'יִּתְ'), ('root', 'חַבֵּ֨א')],
+        )
+
+    def test_stem_prefix_splitting_requires_morphology_and_matching_root(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        for grammar, surface in (('HVqp3ms', 'הִתְהַלֶּךְ'), ('HVtp3ms', 'הִתְחַבֵּא')):
+            with self.subTest(grammar=grammar, surface=surface):
+                parts = _parse_hebrew_word_components('{H1980I=הָלַךְ=walk}', surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
     def test_hebrew_letter_sounds_include_vowels_and_shin_dot(self):
         from walkasjesus_app.lib.strongs_service import _hebrew_letter_data
 

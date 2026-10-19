@@ -2180,7 +2180,9 @@
       return;
     }
 
-    var isHebrew = String((versePayload && versePayload.language_code) || '') === 'hbo';
+    var languageCode = String((versePayload && versePayload.language_code) || '');
+    var isHebrew = languageCode === 'hbo';
+    var isGreek = languageCode === 'grc';
     var selectedWordHtml = isHebrew && selectedWord.hebrew_letters && selectedWord.hebrew_letters.length
       ? hebrewLetterDetailsHtml(selectedWord.hebrew_letters)
       : escapeHtml(selectedWord.text);
@@ -2209,7 +2211,7 @@
     }
     var languageLabel = String((versePayload && versePayload.language_label) || '');
     var html = '<div class="bs-original-detail-meta"><strong' + (isHebrew ? ' class="bs-original-language-hbo bs-hebrew-detail-word"' : '') + '>' +
-      selectedWordHtml + '</strong>' + (isHebrew ? '' : ' · ' + escapeHtml(languageLabel)) + '</div>';
+      selectedWordHtml + '</strong>' + (isHebrew || isGreek ? '' : ' · ' + escapeHtml(languageLabel)) + '</div>';
 
     if (isHebrew) {
       html = '<details class="bs-hebrew-study-disclosure"><summary class="bs-hebrew-study-toggle">' +

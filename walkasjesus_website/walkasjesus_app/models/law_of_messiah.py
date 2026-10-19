@@ -60,24 +60,40 @@ def _split_translation_chunks(text, max_len=4200):
 def _translate_en_to_language(text, target_language):
     chunks = _split_translation_chunks(text)
     translated_chunks = []
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+    }
 
     for chunk in chunks:
-        response = requests.get(
-            'https://translate.googleapis.com/translate_a/single',
-            params={
-                'client': 'gtx',
-                'sl': 'en',
-                'tl': target_language,
-                'dt': 't',
-                'q': chunk,
-            },
-            timeout=15,
-        )
-        response.raise_for_status()
-        data = response.json()
-        segments = data[0] if isinstance(data, list) and data else []
-        translated_parts = [segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0]]
-        translated_chunks.append(''.join(translated_parts))
+        translated_text = chunk
+        for client in ('dict-chrome-ex', 'gtx'):
+            try:
+                response = requests.get(
+                    'https://clients5.google.com/translate_a/t' if client == 'dict-chrome-ex' else 'https://translate.googleapis.com/translate_a/single',
+                    params={
+                        'client': client,
+                        'sl': 'en',
+                        'tl': target_language,
+                        **({'dt': 't'} if client == 'gtx' else {}),
+                        'q': chunk,
+                    },
+                    headers=headers,
+                    timeout=15,
+                )
+                response.raise_for_status()
+                data = response.json()
+                if isinstance(data, list):
+                    if client == 'dict-chrome-ex':
+                        translated_text = ' '.join(str(x) for x in data)
+                        break
+                    elif data and isinstance(data[0], list):
+                        parts = [seg[0] for seg in data[0] if isinstance(seg, list) and seg and seg[0]]
+                        if parts:
+                            translated_text = ''.join(parts)
+                            break
+            except Exception:
+                continue
+        translated_chunks.append(translated_text)
 
     return '\n\n'.join(translated_chunks)
 

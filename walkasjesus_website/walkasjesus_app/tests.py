@@ -22,13 +22,23 @@ from django.utils import translation
 from walkasjesus_app.admin import MediaResourceAdmin
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiah, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
-from walkasjesus_app.models.bibles import BibleTranslationMetaData, BibleTranslation, LocalCompleteJewishBible
+from walkasjesus_app.models.bibles import (
+    BibleTranslationMetaData,
+    BibleTranslation,
+    LocalCompleteJewishBible,
+    LocalStatenvertalingBible,
+)
 from walkasjesus_app.models.sword_commentary import SwordCommentaryEntry, SwordCommentarySource
 from walkasjesus_app.models.bible_usage import BibleTranslationUsageDaily, PageVisitDaily
 from walkasjesus_app.models.law_of_messiah_media import MediaResource
 from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
-from walkasjesus_app.lib.strongs_service import _candidate_payload, original_text_payload
+from walkasjesus_app.lib.strongs_service import (
+    _candidate_payload,
+    english_alignment_payload,
+    localized_original_text_payload,
+    original_text_payload,
+)
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.lib.media_cache_version import MEDIA_CACHE_VERSION_KEY, get_media_cache_version
 from walkasjesus_app.templatetags.media_extras import youtube_captions_url
@@ -41,7 +51,11 @@ from walkasjesus_app.views.detail_view import (
     _filter_grouped_media_by_audience,
     _lesson_allowed_target_audiences,
 )
-from walkasjesus_app.views.user_preferences import ScripturaCommentaryProxyView, _append_unique_commentary
+from walkasjesus_app.views.user_preferences import (
+    ScripturaCommentaryProxyView,
+    _append_unique_commentary,
+    _translate_commentary_text,
+)
 from walkasjesus_app.views.user_preferences import BibleTranslationsForLanguageView
 
 
@@ -540,6 +554,237 @@ class MediaReviewWorkflowTestCase(TestCase):
         self.assertEqual(resource.author, 'Updated author')
         self.assertEqual(resource.media_type, 'shortmovie')
         self.assertTrue(resource.is_public)
+
+
+class EnglishWordAlignmentTestCase(TestCase):
+    def _word_index_for(self, tokens, english_word):
+        for token in tokens:
+            if token['text'].lower() == english_word:
+                return token['word_index']
+        return None
+
+    def test_hebrew_verse_aligns_kjv_words_to_original_tokens(self):
+        payload = english_alignment_payload(
+            'Exodus', 1, 1,
+            'Now these are the names of the children of Israel, which came into Egypt; '
+            'every man and his household came with Jacob.',
+        )
+        original = original_text_payload('Exodus', 1, 1)
+        tokens = payload['tokens']
+
+        self.assertGreater(payload['aligned_count'], 10)
+        children_index = self._word_index_for(tokens, 'children')
+        self.assertIsNotNone(children_index)
+        self.assertIn('H1121', [
+            candidate['strongs_number']
+            for candidate in original['words'][children_index]['candidates']
+        ])
+        self.assertEqual(self._word_index_for(tokens, 'now'), -1)
+        self.assertEqual(
+            ''.join(token['text'] for token in tokens),
+            'Now these are the names of the children of Israel, which came into Egypt; '
+            'every man and his household came with Jacob.',
+        )
+
+    def test_greek_verse_aligns_kjv_words_to_original_tokens(self):
+        payload = english_alignment_payload(
+            'John', 3, 16,
+            'For God so loved the world, that he gave his only begotten Son, that whosoever '
+            'believeth in him should not perish, but have everlasting life.',
+        )
+        original = original_text_payload('John', 3, 16)
+
+        self.assertGreater(payload['aligned_count'], 10)
+        loved_index = self._word_index_for(payload['tokens'], 'loved')
+        self.assertIsNotNone(loved_index)
+        self.assertIn('G0025', [
+            candidate['strongs_number']
+            for candidate in original['words'][loved_index]['candidates']
+        ])
+
+    def test_tagged_kjv_source_uses_direct_strongs_lookup(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In the beginning God created the heaven and the earth.',
+            tagged_source='kjv',
+        )
+
+        self.assertEqual(payload['method'], 'tagged')
+        # The KJV reorders "God created" relative to the Hebrew, which only a tag lookup resolves.
+        self.assertEqual(self._word_index_for(payload['tokens'], 'created'), 1)
+        self.assertEqual(self._word_index_for(payload['tokens'], 'god'), 2)
+
+    def test_unknown_tagged_source_falls_back_to_lexicon_alignment(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In the beginning God created the heaven and the earth.',
+            tagged_source='does-not-exist',
+        )
+
+        self.assertEqual(payload['method'], 'lexicon')
+        self.assertGreater(payload['aligned_count'], 5)
+
+    def test_dutch_verse_uses_statenvertaling_tagging(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'In het begin schiep God de hemel en de aarde.',
+            tagged_source='svv',
+            allow_scoring=False,
+        )
+
+        self.assertEqual(payload['method'], 'tagged')
+        self.assertEqual(self._word_index_for(payload['tokens'], 'schiep'), 1)
+        self.assertEqual(self._word_index_for(payload['tokens'], 'god'), 2)
+
+    def test_untagged_non_english_verse_returns_no_alignment(self):
+        payload = english_alignment_payload(
+            'Genesis', 1, 1,
+            'Am Anfang schuf Gott Himmel und Erde.',
+            allow_scoring=False,
+        )
+
+        self.assertEqual(payload['aligned_count'], 0)
+        self.assertEqual(payload['tokens'], [])
+
+
+@override_settings(CACHES={
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'dutch-original-text-tests',
+    },
+})
+class DutchOriginalTextTestCase(TestCase):
+    def test_hitpael_word_components_explain_stem_prefix(self):
+        word = original_text_payload('Genesis', 6, 9)['words'][11]
+
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+            [('prefix', 'הִֽתְ'), ('root', 'הַלֶּךְ')],
+        )
+        prefix, root = word['word_components'][:2]
+        self.assertEqual(prefix['strongs_number'], '')
+        self.assertIn('Hitpael', prefix['morphology_description'])
+        self.assertIn('not a separate word', prefix['morphology_description'])
+        self.assertEqual(root['strongs_number'], 'H1980I')
+
+    def test_hitpael_components_cover_participles_and_attached_conjunctions(self):
+        words = original_text_payload('Genesis', 3, 8)['words']
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in words[5]['word_components']],
+            [('prefix', 'מִתְ'), ('root', 'הַלֵּ֥ךְ')],
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in words[9]['word_components']],
+            [('prefix', 'וַ'), ('prefix', 'יִּתְ'), ('root', 'חַבֵּ֨א')],
+        )
+
+    def test_stem_prefix_splitting_requires_morphology_and_matching_root(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        for grammar, surface in (('HVqp3ms', 'הִתְהַלֶּךְ'), ('HVtp3ms', 'הִתְחַבֵּא')):
+            with self.subTest(grammar=grammar, surface=surface):
+                parts = _parse_hebrew_word_components('{H1980I=הָלַךְ=walk}', surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_hebrew_letter_sounds_include_vowels_and_shin_dot(self):
+        from walkasjesus_app.lib.strongs_service import _hebrew_letter_data
+
+        for glyph, name, sound in (
+            ('שָׁ', 'Shin', 'shā'), ('שָׁ', 'Shin', 'shā'),
+            ('שָׂ', 'Sin', 'sā'), ('בַּ', 'Bet', 'ba'),
+            ('וּ', 'Vav', 'ū'), ('וֹ', 'Vav', 'ō'),
+        ):
+            with self.subTest(glyph=glyph):
+                letter = _hebrew_letter_data(glyph)[0]
+                self.assertEqual(letter['name'], name)
+                self.assertEqual(letter['sound'], sound)
+
+    def test_hebrew_word_details_include_affixes_letters_and_gematria(self):
+        leviticus_word = original_text_payload('Leviticus', 26, 36)['words'][1]
+
+        self.assertEqual(leviticus_word['gematria_value'], 62)
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in leviticus_word['word_components']],
+            [('prefix', 'בָּ'), ('suffix', 'כֶ֔ם')],
+        )
+        self.assertEqual(
+            leviticus_word['word_components'][1]['morphology_description'],
+            'Object suffix: 2nd person masculine plural',
+        )
+        self.assertEqual([letter['value'] for letter in leviticus_word['hebrew_letters']], [2, 20, 40])
+
+        genesis_word = original_text_payload('Genesis', 1, 1)['words'][0]
+        self.assertEqual(genesis_word['gematria_value'], 913)
+        self.assertEqual([part['role'] for part in genesis_word['word_components']], ['prefix', 'root'])
+        self.assertEqual(
+            [item['description'] for item in genesis_word['grammar_details']],
+            ['preposition', 'common noun, feminine, singular, absolute'],
+        )
+
+        dutch_genesis_word = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
+        self.assertEqual(dutch_genesis_word['word_components'][1]['local_gloss'], 'beginne')
+
+    @patch('walkasjesus_app.views.user_preferences._translate_google_batch')
+    def test_dutch_payload_localizes_grammatical_component_glosses(self, mock_translate_batch):
+        cache.clear()
+        mock_translate_batch.side_effect = lambda texts, language: [f'NL: {text}' for text in texts]
+        word = localized_original_text_payload('Leviticus', 26, 36, 'nl')['words'][1]
+
+        self.assertEqual([part['local_gloss'] for part in word['word_components']], ['NL: in', 'jullie'])
+        self.assertTrue(word['word_components'][1]['local_description'].startswith('NL: '))
+        self.assertNotEqual(
+            word['word_components'][1]['local_description'],
+            word['word_components'][1]['morphology_description'],
+        )
+        self.assertTrue(all(item['local_description'].startswith('NL: ') for item in word['grammar_details']))
+
+        genesis = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
+        self.assertEqual(genesis['local_gloss'], 'beginne')
+        self.assertEqual(genesis['word_components'][1]['local_gloss'], 'beginne')
+
+    def test_dutch_payload_adds_statenvertaling_glosses_and_usage(self):
+        payload = localized_original_text_payload('Exodus', 1, 1, 'nl')
+        words = payload['words']
+
+        self.assertEqual(payload['local_language'], 'nl')
+        self.assertEqual(words[2]['local_gloss'], 'zonen')
+        # Untagged words still fall back to the most common Statenvertaling rendering.
+        self.assertTrue(all(word['local_gloss'] for word in words if word['has_candidates']))
+
+        candidate = words[2]['candidates'][0]
+        usage = candidate['local_usage']
+        self.assertGreater(len(usage), 3)
+        self.assertIn('zoon', [item['label'] for item in usage])
+        self.assertGreater(usage[0]['count'], usage[-1]['count'])
+        self.assertGreater(len(usage[0]['references']), 100)
+
+        # Hebrew usage outline nodes have non-zero counts and references
+        self.assertGreater(candidate['usage_outline'][0]['count'], 0)
+        self.assertGreater(len(candidate['usage_outline'][0]['references']), 0)
+
+    def test_english_payload_is_unchanged(self):
+        payload = localized_original_text_payload('Exodus', 1, 1, 'en')
+
+        self.assertNotIn('local_language', payload)
+        self.assertNotIn('local_gloss', payload['words'][2])
+
+
+class LocalStatenvertalingBibleTestCase(SimpleTestCase):
+    def test_serves_verses_from_bundled_data(self):
+        bible = LocalStatenvertalingBible('svv-statenvertaling')
+
+        self.assertEqual(bible.language, 'nl')
+        self.assertEqual(bible.abbreviation, 'SV')
+        self.assertTrue(bible.is_local_source)
+        self.assertEqual(
+            bible.verses(BibleLibBibleBooks['Genesis'], 1, 1, 1, 1),
+            'In den beginne schiep God den hemel en de aarde.',
+        )
+
+    def test_is_registered_as_a_selectable_translation(self):
+        bible_ids = {getattr(bible, 'id', '') for bible in BibleTranslation().all()}
+
+        self.assertIn('svv-statenvertaling', bible_ids)
 
 
 class StrongsServiceFallbackTestCase(TestCase):
@@ -1694,6 +1939,33 @@ class CommentaryTranslationViewTestCase(SimpleTestCase):
         self.assertEqual(payload['language'], 'nl')
         self.assertTrue(payload['machine_translated'])
         mock_translate_commentary_text.assert_called_once_with('In the beginning', 'nl')
+
+    @patch('walkasjesus_app.views.user_preferences.requests.get')
+    @patch('walkasjesus_app.views.user_preferences.requests.post')
+    def test_translation_provider_failure_returns_original_text(self, mock_requests_post, mock_requests_get):
+        mock_requests_post.side_effect = RuntimeError('primary provider unavailable')
+        mock_requests_get.side_effect = RuntimeError('fallback provider unavailable')
+
+        self.assertEqual(
+            _translate_commentary_text('In the beginning', 'nl'),
+            'In the beginning',
+        )
+
+    @patch('walkasjesus_app.views.user_preferences._translate_google_batch')
+    def test_translation_endpoint_supports_batch_texts(self, mock_translate_batch):
+        cache.clear()
+        mock_translate_batch.return_value = ['zaad', 'zaaien']
+
+        response = self.client.post(
+            reverse('commandments:commentary_translate'),
+            {'texts': json.dumps(['seed', 'sowing']), 'target_language': 'nl'},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(payload['translations']['seed'], 'zaad')
+        self.assertEqual(payload['translations']['sowing'], 'zaaien')
+        mock_translate_batch.assert_called_once_with(['seed', 'sowing'], 'nl')
 
 
 class CommentaryCoverageForGenesisTestCase(TestCase):

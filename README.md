@@ -59,6 +59,12 @@ _This will run the server on your local machine on port 8000_
 
 The following extra information might be helpfull when helping to improve this application. 
 
+### Feature documentation
+
+- [Bible Study tool](walkasjesus_website/walkasjesus_app/BIBLE_STUDY.md) — data sources, the
+  Strong's/original-language engine and the word-by-word link between a translation and the
+  Hebrew/Greek.
+
 ### Scripts
 
 The following scripts can be used:

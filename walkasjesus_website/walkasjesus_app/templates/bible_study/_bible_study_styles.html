@@ -420,8 +420,31 @@
       color: #2e250d;
     }
 
+    .bible-study-shell .bs-aligned-word {
+      cursor: pointer;
+      border-radius: 0.45rem;
+      padding: 0 0.12rem;
+      border-bottom: 1px dotted rgba(200, 168, 75, 0.55);
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .bible-study-shell .bs-aligned-word:focus {
+      outline: none;
+    }
+
+    .bible-study-shell .bs-aligned-word.is-hovered,
+    .bible-study-shell .bs-aligned-word.active {
+      background: rgba(226, 185, 0, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(200, 168, 75, 0.45);
+      color: #2e250d;
+    }
+
     .bible-study-shell .bs-original-language-grc {
       font-family: 'BibleStudySBLGreek', Georgia, serif;
+    }
+
+    .bs-unique-hebrew-css {
+      font-family: 'BibleStudySBLHebrew', Georgia, serif;
     }
 
     .bible-study-shell .bs-original-language-hbo {
@@ -531,10 +554,262 @@
       margin: 0;
     }
 
+    .bible-study-shell .bs-original-local-usage {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .bible-study-shell .bs-original-local-usage-item {
+      align-items: center;
+      background: rgba(226, 185, 0, 0.12);
+      border: 1px solid rgba(200, 168, 75, 0.35);
+      border-radius: 0.8rem;
+      display: inline-flex;
+      font-size: 0.8rem;
+      gap: 0.35rem;
+      padding: 0.1rem 0.55rem;
+    }
+
+    .bible-study-shell .bs-original-local-usage-count {
+      color: #7a6a3d;
+      font-size: 0.72rem;
+    }
+
+    .bible-study-shell .bs-original-occurrence-button {
+      background: rgba(226, 185, 0, 0.16);
+      border: 1px solid rgba(200, 168, 75, 0.45);
+      border-radius: 999px;
+      color: #5d4817;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-left: 0.25rem;
+      padding: 0.08rem 0.45rem;
+      transition: background 0.12s ease, color 0.12s ease;
+      vertical-align: middle;
+    }
+
+    .bible-study-shell .bs-original-occurrence-button:hover,
+    .bible-study-shell .bs-original-occurrence-button:focus {
+      background: #e2b900;
+      border-color: #b8932f;
+      color: #2e250d;
+      outline: none;
+    }
+
+    .bible-study-shell .bs-occurrence-chunk-btn {
+      border-radius: 6px;
+      font-size: 0.76rem;
+      padding: 0.18rem 0.5rem;
+    }
+
+    .bible-study-shell .bs-occurrence-chunk-btn.active {
+      background: #e2b900;
+      border-color: #c8a84b;
+      color: #2e250d;
+      font-weight: 700;
+    }
+
+    .bible-study-shell .bs-occurrence-verse-btn {
+      background: #f5efda;
+      border: 1px solid #dfd1a6;
+      border-radius: 999px;
+      color: #6e5a28;
+      cursor: pointer;
+      font-size: 0.74rem;
+      padding: 0.1rem 0.5rem;
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+
+    .bible-study-shell .bs-occurrence-verse-btn:hover,
+    .bible-study-shell .bs-occurrence-verse-btn.active {
+      background: #e2b900;
+      border-color: #c8a84b;
+      color: #2e250d;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .bible-study-shell .bs-occurrences-chunks,
+    .bible-study-shell .bs-occurrences-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
     .bible-study-shell .bs-original-detail-meta {
       color: #6d5a29;
-      font-size: 0.82rem;
+      font-family: 'BibleStudySBLHebrew', Georgia, serif;
+      font-size: 2.2rem;
       margin-bottom: 0.55rem;
+    }
+
+    .bible-study-shell .bs-hebrew-detail-word {
+      direction: rtl;
+      display: inline-block;
+      font-family: 'BibleStudySBLHebrew', serif;
+      font-size: 2.5rem;
+      line-height: 1.8;
+      unicode-bidi: isolate;
+    }
+
+    .bible-study-shell .bs-hebrew-part-root {
+      color: #94612e;
+    }
+
+    .bible-study-shell .bs-hebrew-part-prefix,
+    .bible-study-shell .bs-hebrew-part-suffix,
+    .bible-study-shell .bs-hebrew-part-grammatical {
+      color: #757575;
+    }
+
+    .bible-study-shell .bs-hebrew-study-disclosure {
+      margin-bottom: 0.65rem;
+    }
+
+    .bible-study-shell .bs-hebrew-study-toggle {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      gap: 0.65rem;
+      list-style: none;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .bible-study-shell .bs-hebrew-study-toggle::-webkit-details-marker {
+      display: none;
+    }
+
+    .bible-study-shell .bs-hebrew-study-help {
+      color: #94612e;
+      font-size: 1rem;
+    }
+
+    .bible-study-shell .bs-hebrew-study-toggle:focus-visible {
+      outline: 2px solid #94612e;
+      outline-offset: 3px;
+    }
+
+    .bible-study-shell .bs-hebrew-letter-info {
+      border-bottom: 1px dotted rgba(106, 85, 32, 0.6);
+      cursor: help;
+      font-family: 'BibleStudySBLHebrew', Georgia, serif;
+      display: inline-block;
+      unicode-bidi: isolate;
+    }
+
+    .bible-study-shell .bs-hebrew-letter-info::after,
+    .bible-study-shell .bs-hebrew-study-help::after {
+      direction: ltr;
+      font-family: Georgia, serif;
+      width: 210px;
+      max-width: min(230px, 75vw);
+    }
+
+    .bible-study-shell .bs-hebrew-letter-info:focus::after,
+    .bible-study-shell .bs-hebrew-study-help:focus::after {
+      opacity: 1;
+    }
+
+    .bible-study-shell .bs-hebrew-word-study {
+      background: #faf7ec;
+      border: 1px solid #e9dfc1;
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+    }
+
+    .bible-study-shell .bs-hebrew-components {
+      display: grid;
+      gap: 0.35rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .bible-study-shell .bs-hebrew-component-row {
+      align-items: center;
+      border-bottom: 1px solid rgba(200, 168, 75, 0.2);
+      display: grid;
+      gap: 0.25rem 0.55rem;
+      grid-template-columns: minmax(8rem, 0.8fr) auto auto minmax(5rem, 1fr);
+      padding: 0.25rem 0;
+    }
+
+    .bible-study-shell .bs-hebrew-component-role {
+      color: #6a5520;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .bible-study-shell .bs-hebrew-component-letters {
+      font-size: 1.15rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .bible-study-shell .bs-hebrew-component-row code {
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+
+    .bible-study-shell .bs-hebrew-component-gloss {
+      font-size: 0.86rem;
+    }
+
+    .bible-study-shell .bs-hebrew-component-morphology {
+      color: #6f633e;
+      grid-column: 2 / -1;
+      font-size: 0.78rem;
+    }
+
+    .bible-study-shell .bs-hebrew-morphology,
+    .bible-study-shell .bs-hebrew-gematria {
+      font-size: 0.86rem;
+      margin-top: 0.45rem;
+    }
+
+    .bible-study-shell .bs-hebrew-morphology ul {
+      margin-top: 0.2rem;
+    }
+
+    .bible-study-shell .bs-hebrew-value-breakdown {
+      align-items: center;
+      direction: rtl;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0.3rem 0;
+    }
+
+    .bible-study-shell .bs-hebrew-value-item {
+      align-items: center;
+      background: #f5efda;
+      border: 1px solid #dfd1a6;
+      border-radius: 4px;
+      display: inline-flex;
+      flex-direction: column;
+      font-family: 'BibleStudySBLHebrew', Georgia, serif;
+      font-size: 1rem;
+      min-width: 2.2rem;
+      padding: 0.12rem 0.28rem;
+    }
+
+    .bible-study-shell .bs-hebrew-value-item small {
+      color: #6e5a28;
+      font-family: Georgia, serif;
+      font-size: 0.68rem;
+    }
+
+    @media (max-width: 575.98px) {
+      .bible-study-shell .bs-hebrew-component-row {
+        grid-template-columns: minmax(6rem, 1fr) auto auto;
+      }
+
+      .bible-study-shell .bs-hebrew-component-gloss,
+      .bible-study-shell .bs-hebrew-component-morphology {
+        grid-column: 1 / -1;
+      }
     }
 
     .bible-study-shell .bs-original-candidate {
@@ -613,6 +888,13 @@
       flex-wrap: wrap;
       gap: 0.35rem;
       margin-top: 0.15rem;
+    }
+
+    .bible-study-shell .bs-occurrences-popup-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
     }
 
     .bible-study-shell .bs-original-reference-group {
@@ -766,7 +1048,9 @@
       border: 1px solid #e0d5b0;
       border-radius: 12px;
       box-shadow: 0 18px 42px rgba(27, 22, 11, 0.24);
-      max-width: 720px;
+      max-height: 90vh;
+      max-width: 760px;
+      overflow-y: auto;
       position: relative;
       width: 100%;
     }

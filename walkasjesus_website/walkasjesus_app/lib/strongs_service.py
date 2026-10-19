@@ -1,3 +1,6 @@
+import copy
+import gzip
+import hashlib
 import html
 import json
 import re
@@ -527,7 +530,7 @@ def _parse_greek_outline_nodes(full_entry_html):
         node = {
             'label': label,
             'children': [],
-            'count': 0,
+            'count': len(refs),
             'references': refs,
             'reference_groups': _chunked(refs, 3),
         }
@@ -710,6 +713,292 @@ def _clean_translation_label(value):
     normalized = normalized.split('@', 1)[0]
     normalized = normalized.replace('<', '[').replace('>', ']')
     return re.sub(r'\s+', ' ', normalized)
+
+
+_HEBREW_LETTER_INFO = {
+    'א': ('Aleph', 'silent / glottal', 1, 'ox'),
+    'ב': ('Bet', 'b / v', 2, 'house'),
+    'ג': ('Gimel', 'g', 3, 'camel'),
+    'ד': ('Dalet', 'd', 4, 'door'),
+    'ה': ('He', 'h', 5, 'window / breath'),
+    'ו': ('Vav', 'v / w', 6, 'hook'),
+    'ז': ('Zayin', 'z', 7, 'weapon'),
+    'ח': ('Chet', 'ch', 8, 'fence'),
+    'ט': ('Tet', 't', 9, 'traditional image varies'),
+    'י': ('Yod', 'y', 10, 'hand'),
+    'כ': ('Kaf', 'k / ch', 20, 'palm'),
+    'ך': ('Final Kaf', 'ch', 20, 'palm'),
+    'ל': ('Lamed', 'l', 30, 'goad'),
+    'מ': ('Mem', 'm', 40, 'water'),
+    'ם': ('Final Mem', 'm', 40, 'water'),
+    'נ': ('Nun', 'n', 50, 'fish'),
+    'ן': ('Final Nun', 'n', 50, 'fish'),
+    'ס': ('Samekh', 's', 60, 'support'),
+    'ע': ('Ayin', 'silent / glottal', 70, 'eye'),
+    'פ': ('Pe', 'p / f', 80, 'mouth'),
+    'ף': ('Final Pe', 'f', 80, 'mouth'),
+    'צ': ('Tsadi', 'ts', 90, 'traditional image varies'),
+    'ץ': ('Final Tsadi', 'ts', 90, 'traditional image varies'),
+    'ק': ('Qof', 'q / k', 100, 'traditional image varies'),
+    'ר': ('Resh', 'r', 200, 'head'),
+    'ש': ('Shin / Sin', 'sh / s', 300, 'tooth'),
+    'ת': ('Tav', 't', 400, 'mark'),
+}
+
+_HEBREW_LETTER_RE = re.compile(r'[\u05D0-\u05EA]')
+_HEBREW_COMPONENT_RE = re.compile(
+    r'(?P<strong>[GH]\d+[A-Za-z]?)(?:=(?P<value>[^=/{}/\\]+))?(?:=(?P<gloss>[^/{}/\\]+))?'
+)
+_HEBREW_TRADITIONAL_IMAGES_NL = {
+    'ox': 'os', 'house': 'huis', 'camel': 'kameel', 'door': 'deur',
+    'window / breath': 'raam / adem', 'hook': 'haak', 'weapon': 'wapen',
+    'fence': 'omheining', 'traditional image varies': 'traditioneel verschillend',
+    'hand': 'hand', 'palm': 'handpalm', 'goad': 'ossenprikkel', 'water': 'water',
+    'fish': 'vis', 'support': 'steun', 'eye': 'oog', 'mouth': 'mond',
+    'tooth': 'tand', 'head': 'hoofd', 'mark': 'teken',
+}
+_HEBREW_LETTER_NAMES_NL = {
+    'Aleph': 'Alef', 'Final Kaf': 'Eind-Kaf', 'Final Mem': 'Eind-Mem',
+    'Final Nun': 'Eind-Noen', 'Final Pe': 'Eind-Pe', 'Final Tsadi': 'Eind-Tsadi',
+    'Samekh': 'Samech', 'Qof': 'Kof', 'Resh': 'Resj', 'Shin': 'Sjin', 'Sin': 'Sin',
+}
+
+
+def _hebrew_letter_data(text):
+    letters = []
+    text = str(text or '')
+    for character in text:
+        if character in _HEBREW_LETTER_INFO:
+            name, sound, value, image = _HEBREW_LETTER_INFO[character]
+            letters.append({
+                'glyph': character,
+                'name': name,
+                'sound': sound,
+                'value': value,
+                'traditional_image': image,
+            })
+        elif unicodedata.category(character).startswith('M') and letters:
+            letters[-1]['glyph'] += character
+    vowels = {
+        '\u05b0': 'ə / ∅', '\u05b1': 'ĕ', '\u05b2': 'ă', '\u05b3': 'ŏ',
+        '\u05b4': 'i', '\u05b5': 'ē', '\u05b6': 'e', '\u05b7': 'a',
+        '\u05b8': 'ā', '\u05b9': 'ō', '\u05ba': 'ō', '\u05bb': 'u', '\u05c7': 'o',
+    }
+    for letter in letters:
+        glyph = letter['glyph']
+        if glyph[0] == 'ש':
+            if '\u05c2' in glyph:
+                letter['name'], letter['sound'] = 'Sin', 's'
+            elif '\u05c1' in glyph:
+                letter['name'], letter['sound'] = 'Shin', 'sh'
+        if '\u05bc' in glyph:
+            hard_sounds = {'ב': 'b', 'כ': 'k', 'ך': 'k', 'פ': 'p', 'ף': 'p'}
+            letter['sound'] = hard_sounds.get(glyph[0], letter['sound'])
+        vowel = next((vowels[mark] for mark in glyph if mark in vowels), '')
+        if glyph[0] == 'ו' and (vowel == 'ō' or ('\u05bc' in glyph and not vowel)):
+            letter['sound'] = vowel or 'ū'
+        else:
+            letter['sound'] += vowel
+    return letters
+
+
+def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''):
+    components = []
+    for match in _HEBREW_COMPONENT_RE.finditer(str(raw_components or '')):
+        strongs_number = _normalize_step_code(match.group('strong'))
+        value = str(match.group('value') or '').strip()
+        gloss = str(match.group('gloss') or '').strip(' :;')
+        value_is_hebrew = bool(_HEBREW_LETTER_RE.search(value))
+        component = {
+            'strongs_number': strongs_number,
+            'surface': value if value_is_hebrew else '',
+            'morphology_code': '' if value_is_hebrew else value,
+            'gloss': _clean_translation_label(gloss).strip(' :;\t'),
+        }
+        component['morphology_description'] = _hebrew_morphology_description(component['morphology_code'])
+
+        numeric_match = re.match(r'^H(\d+)', strongs_number)
+        numeric_code = int(numeric_match.group(1)) if numeric_match else 0
+        if 9001 <= numeric_code <= 9016:
+            component['role'] = 'prefix'
+        elif 9020 <= numeric_code <= 9039:
+            component['role'] = 'suffix'
+        elif strongs_number in {'H0853', 'H0854'}:
+            component['role'] = 'grammatical'
+        elif component['surface']:
+            component['role'] = 'root'
+        else:
+            component['role'] = 'grammatical'
+        component['letters'] = _hebrew_letter_data(component['surface'])
+        component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+        components.append(component)
+
+    surface_parts = [
+        _clean_hebrew_surface(part)
+        for part in str(raw_surface or '').split('/')
+        if _HEBREW_LETTER_RE.search(part)
+    ]
+    surface_components = [
+        component for component in components
+        if component['surface'] or re.fullmatch(r'[A-Za-z][A-Za-z0-9]*', component['morphology_code'])
+    ]
+    if len(surface_parts) == len(surface_components):
+        for component, surface in zip(surface_components, surface_parts):
+            component['lemma'] = component['surface']
+            component['surface'] = surface
+            component['letters'] = _hebrew_letter_data(surface)
+            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+
+    verb_code = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.match(r'^H?Vt', code)
+    ), '')
+    if verb_code:
+        for component in list(components):
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = ''.join(letter['glyph'][0] for letter in component['letters'])
+            lemma_consonants = ''.join(letter['glyph'][0] for letter in _hebrew_letter_data(component['lemma']))
+            prefix_consonants = consonants[:2]
+            if prefix_consonants not in {'הת', 'מת', 'ית', 'תת', 'את', 'נת'} or consonants[2:] != lemma_consonants:
+                continue
+            prefix_letters = component['letters'][:2]
+            prefix = {
+                'strongs_number': '',
+                'role': 'prefix',
+                'surface': ''.join(letter['glyph'] for letter in prefix_letters),
+                'letters': prefix_letters,
+                'gematria_value': sum(letter['value'] for letter in prefix_letters),
+                'morphology_code': verb_code,
+                'gloss': 'Hitpael stem prefix',
+                'morphology_description': (
+                    'Hitpael (Hithpael) verb-stem formation, not a separate word or a fixed translation. '
+                    'This stem often expresses reflexive or repeated action; its meaning depends on the verb and context.'
+                ),
+            }
+            components.insert(components.index(component), prefix)
+            component['letters'] = component['letters'][2:]
+            component['surface'] = ''.join(letter['glyph'] for letter in component['letters'])
+            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+    return components
+
+
+@lru_cache(maxsize=1)
+def _hebrew_morphology_descriptions():
+    path = _stepbible_root() / 'Morphology codes' / (
+        'TEHMC - Translators Expansion of Hebrew Morphology Codes - STEPBible.org CC BY.txt'
+    )
+    if not path.exists():
+        return {}
+
+    descriptions = {}
+    current_code = ''
+    awaiting_description = False
+    try:
+        with path.open('r', encoding='utf-8') as handle:
+            for raw_line in handle:
+                line = raw_line.rstrip('\n')
+                stripped = line.strip()
+                if stripped == '$':
+                    current_code = ''
+                    awaiting_description = False
+                    continue
+
+                full_match = re.match(r'^([A-Z][A-Za-z0-9]*)\s+Function=(.*)$', stripped)
+                if full_match:
+                    current_code = full_match.group(1)
+                    description = _format_hebrew_morphology_attributes(full_match.group(2))
+                    if description:
+                        descriptions[current_code] = description
+                    awaiting_description = not bool(description)
+                    continue
+
+                tab_columns = stripped.split('\t')
+                if len(tab_columns) >= 3:
+                    brief_code = re.match(r'^(?:\d+:)?([A-Za-z][A-Za-z0-9]*)$', tab_columns[0].strip())
+                    if brief_code:
+                        descriptions.setdefault(brief_code.group(1), tab_columns[2].strip())
+                        continue
+
+                brief_match = re.match(r'^\d+:([A-Za-z][A-Za-z0-9]*)\s+\S+\s+(.+)$', stripped)
+                if brief_match:
+                    descriptions.setdefault(brief_match.group(1), brief_match.group(2).strip())
+                    continue
+
+                if current_code and awaiting_description and stripped and not stripped.startswith(('Example:', '"')):
+                    descriptions[current_code] = stripped
+                    awaiting_description = False
+    except OSError:
+        return {}
+    return descriptions
+
+
+def _format_hebrew_morphology_attributes(raw_attributes):
+    attributes = {}
+    for field in str(raw_attributes or '').split(';'):
+        key, separator, value = field.partition('=')
+        if separator:
+            attributes[key.strip()] = value.strip()
+        elif field.strip() and 'Function' not in attributes:
+            attributes['Function'] = field.strip()
+    function = attributes.get('Function', '')
+    form = attributes.get('Form', '')
+    if not function:
+        return ''
+
+    names = {
+        'Noun': 'noun', 'Verb': 'verb', 'Preposition': 'preposition',
+        'Suffix': 'suffix', 'Prefix': 'prefix', 'Particle': 'particle',
+        'Conjunction': 'conjunction', 'Adjective': 'adjective', 'Pronoun': 'pronoun',
+        'Punctuation': 'punctuation', 'Article': 'article', 'Numeral': 'numeral',
+    }
+    function_name = names.get(function, function.lower())
+    if function == 'Noun' and form == 'Proper':
+        parts = ['proper noun']
+    elif function == 'Noun' and form == 'Common':
+        parts = ['common noun']
+    elif form:
+        form_names = {
+            'Definite': 'definite', 'Personal': 'personal', 'Directional': 'directional',
+            'Demonstrative': 'demonstrative', 'Interrogative': 'interrogative',
+        }
+        parts = [form_names.get(form, form.lower()), function_name]
+    else:
+        parts = [function_name]
+
+    for key, label in (
+        ('Person', {'First': 'first person', 'Second': 'second person', 'Third': 'third person'}),
+        ('Gender', {'Masculine': 'masculine', 'Feminine': 'feminine', 'Common': 'common gender'}),
+        ('Number', {'Singular': 'singular', 'Plural': 'plural', 'Dual': 'dual'}),
+        ('State', {'Absolute': 'absolute', 'Construct': 'construct'}),
+        ('Tense', {'Perfect': 'perfect', 'Imperfect': 'imperfect', 'Participle': 'participle'}),
+        ('Stem', {}),
+    ):
+        value = attributes.get(key)
+        if value:
+            parts.append(label.get(value, value.lower()))
+    return ', '.join(parts)
+
+
+def _hebrew_morphology_description(code):
+    normalized = str(code or '').strip()
+    if not normalized:
+        return ''
+    descriptions = _hebrew_morphology_descriptions()
+    return descriptions.get(normalized) or descriptions.get('H' + normalized, '')
+
+
+def _hebrew_morphology_details(raw_grammar):
+    details = []
+    for code in str(raw_grammar or '').split('/'):
+        code = code.strip()
+        if not code:
+            continue
+        details.append({
+            'code': code,
+            'description': _hebrew_morphology_description(code),
+        })
+    return details
 
 
 @lru_cache(maxsize=2)
@@ -1109,6 +1398,78 @@ def _lxx_hebrew_equivalents(strongs_number, language):
     return normalized_candidates
 
 
+def _attach_hebrew_outline_counts(outline, translation_counts):
+    if not outline or not translation_counts:
+        return outline
+
+    def find_best_node(nodes, target_label):
+        target = target_label.lower().strip()
+        best = None
+        best_score = 0
+
+        def walk(node):
+            nonlocal best, best_score
+            n_lbl = str(node.get('label') or '').lower().strip()
+            score = 0
+            if target == n_lbl:
+                score = 10
+            elif target in n_lbl or n_lbl in target:
+                score = 5
+            elif any(len(w) >= 3 and w in n_lbl for w in re.findall(r'[a-z]+', target)):
+                score = 2
+            if score > best_score:
+                best_score = score
+                best = node
+            for child in node.get('children', []):
+                walk(child)
+
+        for root in nodes:
+            walk(root)
+        return best if best_score > 0 else None
+
+    if len(outline) == len(translation_counts):
+        for node, item in zip(outline, translation_counts):
+            node['count'] = int(item.get('count') or 0)
+            node['references'] = list(item.get('references') or [])
+            node['reference_groups'] = list(item.get('reference_groups') or [])
+    else:
+        for item in translation_counts:
+            matched_node = find_best_node(outline, str(item.get('label') or ''))
+            if matched_node and not matched_node.get('count'):
+                matched_node['count'] = int(item.get('count') or 0)
+                matched_node['references'] = list(item.get('references') or [])
+                matched_node['reference_groups'] = list(item.get('reference_groups') or [])
+
+        def rollup(node):
+            if node.get('children'):
+                child_refs = []
+                child_count = 0
+                for child in node['children']:
+                    rollup(child)
+                    child_count += child.get('count', 0)
+                    child_refs.extend(child.get('references', []))
+                if child_count > 0:
+                    node['count'] = child_count
+                    node['references'] = _dedupe_preserve_order(child_refs)
+                    node['reference_groups'] = _chunked(node['references'], 3)
+
+        for root in outline:
+            rollup(root)
+
+    total_count = sum(node.get('count', 0) for node in outline)
+    if total_count == 0 and outline:
+        merged_refs = []
+        for item in translation_counts:
+            total_count += int(item.get('count') or 0)
+            merged_refs.extend(item.get('references') or [])
+        if total_count > 0:
+            outline[0]['count'] = total_count
+            outline[0]['references'] = _dedupe_preserve_order(merged_refs)
+            outline[0]['reference_groups'] = _chunked(outline[0]['references'], 3)
+
+    return outline
+
+
 def _candidate_payload(strongs_number, language, row_data, primary=False):
     candidate = _candidate_core_payload(strongs_number, language, row_data, primary=primary)
     candidate['source_strongs_number'] = _normalize_step_code(strongs_number)
@@ -1118,19 +1479,42 @@ def _candidate_payload(strongs_number, language, row_data, primary=False):
     )
     candidate['reference_groups'] = _chunked(candidate.get('references') or [], 3)
     candidate['translation_counts'] = _candidate_translation_counts(candidate.get('structured_definitions') or [])
-    if language == 'hebrew' and not candidate['translation_counts']:
-        candidate['translation_counts'] = _hebrew_translation_counts(strongs_number)
-        if candidate['translation_counts']:
-            merged_references = []
-            for item in candidate['translation_counts']:
-                merged_references.extend(item.get('references') or [])
-            candidate['references'] = _dedupe_preserve_order(merged_references)
-            candidate['reference_groups'] = _chunked(candidate['references'], 3)
-            candidate['outline_meanings'] = [
-                item['label'] for item in candidate['translation_counts']
-                if str(item.get('label') or '').strip()
-            ]
+    if language == 'hebrew':
+        if not candidate['translation_counts']:
+            candidate['translation_counts'] = _hebrew_translation_counts(strongs_number)
+            if candidate['translation_counts']:
+                merged_references = []
+                for item in candidate['translation_counts']:
+                    merged_references.extend(item.get('references') or [])
+                candidate['references'] = _dedupe_preserve_order(merged_references)
+                candidate['reference_groups'] = _chunked(candidate['references'], 3)
+                candidate['outline_meanings'] = [
+                    item['label'] for item in candidate['translation_counts']
+                    if str(item.get('label') or '').strip()
+                ]
+        if candidate.get('lexicon_outline') and candidate.get('translation_counts'):
+            candidate['lexicon_outline'] = _attach_hebrew_outline_counts(
+                candidate['lexicon_outline'], candidate['translation_counts']
+            )
+
     candidate['usage_outline'] = _candidate_usage_outline(candidate)
+
+    if language == 'greek' and candidate.get('usage_outline'):
+        total_greek_count = sum(node.get('count', 0) for node in candidate['usage_outline'])
+        if total_greek_count == 0:
+            usage_index = _stepbible_usage_index('greek')
+            base_code = re.sub(r'([A-Za-z_]+)$', '', candidate['source_strongs_number']) or candidate['source_strongs_number']
+            greek_refs = []
+            for k in [candidate['source_strongs_number'], base_code, _normalize_strongs_base_code(base_code)]:
+                refs = usage_index['exact'].get(k) or usage_index['base'].get(k) or []
+                if refs:
+                    greek_refs = refs
+                    break
+            if greek_refs:
+                candidate['usage_outline'][0]['count'] = len(greek_refs)
+                candidate['usage_outline'][0]['references'] = greek_refs
+                candidate['usage_outline'][0]['reference_groups'] = _chunked(greek_refs, 3)
+
     candidate['root_words'] = _related_root_words(
         candidate.get('derivation') or '',
         language,
@@ -1212,14 +1596,22 @@ def _parse_stepbible_row(line, language):
             'sentence_text': surface_text,
             'transliteration': transliteration,
             'translation_label': translation_label,
+            'context_translation': _clean_translation_label(columns[2] if len(columns) > 2 else ''),
             'lemma': str(lemma or '').strip(),
             'definition': _clean_translation_label(gloss),
             'grammar': grammar,
             'strongs_numbers': strongs_numbers,
         }
 
-    surface_text = _clean_hebrew_surface(columns[1] if len(columns) > 1 else '')
+    raw_surface = str(columns[1] if len(columns) > 1 else '')
+    surface_text = _clean_hebrew_surface(raw_surface)
     translation_label = _clean_translation_label(columns[3] if len(columns) > 3 else '')
+    grammar = str(columns[5] if len(columns) > 5 else '').strip()
+    word_components = _parse_hebrew_word_components(
+        columns[11] if len(columns) > 11 else '',
+        raw_surface,
+        grammar,
+    )
     strongs_numbers = []
     seen_strongs = set()
     for source in [columns[8] if len(columns) > 8 else '', columns[4] if len(columns) > 4 else '', columns[9] if len(columns) > 9 else '', columns[11] if len(columns) > 11 else '']:
@@ -1233,9 +1625,12 @@ def _parse_stepbible_row(line, language):
         'sentence_text': surface_text,
         'transliteration': str(columns[2] if len(columns) > 2 else '').strip(),
         'translation_label': translation_label,
+        'context_translation': translation_label,
         'lemma': '',
         'definition': translation_label,
-        'grammar': str(columns[5] if len(columns) > 5 else '').strip(),
+        'grammar': grammar,
+        'grammar_details': _hebrew_morphology_details(grammar),
+        'word_components': word_components,
         'strongs_numbers': strongs_numbers,
     }
 
@@ -1255,6 +1650,10 @@ def _fallback_token_payload(raw_token, language):
         'hover_summary': '',
         'candidates': [],
         'grammar': '',
+        'grammar_details': [],
+        'word_components': [],
+        'hebrew_letters': [],
+        'gematria_value': 0,
         'tagging_source': '',
     }
 
@@ -1287,16 +1686,25 @@ def _token_payload_from_step_row(row_data, language):
         'has_candidates': bool(candidates),
         'strongs_count': len(candidates),
         'translation_label': primary_label,
+        # Contextual STEPBible gloss for this exact occurrence; drives English word alignment.
+        'context_gloss': ' '.join(_dedupe_preserve_order([
+            str(row_data.get('context_translation') or '').strip(),
+            str(row_data.get('translation_label') or '').strip(),
+        ])).strip(),
         'detail_note': '' if candidates else 'This word is aligned in STEPBible, but no lexicon entry was resolved from its Strong\'s tag.',
         'hover_summary': ' | '.join(hover_lines),
         'candidates': candidates,
         'grammar': str(row_data.get('grammar') or ''),
+        'grammar_details': list(row_data.get('grammar_details') or []),
+        'word_components': list(row_data.get('word_components') or []),
+        'hebrew_letters': _hebrew_letter_data(row_data.get('surface_text') or '') if language == 'hebrew' else [],
+        'gematria_value': sum(letter['value'] for letter in _hebrew_letter_data(row_data.get('surface_text') or '')) if language == 'hebrew' else 0,
         'tagging_source': 'STEPBible',
     }
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v13:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v20:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1329,3 +1737,545 @@ def original_text_payload(book_name, chapter, verse):
     }
     cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
     return payload
+
+
+# --- English <-> original language word alignment -------------------------------------------------
+
+# Splits a translated verse into alternating filler / word tokens so the original spacing and
+# punctuation can be re-rendered verbatim around the clickable words.
+_WORD_SPLIT_RE = re.compile(r"([^\W\d_]+(?:[\u2019']?[^\W\d_]+)*)", re.UNICODE)
+
+# Words that occur in almost every Strong's KJV definition list; matching on them via the
+# lexicon produces noise, so they may only align through the contextual STEPBible gloss.
+_ENGLISH_FUNCTION_WORDS = {
+    'a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'with', 'from',
+    'as', 'that', 'this', 'these', 'those', 'is', 'are', 'was', 'were', 'be', 'been', 'am',
+    'it', 'its', 'he', 'she', 'they', 'them', 'him', 'her', 'his', 'their', 'thy', 'thine',
+    'thou', 'thee', 'ye', 'you', 'your', 'we', 'us', 'our', 'i', 'my', 'me', 'not', 'no',
+    'so', 'then', 'there', 'which', 'who', 'whom', 'shall', 'will', 'did', 'do', 'doth',
+    'unto', 'up', 'out', 'into', 'upon', 'one', 'all', 'any', 'every', 'more', 'very',
+}
+
+_ENGLISH_IRREGULAR_STEMS = {
+    'children': 'child', 'men': 'man', 'women': 'woman', 'people': 'people', 'feet': 'foot',
+    'teeth': 'tooth', 'mice': 'mouse', 'geese': 'goose', 'oxen': 'ox', 'brethren': 'brother',
+    'wives': 'wife', 'lives': 'life', 'knives': 'knife', 'leaves': 'leaf', 'thieves': 'thief',
+    'calves': 'calf', 'halves': 'half', 'loaves': 'loaf', 'selves': 'self', 'staves': 'staff',
+    'went': 'go', 'gone': 'go', 'came': 'come', 'said': 'say', 'saith': 'say', 'made': 'make',
+    'took': 'take', 'taken': 'take', 'gave': 'give', 'given': 'give', 'saw': 'see', 'seen': 'see',
+    'spake': 'speak', 'spoken': 'speak', 'begat': 'beget', 'begotten': 'beget', 'heard': 'hear',
+    'knew': 'know', 'known': 'know', 'brought': 'bring', 'bare': 'bear', 'born': 'bear',
+    'sons': 'son', 'sat': 'sit', 'stood': 'stand', 'found': 'find', 'built': 'build',
+}
+
+_ENGLISH_STEM_SUFFIXES = ('iest', 'ieth', 'ies', 'ied', 'est', 'eth', 'ing', 'ed', 'es', 's')
+
+
+def _english_stem(word):
+    value = str(word or '').lower().replace('\u2019', "'").strip("'")
+    if not value:
+        return ''
+    if value in _ENGLISH_IRREGULAR_STEMS:
+        return _ENGLISH_IRREGULAR_STEMS[value]
+    for suffix in _ENGLISH_STEM_SUFFIXES:
+        if len(value) - len(suffix) >= 3 and value.endswith(suffix):
+            base = value[:-len(suffix)]
+            if suffix in {'ies', 'ied', 'iest', 'ieth'}:
+                base += 'y'
+            return base
+    return value
+
+
+def _english_similar(left, right):
+    if left == right:
+        return True
+    left_stem = _english_stem(left)
+    right_stem = _english_stem(right)
+    if not left_stem or not right_stem:
+        return False
+    if left_stem == right_stem:
+        return True
+    shorter, longer = (left_stem, right_stem) if len(left_stem) <= len(right_stem) else (right_stem, left_stem)
+    return len(shorter) >= 4 and longer.startswith(shorter) and len(longer) - len(shorter) <= 3
+
+
+def _english_words_from(raw):
+    return [match.lower() for match in re.findall(r'[A-Za-z]+', str(raw or ''))]
+
+
+def _alignment_spec_for_word(word):
+    """Collect the English surface forms a single original-language token may appear as."""
+    gloss_words = set()
+    for source in (word.get('context_gloss'), word.get('translation_label')):
+        gloss_words.update(_english_words_from(source))
+
+    lexicon_words = set()
+    for candidate in word.get('candidates') or []:
+        lexicon_words.update(_english_words_from(candidate.get('kjv_definition')))
+        for gloss in candidate.get('glosses') or []:
+            lexicon_words.update(_english_words_from(gloss))
+    lexicon_words -= gloss_words
+
+    return {
+        'gloss_words': gloss_words,
+        'gloss_stems': {_english_stem(item) for item in gloss_words},
+        'lexicon_words': {item for item in lexicon_words if item not in _ENGLISH_FUNCTION_WORDS},
+        'lexicon_stems': {_english_stem(item) for item in lexicon_words if item not in _ENGLISH_FUNCTION_WORDS},
+    }
+
+
+def _alignment_score(english_word, spec):
+    if english_word in spec['gloss_words']:
+        return 6.0
+    if any(_english_similar(english_word, gloss) for gloss in spec['gloss_words']):
+        return 4.0
+    if english_word in _ENGLISH_FUNCTION_WORDS:
+        return 0.0
+    if english_word in spec['lexicon_words']:
+        return 3.0
+    if any(_english_similar(english_word, item) for item in spec['lexicon_words']):
+        return 2.0
+    return 0.0
+
+
+def _align_english_words(english_words, specs):
+    """Monotonic (order preserving) best-score alignment of English words onto original tokens.
+
+    KJV-style English follows the Hebrew/Greek word order closely enough that an order
+    preserving alignment avoids the false matches a greedy per-word lookup would produce.
+    """
+    word_count = len(english_words)
+    token_count = len(specs)
+    if not word_count or not token_count:
+        return [-1] * word_count
+
+    scores = [[_alignment_score(word, spec) for spec in specs] for word in english_words]
+
+    # best[i][j] = best achievable score using english words i.. and original tokens j..
+    best = [[0.0] * (token_count + 1) for _ in range(word_count + 1)]
+    # 0 = skip english word, 1 = map english word to token j, 2 = advance to token j + 1
+    choice = [[0] * (token_count + 1) for _ in range(word_count + 1)]
+    for i in range(word_count - 1, -1, -1):
+        row = scores[i]
+        for j in range(token_count - 1, -1, -1):
+            best_value = best[i + 1][j]
+            best_choice = 0
+            if row[j] > 0 and row[j] + best[i + 1][j] > best_value:
+                best_value = row[j] + best[i + 1][j]
+                best_choice = 1
+            if best[i][j + 1] > best_value:
+                best_value = best[i][j + 1]
+                best_choice = 2
+            best[i][j] = best_value
+            choice[i][j] = best_choice
+
+    mapping = [-1] * word_count
+    i = 0
+    j = 0
+    while i < word_count and j < token_count:
+        step = choice[i][j]
+        if step == 1:
+            mapping[i] = j
+            i += 1
+        elif step == 0:
+            i += 1
+        else:
+            j += 1
+
+    _align_reordered_leftovers(english_words, scores, mapping)
+    return mapping
+
+
+def _align_reordered_leftovers(english_words, scores, mapping):
+    """Rescue words the translator moved out of original order (e.g. a trailing proper name).
+
+    Only an unambiguous exact gloss hit on a still unused token is accepted, so this cannot
+    introduce the noisy matches that a fully unordered alignment would.
+    """
+    used_tokens = {index for index in mapping if index >= 0}
+    for word_position, token_index in enumerate(mapping):
+        if token_index >= 0 or english_words[word_position] in _ENGLISH_FUNCTION_WORDS:
+            continue
+        matches = [
+            index for index, score in enumerate(scores[word_position])
+            if score >= 6.0 and index not in used_tokens
+        ]
+        if len(matches) == 1:
+            mapping[word_position] = matches[0]
+            used_tokens.add(matches[0])
+
+
+def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_source='', allow_scoring=True):
+    """Map every word of a translated verse onto the index of the original word it renders.
+
+    When the translation has a word-level Strong's tagging the mapping is a direct lookup;
+    English translations without tags fall back to the lexicon-scoring alignment.
+    """
+    text = re.sub(r'\s+', ' ', str(verse_text or '')).strip()
+    if not text:
+        return {'tokens': [], 'aligned_count': 0, 'method': ''}
+
+    tagged_source = str(tagged_source or '').strip().lower()
+    digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
+    cache_key = f'bible_study:alignment:v4:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        original = original_text_payload(book_name, chapter, verse)
+    except Exception:
+        original = None
+
+    words = (original or {}).get('words') or []
+
+    parts = _WORD_SPLIT_RE.split(text)
+    word_positions = [index for index in range(1, len(parts), 2)]
+    display_words = [parts[index].lower() for index in word_positions]
+
+    mapping = None
+    method = ''
+    if tagged_source in TAGGED_BIBLE_SOURCES:
+        mapping = _tagged_mapping(tagged_source, book_name, chapter, verse, display_words, words)
+        if mapping is not None:
+            method = 'tagged'
+
+    if mapping is None and allow_scoring:
+        specs = [_alignment_spec_for_word(word or {}) for word in words]
+        mapping = _align_english_words(display_words, specs)
+        method = 'lexicon'
+
+    word_index_by_part = {}
+    for position, token_index in zip(word_positions, mapping or []):
+        if token_index >= 0 and words[token_index].get('clickable'):
+            word_index_by_part[position] = token_index
+
+    tokens = []
+    for index, part in enumerate(parts):
+        if not part:
+            continue
+        tokens.append({
+            'text': part,
+            'word_index': word_index_by_part.get(index, -1),
+        })
+
+    payload = {
+        'tokens': tokens if word_index_by_part else [],
+        'aligned_count': len(word_index_by_part),
+        'method': method if word_index_by_part else '',
+        'tagging_source': TAGGED_BIBLE_SOURCES[tagged_source]['label'] if method == 'tagged' else '',
+    }
+    cache.set(cache_key, payload, ORIGINAL_TEXT_CACHE_TIMEOUT)
+    return payload
+
+
+# --- Word-level tagged translations (direct Strong's lookup) --------------------------------------
+
+# Public-domain SWORD modules that carry a Strong's number on (nearly) every content word.
+TAGGED_BIBLE_SOURCES = {
+    'kjv': {
+        'label': "CrossWire KJV (1769) with Strong's Numbers",
+        'module': 'KJV',
+        'url': 'https://www.crosswire.org/ftpmirror/pub/sword/packages/rawzip/KJV.zip',
+    },
+    'svv': {
+        'label': 'Statenvertaling met Strong-nummers',
+        'module': 'DutSVVA',
+        'url': 'https://www.crosswire.org/ftpmirror/pub/sword/packages/rawzip/DutSVVA.zip',
+        # Also exported as a selectable local Bible translation.
+        'local_bible': 'statenvertaling',
+    },
+}
+
+# Which tagged edition supplies the word glosses when the site is shown in that language.
+GLOSS_SOURCE_BY_LANGUAGE = {
+    'nl': 'svv',
+}
+
+# Share of displayed words that must be recovered from the tagged text before we trust it; below
+# this the shown edition differs too much (e.g. a modern revision) and the tagging is discarded.
+_TAGGED_COVERAGE_THRESHOLD = 0.6
+
+
+def tagged_bible_root():
+    return Path(__file__).resolve().parents[2] / 'data' / 'tagged_bibles'
+
+
+@lru_cache(maxsize=16)
+def _tagged_book(source, book_name):
+    path = tagged_bible_root() / source / f'{book_name}.json.gz'
+    if not path.exists():
+        return {}
+    try:
+        with gzip.open(path, 'rt', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError, TypeError):
+        return {}
+    chapters = payload.get('chapters') if isinstance(payload, dict) else None
+    return chapters if isinstance(chapters, dict) else {}
+
+
+def _tagged_segments(source, book_name, chapter, verse):
+    return (_tagged_book(source, book_name).get(str(chapter)) or {}).get(str(verse)) or []
+
+
+def _original_token_indexes_by_code(words):
+    """Ordered list of original-language token positions for every Strong's code in the verse."""
+    occurrences = {}
+    for index, word in enumerate(words or []):
+        seen = set()
+        for candidate in (word or {}).get('candidates') or []:
+            code = _normalize_strongs_base_code(candidate.get('strongs_number'))
+            if not code or code in seen:
+                continue
+            seen.add(code)
+            occurrences.setdefault(code, []).append(index)
+    return occurrences
+
+
+def _loose_word_key(value):
+    return _strip_marks(str(value or '').lower())
+
+
+def _loose_words_match(left, right):
+    """Tolerate spelling drift between a tagged edition and its modern revision."""
+    if left == right:
+        return True
+    shorter, longer = (left, right) if len(left) <= len(right) else (right, left)
+    return len(shorter) >= 4 and longer.startswith(shorter) and len(longer) - len(shorter) <= 3
+
+
+def _transfer_alignment_by_lcs(source_words, source_mapping, target_words):
+    """Carry a mapping from the tagged edition's word sequence onto the displayed word sequence."""
+    source_keys = [_loose_word_key(word) for word in source_words]
+    target_keys = [_loose_word_key(word) for word in target_words]
+    source_count = len(source_keys)
+    target_count = len(target_keys)
+    lengths = [[0] * (target_count + 1) for _ in range(source_count + 1)]
+    for i in range(source_count - 1, -1, -1):
+        for j in range(target_count - 1, -1, -1):
+            if _loose_words_match(source_keys[i], target_keys[j]):
+                lengths[i][j] = lengths[i + 1][j + 1] + 1
+            else:
+                lengths[i][j] = max(lengths[i + 1][j], lengths[i][j + 1])
+
+    mapping = [-1] * target_count
+    matched = 0
+    i = 0
+    j = 0
+    while i < source_count and j < target_count:
+        if _loose_words_match(source_keys[i], target_keys[j]):
+            mapping[j] = source_mapping[i]
+            matched += 1
+            i += 1
+            j += 1
+        elif lengths[i + 1][j] >= lengths[i][j + 1]:
+            i += 1
+        else:
+            j += 1
+    return mapping, matched
+
+
+# Grammatical markers (object marker, article) that a tagged word group only points at when it
+# carries no content word; otherwise the content word wins.
+_LOW_PRIORITY_STRONGS = {'H853', 'H854', 'G3588'}
+
+
+def _pick_tagged_token(code, occurrences, consumed, last_assigned):
+    """Pick which occurrence of a repeated Strong's number this tagged word group refers to."""
+    positions = occurrences.get(code)
+    if not positions:
+        return None
+    free = [position for position in positions if position not in consumed[code]]
+    if not free:
+        return positions[-1]
+    # Nearest still unused occurrence, preferring the forward direction on a tie.
+    return min(free, key=lambda position: (abs(position - last_assigned), 0 if position >= last_assigned else 1))
+
+
+def _tagged_run_assignments(source, book_name, chapter, verse, words):
+    """Resolve every tagged word group of a verse to the original-language token it renders."""
+    segments = _tagged_segments(source, book_name, chapter, verse)
+    if not segments or not words:
+        return []
+
+    occurrences = _original_token_indexes_by_code(words)
+    if not occurrences:
+        return []
+
+    consumed = {code: set() for code in occurrences}
+    last_assigned = 0
+    assignments = []
+    for segment in segments:
+        codes = str((segment or [''])[0] or '').split()
+        segment_words = (segment or ['', []])[1] or []
+        ordered_codes = (
+            [code for code in codes if code not in _LOW_PRIORITY_STRONGS]
+            + [code for code in codes if code in _LOW_PRIORITY_STRONGS]
+        )
+
+        token_index = -1
+        for code in ordered_codes:
+            picked = _pick_tagged_token(code, occurrences, consumed, last_assigned)
+            if picked is None:
+                continue
+            consumed[code].add(picked)
+            token_index = picked
+            last_assigned = picked
+            break
+
+        assignments.append((token_index, list(segment_words)))
+    return assignments
+
+
+def _tagged_mapping(source, book_name, chapter, verse, display_words, words):
+    assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    if not assignments or not display_words:
+        return None
+
+    source_words = []
+    source_mapping = []
+    for token_index, segment_words in assignments:
+        for segment_word in segment_words:
+            source_words.append(str(segment_word).lower())
+            source_mapping.append(token_index)
+
+    mapping, matched = _transfer_alignment_by_lcs(source_words, source_mapping, display_words)
+    if matched < len(display_words) * _TAGGED_COVERAGE_THRESHOLD:
+        return None
+    return mapping
+
+
+@lru_cache(maxsize=4)
+def _tagged_usage_index(source):
+    """Concordance of how the tagged edition renders each Strong's number, most frequent first."""
+    path = tagged_bible_root() / source / '_usage.json.gz'
+    if not path.exists():
+        return {}
+    try:
+        with gzip.open(path, 'rt', encoding='utf-8') as handle:
+            payload = json.load(handle)
+    except (OSError, ValueError, TypeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def localized_original_text_payload(book_name, chapter, verse, language_code='en'):
+    """Original-language payload enriched with glosses from a tagged edition in the UI language."""
+    source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code or '').strip().lower()[:2])
+    payload = original_text_payload(book_name, chapter, verse)
+    if not source:
+        return payload
+
+    cache_key = f'bible_study:original-local:v10:{source}:{book_name}:{chapter}:{verse}'
+    cached = cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    words = payload.get('words') or []
+    phrases_by_token = {}
+    phrases_by_component = {}
+    tagged_segments = _tagged_segments(source, book_name, chapter, verse)
+    assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    for segment, (token_index, segment_words) in zip(tagged_segments, assignments):
+        if token_index < 0 or not segment_words:
+            continue
+        phrase = ' '.join(segment_words)
+        phrases_by_token.setdefault(token_index, []).append(phrase)
+        for code in _extract_step_codes((segment or [''])[0]):
+            base_code = _normalize_strongs_base_code(code)
+            phrases_by_component.setdefault((token_index, base_code), []).append(phrase)
+
+    usage_index = _tagged_usage_index(source)
+    enriched = copy.deepcopy(payload)
+
+    unresolved_words = []
+    unresolved_components = []
+    unresolved_morphology = []
+    for index, word in enumerate(enriched.get('words') or []):
+        word['local_gloss'] = ' '.join(_dedupe_preserve_order(phrases_by_token.get(index) or []))
+        for candidate in word.get('candidates') or []:
+            code = _normalize_strongs_base_code(candidate.get('strongs_number'))
+            candidate['local_usage'] = [
+                {
+                    'label': str(entry[0]),
+                    'count': int(entry[1]),
+                    'references': list(entry[2]) if len(entry) > 2 and isinstance(entry[2], list) else [],
+                }
+                for entry in (usage_index.get(code) or [])[:12]
+                if isinstance(entry, (list, tuple)) and len(entry) >= 2
+            ]
+        # Words the tagged edition left untagged still get its most common rendering.
+        if not word['local_gloss']:
+            primary_usage = ((word.get('candidates') or [{}])[0] or {}).get('local_usage') or []
+            word['local_gloss'] = str(primary_usage[0]['label']) if primary_usage else ''
+
+        if not word['local_gloss'] and word.get('clickable'):
+            raw_en = str(word.get('context_gloss') or word.get('translation_label') or '').strip()
+            clean_en = re.sub(r'\[.*?\]|<.*?>', '', raw_en)
+            clean_en = re.sub(r'\s+', ' ', clean_en).strip(' -.,;:')
+            unresolved_words.append((word, clean_en or raw_en))
+
+        for component in word.get('word_components') or []:
+            component_code = _normalize_strongs_base_code(component.get('strongs_number'))
+            exact_phrases = _dedupe_preserve_order(phrases_by_component.get((index, component_code)) or [])
+            if exact_phrases:
+                component['local_gloss'] = ' '.join(exact_phrases)
+            else:
+                local_renderings = usage_index.get(component_code) or []
+                component['local_gloss'] = str(local_renderings[0][0]) if local_renderings else ''
+            if not component['local_gloss'] and component.get('gloss'):
+                raw_component_gloss = str(component.get('gloss') or '').strip()
+                clean_component_gloss = re.sub(r'\[.*?\]|<.*?>', '', raw_component_gloss)
+                clean_component_gloss = re.sub(r'\s+', ' ', clean_component_gloss).strip(' -.,;:')
+                if source == 'svv' and component.get('morphology_code') in {'Op2m', 'Op2f', 'Pp2m', 'Pp2f'} and clean_component_gloss.lower() == 'you':
+                    component['local_gloss'] = 'jullie'
+                else:
+                    unresolved_components.append((component, clean_component_gloss or raw_component_gloss))
+
+            if component.get('morphology_description'):
+                unresolved_morphology.append((component, str(component['morphology_description']).strip()))
+
+        for morphology in word.get('grammar_details') or []:
+            if morphology.get('description'):
+                unresolved_morphology.append((morphology, str(morphology['description']).strip()))
+
+    if unresolved_words or unresolved_components or unresolved_morphology:
+        try:
+            from walkasjesus_app.views.user_preferences import _translate_google_batch
+            texts_to_translate = _dedupe_preserve_order(
+                text for _, text in unresolved_words + unresolved_components + unresolved_morphology if text
+            )
+            if texts_to_translate:
+                translated = _translate_google_batch(texts_to_translate, language_code)
+                translated_by_text = dict(zip(texts_to_translate, translated))
+                for word, text in unresolved_words:
+                    if translated_by_text.get(text):
+                        word['local_gloss'] = translated_by_text[text].strip()
+                for component, text in unresolved_components:
+                    if translated_by_text.get(text):
+                        component['local_gloss'] = translated_by_text[text].strip()
+                for morphology, text in unresolved_morphology:
+                    if translated_by_text.get(text):
+                        morphology['local_description'] = translated_by_text[text].strip()
+        except Exception:
+            pass
+
+    enriched['local_language'] = str(language_code or '')[:2]
+    enriched['local_source_name'] = TAGGED_BIBLE_SOURCES[source]['label']
+    if str(language_code or '').strip().lower()[:2] == 'nl':
+        for word in enriched.get('words') or []:
+            for letter in word.get('hebrew_letters') or []:
+                letter['name_local'] = _HEBREW_LETTER_NAMES_NL.get(letter.get('name'), letter.get('name', ''))
+                letter['traditional_image_local'] = _HEBREW_TRADITIONAL_IMAGES_NL.get(
+                    letter.get('traditional_image'), letter.get('traditional_image', '')
+                )
+            for component in word.get('word_components') or []:
+                for letter in component.get('letters') or []:
+                    letter['name_local'] = _HEBREW_LETTER_NAMES_NL.get(letter.get('name'), letter.get('name', ''))
+                    letter['traditional_image_local'] = _HEBREW_TRADITIONAL_IMAGES_NL.get(
+                        letter.get('traditional_image'), letter.get('traditional_image', '')
+                    )
+    enriched['selected_word'] = next((word for word in enriched['words'] if word['clickable']), None)
+    cache.set(cache_key, enriched, ORIGINAL_TEXT_CACHE_TIMEOUT)
+    return enriched

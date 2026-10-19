@@ -25,7 +25,10 @@ from walkasjesus_app.lib.access_policy import (
     is_bible_id_visible_for_request,
     sort_bibles_for_language,
 )
-from walkasjesus_app.lib.strongs_service import original_text_payload
+from walkasjesus_app.lib.strongs_service import (
+    english_alignment_payload,
+    localized_original_text_payload,
+)
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
 
@@ -118,6 +121,21 @@ _API_BIBLE_BOOK_ORDER = {
         '2PE', '1JN', '2JN', '3JN', 'JUD', 'REV',
     ))
 }
+
+
+# Editions covered by the word-level Strong's tagging built from the CrossWire SWORD modules.
+_TAGGED_KJV_ABBREVIATIONS = {'KJV', 'KJVCPB', 'AKJV', 'AV'}
+
+
+def _tagged_source_for_bible(bible):
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').strip().upper()
+    name = str(getattr(bible, 'name', '') or '').strip().lower()
+    language = str(getattr(bible, 'language', '') or '').strip().lower()[:2]
+    if abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name:
+        return 'kjv'
+    if language == 'nl':
+        return 'svv'
+    return ''
 
 
 def _bible_dropdown_label(bible):
@@ -892,6 +910,65 @@ class BibleStudyOriginalTextView(View):
 
         verses = {}
         for verse in range(start_verse, end_verse + 1):
-            verses[str(verse)] = original_text_payload(book_name, chapter, verse)
+            verses[str(verse)] = localized_original_text_payload(
+                book_name, chapter, verse, getattr(request, 'LANGUAGE_CODE', 'en'),
+            )
 
         return JsonResponse({'verses': verses})
+
+
+class BibleStudyWordAlignmentView(View):
+    """AJAX endpoint: maps the words of a translated verse onto original-language word indexes."""
+
+    MAX_VERSE_TEXT_LENGTH = 4000
+
+    def post(self, request):
+        book_name = str(request.POST.get('book', '')).strip()
+        chapter = _safe_int(request.POST.get('chapter'), 1)
+        bible_id = str(request.POST.get('bible_id', '')).strip()
+
+        if book_name not in _VALID_BOOK_NAMES:
+            return JsonResponse({'error': 'Invalid book'}, status=400)
+
+        if not is_bible_id_visible_for_request(request, bible_id):
+            return JsonResponse({'error': 'Bible not available'}, status=403)
+
+        bible = BibleTranslation().get(bible_id)
+        if not bible:
+            return JsonResponse({'error': 'Bible not found'}, status=404)
+
+        tagged_source = _tagged_source_for_bible(bible)
+        is_english = str(getattr(bible, 'language', '') or '').strip().lower()[:2] == 'en'
+        if not tagged_source and not is_english:
+            return JsonResponse({'verses': {}, 'supported': False})
+
+        try:
+            requested_verses = json.loads(str(request.POST.get('verses', '') or '{}'))
+        except ValueError:
+            return JsonResponse({'error': 'Invalid verses payload'}, status=400)
+
+        if not isinstance(requested_verses, dict):
+            return JsonResponse({'error': 'Invalid verses payload'}, status=400)
+
+        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        alignments = {}
+        for verse_key, verse_text in list(requested_verses.items())[:max_verses]:
+            try:
+                verse_number = int(str(verse_key).strip())
+            except (TypeError, ValueError):
+                continue
+            if verse_number < 1:
+                continue
+            text = str(verse_text or '')[:self.MAX_VERSE_TEXT_LENGTH]
+            try:
+                alignments[str(verse_number)] = english_alignment_payload(
+                    book_name, chapter, verse_number, text,
+                    tagged_source=tagged_source,
+                    allow_scoring=is_english,
+                )
+            except Exception:
+                logger.exception(
+                    'Bible Study word alignment failed for %s %s:%s', book_name, chapter, verse_number
+                )
+
+        return JsonResponse({'verses': alignments, 'supported': True})

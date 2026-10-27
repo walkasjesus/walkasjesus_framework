@@ -3,7 +3,8 @@
 {% load i18n %}
 {% load cache %}
 {% load cookielaw_tags %}
-<html lang="{{ request.LANGUAGE_CODE|default:'en' }}">
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ request.LANGUAGE_CODE|default:'en' }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
   <head>
     <title>{% block title_content %}{% trans 'Walk as Jesus - Follow Jesus in daily life' %}{% endblock %}</title>
   {% cache cache_timeout head cache_on_language request.path %}

@@ -201,6 +201,7 @@ USE_TZ = True
 LANGUAGES = [
     ('en', gettext_lazy('English')),  # First language is the default for modeltranslation
     ('nl', gettext_lazy('Dutch')),
+    ('he', gettext_lazy('Hebrew')),
 #    ('de', gettext_lazy('German')),
 #    ('fr', gettext_lazy('French')),
 ]
@@ -219,6 +220,7 @@ MESSAGE_TAGS = {
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 ROSETTA_LANGUAGE_GROUPS = [
     'translators-nl',
+    'translators-he',
 #    'translators-de',
 #    'translators-fr',
 ]

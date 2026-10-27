@@ -85,6 +85,7 @@
 
 	var carousel = function() {
 		$('.home-slider').owlCarousel({
+	    rtl: document.documentElement.dir === 'rtl',
 	    loop:true,
 	    autoplay: true,
 	    margin:0,
@@ -276,4 +277,3 @@
 
 
 })(jQuery);
-

@@ -1,21 +1,33 @@
 import os
 
 from django.apps import apps
-from django.core.management import BaseCommand
+from django.core.management import BaseCommand, CommandError
 from translate_tool import PoTranslator
 
 from walkasjesus_website.settings import BASE_DIR, LANGUAGES, LOCALE_PATHS
 
 
 class Command(BaseCommand):
+    help = 'Translate missing or fuzzy PO entries, preserving existing translations.'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--locale', action='append', dest='locales')
+
     def handle(self, *args, **options):
-        languages = [code for code, name in LANGUAGES]
+        supported_languages = [code for code, name in LANGUAGES]
+        languages = options.get('locales') or supported_languages
+        unsupported = set(languages) - set(supported_languages)
+        if unsupported:
+            raise CommandError(f'Unsupported locales: {", ".join(sorted(unsupported))}')
 
         translator = PoTranslator()
 
         for language in languages:
             if language != 'en':
-                for file_path in self._po_file_paths(language):
+                paths = list(self._po_file_paths(language))
+                if not paths:
+                    raise CommandError(f'No PO files found for {language}; run makemessages first.')
+                for file_path in paths:
                     self.stdout.write(f'Auto-translating {file_path}')
                     translator.translate(file_path, 'en', language)
 

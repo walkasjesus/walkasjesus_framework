@@ -38,11 +38,17 @@ class LanguageBibleSwitchFlowTest(TestCase):
             [b for b in cls.bible_translation.all_enabled() if b.language == 'nl'],
             key=lambda b: b.id,
         )
+        cls.he_bibles = sorted(
+            [b for b in cls.bible_translation.all_enabled() if b.language == 'he'],
+            key=lambda b: b.id,
+        )
 
         if len(cls.en_bibles) < 2:
             raise AssertionError('Expected at least 2 enabled English Bible translations for this test.')
         if len(cls.nl_bibles) < 2:
             raise AssertionError('Expected at least 2 enabled Dutch Bible translations for this test.')
+        if len(cls.he_bibles) < 2:
+            raise AssertionError('Expected at least 2 enabled Hebrew Bible translations for this test.')
 
         step, _ = Commandment.objects.get_or_create(
             id=cls.step_id,
@@ -122,7 +128,7 @@ class LanguageBibleSwitchFlowTest(TestCase):
 
     @patch('bible_lib.bible_api.api_bible.ApiBible.verses', new=_mocked_api_bible_verses)
     def test_step_and_law_language_and_bible_switching(self):
-        for language_code, bibles in [('en', self.en_bibles), ('nl', self.nl_bibles)]:
+        for language_code, bibles in [('en', self.en_bibles), ('nl', self.nl_bibles), ('he', self.he_bibles)]:
             first_bible = bibles[0]
             second_bible = bibles[1]
 
@@ -152,6 +158,23 @@ class LanguageBibleSwitchFlowTest(TestCase):
 
                     self._assert_verse_fetch_uses_bible(verses_url, second_bible.id)
                     self._assert_page_has_expected_copyright(redirect_url, second_bible)
+
+    @patch('bible_lib.bible_api.api_bible.ApiBible.verses', new=_mocked_api_bible_verses)
+    def test_hebrew_modal_default_bible_and_page_direction(self):
+        with override('he'):
+            page_url = reverse('commandments:detail', args=[self.step_id])
+        redirect_url = self._switch_language('he', page_url)
+        response = self.client.get(redirect_url)
+        self.assertContains(response, '<html lang="he" dir="rtl">')
+        self.assertContains(response, 'value="he"')
+        for bible in self.he_bibles:
+            self.assertContains(response, f'value="{bible.id}"')
+        self.assertEqual(response.context['user_preferences'].bible.id, settings.DEFAULT_BIBLE_PER_LANGUAGE['he'])
+
+        with override('en'):
+            english_url = reverse('commandments:detail', args=[self.step_id])
+        self._switch_language('en', english_url)
+        self.assertContains(self.client.get(english_url), '<html lang="en" dir="ltr">')
 
     @patch('bible_lib.bible_api.api_bible.ApiBible.verses', new=_mocked_api_bible_verses)
     def test_switching_back_to_language_reuses_preferred_bible_for_that_language(self):

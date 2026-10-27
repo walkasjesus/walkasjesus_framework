@@ -1,5 +1,6 @@
 import re
 import time
+from collections import Counter
 
 import polib
 import requests
@@ -41,7 +42,10 @@ class PoTranslator:
         response.raise_for_status()
         data = response.json()
         segments = data[0] if isinstance(data, list) and data else []
-        return ''.join(segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0])
+        translated = ''.join(segment[0] for segment in segments if isinstance(segment, list) and segment and segment[0])
+        if not translated.strip():
+            raise ValueError('Translation service returned no translated text.')
+        return translated
 
     def _translate_text(self, text, source_language, destination_language):
         masked_text, replacements = self._mask_tokens(text)
@@ -61,6 +65,14 @@ class PoTranslator:
             translated_paragraphs.append(' '.join(translated_chunks))
 
         translated = '\n\n'.join(translated_paragraphs)
+        expected_tokens = Counter(token for token, _ in replacements)
+        actual_tokens = Counter(re.findall(r'__WAJ_TOKEN_\d+__', translated))
+        if actual_tokens != expected_tokens:
+            raise ValueError('Translation service changed protected placeholders or HTML tokens.')
+        if text.startswith('\n') and not translated.startswith('\n'):
+            translated = '\n' + translated
+        if text.endswith('\n') and not translated.endswith('\n'):
+            translated += '\n'
         return self._unmask_tokens(translated, replacements)
 
     def _split_chunks(self, text):
@@ -89,19 +101,33 @@ class PoTranslator:
 
     def translate(self, po_file_path, source_language, destination_language):
         po = polib.pofile(po_file_path)
+        po.metadata['Language'] = destination_language
 
         entries = [
             entry for entry in po
-            if not entry.obsolete and ('fuzzy' in entry.flags or (not entry.msgstr and not entry.msgstr_plural))
+            if not entry.obsolete and not entry.translated()
         ]
 
-        for entry in entries:
-            try:
-                entry.msgstr = self._translate_text(entry.msgid, source_language, destination_language)
-                if entry.msgstr and 'fuzzy' in entry.flags:
+        try:
+            for index, entry in enumerate(entries, 1):
+                if entry.msgid_plural:
+                    plural_forms = po.metadata.get('Plural-Forms', '')
+                    match = re.search(r'nplurals\s*=\s*(\d+)', plural_forms)
+                    if not match:
+                        raise ValueError(f'Missing nplurals metadata in {po_file_path}')
+                    singular = self._translate_text(entry.msgid, source_language, destination_language)
+                    plural = self._translate_text(entry.msgid_plural, source_language, destination_language)
+                    entry.msgstr_plural = {
+                        form: singular if form == 0 else plural
+                        for form in range(int(match.group(1)))
+                    }
+                else:
+                    entry.msgstr = self._translate_text(entry.msgid, source_language, destination_language)
+                if 'fuzzy' in entry.flags:
                     entry.flags.remove('fuzzy')
-            except Exception as ex:
-                print(ex)
-                print(f'Could not translate entry: {entry.msgid[:120]}')
-
-        po.save()
+                if index % 25 == 0:
+                    po.save()
+                    print(f'Translated {index}/{len(entries)} entries.', flush=True)
+        finally:
+            # Keep completed work resumable, but propagate failures to the caller.
+            po.save()

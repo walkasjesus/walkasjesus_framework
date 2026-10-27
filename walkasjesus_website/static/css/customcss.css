@@ -1,5 +1,28 @@
 /* Some custom css */
 
+html[dir="rtl"] body {
+    text-align: right;
+}
+
+html[dir="rtl"] .modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+
+html[dir="rtl"] .dropdown-menu,
+html[dir="rtl"] .bootstrap-select .dropdown-toggle .filter-option {
+    text-align: right;
+}
+
+html[dir="rtl"] .bootstrap-select .dropdown-toggle .filter-option {
+    padding-right: 0;
+    padding-left: 25px;
+}
+
+html[dir="rtl"] .bootstrap-select .dropdown-toggle::after {
+    right: auto;
+    left: 12px;
+}
+
 @font-face {
     font-family: 'mufanpfs';
     src: url('../fonts/mufanpfs/mufanpfs.otf') format('opentype');

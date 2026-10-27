@@ -75,8 +75,40 @@ This script can be used to generate all translation files with all the content t
 Auto translate all static files into the other configured languages (in settings.py)  
 `./walkasjesus_website/auto_translate_files.sh`  
 
-When files are auto translated Google will translate all django variables in a wrong format.  
-This script will fix most errors:  
+Both translation scripts accept locale codes. To extract current site text, sync
+database-backed public content, auto-translate missing entries and compile Hebrew:
+
+```sh
+./walkasjesus_website/update_translation_files.sh he
+```
+
+To resume translation of an existing Hebrew catalog without extracting again:
+
+```sh
+./walkasjesus_website/auto_translate_files.sh he
+```
+
+Without arguments, the update script processes all configured non-English languages.
+Existing non-fuzzy translations are preserved. Django placeholders and HTML tags
+are protected during translation. Completed entries are saved if the translation
+service fails; the script exits unsuccessfully, and can be rerun after a rate limit
+clears.
+
+Hebrew (`he`) is available in the language and media selectors and uses a
+right-to-left layout. Configure the Hebrew Bible default and force-enabled IDs
+from `settings.py.example` in existing local/production settings. API.Bible provides:
+
+- `a8a97eebae3c98e4-01`: Biblica Open Hebrew Living New Testament 2009 (default;
+  New Testament only).
+- `2c500771ea16da93-01`: Westminster Leningrad Codex (Old Testament only).
+
+Select the edition appropriate to the passage; neither edition contains both
+Testaments. Translation catalogs live in the `walkasjesus_website/translations`
+Git submodule: publish catalog changes there as well as framework changes.
+Compiled `.mo` files are ignored by Git and must be compiled on deployment.
+
+For older translations with damaged Django variables, this legacy correction
+script can fix common errors:
 `./walkasjesus_website/auto_correct_django_locale_vars.sh`
 
 ```

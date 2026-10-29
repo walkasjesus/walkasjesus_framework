@@ -31,6 +31,20 @@ verses that are actually shown.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Proxy for API.Bible full-text search |
 
+The shipped primary KJV chapter index covers all 1,189 chapters, including Psalm 77
+and three-digit Psalm numbers. Rebuild it without spending API quota using the bundled
+tagged KJV data:
+
+```sh
+python manage.py build_bible_study_chapter_index --local-kjv
+```
+
+Translation-specific chapter metadata takes precedence over this primary fallback.
+Explicit passage ranges can also be submitted before autocomplete metadata has loaded.
+API.Bible text markers such as `[1-4]` (for example BGT Titus 1:1-4) are treated as a
+single combined text block, not discarded or artificially split into separate verses.
+When requesting an individual member of such a group, the API's combined text is shown.
+
 ### Query/state parameters
 
 `book`, `chapter`, `start_verse`, `end_verse`, `bible_id` (repeatable, up to 4 columns),
@@ -117,6 +131,22 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 Cached 30 days under `bible_study:original-local:v10:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
+
+Hebrew word surfaces use the dark original-text brown (`#3d2f08`) for the tagged lexical root/stem component and gray
+for tagged prefixes, suffixes and grammatical components. This applies to the verse
+sentence, word buttons and selected-word details; a legend explains the colors.
+Coloring follows STEPBible component boundaries, not a guess based on individual
+letters. If the components do not cover the displayed word exactly, it stays
+unsegmented. Vowel points, accents, punctuation and copyable text are preserved.
+The lexical component is not necessarily a reconstructed three-consonant root.
+Hebrew lemmas beside Strong's numbers use the same colors in Bible Study and inline
+details: lexical lemmas are brown, tagged service/grammatical lemmas are gray.
+
+Strong's usage outlines explain the Hebrew verb stems Qal, Niphal, Piel, Pual,
+Hiphil, Hophal and Hithpael/Hitpael in hover/focus tooltips. Explanations are Dutch
+for the Dutch interface and English otherwise, and describe typical functions
+rather than a fixed translation. The same helper is used in inline Strong's
+details and retains tooltips when definitions are translated or restored.
 
 For Hebrew TAHOT rows, column 11 encodes the tagged pieces of a word, for example
 `H9003=ב=in/{H9036=Op2m=you}`. The parser aligns those pieces with the slash-separated Hebrew

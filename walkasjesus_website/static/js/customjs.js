@@ -1,4 +1,69 @@
 (function(global) {
+  function sharedHebrewLemmaClass(item, components) {
+    if (!/[\u0590-\u05ff]/.test(String((item && item.lemma) || ''))) {
+      return '';
+    }
+    var code = String((item && (item.strongs_number || item.strong)) || '').toUpperCase();
+    var normalize = function(value) { return String(value || '').toUpperCase().replace(/^H0+/, 'H'); };
+    var component = (components || []).find(function(part) {
+      return normalize(part.strongs_number) === normalize(code);
+    });
+    var numericCode = parseInt(code.replace(/^H/, ''), 10);
+    var service = component ? component.role !== 'root'
+      : (numericCode >= 9001 && numericCode <= 9039) || numericCode === 853 || numericCode === 854;
+    return 'hebrew-lemma ' + (service ? 'bs-hebrew-part-grammatical' : 'bs-hebrew-part-root');
+  }
+
+  function sharedHebrewStemLabelHtml(value) {
+    var descriptions = {
+      qal: [
+        'Basisstam, meestal actief. Beschrijft doorgaans de handeling of toestand zonder een extra veroorzakende of wederkerende betekenis.',
+        'Basic stem, usually active. Generally describes the action or state without an added causative or reflexive meaning.'
+      ],
+      niphal: [
+        'Vaak passief of wederkerend ten opzichte van Qal: iets ondergaan of iets bij zichzelf doen. Kan ook een eigen betekenis hebben.',
+        'Often passive or reflexive relative to Qal: undergoing an action or acting on oneself. May also have a distinct meaning.'
+      ],
+      piel: [
+        'Actieve werkwoordstam, vaak intensief of factitief (iets in een toestand brengen). Niet automatisch sterker dan Qal; de betekenis verschilt per werkwoord.',
+        'Active stem, often intensive or factitive (bringing something into a state). Not automatically stronger than Qal; meaning varies by verb.'
+      ],
+      pual: [
+        'Doorgaans de passieve tegenhanger van Piel: het onderwerp ondergaat de handeling.',
+        'Usually the passive counterpart of Piel: the subject undergoes the action.'
+      ],
+      hiphil: [
+        'Vaak veroorzakend: iemand of iets een handeling laten doen of in een toestand brengen. Sommige werkwoorden hebben een eigen betekenis.',
+        'Often causative: causing someone or something to act or enter a state. Some verbs have a distinct meaning.'
+      ],
+      hophal: [
+        'Doorgaans de passieve tegenhanger van Hiphil: het onderwerp wordt tot een handeling of toestand gebracht.',
+        'Usually the passive counterpart of Hiphil: the subject is caused to act or enter a state.'
+      ],
+      hithpael: [
+        'Vaak wederkerend, wederzijds of herhaald: iets bij zichzelf, met elkaar of telkens doen. De precieze betekenis hangt af van het werkwoord en de context.',
+        'Often reflexive, reciprocal or iterative: acting on oneself, on one another or repeatedly. Exact meaning depends on the verb and context.'
+      ]
+    };
+    var language = String(document.documentElement.lang || 'en').slice(0, 2);
+    var escape = function(text) {
+      return String(text).replace(/[&<>"']/g, function(character) {
+        return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[character];
+      });
+    };
+    return String(value || '').split(/(\b(?:Qal|Niphal|Nifal|Piel|Pi'el|Pual|Pu'al|Hiphil|Hifil|Hophal|Hofal|Hithpael|Hitpael)\b)/gi).map(function(part) {
+      var key = part.toLowerCase().replace(/'/g, '');
+      key = ({nifal: 'niphal', hifil: 'hiphil', hofal: 'hophal', hitpael: 'hithpael'})[key] || key;
+      var description = descriptions[key];
+      if (!description) {
+        return escape(part);
+      }
+      var explanation = part + ': ' + description[language === 'nl' ? 0 : 1];
+      return '<span class="jc-tooltip-host jc-tooltip-immediate hebrew-stem-help" tabindex="0" data-jc-tooltip="' +
+        escape(explanation) + '" aria-label="' + escape(explanation) + '">' + escape(part) + '</span>';
+    }).join('');
+  }
+
   function sharedOriginalWordTitle(word) {
     if (!word) {
       return '';
@@ -100,6 +165,8 @@
     normalizeStrongsCode: sharedOriginalNormalizeStrongsCode,
     usageOutlineCount: sharedOriginalUsageOutlineCount
   };
+  global.WAJOriginalTextShared.hebrewStemLabelHtml = sharedHebrewStemLabelHtml;
+  global.WAJOriginalTextShared.hebrewLemmaClass = sharedHebrewLemmaClass;
 })(window);
 
 $(document).ready(function(){
@@ -1355,6 +1422,8 @@ $(document).ready(function(){
   }
 
   window.WAJOriginalTextShared = {
+    hebrewStemLabelHtml: window.WAJOriginalTextShared.hebrewStemLabelHtml,
+    hebrewLemmaClass: window.WAJOriginalTextShared.hebrewLemmaClass,
     buildWordTitle: sharedOriginalWordTitle,
     buildWordTranslation: sharedOriginalWordTranslation,
     flattenReferences: sharedOriginalFlattenReferences,
@@ -2482,8 +2551,8 @@ $(document).ready(function(){
         var refsHtml = detailOriginalReferenceItemsHtml((item && item.reference_groups) || []);
         var childrenHtml = detailOriginalUsageOutlineItemsHtml((item && item.children) || []);
         return '<li>' +
-          (grammar ? '<div class="detail-inline-original-usage-grammar">' + detailOriginalEscape(grammar) + '</div>' : '') +
-          (label ? '<span class="detail-inline-original-translatable">' + detailOriginalEscape(label) + '</span>' : '<span>' + detailOriginalEscape(detailOriginalUiText('occurrences')) + '</span>') +
+          (grammar ? '<div class="detail-inline-original-usage-grammar">' + originalTextShared().hebrewStemLabelHtml(grammar) + '</div>' : '') +
+          (label ? '<span class="detail-inline-original-translatable">' + originalTextShared().hebrewStemLabelHtml(label) + '</span>' : '<span>' + detailOriginalEscape(detailOriginalUiText('occurrences')) + '</span>') +
           (count ? ' <span class="detail-inline-original-usage-count">(' + detailOriginalEscape(count) + 'x)</span>' : '') +
           (summary ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(summary) + '</p>' : '') +
           (refsHtml ? '<div class="detail-inline-original-ref-list">' + refsHtml + '</div>' : '') +
@@ -2532,7 +2601,7 @@ $(document).ready(function(){
       return '<div class="detail-inline-original-root-word">' +
         '<div class="detail-inline-original-candidate-head">' +
           (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
-          ((item && item.lemma) ? '<span>' + detailOriginalEscape(item.lemma) + '</span>' : '') +
+          ((item && item.lemma) ? '<span class="' + originalTextShared().hebrewLemmaClass(item) + '">' + detailOriginalEscape(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="detail-inline-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
           detailOriginalExternalLexiconLinksHtml(item, strongsNumber) +
@@ -2616,7 +2685,7 @@ $(document).ready(function(){
         html += '<div class="detail-inline-original-candidate">' +
           '<div class="detail-inline-original-candidate-head">' +
           (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
-          ((candidate && candidate.lemma) ? '<span>' + detailOriginalEscape(candidate.lemma) + '</span>' : '') +
+          ((candidate && candidate.lemma) ? '<span class="' + originalTextShared().hebrewLemmaClass(candidate, selectedWord.word_components) + '">' + detailOriginalEscape(candidate.lemma) + '</span>' : '') +
           ((candidate && candidate.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(candidate.transliteration) + '</span>' : '') +
           detailOriginalExternalLexiconLinksHtml(candidate, strongsNumber) +
           '</div>' +
@@ -2653,7 +2722,7 @@ $(document).ready(function(){
           $el.data('originalText', originalText);
         }
         translateCommentaryText(originalText, function(translated) {
-          $el.text(translated || originalText);
+          $el.html(originalTextShared().hebrewStemLabelHtml(translated || originalText));
         });
       });
     }
@@ -2662,7 +2731,7 @@ $(document).ready(function(){
       $panel.find('.detail-inline-original-translatable').each(function() {
         var $el = $(this);
         if ($el.data('originalText')) {
-          $el.text(String($el.data('originalText')));
+          $el.html(originalTextShared().hebrewStemLabelHtml(String($el.data('originalText'))));
         }
       });
     }

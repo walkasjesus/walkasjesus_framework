@@ -1,5 +1,20 @@
 /* Some custom css */
 
+.bs-hebrew-part-root {
+    color: #3d2f08;
+}
+
+.bs-hebrew-part-prefix,
+.bs-hebrew-part-suffix,
+.bs-hebrew-part-grammatical {
+    color: #757575;
+}
+
+.hebrew-lemma {
+    direction: rtl;
+    font-family: 'BibleStudySBLHebrew', Georgia, serif;
+}
+
 @font-face {
     font-family: 'mufanpfs';
     src: url('../fonts/mufanpfs/mufanpfs.otf') format('opentype');
@@ -1390,6 +1405,18 @@ p {
     transition-delay: 0.5s;
 }
 .jc-tooltip-host.jc-tooltip-immediate:hover::after {
+    transition-delay: 0s;
+}
+
+.hebrew-stem-help {
+    border-bottom: 1px dotted currentColor;
+    cursor: help;
+}
+.hebrew-stem-help::after {
+    width: 230px;
+}
+.hebrew-stem-help:focus::after {
+    opacity: 1;
     transition-delay: 0s;
 }
 

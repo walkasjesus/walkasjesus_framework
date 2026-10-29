@@ -76,7 +76,8 @@
   }
 
   function bsResolveChapterMax(bookName, chapter, bibleId) {
-    return bsChapterMetaCache[bsMetaCacheKey(bookName, chapter, bibleId)] || null;
+    var key = bsMetaCacheKey(bookName, chapter, bibleId);
+    return Object.prototype.hasOwnProperty.call(bsChapterMetaCache, key) ? bsChapterMetaCache[key] : null;
   }
 
   function bsFetchChapterMax(bookName, chapter, bibleId, onDone) {
@@ -87,7 +88,7 @@
     }
 
     var key = bsMetaCacheKey(bookName, chapter, bibleId);
-    if (bsChapterMetaCache[key]) {
+    if (Object.prototype.hasOwnProperty.call(bsChapterMetaCache, key)) {
       if (onDone) { onDone(bsChapterMetaCache[key]); }
       return;
     }
@@ -108,15 +109,14 @@
       }
     }).done(function(payload) {
       var maxVerse = parseInt((payload && payload.max_verse) || 0, 10);
-      if (maxVerse > 0) {
-        bsChapterMetaCache[key] = maxVerse;
-      }
-      (bsChapterMetaPending[key] || []).forEach(function(cb) {
+      bsChapterMetaCache[key] = maxVerse;
+      var callbacks = bsChapterMetaPending[key] || [];
+      delete bsChapterMetaPending[key];
+      callbacks.forEach(function(cb) {
         if (typeof cb === 'function') {
           cb(maxVerse > 0 ? maxVerse : null);
         }
       });
-      delete bsChapterMetaPending[key];
     }).fail(function() {
       (bsChapterMetaPending[key] || []).forEach(function(cb) {
         if (typeof cb === 'function') {
@@ -151,7 +151,7 @@
       var rawEnd = matchVerse[4] ? parseInt(matchVerse[4], 10) : startVerse + bsMaxVersesConst - 1;
       bsMatchBooks(bookQuery).slice(0, 3).forEach(function(book) {
         var chapterMax = bsResolveChapterMax(book.n, chapter, preferredBibleId);
-        if (!chapterMax) {
+        if (chapterMax === null) {
           bsFetchChapterMax(book.n, chapter, preferredBibleId, function() {
             var currentInput = $.trim($('#bs-passage-input').val());
             if (currentInput) {
@@ -160,7 +160,7 @@
           });
           return;
         }
-        if (chapterMax && startVerse > chapterMax) {
+        if (startVerse > chapterMax) {
           return;
         }
 
@@ -216,13 +216,16 @@
       if (books2.length) {
         var book2 = books2[0];
         var chapterMax2 = bsResolveChapterMax(book2.n, chapter2, preferredBibleId);
-        if (!chapterMax2) {
+        if (chapterMax2 === null) {
           bsFetchChapterMax(book2.n, chapter2, preferredBibleId, function() {
             var currentInput2 = $.trim($('#bs-passage-input').val());
             if (currentInput2) {
               bsRenderSuggestions(bsGenerateSuggestions(currentInput2));
             }
           });
+          return [];
+        }
+        if (chapterMax2 === 0) {
           return [];
         }
         for (var v = 1; suggestions.length < 8; v += bsMaxVersesConst) {
@@ -285,9 +288,9 @@
     });
   }
 
-  function bsParseSingleVerse(rawInput) {
+  function bsParsePassage(rawInput) {
     var text = $.trim(bsNormalizeDashInput(rawInput));
-    var matchVerse = text.match(/^(.*?)\s+(\d+):(\d+)\s*$/);
+    var matchVerse = text.match(/^(.*?)\s+(\d+):(\d+)(?:\s*-\s*(\d+))?\s*$/);
     if (!matchVerse) {
       return null;
     }
@@ -295,11 +298,22 @@
     if (!bookMatch) {
       return null;
     }
+    var startVerse = parseInt(matchVerse[3], 10);
+    var endVerse = matchVerse[4] ? parseInt(matchVerse[4], 10) : startVerse;
+    var chapter = parseInt(matchVerse[2], 10);
+    var chapterMax = bsResolveChapterMax(bookMatch.n, chapter, bsMetaBibleId());
+    if (chapterMax > 0) {
+      endVerse = Math.min(endVerse, chapterMax);
+    }
+    if (startVerse < 1 || endVerse < startVerse) {
+      return null;
+    }
     return {
       bookName: bookMatch.n,
       bookLabel: bookMatch.l,
-      chapter: parseInt(matchVerse[2], 10),
-      verse: parseInt(matchVerse[3], 10)
+      chapter: chapter,
+      startVerse: startVerse,
+      endVerse: Math.min(endVerse, startVerse + bsMaxVersesConst - 1)
     };
   }
 
@@ -1278,7 +1292,7 @@
       if (!orig) { return; }
       var cacheKey = targetLanguage + '|' + orig;
       if (bsTranslateCache[cacheKey]) {
-        $el.text(bsTranslateCache[cacheKey]);
+        $el.html(originalTextShared().hebrewStemLabelHtml(bsTranslateCache[cacheKey]));
       } else if (needed.indexOf(orig) === -1) {
         needed.push(orig);
       }
@@ -1309,7 +1323,7 @@
           var $el = $(this);
           var orig = $el.data('originalText');
           if (orig && translations[orig]) {
-            $el.text(translations[orig]);
+            $el.html(originalTextShared().hebrewStemLabelHtml(translations[orig]));
           }
         });
       }
@@ -1320,7 +1334,7 @@
     $card.find('.bs-translatable-text').each(function() {
       var $el = $(this);
       var original = $el.data('originalText');
-      if (original) { $el.text(original); }
+      if (original) { $el.html(originalTextShared().hebrewStemLabelHtml(original)); }
     });
   }
 
@@ -1485,6 +1499,38 @@
         ' · {% trans "Traditional image, not word meaning" %}: ' + String(traditionalImage);
       return '<span class="bs-hebrew-letter-info jc-tooltip-host" tabindex="0" data-jc-tooltip="' + escapeHtml(title) + '" aria-label="' +
         escapeHtml(title) + '">' + escapeHtml(String(letter.glyph || '')) + '</span>';
+    }).join('');
+  }
+
+  function originalWordSurfaceHtml(word, languageCode, showLetterDetails, surfaceText) {
+    var text = String(surfaceText == null ? ((word && word.text) || '') : surfaceText);
+    if (languageCode !== 'hbo') {
+      return escapeHtml(text);
+    }
+    var letters = (word && word.hebrew_letters) || [];
+    var components = (word && word.word_components) || [];
+    var consonants = function(value) { return String(value || '').replace(/[^\u05d0-\u05ea]/g, ''); };
+    var componentConsonants = components.map(function(part) { return consonants(part.surface); }).join('');
+    var wordConsonants = letters.map(function(letter) { return consonants(letter.glyph); }).join('');
+    if (!wordConsonants || componentConsonants !== wordConsonants || consonants(text) !== wordConsonants) {
+      return showLetterDetails && letters.length ? hebrewLetterDetailsHtml(letters) : escapeHtml(text);
+    }
+    var roles = [];
+    components.forEach(function(part) {
+      var role = ['root', 'prefix', 'suffix', 'grammatical'].indexOf(part.role) >= 0 ? part.role : 'grammatical';
+      for (var index = 0; index < consonants(part.surface).length; index += 1) {
+        roles.push(role);
+      }
+    });
+    var letterIndex = -1;
+    // Keep the original vowel points, accents and punctuation attached to their letters.
+    return (text.match(/[\u05d0-\u05ea][\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]*|[^\u05d0-\u05ea]+/g) || []).map(function(glyph) {
+      if (!consonants(glyph)) {
+        return escapeHtml(glyph);
+      }
+      letterIndex += 1;
+      var html = showLetterDetails ? hebrewLetterDetailsHtml([letters[letterIndex]]) : escapeHtml(glyph);
+      return '<span class="bs-hebrew-part-' + roles[letterIndex] + '">' + html + '</span>';
     }).join('');
   }
 
@@ -1726,7 +1772,7 @@
       return '<div class="bs-original-root-word">' +
         '<div class="bs-original-root-head">' +
           (detailUrl ? '<a class="bs-original-strong-link" href="' + escapeHtml(detailUrl) + '"><strong>' + escapeHtml(strongsNumber) + '</strong></a>' : '<strong>' + escapeHtml(strongsNumber) + '</strong>') +
-          ((item && item.lemma) ? '<span class="bs-unique-hebrew-css">' + escapeHtml(item.lemma) + '</span>' : '') +
+          ((item && item.lemma) ? '<span class="bs-unique-hebrew-css ' + originalTextShared().hebrewLemmaClass(item) + '">' + escapeHtml(item.lemma) + '</span>' : '') +
           ((item && item.transliteration) ? '<span class="text-muted">' + escapeHtml(item.transliteration) + '</span>' : '') +
           (metaBits.length ? '<span class="bs-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
           bibleStudyExternalLexiconLinksHtml(item, strongsNumber) +
@@ -1784,8 +1830,8 @@
       var btn = count ? bibleStudyOccurrenceButtonHtml(label || '{% trans "Occurrences" %}', count, refs) : '';
       return '<li><div class="bs-original-usage-item">' +
         '<div class="bs-original-usage-copy">' +
-          (grammar ? '<div class="bs-original-usage-grammar">' + escapeHtml(grammar) + '</div>' : '') +
-          (label ? '<span class="bs-translatable-text">' + escapeHtml(label) + '</span>' : '<span>{% trans "Occurrences" %}</span>') +
+          (grammar ? '<div class="bs-original-usage-grammar">' + originalTextShared().hebrewStemLabelHtml(grammar) + '</div>' : '') +
+          (label ? '<span class="bs-translatable-text">' + originalTextShared().hebrewStemLabelHtml(label) + '</span>' : '<span>{% trans "Occurrences" %}</span>') +
           (btn ? ' ' + btn : '') +
           (summary ? '<p class="bs-original-usage-summary bs-translatable-text">' + escapeHtml(summary) + '</p>' : '') +
         '</div>' +
@@ -2139,7 +2185,7 @@
       if (!tokenText) {
         return '';
       }
-      return '<span class="bs-original-sentence-token ' + (languageCode === 'hbo' ? 'bs-original-language-hbo' : 'bs-original-language-grc') + '" data-word-index="' + escapeHtml(String(index)) + '" data-clickable="' + (word && word.clickable ? '1' : '0') + '"' + (word && word.clickable ? ' tabindex="0" role="button"' : '') + '>' + escapeHtml(tokenText) + '</span>';
+      return '<span class="bs-original-sentence-token ' + (languageCode === 'hbo' ? 'bs-original-language-hbo' : 'bs-original-language-grc') + '" data-word-index="' + escapeHtml(String(index)) + '" data-clickable="' + (word && word.clickable ? '1' : '0') + '"' + (word && word.clickable ? ' tabindex="0" role="button"' : '') + '>' + originalWordSurfaceHtml(word, languageCode, false, tokenText) + '</span>';
     }).join('');
     return '<div class="' + itemClass + '">' + parts + '</div>';
   }
@@ -2183,32 +2229,7 @@
     var languageCode = String((versePayload && versePayload.language_code) || '');
     var isHebrew = languageCode === 'hbo';
     var isGreek = languageCode === 'grc';
-    var selectedWordHtml = isHebrew && selectedWord.hebrew_letters && selectedWord.hebrew_letters.length
-      ? hebrewLetterDetailsHtml(selectedWord.hebrew_letters)
-      : escapeHtml(selectedWord.text);
-    if (isHebrew) {
-      var parts = selectedWord.word_components || [];
-      var wordLetters = selectedWord.hebrew_letters || [];
-      var partConsonants = parts.map(function(part) {
-        return String(part.surface || '').replace(/[^\u05d0-\u05ea]/g, '');
-      });
-      var wordConsonants = wordLetters.map(function(letter) {
-        return String(letter.glyph || '').replace(/[^\u05d0-\u05ea]/g, '');
-      }).join('');
-      if (parts.length && wordConsonants && partConsonants.join('') === wordConsonants) {
-        var letterOffset = 0;
-        selectedWordHtml = parts.map(function(part) {
-          var letterCount = String(part.surface || '').replace(/[^\u05d0-\u05ea]/g, '').length;
-          var partLetters = wordLetters.slice(letterOffset, letterOffset + letterCount);
-          letterOffset += letterCount;
-          if (!partLetters.length) {
-            return '';
-          }
-          return '<span class="bs-hebrew-part-' + escapeHtml(part.role || 'grammatical') + '">' +
-            hebrewLetterDetailsHtml(partLetters) + '</span>';
-        }).join('');
-      }
-    }
+    var selectedWordHtml = originalWordSurfaceHtml(selectedWord, languageCode, true);
     var languageLabel = String((versePayload && versePayload.language_label) || '');
     var html = '<div class="bs-original-detail-meta"><strong' + (isHebrew ? ' class="bs-original-language-hbo bs-hebrew-detail-word"' : '') + '>' +
       selectedWordHtml + '</strong>' + (isHebrew || isGreek ? '' : ' · ' + escapeHtml(languageLabel)) + '</div>';
@@ -2282,7 +2303,7 @@
             '</strong>') +
 
         ((candidate && candidate.lemma)
-          ? '<span' + (/[\u0590-\u05ff]/.test(candidate.lemma) ? ' class="bs-original-language-hbo"' : '') + '>' + escapeHtml(candidate.lemma) + '</span>'
+          ? '<span class="' + originalTextShared().hebrewLemmaClass(candidate, selectedWord.word_components) + '">' + escapeHtml(candidate.lemma) + '</span>'
           : '') +
 
         bibleStudyExternalLexiconLinksHtml(candidate, String((candidate && candidate.strongs_number) || '')) +
@@ -2358,7 +2379,7 @@
         var strongsLabel = String((((word.candidates || [])[0] || {}).strongs_number) || '');
         return '<span class="' + itemClass + '">' +
           '<span class="bs-original-word-strongs">' + escapeHtml(strongsLabel) + '</span>' +
-          '<button type="button" class="bs-original-word-btn ' + languageClass + (word.has_candidates ? '' : ' bs-original-word-btn-missing') + '" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '" title="' + escapeHtml(buildOriginalWordTitle(word)) + '">' + escapeHtml(String(word.text || '')) + '</button>' +
+          '<button type="button" class="bs-original-word-btn ' + languageClass + (word.has_candidates ? '' : ' bs-original-word-btn-missing') + '" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '" title="' + escapeHtml(buildOriginalWordTitle(word)) + '">' + originalWordSurfaceHtml(word, languageCode, false) + '</button>' +
           '<span class="bs-original-word-translation' + (translationLabel ? '' : ' bs-original-word-translation-empty') + '" data-verse="' + escapeHtml(String(verseNumber)) + '" data-word-index="' + escapeHtml(String(index)) + '">' + escapeHtml(translationLabel) + '</span>' +
           '</span>';
       }).join('');
@@ -2367,6 +2388,7 @@
       $shell.data('versePayload', versePayload || {});
       $shell.find('.bs-original-sentence').attr('class', sentenceClass).html(
         '<div class="bs-original-source-badge">' + escapeHtml(String((versePayload && versePayload.source_bible_name) || '')) + '</div>' +
+        (languageCode === 'hbo' ? '<div class="bs-hebrew-color-legend"><span class="bs-hebrew-part-root">{% trans "Root word" %}</span> / <span class="bs-hebrew-part-prefix">{% trans "Prefix / service word" %} · {% trans "Suffix" %} · {% trans "Grammatical element" %}</span></div>' : '') +
         buildOriginalSentenceHtml(words, languageCode)
       );
       $shell.find('.bs-original-word-cloud').html(wordButtonsHtml || '<p class="bs-original-detail-empty mb-0">{% trans "No original-language word data found for this verse." %}</p>');
@@ -2939,12 +2961,12 @@
     // Pre-process the passage input field to populate hidden fields
     var passageRaw = $.trim($('#bs-passage-input').val());
     if (passageRaw) {
-      var singleVerse = bsParseSingleVerse(passageRaw);
-      if (singleVerse) {
-        $('#bs-book').val(singleVerse.bookName).data('book-label', singleVerse.bookLabel);
-        $('#bs-chapter').val(singleVerse.chapter);
-        $('#bs-start').val(singleVerse.verse);
-        $('#bs-end').val(singleVerse.verse);
+      var passage = bsParsePassage(passageRaw);
+      if (passage) {
+        $('#bs-book').val(passage.bookName).data('book-label', passage.bookLabel);
+        $('#bs-chapter').val(passage.chapter);
+        $('#bs-start').val(passage.startVerse);
+        $('#bs-end').val(passage.endVerse);
       } else {
         var suggs = bsGenerateSuggestions(passageRaw);
         if (suggs.length) {

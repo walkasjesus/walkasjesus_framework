@@ -50,6 +50,8 @@ When requesting an individual member of such a group, the API's combined text is
 `book`, `chapter`, `start_verse`, `end_verse`, `bible_id` (repeatable, up to 4 columns),
 `show_original`, `combine_verses`. `combine_verses=1` shows one block per translation;
 `combine_verses=0` shows one card per verse — **word linking only runs in this mode**.
+The info icon next to the "Combine verses" checkbox (`.bs-combine-help`, CSS-only tooltip with
+`white-space: pre-line`) explains this on/off difference to users; keep it in sync when the modes change.
 
 ---
 

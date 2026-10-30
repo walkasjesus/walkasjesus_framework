@@ -58,7 +58,7 @@
 
         <hr class="my-3">
 
-        <h4 class="mb-3">{% trans 'Settings' %}</h4>
+        <h4 class="mb-3" id="bs-settings-heading">{% trans 'Settings' %}</h4>
         <form method="get" action="" id="bibleStudyForm" class="law-filter-form">
           {# Hidden state inputs — populated by the smart passage search field below #}
           <input type="checkbox" id="bs-show-original" name="show_original" value="1"{% if show_original_text %} checked{% endif %} style="position:absolute;opacity:0;pointer-events:none;">
@@ -99,7 +99,14 @@
               <div class="bs-passage-mode-toggle">
                 <div class="form-check mb-0">
                   <input class="form-check-input" type="checkbox" id="bs-combine-verses" name="combine_verses" value="1" checked>
-                  <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses for easier reading (turn off to divide Bible texts by verse for thorough word study).' %}</label>
+                  <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses into one continuous text' %} {% trans '(turn off for verse-by-verse word study)' %}</label>
+                  {# Line breaks inside data-jc-tooltip are kept (white-space: pre-line) to separate the on/off explanation. #}
+                  <span class="bs-combine-help jc-tooltip-host jc-tooltip-immediate" tabindex="0"
+                        data-jc-tooltip="{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %}
+
+{% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %}
+
+{% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}</span></span>
                 </div>
               </div>
             </div>

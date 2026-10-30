@@ -392,6 +392,11 @@
     width: 50px;
   }
 
+/* Keep the fixed menu above page cards that create their own stacking context (e.g. Bible Study, z-index 20). */
+#ftco-navbar.ftco-navbar-light {
+    z-index: 1030;
+}
+
 .ftco-navbar-light .navbar-brand {
     align-items: center;
     display: inline-flex;
@@ -1416,6 +1421,53 @@ p {
     width: 230px;
 }
 .hebrew-stem-help:focus::after {
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+.bs-combine-help {
+    color: #94612e;
+    cursor: help;
+    display: inline-block;
+    margin-left: 4px;
+}
+/* Anchor the tooltip to the whole option row (.form-check) so it never runs off-screen on narrow layouts. */
+.bs-passage-mode-toggle .form-check {
+    position: relative;
+}
+.bs-passage-mode-toggle .form-check-label {
+    display: inline;
+}
+.bs-passage-mode-toggle .bs-combine-help.jc-tooltip-host {
+    position: static;
+}
+.bs-combine-help.jc-tooltip-host::after {
+    left: 0;
+    max-width: min(440px, 100%);
+    padding: 8px 11px;
+    text-align: left;
+    transform: none;
+    white-space: pre-line;
+    width: 440px;
+}
+.bs-combine-help:focus {
+    outline: none;
+}
+[dir="rtl"] .bs-combine-help {
+    margin-left: 0;
+    margin-right: 4px;
+}
+[dir="rtl"] .bs-combine-help.jc-tooltip-host::after {
+    left: auto;
+    right: 0;
+    text-align: right;
+}
+.bs-combine-help:focus-visible {
+    border-radius: 50%;
+    outline: 2px solid #94612e;
+    outline-offset: 2px;
+}
+.bs-combine-help:focus::after {
     opacity: 1;
     transition-delay: 0s;
 }

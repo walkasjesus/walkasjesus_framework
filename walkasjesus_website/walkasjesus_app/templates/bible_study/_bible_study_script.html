@@ -327,12 +327,64 @@
       display += '\u2013' + suggestion.endVerse;
     }
     $('#bs-passage-input').val(display);
+    bsClosePassageSuggestions();
+    if (suggestion.autoSubmit) { bsCommitPassageSearch(); }
+  }
+
+  var bsPassageCommitted = false;
+
+  function bsClosePassageSuggestions() {
     $('#bs-passage-suggestions').empty().removeClass('is-open');
-    if (suggestion.autoSubmit) { $('#bibleStudyForm').trigger('submit'); }
+  }
+
+  function bsSettingsScrollTarget() {
+    var heading = document.getElementById('bs-settings-heading');
+    if (!heading) {
+      return null;
+    }
+    var nav = document.getElementById('ftco-navbar');
+    var top = heading.getBoundingClientRect().top + window.pageYOffset - 8;
+    // The theme (main.js) only shows the fixed menu after scrolling past 350px.
+    if (nav && top > 350) {
+      top -= nav.classList.contains('scrolled') ? nav.getBoundingClientRect().height : 52;
+    }
+    return Math.max(0, Math.round(top));
+  }
+
+  function bsScrollToSettings() {
+    var top = bsSettingsScrollTarget();
+    if (top === null) {
+      return;
+    }
+    window.scrollTo({ top: top, behavior: 'smooth' });
+    // The menu switches between in-flow and fixed while scrolling (mobile), which shifts the layout; correct once afterwards.
+    window.setTimeout(function() {
+      var corrected = bsSettingsScrollTarget();
+      if (corrected !== null && Math.abs(corrected - window.pageYOffset) > 4) {
+        window.scrollTo({ top: corrected, behavior: 'smooth' });
+      }
+    }, 700);
+  }
+
+  // Explicit search (Enter or picking a suggestion): run it once, close the dropdown and bring Settings to the top.
+  function bsCommitPassageSearch() {
+    bsPassageCommitted = true;
+    bsClosePassageSuggestions();
+    if (bsAutoApplyTimer) {
+      window.clearTimeout(bsAutoApplyTimer);
+      bsAutoApplyTimer = null;
+    }
+    $('#bibleStudyForm').trigger('submit');
+    $('#bs-passage-input').trigger('blur');
+    bsScrollToSettings();
   }
 
   function bsRenderSuggestions(suggestions) {
     var $box = $('#bs-passage-suggestions');
+    if (bsPassageCommitted) {
+      bsClosePassageSuggestions();
+      return;
+    }
     $box.empty();
     if (!suggestions.length) { $box.removeClass('is-open'); return; }
     $.each(suggestions, function(i, sugg) {
@@ -355,17 +407,28 @@
   }
 
   $(document).on('input', '#bs-passage-input', function() {
+    bsPassageCommitted = false;
     var value = $.trim($(this).val());
     bsRenderSuggestions(bsGenerateSuggestions(value));
     bsPrimeChapterMax(value);
   });
 
   $(document).on('change', '#bs-passage-input', function() {
+    if (bsPassageCommitted) {
+      return;
+    }
     queueBibleStudyAutoApply(0);
   });
 
   $(document).on('keydown', '#bs-passage-input', function(event) {
     var $box = $('#bs-passage-suggestions');
+    if (event.key === 'Enter' && !$box.find('.bs-passage-suggestion-item.is-active').length) {
+      event.preventDefault();
+      if ($.trim($(this).val())) {
+        bsCommitPassageSearch();
+      }
+      return;
+    }
     if (!$box.hasClass('is-open')) return;
     var $items = $box.find('.bs-passage-suggestion-item');
     var $active = $items.filter('.is-active');

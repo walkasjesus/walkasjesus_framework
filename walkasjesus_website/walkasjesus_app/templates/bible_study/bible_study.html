@@ -7,7 +7,6 @@
 {% block title_content %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
 {% block meta_description %}{% trans 'Compare multiple Bible translations side by side, with verse commentary from David Stern, John Lightfoot, King, and Rabbinical Jewish Commentaries.' %}{% endblock %}
 {% block og_title %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
-{% block extra_head_assets %}{% include "bible_study/_bible_study_styles.html" %}{% endblock %}
 
 {% block content %}
 <section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
@@ -396,33 +395,6 @@
     </div>
   </div>
   {% endif %}
-  </div>
-
-  <div class="bs-reference-preview-overlay" id="bs-reference-preview" hidden>
-    <div class="bs-reference-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="bs-reference-preview-title">
-      <button type="button" class="bs-reference-preview-close" data-preview-close="1" aria-label="{% trans 'Close passage preview' %}">&times;</button>
-      <div class="bs-reference-preview-body">
-        <span class="bible-study-translation-title" id="bs-reference-preview-title">{% trans 'Passage preview' %}</span>
-        <h5 class="bs-reference-preview-reference"></h5>
-        <p class="small bs-reference-preview-translation"></p>
-        <div class="bs-reference-preview-content"></div>
-        <div class="bs-reference-preview-actions">
-          <button type="button" class="btn btn-sm commentary-action-btn bible-study-preview-study-btn" data-bible-study-reference="">
-            <i class="fa fa-book mr-1"></i> {% trans 'Study this passage' %}
-          </button>
-          <small class="text-muted">{% trans 'The preview uses the first selected translation.' %}</small>
-        </div>
-        <div class="bs-reference-preview-occurrences" hidden>
-          <hr class="my-3">
-          <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
-            <span class="bs-original-detail-label mb-0 bs-occurrences-section-label">{% trans 'Occurrences' %}</span>
-            <span class="small text-muted bs-occurrences-summary"></span>
-          </div>
-          <div class="bs-occurrences-chunks mb-2"></div>
-          <div class="bs-occurrences-list"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="bible-study-sources-card">

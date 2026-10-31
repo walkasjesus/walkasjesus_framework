@@ -13,12 +13,31 @@ text is linked word-by-word to the Hebrew/Greek.
 | Page view + AJAX endpoints | [views/bible_study_view.py](views/bible_study_view.py) |
 | Strong's / original-language engine | [lib/strongs_service.py](lib/strongs_service.py) |
 | Page template | [templates/bible_study/bible_study.html](templates/bible_study/bible_study.html) |
-| All client logic | [templates/bible_study/_bible_study_script.html](templates/bible_study/_bible_study_script.html) |
-| All styling | [templates/bible_study/_bible_study_styles.html](templates/bible_study/_bible_study_styles.html) |
+| Passage selection, translations and word alignment | [templates/bible_study/_bible_study_script.html](templates/bible_study/_bible_study_script.html) |
+| Shared original-language renderer, word interactions and occurrence previews | [templates/bible_study/_study_panels_script.html](templates/bible_study/_study_panels_script.html) |
+| Shared passage-preview dialog | [templates/bible_study/_study_reference_preview.html](templates/bible_study/_study_reference_preview.html) |
+| Shared commentary loading/rendering and detail-page adapters | [../static/js/customjs.js](../static/js/customjs.js) |
+| Bible Study and shared panel styling | [templates/bible_study/_bible_study_styles.html](templates/bible_study/_bible_study_styles.html) |
 
 The page renders the first passage server-side, then everything else (changing passage,
 translations, toggles, panels) happens through AJAX so the API.Bible quota is only spent on
 verses that are actually shown.
+
+### Shared panels on other pages
+
+Maimonides, steps, Law of Messiah and lessons use the same commentary handlers and
+`WAJBibleStudyPanels` original-language controller as Bible Study. The base template
+loads the shared script, preview template and styles once. Detail-page adapters only
+provide the passage, selected translation and navigation destination; they do not
+render their own word details.
+
+Each original-language controller scopes DOM queries and interactions to its passage
+root, so repeated verse numbers in different passages cannot affect one another.
+Long original-language ranges are fetched progressively using the server's returned
+verse range; cross-chapter references get a separate controller per chapter.
+Occurrence buttons open the shared passage preview in the selected translation.
+Its study button and Strong's links navigate to Bible Study on detail pages, while
+the Bible Study page keeps its existing in-page passage navigation.
 
 ### Endpoints
 

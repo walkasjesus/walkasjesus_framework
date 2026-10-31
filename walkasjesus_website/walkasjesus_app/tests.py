@@ -16,6 +16,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
+from django.template.loader import get_template, render_to_string
 from django.urls import reverse
 from django.utils import translation
 
@@ -1662,6 +1663,43 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
         self.assertEqual(payload['default_bible_id'], 'jnt-stern-en')
 
 
+class BibleStudySharedPanelsTestCase(SimpleTestCase):
+    def test_shared_original_renderer_and_preview_compile_and_render(self):
+        script = render_to_string('bible_study/_study_panels_script.html')
+        preview = render_to_string('bible_study/_study_reference_preview.html')
+        self.assertEqual(script.count('function renderOriginalWordDetail('), 1)
+        self.assertIn('hebrewWordStudyHtml(selectedWord)', script)
+        self.assertIn('bibleStudyLocalUsageHtml(candidate', script)
+        self.assertIn("$root.find('.bible-study-original-shell", script)
+        self.assertIn('fetchNext(nextVerse)', script)
+        self.assertIn('waj-reference-preview-template', preview)
+        self.assertIn('bs-occurrences-chunks', preview)
+
+    def test_all_page_templates_load_the_shared_panels_through_base(self):
+        base = get_template('base.html').template.source
+        self.assertEqual(base.count('include "bible_study/_study_panels_script.html"'), 1)
+        self.assertEqual(base.count('include "bible_study/_study_reference_preview.html"'), 1)
+        for name in (
+            'bible_study/bible_study.html',
+            'maimonides/listing.html',
+            'commandments/detail.html',
+            'law_of_messiah/detail.html',
+            'lessons/detail.html',
+        ):
+            with self.subTest(template=name):
+                source = get_template(name).template.source
+                self.assertIn('{% extends "base.html" %}', source)
+
+    def test_page_scripts_do_not_keep_a_second_original_renderer(self):
+        page_script = get_template('bible_study/_bible_study_script.html').template.source
+        detail_script = (Path(settings.BASE_DIR) / 'static/js/customjs.js').read_text()
+        self.assertIn('window.WAJBibleStudyPanels.create', page_script)
+        self.assertIn('window.WAJBibleStudyPanels.create', detail_script)
+        self.assertNotIn('function renderOriginalWordDetail', page_script)
+        self.assertNotIn('detailOriginalRenderWordDetail', detail_script)
+        self.assertNotIn('detail-inline-original', detail_script)
+
+
 class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
     databases = {'default'}
 
@@ -1703,6 +1741,8 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
         self.assertIn('https://www.stepbible.org/?q=version=KJV@strong=', html)
         self.assertIn('class="jc-tooltip-host jc-tooltip-immediate"', html)
         self.assertIn('data-jc-tooltip=', html)
+        self.assertEqual(html.count('function renderOriginalWordDetail('), 1)
+        self.assertIn('window.WAJBibleStudyPanels.create', html)
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_bible_translations_endpoint_returns_bibles_for_each_language(self, mock_bible_translation):

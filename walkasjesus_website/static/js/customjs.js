@@ -198,7 +198,6 @@ $(document).ready(function(){
   var scripturaChapterCache = {};
   var sefariaRelatedCache = {};
   var sefariaTextCache = {};
-  var detailOriginalTextCache = {};
   var translationCache = {};
   var SCRIPTURA_CHAPTER_CACHE_VERSION = 'v2';
 
@@ -792,11 +791,6 @@ $(document).ready(function(){
   function getBibleStudyUrl() {
     var container = document.querySelector('[data-bible-study-url]');
     return container ? String(container.getAttribute('data-bible-study-url') || '').trim() : '';
-  }
-
-  function getOriginalTextUrl() {
-    var container = document.querySelector('[data-original-text-url]');
-    return container ? String(container.getAttribute('data-original-text-url') || '').trim() : '';
   }
 
   function bibleStudyBookLookup() {
@@ -2093,7 +2087,7 @@ $(document).ready(function(){
 
     function extractBibleStudyDetails($context) {
       var $scriptura = $context.find('.scriptura-commentary-btn').first();
-      var referenceLabel = $.trim($context.find('b, strong').first().text());
+      var referenceLabel = $.trim($context.find('.bible-study-reference-label').first().text() || $context.find('b, strong').first().text());
       var parsedReference = parseBibleStudyReference(referenceLabel);
       if (parsedReference && parsedReference.book) {
         return parsedReference;
@@ -2150,7 +2144,10 @@ $(document).ready(function(){
 
         $context.data('jcBibleStudyEnhanced', true);
 
-        var $reference = $context.find('b, strong').first();
+        var $reference = $context.find('.bible-study-reference-label').first();
+        if (!$reference.length) {
+          $reference = $context.find('b, strong').first();
+        }
         var referenceLabel = $.trim($reference.text());
         var $verseTarget = $context.find('.bible-verse-load-link, .bible-verse-text').first();
         var hasScripturaForBook = availableScripturaCommentatorsForBook(details.book).length > 0;
@@ -2194,9 +2191,13 @@ $(document).ready(function(){
           $origBtn.append(document.createTextNode(uiMessage('original_text')));
         }
 
-        if (!$context.find('.detail-inline-original-panel').length) {
-          $('<div class="detail-inline-original-panel"></div>').appendTo($context);
+        if (!$context.find('.bible-study-inline-original-panel').length) {
+          $('<div class="bible-study-inline-original-panel waj-study-panels"></div>').appendTo($context);
         }
+
+        var $commentarySlot = $('<div class="bible-study-commentary-slot waj-study-panels"></div>').appendTo($context);
+        $context.find('.scriptura-commentary-panel, .sefaria-commentary-panel')
+          .addClass('w-100 mb-1').appendTo($commentarySlot);
 
         $actionButtons = $context.find('.scriptura-commentary-btn, .sefaria-commentary-btn-secondary, .detail-original-text-btn').filter(function() {
           return !$(this).hasClass('bible-verse-load-link');
@@ -2452,441 +2453,128 @@ $(document).ready(function(){
       return $btn.closest('.bible-study-verse-item, .bible-study-verse-card').find(panelClass).first();
     }
 
-    function detailOriginalCacheKey(details) {
-      return [details.book, details.chapter, details.startVerse, details.endVerse].join('|');
-    }
-
-    function detailOriginalChunks(details) {
-      var chunks = [];
-      var startVerse = Number(details.startVerse || 1);
-      var endVerse = Number(details.endVerse || startVerse);
-      while (startVerse <= endVerse) {
-        var chunkEnd = Math.min(endVerse, startVerse + 4);
-        chunks.push({
-          book: details.book,
-          chapter: Number(details.chapter || 1),
-          startVerse: startVerse,
-          endVerse: chunkEnd
-        });
-        startVerse = chunkEnd + 1;
-      }
-      return chunks;
-    }
-
-    function detailOriginalFirstSelectableWordIndex(words) {
-      for (var index = 0; index < (words || []).length; index += 1) {
-        if (words[index] && words[index].clickable) {
-          return index;
+    function detailStudyPanelOptions($root, state) {
+      $root.attr('data-commentary-language', getCommentaryLanguage())
+        .attr('data-commentary-translate-url', getCommentaryTranslateUrl());
+      return {
+        getState: function() { return state; },
+        bookLabel: scripturaBookLabelFromKey,
+        jumpReference: function(parsed) { window.location.href = buildBibleStudyUrl(parsed); },
+        fetchVerses: function(previewState, bible, onDone) {
+          $.ajax({
+            type: 'POST',
+            url: String($('body').data('bible-study-verses-url')),
+            dataType: 'json',
+            data: {
+              csrfmiddlewaretoken: getCsrfToken(),
+              bible_id: bible.id,
+              book: previewState.book,
+              chapter: previewState.chapter,
+              start_verse: previewState.startVerse,
+              end_verse: previewState.endVerse
+            },
+            success: onDone,
+            error: function(xhr) {
+              console.error('Failed to load passage preview:', xhr.status, xhr.responseText);
+              onDone(null, (xhr.responseJSON && xhr.responseJSON.error) || uiMessage('could_not_load_verse_text'));
+            }
+          });
         }
-      }
-      return -1;
-    }
-
-    function originalTextShared() {
-      return window.WAJOriginalTextShared || {};
-    }
-
-    function detailOriginalUiText(key) {
-      var lang = getCommentaryLanguage() === 'nl' ? 'nl' : 'en';
-      var labels = {
-        noTagYet: { en: 'No tag yet', nl: 'Nog geen tag' },
-        directGloss: { en: 'Direct gloss', nl: 'Directe gloss' },
-        grammar: { en: 'Grammar', nl: 'Grammatica' },
-        lookupNote: { en: 'Lookup note', nl: 'Opzoeknotitie' },
-        normalizedLookup: { en: 'Normalized lookup form', nl: 'Genormaliseerde zoekvorm' },
-        strongsDefinitions: { en: 'Strongs Definitions', nl: 'Strongs-definities' },
-        rootWord: { en: 'Root Word', nl: 'Wortelwoord' },
-        lxxEquivalent: { en: 'Most likely Hebrew equivalent based on Septuagint usage', nl: 'Meest waarschijnlijke Hebreeuwse equivalent op basis van Septuaginta-gebruik' },
-        outlineUsage: { en: 'Outline of Biblical Usage', nl: 'Overzicht van Bijbels gebruik' },
-        kjvTranslation: { en: 'KJV Translation', nl: 'KJV-vertaling' },
-        occurrences: { en: 'Occurrences', nl: 'Voorkomens' },
-        sourceTitle: { en: 'Original text', nl: 'Originele tekst' },
-        detailTitle: { en: "Strong's details", nl: "Strong's details" },
-        hoverWords: { en: 'Hover / click words', nl: 'Beweeg / klik woorden' },
-        translate: { en: 'Auto Translate', nl: 'Automatisch Vertalen' },
-        showOriginal: { en: 'Show original', nl: 'Toon origineel' },
-        openBlueLetter: { en: 'Open {code} in Blue Letter Bible', nl: 'Open {code} in Blue Letter Bible' },
-        openStepBible: { en: 'Open {code} in StepBible', nl: 'Open {code} in StepBible' },
-        previewPassage: { en: 'Preview this passage', nl: 'Bekijk deze passage' },
-        noWordData: { en: 'No original-language word data found for this verse.', nl: 'Geen originele woorddata gevonden voor dit vers.' },
-        hoverPrompt: { en: 'Hover or click an original-language word to inspect Strong\'s numbers, lemma data, and possible translations.', nl: 'Beweeg over of klik op een woord uit de brontekst om Strong\'s-nummers, lemma-data en mogelijke vertalingen te bekijken.' }
       };
-      return (labels[key] && labels[key][lang]) || (labels[key] && labels[key].en) || key;
     }
 
-    function detailOriginalNormalizeStrongsCode(value) {
-      return originalTextShared().normalizeStrongsCode(value);
-    }
-
-    function detailOriginalStrongDetailUrl(details, strongsNumber) {
-      if (!details || !details.book || !strongsNumber) {
-        return '';
-      }
-      return buildBibleStudyUrl({
-        book: details.book,
-        chapter: details.chapter,
-        startVerse: details.startVerse,
-        endVerse: details.endVerse,
-        showOriginalText: true,
-        selectedVerse: details.startVerse,
-        selectedStrongs: detailOriginalNormalizeStrongsCode(strongsNumber)
+    function loadDetailStudyOriginal($panel, details) {
+      var selectedBible = $('#drpBibleTranslation option:selected');
+      var bibles = selectedBible.length ? [{
+        id: String(selectedBible.val() || ''),
+        displayName: $.trim(selectedBible.text())
+      }] : [];
+      ($panel.data('studyOriginalControllers') || []).forEach(function(controller) {
+        controller.destroy();
       });
-    }
+      var controllers = [];
+      $panel.data('studyOriginalControllers', controllers);
+      $panel.empty();
 
-    function detailOriginalFlattenReferences(referenceGroups) {
-      return originalTextShared().flattenReferences(referenceGroups);
-    }
+      function loadChapter(chapter) {
+        var endChapter = Number(details.endChapter || details.chapter);
+        var startVerse = chapter === Number(details.chapter) ? Number(details.startVerse) : 1;
 
-    function detailOriginalWordTitle(word) {
-      return originalTextShared().buildWordTitle(word);
-    }
-
-    function detailOriginalWordTranslation(word) {
-      return originalTextShared().buildWordTranslation(word, detailOriginalUiText('noTagYet'));
-    }
-
-    function detailOriginalEscape(value) {
-      return $('<span>').text(String(value || '')).html();
-    }
-
-    function detailOriginalReferenceItemsHtml(referenceGroups) {
-      return detailOriginalFlattenReferences(referenceGroups).slice(0, 24).map(function(reference) {
-        var parsed = parseBibleStudyReference(reference);
-        var href = parsed ? buildBibleStudyUrl({
-          book: parsed.book,
-          chapter: parsed.chapter,
-          startVerse: parsed.startVerse,
-          endVerse: parsed.endVerse,
-          showOriginalText: false
-        }) : '';
-        if (href) {
-          return '<a class="detail-inline-original-ref-item detail-inline-original-ref-link" href="' + detailOriginalEscape(href) + '" title="' + detailOriginalEscape(detailOriginalUiText('previewPassage')) + '">' + detailOriginalEscape(reference) + '</a>';
-        }
-        return '<span class="detail-inline-original-ref-item">' + detailOriginalEscape(reference) + '</span>';
-      }).join('');
-    }
-
-    function detailOriginalUsageOutlineCount(items) {
-      return originalTextShared().usageOutlineCount(items);
-    }
-
-    function detailOriginalUsageOutlineItemsHtml(items) {
-      items = (items || []).filter(function(item) {
-        return item && (String(item.label || '').trim() || String(item.summary || '').trim() || ((item.children || []).length > 0) || ((item.reference_groups || []).length > 0));
-      });
-      if (!items.length) {
-        return '';
-      }
-
-      return '<ol class="detail-inline-original-meaning-list detail-inline-original-usage-outline">' + items.map(function(item) {
-        var count = parseInt((item && item.count) || 0, 10) || 0;
-        var label = String((item && item.label) || '').trim();
-        var summary = String((item && item.summary) || '').trim();
-        var grammar = String((item && item.grammar_label) || '').trim();
-        var refsHtml = detailOriginalReferenceItemsHtml((item && item.reference_groups) || []);
-        var childrenHtml = detailOriginalUsageOutlineItemsHtml((item && item.children) || []);
-        return '<li>' +
-          (grammar ? '<div class="detail-inline-original-usage-grammar">' + originalTextShared().hebrewStemLabelHtml(grammar) + '</div>' : '') +
-          (label ? '<span class="detail-inline-original-translatable">' + originalTextShared().hebrewStemLabelHtml(label) + '</span>' : '<span>' + detailOriginalEscape(detailOriginalUiText('occurrences')) + '</span>') +
-          (count ? ' <span class="detail-inline-original-usage-count">(' + detailOriginalEscape(count) + 'x)</span>' : '') +
-          (summary ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(summary) + '</p>' : '') +
-          (refsHtml ? '<div class="detail-inline-original-ref-list">' + refsHtml + '</div>' : '') +
-          childrenHtml +
-        '</li>';
-      }).join('') + '</ol>';
-    }
-
-    function detailOriginalUsageSectionHtml(candidate) {
-      var usageOutline = ((candidate && candidate.usage_outline) || []).filter(function(item) {
-        return item && (String(item.label || '').trim() || String(item.summary || '').trim() || ((item.children || []).length > 0) || ((item.reference_groups || []).length > 0));
-      });
-      var referenceGroups = (candidate && candidate.reference_groups) || [];
-      if (!usageOutline.length && !referenceGroups.length) {
-        return '';
-      }
-      var totalCount = usageOutline.length ? detailOriginalUsageOutlineCount(usageOutline) : 0;
-      var refsHtml = !usageOutline.length ? detailOriginalReferenceItemsHtml(referenceGroups) : '';
-      var contentHtml = usageOutline.length ? detailOriginalUsageOutlineItemsHtml(usageOutline) : '<div class="detail-inline-original-ref-list">' + refsHtml + '</div>';
-      return '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('outlineUsage')) + (totalCount ? ' (' + detailOriginalEscape(totalCount) + 'x)' : '') + '</small>' + contentHtml + '</div>';
-    }
-
-    function detailOriginalRelatedWordCardHtml(item, showUsageOutline, details) {
-      var strongsNumber = String((item && (item.strongs_number || item.strong)) || '');
-      var meanings = showUsageOutline ? [] : ((item && item.possible_meanings) || []);
-      var usageOutline = showUsageOutline ? ((item && item.usage_outline) || []) : [];
-      var metaBits = [];
-      if (item && item.count) {
-        metaBits.push(detailOriginalEscape(item.count) + 'x');
-      }
-      if (item && item.percentage) {
-        metaBits.push(detailOriginalEscape(item.percentage) + '%');
-      }
-      if (item && item.confidence) {
-        metaBits.push('confidence ' + detailOriginalEscape(item.confidence));
-      }
-      var meaningsHtml = meanings.length
-        ? '<ul class="detail-inline-original-meaning-list">' + meanings.map(function(meaning) {
-          return '<li>' + detailOriginalEscape(meaning) + '</li>';
-        }).join('') + '</ul>'
-        : '';
-      var usageOutlineHtml = usageOutline.length
-        ? '<div class="detail-inline-original-detail-section mb-0"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('outlineUsage')) + '</small>' + detailOriginalUsageOutlineItemsHtml(usageOutline) + '</div>'
-        : '';
-      var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
-      return '<div class="detail-inline-original-root-word">' +
-        '<div class="detail-inline-original-candidate-head">' +
-          (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
-          ((item && item.lemma) ? '<span class="' + originalTextShared().hebrewLemmaClass(item) + '">' + detailOriginalEscape(item.lemma) + '</span>' : '') +
-          ((item && item.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(item.transliteration) + '</span>' : '') +
-          (metaBits.length ? '<span class="detail-inline-original-count-badge">' + metaBits.join(' · ') + '</span>' : '') +
-          detailOriginalExternalLexiconLinksHtml(item, strongsNumber) +
-        '</div>' +
-        (!showUsageOutline && item && item.definition ? '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(item.definition) + '</p>' : '') +
-        meaningsHtml +
-        usageOutlineHtml +
-      '</div>';
-    }
-
-    function detailOriginalExternalLexiconLinksHtml(item, strongsNumber) {
-      if (!strongsNumber) {
-        return '';
-      }
-      var blueLetterLabel = detailOriginalUiText('openBlueLetter').replace('{code}', strongsNumber);
-      var stepBibleLabel = detailOriginalUiText('openStepBible').replace('{code}', strongsNumber);
-      var stepUrl = 'https://www.stepbible.org/?q=version=KJV@strong=' + encodeURIComponent(strongsNumber + 'G') + '&clickvocab';
-      return '<span class="original-lexicon-links">' +
-        '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + detailOriginalEscape(stepBibleLabel) + '" href="' + detailOriginalEscape(stepUrl) + '" target="_blank" rel="noopener noreferrer" aria-label="' + detailOriginalEscape(stepBibleLabel) + '"><img class="original-lexicon-icon" src="/static/images/StepBible.png" alt=""></a>' +
-        ((item && item.blueletter_url) ? '<a class="jc-tooltip-host jc-tooltip-immediate" data-jc-tooltip="' + detailOriginalEscape(blueLetterLabel) + '" href="' + detailOriginalEscape(item.blueletter_url) + '" target="_blank" rel="noopener noreferrer" aria-label="' + detailOriginalEscape(blueLetterLabel) + '"><img class="original-lexicon-icon" src="/static/images/BLB.png" alt=""></a>' : '') +
-        '</span>';
-    }
-
-    function detailOriginalSentenceHtml(words, languageCode) {
-      var sentenceClass = languageCode === 'hbo'
-        ? 'detail-inline-original-sentence-words detail-inline-original-language-hbo'
-        : 'detail-inline-original-sentence-words detail-inline-original-language-grc';
-      return '<div class="' + sentenceClass + '">' + (words || []).map(function(word, index) {
-        var tokenText = String((word && (word.sentence_text || word.text)) || '').trim();
-        if (!tokenText) {
-          return '';
-        }
-        var clickable = !!(word && word.clickable);
-        var languageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
-        return '<span class="detail-inline-original-token' + languageClass + '" data-word-index="' + $('<span>').text(String(index)).html() + '" data-clickable="' + (clickable ? '1' : '0') + '"' + (clickable ? ' tabindex="0" role="button"' : '') + '>' + $('<span>').text(tokenText).html() + '</span>';
-      }).join('') + '</div>';
-    }
-
-    function detailOriginalRenderWordDetail($panel, details, versePayload, wordIndex) {
-      var words = (versePayload && versePayload.words) || [];
-      var selectedWord = (wordIndex >= 0 && wordIndex < words.length) ? words[wordIndex] : null;
-      var $detail = $panel.find('.detail-inline-original-detail-body');
-      if (!$detail.length) {
-        return;
-      }
-
-      if (!selectedWord || !selectedWord.clickable) {
-        $detail.html('<p class="mb-0 text-muted detail-inline-original-translatable">' + detailOriginalEscape(detailOriginalUiText('hoverPrompt')) + '</p>');
-        return;
-      }
-
-      var html = '<div class="detail-inline-original-meta"><strong>' + detailOriginalEscape(selectedWord.text || '') + '</strong> · ' + detailOriginalEscape(String((versePayload && versePayload.language_label) || '')) + '</div>';
-      if (selectedWord.translation_label) {
-        html += '<p class="mb-2"><small>' + detailOriginalEscape(detailOriginalUiText('directGloss')) + ': ' + detailOriginalEscape(selectedWord.translation_label) + '</small></p>';
-      }
-      if (selectedWord.grammar) {
-        html += '<p class="mb-2"><small>' + detailOriginalEscape(detailOriginalUiText('grammar')) + ': <code>' + detailOriginalEscape(selectedWord.grammar) + '</code></small></p>';
-      }
-
-      if (!selectedWord.has_candidates) {
-        html += '<div class="detail-inline-original-candidate">' +
-          '<div class="detail-inline-original-candidate-head"><strong>' + detailOriginalEscape(detailOriginalUiText('lookupNote')) + '</strong></div>' +
-          '<p class="mb-1 detail-inline-original-translatable">' + detailOriginalEscape(String(selectedWord.detail_note || '')) + '</p>' +
-          (selectedWord.lookup_key ? '<p class="mb-0"><small>' + detailOriginalEscape(detailOriginalUiText('normalizedLookup')) + ': ' + detailOriginalEscape(String(selectedWord.lookup_key)) + '</small></p>' : '') +
-        '</div>';
-        $detail.html(html);
-        detailOriginalMaybeApplyTranslation($panel);
-        return;
-      }
-
-      $.each(selectedWord.candidates || [], function(_, candidate) {
-        var usageHtml = detailOriginalUsageSectionHtml(candidate || {});
-        var rootWordsHtml = ((candidate && candidate.root_words) || []).map(function(rootWord) {
-          return detailOriginalRelatedWordCardHtml(rootWord || {}, false, details);
-        }).join('');
-        var lxxHebrewHtml = ((candidate && candidate.lxx_hebrew_equivalents) || []).map(function(item) {
-          return detailOriginalRelatedWordCardHtml(item || {}, true, details);
-        }).join('');
-        var strongsNumber = String((candidate && candidate.strongs_number) || '');
-        var strongsUrl = detailOriginalStrongDetailUrl(details, strongsNumber);
-        html += '<div class="detail-inline-original-candidate">' +
-          '<div class="detail-inline-original-candidate-head">' +
-          (strongsUrl ? '<a class="detail-inline-original-strong-link" href="' + detailOriginalEscape(strongsUrl) + '"><strong>' + detailOriginalEscape(strongsNumber) + '</strong></a>' : '<strong>' + detailOriginalEscape(strongsNumber) + '</strong>') +
-          ((candidate && candidate.lemma) ? '<span class="' + originalTextShared().hebrewLemmaClass(candidate, selectedWord.word_components) + '">' + detailOriginalEscape(candidate.lemma) + '</span>' : '') +
-          ((candidate && candidate.transliteration) ? '<span class="text-muted">' + detailOriginalEscape(candidate.transliteration) + '</span>' : '') +
-          detailOriginalExternalLexiconLinksHtml(candidate, strongsNumber) +
-          '</div>' +
-          usageHtml +
-          ((candidate && candidate.kjv_definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('kjvTranslation')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.kjv_definition) + '</p></div>' : '') +
-          ((candidate && candidate.definition) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('strongsDefinitions')) + '</small><p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.definition) + '</p></div>' : '') +
-          ((rootWordsHtml || (candidate && candidate.derivation)) ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('rootWord')) + '</small>' + rootWordsHtml + (!rootWordsHtml && candidate && candidate.derivation ? '<p class="mb-0 detail-inline-original-translatable">' + detailOriginalEscape(candidate.derivation) + '</p>' : '') + '</div>' : '') +
-          (lxxHebrewHtml ? '<div class="detail-inline-original-detail-section"><small class="font-weight-bold d-block mb-1">' + detailOriginalEscape(detailOriginalUiText('lxxEquivalent')) + '</small>' + lxxHebrewHtml + '</div>' : '') +
-          '</div>';
-      });
-
-      $detail.html(html);
-      detailOriginalMaybeApplyTranslation($panel);
-    }
-
-    function detailOriginalSyncSelection($panel, wordIndex) {
-      $panel.find('.detail-inline-original-token, .detail-inline-original-word-btn, .detail-inline-original-word-translation').removeClass('active');
-      $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').addClass('active');
-      $panel.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
-      $panel.find('.detail-inline-original-word-translation[data-word-index="' + wordIndex + '"]').addClass('active');
-    }
-
-    function detailOriginalSyncHover($panel, wordIndex, hovering) {
-      $panel.find('.detail-inline-original-token[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
-      $panel.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
-      $panel.find('.detail-inline-original-word-translation[data-word-index="' + wordIndex + '"]').toggleClass('is-hovered', !!hovering);
-    }
-
-    function detailOriginalApplyTranslation($panel) {
-      $panel.find('.detail-inline-original-translatable').each(function() {
-        var $el = $(this);
-        var originalText = String($el.data('originalText') || $el.text() || '');
-        if (!$el.data('originalText')) {
-          $el.data('originalText', originalText);
-        }
-        translateCommentaryText(originalText, function(translated) {
-          $el.html(originalTextShared().hebrewStemLabelHtml(translated || originalText));
-        });
-      });
-    }
-
-    function detailOriginalRevertTranslation($panel) {
-      $panel.find('.detail-inline-original-translatable').each(function() {
-        var $el = $(this);
-        if ($el.data('originalText')) {
-          $el.html(originalTextShared().hebrewStemLabelHtml(String($el.data('originalText'))));
-        }
-      });
-    }
-
-    function detailOriginalMaybeApplyTranslation($panel) {
-      if ($panel.data('detailOriginalTranslated')) {
-        detailOriginalApplyTranslation($panel);
-      }
-    }
-
-    function detailOriginalVerseHtml(details, referenceLabel, verseKey, versePayload) {
-      var firstWordIndex = detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []);
-      var languageCode = String((versePayload && versePayload.language_code) || '');
-      var uiLang = getCommentaryLanguage();
-      var translateButtonHtml = uiLang !== 'en'
-        ? '<button type="button" class="btn btn-sm btn-outline-secondary detail-inline-original-translate-btn mt-1 mb-1"><i class="fa fa-language mr-1" aria-hidden="true"></i><span class="detail-inline-original-translate-label">' + detailOriginalEscape(detailOriginalUiText('translate')) + '</span></button>'
-        : '';
-      var wordButtons = ((versePayload && versePayload.words) || []).map(function(word, index) {
-        if (!word || !word.clickable) {
-          var punctLanguageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
-          return '<span class="detail-inline-original-word-item' + (languageCode === 'hbo' ? ' detail-inline-original-word-item-hbo' : '') + '"><span class="detail-inline-original-word-strongs"></span><span class="detail-inline-original-word-punct' + punctLanguageClass + '">' + $('<span>').text(String((word && word.text) || '')).html() + '</span><span class="detail-inline-original-word-translation detail-inline-original-word-translation-empty" data-word-index="' + $('<span>').text(String(index)).html() + '"></span></span>';
-        }
-        var strongsLabel = String((((word.candidates || [])[0] || {}).strongs_number) || '');
-        var languageClass = languageCode === 'hbo' ? ' detail-inline-original-language-hbo' : ' detail-inline-original-language-grc';
-        return '<span class="detail-inline-original-word-item">' +
-          '<span class="detail-inline-original-word-strongs">' + $('<span>').text(strongsLabel).html() + '</span>' +
-          '<button type="button" class="detail-inline-original-word-btn' + languageClass + (index === firstWordIndex ? ' active' : '') + (word.has_candidates ? '' : ' detail-inline-original-word-btn-missing') + '" data-word-index="' + $('<span>').text(String(index)).html() + '" title="' + $('<span>').text(detailOriginalWordTitle(word)).html() + '">' + $('<span>').text(String(word.text || '')).html() + '</button>' +
-          '<span class="detail-inline-original-word-translation' + (detailOriginalWordTranslation(word) ? '' : ' detail-inline-original-word-translation-empty') + '" data-word-index="' + $('<span>').text(String(index)).html() + '">' + $('<span>').text(detailOriginalWordTranslation(word)).html() + '</span>' +
-          '</span>';
-      }).join('');
-
-      return '<div class="detail-inline-original-verse" data-verse="' + $('<span>').text(String(verseKey)).html() + '">' +
-        '<div class="row">' +
-          '<div class="col-lg-6 mb-2">' +
-            '<div class="detail-inline-original-sentence">' +
-              '<div class="detail-inline-original-head"><span class="detail-inline-original-title">' + detailOriginalEscape(detailOriginalUiText('sourceTitle')) + ' · ' + $('<span>').text(referenceLabel).html() + '</span><span class="badge badge-light border">' + detailOriginalEscape(detailOriginalUiText('hoverWords')) + '</span></div>' +
-              '<div class="detail-inline-original-source-badge">' + detailOriginalEscape(String((versePayload && versePayload.source_bible_name) || '')) + '</div>' +
-              detailOriginalSentenceHtml((versePayload && versePayload.words) || [], languageCode) +
-              '<div class="detail-inline-original-word-cloud">' + (wordButtons || '<p class="mb-0 text-muted">' + detailOriginalEscape(detailOriginalUiText('noWordData')) + '</p>') + '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="col-lg-6 mb-2">' +
-            '<div class="detail-inline-original-detail">' +
-              '<div class="detail-inline-original-head"><span class="detail-inline-original-title">' + detailOriginalEscape(detailOriginalUiText('detailTitle')) + '</span>' + translateButtonHtml + '</div>' +
-              '<div class="detail-inline-original-detail-body"></div>' +
-            '</div>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }
-
-    function detailOriginalApplyPayload($panel, details, payload) {
-      var verses = (payload && payload.verses) ? payload.verses : {};
-      var html = '<div class="detail-inline-original-grid"></div>';
-      $panel.html(html);
-      var $grid = $panel.find('.detail-inline-original-grid');
-      Object.keys(verses).sort(function(a, b) { return Number(a) - Number(b); }).forEach(function(verseKey) {
-        var referenceLabel = scripturaBookLabelFromKey(details.book) + ' ' + details.chapter + ':' + verseKey;
-        var versePayload = verses[verseKey] || {};
-        var verseDetails = $.extend({}, details, {
-          startVerse: Number(verseKey),
-          endVerse: Number(verseKey)
-        });
-        var $verse = $(detailOriginalVerseHtml(verseDetails, referenceLabel, verseKey, versePayload));
-        $verse.data('verseDetails', verseDetails);
-        $verse.data('versePayload', versePayload);
-        $grid.append($verse);
-        detailOriginalRenderWordDetail($verse, verseDetails, versePayload, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
-        detailOriginalSyncSelection($verse, detailOriginalFirstSelectableWordIndex((versePayload && versePayload.words) || []));
-      });
-    }
-
-    function fetchDetailOriginalText(details, onDone) {
-      var cacheKey = detailOriginalCacheKey(details);
-      if (detailOriginalTextCache[cacheKey]) {
-        onDone(detailOriginalTextCache[cacheKey]);
-        return;
-      }
-
-      var originalTextUrl = getOriginalTextUrl();
-      if (!originalTextUrl) {
-        onDone({ verses: {} });
-        return;
-      }
-
-      var merged = { verses: {} };
-      var chunks = detailOriginalChunks(details);
-
-      function fetchChunk(index) {
-        if (index >= chunks.length) {
-          detailOriginalTextCache[cacheKey] = merged;
-          onDone(merged);
-          return;
-        }
-
-        var chunk = chunks[index];
-        $.ajax({
-          type: 'POST',
-          url: originalTextUrl,
-          timeout: 20000,
-          dataType: 'json',
-          data: {
-            csrfmiddlewaretoken: getCsrfToken(),
-            book: chunk.book,
-            chapter: chunk.chapter,
-            start_verse: chunk.startVerse,
-            end_verse: chunk.endVerse
-          },
-          success: function(payload) {
-            $.extend(merged.verses, (payload && payload.verses) || {});
-            fetchChunk(index + 1);
-          },
-          error: function() {
-            fetchChunk(index + 1);
+        function renderChapter(endVerse) {
+          var state = {
+            book: details.book,
+            bookLabel: scripturaBookLabelFromKey(details.book),
+            chapter: chapter,
+            startVerse: startVerse,
+            endVerse: endVerse,
+            bibles: bibles
+          };
+          var $chapter = $('<div class="waj-study-panels"></div>').appendTo($panel);
+          var controller = window.WAJBibleStudyPanels.create($chapter, detailStudyPanelOptions($chapter, state));
+          controllers.push(controller);
+          for (var verse = startVerse; verse <= endVerse; verse += 1) {
+            $('<div class="bible-study-reference-chip"></div>')
+              .text(state.bookLabel + ' ' + chapter + ':' + verse).appendTo($chapter);
+            $chapter.append(controller.bibleStudyOriginalPanelsHtml(state, verse));
           }
-        });
-      }
+          controller.fetchBibleStudyOriginalRange(state, function(payload, errorMessage) {
+            if (!payload) {
+              $panel.data('studyOriginalLoaded', false);
+              $chapter.empty().append($('<p class="text-danger" role="alert"></p>').text(errorMessage));
+              return;
+            }
+            controller.applyBibleStudyOriginalPayloadToDom(state, payload);
+            if (chapter < endChapter) {
+              loadChapter(chapter + 1);
+            }
+          });
+        }
 
-      fetchChunk(0);
+        if (chapter === endChapter) {
+          renderChapter(Number(details.endVerse || details.startVerse));
+        } else {
+          $.ajax({
+            url: String($('body').data('bible-study-chapter-meta-url')),
+            dataType: 'json',
+            data: { book: details.book, chapter: chapter },
+            success: function(payload) {
+              if (!payload || !Number(payload.max_verse)) {
+                $panel.data('studyOriginalLoaded', false);
+                console.error('Missing chapter length for original text:', details.book, chapter);
+                $panel.append($('<p class="text-danger" role="alert"></p>').text(uiMessage('could_not_load_verse_text')));
+                return;
+              }
+              renderChapter(Number(payload.max_verse));
+            },
+            error: function(xhr) {
+              $panel.data('studyOriginalLoaded', false);
+              console.error('Failed to load chapter length:', xhr.status, xhr.responseText);
+              $panel.append($('<p class="text-danger" role="alert"></p>').text(uiMessage('could_not_load_verse_text')));
+            }
+          });
+        }
+      }
+      loadChapter(Number(details.chapter));
     }
+
+    $(document).on('click', '.detail-original-text-btn', function() {
+      var $btn = $(this);
+      var $context = $btn.closest('li, .our-services-text');
+      var $panel = $context.find('.bible-study-inline-original-panel').first();
+      var details = extractBibleStudyDetails($context);
+      if (!$panel.length || !details || !details.book) {
+        console.error('Missing reference or original-text panel for Bible Study button');
+        return;
+      }
+      var opening = !$panel.hasClass('is-open');
+      setCommentaryButtonActive($btn, opening);
+      $btn.attr('aria-expanded', String(opening));
+      $panel.toggleClass('is-open', opening).toggle(opening);
+      if (opening && !$panel.data('studyOriginalLoaded')) {
+        $panel.data('studyOriginalLoaded', true);
+        loadDetailStudyOriginal($panel, details);
+      }
+    });
 
     $(document).on('click', '.scriptura-commentary-btn', function() {
       var $btn = $(this);
@@ -3154,34 +2842,6 @@ $(document).ready(function(){
       });
     });
 
-    $(document).on('click', '.detail-original-text-btn', function() {
-      var $btn = $(this);
-      var details = extractBibleStudyDetails($btn.closest('li, .our-services-text'));
-      var $panel = $btn.closest('li').find('.detail-inline-original-panel').first();
-      if (!$panel.length) {
-        $panel = $btn.closest('.our-services-text').find('.detail-inline-original-panel').first();
-      }
-      if (!$panel.length || !details.book) {
-        return;
-      }
-
-      if ($panel.hasClass('is-open')) {
-        setCommentaryButtonActive($btn, false);
-        $panel.removeClass('is-open').slideUp(200);
-        return;
-      }
-
-      setCommentaryButtonActive($btn, true);
-      $panel.addClass('is-open').html(commentarySpinnerHtml('api', uiMessage('loading_commentary'))).slideDown(200);
-      fetchDetailOriginalText(details, function(payload) {
-        if (!payload || !payload.verses || Object.keys(payload.verses).length === 0) {
-          $panel.html('<p class="mb-0"><em>' + uiMessage('could_not_load_verse_text') + '</em></p>');
-          return;
-        }
-        detailOriginalApplyPayload($panel, details, payload);
-      });
-    });
-
     $(document).on('click', '.commentary-original-toggle', function(event) {
       event.preventDefault();
       var $btn = $(this);
@@ -3230,81 +2890,6 @@ $(document).ready(function(){
       $btn.data('showingOriginal', !showingOriginal);
     });
 
-    $(document).on('mouseenter focus', '.detail-inline-original-word-btn', function() {
-      var $btn = $(this);
-      var wordIndex = Number($btn.data('wordIndex'));
-      detailOriginalSyncHover($btn.closest('.detail-inline-original-verse'), wordIndex, true);
-    });
-
-    $(document).on('mouseleave blur', '.detail-inline-original-word-btn', function() {
-      var $btn = $(this);
-      var wordIndex = Number($btn.data('wordIndex'));
-      detailOriginalSyncHover($btn.closest('.detail-inline-original-verse'), wordIndex, false);
-    });
-
-    $(document).on('click', '.detail-inline-original-word-btn', function() {
-      var $btn = $(this);
-      var wordIndex = Number($btn.data('wordIndex'));
-      var $verse = $btn.closest('.detail-inline-original-verse');
-      var versePayload = $verse.data('versePayload') || {};
-      var verseDetails = $verse.data('verseDetails') || {};
-
-      $verse.find('.detail-inline-original-word-btn').removeClass('active');
-      $btn.addClass('active');
-      detailOriginalSyncSelection($verse, wordIndex);
-      detailOriginalRenderWordDetail($verse, verseDetails, versePayload, wordIndex);
-    });
-
-    $(document).on('mouseenter focus', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function() {
-      var $target = $(this);
-      detailOriginalSyncHover($target.closest('.detail-inline-original-verse'), Number($target.data('wordIndex')), true);
-    });
-
-    $(document).on('mouseleave blur', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function() {
-      var $target = $(this);
-      detailOriginalSyncHover($target.closest('.detail-inline-original-verse'), Number($target.data('wordIndex')), false);
-    });
-
-    $(document).on('click', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function(event) {
-      event.preventDefault();
-      var $target = $(this);
-      var wordIndex = Number($target.data('wordIndex'));
-      var $verse = $target.closest('.detail-inline-original-verse');
-      var versePayload = $verse.data('versePayload') || {};
-      var verseDetails = $verse.data('verseDetails') || {};
-
-      $verse.find('.detail-inline-original-word-btn').removeClass('active');
-      $verse.find('.detail-inline-original-word-btn[data-word-index="' + wordIndex + '"]').addClass('active');
-      detailOriginalSyncSelection($verse, wordIndex);
-      detailOriginalRenderWordDetail($verse, verseDetails, versePayload, wordIndex);
-    });
-
-    $(document).on('keydown', '.detail-inline-original-word-translation[data-word-index], .detail-inline-original-token[data-clickable="1"]', function(event) {
-      if (event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      event.preventDefault();
-      $(this).trigger('click');
-    });
-
-    $(document).on('click', '.detail-inline-original-translate-btn', function() {
-      var $btn = $(this);
-      var $panel = $btn.closest('.detail-inline-original-verse');
-      var isTranslated = !!$panel.data('detailOriginalTranslated');
-      var nextTranslated = !isTranslated;
-      $panel.data('detailOriginalTranslated', nextTranslated);
-      $btn.toggleClass('active', nextTranslated);
-      $btn.find('.detail-inline-original-translate-label').text(nextTranslated ? detailOriginalUiText('showOriginal') : detailOriginalUiText('translate'));
-      if (nextTranslated) {
-        detailOriginalApplyTranslation($panel);
-      } else {
-        detailOriginalRevertTranslation($panel);
-      }
-    });
-
-    // ----- Sefaria Jewish Commentary END ------ \\
-
-    // Hide Commentary buttons when no suitable Scriptura commentator exists for the reference book.
     $('.scriptura-commentary-btn').each(function() {
       var $button = $(this);
       var scripturaBook = String($button.data('scriptura-book') || '').trim();

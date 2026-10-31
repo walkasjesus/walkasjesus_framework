@@ -564,7 +564,7 @@ $(document).ready(function(){
 
   function cleanVerseReferenceLabel(rawText) {
     var text = $.trim(String(rawText || '').replace(/\s+/g, ' '));
-    text = text.replace(/^(study this passage on the bible study page|bestudeer deze passage op de bijbelstudie-pagina)\s*:?\s*/i, '');
+    text = text.replace(/^(study this passage on the bible study page|bestudeer deze passage op de bijbelstudie-?pagina|load bible text|bijbeltekst ophalen)\s*:?\s*/i, '');
     text = text.replace(/^:\s*/, '');
     return $.trim(text);
   }
@@ -2093,7 +2093,7 @@ $(document).ready(function(){
 
     function extractBibleStudyDetails($context) {
       var $scriptura = $context.find('.scriptura-commentary-btn').first();
-      var referenceLabel = $.trim($context.find('b').first().text());
+      var referenceLabel = $.trim($context.find('b, strong').first().text());
       var parsedReference = parseBibleStudyReference(referenceLabel);
       if (parsedReference && parsedReference.book) {
         return parsedReference;
@@ -2150,7 +2150,7 @@ $(document).ready(function(){
 
         $context.data('jcBibleStudyEnhanced', true);
 
-        var $reference = $context.find('b').first();
+        var $reference = $context.find('b, strong').first();
         var referenceLabel = $.trim($reference.text());
         var $verseTarget = $context.find('.bible-verse-load-link, .bible-verse-text').first();
         var hasScripturaForBook = availableScripturaCommentatorsForBook(details.book).length > 0;

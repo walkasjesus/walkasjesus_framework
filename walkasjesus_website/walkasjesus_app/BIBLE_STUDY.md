@@ -13,12 +13,31 @@ text is linked word-by-word to the Hebrew/Greek.
 | Page view + AJAX endpoints | [views/bible_study_view.py](views/bible_study_view.py) |
 | Strong's / original-language engine | [lib/strongs_service.py](lib/strongs_service.py) |
 | Page template | [templates/bible_study/bible_study.html](templates/bible_study/bible_study.html) |
-| All client logic | [templates/bible_study/_bible_study_script.html](templates/bible_study/_bible_study_script.html) |
-| All styling | [templates/bible_study/_bible_study_styles.html](templates/bible_study/_bible_study_styles.html) |
+| Passage selection, translations and word alignment | [templates/bible_study/_bible_study_script.html](templates/bible_study/_bible_study_script.html) |
+| Shared original-language renderer, word interactions and occurrence previews | [templates/bible_study/_study_panels_script.html](templates/bible_study/_study_panels_script.html) |
+| Shared passage-preview dialog | [templates/bible_study/_study_reference_preview.html](templates/bible_study/_study_reference_preview.html) |
+| Shared commentary loading/rendering and detail-page adapters | [../static/js/customjs.js](../static/js/customjs.js) |
+| Bible Study and shared panel styling | [templates/bible_study/_bible_study_styles.html](templates/bible_study/_bible_study_styles.html) |
 
 The page renders the first passage server-side, then everything else (changing passage,
 translations, toggles, panels) happens through AJAX so the API.Bible quota is only spent on
 verses that are actually shown.
+
+### Shared panels on other pages
+
+Maimonides, steps, Law of Messiah and lessons use the same commentary handlers and
+`WAJBibleStudyPanels` original-language controller as Bible Study. The base template
+loads the shared script, preview template and styles once. Detail-page adapters only
+provide the passage, selected translation and navigation destination; they do not
+render their own word details.
+
+Each original-language controller scopes DOM queries and interactions to its passage
+root, so repeated verse numbers in different passages cannot affect one another.
+Long original-language ranges are fetched progressively using the server's returned
+verse range; cross-chapter references get a separate controller per chapter.
+Occurrence buttons open the shared passage preview in the selected translation.
+Its study button and Strong's links navigate to Bible Study on detail pages, while
+the Bible Study page keeps its existing in-page passage navigation.
 
 ### Endpoints
 
@@ -31,11 +50,27 @@ verses that are actually shown.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Proxy for API.Bible full-text search |
 
+The shipped primary KJV chapter index covers all 1,189 chapters, including Psalm 77
+and three-digit Psalm numbers. Rebuild it without spending API quota using the bundled
+tagged KJV data:
+
+```sh
+python manage.py build_bible_study_chapter_index --local-kjv
+```
+
+Translation-specific chapter metadata takes precedence over this primary fallback.
+Explicit passage ranges can also be submitted before autocomplete metadata has loaded.
+API.Bible text markers such as `[1-4]` (for example BGT Titus 1:1-4) are treated as a
+single combined text block, not discarded or artificially split into separate verses.
+When requesting an individual member of such a group, the API's combined text is shown.
+
 ### Query/state parameters
 
 `book`, `chapter`, `start_verse`, `end_verse`, `bible_id` (repeatable, up to 4 columns),
 `show_original`, `combine_verses`. `combine_verses=1` shows one block per translation;
 `combine_verses=0` shows one card per verse — **word linking only runs in this mode**.
+The info icon next to the "Combine verses" checkbox (`.bs-combine-help`, CSS-only tooltip with
+`white-space: pre-line`) explains this on/off difference to users; keep it in sync when the modes change.
 
 ---
 
@@ -65,7 +100,11 @@ the pinned revision and print the data version currently in use.
 ## 3. The original-language panel
 
 `original_text_payload(book, chapter, verse)` in `lib/strongs_service.py` builds one payload per
-verse, cached 30 days under `bible_study:original:v20:…`:
+verse, cached 30 days under `bible_study:original:v21:…`:
+
+TAHOT references use the primary English/NRSV verse numbering, with differing Hebrew
+numbers in parentheses (for example `Psa.51.7(51.9)`). Word lookup and occurrence links
+use the primary reference; the parenthetical annotation must not prevent a match.
 
 1. Scan the TAHOT/TAGNT file for the book and pull every row whose reference matches the verse.
 2. `_parse_stepbible_row` extracts per original word:
@@ -114,9 +153,25 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The existing **Translate** button still machine-translates lexicon definitions. Translation requests
   are versioned and queued sequentially to avoid provider rate-limit bursts.
 
-Cached 30 days under `bible_study:original-local:v10:<source>:<book>:<ch>:<v>`.
+Cached 30 days under `bible_study:original-local:v11:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
+
+Hebrew word surfaces use the dark original-text brown (`#3d2f08`) for the tagged lexical root/stem component and gray
+for tagged prefixes, suffixes and grammatical components. This applies to the verse
+sentence, word buttons and selected-word details; a legend explains the colors.
+Coloring follows STEPBible component boundaries, not a guess based on individual
+letters. If the components do not cover the displayed word exactly, it stays
+unsegmented. Vowel points, accents, punctuation and copyable text are preserved.
+The lexical component is not necessarily a reconstructed three-consonant root.
+Hebrew lemmas beside Strong's numbers use the same colors in Bible Study and inline
+details: lexical lemmas are brown, tagged service/grammatical lemmas are gray.
+
+Strong's usage outlines explain the Hebrew verb stems Qal, Niphal, Piel, Pual,
+Hiphil, Hophal and Hithpael/Hitpael in hover/focus tooltips. Explanations are Dutch
+for the Dutch interface and English otherwise, and describe typical functions
+rather than a fixed translation. The same helper is used in inline Strong's
+details and retains tooltips when definitions are translated or restored.
 
 For Hebrew TAHOT rows, column 11 encodes the tagged pieces of a word, for example
 `H9003=ב=in/{H9036=Op2m=you}`. The parser aligns those pieces with the slash-separated Hebrew
@@ -227,7 +282,7 @@ A translation that is neither tagged nor English gets no alignment at all; the e
 `supported: false` and the verse renders as plain text.
 
 Both results are cached 30 days under
-`bible_study:alignment:v4:<source>:<scoring>:<book>:<ch>:<v>:<sha>`.
+`bible_study:alignment:v5:<source>:<scoring>:<book>:<ch>:<v>:<sha>`.
 
 ---
 
@@ -307,9 +362,9 @@ CrossWire also ships tagged German/French/Spanish/Russian editions if those lang
 | Key prefix | TTL | Contents |
 | --- | --- | --- |
 | `bible_study:v1:…` | `BIBLE_API_CACHE_TIMEOUT_SECONDS` (6 months) | verse text per translation |
-| `bible_study:original:v15:…` | 30 days | original-language payload per verse |
-| `bible_study:original-local:v1:…` | 30 days | same payload enriched with interface-language glosses |
-| `bible_study:alignment:v4:…` | 30 days | translated↔original token mapping |
+| `bible_study:original:v21:…` | 30 days | original-language payload per verse |
+| `bible_study:original-local:v11:…` | 30 days | same payload enriched with interface-language glosses |
+| `bible_study:alignment:v5:…` | 30 days | translated↔original token mapping |
 | `bible_study:search:…` | 7 days | API.Bible search results |
 
 Bump the `vNN` in the cache key whenever the shape of a payload changes, otherwise stale entries

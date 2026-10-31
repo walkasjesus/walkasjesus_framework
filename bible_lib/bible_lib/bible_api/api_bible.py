@@ -61,18 +61,17 @@ class ApiBible(Bible):
 
         # Format when using content-type=text is like [1] text... [2] ... [1] ...
         normalized_text = re.sub(r'\s+', ' ', verses_text).replace('\n', '')
-        split_verses = normalized_text.split('[')
+        markers = list(re.finditer(r'\[(\d+)(?:\s*[-\u2013\u2014]\s*\d+)?\]\s*', normalized_text))
 
-        # extract verse number and texts
-        for verse in split_verses:
-            capture_groups = re.match(r'(\d+)]\s+(.+)', verse)
-            if capture_groups:
-                current_verse = int(capture_groups.group(1))
-                text = capture_groups.group(2).strip()
-
-                if current_verse == 1:
-                    current_chapter += 1
-                parsed_verses.append(Verse(book, current_chapter, current_verse, text))
+        for index, marker in enumerate(markers):
+            current_verse = int(marker.group(1))
+            end = markers[index + 1].start() if index + 1 < len(markers) else len(normalized_text)
+            text = normalized_text[marker.end():end].strip()
+            if not text:
+                continue
+            if current_verse == 1 and parsed_verses:
+                current_chapter += 1
+            parsed_verses.append(Verse(book, current_chapter, current_verse, text))
 
         return parsed_verses
 

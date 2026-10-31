@@ -7,7 +7,6 @@
 {% block title_content %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
 {% block meta_description %}{% trans 'Compare multiple Bible translations side by side, with verse commentary from David Stern, John Lightfoot, King, and Rabbinical Jewish Commentaries.' %}{% endblock %}
 {% block og_title %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
-{% block extra_head_assets %}{% include "bible_study/_bible_study_styles.html" %}{% endblock %}
 
 {% block content %}
 <section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
@@ -58,7 +57,7 @@
 
         <hr class="my-3">
 
-        <h4 class="mb-3">{% trans 'Settings' %}</h4>
+        <h4 class="mb-3" id="bs-settings-heading">{% trans 'Settings' %}</h4>
         <form method="get" action="" id="bibleStudyForm" class="law-filter-form">
           {# Hidden state inputs — populated by the smart passage search field below #}
           <input type="checkbox" id="bs-show-original" name="show_original" value="1"{% if show_original_text %} checked{% endif %} style="position:absolute;opacity:0;pointer-events:none;">
@@ -99,7 +98,14 @@
               <div class="bs-passage-mode-toggle">
                 <div class="form-check mb-0">
                   <input class="form-check-input" type="checkbox" id="bs-combine-verses" name="combine_verses" value="1" checked>
-                  <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses for easier reading (turn off to divide Bible texts by verse for thorough word study).' %}</label>
+                  <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses into one continuous text' %} {% trans '(turn off for verse-by-verse word study)' %}</label>
+                  {# Line breaks inside data-jc-tooltip are kept (white-space: pre-line) to separate the on/off explanation. #}
+                  <span class="bs-combine-help jc-tooltip-host jc-tooltip-immediate" tabindex="0"
+                        data-jc-tooltip="{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %}
+
+{% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %}
+
+{% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}</span></span>
                 </div>
               </div>
             </div>
@@ -389,33 +395,6 @@
     </div>
   </div>
   {% endif %}
-  </div>
-
-  <div class="bs-reference-preview-overlay" id="bs-reference-preview" hidden>
-    <div class="bs-reference-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="bs-reference-preview-title">
-      <button type="button" class="bs-reference-preview-close" data-preview-close="1" aria-label="{% trans 'Close passage preview' %}">&times;</button>
-      <div class="bs-reference-preview-body">
-        <span class="bible-study-translation-title" id="bs-reference-preview-title">{% trans 'Passage preview' %}</span>
-        <h5 class="bs-reference-preview-reference"></h5>
-        <p class="small bs-reference-preview-translation"></p>
-        <div class="bs-reference-preview-content"></div>
-        <div class="bs-reference-preview-actions">
-          <button type="button" class="btn btn-sm commentary-action-btn bible-study-preview-study-btn" data-bible-study-reference="">
-            <i class="fa fa-book mr-1"></i> {% trans 'Study this passage' %}
-          </button>
-          <small class="text-muted">{% trans 'The preview uses the first selected translation.' %}</small>
-        </div>
-        <div class="bs-reference-preview-occurrences" hidden>
-          <hr class="my-3">
-          <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
-            <span class="bs-original-detail-label mb-0 bs-occurrences-section-label">{% trans 'Occurrences' %}</span>
-            <span class="small text-muted bs-occurrences-summary"></span>
-          </div>
-          <div class="bs-occurrences-chunks mb-2"></div>
-          <div class="bs-occurrences-list"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="bible-study-sources-card">

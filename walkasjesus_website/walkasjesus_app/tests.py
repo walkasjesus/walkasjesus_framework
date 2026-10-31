@@ -16,6 +16,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.db import IntegrityError
 from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
+from django.template.loader import get_template, render_to_string
 from django.urls import reverse
 from django.utils import translation
 
@@ -35,6 +36,8 @@ from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.strongs_service import (
     _candidate_payload,
+    _step_reference_to_display,
+    _stepbible_rows_for_verse,
     english_alignment_payload,
     localized_original_text_payload,
     original_text_payload,
@@ -788,13 +791,49 @@ class LocalStatenvertalingBibleTestCase(SimpleTestCase):
 
 
 class StrongsServiceFallbackTestCase(TestCase):
-    def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self):
+    @patch('walkasjesus_app.lib.strongs_service._stepbible_rows_for_verse', return_value=[])
+    def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self, _mock_rows):
         payload = original_text_payload('Psalms', 3, 2)
 
         self.assertGreater(len(payload['words']), 0)
         self.assertTrue(all(not word['clickable'] for word in payload['words']))
         self.assertTrue(all(not word['has_candidates'] for word in payload['words']))
         self.assertTrue(all(not word['detail_note'] for word in payload['words']))
+
+    def test_step_references_preserve_primary_numbering_with_hebrew_annotations(self):
+        for source, expected in (
+            ('Psa.51.7(51.9)', 'Psa.51:7'),
+            ('Psa.3.2(3.3)', 'Psa.3:2'),
+            ('Mal.4.1(3.19)', 'Mal.4:1'),
+            ('Gen.1.1', 'Gen.1:1'),
+            ('Jhn.3.16', 'Jhn.3:16'),
+        ):
+            with self.subTest(reference=source):
+                self.assertEqual(_step_reference_to_display(source), expected)
+
+    @patch('walkasjesus_app.lib.strongs_service.BibleTranslation')
+    def test_psalm_51_verses_have_tagged_hebrew_and_strongs_details(self, mock_bibles):
+        mock_bibles.return_value.get.return_value = SimpleNamespace(
+            name='Westminster Leningrad Codex',
+            verses=lambda *args: '',
+        )
+        for verse in range(7, 12):
+            with self.subTest(verse=verse):
+                rows = _stepbible_rows_for_verse('Psalms', 51, verse)
+                self.assertGreater(len(rows), 0)
+                self.assertTrue(all(row.startswith(f'Psa.51.{verse}(') for row in rows))
+                payload = original_text_payload('Psalms', 51, verse)
+                self.assertGreater(len(payload['words']), 0)
+                self.assertTrue(any(word['clickable'] and word['has_candidates'] for word in payload['words']))
+                self.assertTrue(all(word['tagging_source'] == 'STEPBible' for word in payload['words']))
+                self.assertIsNotNone(payload['selected_word'])
+                self.assertTrue(payload['selected_word']['grammar'])
+        verse_seven = original_text_payload('Psalms', 51, 7)
+        self.assertTrue(any(
+            candidate['strongs_number'] == 'H0231'
+            for word in verse_seven['words']
+            for candidate in word['candidates']
+        ))
 
     def test_candidate_payload_exposes_structured_detail_sections(self):
         candidate = _candidate_payload('G5083', 'greek', {})
@@ -1662,6 +1701,43 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
         self.assertEqual(payload['default_bible_id'], 'jnt-stern-en')
 
 
+class BibleStudySharedPanelsTestCase(SimpleTestCase):
+    def test_shared_original_renderer_and_preview_compile_and_render(self):
+        script = render_to_string('bible_study/_study_panels_script.html')
+        preview = render_to_string('bible_study/_study_reference_preview.html')
+        self.assertEqual(script.count('function renderOriginalWordDetail('), 1)
+        self.assertIn('hebrewWordStudyHtml(selectedWord)', script)
+        self.assertIn('bibleStudyLocalUsageHtml(candidate', script)
+        self.assertIn("$root.find('.bible-study-original-shell", script)
+        self.assertIn('fetchNext(nextVerse)', script)
+        self.assertIn('waj-reference-preview-template', preview)
+        self.assertIn('bs-occurrences-chunks', preview)
+
+    def test_all_page_templates_load_the_shared_panels_through_base(self):
+        base = get_template('base.html').template.source
+        self.assertEqual(base.count('include "bible_study/_study_panels_script.html"'), 1)
+        self.assertEqual(base.count('include "bible_study/_study_reference_preview.html"'), 1)
+        for name in (
+            'bible_study/bible_study.html',
+            'maimonides/listing.html',
+            'commandments/detail.html',
+            'law_of_messiah/detail.html',
+            'lessons/detail.html',
+        ):
+            with self.subTest(template=name):
+                source = get_template(name).template.source
+                self.assertIn('{% extends "base.html" %}', source)
+
+    def test_page_scripts_do_not_keep_a_second_original_renderer(self):
+        page_script = get_template('bible_study/_bible_study_script.html').template.source
+        detail_script = (Path(settings.BASE_DIR) / 'static/js/customjs.js').read_text()
+        self.assertIn('window.WAJBibleStudyPanels.create', page_script)
+        self.assertIn('window.WAJBibleStudyPanels.create', detail_script)
+        self.assertNotIn('function renderOriginalWordDetail', page_script)
+        self.assertNotIn('detailOriginalRenderWordDetail', detail_script)
+        self.assertNotIn('detail-inline-original', detail_script)
+
+
 class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
     databases = {'default'}
 
@@ -1703,6 +1779,8 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
         self.assertIn('https://www.stepbible.org/?q=version=KJV@strong=', html)
         self.assertIn('class="jc-tooltip-host jc-tooltip-immediate"', html)
         self.assertIn('data-jc-tooltip=', html)
+        self.assertEqual(html.count('function renderOriginalWordDetail('), 1)
+        self.assertIn('window.WAJBibleStudyPanels.create', html)
 
     @patch('walkasjesus_app.views.user_preferences.BibleTranslation')
     def test_bible_translations_endpoint_returns_bibles_for_each_language(self, mock_bible_translation):

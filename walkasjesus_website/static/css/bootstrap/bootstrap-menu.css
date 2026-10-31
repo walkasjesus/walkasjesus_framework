@@ -7,11 +7,13 @@ main{
 }
 
 .floating-menu{
-    border-radius: 100px;
+    background: #fffdf7;
+    border: 1px solid #d8bd65;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(49,37,15,.16);
     z-index:999;
-    padding-top:10px;
-    padding-bottom:10px;
-    left:0;
+    padding:2px;
+    left:8px;
     position:fixed;
     display:inline-block;
     top:50%;
@@ -23,23 +25,102 @@ main{
 .main-menu{
     margin:0;
     padding-left:0;
-    list-style:none
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:3px
 }
 
 .main-menu li a{
-    display:block;
-    padding:1px;
-    color:#fff;
-    border-radius:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;
+    height:44px;
+    padding:2px;
+    color:#3d2f08;
+    border:1px solid transparent;
+    border-radius:8px;
     position:relative;
-    -webkit-transition:none;
-    -o-transition:none;
-    transition:none
+    transition:background-color .12s ease,border-color .12s ease
 }
 
-.main-menu li a:hover{
-    background:rgba(244,244,244,.8)}
+.main-menu li a:hover,
+.main-menu li a:focus-visible{
+    background:#fff3cf;
+    border-color:#c8a84b;
+}
+
+.main-menu li a:focus-visible{
+    outline:2px solid #94612e;
+    outline-offset:2px
+}
+
+.floating-menu .main-menu img{
+    display:block;
+    width:40px;
+    height:40px;
+    object-fit:contain
+}
+
+.floating-menu .ripple{
+    overflow:visible;
+    transform:none
+}
+
+.floating-menu a[data-jc-tooltip]::before{
+    content:attr(data-jc-tooltip);
+    position:absolute;
+    left:calc(100% + 14px);
+    top:50%;
+    transform:translateY(-50%);
+    width:max-content;
+    max-width:min(240px,calc(100vw - 90px));
+    padding:7px 11px;
+    border:1px solid #d8bd65;
+    border-radius:8px;
+    background:#fffdf7;
+    color:#3d2f08;
+    box-shadow:0 4px 12px rgba(49,37,15,.16);
+    font-size:.8rem;
+    line-height:1.4;
+    text-align:start;
+    white-space:normal;
+    pointer-events:none;
+    visibility:hidden;
+    opacity:0;
+    transition:opacity .12s ease,visibility .12s ease;
+    z-index:1
+}
+
+.floating-menu a[data-jc-tooltip]:hover::before,
+.floating-menu a[data-jc-tooltip]:focus-visible::before{
+    visibility:visible;
+    opacity:1
+}
+
+@media (max-width:575.98px), (max-height:700px){
+    .floating-menu{
+        left:4px;
+        padding:4px
+    }
+    .floating-menu .main-menu{
+        gap:2px
+    }
+    .floating-menu .main-menu li a{
+        width:36px;
+        height:36px
+    }
+    .floating-menu .main-menu img{
+        width:32px;
+        height:32px
+    }
+}
     
+.floating-menu .menu-bg{
+    display:none;
+}
+
 .menu-bg{
     background-image:-webkit-linear-gradient(top,#b1b1b1 0,#413e3e 100%);
     background-image:-o-linear-gradient(top,#b1b1b1 0,#413e3e 100%);

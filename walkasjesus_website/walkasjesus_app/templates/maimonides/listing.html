@@ -78,6 +78,7 @@
                                                 <p class="small text-muted mb-2">{% trans 'When the same Bible passage is used by Maimonides, Meir, and HaChinuch, it is shown once with a shared source label instead of being repeated three times.' %}</p>
                                                 <p class="small text-muted mb-2">{% trans 'Unique Meir or HaChinuch passages still remain visible, together with their source numbering when that helps identify where the reference came from.' %}</p>
                                                 <p class="small text-muted mb-0">{% trans 'Click a verse button to load the Bible text on demand instead of preloading the entire page.' %}</p>
+                                                <p class="small text-muted mt-2 mb-0">{% trans 'Click the scripture reference to open the Bible Study page. Use the buttons beside it for commentary and original text, or load the Bible text below.' %}</p>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <h6 class="font-weight-bold">{% trans 'Sorting and searching' %}</h6>
@@ -167,9 +168,7 @@
                                                     <li class="mb-2">
                                                         <div class="font-weight-bold small mb-1">{{ entry.usage_title }}</div>
                                                         <strong>{{ entry.reference.display_reference }}</strong>
-                                                        <div class="mt-1">
-                                                            <button type="button" class="btn btn-sm btn-outline-secondary commentary-action-btn bible-verse-load-link" data-verse-ref="{{ entry.reference.pk }}"><i class="fa fa-book"></i> {% trans 'Study this passage on the Bible Study page' %}: {{ entry.reference.display_reference }}</button>
-                                                        </div>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary commentary-action-btn bible-verse-load-link" data-verse-ref="{{ entry.reference.pk }}"><i class="fa fa-book" aria-hidden="true"></i> {% trans 'Load Bible text' %}: {{ entry.reference.display_reference }}</button>
                                                         <span class="bible-verse-text" data-verse-ref="{{ entry.reference.pk }}" data-verse-manual="1"></span>
                                                         {% if not entry.reference.is_ot %}
                                                         <div class="mt-1"><button type="button" class="btn btn-sm btn-outline-secondary sefaria-commentary-btn scriptura-commentary-btn" data-scriptura-book="{{ entry.reference.scriptura_book }}" data-scriptura-chapter="{{ entry.reference.scriptura_chapter }}" data-scriptura-verse="{{ entry.reference.scriptura_verse }}"><span class="commentary-inline-icon" aria-hidden="true"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span> {% trans "NT Commentary" %}</button><div class="scriptura-commentary-panel"></div></div>
@@ -229,4 +228,3 @@
   })(window.jQuery);
 </script>
 {% endblock %}
-

@@ -26,7 +26,7 @@
 </script>
 {% endblock %}
 {% block content %}
-{% cache cache_timeout commandments_detail_v3 cache_on_bible cache_on_kids_mode cache_on_media_version commandment.id %}
+{% cache cache_timeout commandments_detail_v4 cache_on_bible cache_on_kids_mode cache_on_media_version commandment.id %}
 <nav class="floating-menu">
     <ul class="main-menu">
         <li targetaudience="adults">
@@ -37,7 +37,7 @@
         {% if commandment.waj_video %}
         <li>
             <a href="#waj_video" class="ripple">
-                <i><img src="{% static 'images/wajvideo.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Walk as Jesus' %}" src="{% static 'images/wajvideo.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}
@@ -79,7 +79,7 @@
         {% if commandment.short_movies %}
         <li>
             <a href="#short_movies" class="ripple">
-                <i><img src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Short Movies' %}" src="{% static 'images/shortmovie.png' %}" width="40px" alt=""></i>
             </a>
         </li>
         {% endif %}

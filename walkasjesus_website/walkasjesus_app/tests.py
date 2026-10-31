@@ -36,6 +36,8 @@ from walkasjesus_app.models.media_review import MediaReviewRequest
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
 from walkasjesus_app.lib.strongs_service import (
     _candidate_payload,
+    _step_reference_to_display,
+    _stepbible_rows_for_verse,
     english_alignment_payload,
     localized_original_text_payload,
     original_text_payload,
@@ -789,13 +791,49 @@ class LocalStatenvertalingBibleTestCase(SimpleTestCase):
 
 
 class StrongsServiceFallbackTestCase(TestCase):
-    def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self):
+    @patch('walkasjesus_app.lib.strongs_service._stepbible_rows_for_verse', return_value=[])
+    def test_original_text_payload_uses_non_clickable_fallback_for_missing_stepbible_rows(self, _mock_rows):
         payload = original_text_payload('Psalms', 3, 2)
 
         self.assertGreater(len(payload['words']), 0)
         self.assertTrue(all(not word['clickable'] for word in payload['words']))
         self.assertTrue(all(not word['has_candidates'] for word in payload['words']))
         self.assertTrue(all(not word['detail_note'] for word in payload['words']))
+
+    def test_step_references_preserve_primary_numbering_with_hebrew_annotations(self):
+        for source, expected in (
+            ('Psa.51.7(51.9)', 'Psa.51:7'),
+            ('Psa.3.2(3.3)', 'Psa.3:2'),
+            ('Mal.4.1(3.19)', 'Mal.4:1'),
+            ('Gen.1.1', 'Gen.1:1'),
+            ('Jhn.3.16', 'Jhn.3:16'),
+        ):
+            with self.subTest(reference=source):
+                self.assertEqual(_step_reference_to_display(source), expected)
+
+    @patch('walkasjesus_app.lib.strongs_service.BibleTranslation')
+    def test_psalm_51_verses_have_tagged_hebrew_and_strongs_details(self, mock_bibles):
+        mock_bibles.return_value.get.return_value = SimpleNamespace(
+            name='Westminster Leningrad Codex',
+            verses=lambda *args: '',
+        )
+        for verse in range(7, 12):
+            with self.subTest(verse=verse):
+                rows = _stepbible_rows_for_verse('Psalms', 51, verse)
+                self.assertGreater(len(rows), 0)
+                self.assertTrue(all(row.startswith(f'Psa.51.{verse}(') for row in rows))
+                payload = original_text_payload('Psalms', 51, verse)
+                self.assertGreater(len(payload['words']), 0)
+                self.assertTrue(any(word['clickable'] and word['has_candidates'] for word in payload['words']))
+                self.assertTrue(all(word['tagging_source'] == 'STEPBible' for word in payload['words']))
+                self.assertIsNotNone(payload['selected_word'])
+                self.assertTrue(payload['selected_word']['grammar'])
+        verse_seven = original_text_payload('Psalms', 51, 7)
+        self.assertTrue(any(
+            candidate['strongs_number'] == 'H0231'
+            for word in verse_seven['words']
+            for candidate in word['candidates']
+        ))
 
     def test_candidate_payload_exposes_structured_detail_sections(self):
         candidate = _candidate_payload('G5083', 'greek', {})

@@ -100,7 +100,11 @@ the pinned revision and print the data version currently in use.
 ## 3. The original-language panel
 
 `original_text_payload(book, chapter, verse)` in `lib/strongs_service.py` builds one payload per
-verse, cached 30 days under `bible_study:original:v20:…`:
+verse, cached 30 days under `bible_study:original:v21:…`:
+
+TAHOT references use the primary English/NRSV verse numbering, with differing Hebrew
+numbers in parentheses (for example `Psa.51.7(51.9)`). Word lookup and occurrence links
+use the primary reference; the parenthetical annotation must not prevent a match.
 
 1. Scan the TAHOT/TAGNT file for the book and pull every row whose reference matches the verse.
 2. `_parse_stepbible_row` extracts per original word:
@@ -149,7 +153,7 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The existing **Translate** button still machine-translates lexicon definitions. Translation requests
   are versioned and queued sequentially to avoid provider rate-limit bursts.
 
-Cached 30 days under `bible_study:original-local:v10:<source>:<book>:<ch>:<v>`.
+Cached 30 days under `bible_study:original-local:v11:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
 
@@ -278,7 +282,7 @@ A translation that is neither tagged nor English gets no alignment at all; the e
 `supported: false` and the verse renders as plain text.
 
 Both results are cached 30 days under
-`bible_study:alignment:v4:<source>:<scoring>:<book>:<ch>:<v>:<sha>`.
+`bible_study:alignment:v5:<source>:<scoring>:<book>:<ch>:<v>:<sha>`.
 
 ---
 
@@ -358,9 +362,9 @@ CrossWire also ships tagged German/French/Spanish/Russian editions if those lang
 | Key prefix | TTL | Contents |
 | --- | --- | --- |
 | `bible_study:v1:…` | `BIBLE_API_CACHE_TIMEOUT_SECONDS` (6 months) | verse text per translation |
-| `bible_study:original:v15:…` | 30 days | original-language payload per verse |
-| `bible_study:original-local:v1:…` | 30 days | same payload enriched with interface-language glosses |
-| `bible_study:alignment:v4:…` | 30 days | translated↔original token mapping |
+| `bible_study:original:v21:…` | 30 days | original-language payload per verse |
+| `bible_study:original-local:v11:…` | 30 days | same payload enriched with interface-language glosses |
+| `bible_study:alignment:v5:…` | 30 days | translated↔original token mapping |
 | `bible_study:search:…` | 7 days | API.Bible search results |
 
 Bump the `vNN` in the cache key whenever the shape of a payload changes, otherwise stale entries

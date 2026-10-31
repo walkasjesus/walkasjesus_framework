@@ -650,7 +650,7 @@ def _stepbible_file_for_book(book_name):
 
 
 def _step_reference_to_display(reference_prefix):
-    match = re.match(r'^([^.]+)\.(\d+)\.(\d+)$', str(reference_prefix or '').strip())
+    match = re.match(r'^([^.]+)\.(\d+)\.(\d+)(?:\(\d+\.\d+\))?$', str(reference_prefix or '').strip())
     if not match:
         return str(reference_prefix or '').strip()
     return f'{match.group(1)}.{match.group(2)}:{match.group(3)}'
@@ -1562,13 +1562,18 @@ def _primary_translation_label(candidates):
 
 
 def _stepbible_rows_for_verse(book_name, chapter, verse):
-    reference_prefix = f'{_stepbible_book_code(book_name)}.{chapter}.{verse}#'
+    book_code = _stepbible_book_code(book_name)
+    reference_prefix = f'{book_code}.{chapter}.{verse}'
+    reference = f'{book_code}.{chapter}:{verse}'
     rows = []
     path = _stepbible_file_for_book(book_name)
     with path.open('r', encoding='utf-8') as handle:
         for raw_line in handle:
             line = raw_line.rstrip('\n')
             if not line.startswith(reference_prefix):
+                continue
+            reference_token, separator, _ = line.partition('#')
+            if not separator or _step_reference_to_display(reference_token) != reference:
                 continue
             rows.append(line)
     return rows
@@ -1704,7 +1709,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v20:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v21:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1917,7 +1922,7 @@ def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_sour
 
     tagged_source = str(tagged_source or '').strip().lower()
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:alignment:v4:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
+    cache_key = f'bible_study:alignment:v5:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2167,7 +2172,7 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v10:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v11:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

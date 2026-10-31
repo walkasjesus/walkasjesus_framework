@@ -9,6 +9,20 @@ import requests
 class PoTranslator:
     MASK_PATTERN = re.compile(r'%(?:\([^)]+\))?[#0\- +]?(?:\d+|\*)?(?:\.\d+)?[hlL]?[diouxXeEfFgGcrs]|\{\{.*?\}\}|\{%.*?%\}|<[^>]+>', re.DOTALL)
     MAX_CHUNK_LENGTH = 5500
+    draft_marker = None
+
+    @staticmethod
+    def needs_translation(entry):
+        has_draft = bool(entry.msgstr) or bool(entry.msgstr_plural) and all(entry.msgstr_plural.values())
+        return not entry.obsolete and not entry.translated() and not (
+            has_draft and 'Machine translation draft:' in entry.tcomment
+        )
+
+    def __init__(self, request_interval=1.0):
+        if request_interval < 0:
+            raise ValueError('Request interval must not be negative.')
+        self.request_interval = request_interval
+        self._last_request_at = None
 
     def _mask_tokens(self, text):
         replacements = []
@@ -28,6 +42,11 @@ class PoTranslator:
         return result
 
     def _translate_chunk(self, text, source_language, destination_language):
+        if self._last_request_at is not None:
+            wait = self.request_interval - (time.monotonic() - self._last_request_at)
+            if wait > 0:
+                time.sleep(wait)
+        self._last_request_at = time.monotonic()
         response = requests.get(
             'https://translate.googleapis.com/translate_a/single',
             params={
@@ -61,7 +80,6 @@ class PoTranslator:
             translated_chunks = []
             for chunk in self._split_chunks(paragraph):
                 translated_chunks.append(self._translate_chunk(chunk, source_language, destination_language))
-                time.sleep(0.05)
             translated_paragraphs.append(' '.join(translated_chunks))
 
         translated = '\n\n'.join(translated_paragraphs)
@@ -99,15 +117,21 @@ class PoTranslator:
 
         return chunks
 
-    def translate(self, po_file_path, source_language, destination_language):
+    def translate(self, po_file_path, source_language, destination_language, *, entry_filter=None, limit=None):
+        if limit is not None and limit < 1:
+            raise ValueError('Entry limit must be positive.')
         po = polib.pofile(po_file_path)
         po.metadata['Language'] = destination_language
 
         entries = [
             entry for entry in po
-            if not entry.obsolete and not entry.translated()
+            if self.needs_translation(entry)
+            and (entry_filter is None or entry_filter(entry))
         ]
+        if limit is not None:
+            entries = entries[:limit]
 
+        completed = 0
         try:
             for index, entry in enumerate(entries, 1):
                 if entry.msgid_plural:
@@ -125,9 +149,14 @@ class PoTranslator:
                     entry.msgstr = self._translate_text(entry.msgid, source_language, destination_language)
                 if 'fuzzy' in entry.flags:
                     entry.flags.remove('fuzzy')
-                if index % 25 == 0:
-                    po.save()
+                if self.draft_marker:
+                    entry.flags.append('fuzzy')
+                    entry.tcomment = '\n'.join(filter(None, [entry.tcomment, self.draft_marker]))
+                completed += 1
+                po.save()
+                if index % 25 == 0 or index == len(entries):
                     print(f'Translated {index}/{len(entries)} entries.', flush=True)
         finally:
             # Keep completed work resumable, but propagate failures to the caller.
             po.save()
+        return completed

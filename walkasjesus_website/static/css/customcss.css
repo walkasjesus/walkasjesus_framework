@@ -21,6 +21,8 @@ html[dir="rtl"] .bootstrap-select .dropdown-toggle .filter-option {
 html[dir="rtl"] .bootstrap-select .dropdown-toggle::after {
     right: auto;
     left: 12px;
+}
+
 .bs-hebrew-part-root {
     color: #3d2f08;
 }

@@ -1,0 +1,3 @@
+# Optional CPU inference dependencies; not needed by the website server.
+ctranslate2>=4.8,<5
+sentencepiece>=0.2.2,<0.3

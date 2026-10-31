@@ -24,25 +24,31 @@ class Command(BaseCommand):
                 continue
 
             po = polib.pofile(po_path)
-            active_msgids = {entry.msgid for entry in po if not entry.obsolete}
+            entries_by_msgid = {entry.msgid: entry for entry in po if not entry.obsolete}
+            obsolete_by_msgid = {entry.msgid: entry for entry in po.obsolete_entries()}
             revived = 0
             added = 0
 
-            def ensure_msgid(value):
+            def ensure_msgid(value, source):
                 nonlocal revived, added
                 msgid = str(value or '').strip()
-                if not msgid or msgid in active_msgids:
+                if not msgid:
                     return
 
-                obsolete_entry = next((entry for entry in po.obsolete_entries() if entry.msgid == msgid), None)
-                if obsolete_entry:
-                    obsolete_entry.obsolete = False
-                    active_msgids.add(msgid)
-                    revived += 1
-                else:
-                    po.append(polib.POEntry(msgid=msgid, msgstr=''))
-                    active_msgids.add(msgid)
-                    added += 1
+                entry = entries_by_msgid.get(msgid)
+                if entry is None:
+                    entry = obsolete_by_msgid.get(msgid)
+                    if entry is not None:
+                        entry.obsolete = False
+                        revived += 1
+                    else:
+                        entry = polib.POEntry(msgid=msgid, msgstr='')
+                        po.append(entry)
+                        added += 1
+                    entries_by_msgid[msgid] = entry
+                occurrence = (source, '')
+                if occurrence not in entry.occurrences:
+                    entry.occurrences.append(occurrence)
 
             for model_name, fields in TRANSLATABLE_MODEL_FIELDS.items():
                 model = apps.get_model('commandments_app', model_name)
@@ -53,11 +59,11 @@ class Command(BaseCommand):
                 for field in fields_to_sync:
                     values = model.objects.exclude(**{field: ''}).values_list(field, flat=True).distinct()
                     for value in values.iterator():
-                        ensure_msgid(value)
+                        ensure_msgid(value, f'model:{model_name}.{field}')
 
                 for field in model._meta.fields:
                     for _, label in field.choices or []:
-                        ensure_msgid(label)
+                        ensure_msgid(label, 'walkasjesus_app/translation.py')
 
             po.save()
             self.stdout.write(self.style.SUCCESS(f'{locale}: revived {revived}, added {added} model translation entries.'))

@@ -3,7 +3,9 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-if [[ -x ./venv/bin/python ]]; then
+if [[ -n "${WAJ_TRANSLATION_PYTHON:-}" ]]; then
+    python="$WAJ_TRANSLATION_PYTHON"
+elif [[ -x ./venv/bin/python ]]; then
     python=./venv/bin/python
 elif [[ -x ../venv/bin/python ]]; then
     python=../venv/bin/python
@@ -17,6 +19,7 @@ log="log/translation.$(date +%Y%m%d).log"
 "$python" - "$@" <<'PY' 2>&1 | tee -a "$log"
 import os
 import sys
+import argparse
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'walkasjesus_website.settings')
 import django
@@ -28,7 +31,16 @@ from django.core.management import call_command, CommandError
 from django.core.management.commands.makemessages import Command
 
 supported = {code for code, _ in settings.LANGUAGES if code != 'en'}
-locales = sys.argv[1:] or sorted(supported)
+parser = argparse.ArgumentParser()
+parser.add_argument('locales', nargs='*')
+parser.add_argument('--scope', choices=['all', 'ui', 'content'], default='all')
+parser.add_argument('--limit', type=int)
+parser.add_argument('--request-interval', type=float, default=1.0)
+parser.add_argument('--dry-run', action='store_true')
+parser.add_argument('--provider', choices=['google', 'local'], default='google')
+parser.add_argument('--model-path')
+options = parser.parse_args()
+locales = options.locales or sorted(supported)
 if set(locales) - supported:
     raise CommandError(f'Expected locales from: {", ".join(sorted(supported))}')
 
@@ -43,6 +55,13 @@ for locale in locales:
     po.metadata['Language'] = locale
     po.save()
     call_command('sync_model_translations', locales=[locale])
-    call_command('auto_translate', locales=[locale])
-    call_command('compilemessages', locale=[locale], ignore_patterns=['venv/*', '.venv/*', 'data/*'])
+try:
+    call_command(
+        'auto_translate', locales=locales, scope=options.scope, limit=options.limit,
+        request_interval=options.request_interval, dry_run=options.dry_run,
+        provider=options.provider, model_path=options.model_path,
+    )
+finally:
+    if not options.dry_run:
+        call_command('compilemessages', locale=locales, ignore_patterns=['venv/*', '.venv/*', 'data/*'])
 PY

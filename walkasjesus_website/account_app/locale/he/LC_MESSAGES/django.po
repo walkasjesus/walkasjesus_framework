@@ -16,113 +16,165 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
-"1 == 0) ? 1: 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;\n"
+
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/change_password.html:8
 #: account_app/templates/account/profile.html:55
+#, fuzzy
 msgid "Save changes"
-msgstr ""
+msgstr "להציל שינויים"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/index.html:6
 #: account_app/templates/account/login.html:10
+#, fuzzy
 msgid "Login"
-msgstr ""
+msgstr "כניסה"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/index.html:9
+#, fuzzy
 msgid "Logout"
-msgstr ""
+msgstr "Logout"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/index.html:12
+#, fuzzy
 msgid "Profile"
-msgstr ""
+msgstr "פרופיל פרופיל"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/index.html:13
+#, fuzzy
 msgid "Change password"
-msgstr ""
+msgstr "שינוי הסיסמה"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/login.html:9
+#, fuzzy
 msgid "Contribute"
-msgstr ""
+msgstr "Contribute"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/login.html:11
+#, fuzzy
 msgid ""
 "Thank you for helping in teaching the words and steps of Jesus all around "
 "the world!"
-msgstr ""
+msgstr "תודה על שעזרתם ללמד את דברי ישוע בכל רחבי העולם!"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/login.html:15
+#, fuzzy
 msgid "Your username and password didn't match. Please try again."
-msgstr ""
+msgstr "שם המשתמש והסיסמה שלך לא התאימו. אנא נסה שוב."
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/login.html:22
+#, fuzzy
 msgid ""
-"Your account doesn't have access to this page. To proceed, please login with "
-"an account that has access."
-msgstr ""
+"Your account doesn't have access to this page. To proceed, please login with"
+" an account that has access."
+msgstr "לחשבון שלך אין גישה לדף זה. להמשיך, אנא הכנס עם חשבון שיש לו גישה."
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/login.html:25
+#, fuzzy
 msgid "Please login to see this page."
-msgstr ""
+msgstr "אנא היכנסו לראות את הדף הזה."
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/profile.html:10
+#, fuzzy
 msgid "My profile"
-msgstr ""
+msgstr "הפרופיל שלי"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/profile.html:11
+#, fuzzy
 msgid "My Profile"
-msgstr ""
+msgstr "הפרופיל שלי"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/profile.html:22
+#, fuzzy
 msgid "You can change your profile settings on this page."
-msgstr ""
+msgstr "באפשרותך לשנות את הגדרות הפרופיל שלך בדף זה."
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/account/profile.html:32
 #: account_app/templates/registration/signup.html:34
+#, fuzzy
 msgid "I agree with the Terms and Conditions"
-msgstr ""
+msgstr "אני מסכים עם התנאים והתנאים"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:10
+#, fuzzy
 msgid "Signup"
-msgstr ""
+msgstr "Signup"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:11
+#, fuzzy
 msgid "Register for a new account"
-msgstr ""
+msgstr "רישום לחשבון חדש"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:12
+#, fuzzy
 msgid ""
 "The content of this website is made possible by contributors around the "
 "world. You can help improving by:"
 msgstr ""
+"התוכן של אתר זה אפשרי על ידי תורמים ברחבי העולם.אתה יכול לעזור לשפר על ידי:"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:16
+#, fuzzy
 msgid ""
 "Translating to your language, since most translation is done automatically, "
 "corrections are very welcome!"
 msgstr ""
+"תרגום לשפה שלך, שכן רוב התרגום נעשה באופן אוטומטי, תיקונים יתקבלו בברכה!"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:19
+#, fuzzy
 msgid "Adding or correcting steps along with their Bible references"
-msgstr ""
+msgstr "הוספת או תיקון צעדים יחד עם אזכורי התנ\"ך"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:22
+#, fuzzy
 msgid ""
 "Adding resources like movies, books, testimonies, blogs, songs, pictures, "
 "illustrations and sermons which are related to the corresponding steps"
 msgstr ""
+"הוספת משאבים כמו סרטים, ספרים, עדויות, בלוגים, שירים, תמונות, איורים ו דרשות"
+" הקשורים בצעדים המתאימים"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/templates/registration/signup.html:57
+#, fuzzy
 msgid "Sign up"
-msgstr ""
+msgstr "Sign Up"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/views.py:22
+#, fuzzy
 msgid "Your profile was successfully updated!"
-msgstr ""
+msgstr "הפרופיל שלך עודכן בהצלחה!"
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/views.py:25 account_app/views.py:43
+#, fuzzy
 msgid "Please correct the error below."
-msgstr ""
+msgstr "נא לתקן את השגיאה למטה."
 
+# Machine translation draft: local Argos; review in Rosetta.
 #: account_app/views.py:40
+#, fuzzy
 msgid "Your password was successfully updated!"
-msgstr ""
+msgstr "הסיסמה שלך מעודכנת בהצלחה!"

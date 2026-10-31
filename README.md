@@ -65,6 +65,14 @@ The following extra information might be helpfull when helping to improve this a
   Strong's/original-language engine and the word-by-word link between a translation and the
   Hebrew/Greek.
 
+The step, lesson and Law of Messiah detail pages share the `.floating-menu` side
+navigation, styled in [bootstrap-menu.css](walkasjesus_website/static/css/bootstrap/bootstrap-menu.css). Its icons retain
+translated `Jump to:` titles in the templates; [customjs.js](walkasjesus_website/static/js/customjs.js) moves those
+titles onto the links as tooltip text and accessible labels. Tooltips appear on
+hover and keyboard focus without the browser's native tooltip delay.
+Side-menu links align the section card's top edge below the fixed navbar, keeping
+the section title visible, and update the URL fragment without a second anchor jump.
+
 ### Scripts
 
 The following scripts can be used:

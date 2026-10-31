@@ -171,6 +171,17 @@
 
 $(document).ready(function(){
 
+  // Reuse the server-translated labels without the browser's delayed native tooltip.
+  $('.floating-menu .main-menu a').each(function() {
+    var $link = $(this);
+    var $image = $link.find('img[title]').first();
+    var label = $image.attr('title');
+    if (label) {
+      $link.attr('data-jc-tooltip', label).attr('aria-label', label);
+      $image.removeAttr('title');
+    }
+  });
+
   // Normalize YouTube iframe permissions to avoid browser policy warnings.
   $('iframe[src*="youtube.com/embed/"], iframe[src*="youtube-nocookie.com/embed/"]').each(function() {
     var $iframe = $(this);
@@ -1715,6 +1726,30 @@ $(document).ready(function(){
   // ----- Detailed commandments page: Smooth scrolling BEGIN ------ \\  
     // Add smooth scrolling to all links
     $("a").on('click', function(event) {
+
+      if ($(this).closest('.floating-menu').length && this.hash) {
+        var section = document.getElementById(this.hash.slice(1));
+        if (!section) {
+          return;
+        }
+        event.preventDefault();
+        var hash = this.hash;
+        var card = $(section).children('.our-services-wrapper').first()[0] || section;
+        var scrollTarget = function() {
+          var nav = document.getElementById('ftco-navbar');
+          var navBottom = nav && window.getComputedStyle(nav).position === 'fixed'
+            ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
+          return Math.max(0, card.getBoundingClientRect().top + window.pageYOffset - navBottom);
+        };
+        var $scroll = $('html, body');
+        $scroll.stop(true).animate({ scrollTop: scrollTarget() }, 800);
+        $scroll.promise().done(function() {
+          // Scrolling can switch the navbar to fixed and shift the mobile layout.
+          window.scrollTo(0, scrollTarget());
+          window.history.replaceState(null, '', hash);
+        });
+        return;
+      }
 
       // Make sure this.hash has a value before overriding default behavior
       if (this.hash !== "") {

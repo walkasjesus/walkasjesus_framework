@@ -142,7 +142,8 @@ word-level tagging makes possible:
 
 The client then prefers `local_gloss` for the word-cloud label and the "Direct gloss" line, and
 renders `local_usage` as an ordered list headed with `payload['local_source_name']`. Each item in
-`local_usage` and each node in the *Outline of Biblical Usage* carries a count button (e.g. `(203x)`).
+`local_usage` and each node in the *Outline of Biblical Usage* with Bible references carries a count
+button (e.g. `(203x)`); entries without references remain plain list items.
 Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The upper area displays the text for the currently selected verse in the active translation.
 - The lower area displays range buttons chunked in blocks of 25 (e.g. `1. Gen.1:11–Gen.24:60 (25x)`),

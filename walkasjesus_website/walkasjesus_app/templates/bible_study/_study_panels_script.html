@@ -502,7 +502,10 @@
           var grammar = String((item && item.grammar_label) || '').trim();
           var childrenHtml = bibleStudyUsageOutlineItemsHtml((item && item.children) || []);
           var refs = (item && item.references && item.references.length) ? item.references : bibleStudyFlattenReferences((item && item.reference_groups) || []);
-          var btn = count ? bibleStudyOccurrenceButtonHtml(label || '{% trans "Occurrences" %}', count, refs) : '';
+          var hasReferences = refs.some(function(reference) {
+            return String(reference || '').trim();
+          });
+          var btn = count && hasReferences ? bibleStudyOccurrenceButtonHtml(label || '{% trans "Occurrences" %}', count, refs) : '';
           return '<li><div class="bs-original-usage-item">' +
             '<div class="bs-original-usage-copy">' +
               (grammar ? '<div class="bs-original-usage-grammar">' + originalTextShared().hebrewStemLabelHtml(grammar) + '</div>' : '') +

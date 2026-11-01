@@ -26,8 +26,14 @@ from walkasjesus_app.lib.access_policy import (
     sort_bibles_for_language,
 )
 from walkasjesus_app.lib.strongs_service import (
+    _stepbible_book_code,
     english_alignment_payload,
     localized_original_text_payload,
+    search_result_word_study,
+    search_strongs_dictionary,
+    strongs_occurrence_references,
+    strongs_word_detail,
+    strongs_occurrence_word_detail,
 )
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
@@ -775,6 +781,9 @@ class BibleStudySearchView(View):
         sort = _safe_search_sort(request.GET.get('sort'))
         fuzziness = _safe_search_fuzziness(request.GET.get('fuzziness'))
         search_range = _safe_search_range(request.GET.get('range'))
+        original_language = str(request.GET.get('original_language', 'hebrew'))
+        if original_language not in {'hebrew', 'greek', 'both'}:
+            return JsonResponse({'error': 'Invalid original language.'}, status=400)
 
         if not query:
             return JsonResponse({'error': 'Enter words to search for.'}, status=400)
@@ -787,6 +796,14 @@ class BibleStudySearchView(View):
         bible = BibleTranslation().get(bible_id)
         if not bible:
             return JsonResponse({'error': 'Bible not found'}, status=404)
+
+        mode = str(request.GET.get('mode', 'verses'))
+        if mode not in {'verses', 'text', 'lexicon', 'strongs', 'detail'}:
+            return JsonResponse({'error': 'Invalid search mode.'}, status=400)
+        if mode not in {'verses', 'text'}:
+            return self.strongs_search(request, bible, query, mode, limit, offset, sort, search_range)
+        if mode == 'verses' and request.GET.get('study_scope') == 'all':
+            return self.complete_word_search(request, bible, query, limit, sort, fuzziness, search_range, original_language)
 
         try:
             api_payload = _api_bible_search_payload(bible_id, query, limit, offset, sort, fuzziness, search_range, request=request, bible=bible)
@@ -836,6 +853,26 @@ class BibleStudySearchView(View):
 
         language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
         display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)
+        study_results = []
+        for result in results if mode == 'verses' else []:
+            match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)', str(result['id']).upper())
+            if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
+                continue
+            book = list(_CANONICAL_CHAPTER_COUNTS)[_API_BIBLE_BOOK_ORDER[match[1]]]
+            if original_language != 'both' and (book in _OT_BOOKS) != (original_language == 'hebrew'):
+                continue
+            study_results.append(dict(result, book=book, chapter=int(match[2]), verse=int(match[3])))
+        word_study = None
+        if mode == 'verses':
+            try:
+                word_study = search_result_word_study(
+                    study_results, query, tagged_source=_tagged_source_for_bible(bible),
+                    allow_scoring=language_code == 'EN',
+                    language_code=request.LANGUAGE_CODE,
+                )
+            except Exception:
+                logger.exception('Reverse word study failed for bible=%s', bible_id)
+                word_study = {'candidates': [], 'error': 'Original-word analysis is unavailable right now.'}
         return JsonResponse({
             'query': query,
             'bible_id': bible_id,
@@ -851,7 +888,223 @@ class BibleStudySearchView(View):
             'page_count': page_count,
             'pages': pages,
             'results': results,
+            'word_study': word_study,
         })
+
+    def complete_word_search(self, request, bible, query, limit, sort, fuzziness, search_range, original_language):
+        cache_data = json.dumps([bible.id, query, sort, fuzziness, search_range, original_language, request.LANGUAGE_CODE])
+        key = 'bible_study:complete-search:v3:' + hashlib.sha256(cache_data.encode()).hexdigest()
+        cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(key)
+        if cached is not None:
+            return JsonResponse(dict(cached, limit=limit, results=cached['all_results'][:limit]))
+        try:
+            results = []
+            seen = set()
+            api_offset = 0
+            previous_seen = set()
+            while True:
+                payload = _api_bible_search_payload(
+                    bible.id, query, 100, api_offset, sort, fuzziness, search_range,
+                    request=request, bible=bible,
+                )
+                data = payload.get('data', {})
+                batch = data.get('verses', [])
+                for item in batch:
+                    if item.get('id') not in seen:
+                        seen.add(item.get('id'))
+                        results.append({field: item.get(field, '') for field in ('id', 'reference', 'text')})
+                if len(batch) < 100:
+                    break
+                if api_offset and not any(item.get('id') not in previous_seen for item in batch):
+                    raise ValueError('Bible search returned a repeated page.')
+                previous_seen = set(seen)
+                api_offset += len(batch)
+            study_results = []
+            for result in results:
+                match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)', str(result['id']).upper())
+                if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
+                    continue
+                book = list(_CANONICAL_CHAPTER_COUNTS)[_API_BIBLE_BOOK_ORDER[match[1]]]
+                if original_language != 'both' and (book in _OT_BOOKS) != (original_language == 'hebrew'):
+                    continue
+                study_results.append(dict(result, book=book, chapter=int(match[2]), verse=int(match[3])))
+            study = search_result_word_study(study_results, query, tagged_source=_tagged_source_for_bible(bible),
+                                             allow_scoring=str(bible.language).lower().startswith('en'),
+                                             language_code=request.LANGUAGE_CODE)
+            response = {
+                'query': query, 'bible_id': bible.id, 'bible_display_name': _bible_dropdown_label(bible),
+                'all_results': results, 'results': results[:limit], 'limit': limit,
+                'word_study': study, 'total': len(results), 'verse_count': len(results),
+            }
+            cache.set(key, response, BIBLE_SEARCH_CACHE_TIMEOUT)
+            return JsonResponse(response)
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
+        except Exception:
+            logger.exception('Complete reverse word search failed for bible=%s', bible.id)
+            return JsonResponse({'error': 'Complete original-word search is unavailable right now.'}, status=502)
+
+    def strongs_search(self, request, bible, query, mode, limit, offset, sort, search_range):
+        try:
+            original_language = str(request.GET.get('original_language', 'hebrew'))
+            prefix = {'hebrew': 'H', 'greek': 'G', 'both': ''}[original_language]
+            versification = 'kjv' if _tagged_source_for_bible(bible) else 'nrsv'
+            if search_range:
+                self.reference_in_scope('Gen.1:1', search_range)
+            if mode == 'detail':
+                if not re.fullmatch(r'[HGhg]\d+[A-Za-z]*', query):
+                    return JsonResponse({'error': 'Invalid Strong\'s number.'}, status=400)
+                occurrence_keys = ('book', 'chapter', 'verse', 'word_index')
+                if any(key in request.GET for key in occurrence_keys):
+                    book = request.GET.get('book')
+                    if book not in _VALID_BOOK_NAMES or not all(key in request.GET for key in occurrence_keys):
+                        return JsonResponse({'error': 'Invalid original word occurrence.'}, status=400)
+                    chapter, verse, word_index = (int(request.GET[key]) for key in occurrence_keys[1:])
+                    if chapter < 1 or verse < 1 or word_index < 0:
+                        return JsonResponse({'error': 'Invalid original word occurrence.'}, status=400)
+                    return JsonResponse({'detail': strongs_occurrence_word_detail(
+                        query, book, chapter, verse, word_index,
+                        language_code=request.LANGUAGE_CODE,
+                    )})
+                return JsonResponse({'detail': strongs_word_detail(query, request.LANGUAGE_CODE)})
+            if mode == 'lexicon':
+                candidates = search_strongs_dictionary(query, request.LANGUAGE_CODE)
+                candidates = [item for item in candidates if item['strongs_number'].startswith(prefix)]
+                if search_range:
+                    candidates = [item for item in candidates
+                                  if any(self.reference_in_scope(ref, search_range)
+                                         for code in item.get('source_strongs_numbers', [item['strongs_number']])
+                                         for ref in strongs_occurrence_references(code, versification))]
+                if request.GET.get('study_scope') != 'all':
+                    return JsonResponse({
+                        'mode': 'lexicon', 'query': query, 'total': len(candidates),
+                        'candidates': candidates[offset:offset + limit],
+                        'offset': offset, 'limit': limit,
+                    })
+                codes = [item['strongs_number'] for item in candidates]
+                if 'selected_strongs' in request.GET:
+                    selected = request.GET['selected_strongs'].split(',') if request.GET['selected_strongs'] else []
+                    if not set(selected).issubset(codes):
+                        return JsonResponse({'error': 'Invalid original-word selection.'}, status=400)
+                    codes = selected
+                else:
+                    codes = codes[:1]
+            else:
+                if not re.fullmatch(r'[HGhg]\d+', query):
+                    return JsonResponse({'error': 'Invalid Strong\'s number.'}, status=400)
+                if not query.upper().startswith(prefix):
+                    return JsonResponse({'error': 'Strong\'s number does not match the selected original language.'}, status=400)
+                codes = [query.upper()]
+                candidates = []
+            source_codes = [
+                source for item in candidates if item['strongs_number'] in codes
+                for source in item.get('source_strongs_numbers', [item['strongs_number']])
+            ] if mode == 'lexicon' else codes
+            references = list(dict.fromkeys(ref for code in source_codes for ref in strongs_occurrence_references(code, versification)))
+            references.sort(key=lambda ref: self.occurrence_sort_key(ref))
+            references = [ref for ref in references
+                          if not search_range or self.reference_in_scope(ref, search_range)]
+            if sort == 'reverse-canonical':
+                references = list(reversed(references))
+            results = []
+            verse_sources = {}
+            try:
+                for reference in references[offset:offset + limit]:
+                    parsed = self.parse_step_reference(reference)
+                    if not parsed:
+                        raise ValueError('Invalid concordance reference.')
+                    book, chapter, verse = parsed
+                    key = f'bible_study:v1:{bible.id}:{book}:{chapter}:{verse}'
+                    text = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(key)
+                    source = 'cache'
+                    if text is None:
+                        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+                        verse_sources[reference] = 'api'
+                        text = bible.verses(BibleLibBibleBooks[book], chapter, verse, chapter, verse)
+                        source = 'api'
+                        if not text:
+                            return JsonResponse({'error': 'An occurrence verse is unavailable in this translation.'}, status=502)
+                        cache.set(key, text, VERSE_CACHE_TIMEOUT)
+                    verse_sources[reference] = source
+                    code = list(_API_BIBLE_BOOK_ORDER)[list(_CANONICAL_CHAPTER_COUNTS).index(book)]
+                    results.append({
+                        'id': f'{code}.{chapter}.{verse}', 'reference': reference,
+                        'text': re.sub(r'<[^>]+>', '', str(text)),
+                    })
+            finally:
+                _record_bible_usage_for_sources(
+                    request=request, bible=bible, verse_sources=verse_sources,
+                    endpoint=BibleTranslationUsageDaily.ENDPOINT_VERSES_API,
+                )
+            total = len(references)
+            page_count = max(1, (total + limit - 1) // limit)
+            page = offset // limit + 1
+            pages = [
+                {'page': number, 'offset': (number - 1) * limit, 'current': number == page,
+                 'range_label': self.occurrence_range_label(references[(number - 1) * limit:number * limit])}
+                for number in range(1, page_count + 1)
+            ]
+            return JsonResponse({
+                'mode': 'strongs', 'query': query, 'bible_display_name': _bible_dropdown_label(bible),
+                'results': results, 'total': total, 'verse_count': total, 'page': page,
+                'page_count': page_count, 'pages': pages, 'limit': limit, 'offset': offset,
+                'word_study': {'candidates': candidates, 'dictionary': True} if mode == 'lexicon' else None,
+                'selected_strongs': codes,
+            })
+        except ValueError as ex:
+            return JsonResponse({'error': str(ex)}, status=400)
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
+        except Exception:
+            logger.exception('Strong\'s search failed for mode=%s', mode)
+            return JsonResponse({'error': 'Strong\'s search is unavailable right now.'}, status=502)
+
+    @staticmethod
+    def occurrence_sort_key(reference):
+        book, chapter, verse = BibleStudySearchView.parse_step_reference(reference)
+        return list(_CANONICAL_CHAPTER_COUNTS).index(book), chapter, verse
+
+    @staticmethod
+    def occurrence_range_label(references):
+        if not references:
+            return ''
+        return references[0] if len(references) == 1 else f'{references[0]}–{references[-1]}'
+
+    @staticmethod
+    def parse_step_reference(reference):
+        match = re.fullmatch(r'([^.]+)\.(\d+):(\d+)', reference)
+        if not match:
+            return None
+        book = next((book for book in _CANONICAL_CHAPTER_COUNTS
+                     if _stepbible_book_code(book).lower() == match[1].lower()), None)
+        return (book, int(match[2]), int(match[3])) if book else None
+
+    @classmethod
+    def reference_in_scope(cls, reference, search_range):
+        parsed = cls.parse_step_reference(reference)
+        if not parsed:
+            raise ValueError('Invalid concordance reference.')
+        book, chapter, verse = parsed
+        position = (list(_CANONICAL_CHAPTER_COUNTS).index(book), chapter, verse)
+        matches = False
+        for part in search_range.split(','):
+            ends = part.split('-')
+            if len(ends) > 2:
+                raise ValueError('Invalid Bible book scope.')
+            bounds = []
+            for index, end in enumerate((ends[0], ends[-1])):
+                match = re.fullmatch(r'([A-Z0-9]+)(?:\.(\d+)(?:\.(\d+))?)?', end)
+                if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
+                    raise ValueError('Invalid Bible book scope.')
+                default = 0 if index == 0 else 1000000
+                bounds.append((_API_BIBLE_BOOK_ORDER[match[1]],
+                               int(match[2]) if match[2] else default,
+                               int(match[3]) if match[3] else default))
+            if bounds[0] > bounds[1]:
+                raise ValueError('Invalid Bible book scope.')
+            if bounds[0] <= position <= bounds[1]:
+                matches = True
+        return matches
 
 
 class BibleStudyChapterMetaView(View):

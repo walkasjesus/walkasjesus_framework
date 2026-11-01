@@ -41,15 +41,7 @@
         <img src="{% static 'images/bible.png' %}" width="55px" alt="">
       </div>
       <div class="our-services-text" style="flex:1;">
-        <h4 class="mb-1">{% trans 'Bible Study' %}</h4>
-        <p class="mb-2">
-          {% trans 'Select up to 4 Bible translations and display them side by side. Choose a book, chapter, and up to' %}
-          <strong>{{ max_verses }}</strong> {% trans 'consecutive verses.' %}
-          {% trans 'You can also search for words or phrases in the first selected translation and jump straight to a matching verse.' %}
-          {% trans 'Use the commentary buttons next to each verse to open notes from David Stern, John Lightfoot, King, or Rabbinical Jewish Commentaries.' %}
-          {% trans "You can also enable the original Hebrew/Greek text with Strong's details below." %}
-          {% trans 'Turn off "Combine verses" and the translated words are linked one by one to the Hebrew or Greek word behind them.' %}
-        </p>
+        <h4 class="mb-1">{% trans 'Bible Study - Settings' %}</h4>
         <button class="btn law-filter-legend-toggle law-filter-legend-btn btn-sm" type="button"
           data-toggle="collapse" data-target="#bibleStudyLegend" aria-expanded="false" aria-controls="bibleStudyLegend">
           <span class="ion-ios-information-circle-outline mr-1"></span> {% trans 'Legend — how does this page work?' %} <span class="ion-ios-arrow-down ml-1"></span>
@@ -57,7 +49,6 @@
 
         <hr class="my-3">
 
-        <h4 class="mb-3" id="bs-settings-heading">{% trans 'Settings' %}</h4>
         <form method="get" action="" id="bibleStudyForm" class="law-filter-form">
           {# Hidden state inputs — populated by the smart passage search field below #}
           <input type="checkbox" id="bs-show-original" name="show_original" value="1"{% if show_original_text %} checked{% endif %} style="position:absolute;opacity:0;pointer-events:none;">
@@ -65,36 +56,58 @@
           <input type="hidden" id="bs-chapter" name="chapter" value="{{ selected_chapter }}">
           <input type="hidden" id="bs-start" name="start_verse" value="{{ selected_start_verse }}">
           <input type="hidden" id="bs-end" name="end_verse" value="{{ selected_end_verse }}">
-          <div class="row mb-3">
-            <div class="col-md-6 mb-3">
-              <label for="bs-passage-input" class="form-label">{% trans 'Bible passage' %}</label>
-              <div class="bs-passage-wrap">
-                <input type="text" class="form-control bible-study-number-input bs-passage-input" id="bs-passage-input"
-                       autocomplete="off" placeholder="{% trans 'e.g. Joh 3:16 or Genesis 1:1-5' %}">
-                <div class="bs-passage-suggestions" id="bs-passage-suggestions"></div>
+          <div class="row mb-3 bs-search-methods">
+            <div class="col-lg-4 mb-3">
+              <div class="bs-word-search-panel bs-search-method-panel">
+                <label for="bs-passage-input" class="form-label">{% trans 'Search Bible passage' %}</label>
+                <div class="bs-word-search-row">
+                  <div class="bs-passage-wrap">
+                    <input type="text" class="form-control bible-study-number-input bs-passage-input" id="bs-passage-input"
+                           autocomplete="off" placeholder="{% trans 'e.g. Joh 3:16 or Genesis 1:1-5' %}">
+                    <div class="bs-passage-suggestions" id="bs-passage-suggestions"></div>
+                  </div>
+                  <button type="button" class="btn commentary-action-btn bs-word-search-btn" id="bs-passage-search-btn">
+                    <i class="fa fa-search" aria-hidden="true"></i> {% trans 'Search' %}
+                  </button>
+                </div>
+                <small class="text-muted">{% trans 'e.g. Joh 3:16 or Genesis 1:1-5.' %}</small>
               </div>
-              <small class="text-muted">{% trans 'e.g. Joh 3:16 or Genesis 1:1-5.' %}</small>
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="bs-word-search-input" class="form-label">{% trans 'Search words' %}</label>
-              <div class="bs-word-search-panel">
+            <div class="col-lg-4 mb-3">
+              <div class="bs-word-search-panel bs-search-method-panel">
+                <label for="bs-word-search-input" class="form-label">{% trans 'Search words in Bible translation' %}</label>
                 <div class="bs-word-search-row">
                   <input type="text" class="form-control bible-study-number-input" id="bs-word-search-input"
                          autocomplete="off" placeholder="{% trans 'e.g. Tree of life' %}">
                   <button type="button" class="btn commentary-action-btn bs-word-search-btn" id="bs-word-search-btn">
                     <i class="fa fa-search" aria-hidden="true"></i> {% trans 'Search' %}
                   </button>
-                  <button type="button" class="btn commentary-action-btn bs-word-search-advanced-btn" id="bs-word-search-advanced-btn" data-toggle="modal" data-target="#bsWordSearchAdvancedModal" title="{% trans 'Search options' %}" aria-label="{% trans 'Search options' %}">
+                  <button type="button" class="btn commentary-action-btn bs-word-search-advanced-btn" id="bs-word-search-advanced-btn" data-toggle="modal" data-target="#bsWordSearchAdvancedModal" title="{% trans 'Search options' %}" aria-label="{% trans 'Bible verse search options' %}">
                     <i class="fa fa-sliders" aria-hidden="true"></i> {% trans 'Options' %}
                   </button>
                 </div>
-                <div class="form-check mt-2 bs-search-study-option">
-                  <input class="form-check-input" type="checkbox" id="bs-search-word-study-enabled" checked>
-                  <label class="form-check-label" for="bs-search-word-study-enabled">{% trans "Include Hebrew/Greek word study" %}</label>
-                  <span class="bs-combine-help jc-tooltip-host jc-tooltip-immediate" tabindex="0"
-                        data-jc-tooltip="{% trans 'Checked: also find the original Hebrew/Greek words behind your search and show their Strong’s details. The first original-word match is selected and filters the verses; select more words to include their verses.' %}
-
-{% trans 'Unchecked: search only the text of the first selected translation, without original-word analysis or filtering. Choose the original language and search method in Options.' %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'Checked: also find the original Hebrew/Greek words behind your search and show their Strong’s details. The first original-word match is selected and filters the verses; select more words to include their verses.' %} {% trans 'Unchecked: search only the text of the first selected translation, without original-word analysis or filtering. Choose the original language and search method in Options.' %}</span></span>
+                <small class="text-muted">{% trans 'Search only the text of the first selected translation.' %}</small>
+              </div>
+            </div>
+            <div class="col-lg-4 mb-3">
+              <div class="bs-word-search-panel bs-search-method-panel">
+                <label for="bs-dictionary-search-input" class="form-label">{% trans "Search words in Strong's Dictionary" %}</label>
+                <div class="bs-word-search-row">
+                  <input type="text" class="form-control bible-study-number-input" id="bs-dictionary-search-input"
+                         autocomplete="off" placeholder="{% trans 'e.g. Life, H2416 or a Hebrew/Greek word' %}">
+                  <button type="button" class="btn commentary-action-btn bs-word-search-btn" id="bs-dictionary-search-btn">
+                    <i class="fa fa-search" aria-hidden="true"></i> {% trans 'Search' %}
+                  </button>
+                </div>
+                <div class="bs-dictionary-languages" role="group" aria-label="{% trans 'Original language' %}">
+                  <div class="form-check form-check-inline mb-0">
+                    <input type="checkbox" class="form-check-input" id="bs-search-hebrew" checked>
+                    <label class="form-check-label" for="bs-search-hebrew">{% trans 'Hebrew' %}</label>
+                  </div>
+                  <div class="form-check form-check-inline mb-0">
+                    <input type="checkbox" class="form-check-input" id="bs-search-greek">
+                    <label class="form-check-label" for="bs-search-greek">{% trans 'Greek' %}</label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -160,35 +173,7 @@
           </div>
           <div class="modal-body">
             <div class="bs-search-options-stack">
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-mode" class="form-label">{% trans "Search method" %}</label>
-                  <p class="small text-muted">{% trans "Search the translated Bible text, or search original-word dictionary labels and their occurrence verses. Dictionary labels are English, with Dutch renderings when available. Without word study, only the translated Bible text is searched." %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select selectpicker" id="bs-search-mode" data-live-search="false" data-width="100%">
-                      <option value="verses">{% trans "Search Bible text" %}</option>
-                      <option value="lexicon">{% trans "Search Strong's dictionary" %}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-original-language" class="form-label">{% trans "Original language" %}</label>
-                  <p class="small text-muted">{% trans "Choose which original words to include in word study and dictionary results. This does not change the translated Bible text search." %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select selectpicker" id="bs-search-original-language" data-live-search="false" data-width="100%">
-                      <option value="hebrew" selected>{% trans "Hebrew only" %}</option>
-                      <option value="greek">{% trans "Greek only" %}</option>
-                      <option value="both">{% trans "Hebrew and Greek" %}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+              <p class="small text-muted">{% trans 'These options apply only to searching words in Bible verses.' %}</p>
               <div class="bs-search-option-row">
                 <div class="bs-search-option-copy">
                   <label for="bs-search-scope" class="form-label">{% trans 'Search in' %}</label>
@@ -305,26 +290,35 @@
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-columns"></i></span>{% trans 'Translations' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Use each translation dropdown to pick up to 4 Bibles side by side. As soon as you change the passage or translations, the verse grid refreshes automatically.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'The Statenvertaling (SV) is served from this server instead of the Bible API, so it always loads and is the most precise choice for a Dutch word study.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'The Statenvertaling (SV) uses local text and word-level Strong’s tagging. Other translations may have less complete word links.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-list-ol"></i></span>{% trans 'Verse range' %}</h6>
-            <p class="small text-muted mb-0">{% trans 'Type a book and chapter (for example: 1 John 5 or 1 John 5:1). Suggestions respect the real chapter end and show ranges of up to' %} {{ max_verses }} {% trans 'verses.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose an autocomplete suggestion, press Enter or click Search to open it. Suggestions respect chapter boundaries and show up to' %} {{ max_verses }} {% trans 'verses.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Use Previous and Next above the passage to move through the Bible. Combine verses gives continuous text; turn it off for separate verse cards and word-by-word study.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
-            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-search"></i></span>{% trans 'Word search' %}</h6>
-            <p class="small text-muted mb-0">{% trans 'Enter one or more words, such as Tree of life. The search is sent to API.Bible for the first selected translation, and the matching words are bold in the results. Click a result to study that passage.' %}</p>
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-search"></i></span>{% trans 'Search words in Bible translation' %}</h6>
+            <p class="small text-muted mb-1">{% trans 'The second box searches only the first selected translation, without Hebrew/Greek word study. Matching words are highlighted; click a result to open its passage. Search and Enter do the same thing.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Only this box has Options: choose a Bible section or custom book range, results per page, sorting, spelling strictness and exact phrase matching. Automatic spelling can return related spellings, not just the literal query. Local translations use literal matching and do not support fuzzy spelling.' %}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-book"></i></span>{% trans "Search words in Strong's Dictionary" %}</h6>
+            <p class="small text-muted mb-1">{% trans 'Use the third box for a word meaning, a Strong’s number such as H2416 or G26, or a Hebrew/Greek word. Check Hebrew, Greek or both; at least one language must be selected. Hebrew is selected initially.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Dictionary search uses local lemmas, English meanings and available Dutch Statenvertaling renderings. It does not require the typed word to appear in the selected translation. It searches the whole Bible in Bible order, with 50 occurrence verses per page; the second box’s Options do not apply.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'The first matching Strong’s word starts selected. Select more word buttons to include their occurrence verses; deselect them to remove those verses. Deselecting all shows no verses. Selection is kept while paging, and page buttons show reference ranges. Close the result panel with its cross.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-language"></i></span>{% trans "Original text + Strong's" %}</h6>
             <p class="small text-muted mb-1">{% trans "Use the Original text button on a verse to toggle only that verse's Hebrew/Greek panel and Strong's detail card." %}</p>
             <p class="small text-muted mb-0">{% trans "Hover a word to preview Strong's numbers and click it to explore all possible glosses, lemma data, transliteration, and derivation." %}</p>
+            <p class="small text-muted mb-0">{% trans 'Word details include grammar, root and service-word components, and Hebrew letter values. Expand or collapse the parts-and-letters and Strong’s cards. Dictionary details show the lemma; clicking a passage word shows its actual inflected form, so grammar and letter totals can differ.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-link"></i></span>{% trans 'Word-by-word links' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Turn off "Combine verses" to study a passage word by word. Translated words that we can tie to a specific Hebrew or Greek word then get a dotted underline.' %}</p>
             <p class="small text-muted mb-1">{% trans "Hover such a word and the matching original word lights up in the same colour. Click it to open that word's Strong's details — if the original text panel is still closed, it opens by itself and jumps to that word." %}</p>
-            <p class="small text-muted mb-0">{% trans 'Words without an underline simply have no counterpart in the original language, for example words a translator added to make the sentence run smoothly.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'A word without a link was not reliably aligned. It may be added by the translator, or the wording may differ too much from the tagged edition; it does not prove that no original-language counterpart exists.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-cogs"></i></span>{% trans 'How the word links are made' %}</h6>
@@ -334,7 +328,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-database"></i></span>{% trans 'Where the data comes from' %}</h6>
-            <p class="small text-muted mb-1">{% trans 'Translation texts come from API.Bible and from the local Complete Jewish Bible; every translation shows its own copyright line.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Translation texts come from API.Bible, the local Statenvertaling and the local Complete Jewish Bible; each translation has its own copyright notice. Local text search does not call API.Bible. Fetching external translation verses can be subject to the daily API allowance; errors are shown explicitly.' %}</p>
             <p class="small text-muted mb-1">{% trans "The Hebrew and Greek words, their grammar and their meanings come from the STEPBible datasets (TAHOT, TAGNT and the brief Strong's lexicons, CC BY 4.0) by Tyndale House Cambridge." %}</p>
             <p class="small text-muted mb-1">{% trans "The Strong's definitions and the &quot;KJV usage&quot; lists come from the public-domain OpenScriptures Strong's dictionaries. The word-by-word tagging comes from the public CrossWire Bible Society modules." %}</p>
             <p class="small text-muted mb-1">{% trans 'When the site is set to Dutch, each original word also shows how the Statenvertaling renders it here, plus a list of all its Statenvertaling renderings with how often each one is used.' %}</p>

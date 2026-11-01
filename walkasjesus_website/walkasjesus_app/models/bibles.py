@@ -10,6 +10,7 @@ from django.db import models
 from django.utils import translation
 
 from walkasjesus_app.lib.access_policy import cjb_bible_id
+from walkasjesus_app.models.bible_books import BibleBooks
 
 
 def local_bible_root():
@@ -71,6 +72,16 @@ class LocalStatenvertalingBible(Bible):
         if len(snippets) == 1:
             return snippets[0][2]
         return '\n'.join(f'{chapter}:{verse} {text}' for chapter, verse, text in snippets)
+
+    def iter_verses(self):
+        for book in BibleBooks:
+            chapters = self._chapters(book.name)
+            if not chapters:
+                raise ValueError(f'Statenvertaling data is unavailable for {book.name}.')
+            for chapter in sorted(chapters, key=int):
+                for verse, text in sorted(chapters[chapter].items(), key=lambda item: int(item[0])):
+                    if text:
+                        yield book.name, int(chapter), int(verse), text
 
 
 class LocalCompleteJewishBible(Bible):
@@ -187,6 +198,16 @@ class LocalCompleteJewishBible(Bible):
             return snippets[0][2]
 
         return '\n'.join(f'{chapter}:{verse} {text}' for chapter, verse, text in snippets)
+
+    def iter_verses(self):
+        index = self._load_index()
+        if not index:
+            raise ValueError('Local Complete Jewish Bible data is unavailable.')
+        for book in BibleBooks:
+            chapters = index.get(self._normalize_book_key(book.name), {})
+            for chapter in sorted(chapters):
+                for verse, text in sorted(chapters[chapter].items()):
+                    yield book.name, chapter, verse, text
 
 
 class BibleTranslation:

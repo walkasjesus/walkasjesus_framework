@@ -2152,6 +2152,10 @@ def _tagged_run_assignments(source, book_name, chapter, verse, words):
 
 def _tagged_mapping(source, book_name, chapter, verse, display_words, words):
     assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    return _tagged_mapping_from_assignments(assignments, display_words)
+
+
+def _tagged_mapping_from_assignments(assignments, display_words):
     if not assignments or not display_words:
         return None
 
@@ -2347,23 +2351,36 @@ def search_result_word_study(results, query, tagged_source='', allow_scoring=Fal
     for result in results:
         book, chapter, verse = result['book'], result['chapter'], result['verse']
         language = original_language_code(book)
-        lines = _search_stepbible_book_rows(book).get(f'{_stepbible_book_code(book)}.{chapter}:{verse}', [])
-        rows = [_parse_stepbible_row(line, language) for line in lines]
-        rows = [row for row in rows if row and str(row.get('surface_text') or '').strip()]
+        rows = []
         words = []
-        for row in rows:
-            candidates = []
-            for code in row.get('strongs_numbers') or []:
-                entry = _lookup_step_lexicon_entry(code, language) or {}
-                candidates.append({'strongs_number': code, 'glosses': [entry.get('short_gloss', '')]})
-            words.append({
-                'candidates': candidates, 'clickable': bool(candidates),
-                'context_gloss': row.get('context_translation', ''),
-                'translation_label': row.get('translation_label', ''),
-            })
+        positions = []
+        assignments = []
+        for part_chapter, part_verse in result.get('verse_positions', [(chapter, verse)]):
+            lines = _search_stepbible_book_rows(book).get(f'{_stepbible_book_code(book)}.{part_chapter}:{part_verse}', [])
+            part_rows = [_parse_stepbible_row(line, language) for line in lines]
+            part_rows = [row for row in part_rows if row and str(row.get('surface_text') or '').strip()]
+            part_words = []
+            for word_index, row in enumerate(part_rows):
+                candidates = []
+                for code in row.get('strongs_numbers') or []:
+                    entry = _lookup_step_lexicon_entry(code, language) or {}
+                    candidates.append({'strongs_number': code, 'glosses': [entry.get('short_gloss', '')]})
+                part_words.append({
+                    'candidates': candidates, 'clickable': bool(candidates),
+                    'context_gloss': row.get('context_translation', ''),
+                    'translation_label': row.get('translation_label', ''),
+                })
+                positions.append((part_chapter, part_verse, word_index))
+            if tagged_source:
+                assignments.extend(
+                    (index + len(words) if index >= 0 else -1, segment_words)
+                    for index, segment_words in _tagged_run_assignments(
+                        tagged_source, book, part_chapter, part_verse, part_words)
+                )
+            rows.extend(part_rows)
+            words.extend(part_words)
         displayed = _WORD_SPLIT_RE.findall(_strip_html(result.get('text', '')))
-        mapping = _tagged_mapping(tagged_source, book, chapter, verse,
-                                  [word.casefold() for word in displayed], words) if tagged_source else None
+        mapping = _tagged_mapping_from_assignments(assignments, [word.casefold() for word in displayed]) if tagged_source else None
         method = 'tagged'
         if mapping is None and allow_scoring:
             mapping = _align_english_words([word.casefold() for word in displayed],
@@ -2384,8 +2401,9 @@ def search_result_word_study(results, query, tagged_source='', allow_scoring=Fal
                                        matched_occurrences=[], alignment_method=method)
                 if result['reference'] not in found[code]['matched_references']:
                     found[code]['matched_references'].append(result['reference'])
+                part_chapter, part_verse, word_index = positions[index]
                 occurrence = {
-                    'book': book, 'chapter': chapter, 'verse': verse, 'word_index': index,
+                    'book': book, 'chapter': part_chapter, 'verse': part_verse, 'word_index': word_index,
                     'reference': result['reference'], 'text': rows[index]['surface_text'],
                     'source_strongs_number': candidate['strongs_number'],
                 }

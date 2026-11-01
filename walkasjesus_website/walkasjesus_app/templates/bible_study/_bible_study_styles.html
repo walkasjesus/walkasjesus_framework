@@ -1,5 +1,79 @@
 {% load static %}
 <style>
+    .bible-study-shell .bs-search-study-option {
+      align-items: baseline;
+      display: flex;
+      gap: 0.25rem;
+      position: relative;
+    }
+    .bible-study-shell .bs-search-study-option .form-check-label {
+      display: inline;
+      margin-bottom: 0;
+    }
+    .bible-study-shell .bs-search-study-option .bs-combine-help {
+      flex-shrink: 0;
+      margin: 0;
+      position: static;
+    }
+    .bible-study-shell .bs-search-study-option .bs-combine-help::after {
+      font-size: 0.85rem;
+      max-width: 100%;
+      min-width: 0;
+      width: 440px;
+    }
+    .bible-study-shell .bs-search-study-detail {
+      border: 1px solid #d6c697;
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+    .bible-study-shell .bs-search-study-detail .bs-hebrew-study-disclosure {
+      position: relative;
+      background: #faf7ec;
+      border: 1px solid #e9dfc1;
+      border-radius: 6px;
+      padding: 0.65rem 0.75rem;
+    }
+    .bible-study-shell .bs-search-study-detail .bs-hebrew-study-toggle {
+      padding-right: 2rem;
+      width: 100%;
+    }
+    .bible-study-shell .bs-search-study-detail .bs-hebrew-word-study {
+      background: transparent;
+      border: 0;
+      border-top: 1px solid #e9dfc1;
+      border-radius: 0;
+      margin-top: 0.5rem;
+      padding: 0.65rem 0 0;
+    }
+    .bible-study-shell .bs-search-parts-close {
+      position: absolute;
+      top: 0.45rem;
+      right: 0.45rem;
+      background: transparent;
+      border: 0;
+      color: #757575;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+    }
+    .bible-study-shell details:not([open]) > .bs-search-parts-close {
+      display: none;
+    }
+    .bible-study-shell .bs-search-candidate-disclosure > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 0.3rem 0;
+    }
+    .bible-study-shell .bs-search-candidate-disclosure > summary::-webkit-details-marker {
+      display: none;
+    }
+    .bible-study-shell .bs-search-candidate-disclosure > summary::before {
+      content: '+';
+      font-weight: bold;
+      margin-right: 0.4rem;
+    }
+    .bible-study-shell .bs-search-candidate-disclosure[open] > summary::before {
+      content: '-';
+    }
     @font-face {
       font-family: 'BibleStudySBLGreek';
       src: url('{% static 'fonts/sblgrk/SBL_grk.ttf' %}') format('truetype');

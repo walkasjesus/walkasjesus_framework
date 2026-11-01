@@ -1579,6 +1579,21 @@ def _stepbible_rows_for_verse(book_name, chapter, verse):
     return rows
 
 
+@lru_cache(maxsize=8)
+def _search_stepbible_book_rows(book_name):
+    """Index local tagged rows once per book while analysing a complete search."""
+    book_code = _stepbible_book_code(book_name)
+    rows = {}
+    with _stepbible_file_for_book(book_name).open(encoding='utf-8') as handle:
+        for line in handle:
+            token, separator, _ = line.partition('#')
+            if not separator or not token.startswith(book_code + '.'):
+                continue
+            reference = _step_reference_to_display(token)
+            rows.setdefault(reference, []).append(line.rstrip('\n'))
+    return rows
+
+
 def _parse_stepbible_row(line, language):
     columns = line.split('\t')
     if language == 'greek':
@@ -1782,6 +1797,8 @@ def _english_stem(word):
         return ''
     if value in _ENGLISH_IRREGULAR_STEMS:
         return _ENGLISH_IRREGULAR_STEMS[value]
+    if value.endswith('ees'):
+        return value[:-1]
     for suffix in _ENGLISH_STEM_SUFFIXES:
         if len(value) - len(suffix) >= 3 and value.endswith(suffix):
             base = value[:-len(suffix)]
@@ -2163,6 +2180,218 @@ def _tagged_usage_index(source):
     except (OSError, ValueError, TypeError):
         return {}
     return payload if isinstance(payload, dict) else {}
+
+
+def strongs_word_summary(code, language_code='en'):
+    normalized = _normalize_strongs_base_code(code)
+    if not re.fullmatch(r'[HG]\d+', normalized):
+        raise ValueError('Invalid Strong\'s number.')
+    language = 'hebrew' if normalized.startswith('H') else 'greek'
+    entry = (_lookup_step_lexicon_entry(str(code).upper(), language)
+             or _lookup_step_lexicon_entry(normalized, language)
+             or _lookup_step_lexicon_entry(normalized[0] + normalized[1:].zfill(4), language))
+    if not entry:
+        raise ValueError('Strong\'s entry not found.')
+    source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code).lower()[:2])
+    local_usage = _tagged_usage_index(source).get(normalized, []) if source else []
+    return {
+        'strongs_number': normalized,
+        'source_strongs_number': entry['strongs_number'],
+        'lemma': entry.get('lemma', ''),
+        'transliteration': entry.get('transliteration', ''),
+        'gloss': entry.get('short_gloss', ''),
+        'local_gloss': str(local_usage[0][0]) if local_usage else '',
+        'language': 'Hebrew' if language == 'hebrew' else 'Greek',
+    }
+
+
+def strongs_word_detail(code, language_code='en'):
+    summary = strongs_word_summary(code, language_code)
+    language = 'hebrew' if summary['language'] == 'Hebrew' else 'greek'
+    code = summary['strongs_number']
+    entry_code = summary['source_strongs_number']
+    candidate = _candidate_payload(entry_code, language, {})
+    candidate['strongs_number'] = code
+    source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code)[:2])
+    if source:
+        candidate['local_usage'] = [
+            {'label': item[0], 'count': item[1], 'references': item[2] if len(item) > 2 else []}
+            for item in _tagged_usage_index(source).get(summary['strongs_number'], [])[:12]
+        ]
+    letters = _hebrew_letter_data(summary['lemma']) if language == 'hebrew' else []
+    components = []
+    if language == 'hebrew':
+        service = 9001 <= int(code[1:]) <= 9039 or int(code[1:]) in {853, 854}
+        components = [{
+            'strongs_number': candidate['source_strongs_number'],
+            'surface': summary['lemma'], 'lemma': summary['lemma'],
+            'role': 'grammatical' if service else 'root',
+            'gloss': summary['gloss'], 'local_gloss': summary['local_gloss'], 'letters': letters,
+        }]
+    return {
+        'detail_kind': 'lemma',
+        'language_code': 'hbo' if language == 'hebrew' else 'grc',
+        'language_label': summary['language'],
+        'words': [{
+            'text': summary['lemma'], 'clickable': True, 'has_candidates': True,
+            'candidates': [candidate], 'word_components': components,
+            'hebrew_letters': letters,
+            'gematria_value': sum(letter['value'] for letter in letters),
+        }],
+    }
+
+
+def strongs_occurrence_word_detail(code, book, chapter, verse, word_index, language_code='en'):
+    """Use the exact tagged token, including its inflection and component morphology."""
+    summary = strongs_word_summary(code)
+    language = original_language_code(book)
+    lines = _search_stepbible_book_rows(book).get(f'{_stepbible_book_code(book)}.{chapter}:{verse}', [])
+    rows = [_parse_stepbible_row(line, language) for line in lines]
+    rows = [row for row in rows if row and str(row.get('surface_text') or '').strip()]
+    if word_index < 0 or word_index >= len(rows):
+        raise ValueError('Original word occurrence not found.')
+    row = rows[word_index]
+    if summary['strongs_number'] not in {
+        _normalize_strongs_base_code(item) for item in row.get('strongs_numbers') or []
+    }:
+        raise ValueError('Original word occurrence does not match the Strong\'s number.')
+    word = _token_payload_from_step_row(row, language)
+    if str(language_code).lower()[:2] in GLOSS_SOURCE_BY_LANGUAGE:
+        localized = localized_original_text_payload(book, chapter, verse, language_code)
+        localized_words = localized.get('words') or []
+        if word_index >= len(localized_words) or localized_words[word_index]['text'] != word['text']:
+            raise ValueError('Localized original word occurrence does not match the tagged token.')
+        word = localized_words[word_index]
+    return {
+        'detail_kind': 'occurrence',
+        'book': book, 'chapter': chapter, 'verse': verse,
+        'language_code': 'hbo' if language == 'hebrew' else 'grc',
+        'language_label': summary['language'],
+        'words': [word],
+        'local_source_name': TAGGED_BIBLE_SOURCES[GLOSS_SOURCE_BY_LANGUAGE[str(language_code).lower()[:2]]]['label']
+        if str(language_code).lower()[:2] in GLOSS_SOURCE_BY_LANGUAGE else '',
+    }
+
+
+def strongs_occurrence_references(code, versification='nrsv'):
+    summary = strongs_word_summary(code)
+    language = 'hebrew' if summary['language'] == 'Hebrew' else 'greek'
+    usage = _stepbible_usage_index(language)
+    references = (usage['exact'].get(summary['source_strongs_number'], [])
+                  if re.fullmatch(r'[HGhg]\d+[A-Za-z]+', str(code))
+                  else usage['base'].get(summary['strongs_number'], []))
+    normalized = []
+    for reference in references:
+        match = re.match(r'^([^.]+)\.(\d+)[.:](\d+)', reference)
+        if not match:
+            raise ValueError('Invalid concordance reference.')
+        chapter, start, end = int(match[2]), int(match[3]), int(match[3])
+        if versification == 'kjv' and '[' in reference:
+            alternate = re.search(r'\[(\d+)\.(\d+)[a-z]?(?:-(\d+)[a-z]?)?\]', reference)
+            if not alternate:
+                raise ValueError('Unsupported KJV concordance numbering.')
+            chapter = int(alternate[1])
+            start = int(alternate[2])
+            end = int(alternate[3] or start)
+        normalized.extend(f'{match[1]}.{chapter}:{verse}' for verse in range(start, end + 1))
+    book_order = {
+        _stepbible_book_code(book).lower(): index
+        for index, book in enumerate([*_STEPBIBLE_OT_FILES, *_STEPBIBLE_NT_FILES])
+    }
+    def sort_key(reference):
+        book, position = reference.split('.', 1)
+        chapter, verse = position.split(':')
+        return book_order[book.lower()], int(chapter), int(verse)
+    return sorted({ref for ref in normalized if not ref.endswith(':0')}, key=sort_key)
+
+
+def search_strongs_dictionary(query, language_code='en'):
+    """Search local lexicon labels, original lemmas and tagged Dutch renderings."""
+    query = str(query).strip()
+    if re.fullmatch(r'[HGhg]0*\d+', query):
+        try:
+            return [strongs_word_summary(query.upper(), language_code)]
+        except ValueError:
+            return []
+    terms = _WORD_SPLIT_RE.findall(_strip_marks(query).casefold())
+    if not terms:
+        return []
+    source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code)[:2], 'svv')
+    local_usage = _tagged_usage_index(source)
+    found = {}
+    for language in ('hebrew', 'greek'):
+        for code, entry in _stepbible_lexicon(language).items():
+            normalized = _normalize_strongs_base_code(code)
+            labels = ' '.join(str(item[0]) for item in local_usage.get(normalized, []))
+            haystack = _strip_marks(' '.join([
+                entry.get('lemma', ''), entry.get('transliteration', ''),
+                entry.get('short_gloss', ''), labels,
+            ])).casefold()
+            words = _WORD_SPLIT_RE.findall(haystack)
+            if all(any(term == word or _english_stem(term) == _english_stem(word) for word in words)
+                   for term in terms):
+                if normalized not in found:
+                    found[normalized] = dict(strongs_word_summary(code, language_code), source_strongs_numbers=[])
+                source_code = entry['strongs_number']
+                if source_code not in found[normalized]['source_strongs_numbers']:
+                    found[normalized]['source_strongs_numbers'].append(source_code)
+    return sorted(found.values(), key=lambda item: (item['strongs_number'][0], int(item['strongs_number'][1:])))
+
+
+def search_result_word_study(results, query, tagged_source='', allow_scoring=False, language_code='en'):
+    """Reverse existing verse-word alignment using only local tagged/lexicon data."""
+    query_terms = {word.casefold() for word in _WORD_SPLIT_RE.findall(query)}
+    query_stems = {_english_stem(word) for word in query_terms} if tagged_source == 'kjv' or allow_scoring else set()
+    found = {}
+    unaligned = 0
+    for result in results:
+        book, chapter, verse = result['book'], result['chapter'], result['verse']
+        language = original_language_code(book)
+        lines = _search_stepbible_book_rows(book).get(f'{_stepbible_book_code(book)}.{chapter}:{verse}', [])
+        rows = [_parse_stepbible_row(line, language) for line in lines]
+        rows = [row for row in rows if row and str(row.get('surface_text') or '').strip()]
+        words = []
+        for row in rows:
+            candidates = []
+            for code in row.get('strongs_numbers') or []:
+                entry = _lookup_step_lexicon_entry(code, language) or {}
+                candidates.append({'strongs_number': code, 'glosses': [entry.get('short_gloss', '')]})
+            words.append({
+                'candidates': candidates, 'clickable': bool(candidates),
+                'context_gloss': row.get('context_translation', ''),
+                'translation_label': row.get('translation_label', ''),
+            })
+        displayed = _WORD_SPLIT_RE.findall(_strip_html(result.get('text', '')))
+        mapping = _tagged_mapping(tagged_source, book, chapter, verse,
+                                  [word.casefold() for word in displayed], words) if tagged_source else None
+        method = 'tagged'
+        if mapping is None and allow_scoring:
+            mapping = _align_english_words([word.casefold() for word in displayed],
+                                          [_alignment_spec_for_word(word) for word in words])
+            method = 'lexicon'
+        if mapping is None:
+            unaligned += 1
+            continue
+        for text, index in zip(displayed, mapping):
+            if index < 0 or (text.casefold() not in query_terms and _english_stem(text) not in query_stems):
+                continue
+            for candidate in words[index]['candidates']:
+                code = _normalize_strongs_base_code(candidate['strongs_number'])
+                if code.startswith('H') and int(code[1:]) >= 9000:
+                    continue
+                if code not in found:
+                    found[code] = dict(strongs_word_summary(code, language_code), matched_references=[],
+                                       matched_occurrences=[], alignment_method=method)
+                if result['reference'] not in found[code]['matched_references']:
+                    found[code]['matched_references'].append(result['reference'])
+                occurrence = {
+                    'book': book, 'chapter': chapter, 'verse': verse, 'word_index': index,
+                    'reference': result['reference'], 'text': rows[index]['surface_text'],
+                    'source_strongs_number': candidate['strongs_number'],
+                }
+                if occurrence not in found[code]['matched_occurrences']:
+                    found[code]['matched_occurrences'].append(occurrence)
+    return {'candidates': list(found.values()), 'unaligned_results': unaligned}
 
 
 def localized_original_text_payload(book_name, chapter, verse, language_code='en'):

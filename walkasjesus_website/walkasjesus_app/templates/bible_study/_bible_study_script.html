@@ -585,18 +585,95 @@
   function bsSyncAdvancedSearchControls() {
     var scope = String($('#bs-search-scope').val() || '');
     $('.bs-search-custom-range').toggle(scope === 'custom' || scope === 'custom_books');
+    var studyEnabled = $('#bs-search-word-study-enabled').is(':checked');
+    var dictionary = studyEnabled && $('#bs-search-mode').val() === 'lexicon';
+    $('#bs-search-mode, #bs-search-original-language').prop('disabled', !studyEnabled);
+    $('#bs-search-fuzziness, #bs-search-exact-phrase').prop('disabled', dictionary);
+    if (dictionary && $('#bs-search-sort').val() === 'relevance') {
+      $('#bs-search-sort').val('canonical');
+    }
+    $('#bs-search-mode, #bs-search-sort, #bs-search-fuzziness, #bs-search-original-language').each(function() {
+      var $select = $(this);
+      if ($.fn.selectpicker && $select.data('selectpicker')) {
+        $select.selectpicker('refresh');
+      } else {
+        $select.trigger('jc:native-select-refresh');
+      }
+    });
   }
 
-  function bsSearchEffectiveQuery(query) {
+  function bsSearchEffectiveQuery(query, exactPhrase) {
     var text = $.trim(String(query || ''));
-    if ($('#bs-search-exact-phrase').is(':checked') && text && text.charAt(0) !== '"') {
+    if (exactPhrase && text && text.charAt(0) !== '"') {
       return '"' + text + '"';
     }
     return text;
   }
 
+  var bsWordSearchVersion = 0;
+  var bsWordStudyVersion = 0;
+  var bsWordSelection = null;
+  var bsAllWordSearchPayload = null;
+  var bsWordFocusCode = null;
+
+  function renderCompleteWordSearch(offset) {
+    var payload = $.extend({}, bsAllWordSearchPayload);
+    var candidates = (payload.word_study || {}).candidates || [];
+    var results = payload.all_results.slice();
+    if (bsLastWordSearch.exactPhrase) {
+      results = results.filter(function(result) { return bsMatchesExactPhrase(result.text, bsLastWordSearch.query); });
+      candidates = candidates.map(function(candidate) {
+        return $.extend({}, candidate, {
+          matched_references: (candidate.matched_references || []).filter(function(ref) {
+            return results.some(function(result) { return result.reference === ref; });
+          }),
+          matched_occurrences: (candidate.matched_occurrences || []).filter(function(item) {
+            return results.some(function(result) { return result.reference === item.reference; });
+          })
+        });
+      }).filter(function(candidate) { return candidate.matched_references.length; });
+      payload.word_study = $.extend({}, payload.word_study, {candidates: candidates});
+    }
+    if (bsWordSelection === null && candidates.length) {
+      bsWordSelection = {};
+      bsWordSelection[candidates[0].strongs_number] = true;
+    }
+    if (bsWordSelection !== null) {
+      var references = {};
+      candidates.forEach(function(item) {
+        if (bsWordSelection[item.strongs_number]) {
+          (item.matched_references || []).forEach(function(ref) { references[ref] = true; });
+        }
+      });
+      results = results.filter(function(result) { return references[result.reference]; });
+    }
+    var limit = bsLastWordSearch.limit;
+    var pageCount = Math.max(1, Math.ceil(results.length / limit));
+    offset = Math.min(offset || 0, (pageCount - 1) * limit);
+    payload.results = results.slice(offset, offset + limit);
+    payload.total = results.length;
+    payload.verse_count = results.length;
+    payload.page = Math.floor(offset / limit) + 1;
+    payload.page_count = pageCount;
+    payload.pages = [];
+    for (var page = 1; page <= pageCount; page += 1) {
+      var items = results.slice((page - 1) * limit, page * limit);
+      var codes = Object.keys(bsSearchBookMeta).map(function(book) { return bsSearchBookMeta[book][0]; });
+      items.sort(function(left, right) {
+        var a = String(left.id).split('.'), b = String(right.id).split('.');
+        return codes.indexOf(a[0]) - codes.indexOf(b[0]) || Number(a[1]) - Number(b[1]) || Number(a[2]) - Number(b[2]);
+      });
+      payload.pages.push({page: page, offset: (page - 1) * limit, current: page === payload.page,
+        range_label: items.length ? items[0].reference + (items.length > 1 ? '–' + items[items.length - 1].reference : '') : ''});
+    }
+    ++bsWordStudyVersion;
+    renderBibleStudySearchResults(payload);
+  }
+
   function bsCurrentSearchOptions(offset) {
     return {
+      mode: $('#bs-search-word-study-enabled').is(':checked') ? String($('#bs-search-mode').val() || 'verses') : 'text',
+      originalLanguage: String($('#bs-search-original-language').val() || 'hebrew'),
       limit: parseInt($('#bs-search-limit').val(), 10) || 50,
       offset: parseInt(offset || 0, 10) || 0,
       sort: String($('#bs-search-sort').val() || 'canonical'),
@@ -612,7 +689,7 @@
     var originalResults = (payload && payload.results) || [];
     var results = originalResults.slice();
     var query = String((bsLastWordSearch && bsLastWordSearch.query) || (payload && payload.query) || $('#bs-word-search-input').val() || '');
-    if (bsLastWordSearch && bsLastWordSearch.exactPhrase) {
+    if (payload.mode !== 'strongs' && bsLastWordSearch && bsLastWordSearch.exactPhrase) {
       results = results.filter(function(result) {
         return bsMatchesExactPhrase(String((result && result.text) || ''), query);
       });
@@ -636,14 +713,19 @@
     var pageRange = String((currentPage && currentPage.range_label) || '');
     if (!results.length) {
       $target.html('<div class="alert alert-info mb-0">{% trans "No matching verses found in the first selected translation." %}</div>');
+      if (payload.word_study) {
+        renderSearchWordStudy(payload.word_study, payload.mode === 'strongs');
+      }
       return;
     }
 
     var summaryHtml = '<div class="bs-word-search-summary">' +
       '<div><strong>' + escapeHtml(query) + '</strong></div>' +
-      '<div>{% trans "occurs" %} ' + escapeHtml(String(total)) + ' {% trans "times in" %} <strong>' + escapeHtml(String(verseCount)) + '</strong> {% trans "verses in" %} ' + escapeHtml(bibleName || '{% trans "the selected Bible" %}') + '.</div>' +
+      (payload.all_results || (payload.word_study && payload.word_study.dictionary)
+        ? '<div><strong>' + escapeHtml(String(verseCount)) + '</strong> {% trans "matching verses in" as bs_matching_verses %}{{ bs_matching_verses|escapejs }} ' + escapeHtml(bibleName) + '.</div>'
+        : '<div>{% trans "occurs" %} ' + escapeHtml(String(total)) + ' {% trans "times in" %} <strong>' + escapeHtml(String(verseCount)) + '</strong> {% trans "verses in" %} ' + escapeHtml(bibleName || '{% trans "the selected Bible" %}') + '.</div>') +
       '<div class="mt-1">{% trans "Page" %} ' + escapeHtml(String(page)) + ' / ' + escapeHtml(String(pageCount)) + ': ' +
-        '<em>' + (bsLastWordSearch && bsLastWordSearch.exactPhrase ? '{% trans "exact phrase" %}' : '{% trans "all keywords" %}') + '</em>' +
+        '<em>' + (payload.mode === 'strongs' ? escapeHtml((payload.selected_strongs || []).join(', ')) : (bsLastWordSearch && bsLastWordSearch.exactPhrase ? '{% trans "exact phrase" %}' : '{% trans "all keywords" %}')) + '</em>' +
         (pageRange ? ' (' + escapeHtml(pageRange) + ')' : '') +
         (bsLastWordSearch && bsLastWordSearch.scopeLabel ? ' · ' + escapeHtml(bsLastWordSearch.scopeLabel) : '') +
       '</div>' +
@@ -677,13 +759,115 @@
       itemsHtml +
       '</div>'
     );
+    if (payload.word_study) {
+      renderSearchWordStudy(payload.word_study, payload.mode === 'strongs');
+    }
   }
 
-  function runBibleStudyWordSearch(offset) {
+  function renderSearchWordStudy(study, occurrences, dictionary) {
+    var candidates = study.candidates || [];
+    dictionary = dictionary || study.dictionary;
+    var note = dictionary
+      ? '{% trans "Select an original word to see its Strong's details and occurrence verses." as bs_dictionary_note %}{{ bs_dictionary_note|escapejs }}'
+      : (occurrences ? '{% trans "Verses containing the selected Strong's number in the original text." as bs_occurrence_note %}{{ bs_occurrence_note|escapejs }}'
+        : '{% trans "Original words found across this search. The first match starts selected. Select words to show their related verses; deselect words to hide them. English lexicon matches are estimates." as bs_reverse_note %}{{ bs_reverse_note|escapejs }}');
+    if (dictionary) {
+      note = '{% trans "Dictionary matches can include meanings not translated by your search term. The first match starts selected; select other words to include their occurrence verses." as bs_dictionary_selection_note %}{{ bs_dictionary_selection_note|escapejs }}';
+    }
+    if (bsWordSelection === null) {
+      bsWordSelection = {};
+      if (candidates.length) { bsWordSelection[candidates[0].strongs_number] = true; }
+    }
+    var html = '<div class="bs-word-search-panel mb-3" id="bs-search-word-study">' +
+      '<div class="bs-word-search-panel-head"><h3 class="h5 mb-0">{% trans "Original-word study" as bs_word_study_title %}{{ bs_word_study_title|escapejs }}</h3>' +
+      '<button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div>' +
+      '<p class="small text-muted">' + escapeHtml(study.error || note) + '</p>';
+    if (!candidates.length) {
+      html += '<p class="mb-0">{% trans "No matching original words were found for the selected language. Check Original language or try the Strong's dictionary in Search options." as bs_unmapped_note %}{{ bs_unmapped_note|escapejs }}</p>';
+    }
+    html += '<div class="d-flex flex-wrap">' + candidates.map(function(candidate) {
+      var selected = !!bsWordSelection[candidate.strongs_number];
+      var occurrence = searchWordOccurrence(candidate);
+      return '<button type="button" class="btn btn-sm commentary-action-btn mr-2 mb-2 bs-search-strongs-btn' + (selected ? ' active' : '') +
+        '" aria-pressed="' + selected + '" data-code="' +
+        escapeHtml(candidate.strongs_number) + '" data-occurrences="' + (dictionary ? '1' : '0') + '">' +
+        escapeHtml(candidate.strongs_number) + ' · <span class="' + (candidate.language === 'Hebrew'
+          ? 'bs-original-language-hbo ' + window.WAJOriginalTextShared.hebrewLemmaClass(candidate, candidate.word_components)
+          : 'bs-original-language-grc') + '">' +
+        escapeHtml(occurrence ? occurrence.text : (candidate.lemma || '')) + '</span>' +
+        (candidate.local_gloss || candidate.gloss ? ' · ' + escapeHtml(candidate.local_gloss || candidate.gloss) : '') + '</button>';
+    }).join('') + '</div>' + candidates.filter(function(item) { return bsWordSelection[item.strongs_number]; }).map(function(item) {
+      return '<div class="bs-search-study-detail mb-3" data-code="' + escapeHtml(item.strongs_number) +
+        '"><div class="bs-original-word-detail"></div></div>';
+    }).join('') + '</div>';
+    $('#bs-word-search-results').prepend(html);
+    $('#bs-search-word-study').data('candidates', candidates);
+    if (bsWordFocusCode) {
+      $('#bs-search-word-study .bs-search-strongs-btn').filter(function() {
+        return $(this).data('code') === bsWordFocusCode;
+      }).trigger('focus');
+      bsWordFocusCode = null;
+    }
+    candidates.forEach(function(item) {
+      if (bsWordSelection[item.strongs_number]) { loadSearchWordDetail(item.strongs_number); }
+    });
+  }
+
+  function searchWordOccurrence(candidate) {
+    var occurrences = candidate.matched_occurrences || [];
+    var visibleReferences = $('#bs-word-search-results .bs-word-search-result').map(function() {
+      return $(this).find('.bs-word-search-reference').text();
+    }).get();
+    return occurrences.filter(function(item) { return visibleReferences.indexOf(item.reference) >= 0; })[0] ||
+      occurrences[0] || null;
+  }
+
+  function loadSearchWordDetail(code) {
+    var version = bsWordStudyVersion;
+    var $panel = $('#bs-search-word-study');
+    var $detail = $panel.find('.bs-search-study-detail').filter(function() { return $(this).data('code') === code; });
+    var candidate = ($panel.data('candidates') || []).filter(function(item) { return item.strongs_number === code; })[0] || {};
+    var occurrence = searchWordOccurrence(candidate);
+    var detailRequest = {bible_id: bsLastWordSearch.bibleId, query: occurrence ? code : (candidate.source_strongs_number || code), mode: 'detail',
+      original_language: bsLastWordSearch.originalLanguage};
+    if (occurrence) {
+      $.extend(detailRequest, {book: occurrence.book, chapter: occurrence.chapter,
+        verse: occurrence.verse, word_index: occurrence.word_index});
+    }
+    $detail.find('.bs-original-word-detail').html('<i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+      url: bibleStudySearchUrl(), dataType: 'json',
+      data: detailRequest
+    }).done(function(payload) {
+      if (version !== bsWordStudyVersion || !$.contains(document, $detail[0])) { return; }
+      originalPanels.renderWordStudyDetail($detail, payload.detail || {});
+      if (!occurrence) {
+        $detail.find('.bs-original-word-detail').prepend('<p class="small text-muted">{% trans "Dictionary form (lemma), not a word form from a specific verse. Grammar and letter values can differ in actual verses." as bs_lemma_form_label %}{{ bs_lemma_form_label|escapejs }}</p>');
+      }
+    }).fail(function(xhr) {
+      if (version !== bsWordStudyVersion) { return; }
+      $detail.find('.bs-original-word-detail').text((xhr.responseJSON || {}).error || '{% trans "Original-word analysis is unavailable right now." as bs_word_study_error %}{{ bs_word_study_error|escapejs }}');
+    });
+  }
+
+  function runBibleStudyWordSearch(offset, preserveSelection) {
+    if (preserveSelection && bsAllWordSearchPayload) {
+      renderCompleteWordSearch(offset || 0);
+      return;
+    }
+    if (!preserveSelection) {
+      bsWordSelection = null;
+      bsAllWordSearchPayload = null;
+      bsWordFocusCode = null;
+    }
+    var version = ++bsWordSearchVersion;
+    ++bsWordStudyVersion;
     var endpoint = bibleStudySearchUrl();
-    var query = $.trim($('#bs-word-search-input').val());
-    var options = bsCurrentSearchOptions(offset || 0);
-    var firstBible = selectedBibleDescriptors()[0] || null;
+    var query = preserveSelection && bsLastWordSearch ? bsLastWordSearch.query : $.trim($('#bs-word-search-input').val());
+    var options = preserveSelection && bsLastWordSearch
+      ? $.extend({}, bsLastWordSearch, {offset: offset || 0}) : bsCurrentSearchOptions(offset || 0);
+    var firstBible = preserveSelection && bsLastWordSearch
+      ? {id: bsLastWordSearch.bibleId} : (selectedBibleDescriptors()[0] || null);
     var $target = $('#bs-word-search-results');
     if (!query) {
       $target.html('<div class="alert alert-warning mb-0">{% trans "Enter one or more words to search." %}</div>');
@@ -694,7 +878,13 @@
       return;
     }
 
-    $target.html('<div class="bs-word-search-panel"><div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div><p class="mb-0 text-muted"><i class="fa fa-spinner fa-spin mr-1"></i>{% trans "Searching the first selected translation…" %}</p></div>');
+    var loadingHtml = '<div class="bs-word-search-panel"><div class="bs-word-search-panel-head"><span class="bible-study-translation-title">{% trans "Search results" %}</span><button type="button" class="bs-word-search-close-btn" aria-label="{% trans "Close search results" %}" title="{% trans "Close search results" %}"><i class="fa fa-times" aria-hidden="true"></i></button></div><p class="mb-0 text-muted"><i class="fa fa-spinner fa-spin mr-1"></i>{% trans "Searching the first selected translation…" %}</p></div>';
+    if (preserveSelection) {
+      $target.children().not('#bs-search-word-study').remove();
+      $target.append(loadingHtml);
+    } else {
+      $target.html(loadingHtml);
+    }
     bsLastWordSearch = $.extend({
       bibleId: firstBible.id,
       query: query
@@ -703,32 +893,63 @@
       type: 'GET',
       url: endpoint,
       dataType: 'json',
-      data: {
+      data: $.extend({
+        mode: options.mode,
+        original_language: options.originalLanguage,
         bible_id: firstBible.id,
-        query: bsSearchEffectiveQuery(query),
+        query: options.mode === 'lexicon' ? query : bsSearchEffectiveQuery(query, options.exactPhrase),
         limit: options.limit,
         offset: options.offset,
         sort: options.sort,
         fuzziness: options.fuzziness,
-        range: options.range
-      }
+        range: options.range,
+        study_scope: 'all'
+      }, bsWordSelection === null ? {} : {
+        selected_strongs: Object.keys(bsWordSelection).filter(function(code) { return bsWordSelection[code]; }).join(',')
+      })
     }).done(function(payload) {
-      renderBibleStudySearchResults(payload || {});
+      if (version !== bsWordSearchVersion) { return; }
+      if (payload.all_results) {
+        bsAllWordSearchPayload = payload;
+        renderCompleteWordSearch(options.offset);
+      } else { renderBibleStudySearchResults(payload || {}); }
     }).fail(function(xhr) {
+      if (version !== bsWordSearchVersion) { return; }
       var message = '{% trans "Search is not available for this translation right now." %}';
       if (xhr && xhr.responseJSON && xhr.responseJSON.error) {
         message = xhr.responseJSON.error;
       }
-      $target.html('<div class="alert alert-warning mb-0">' + escapeHtml(message) + '</div>');
+      if (preserveSelection) {
+        $target.children().not('#bs-search-word-study').remove();
+        $target.append('<div class="alert alert-warning mb-0">' + escapeHtml(message) + '</div>');
+      } else {
+        $target.html('<div class="alert alert-warning mb-0">' + escapeHtml(message) + '</div>');
+      }
     });
   }
 
   $(document).on('click', '.bible-study-shell .bs-word-search-close-btn', function() {
+    ++bsWordSearchVersion;
+    ++bsWordStudyVersion;
     $('#bs-word-search-results').empty();
   });
 
-  $(document).on('change', '.bible-study-shell #bs-search-scope', function() {
+  $(document).on('click', '.bible-study-shell .bs-search-strongs-btn', function() {
+    var code = String($(this).data('code'));
+    bsWordFocusCode = code;
+    bsWordSelection[code] = !bsWordSelection[code];
+    $(this).toggleClass('active', bsWordSelection[code]).attr('aria-pressed', String(bsWordSelection[code]));
+    if (!bsWordSelection[code]) {
+      $('#bs-search-word-study .bs-search-study-detail').filter(function() { return $(this).data('code') === code; }).remove();
+    }
+    runBibleStudyWordSearch(0, true);
+  });
+
+  $(document).on('change', '.bible-study-shell #bs-search-scope, .bible-study-shell #bs-search-mode, .bible-study-shell #bs-search-word-study-enabled', function() {
     bsSyncAdvancedSearchControls();
+  });
+  $(document).on('change', '.bible-study-shell #bs-search-word-study-enabled', function() {
+    if ($.trim($('#bs-word-search-input').val())) { runBibleStudyWordSearch(0); }
   });
 
   $(document).on('click', '.bible-study-shell #bs-search-advanced-apply', function() {
@@ -737,7 +958,7 @@
   });
 
   $(document).on('click', '.bible-study-shell .bs-word-search-page-btn', function() {
-    runBibleStudyWordSearch(parseInt($(this).data('searchOffset'), 10) || 0);
+    runBibleStudyWordSearch(parseInt($(this).data('searchOffset'), 10) || 0, true);
   });
 
   function verseSpinnerHtml(source) {

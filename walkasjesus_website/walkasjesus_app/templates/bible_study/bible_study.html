@@ -47,7 +47,7 @@
           <strong>{{ max_verses }}</strong> {% trans 'consecutive verses.' %}
           {% trans 'You can also search for words or phrases in the first selected translation and jump straight to a matching verse.' %}
           {% trans 'Use the commentary buttons next to each verse to open notes from David Stern, John Lightfoot, King, or Rabbinical Jewish Commentaries.' %}
-          {% trans 'You can also enable the original Hebrew/Greek text with Strong\'s details below.' %}
+          {% trans "You can also enable the original Hebrew/Greek text with Strong's details below." %}
           {% trans 'Turn off "Combine verses" and the translated words are linked one by one to the Hebrew or Greek word behind them.' %}
         </p>
         <button class="btn law-filter-legend-toggle law-filter-legend-btn btn-sm" type="button"
@@ -88,7 +88,14 @@
                     <i class="fa fa-sliders" aria-hidden="true"></i> {% trans 'Options' %}
                   </button>
                 </div>
-                <small class="text-muted d-block mt-2">{% trans 'Search uses the first selected translation. Matching words are shown in bold.' %}</small>
+                <div class="form-check mt-2 bs-search-study-option">
+                  <input class="form-check-input" type="checkbox" id="bs-search-word-study-enabled" checked>
+                  <label class="form-check-label" for="bs-search-word-study-enabled">{% trans "Include Hebrew/Greek word study" %}</label>
+                  <span class="bs-combine-help jc-tooltip-host jc-tooltip-immediate" tabindex="0"
+                        data-jc-tooltip="{% trans 'Checked: also find the original Hebrew/Greek words behind your search and show their Strong’s details. The first original-word match is selected and filters the verses; select more words to include their verses.' %}
+
+{% trans 'Unchecked: search only the text of the first selected translation, without original-word analysis or filtering. Choose the original language and search method in Options.' %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'Checked: also find the original Hebrew/Greek words behind your search and show their Strong’s details. The first original-word match is selected and filters the verses; select more words to include their verses.' %} {% trans 'Unchecked: search only the text of the first selected translation, without original-word analysis or filtering. Choose the original language and search method in Options.' %}</span></span>
+                </div>
               </div>
             </div>
           </div>
@@ -105,7 +112,7 @@
 
 {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %}
 
-{% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans 'Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong\'s details.' %}</span></span>
+{% trans "Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong's details." %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans "Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong's details." %}</span></span>
                 </div>
               </div>
             </div>
@@ -153,6 +160,35 @@
           </div>
           <div class="modal-body">
             <div class="bs-search-options-stack">
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-mode" class="form-label">{% trans "Search method" %}</label>
+                  <p class="small text-muted">{% trans "Search the translated Bible text, or search original-word dictionary labels and their occurrence verses. Dictionary labels are English, with Dutch renderings when available. Without word study, only the translated Bible text is searched." %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select selectpicker" id="bs-search-mode" data-live-search="false" data-width="100%">
+                      <option value="verses">{% trans "Search Bible text" %}</option>
+                      <option value="lexicon">{% trans "Search Strong's dictionary" %}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="bs-search-option-row">
+                <div class="bs-search-option-copy">
+                  <label for="bs-search-original-language" class="form-label">{% trans "Original language" %}</label>
+                  <p class="small text-muted">{% trans "Choose which original words to include in word study and dictionary results. This does not change the translated Bible text search." %}</p>
+                </div>
+                <div class="bs-search-option-control">
+                  <div class="select law-filter-select-wrap">
+                    <select class="form-control law-filter-select selectpicker" id="bs-search-original-language" data-live-search="false" data-width="100%">
+                      <option value="hebrew" selected>{% trans "Hebrew only" %}</option>
+                      <option value="greek">{% trans "Greek only" %}</option>
+                      <option value="both">{% trans "Hebrew and Greek" %}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               <div class="bs-search-option-row">
                 <div class="bs-search-option-copy">
                   <label for="bs-search-scope" class="form-label">{% trans 'Search in' %}</label>
@@ -280,27 +316,27 @@
             <p class="small text-muted mb-0">{% trans 'Enter one or more words, such as Tree of life. The search is sent to API.Bible for the first selected translation, and the matching words are bold in the results. Click a result to study that passage.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
-            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-language"></i></span>{% trans 'Original text + Strong\'s' %}</h6>
-            <p class="small text-muted mb-1">{% trans 'Use the Original text button on a verse to toggle only that verse\'s Hebrew/Greek panel and Strong\'s detail card.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'Hover a word to preview Strong\'s numbers and click it to explore all possible glosses, lemma data, transliteration, and derivation.' %}</p>
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-language"></i></span>{% trans "Original text + Strong's" %}</h6>
+            <p class="small text-muted mb-1">{% trans "Use the Original text button on a verse to toggle only that verse's Hebrew/Greek panel and Strong's detail card." %}</p>
+            <p class="small text-muted mb-0">{% trans "Hover a word to preview Strong's numbers and click it to explore all possible glosses, lemma data, transliteration, and derivation." %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-link"></i></span>{% trans 'Word-by-word links' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Turn off "Combine verses" to study a passage word by word. Translated words that we can tie to a specific Hebrew or Greek word then get a dotted underline.' %}</p>
-            <p class="small text-muted mb-1">{% trans 'Hover such a word and the matching original word lights up in the same colour. Click it to open that word\'s Strong\'s details — if the original text panel is still closed, it opens by itself and jumps to that word.' %}</p>
+            <p class="small text-muted mb-1">{% trans "Hover such a word and the matching original word lights up in the same colour. Click it to open that word's Strong's details — if the original text panel is still closed, it opens by itself and jumps to that word." %}</p>
             <p class="small text-muted mb-0">{% trans 'Words without an underline simply have no counterpart in the original language, for example words a translator added to make the sentence run smoothly.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-cogs"></i></span>{% trans 'How the word links are made' %}</h6>
-            <p class="small text-muted mb-1">{% trans 'For the King James Version and the Dutch Statenvertaling the link is exact: those editions were tagged word by word with Strong\'s numbers long ago, so we simply look the number up.' %}</p>
+            <p class="small text-muted mb-1">{% trans "For the King James Version and the Dutch Statenvertaling the link is exact: those editions were tagged word by word with Strong's numbers long ago, so we simply look the number up." %}</p>
             <p class="small text-muted mb-1">{% trans 'Modern revisions such as the Herziene Statenvertaling are matched against that older tagged edition; where the wording still agrees, the link carries over. Where it differs too much, no link is shown rather than a wrong one.' %}</p>
             <p class="small text-muted mb-0">{% trans 'For other English translations there is no tagging, so the link is estimated: every original word carries a short English rendering plus its dictionary meanings, and the sentence is matched in reading order. This is a best effort and can occasionally be off by a word.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-database"></i></span>{% trans 'Where the data comes from' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Translation texts come from API.Bible and from the local Complete Jewish Bible; every translation shows its own copyright line.' %}</p>
-            <p class="small text-muted mb-1">{% trans 'The Hebrew and Greek words, their grammar and their meanings come from the STEPBible datasets (TAHOT, TAGNT and the brief Strong\'s lexicons, CC BY 4.0) by Tyndale House Cambridge.' %}</p>
-            <p class="small text-muted mb-1">{% trans 'The Strong\'s definitions and the "KJV usage" lists come from the public-domain OpenScriptures Strong\'s dictionaries. The word-by-word tagging comes from the public CrossWire Bible Society modules.' %}</p>
+            <p class="small text-muted mb-1">{% trans "The Hebrew and Greek words, their grammar and their meanings come from the STEPBible datasets (TAHOT, TAGNT and the brief Strong's lexicons, CC BY 4.0) by Tyndale House Cambridge." %}</p>
+            <p class="small text-muted mb-1">{% trans "The Strong's definitions and the &quot;KJV usage&quot; lists come from the public-domain OpenScriptures Strong's dictionaries. The word-by-word tagging comes from the public CrossWire Bible Society modules." %}</p>
             <p class="small text-muted mb-1">{% trans 'When the site is set to Dutch, each original word also shows how the Statenvertaling renders it here, plus a list of all its Statenvertaling renderings with how often each one is used.' %}</p>
             <p class="small text-muted mb-0">{% trans 'All of this word data is stored on this server, so studying words costs no external requests and works even when the Bible API is unavailable.' %}</p>
           </div>
@@ -400,8 +436,8 @@
   <div class="bible-study-sources-card">
     <span class="bible-study-translation-title">{% trans 'Sources & licenses' %}</span>
     <p class="small mb-2">{% trans 'Original-language verse text is loaded from the installed Hebrew and Greek Bible sources in this app. The active source edition is shown above each original-text sentence.' %}</p>
-    <p class="small mb-2">{% trans 'Verse-aligned original-word tags, glosses, Strong\'s links, and grammar now come from the local STEPBible dataset submodule' %}: <a href="https://github.com/STEPBible/STEPBible-Data" target="_blank" rel="noopener noreferrer">STEPBible/STEPBible-Data</a>. {% trans 'The TAGNT and TAHOT source files in that repository are published as CC BY 4.0.' %}</p>
-    <p class="small mb-0">{% trans 'Expanded Strong\'s-style meaning lists and derivation notes are supplemented from the local Open Scriptures Strong\'s dataset already present in this project. That supplemental dataset remains useful as long as these richer meaning lists stay enabled.' %}</p>
+    <p class="small mb-2">{% trans "Verse-aligned original-word tags, glosses, Strong's links, and grammar now come from the local STEPBible dataset submodule" %}: <a href="https://github.com/STEPBible/STEPBible-Data" target="_blank" rel="noopener noreferrer">STEPBible/STEPBible-Data</a>. {% trans 'The TAGNT and TAHOT source files in that repository are published as CC BY 4.0.' %}</p>
+    <p class="small mb-0">{% trans "Expanded Strong's-style meaning lists and derivation notes are supplemented from the local Open Scriptures Strong's dataset already present in this project. That supplemental dataset remains useful as long as these richer meaning lists stay enabled." %}</p>
   </div>
 </div>
 {% endblock %}

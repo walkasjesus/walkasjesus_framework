@@ -48,7 +48,108 @@ the Bible Study page keeps its existing in-page passage navigation.
 | `bible_study_chapter_meta` | Last verse number of a chapter, from `data/bible_study_chapter_index.json` |
 | `bible_study_original_text` | Original-language words + Strong's candidates for a verse range |
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
-| `bible_study_search` | Proxy for API.Bible full-text search |
+| `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
+
+### Reverse word study
+
+The checked **Include Hebrew/Greek word study** checkbox below Search and Options
+enables original-word analysis. Its tooltip explains the word selection and filtering.
+Uncheck it to search only the first selected translation without a study panel;
+the search method and original language controls are disabled until it is checked again.
+**Search options → Search method** contains **Search Bible text** (default) and
+**Search Strong's dictionary**.
+
+Searching translated words now shows **Original-word study** above the verse results.
+The candidates come from the words matched across the complete search, not from a
+generic dictionary guess. KJV and compatible Dutch editions use the existing local
+Strong's tagging and word alignment; untagged English editions use lexicon-scoring
+estimates. Other editions, or Dutch text that differs too much from the tagged
+Statenvertaling, may remain unaligned. The UI says so rather than inventing a root.
+Hebrew service prefixes are not presented as root candidates. NT results retain
+their actual Greek originals. Multiple Strong's words can match the same search term.
+Candidate buttons are multi-select filters and load the same full Strong's renderer
+used by the original-text panels. Their Hebrew lemmas reuse the shared root/service
+classification and colors: dark brown (`#3d2f08`) for roots and gray (`#757575`) for
+service words, matching the Strong's details. Analysis uses local STEPBible/tagged data and does
+not fetch an original Bible translation or auto-translate definitions.
+
+Only the first candidate starts selected, filtering verses immediately.
+Selecting additional words includes their related verses. Deselecting one removes verses linked
+only to that word, across every result page; verses linked to another selected
+word remain. Only verses linked to selected candidates remain. Deselecting all
+shows no verses. Selection is retained during pagination and resets on a new search.
+Every page button shows the range of verses actually present on that page, including
+after filtering and in dictionary mode.
+
+Verse-backed candidates retain matched token indexes. Their details use the exact
+STEPBible form from a displayed verse (or the first matching occurrence if none is on
+the page), components,
+grammar and letter total, just like clicking the original text. The candidate button
+uses that same occurrence form, without transliteration; dictionary-only buttons
+show the lemma. On the Dutch site, candidate labels and dictionary word components
+prefer the local Statenvertaling rendering over the English lexicon gloss.
+Complete-search snapshots are cached separately by interface language.
+English lexicon definitions remain source text unless explicitly translated.
+Dictionary-only
+details explicitly show a lemma, with its tagged lexical component but no invented
+verse-specific morphology. Lexicon searches preserve the matched extended Strong's
+variant instead of always loading the first variant of the base number.
+For example, H2416A has the lemma `חַי` (18), but Genesis 1:20 uses the feminine
+singular adjective `חַיָּ֑ה` (23). Neither form is an error; lemma and inflected form
+must not be presented as interchangeable. H2416 also groups other lexical variants.
+Search details open **parts and letters** by default, with a top-right close button
+inside a shared border enclosing both the large Hebrew word and its analysis;
+click its summary to reopen. An outer border groups the word analysis and its Strong's
+cards. Hebrew details omit the duplicate standalone direct gloss and grammar lines,
+as does search word study; Greek original-text details retain them.
+Hover synchronization preserves token index zero, including the first word in a verse.
+The checkbox help icon stays beside its label,
+with a wider, responsive tooltip. Each Strong's card is a keyboard-accessible collapsible
+disclosure with a plus/minus indicator. Duplicate verse buttons, the occurrence-form
+caption, and the "Show verses with this Strong's number" button have been removed.
+
+**Search options → Original language** offers **Hebrew only** (default),
+**Greek only**, or **Hebrew and Greek**. This filters reverse word-study candidates
+and dictionary matches before pagination, without removing translated full-text
+verse results. Select Greek or both to include NT original-word candidates.
+The endpoint parameter is `original_language=hebrew|greek|both`, defaulting to
+`hebrew`; occurrence searches must match the selected language.
+
+In **Search options → Search method**, select **Search Strong's dictionary** to search
+local lemmas (also without vowel marks), transliterations, English short glosses,
+Strong's numbers, and available Dutch tagged renderings. Only the first match is
+selected automatically. Selected words show their details and the union of their occurrence
+verses in the first
+selected translation. These are occurrences of the original Strong's number, so the
+displayed translation need not contain the originally typed search word. Book scopes,
+page size and reverse-canonical sorting apply; fuzziness, exact phrase and relevance
+scoring are full-text-only options. Verse retrieval uses the existing cache and quota
+accounting; unavailable verses and quota failures are reported explicitly.
+Concordance references are sorted canonically and deduplicated. STEPBible's KJV
+alternate numbering is used for KJV/SVV editions (for example 2 Corinthians 13:14);
+other NT editions use its NRSV numbering. Unnumbered Psalm headings (verse 0) are
+excluded from the numbered-verse results.
+
+The search endpoint accepts `mode=verses` (default), `text` (text only), `lexicon`, `detail`, or `strongs`.
+`detail` and `strongs` require a valid H/G number in `query`. Full details are loaded
+for selected candidates. The page uses `study_scope=all`: full-text mode retrieves
+all API result pages in batches of 100 and caches the complete result/alignment
+snapshot; filtering and repagination then require no API requests. Dictionary mode
+accepts `selected_strongs` (comma-separated base codes, empty for none), keeps all
+candidate buttons visible, and fetches only the requested page of occurrence texts.
+Omitting `selected_strongs` selects the first dictionary candidate.
+The union uses the extended lexical variants matched by the dictionary rather than
+unrelated senses sharing a base number. Legacy calls without `study_scope=all`
+retain their page-based behavior. Quota exhaustion during collection returns an
+explicit error, never a partial result claimed to cover the complete search.
+
+The two search modes deliberately need not return the same original words. Full-text
+search analyses the selected translation (and API spelling/fuzziness options);
+dictionary search matches lexical labels and original forms. Previously, reverse
+word study only analysed the first/current page, which hid candidates found later
+in the Bible. For "tree", dictionary examples include H5158B (palm-tree, Numbers
+24:6, rendered "valleys" in KJV) and H363 (Aramaic tree, Daniel 4); different lexical
+meanings and translation choices still explain differences after whole-search analysis.
 
 The shipped primary KJV chapter index covers all 1,189 chapters, including Psalm 77
 and three-digit Psalm numbers. Rebuild it without spending API quota using the bundled

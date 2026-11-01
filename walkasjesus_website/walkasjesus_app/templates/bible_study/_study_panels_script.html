@@ -734,7 +734,7 @@
         renderOriginalWordDetail($detailCard, versePayload, wordIndex);
       }
 
-      function renderOriginalWordDetail($detailCard, versePayload, wordIndex) {
+      function renderOriginalWordDetail($detailCard, versePayload, wordIndex, searchDetails) {
         var words = (versePayload && versePayload.words) || [];
         var selectedWord = (wordIndex >= 0 && wordIndex < words.length) ? words[wordIndex] : null;
         var $detail = $detailCard.find('.bs-original-word-detail');
@@ -753,19 +753,22 @@
           selectedWordHtml + '</strong>' + (isHebrew || isGreek ? '' : ' · ' + escapeHtml(languageLabel)) + '</div>';
 
         if (isHebrew) {
-          html = '<details class="bs-hebrew-study-disclosure"><summary class="bs-hebrew-study-toggle">' +
+          html = '<details class="bs-hebrew-study-disclosure"' + (searchDetails ? ' open' : '') +
+            '><summary class="bs-hebrew-study-toggle">' +
             '<strong class="bs-original-language-hbo bs-hebrew-detail-word">' + selectedWordHtml + '</strong>' +
             '<span class="bs-hebrew-study-help jc-tooltip-host" data-jc-tooltip="{% trans "Hebrew word: parts and letters" %}" aria-label="{% trans "Hebrew word: parts and letters" %}">' +
-            '<i class="icon-question-circle" aria-hidden="true"></i></span></summary>' + hebrewWordStudyHtml(selectedWord) + '</details>';
+            '<i class="icon-question-circle" aria-hidden="true"></i></span></summary>' +
+            (searchDetails ? '<button type="button" class="bs-search-parts-close" aria-label="{% trans "Close parts and letters" %}" title="{% trans "Close parts and letters" %}"><i class="fa fa-times" aria-hidden="true"></i></button>' : '') +
+            hebrewWordStudyHtml(selectedWord) + '</details>';
         }
 
         // Prefer the STEPBible gloss for this exact occurrence over the generic lexicon label.
         var directGloss = String(selectedWord.local_gloss || selectedWord.context_gloss || selectedWord.translation_label || '');
-        if (directGloss) {
+        if (directGloss && !isHebrew && !searchDetails) {
           html += '<p class="mb-2"><small>{% trans "Direct gloss" %}: ' + escapeHtml(directGloss) + '</small></p>';
         }
 
-        if (selectedWord.grammar) {
+        if (selectedWord.grammar && !isHebrew && !searchDetails) {
           html += '<p class="mb-2"><small>{% trans "Grammar" %}: <code>' + escapeHtml(selectedWord.grammar) + '</code></small></p>';
         }
 
@@ -809,10 +812,10 @@
           var rootWordsHtml = bibleStudyRootWordsHtml(rootWords);
           var lxxHebrewHtml = bibleStudyLxxHebrewEquivalentsHtml(lxxHebrewItems);
 
-          html += '<div class="bs-original-candidate">' +
-            '<div class="bs-original-candidate-head">' +
+          html += (searchDetails ? '<details class="bs-original-candidate bs-search-candidate-disclosure" open>' : '<div class="bs-original-candidate">') +
+            (searchDetails ? '<summary class="bs-original-candidate-head">' : '<div class="bs-original-candidate-head">') +
 
-            (strongDetailUrl
+            (strongDetailUrl && !searchDetails
               ? '<a class="bs-original-strong-link" href="' + escapeHtml(strongDetailUrl) + '"><strong>' +
                   escapeHtml(String((candidate && candidate.strongs_number) || '')) +
                 '</strong></a>'
@@ -826,7 +829,7 @@
 
             bibleStudyExternalLexiconLinksHtml(candidate, String((candidate && candidate.strongs_number) || '')) +
 
-            '</div>' +
+            (searchDetails ? '</summary>' : '</div>') +
 
             ((candidate && candidate.transliteration)
               ? '<p class="mb-1"><small>{% trans "Transliteration" %}: ' +
@@ -869,7 +872,7 @@
                 '</div>'
               : '') +
 
-            '</div>';
+            (searchDetails ? '</details>' : '</div>');
         });
 
         $detail.html(html);
@@ -1150,10 +1153,15 @@
         selectBibleStudyOriginalWord(String($(this).data('verse') || ''), parseInt($(this).data('word-index'), 10));
       });
 
+      $events.on('click', '.bs-search-parts-close', function(event) {
+        event.preventDefault();
+        $(this).closest('details').prop('open', false);
+      });
+
       $events.on('mouseenter focusin', '.bs-original-word-btn', function() {
         var $btn = $(this);
         var verseNumber = String($btn.data('verse') || '');
-        var wordIndex = String($btn.data('word-index') || '');
+        var wordIndex = String($btn.data('word-index'));
         var $shell = $root.find('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
         if (!$shell.length) {
           return;
@@ -1164,7 +1172,7 @@
       $events.on('mouseleave focusout', '.bs-original-word-btn', function() {
         var $btn = $(this);
         var verseNumber = String($btn.data('verse') || '');
-        var wordIndex = String($btn.data('word-index') || '');
+        var wordIndex = String($btn.data('word-index'));
         var $shell = $root.find('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
         if (!$shell.length) {
           return;
@@ -1183,7 +1191,7 @@
         if (!$shell.length) {
           return;
         }
-        syncOriginalSentenceHover($shell, String($target.data('word-index') || ''), true);
+        syncOriginalSentenceHover($shell, String($target.data('word-index')), true);
       });
 
       $events.on('mouseleave focusout', '.bs-original-word-translation[data-word-index], .bs-original-sentence-token[data-clickable="1"]', function() {
@@ -1192,7 +1200,7 @@
         if (!$shell.length) {
           return;
         }
-        syncOriginalSentenceHover($shell, String($target.data('word-index') || ''), false);
+        syncOriginalSentenceHover($shell, String($target.data('word-index')), false);
       });
 
       $events.on('click', '.bs-original-sentence-token[data-clickable="1"]', function(event) {
@@ -1211,6 +1219,9 @@
       });
 
       return {
+        renderWordStudyDetail: function($target, payload) {
+          renderOriginalWordDetail($target, payload, 0, true);
+        },
         bibleStudyOriginalPanelsHtml: bibleStudyOriginalPanelsHtml,
         applyBibleStudyOriginalPayloadToDom: applyBibleStudyOriginalPayloadToDom,
         fetchBibleStudyOriginalRange: fetchBibleStudyOriginalRange,

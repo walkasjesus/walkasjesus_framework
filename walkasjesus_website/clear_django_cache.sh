@@ -16,7 +16,7 @@ if [[ -e "$UWSGI_CONFIG" ]]; then
 			cache_key="${BASH_REMATCH[1]}"
 			cache_value="${BASH_REMATCH[2]}"
 			cache_value="${cache_value%"${cache_value##*[![:space:]]}"}"
-			if [[ ! -v "$cache_key" ]]; then
+			if ! declare -p "$cache_key" >/dev/null 2>&1; then
 				export "$cache_key=$cache_value"
 			fi
 		fi

@@ -53,7 +53,7 @@ the Bible Study page keeps its existing in-page passage navigation.
 ### Text search and dictionary word study
 
 Three matching search boxes are shown in Settings:
-**Bible passage**, **Search words in Bible translation**, and
+**Search Bible passage**, **Search words in Bible translation**, and
 **Search words in Strong's Dictionary**.
 The three boxes sit side by side on desktop and stack on smaller screens. Each has
 its own input and Search button. Only **Search words in Bible translation** has Options.

@@ -1,26 +1,5 @@
 {% load static %}
 <style>
-    .bible-study-shell .bs-search-study-option {
-      align-items: baseline;
-      display: flex;
-      gap: 0.25rem;
-      position: relative;
-    }
-    .bible-study-shell .bs-search-study-option .form-check-label {
-      display: inline;
-      margin-bottom: 0;
-    }
-    .bible-study-shell .bs-search-study-option .bs-combine-help {
-      flex-shrink: 0;
-      margin: 0;
-      position: static;
-    }
-    .bible-study-shell .bs-search-study-option .bs-combine-help::after {
-      font-size: 0.85rem;
-      max-width: 100%;
-      min-width: 0;
-      width: 440px;
-    }
     .bible-study-shell .bs-search-study-detail {
       border: 1px solid #d6c697;
       border-radius: 8px;
@@ -1267,6 +1246,54 @@
       align-items: stretch;
       display: flex;
       gap: 0.5rem;
+    }
+
+    .bible-study-shell .bs-search-method-panel {
+      margin-top: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.5rem 0.65rem;
+    }
+
+    .bible-study-shell .bs-search-method-panel > .form-label:first-child {
+      margin-bottom: 0;
+    }
+
+    .bible-study-shell .bs-dictionary-languages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 0.75rem;
+      align-items: center;
+    }
+
+    .bible-study-shell [data-target="#bibleStudyLegend"] {
+      width: 100%;
+      white-space: normal;
+    }
+
+    .bible-study-shell .bs-search-method-panel .bs-word-search-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bible-study-shell .bs-search-method-panel .bs-word-search-row > .form-control,
+    .bible-study-shell .bs-search-method-panel .bs-passage-wrap {
+      grid-column: 1 / -1;
+    }
+
+    .bible-study-shell .bs-search-method-panel .bs-word-search-row > button {
+      min-width: 0;
+    }
+
+    .bible-study-shell #bs-passage-search-btn,
+    .bible-study-shell #bs-dictionary-search-btn {
+      grid-column: 1 / -1;
+    }
+
+    .bible-study-shell .bs-search-method-panel .bs-passage-wrap {
+      min-width: 0;
     }
 
     :is(.bible-study-shell, .waj-study-panels) .bs-word-search-row .form-control {

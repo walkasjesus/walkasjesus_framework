@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 from django.core.cache import cache
 from django.test import RequestFactory, SimpleTestCase
+from django.utils import translation
 
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded
 from walkasjesus_app.lib.strongs_service import (
@@ -16,6 +17,7 @@ from walkasjesus_app.lib.strongs_service import (
     strongs_occurrence_word_detail,
 )
 from walkasjesus_app.views.bible_study_view import BibleStudySearchView
+from walkasjesus_app.models.bibles import LocalCompleteJewishBible, LocalStatenvertalingBible
 
 
 class ReverseWordStudyTestCase(SimpleTestCase):
@@ -124,6 +126,22 @@ class ReverseWordStudyTestCase(SimpleTestCase):
                              'In den beginne schiep God den hemel en de aarde.', 'God', 'svv')
         self.assertEqual([item['strongs_number'] for item in payload['candidates']], ['H430'])
 
+    def test_combined_verse_alignment_preserves_individual_occurrences(self):
+        from bible_lib import BibleBooks
+        bible = LocalStatenvertalingBible('svv-statenvertaling')
+        text = bible.verses(BibleBooks.Genesis, 1, 3, 1, 4)
+        payload = search_result_word_study([{
+            'book': 'Genesis', 'chapter': 1, 'verse': 3,
+            'verse_positions': [(1, 3), (1, 4)],
+            'reference': 'Genesis 1:3-4', 'text': text,
+        }], 'God', 'svv', language_code='nl')
+        candidate = next(item for item in payload['candidates'] if item['strongs_number'] == 'H430')
+        self.assertEqual({item['verse'] for item in candidate['matched_occurrences']}, {3, 4})
+        for occurrence in candidate['matched_occurrences']:
+            detail = strongs_occurrence_word_detail('H430', occurrence['book'], occurrence['chapter'],
+                                                    occurrence['verse'], occurrence['word_index'])
+            self.assertEqual(occurrence['text'], detail['words'][0]['text'])
+
     def test_unsupported_translation_is_explicitly_unaligned(self):
         payload = self.study('Genesis', 1, 1, 'Au commencement Dieu', 'Dieu', '')
         self.assertEqual(payload, {'candidates': [], 'unaligned_results': 1})
@@ -169,8 +187,8 @@ class ReverseWordStudyEndpointTestCase(SimpleTestCase):
         study.return_value = {'candidates': [{
             'strongs_number': 'H6086', 'matched_references': ['Genesis 1:121'],
         }]}
-        cache_data = json.dumps([self.bible.id, 'snapshot-tree', 'canonical', 'AUTO', '', 'hebrew', 'en'])
-        key = 'bible_study:complete-search:v3:' + hashlib.sha256(cache_data.encode()).hexdigest()
+        cache_data = json.dumps([self.bible.id, 'snapshot-tree', 'canonical', 'AUTO', '', 'hebrew', 'nl'])
+        key = 'bible_study:complete-search:v4:' + hashlib.sha256(cache_data.encode()).hexdigest()
         cache.delete(key)
         self.addCleanup(cache.delete, key)
         with self.settings(DISABLE_CACHE_FOR_DEBUG=False):
@@ -253,7 +271,8 @@ class ReverseWordStudyEndpointTestCase(SimpleTestCase):
         self.visible = patch('walkasjesus_app.views.bible_study_view.is_bible_id_visible_for_request', return_value=True)
         self.translation = patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
         self.visible.start()
-        self.translation.start().return_value.get.return_value = self.bible
+        self.translation_mock = self.translation.start()
+        self.translation_mock.return_value.get.return_value = self.bible
         self.addCleanup(self.visible.stop)
         self.addCleanup(self.translation.stop)
 
@@ -261,6 +280,99 @@ class ReverseWordStudyEndpointTestCase(SimpleTestCase):
         request = self.factory.get('/bible-study/search/', {'bible_id': self.bible.id, **params})
         request.LANGUAGE_CODE = 'nl'
         return BibleStudySearchView.as_view()(request)
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    def test_statenvertaling_leef_search_uses_local_data(self, quota, api_get):
+        self.bible = LocalStatenvertalingBible('svv-statenvertaling')
+        self.translation_mock.return_value.get.return_value = self.bible
+        with self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+            response = self.get(query='leef', study_scope='all')
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content)
+        self.assertEqual(payload['total'], 36)
+        self.assertEqual({item['strongs_number'] for item in payload['word_study']['candidates']},
+                         {'H2416', 'H2421', 'H2418'})
+        self.assertEqual(payload['word_study']['unaligned_results'], 0)
+        self.assertTrue(all('leef' in item['text'].casefold() for item in payload['all_results']))
+        api_get.assert_not_called()
+        quota.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    def test_local_search_options_and_pagination(self, api_get):
+        for bible_class in (LocalStatenvertalingBible, LocalCompleteJewishBible):
+            self.bible = bible_class('local-test')
+            self.translation_mock.return_value.get.return_value = self.bible
+            with self.subTest(bible=bible_class), patch.object(self.bible, 'iter_verses', return_value=iter([
+                ('Genesis', 1, 1, 'God is good.'),
+                ('Genesis', 1, 2, 'God is God.'),
+                ('Genesis', 1, 3, 'Gods are not God.'),
+                ('John', 1, 1, 'God is good.'),
+            ])), self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+                response = self.get(query='"GOD IS"', mode='text', range='GEN', sort='reverse-canonical',
+                                    limit=10, offset=1, fuzziness='0')
+                payload = json.loads(response.content)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(payload['total'], 2)
+                self.assertEqual([item['id'] for item in payload['results']], ['GEN.1.1'])
+                self.assertIsNone(payload['word_study'])
+                self.assertEqual(self.get(query='God', mode='text', fuzziness='2').status_code, 400)
+                self.assertEqual(self.get(query='God', mode='text', range='XYZ').status_code, 400)
+        api_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    def test_local_search_snapshot_is_reused_for_sorted_pages(self, api_get):
+        self.bible = LocalStatenvertalingBible('local-cache-test')
+        self.translation_mock.return_value.get.return_value = self.bible
+        digest = hashlib.sha256(json.dumps([
+            self.bible.id, 'God', 'relevance', '', translation.get_language(),
+        ]).encode()).hexdigest()
+        key = f'bible_study:local-search:v1:{digest}'
+        cache.delete(key)
+        self.addCleanup(cache.delete, key)
+        with patch.object(self.bible, 'iter_verses', return_value=iter([
+            ('Genesis', 1, 1, 'Gods, not God.'),
+            ('Genesis', 1, 2, 'God is God.'),
+            ('Genesis', 1, 3, 'Gods only.'),
+        ])) as verses, self.settings(DISABLE_CACHE_FOR_DEBUG=False):
+            first = json.loads(self.get(query='God', mode='text', sort='relevance', limit=10).content)
+            second = json.loads(self.get(query='God', mode='text', sort='relevance', limit=10, offset=1).content)
+        self.assertEqual(first['total'], 2)
+        self.assertEqual([item['id'] for item in first['results']], ['GEN.1.2', 'GEN.1.1'])
+        self.assertEqual([item['id'] for item in second['results']], ['GEN.1.1'])
+        verses.assert_called_once()
+        api_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    def test_missing_local_text_returns_an_explicit_error(self, api_get):
+        self.bible = LocalStatenvertalingBible('missing-local-test')
+        self.translation_mock.return_value.get.return_value = self.bible
+        with patch.object(self.bible, '_chapters', return_value={}), self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+            with self.assertLogs('walkasjesus_app.views.bible_study_view', level='ERROR'):
+                response = self.get(query='leef', study_scope='all')
+        self.assertEqual(response.status_code, 502)
+        self.assertIn('error', json.loads(response.content))
+        api_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view._api_bible_search_payload')
+    def test_combined_verse_search_is_analyzed_in_both_search_scopes(self, api_search):
+        from bible_lib import BibleBooks
+        bible = LocalStatenvertalingBible('svv-statenvertaling')
+        api_search.return_value = {'data': {'total': 1, 'verses': [{
+            'id': 'GEN.1.3-GEN.1.4', 'reference': 'Genesis 1:3-4',
+            'text': bible.verses(BibleBooks.Genesis, 1, 3, 1, 4),
+        }]}}
+        self.bible.language = 'nl'
+        self.bible.abbreviation = 'SV'
+        for scope in ('all', ''):
+            with self.subTest(scope=scope), self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+                response = self.get(query='God', study_scope=scope)
+                self.assertEqual(response.status_code, 200)
+                payload = json.loads(response.content)
+                self.assertEqual(payload['results'][0]['id'], 'GEN.1.3-GEN.1.4')
+                candidate = next(item for item in payload['word_study']['candidates']
+                                 if item['strongs_number'] == 'H430')
+                self.assertEqual({item['verse'] for item in candidate['matched_occurrences']}, {3, 4})
 
     @patch('walkasjesus_app.views.bible_study_view._api_bible_search_payload')
     def test_dictionary_first_does_not_search_or_fetch_verses(self, api_search):

@@ -50,21 +50,50 @@ the Bible Study page keeps its existing in-page passage navigation.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
 
-### Reverse word study
+### Text search and dictionary word study
 
-The checked **Include Hebrew/Greek word study** checkbox below Search and Options
-enables original-word analysis. Its tooltip explains the word selection and filtering.
-Uncheck it to search only the first selected translation without a study panel;
-the search method and original language controls are disabled until it is checked again.
-**Search options → Search method** contains **Search Bible text** (default) and
-**Search Strong's dictionary**.
+Three matching search boxes are shown in Settings:
+**Bible passage**, **Search words in Bible translation**, and
+**Search words in Strong's Dictionary**.
+The three boxes sit side by side on desktop and stack on smaller screens. Each has
+its own input and Search button. Only **Search words in Bible translation** has Options.
+Passage search retains
+autocomplete and Enter-to-open behavior. The other boxes retain independent query
+text and route directly to their respective search methods on Search or Enter.
+The second box always uses `mode=text`: it searches the first selected translation
+without original-word analysis, candidate filtering, or an alignment warning. The
+word-study checkbox and Search method selector have been removed. Options and Apply
+apply only to this text search (scope, page size, sorting, fuzziness, exact phrase).
+Dictionary search has no Options button and does not inherit these text options:
+it searches the whole Bible in canonical order, 50 results per page. The Original
+language checkboxes are directly in the third box: Hebrew (initially checked) and
+Greek. Check either or both; searching with neither selected shows an explicit
+validation message. There is no dropdown or extra dictionary description below Search.
+Word study is shown only by the third box's dictionary search.
+Dictionary result summaries show the query followed by each selected Strong's code
+and its dictionary lemma. The pagination line shows the reference range without
+repeating those codes. Multiple selections keep each code paired with its own lemma.
+The introductory paragraph is omitted to keep Settings compact. The full-width,
+initially collapsed legend explains the three searches, text options, dictionary
+selection and paging, translations, passage navigation, combined/per-verse display,
+original-word details, word-link limitations, commentary and data sources.
 
-Searching translated words now shows **Original-word study** above the verse results.
+#### Legacy reverse-word endpoint
+
+The API still supports `mode=verses` for existing clients, but the page no longer
+uses it. In this legacy mode, **Original-word study** appears above verse results.
 The candidates come from the words matched across the complete search, not from a
 generic dictionary guess. KJV and compatible Dutch editions use the existing local
 Strong's tagging and word alignment; untagged English editions use lexicon-scoring
 estimates. Other editions, or Dutch text that differs too much from the tagged
 Statenvertaling, may remain unaligned. The UI says so rather than inventing a root.
+The panel reports how many search results could not be aligned reliably, including when
+some candidates were found. No candidates is not proof that no Hebrew/Greek equivalent
+exists. API.Bible's default `AUTO` fuzziness can return many verses without the literal
+query word; reverse study only links literal query words (and English inflections).
+Thus a search for Dutch `leef` does not automatically analyse every occurrence of `leven`.
+Combined-verse results (such as BGT's `GEN.6.3-GEN.6.4`) are aligned as one passage,
+while candidate details retain the individual verse and original token index.
 Hebrew service prefixes are not presented as root candidates. NT results retain
 their actual Greek originals. Multiple Strong's words can match the same search term.
 Candidate buttons are multi-select filters and load the same full Strong's renderer
@@ -103,27 +132,25 @@ click its summary to reopen. An outer border groups the word analysis and its St
 cards. Hebrew details omit the duplicate standalone direct gloss and grammar lines,
 as does search word study; Greek original-text details retain them.
 Hover synchronization preserves token index zero, including the first word in a verse.
-The checkbox help icon stays beside its label,
-with a wider, responsive tooltip. Each Strong's card is a keyboard-accessible collapsible
+Each Strong's card is a keyboard-accessible collapsible
 disclosure with a plus/minus indicator. Duplicate verse buttons, the occurrence-form
 caption, and the "Show verses with this Strong's number" button have been removed.
 
-**Search options → Original language** offers **Hebrew only** (default),
-**Greek only**, or **Hebrew and Greek**. This filters reverse word-study candidates
-and dictionary matches before pagination, without removing translated full-text
+The third box's **Hebrew** and **Greek** checkboxes filter
+dictionary matches before pagination, without removing translated full-text
 verse results. Select Greek or both to include NT original-word candidates.
 The endpoint parameter is `original_language=hebrew|greek|both`, defaulting to
 `hebrew`; occurrence searches must match the selected language.
 
-In **Search options → Search method**, select **Search Strong's dictionary** to search
+Use the third box, **Search words in Strong's Dictionary**, to search
 local lemmas (also without vowel marks), transliterations, English short glosses,
 Strong's numbers, and available Dutch tagged renderings. Only the first match is
 selected automatically. Selected words show their details and the union of their occurrence
 verses in the first
 selected translation. These are occurrences of the original Strong's number, so the
-displayed translation need not contain the originally typed search word. Book scopes,
-page size and reverse-canonical sorting apply; fuzziness, exact phrase and relevance
-scoring are full-text-only options. Verse retrieval uses the existing cache and quota
+displayed translation need not contain the originally typed search word. The API still
+supports book scopes, page size and reverse-canonical sorting for dictionary clients;
+the third box uses the defaults described above. Verse retrieval uses the existing cache and quota
 accounting; unavailable verses and quota failures are reported explicitly.
 Concordance references are sorted canonically and deduplicated. STEPBible's KJV
 alternate numbering is used for KJV/SVV editions (for example 2 Corinthians 13:14);
@@ -132,9 +159,10 @@ excluded from the numbered-verse results.
 
 The search endpoint accepts `mode=verses` (default), `text` (text only), `lexicon`, `detail`, or `strongs`.
 `detail` and `strongs` require a valid H/G number in `query`. Full details are loaded
-for selected candidates. The page uses `study_scope=all`: full-text mode retrieves
-all API result pages in batches of 100 and caches the complete result/alignment
-snapshot; filtering and repagination then require no API requests. Dictionary mode
+for selected candidates. The page sends `study_scope=all` for dictionary selection;
+text-only search uses ordinary result pages and performs no alignment. Legacy
+`mode=verses&study_scope=all` retrieves all API result pages in batches of 100 and
+caches the complete result/alignment snapshot. Dictionary mode
 accepts `selected_strongs` (comma-separated base codes, empty for none), keeps all
 candidate buttons visible, and fetches only the requested page of occurrence texts.
 Omitting `selected_strongs` selects the first dictionary candidate.
@@ -142,6 +170,12 @@ The union uses the extended lexical variants matched by the dictionary rather th
 unrelated senses sharing a base number. Legacy calls without `study_scope=all`
 retain their page-based behavior. Quota exhaustion during collection returns an
 explicit error, never a partial result claimed to cover the complete search.
+
+Local Statenvertaling and CJB full-text searches read their bundled verse data and never
+call API.Bible or consume API quota. They support case-insensitive whole words (all
+query words must occur), quoted contiguous phrases, ranges, sorting and pagination.
+For local translations `AUTO` and `0` both use literal matching; numeric fuzziness above
+zero is explicitly unsupported. Local result snapshots are cached before pagination.
 
 The two search modes deliberately need not return the same original words. Full-text
 search analyses the selected translation (and API spelling/fuzziness options);

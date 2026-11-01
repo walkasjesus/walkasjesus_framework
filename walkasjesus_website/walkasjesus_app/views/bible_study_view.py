@@ -16,7 +16,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.views import View
 
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
@@ -27,6 +27,8 @@ from walkasjesus_app.lib.access_policy import (
 )
 from walkasjesus_app.lib.strongs_service import (
     _stepbible_book_code,
+    _WORD_SPLIT_RE,
+    _search_stepbible_book_rows,
     english_alignment_payload,
     localized_original_text_payload,
     search_result_word_study,
@@ -37,6 +39,7 @@ from walkasjesus_app.lib.strongs_service import (
 )
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
+from walkasjesus_app.models.bibles import LocalCompleteJewishBible, LocalStatenvertalingBible
 
 logger = logging.getLogger(__name__)
 
@@ -291,6 +294,8 @@ def _api_bible_search_url(bible_id, query, limit, offset=0, sort='canonical', fu
 
 
 def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical', fuzziness='AUTO', search_range='', request=None, bible=None):
+    if isinstance(bible, (LocalStatenvertalingBible, LocalCompleteJewishBible)):
+        return _local_bible_search_payload(bible, query, limit, offset, sort, fuzziness, search_range)
     cache_payload = json.dumps({
         'query': str(query or '').strip(),
         'limit': limit,
@@ -313,6 +318,77 @@ def _api_bible_search_payload(bible_id, query, limit, offset=0, sort='canonical'
     payload = response.json()
     cache.set(cache_key, payload, BIBLE_SEARCH_CACHE_TIMEOUT)
     return payload
+
+
+def _local_bible_search_payload(bible, query, limit, offset, sort, fuzziness, search_range):
+    if fuzziness not in {'AUTO', '0'}:
+        raise ValueError('Fuzzy spelling search is not supported by local Bible translations.')
+    terms = _WORD_SPLIT_RE.findall(query.casefold())
+    if not terms:
+        raise ValueError('Enter words to search for.')
+    phrase = query.startswith('"') and query.endswith('"')
+    digest = hashlib.sha256(json.dumps([bible.id, query, sort, search_range, translation.get_language()]).encode()).hexdigest()
+    key = f'bible_study:local-search:v1:{digest}'
+    results = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(key)
+    if results is not None:
+        return {'data': {'total': len(results), 'verseCount': len(results), 'verses': results[offset:offset + limit]}}
+    results = []
+    codes = list(_API_BIBLE_BOOK_ORDER)
+    for book, chapter, verse, text in bible.iter_verses():
+        reference = f'{_stepbible_book_code(book)}.{chapter}:{verse}'
+        if search_range and not BibleStudySearchView.reference_in_scope(reference, search_range):
+            continue
+        words = _WORD_SPLIT_RE.findall(text.casefold())
+        if phrase:
+            matches = sum(words[index:index + len(terms)] == terms
+                          for index in range(len(words) - len(terms) + 1))
+        else:
+            matches = sum(words.count(term) for term in terms) if all(term in words for term in terms) else 0
+        if matches:
+            results.append({
+                'id': f'{codes[list(_CANONICAL_CHAPTER_COUNTS).index(book)]}.{chapter}.{verse}',
+                'reference': f'{BibleBooks[book].value} {chapter}:{verse}', 'text': text, '_score': matches,
+            })
+    if sort == 'reverse-canonical':
+        results.reverse()
+    elif sort == 'relevance':
+        results.sort(key=lambda item: -item['_score'])
+    results = [
+        {field: item[field] for field in ('id', 'reference', 'text')}
+        for item in results
+    ]
+    cache.set(key, results, BIBLE_SEARCH_CACHE_TIMEOUT)
+    return {'data': {'total': len(results), 'verseCount': len(results), 'verses': results[offset:offset + limit]}}
+
+
+def _word_study_results(results, original_language):
+    study_results = []
+    for result in results:
+        match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)(?:-([A-Z0-9]+)\.(\d+)\.(\d+))?',
+                             str(result['id']).upper())
+        if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
+            continue
+        book = list(_CANONICAL_CHAPTER_COUNTS)[_API_BIBLE_BOOK_ORDER[match[1]]]
+        if original_language != 'both' and (book in _OT_BOOKS) != (original_language == 'hebrew'):
+            continue
+        chapter, verse = int(match[2]), int(match[3])
+        item = dict(result, book=book, chapter=chapter, verse=verse)
+        if match[4]:
+            if match[4] != match[1]:
+                raise ValueError('Search result spans multiple Bible books.')
+            end = (int(match[5]), int(match[6]))
+            if end < (chapter, verse):
+                raise ValueError('Search result has a reversed verse range.')
+            positions = set()
+            for reference in _search_stepbible_book_rows(book):
+                position = re.match(r'^[^.]+\.(\d+):(\d+)', reference)
+                if position and (chapter, verse) <= (int(position[1]), int(position[2])) <= end:
+                    positions.add((int(position[1]), int(position[2])))
+            if not positions:
+                raise ValueError('Original text is unavailable for the search result range.')
+            item['verse_positions'] = sorted(positions)
+        study_results.append(item)
+    return study_results
 
 
 def _search_result_canonical_key(verse):
@@ -802,6 +878,14 @@ class BibleStudySearchView(View):
             return JsonResponse({'error': 'Invalid search mode.'}, status=400)
         if mode not in {'verses', 'text'}:
             return self.strongs_search(request, bible, query, mode, limit, offset, sort, search_range)
+        if isinstance(bible, (LocalStatenvertalingBible, LocalCompleteJewishBible)):
+            if fuzziness not in {'AUTO', '0'}:
+                return JsonResponse({'error': 'Fuzzy spelling search is not supported by local Bible translations.'}, status=400)
+            if search_range:
+                try:
+                    self.reference_in_scope('Gen.1:1', search_range)
+                except ValueError as ex:
+                    return JsonResponse({'error': str(ex)}, status=400)
         if mode == 'verses' and request.GET.get('study_scope') == 'all':
             return self.complete_word_search(request, bible, query, limit, sort, fuzziness, search_range, original_language)
 
@@ -853,20 +937,11 @@ class BibleStudySearchView(View):
 
         language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
         display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)
-        study_results = []
-        for result in results if mode == 'verses' else []:
-            match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)', str(result['id']).upper())
-            if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
-                continue
-            book = list(_CANONICAL_CHAPTER_COUNTS)[_API_BIBLE_BOOK_ORDER[match[1]]]
-            if original_language != 'both' and (book in _OT_BOOKS) != (original_language == 'hebrew'):
-                continue
-            study_results.append(dict(result, book=book, chapter=int(match[2]), verse=int(match[3])))
         word_study = None
         if mode == 'verses':
             try:
                 word_study = search_result_word_study(
-                    study_results, query, tagged_source=_tagged_source_for_bible(bible),
+                    _word_study_results(results, original_language), query, tagged_source=_tagged_source_for_bible(bible),
                     allow_scoring=language_code == 'EN',
                     language_code=request.LANGUAGE_CODE,
                 )
@@ -893,7 +968,7 @@ class BibleStudySearchView(View):
 
     def complete_word_search(self, request, bible, query, limit, sort, fuzziness, search_range, original_language):
         cache_data = json.dumps([bible.id, query, sort, fuzziness, search_range, original_language, request.LANGUAGE_CODE])
-        key = 'bible_study:complete-search:v3:' + hashlib.sha256(cache_data.encode()).hexdigest()
+        key = 'bible_study:complete-search:v4:' + hashlib.sha256(cache_data.encode()).hexdigest()
         cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(key)
         if cached is not None:
             return JsonResponse(dict(cached, limit=limit, results=cached['all_results'][:limit]))
@@ -919,16 +994,7 @@ class BibleStudySearchView(View):
                     raise ValueError('Bible search returned a repeated page.')
                 previous_seen = set(seen)
                 api_offset += len(batch)
-            study_results = []
-            for result in results:
-                match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)', str(result['id']).upper())
-                if not match or match[1] not in _API_BIBLE_BOOK_ORDER:
-                    continue
-                book = list(_CANONICAL_CHAPTER_COUNTS)[_API_BIBLE_BOOK_ORDER[match[1]]]
-                if original_language != 'both' and (book in _OT_BOOKS) != (original_language == 'hebrew'):
-                    continue
-                study_results.append(dict(result, book=book, chapter=int(match[2]), verse=int(match[3])))
-            study = search_result_word_study(study_results, query, tagged_source=_tagged_source_for_bible(bible),
+            study = search_result_word_study(_word_study_results(results, original_language), query, tagged_source=_tagged_source_for_bible(bible),
                                              allow_scoring=str(bible.language).lower().startswith('en'),
                                              language_code=request.LANGUAGE_CODE)
             response = {

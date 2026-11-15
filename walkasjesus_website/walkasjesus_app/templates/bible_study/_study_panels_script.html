@@ -44,7 +44,7 @@
         return '<i class="fa fa-spinner fa-spin verse-loading-spinner verse-loading-spinner-' + (source === 'cache' ? 'cache' : 'api') + '"></i>';
       }
       function bibleStudyOriginalRangeKey(state) {
-        return ['original', String(state.book || ''), String(state.chapter || ''), String(state.startVerse || ''), String(state.endVerse || '')].join('|');
+        return ['original', options.referenceSystem || 'english', String(state.book || ''), String(state.chapter || ''), String(state.startVerse || ''), String(state.endVerse || '')].join('|');
       }
 
       function bibleStudyOriginalPanelsHtml(state, verseNumber) {
@@ -409,6 +409,7 @@
         params.set('show_original', '1');
         params.set('selected_verse', String(parsed.startVerse || '1'));
         params.set('selected_strongs', normalizeBibleStudyStrongsCode(strongsNumber));
+        params.set('reference_system', options.referenceSystem || 'english');
         var currentState = currentBibleStudyState();
         $.each((currentState && currentState.bibles) || [], function(_, bible) {
           if (bible && bible.id) {
@@ -946,7 +947,8 @@
               book: state.book,
               chapter: state.chapter,
               start_verse: startVerse,
-              end_verse: state.endVerse
+              end_verse: state.endVerse,
+              reference_system: options.referenceSystem || 'english'
             },
             success: function(payload) {
               var verses = payload && payload.verses;
@@ -976,11 +978,13 @@
         fetchNext(Number(state.startVerse));
       }
 
-      function parseBibleStudyDeeplinkReference(reference) {
+      function parseBibleStudyDeeplinkReference(reference, referenceSystem) {
         var normalized = String(reference || '').trim();
         var numberedOtMatch = normalized.match(/^([1-3]?[A-Za-z]{1,4})\.(\d+)\.(\d+(?:-\d+)?)\((?:(\d+)\.)?(\d+(?:-\d+)?)\)$/);
         if (numberedOtMatch) {
-          normalized = numberedOtMatch[1] + '.' + String(numberedOtMatch[4] || numberedOtMatch[2]) + ':' + numberedOtMatch[5];
+          normalized = numberedOtMatch[1] === 'Psa' && options.referenceSystem !== 'hebrew'
+            ? numberedOtMatch[1] + '.' + numberedOtMatch[2] + ':' + numberedOtMatch[3]
+            : numberedOtMatch[1] + '.' + String(numberedOtMatch[4] || numberedOtMatch[2]) + ':' + numberedOtMatch[5];
         } else {
           normalized = normalized.replace(/^([1-3]?[A-Za-z]{1,4})\.(\d+)\.(\d+(?:-\d+)?)$/, '$1.$2:$3');
         }
@@ -1029,12 +1033,15 @@
           return null;
         }
 
-        return {
+        var parsed = {
           book: book,
           chapter: match[2],
           startVerse: match[3],
           endVerse: match[4] && String(match[4]) !== String(match[2]) ? match[3] : (match[5] || match[3])
         };
+        return options.mapReference && !numberedOtMatch
+          ? options.mapReference(parsed, referenceSystem || 'english')
+          : parsed;
       }
 
       $events.on('click', '.bs-strongs-translate-btn', function() {

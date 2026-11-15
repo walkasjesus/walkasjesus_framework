@@ -19,8 +19,32 @@
   var bsCopySelection = null;
   var bsLastWordSearch = null;
   var bsCombineVerses = false;
+  var psalmEnglishReferences = JSON.parse($('#bs-psalm-english-references').text() || '{}');
+
+  function mapPsalmReference(parsed, referenceSystem) {
+    if (parsed.book !== 'Psalms') {
+      return parsed;
+    }
+    if (referenceSystem === 'translation') {
+      var bible = (currentBibleStudyState().bibles || [])[0] || {};
+      if (bible.id !== 'svv-statenvertaling' && !/king james|kjv/i.test(bible.displayName || '')) {
+        return parsed;
+      }
+    } else if (referenceSystem !== 'english') {
+      return parsed;
+    }
+    var start = psalmEnglishReferences[parsed.chapter + ':' + parsed.startVerse];
+    var end = psalmEnglishReferences[parsed.chapter + ':' + parsed.endVerse];
+    return $.extend({}, parsed, {
+      chapter: start ? String(start[0]) : parsed.chapter,
+      startVerse: start ? String(start[1]) : parsed.startVerse,
+      endVerse: end ? String(end[1]) : parsed.endVerse
+    });
+  }
 
   var originalPanels = window.WAJBibleStudyPanels.create($('.bible-study-shell'), {
+    referenceSystem: 'hebrew',
+    mapReference: mapPsalmReference,
     getState: currentBibleStudyState,
     bookLabel: bibleStudyBookLabel,
     fetchVerses: fetchBibleStudyRange,
@@ -122,7 +146,8 @@
       data: {
         book: bookName,
         chapter: chapter,
-        bible_id: bibleId
+        bible_id: bibleId,
+        reference_system: 'hebrew'
       }
     }).done(function(payload) {
       var maxVerse = parseInt((payload && payload.max_verse) || 0, 10);
@@ -751,10 +776,11 @@
 
     var itemsHtml = results.map(function(result) {
       var reference = String((result && result.reference) || '');
-      var parsed = parseBibleStudyDeeplinkReference(reference);
+      var referenceSystem = payload.mode === 'strongs' ? 'english' : 'translation';
+      var parsed = parseBibleStudyDeeplinkReference(reference, referenceSystem);
       var tag = parsed ? 'button' : 'div';
       var attrs = parsed
-        ? ' type="button" data-bible-study-reference="' + escapeHtml(reference) + '"'
+        ? ' type="button" data-reference-system="' + referenceSystem + '" data-bible-study-reference="' + escapeHtml(reference) + '"'
         : '';
       return '<' + tag + ' class="bs-word-search-result"' + attrs + '>' +
         '<span class="bs-word-search-reference">' + escapeHtml(reference || '{% trans "Search result" %}') + '</span>' +
@@ -1171,7 +1197,7 @@
       '</div></div>';
   }
 
-  function buildCombinedBibleStudyText(state, bibleId, displayName, verses) {
+  function buildCombinedBibleStudyText(state, bibleId, displayName, verses, references) {
     var lines = [];
     var abbreviation = bibleStudyAbbreviationForSelection(bibleId, displayName || '').toUpperCase();
     bibleStudyVerseNumbers(state).forEach(function(verseNumber) {
@@ -1180,7 +1206,11 @@
       if (abbreviation) {
         footer += ' (' + abbreviation + ')';
       }
-      lines.push('<span class="js-copy-selectable-line bs-copy-line" data-copy-group="' + escapeHtml('bs|' + String(bibleId || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(verseNumber || '')) + '" data-copy-abbreviation="' + escapeHtml(abbreviation) + '" data-copy-text="' + escapeHtml(text.replace(/\s+/g, ' ').trim()) + '" data-copy-footer="' + escapeHtml(footer) + '">' + escapeHtml(String(verseNumber) + ' ' + text).replace(/\n/g, '<br>') + '</span>');
+      var sourceReference = (references || {})[String(verseNumber)];
+      var sourceLabel = sourceReference && sourceReference !== String(state.chapter) + ':' + String(verseNumber)
+        ? ' (' + abbreviation + ' ' + sourceReference + ')'
+        : '';
+      lines.push('<span class="js-copy-selectable-line bs-copy-line" data-copy-group="' + escapeHtml('bs|' + String(bibleId || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(verseNumber || '')) + '" data-copy-abbreviation="' + escapeHtml(abbreviation) + '" data-copy-text="' + escapeHtml(text.replace(/\s+/g, ' ').trim()) + '" data-copy-footer="' + escapeHtml(footer) + '">' + escapeHtml(String(verseNumber) + sourceLabel + ' ' + text).replace(/\n/g, '<br>') + '</span>');
     });
     return lines.join('<br>');
   }
@@ -1305,7 +1335,7 @@
       if (displayName) {
         $combinedCard.find('.bible-study-translation-title').text(displayName);
       }
-      $combinedCard.find('[data-bible-verse-text="1"]').html(buildCombinedBibleStudyText(state, bibleId, displayName || (bibleStudyAbbreviationForSelection(bibleId, $combinedCard.find('.bible-study-translation-title').text()) || ''), verses));
+      $combinedCard.find('[data-bible-verse-text="1"]').html(buildCombinedBibleStudyText(state, bibleId, displayName || (bibleStudyAbbreviationForSelection(bibleId, $combinedCard.find('.bible-study-translation-title').text()) || ''), verses, payload.verse_references));
       if (copyrights) {
         if (!$combinedCard.find('.bible-study-copyright').length) {
           $combinedCard.append('<p class="bible-study-copyright mb-0"><small></small></p>');
@@ -1325,6 +1355,15 @@
       }
       if (displayName) {
         $card.find('.bible-study-translation-title').text(displayName);
+      }
+      var sourceReference = (payload.verse_references || {})[verseNumber];
+      $card.find('.bs-source-reference').remove();
+      if (sourceReference && sourceReference !== String(state.chapter) + ':' + verseNumber) {
+        $card.find('.bible-study-translation-title').after(
+          $('<small class="bs-source-reference d-block text-muted"></small>').text(
+            sourceReference === '—' ? '—' : String(state.bookLabel || '') + ' ' + sourceReference
+          )
+        );
       }
       $card.find('[data-bible-verse-text="1"]').html(escapeHtml(String(verses[verseNumber] || '—')).replace(/\n/g, '<br>'))
         .attr('data-copy-footer', copyFooter)
@@ -1440,6 +1479,7 @@
         bible_id: bible.id,
         book: state.book,
         chapter: state.chapter,
+        reference_system: 'hebrew',
         verses: JSON.stringify(verses)
       },
       success: function(payload) {
@@ -1771,7 +1811,8 @@
         book: state.book,
         chapter: state.chapter,
         start_verse: state.startVerse,
-        end_verse: state.endVerse
+        end_verse: state.endVerse,
+        reference_system: 'hebrew'
       },
       success: function(payload) {
         bibleStudyRequestCache[requestKey] = payload || {};
@@ -1807,6 +1848,9 @@
       },
       verse_sources: {
         {% for verse in verse_data %}'{{ verse.verse_num }}': '{{ bible.verse_sources|get_item:verse.verse_num|default:"cache"|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+      },
+      verse_references: {
+        {% for verse in verse_data %}'{{ verse.verse_num }}': '{{ bible.verse_references|get_item:verse.verse_num|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}
       }
     };
     {% endfor %}
@@ -2475,7 +2519,7 @@
 
   $(document).on('click', '.bible-study-shell .bs-word-search-result[data-bible-study-reference]', function(event) {
     event.preventDefault();
-    var parsed = parseBibleStudyDeeplinkReference($(this).attr('data-bible-study-reference'));
+    var parsed = parseBibleStudyDeeplinkReference($(this).attr('data-bible-study-reference'), $(this).attr('data-reference-system'));
     if (parsed) {
       jumpToBibleStudyReference(parsed);
     }
@@ -2484,6 +2528,12 @@
   seedBibleStudyRequestCache();
 
   var bsInitialParams = new URLSearchParams(window.location.search || '');
+  if (bsInitialParams.get('reference_system') === 'english' && bsInitialParams.get('book') === 'Psalms') {
+    var selectedReference = psalmEnglishReferences[bsInitialParams.get('chapter') + ':' + bsInitialParams.get('selected_verse')];
+    if (selectedReference) {
+      bsInitialParams.set('selected_verse', String(selectedReference[1]));
+    }
+  }
   var bsSelectedVerseParam = $.trim(String(bsInitialParams.get('selected_verse') || ''));
   var bsSelectedStrongsParam = $.trim(String(bsInitialParams.get('selected_strongs') || ''));
   bsCombineVerses = String(bsInitialParams.get('combine_verses') || '1') !== '0';

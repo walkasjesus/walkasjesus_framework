@@ -1561,19 +1561,52 @@ def _primary_translation_label(candidates):
     return ''
 
 
-def _stepbible_rows_for_verse(book_name, chapter, verse):
+@lru_cache(maxsize=1)
+def psalm_verse_mapping():
+    """Map Hebrew references to STEPBible's English/KJV references, including titles."""
+    references = {}
+    with _stepbible_file_for_book('Psalms').open(encoding='utf-8') as handle:
+        for line in handle:
+            token, separator, _ = line.partition('#')
+            if not separator or not token.startswith('Psa.'):
+                continue
+            match = re.fullmatch(r'Psa\.(\d+)\.(\d+)(?:\((\d+)\.(\d+)\))?', token)
+            if match:
+                english = (int(match[1]), int(match[2]))
+                hebrew = (int(match[3] or match[1]), int(match[4] or match[2]))
+                references[hebrew] = english
+    return references
+
+
+def psalm_english_reference(chapter, verse):
+    return psalm_verse_mapping().get((int(chapter), int(verse)), (int(chapter), int(verse)))
+
+
+def psalm_hebrew_reference(chapter, verse):
+    reference = (int(chapter), int(verse))
+    return next((hebrew for hebrew, english in psalm_verse_mapping().items() if english == reference), reference)
+
+
+def _stepbible_rows_for_verse(book_name, chapter, verse, reference_system='english'):
     book_code = _stepbible_book_code(book_name)
     reference_prefix = f'{book_code}.{chapter}.{verse}'
     reference = f'{book_code}.{chapter}:{verse}'
     rows = []
     path = _stepbible_file_for_book(book_name)
+    use_hebrew_reference = reference_system == 'hebrew' and book_name == 'Psalms'
     with path.open('r', encoding='utf-8') as handle:
         for raw_line in handle:
             line = raw_line.rstrip('\n')
-            if not line.startswith(reference_prefix):
+            if not line.startswith(f'{book_code}.' if use_hebrew_reference else reference_prefix):
                 continue
             reference_token, separator, _ = line.partition('#')
-            if not separator or _step_reference_to_display(reference_token) != reference:
+            if not separator:
+                continue
+            if use_hebrew_reference:
+                match = re.fullmatch(r'Psa\.(\d+)\.(\d+)(?:\((\d+)\.(\d+)\))?', reference_token)
+                if not match or (int(match[3] or match[1]), int(match[4] or match[2])) != (int(chapter), int(verse)):
+                    continue
+            elif _step_reference_to_display(reference_token) != reference:
                 continue
             rows.append(line)
     return rows
@@ -1723,8 +1756,8 @@ def _token_payload_from_step_row(row_data, language):
     }
 
 
-def original_text_payload(book_name, chapter, verse):
-    cache_key = f'bible_study:original:v21:{book_name}:{chapter}:{verse}'
+def original_text_payload(book_name, chapter, verse, reference_system='english'):
+    cache_key = f'bible_study:original:v22:{reference_system}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -1732,7 +1765,7 @@ def original_text_payload(book_name, chapter, verse):
     language = original_language_code(book_name)
     bible = BibleTranslation().get(original_bible_id(book_name))
     original_text = bible.verses(BibleLibBibleBooks[book_name], chapter, verse, chapter, verse) or ''
-    step_rows = [_parse_stepbible_row(row, language) for row in _stepbible_rows_for_verse(book_name, chapter, verse)]
+    step_rows = [_parse_stepbible_row(row, language) for row in _stepbible_rows_for_verse(book_name, chapter, verse, reference_system)]
     words = [_token_payload_from_step_row(row, language) for row in step_rows if row and str(row.get('surface_text') or '').strip()]
     if not words:
         raw_tokens = _WORD_RE.findall(original_text)
@@ -1927,7 +1960,7 @@ def _align_reordered_leftovers(english_words, scores, mapping):
             used_tokens.add(matches[0])
 
 
-def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_source='', allow_scoring=True):
+def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_source='', allow_scoring=True, reference_system='english'):
     """Map every word of a translated verse onto the index of the original word it renders.
 
     When the translation has a word-level Strong's tagging the mapping is a direct lookup;
@@ -1939,13 +1972,13 @@ def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_sour
 
     tagged_source = str(tagged_source or '').strip().lower()
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:alignment:v5:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
+    cache_key = f'bible_study:alignment:v6:{reference_system}:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
     try:
-        original = original_text_payload(book_name, chapter, verse)
+        original = original_text_payload(book_name, chapter, verse, reference_system)
     except Exception:
         original = None
 
@@ -1958,7 +1991,10 @@ def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_sour
     mapping = None
     method = ''
     if tagged_source in TAGGED_BIBLE_SOURCES:
-        mapping = _tagged_mapping(tagged_source, book_name, chapter, verse, display_words, words)
+        tagged_chapter, tagged_verse = (chapter, verse)
+        if reference_system == 'hebrew' and book_name == 'Psalms':
+            tagged_chapter, tagged_verse = psalm_english_reference(chapter, verse)
+        mapping = _tagged_mapping(tagged_source, book_name, tagged_chapter, tagged_verse, display_words, words)
         if mapping is not None:
             method = 'tagged'
 
@@ -2412,14 +2448,14 @@ def search_result_word_study(results, query, tagged_source='', allow_scoring=Fal
     return {'candidates': list(found.values()), 'unaligned_results': unaligned}
 
 
-def localized_original_text_payload(book_name, chapter, verse, language_code='en'):
+def localized_original_text_payload(book_name, chapter, verse, language_code='en', reference_system='english'):
     """Original-language payload enriched with glosses from a tagged edition in the UI language."""
     source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code or '').strip().lower()[:2])
-    payload = original_text_payload(book_name, chapter, verse)
+    payload = original_text_payload(book_name, chapter, verse, reference_system)
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v11:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v12:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2427,8 +2463,11 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     words = payload.get('words') or []
     phrases_by_token = {}
     phrases_by_component = {}
-    tagged_segments = _tagged_segments(source, book_name, chapter, verse)
-    assignments = _tagged_run_assignments(source, book_name, chapter, verse, words)
+    tagged_chapter, tagged_verse = (chapter, verse)
+    if reference_system == 'hebrew' and book_name == 'Psalms':
+        tagged_chapter, tagged_verse = psalm_english_reference(chapter, verse)
+    tagged_segments = _tagged_segments(source, book_name, tagged_chapter, tagged_verse)
+    assignments = _tagged_run_assignments(source, book_name, tagged_chapter, tagged_verse, words)
     for segment, (token_index, segment_words) in zip(tagged_segments, assignments):
         if token_index < 0 or not segment_words:
             continue

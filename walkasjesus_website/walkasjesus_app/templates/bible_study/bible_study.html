@@ -9,6 +9,7 @@
 {% block og_title %}{% trans 'Bible Study' %} | Walk as Jesus{% endblock %}
 
 {% block content %}
+{{ psalm_english_references|json_script:"bs-psalm-english-references" }}
 <section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
   <div class="overlay"></div>
 </section>
@@ -394,6 +395,17 @@
                 <div class="bible-study-translation-card" data-verse="{{ verse.verse_num }}" data-bible-id="{{ bible.id }}">
                   <div class="bible-study-translation-head">
                     <span class="bible-study-translation-title">{{ bible.display_name }}</span>
+                    {% with chapter_string=selected_chapter|stringformat:"s" verse_string=verse.verse_num|stringformat:"s" %}
+                    {% with current_reference=chapter_string|add:":"|add:verse_string %}
+                    {% with source_reference=bible.verse_references|get_item:verse.verse_num %}
+                    {% if source_reference == '—' %}
+                    <small class="bs-source-reference d-block text-muted">—</small>
+                    {% elif source_reference and source_reference != current_reference %}
+                    <small class="bs-source-reference d-block text-muted">{{ selected_book_label }} {{ source_reference }}</small>
+                    {% endif %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
                   </div>
                   <p class="bs-verse-text js-copy-selectable-line" data-bible-verse-text="1" data-copy-footer="{{ selected_book_label }} {{ selected_chapter }}:{{ verse.verse_num }}" data-copy-group="bs|{{ bible.id }}|{{ selected_book }}|{{ selected_chapter }}" data-copy-book-label="{{ selected_book_label|escape }}" data-copy-chapter="{{ selected_chapter }}" data-copy-verse="{{ verse.verse_num }}" data-copy-text="{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|striptags|escape }}">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>
                   {% comment %} {% if forloop.parentloop.last and bible.copyright %} {% endcomment %}

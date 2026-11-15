@@ -36,12 +36,30 @@ from walkasjesus_app.lib.strongs_service import (
     strongs_occurrence_references,
     strongs_word_detail,
     strongs_occurrence_word_detail,
+    psalm_english_reference,
+    psalm_hebrew_reference,
+    psalm_verse_mapping,
 )
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
 from walkasjesus_app.models.bible_books import BibleBooks
 from walkasjesus_app.models.bibles import LocalCompleteJewishBible, LocalStatenvertalingBible
 
 logger = logging.getLogger(__name__)
+
+
+def _study_verse_reference(bible, book, chapter, verse, reference_system):
+    if book == 'Psalms' and reference_system == 'hebrew' and _tagged_source_for_bible(bible) == 'kjv':
+        return psalm_english_reference(chapter, verse)
+    return chapter, verse
+
+
+def _study_verse_text(bible, book, chapter, verse, reference_system):
+    if book == 'Psalms' and reference_system == 'hebrew' and isinstance(bible, LocalStatenvertalingBible):
+        return bible.psalm_study_verse(chapter, verse)
+    source_chapter, source_verse = _study_verse_reference(bible, book, chapter, verse, reference_system)
+    if source_verse == 0:
+        return ''
+    return bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse)
 
 VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 BIBLE_SEARCH_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_STUDY_SEARCH_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 7))
@@ -688,6 +706,12 @@ class BibleStudyView(View):
         if not bible_ids and enabled_bibles:
             bible_ids = [enabled_bibles[0].id]
 
+        if book == 'Psalms' and request.GET.get('reference_system') == 'english':
+            source_chapter = chapter
+            chapter, start_verse = psalm_hebrew_reference(source_chapter, start_verse)
+            _, end_verse = psalm_hebrew_reference(source_chapter, end_verse)
+            end_verse = min(end_verse, start_verse + max_verses - 1)
+
         verse_range = list(range(start_verse, end_verse + 1))
         is_ot_book = book in _OT_BOOKS
         sefaria_book = _SEFARIA_BOOK_NAMES.get(book, book)
@@ -714,11 +738,16 @@ class BibleStudyView(View):
                 break
             bible_obj = bt.get(bid)
             if bible_obj:
-                bible_book = BibleLibBibleBooks[book]
                 verse_texts = {}
                 verse_sources = {}
+                verse_references = {}
                 for v in verse_range:
-                    cache_key = f'bible_study:v1:{bid}:{book}:{chapter}:{v}'
+                    source_chapter, source_verse = _study_verse_reference(bible_obj, book, chapter, v, 'hebrew')
+                    verse_references[str(v)] = f'{source_chapter}:{source_verse}' if source_verse else '—'
+                    if source_verse == 0:
+                        verse_texts[str(v)] = ''
+                        continue
+                    cache_key = f'bible_study:v2:hebrew:{bid}:{book}:{chapter}:{v}'
                     cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
                     if cached is not None:
                         verse_texts[str(v)] = cached
@@ -726,7 +755,7 @@ class BibleStudyView(View):
                         continue
                     try:
                         consume_bible_api_quota(request, bible_obj, BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
-                        text = bible_obj.verses(bible_book, chapter, v, chapter, v)
+                        text = _study_verse_text(bible_obj, book, chapter, v, 'hebrew')
                     except BibleApiRateLimitExceeded as ex:
                         bible_api_rate_limit_error = ex.message
                         rate_limit_exceeded = True
@@ -754,6 +783,7 @@ class BibleStudyView(View):
                     'display_name': f"{str(getattr(bible_obj, 'language', '') or '').strip().upper()[:2]} - {bible_obj.name}" if str(getattr(bible_obj, 'language', '') or '').strip() else bible_obj.name,
                     'verse_texts': verse_texts,
                     'verse_sources': verse_sources,
+                    'verse_references': verse_references,
                     'copyright': getattr(bible_obj, 'copyright', ''),
                 })
 
@@ -777,6 +807,11 @@ class BibleStudyView(View):
             'is_ot_book': is_ot_book,
             'show_original_text': show_original_text,
             'bible_api_rate_limit_error': bible_api_rate_limit_error,
+            'psalm_english_references': {
+                f'{english_chapter}:{english_verse}': [hebrew_chapter, hebrew_verse]
+                for (hebrew_chapter, hebrew_verse), (english_chapter, english_verse) in psalm_verse_mapping().items()
+                if english_verse and (hebrew_chapter, hebrew_verse) != (english_chapter, english_verse)
+            },
         })
 
 
@@ -805,12 +840,18 @@ class BibleStudyVersesView(View):
         if not bible:
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
-        bible_lib_book = BibleLibBibleBooks[book_name]
         disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
+        reference_system = 'hebrew' if request.POST.get('reference_system') == 'hebrew' else 'english'
         verses = {}
         verse_sources = {}
+        verse_references = {}
         for v in range(start_verse, end_verse + 1):
-            cache_key = f'bible_study:v1:{bible_id}:{book_name}:{chapter}:{v}'
+            source_chapter, source_verse = _study_verse_reference(bible, book_name, chapter, v, reference_system)
+            verse_references[str(v)] = f'{source_chapter}:{source_verse}' if source_verse else '—'
+            if source_verse == 0:
+                verses[str(v)] = ''
+                continue
+            cache_key = f'bible_study:v2:{reference_system}:{bible_id}:{book_name}:{chapter}:{v}'
             cached = None if disable_cache else cache.get(cache_key)
             if cached is not None:
                 verses[str(v)] = cached
@@ -818,7 +859,7 @@ class BibleStudyVersesView(View):
                 continue
             try:
                 consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
-                text = bible.verses(bible_lib_book, chapter, v, chapter, v)
+                text = _study_verse_text(bible, book_name, chapter, v, reference_system)
             except BibleApiRateLimitExceeded as ex:
                 return JsonResponse({'error': ex.message}, status=429)
             except Exception:
@@ -840,6 +881,7 @@ class BibleStudyVersesView(View):
         return JsonResponse({
             'verses': verses,
             'verse_sources': verse_sources,
+            'verse_references': verse_references,
             'bible_name': getattr(bible, 'name', bible_id),
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),
@@ -1203,6 +1245,8 @@ class BibleStudyChapterMetaView(View):
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
         max_verse = _chapter_max_verse_for_bible(bible, book_name, chapter)
+        if book_name == 'Psalms' and request.GET.get('reference_system') == 'hebrew':
+            max_verse = max((verse for source_chapter, verse in psalm_verse_mapping() if source_chapter == chapter), default=max_verse)
         return JsonResponse({
             'book': book_name,
             'chapter': chapter,
@@ -1231,6 +1275,7 @@ class BibleStudyOriginalTextView(View):
         for verse in range(start_verse, end_verse + 1):
             verses[str(verse)] = localized_original_text_payload(
                 book_name, chapter, verse, getattr(request, 'LANGUAGE_CODE', 'en'),
+                reference_system='hebrew' if request.POST.get('reference_system') == 'hebrew' else 'english',
             )
 
         return JsonResponse({'verses': verses})
@@ -1284,6 +1329,7 @@ class BibleStudyWordAlignmentView(View):
                     book_name, chapter, verse_number, text,
                     tagged_source=tagged_source,
                     allow_scoring=is_english,
+                    reference_system='hebrew' if request.POST.get('reference_system') == 'hebrew' else 'english',
                 )
             except Exception:
                 logger.exception(

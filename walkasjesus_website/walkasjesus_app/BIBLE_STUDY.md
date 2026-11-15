@@ -50,6 +50,32 @@ the Bible Study page keeps its existing in-page passage navigation.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
 
+### Psalm verse numbering
+
+Bible Study passage comparisons use Hebrew Psalm numbering, independent of the
+first selected translation. The TAHOT references explicitly map the primary
+English/KJV reference to its Hebrew reference, e.g. `Psa.30.1(30.2)`.
+The original-text and word-alignment requests send `reference_system=hebrew`;
+the shared detail-page controllers retain their existing English reference system.
+Caches distinguish the two systems.
+
+Psalm 30:1 is the Hebrew title. HSV and Naardense number that title as verse 1.
+KJV does not number it: its first body verse (30:1) is displayed alongside Hebrew
+30:2, with its own source reference shown above the translation. A dash represents
+the absent numbered KJV title, not a substituted body verse. Chapter navigation
+uses TAHOT's Hebrew maximum, including the last body verse.
+
+The local Statenvertaling's CrossWire storage uses KJV slots, but its text embeds
+the Dutch/Hebrew markers such as `[030:2]`. Bible Study splits those markers to keep
+the title separate from the body; it does not change the underlying bundled data.
+Word links and Dutch contextual glosses use the same Hebrew-to-tagged-slot mapping.
+KJV editions are recognized by their existing tagging metadata; other translations
+retain their supplied Psalm numbering.
+Psalm occurrence previews convert English concordance references to Hebrew;
+translation-text search links convert KJV/local-SV storage references only.
+Detail-page links can explicitly request `reference_system=english`, which the
+page converts to the Hebrew passage before rendering.
+
 ### Text search and dictionary word study
 
 Three matching search boxes are shown in Settings:

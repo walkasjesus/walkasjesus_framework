@@ -1,6 +1,7 @@
 import gzip
 import logging
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -82,6 +83,26 @@ class LocalStatenvertalingBible(Bible):
                 for verse, text in sorted(chapters[chapter].items(), key=lambda item: int(item[0])):
                     if text:
                         yield book.name, int(chapter), int(verse), text
+
+    def psalm_study_verse(self, chapter, verse):
+        """Read the Dutch numbering embedded inside CrossWire's KJV-numbered slots."""
+        chapter_verses = self._chapters('Psalms').get(str(chapter)) or {}
+        numbered = {}
+        for storage_verse, text in sorted(chapter_verses.items(), key=lambda item: int(item[0])):
+            markers = list(re.finditer(r'\[(\d{3}):(\d+)\]', text))
+            if not markers:
+                continue
+            prefix = text[:markers[0].start()].strip()
+            if int(storage_verse) == 1 and prefix:
+                numbered[1] = prefix
+            for index, marker in enumerate(markers):
+                if int(marker[1]) != int(chapter):
+                    continue
+                end = markers[index + 1].start() if index + 1 < len(markers) else len(text)
+                numbered[int(marker[2])] = text[marker.end():end].strip()
+        if numbered:
+            return numbered.get(int(verse), '')
+        return self.verses(BibleLibBibleBooks.Psalms, chapter, verse, chapter, verse)
 
 
 class LocalCompleteJewishBible(Bible):

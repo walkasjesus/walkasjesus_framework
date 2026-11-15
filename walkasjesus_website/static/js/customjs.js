@@ -862,6 +862,13 @@ $(document).ready(function(){
     params.set('chapter', String(details.chapter || 1));
     params.set('start_verse', String(details.startVerse || 1));
     params.set('end_verse', String(details.endVerse || details.startVerse || 1));
+    if (details.book === 'Psalms') {
+      var selectedBible = $('#drpBibleTranslation option:selected');
+      if (details.referenceSystem === 'english' || selectedBible.val() === 'svv-statenvertaling' ||
+          /king james|kjv/i.test(selectedBible.text())) {
+        params.set('reference_system', 'english');
+      }
+    }
     if (details.showOriginalText) {
       params.set('show_original', '1');
     }
@@ -2459,7 +2466,9 @@ $(document).ready(function(){
       return {
         getState: function() { return state; },
         bookLabel: scripturaBookLabelFromKey,
-        jumpReference: function(parsed) { window.location.href = buildBibleStudyUrl(parsed); },
+        jumpReference: function(parsed) {
+          window.location.href = buildBibleStudyUrl($.extend({}, parsed, {referenceSystem: 'english'}));
+        },
         fetchVerses: function(previewState, bible, onDone) {
           $.ajax({
             type: 'POST',

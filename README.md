@@ -14,6 +14,16 @@ _This will install all configured applications from `./walkasjesus_website/requi
 
 `./walkasjesus_website/install.sh`
 
+Use a single virtual environment at `walkasjesus_website/venv`. Run installation
+and other shell scripts from `walkasjesus_website` so their relative paths resolve
+correctly. In VS Code, select `walkasjesus_website/venv/bin/python` as the Python
+interpreter (`venv/Scripts/python.exe` on Windows). To activate it manually:
+
+```bash
+cd walkasjesus_website
+source venv/bin/activate
+```
+
 2. Initialize database  
 _This will initialize a first database structure with all required tables, or update existing tables with the latest migrations to apply_  
 

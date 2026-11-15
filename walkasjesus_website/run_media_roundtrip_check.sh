@@ -12,7 +12,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT_DIR"
 
-PYTHON_BIN="${PYTHON_BIN:-../.venv/bin/python}"
+PYTHON_BIN="${PYTHON_BIN:-./venv/bin/python}"
 CLEAN_FIRST="true"
 
 if [[ "${1:-}" == "--no-clean" ]]; then
@@ -21,7 +21,7 @@ fi
 
 if [[ ! -x "$PYTHON_BIN" ]]; then
   echo "ERROR: Python executable not found or not executable: $PYTHON_BIN"
-  echo "Hint: set PYTHON_BIN env var, for example: PYTHON_BIN=../.venv/bin/python"
+  echo "Hint: set PYTHON_BIN env var, for example: PYTHON_BIN=./venv/bin/python"
   exit 1
 fi
 

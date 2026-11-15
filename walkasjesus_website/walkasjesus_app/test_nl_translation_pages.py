@@ -60,6 +60,24 @@ class DutchTranslationPagesTest(TestCase):
     def setUp(self):
         cache.clear()
 
+    def test_nl_step_titles_are_translated_on_listing_and_detail_pages(self):
+        commandment = Commandment.objects.get(pk=self.step_id)
+        commandment.title = 'Repent and believe the gospel'
+        commandment.save(update_fields=['title'])
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = 'nl'
+
+        with override('nl'):
+            listing_url = reverse('commandments:listing')
+            detail_url = reverse('commandments:detail', args=[self.step_id])
+
+        for page_url in [listing_url, detail_url]:
+            with self.subTest(page_url=page_url):
+                response = self.client.get(page_url)
+                self.assertEqual(response.status_code, 200)
+                html = response.content.decode('utf-8', errors='ignore')
+                self.assertIn('Bekeer u en geloof het evangelie', html)
+                self.assertNotIn('Repent and believe the gospel', html)
+
     def test_nl_pages_do_not_show_known_english_law_strings(self):
         with override('nl'):
             next_url = reverse('commandments:index')

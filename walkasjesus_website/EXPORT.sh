@@ -20,8 +20,6 @@ if [[ -f ./venv/Scripts/activate ]]; then
 elif [[ -f ./venv/bin/activate ]]; then
     source ./venv/bin/activate
     PYTHON_BIN="python3"
-elif [[ -x ../.venv/bin/python ]]; then
-    PYTHON_BIN="../.venv/bin/python"
 else
     PYTHON_BIN="python3"
 fi

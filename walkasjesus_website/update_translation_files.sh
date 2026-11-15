@@ -8,12 +8,6 @@ if [[ -f ./venv/Scripts/activate ]]; then
 	source ./venv/Scripts/activate
 elif [[ -f ./venv/bin/activate ]]; then 
 	source ./venv/bin/activate
-elif [[ -f ./.venv/bin/activate ]]; then
-	source ./.venv/bin/activate
-elif [[ -f ../venv/bin/activate ]]; then
-	source ../venv/bin/activate
-elif [[ -f ../.venv/bin/activate ]]; then
-	source ../.venv/bin/activate
 else
 	echo "ERROR: cannot find environment binary"
 	exit 1

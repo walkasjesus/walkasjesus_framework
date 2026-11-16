@@ -2,20 +2,20 @@
 {% load i18n %}
 {% for badge in media_type_badges %}
     {% if badge.media_type == 'movie' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/movie.png' %}" alt="{% trans 'Movie' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#movies"><img class="lom-person-icon" src="{% static 'images/movie.png' %}" alt="{% trans 'Movie' %}"></a></span>
     {% elif badge.media_type == 'shortmovie' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/shortmovie.png' %}" alt="{% trans 'Short Movie' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#short_movies"><img class="lom-person-icon" src="{% static 'images/shortmovie.png' %}" alt="{% trans 'Short Movie' %}"></a></span>
     {% elif badge.media_type == 'wajvideo' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/wajvideo.png' %}" alt="{% trans 'WaJVideo' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#waj_video"><img class="lom-person-icon" src="{% static 'images/wajvideo.png' %}" alt="{% trans 'WaJVideo' %}"></a></span>
     {% elif badge.media_type == 'sermon' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/sermon.png' %}" alt="{% trans 'Sermon' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#sermons"><img class="lom-person-icon" src="{% static 'images/sermon.png' %}" alt="{% trans 'Sermon' %}"></a></span>
     {% elif badge.media_type == 'podcast' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/podcast.png' %}" alt="{% trans 'Podcast' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#podcasts"><img class="lom-person-icon" src="{% static 'images/podcast.png' %}" alt="{% trans 'Podcast' %}"></a></span>
     {% elif badge.media_type == 'testimony' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/testimony.png' %}" alt="{% trans 'Testimony' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#testimonies"><img class="lom-person-icon" src="{% static 'images/testimony.png' %}" alt="{% trans 'Testimony' %}"></a></span>
     {% elif badge.media_type == 'blog' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/blog.png' %}" alt="{% trans 'Blog' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#blogs"><img class="lom-person-icon" src="{% static 'images/blog.png' %}" alt="{% trans 'Blog' %}"></a></span>
     {% elif badge.media_type == 'book' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/book.png' %}" alt="{% trans 'Book' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><a href="{{ detail_url }}#books"><img class="lom-person-icon" src="{% static 'images/book.png' %}" alt="{% trans 'Book' %}"></a></span>
     {% endif %}
 {% endfor %}

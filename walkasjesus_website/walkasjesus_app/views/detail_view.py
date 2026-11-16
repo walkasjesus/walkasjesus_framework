@@ -284,6 +284,7 @@ def _apply_shared_media_to_commandment_display(commandment, grouped):
     commandment.short_movies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE, [])
     commandment.waj_video = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO, [])
     commandment.sermons = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SERMON, [])
+    commandment.podcasts = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PODCAST, [])
     commandment.pictures = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PICTURE, [])
     commandment.testimonies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY, [])
     commandment.blogs = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_BLOG, [])
@@ -299,6 +300,7 @@ def _apply_shared_media_to_lesson_display(lesson, grouped):
     lesson.short_movies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_SHORTMOVIE, [])
     lesson.pictures = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PICTURE, [])
     lesson.testimonies = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY, [])
+    lesson.podcasts = grouped.get(LawOfMessiahDrawing.MEDIA_TYPE_PODCAST, [])
     lesson.background_drawing = lesson.drawings[0] if lesson.drawings else ''
 
 
@@ -479,4 +481,3 @@ class BibleVersesLessonView(View):
             verse_sources = {pk: src for pk, src in verse_sources.items() if pk in requested_ref_ids}
 
         return JsonResponse({'verses': verses, 'verse_sources': verse_sources})
-

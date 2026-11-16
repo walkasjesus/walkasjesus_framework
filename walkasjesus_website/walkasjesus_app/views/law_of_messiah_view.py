@@ -97,6 +97,7 @@ def _law_media_type_order():
         LawOfMessiahDrawing.MEDIA_TYPE_WAJVIDEO,
         LawOfMessiahDrawing.MEDIA_TYPE_TESTIMONY,
         LawOfMessiahDrawing.MEDIA_TYPE_BLOG,
+        LawOfMessiahDrawing.MEDIA_TYPE_PODCAST,
         LawOfMessiahDrawing.MEDIA_TYPE_PICTURE,
         LawOfMessiahDrawing.MEDIA_TYPE_SERMON,
         LawOfMessiahDrawing.MEDIA_TYPE_BOOK,

@@ -58,6 +58,11 @@ class Command(BaseCommand):
             model_reference = LessonTestimony(lesson_id=lesson_id)
         elif media_type == 'picture':
             model_reference = LessonPicture(lesson_id=lesson_id)
+        elif media_type == LawOfMessiahDrawing.MEDIA_TYPE_PODCAST:
+            model_reference = LawOfMessiahDrawing(
+                lesson_id=lesson_id,
+                media_type=LawOfMessiahDrawing.MEDIA_TYPE_PODCAST,
+            )
         else:
             logging.getLogger().warning(f'Type {media_type} not yet implemented in import command')
             return

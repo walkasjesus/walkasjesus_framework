@@ -362,7 +362,7 @@ class LawOfMessiah(models.Model):
 
         return [
             {'media_type': media_type, 'count': counts[media_type], 'tooltip': media_badge_tooltip(media_type, counts[media_type])}
-            for media_type in ['movie', 'shortmovie', 'wajvideo', 'sermon', 'testimony', 'blog', 'book'] if media_type in counts
+            for media_type in ['movie', 'shortmovie', 'wajvideo', 'sermon', 'podcast', 'testimony', 'blog', 'book'] if media_type in counts
         ]
 
 

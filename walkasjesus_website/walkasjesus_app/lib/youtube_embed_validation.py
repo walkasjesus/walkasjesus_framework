@@ -6,11 +6,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 def is_youtube_url(url):
-    host = urlparse(str(url or '').strip()).netloc.lower()
-    return (
-        'youtube.com' in host
-        or 'youtu.be' in host
-        or 'youtube-nocookie.com' in host
+    host = (urlparse(str(url or '').strip()).hostname or '').lower()
+    return any(
+        host == domain or host.endswith(f'.{domain}')
+        for domain in ('youtube.com', 'youtu.be', 'youtube-nocookie.com')
     )
 
 

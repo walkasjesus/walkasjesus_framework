@@ -21,6 +21,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from walkasjesus_app.admin import MediaResourceAdmin
+from walkasjesus_app.management.commands.import_media_lessons import Command as ImportLessonMediaCommand
 from walkasjesus_app.models import AbstractBibleReference, DirectBibleReference, Commandment, Lesson, LawOfMessiah, LawOfMessiahDrawing
 from walkasjesus_app.models import PrimaryBibleReference, BibleBooks
 from walkasjesus_app.models.bibles import (
@@ -44,7 +45,7 @@ from walkasjesus_app.lib.strongs_service import (
 )
 from walkasjesus_app.context_processors import cache_settings
 from walkasjesus_app.lib.media_cache_version import MEDIA_CACHE_VERSION_KEY, get_media_cache_version
-from walkasjesus_app.templatetags.media_extras import youtube_captions_url
+from walkasjesus_app.templatetags.media_extras import is_youtube_url_filter, youtube_captions_url
 from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageView
 from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
 from walkasjesus_app.views.detail_view import (
@@ -1114,6 +1115,12 @@ class DynamicUiRegressionTestCase(TestCase):
 
 
 class MediaTemplateFilterTestCase(SimpleTestCase):
+    def test_is_youtube_url_filter_only_accepts_youtube_hosts(self):
+        self.assertTrue(is_youtube_url_filter('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw'))
+        self.assertTrue(is_youtube_url_filter('https://youtu.be/Ilbh6Dv_8Yw'))
+        self.assertFalse(is_youtube_url_filter('https://example.org/podcast'))
+        self.assertFalse(is_youtube_url_filter('https://youtube.com.example.org/podcast'))
+
     def test_youtube_captions_url_converts_watch_url_to_embed(self):
         rendered = youtube_captions_url('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw', 'nl')
         parsed = urlparse(rendered)
@@ -1357,6 +1364,68 @@ class SharedMediaDeduplicationTestCase(TestCase):
         songs = grouped[LawOfMessiahDrawing.MEDIA_TYPE_SONG]
 
         self.assertEqual(songs, [])
+
+    def test_podcast_media_is_collected_and_shown_as_a_badge(self):
+        podcast = LawOfMessiahDrawing.objects.create(
+            commandment=self.commandment,
+            media_type=LawOfMessiahDrawing.MEDIA_TYPE_PODCAST,
+            title='Podcast episode',
+            author='Podcast host',
+            url='https://example.org/podcast',
+            target_audience='any',
+            language='en',
+            is_public=True,
+        )
+
+        grouped = _collect_shared_media_by_type(commandment=self.commandment)
+        badges = self.commandment.media_type_badges()
+        rendered_badges = render_to_string(
+            'commandments/_media_type_badges.html',
+            {'media_type_badges': badges},
+        )
+
+        self.assertIn(podcast, grouped[LawOfMessiahDrawing.MEDIA_TYPE_PODCAST])
+        self.assertEqual(
+            [badge['media_type'] for badge in badges],
+            [LawOfMessiahDrawing.MEDIA_TYPE_PODCAST],
+        )
+        self.assertIn('/static/images/podcast.png', rendered_badges)
+
+        law = LawOfMessiah.objects.create(id='LPOD', title='Podcast law')
+        LawOfMessiahDrawing.objects.create(
+            law_of_messiah=law,
+            media_type=LawOfMessiahDrawing.MEDIA_TYPE_PODCAST,
+            title='Law podcast',
+            url='https://example.org/law-podcast',
+            is_public=True,
+        )
+        self.assertEqual(
+            [badge['media_type'] for badge in law.media_type_badges()],
+            [LawOfMessiahDrawing.MEDIA_TYPE_PODCAST],
+        )
+
+    def test_podcast_from_legacy_lesson_import_is_saved_as_shared_media(self):
+        podcast = SimpleNamespace(
+            type='podcast',
+            title='Lesson podcast',
+            description='Podcast description',
+            target_audience='any',
+            language='en',
+            img_url='',
+            url='https://example.org/lesson-podcast',
+            author='Podcast host',
+            is_public=True,
+        )
+
+        ImportLessonMediaCommand()._add_media(self.lesson.id, podcast)
+
+        self.assertTrue(
+            LawOfMessiahDrawing.objects.filter(
+                lesson=self.lesson,
+                media_type=LawOfMessiahDrawing.MEDIA_TYPE_PODCAST,
+                title=podcast.title,
+            ).exists()
+        )
 
 
 class KidsOnlyMediaServerRenderingTestCase(TestCase):

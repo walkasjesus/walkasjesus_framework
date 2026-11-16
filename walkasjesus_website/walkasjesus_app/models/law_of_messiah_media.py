@@ -19,6 +19,7 @@ class LawOfMessiahMedia(models.Model):
     MEDIA_TYPE_SHORTMOVIE = 'shortmovie'
     MEDIA_TYPE_WAJVIDEO = 'wajvideo'
     MEDIA_TYPE_SERMON = 'sermon'
+    MEDIA_TYPE_PODCAST = 'podcast'
     MEDIA_TYPE_PICTURE = 'picture'
     MEDIA_TYPE_TESTIMONY = 'testimony'
     MEDIA_TYPE_BLOG = 'blog'
@@ -32,6 +33,7 @@ class LawOfMessiahMedia(models.Model):
         (MEDIA_TYPE_SHORTMOVIE, 'ShortMovie'),
         (MEDIA_TYPE_WAJVIDEO, 'WaJVideo'),
         (MEDIA_TYPE_SERMON, 'Sermon'),
+        (MEDIA_TYPE_PODCAST, 'Podcast'),
         (MEDIA_TYPE_PICTURE, 'Picture'),
         (MEDIA_TYPE_TESTIMONY, 'Testimony'),
         (MEDIA_TYPE_BLOG, 'Blog'),

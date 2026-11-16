@@ -100,6 +100,13 @@
             </a>
         </li>
         {% endif %}
+        {% if lesson.podcasts %}
+        <li>
+            <a href="#podcasts" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Podcasts' %}" src="{% static 'images/podcast.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         <li>
             <a href="#games" class="ripple">
                 <i><img title="{% trans 'Jump to:' %} {% trans 'Games' %}" src="{% static 'images/games.png' %}" width="40px" alt=""></i>
@@ -331,6 +338,34 @@
             </div>
             {% endif %}
 
+            {% if lesson.podcasts %}
+            <div id="podcasts" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/podcast.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Podcasts' %}</h4>
+                            {% for podcast in lesson.podcasts %}
+                            <h5>
+                                {% if podcast.url|is_youtube_url %}{{ podcast.author }}{% if podcast.title %} - {{ podcast.title }}{% endif %}
+                                {% elif podcast.url %}<a href="{{ podcast.url }}" target="_blank" rel="noopener">{{ podcast.author }}{% if podcast.title %} - {{ podcast.title }}{% endif %}</a>
+                                {% else %}{{ podcast.author }}{% if podcast.title %} - {{ podcast.title }}{% endif %}{% endif %}
+                            </h5>
+                            {% if podcast.description %}<p>{{ podcast.description }}</p>{% endif %}
+                            {% if podcast.url|is_youtube_url %}
+                            <div class="video-iframe">
+                                <iframe src="{{ podcast.url|youtube_captions_url }}" frameborder="0" title="YouTube podcast player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             {% if lesson.drawings %}
             <div id="drawings" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="our-services-wrapper mb-60">
@@ -446,7 +481,7 @@
                     <div class="our-services-text">
                         <div class="resource-settings">
                             <h4>{% trans 'Resource Language Settings' %}</h4>
-                            {% blocktrans %}Below you will find all kinds of related resources to this step, to help you grow. Resources can be Sermons, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
+                            {% blocktrans %}Below you will find all kinds of related resources to this step, to help you grow. Resources can be Sermons, Podcasts, Testimonies, Movies, Shortmovies, Songs, Blogs or Books. You can select multiple languages if you like to see those resources in more languages.{% endblocktrans %}
                             <p><i>{% blocktrans %}Do you know more good resources in your language which can be added to this list? Please <a href="mailto:info@walkasjesus.org">contact us</a> so we can add it (or <a href="">register</a> and you can add it yourself!{% endblocktrans %}</i></p>
                             <div class="btnResourceSettings">
                                 <span><a href="javascript:void(0);" data-toggle="modal" data-target="#changeLanguageModal">{% trans 'Change resource language' %}</a></span>

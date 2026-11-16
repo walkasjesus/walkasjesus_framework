@@ -6,7 +6,7 @@ from walkasjesus_app.media_image_utils import media_file_exists
 from walkasjesus_app.models.commandment_categories import CommandmentCategories
 
 # Media types shown as card icons, in display order.
-MEDIA_BADGE_TYPES = ['movie', 'shortmovie', 'wajvideo', 'sermon', 'testimony', 'blog', 'book']
+MEDIA_BADGE_TYPES = ['movie', 'shortmovie', 'wajvideo', 'sermon', 'podcast', 'testimony', 'blog', 'book']
 
 # Singular/plural display labels for each media badge type.
 MEDIA_BADGE_LABELS = {
@@ -14,6 +14,7 @@ MEDIA_BADGE_LABELS = {
     'shortmovie': ('Short Movie', 'Short Movies'),
     'wajvideo': ('WaJVideo', 'WaJVideos'),
     'sermon': ('Sermon', 'Sermons'),
+    'podcast': ('Podcast', 'Podcasts'),
     'testimony': ('Testimony', 'Testimonies'),
     'blog': ('Blog', 'Blogs'),
     'book': ('Book', 'Books'),
@@ -178,6 +179,9 @@ class Commandment(models.Model):
 
     def sermons(self):
         return self._filter_on_language(self.sermon_set)
+
+    def podcasts(self):
+        return self._filter_on_language(self.shared_media_resources.filter(media_type='podcast'))
 
     def pictures(self):
         return self.picture_set.filter(is_public=True)

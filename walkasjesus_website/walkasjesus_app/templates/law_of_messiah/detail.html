@@ -112,6 +112,13 @@
             </a>
         </li>
         {% endif %}
+        {% if law_media_by_type.podcast %}
+        <li targetaudience="adults">
+            <a href="#podcasts" class="ripple">
+                <i><img title="{% trans 'Jump to:' %} {% trans 'Podcasts' %}" src="{% static 'images/podcast.png' %}" width="40px" alt=""></i>
+            </a>
+        </li>
+        {% endif %}
         {% if law_media_by_type.book %}
         <li targetaudience="adults">
             <a href="#books" class="ripple">
@@ -729,6 +736,34 @@
                                     {% if item.url %}<p><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.url }}</a></p>{% endif %}
                                 </div>
                             </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if law_media_by_type.podcast %}
+            <div id="podcasts" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="our-services-wrapper mb-60">
+                    <div class="services-inner">
+                        <div class="our-services-img">
+                        <img src="{% static 'images/podcast.png' %}" width="65px" alt="">
+                        </div>
+                        <div class="our-services-text">
+                            <h4>{% trans 'Podcasts' %}</h4>
+                            {% for item in law_media_by_type.podcast %}
+                            <h5>
+                                {% if item.url|is_youtube_url %}{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}
+                                {% elif item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}</a>
+                                {% else %}{{ item.author }}{% if item.title %} - {{ item.title }}{% endif %}{% endif %}
+                            </h5>
+                            {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                            {% if item.url|is_youtube_url %}
+                            <div class="video-iframe">
+                                <iframe src="{{ item.url|youtube_captions_url }}" frameborder="0" title="YouTube podcast player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;top:0;left:0;width:97%;height:97%;"></iframe>
+                            </div>
+                            {% endif %}
                             {% endfor %}
                         </div>
                     </div>

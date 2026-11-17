@@ -682,6 +682,38 @@ class DutchOriginalTextTestCase(TestCase):
             [('prefix', 'וַ'), ('prefix', 'יִּתְ'), ('root', 'חַבֵּ֨א')],
         )
 
+    def test_imperfect_verb_person_prefixes_are_separated_from_the_root(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        word = next(
+            word for word in original_text_payload('Genesis', 8, 3)['words']
+            if 'H2637' in word['strongs_numbers']
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in word['word_components']],
+            [('prefix', 'וַ'), ('prefix', 'יַּ'), ('root', 'חְסְר֣וּ')],
+        )
+
+        aleph_form = _parse_hebrew_word_components(
+            '{H1696=דָּבַר=to speak}',
+            'אֲדַבֵּר',
+            'HVqi1cs',
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in aleph_form],
+            [('prefix', 'אֲ'), ('root', 'דַבֵּר')],
+        )
+
+        nun_form = _parse_hebrew_word_components(
+            '{H3789=כָּתַב=to write}',
+            'נִכְתֹּב',
+            'HVqi1cp',
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in nun_form],
+            [('prefix', 'נִ'), ('root', 'כְתֹּב')],
+        )
+
     def test_stem_prefix_splitting_requires_morphology_and_matching_root(self):
         from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
 

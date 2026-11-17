@@ -880,6 +880,46 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
             component['letters'] = component['letters'][2:]
             component['surface'] = ''.join(letter['glyph'] for letter in component['letters'])
             component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+
+    person_prefix_code = None
+    for code in str(raw_grammar or '').split('/'):
+        person_prefix_code = re.match(r'^H?V[a-z][wij]([123])([mfc])([sp])$', code)
+        if person_prefix_code:
+            break
+    if person_prefix_code:
+        person, gender, number = person_prefix_code.groups()
+        possible_prefixes = {
+            '1': {'s': {'א'}, 'p': {'נ'}}[number],
+            '2': {'ת'},
+            '3': {'m': {'י'}, 'f': {'ת'}, 'c': {'י', 'ת'}}[gender],
+        }[person]
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = ''.join(letter['glyph'][0] for letter in component['letters'])
+            lemma_consonants = ''.join(letter['glyph'][0] for letter in _hebrew_letter_data(component['lemma']))
+            if (
+                len(consonants) <= len(lemma_consonants)
+                or consonants[0] not in possible_prefixes
+                or not consonants[1:].startswith(lemma_consonants)
+            ):
+                continue
+            prefix_letters = component['letters'][:1]
+            prefix = {
+                'strongs_number': '',
+                'role': 'prefix',
+                'surface': prefix_letters[0]['glyph'],
+                'letters': prefix_letters,
+                'gematria_value': sum(letter['value'] for letter in prefix_letters),
+                'morphology_code': person_prefix_code.group(0),
+                'gloss': 'Verb person prefix',
+                'morphology_description': 'Verb conjugation prefix.',
+            }
+            components.insert(components.index(component), prefix)
+            component['letters'] = component['letters'][1:]
+            component['surface'] = ''.join(letter['glyph'] for letter in component['letters'])
+            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+            break
     return components
 
 

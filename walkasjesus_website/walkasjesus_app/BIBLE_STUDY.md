@@ -349,7 +349,10 @@ For Hitpael verbs, morphology plus an exact consonantal lemma match identifies t
 two-letter stem prefix (for example `הִתְ`, `מִתְ`, or `יִתְ`). This prefix has no separate
 Strong's number: it is verb-stem formation, not an independent service word or a fixed translation.
 Uncertain forms, including consonant changes that prevent an exact match, remain unsplit rather
-than inferring a root boundary from spelling alone.
+than inferring a root boundary from spelling alone. Imperfect verb forms are also split at their
+person prefix (Aleph, Nun, Tav or Yod) when morphology identifies the prefix and the following
+consonants begin with the tagged lemma; for example, the Yod in Genesis 8:3 is shown as a
+grammatical prefix rather than part of Strong's H2637 root.
 
 The large Hebrew word distinguishes lexical roots from attached grammatical parts by color.
 Clicking the word or its question-mark icon expands the parts-and-letters panel.

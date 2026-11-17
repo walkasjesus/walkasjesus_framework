@@ -1728,6 +1728,14 @@ $(document).ready(function(){
     // Add smooth scrolling to all links
     $("a").on('click', function(event) {
 
+      var isSamePageAnchor = this.hash &&
+        this.origin === window.location.origin &&
+        this.pathname === window.location.pathname &&
+        this.search === window.location.search;
+      if (!isSamePageAnchor) {
+        return;
+      }
+
       if ($(this).closest('.floating-menu').length && this.hash) {
         var section = document.getElementById(this.hash.slice(1));
         if (!section) {

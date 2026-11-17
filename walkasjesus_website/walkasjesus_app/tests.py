@@ -1167,6 +1167,13 @@ class MediaTemplateFilterTestCase(SimpleTestCase):
         self.assertIn(f'href="{step_url}#sermons"', rendered)
         self.assertIn('href="/stap/4/#sermons"', rendered)
 
+    def test_smooth_scroll_only_intercepts_same_page_anchors(self):
+        script = (Path(settings.BASE_DIR) / 'static/js/customjs.js').read_text()
+
+        self.assertIn('this.origin === window.location.origin', script)
+        self.assertIn('this.pathname === window.location.pathname', script)
+        self.assertIn('this.search === window.location.search', script)
+
     def test_is_youtube_url_filter_only_accepts_youtube_hosts(self):
         self.assertTrue(is_youtube_url_filter('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw'))
         self.assertTrue(is_youtube_url_filter('https://youtu.be/Ilbh6Dv_8Yw'))

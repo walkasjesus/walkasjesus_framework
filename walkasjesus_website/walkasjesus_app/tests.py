@@ -1147,6 +1147,31 @@ class DynamicUiRegressionTestCase(TestCase):
 
 
 class MediaTemplateFilterTestCase(SimpleTestCase):
+    def test_overview_media_badges_link_to_localized_detail_sections(self):
+        badge_sections = {
+            'movie': 'movies',
+            'shortmovie': 'short_movies',
+            'wajvideo': 'waj_video',
+            'sermon': 'sermons',
+            'podcast': 'podcasts',
+            'testimony': 'testimonies',
+            'blog': 'blogs',
+            'book': 'books',
+        }
+        badges = [{'media_type': media_type, 'tooltip': media_type} for media_type in badge_sections]
+        cards = (
+            ('commandments/single_commandment_overview.html', 'commandment', 4, '/stap/4/'),
+            ('law_of_messiah/single_law_of_messiah_overview.html', 'law', 'GA3', '/wet_van_christus/GA3/'),
+        )
+        with translation.override('nl'):
+            for template, context_key, pk, path in cards:
+                rendered = render_to_string(
+                    template, {context_key: SimpleNamespace(id=pk, media_type_badge_list=badges)},
+                )
+                for section in badge_sections.values():
+                    with self.subTest(path=path, section=section):
+                        self.assertIn(f'href="{path}#{section}"', rendered)
+
     def test_commandment_sermon_badge_links_to_step_sermons_section(self):
         commandment = SimpleNamespace(
             id=4,

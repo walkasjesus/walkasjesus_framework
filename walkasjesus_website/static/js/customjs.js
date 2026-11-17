@@ -1725,7 +1725,46 @@ $(document).ready(function(){
 
 
   // ----- Detailed commandments page: Smooth scrolling BEGIN ------ \\  
-    // Add smooth scrolling to all links
+    var $sectionMenuLinks = $('.floating-menu .main-menu a[href^="#"]');
+
+    function scrollToMenuSection(section, hash) {
+      var card = $(section).children('.our-services-wrapper').first()[0] || section;
+      var scrollTarget = function() {
+        var nav = document.getElementById('ftco-navbar');
+        var navBottom = nav && window.getComputedStyle(nav).position === 'fixed'
+          ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
+        return Math.max(0, card.getBoundingClientRect().top + window.pageYOffset - navBottom);
+      };
+      var $scroll = $('html, body');
+      $scroll.stop(true).animate({ scrollTop: scrollTarget() }, 800);
+      $scroll.promise().done(function() {
+        // Scrolling can switch the navbar to fixed and shift the mobile layout.
+        window.scrollTo(0, scrollTarget());
+        if (window.location.hash !== hash) {
+          window.history.replaceState(null, '', hash);
+        }
+      });
+    }
+
+    function scrollToLinkedMenuSection() {
+      var hash = window.location.hash;
+      var section = hash && document.getElementById(hash.slice(1));
+      if (section && $sectionMenuLinks.toArray().some(function(link) { return link.hash === hash; })) {
+        scrollToMenuSection(section, hash);
+      }
+    }
+
+    // Let the browser finish its initial fragment jump before correcting the offset.
+    if ($sectionMenuLinks.length && window.location.hash) {
+      if (document.readyState === 'complete') {
+        window.requestAnimationFrame(scrollToLinkedMenuSection);
+      } else {
+        window.addEventListener('load', function() {
+          window.requestAnimationFrame(scrollToLinkedMenuSection);
+        }, { once: true });
+      }
+    }
+
     $("a").on('click', function(event) {
 
       var isSamePageAnchor = this.hash &&
@@ -1736,27 +1775,13 @@ $(document).ready(function(){
         return;
       }
 
-      if ($(this).closest('.floating-menu').length && this.hash) {
+      if ($sectionMenuLinks.is(this)) {
         var section = document.getElementById(this.hash.slice(1));
         if (!section) {
           return;
         }
         event.preventDefault();
-        var hash = this.hash;
-        var card = $(section).children('.our-services-wrapper').first()[0] || section;
-        var scrollTarget = function() {
-          var nav = document.getElementById('ftco-navbar');
-          var navBottom = nav && window.getComputedStyle(nav).position === 'fixed'
-            ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
-          return Math.max(0, card.getBoundingClientRect().top + window.pageYOffset - navBottom);
-        };
-        var $scroll = $('html, body');
-        $scroll.stop(true).animate({ scrollTop: scrollTarget() }, 800);
-        $scroll.promise().done(function() {
-          // Scrolling can switch the navbar to fixed and shift the mobile layout.
-          window.scrollTo(0, scrollTarget());
-          window.history.replaceState(null, '', hash);
-        });
+        scrollToMenuSection(section, this.hash);
         return;
       }
 

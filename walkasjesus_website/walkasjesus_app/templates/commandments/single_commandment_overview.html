@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% url 'commandments:detail' commandment.id as detail_url %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
         <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if commandment.background_drawing.img_url %}{{ commandment.background_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %} ');">
@@ -10,8 +11,7 @@
             <div class="commandment-media-items">
                 {% if commandment.found_superbook.title %}<img targetaudience="kids" title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
                 {% if commandment.found_henkieshow.title %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
-                {% url 'commandments:detail' commandment.id as detail_url %}
-                {% include "commandments/_media_type_badges.html" with media_type_badges=commandment.media_type_badge_list detail_url=detail_url %}
+                {% include "commandments/_media_type_badges.html" with media_type_badges=commandment.media_type_badge_list detail_url=detail_url only %}
             </div>
             <div class="text-content p-4 text-center">
                 <h3>{{ commandment.title }}</h3>

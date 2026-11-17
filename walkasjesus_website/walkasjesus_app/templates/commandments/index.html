@@ -94,7 +94,8 @@
 {% endblock %}
 
 {% block content %}
-{% cache cache_timeout commandments_index cache_on_language %}
+{% get_current_language as LANGUAGE_CODE %}
+{% cache cache_timeout commandments_index_v2 LANGUAGE_CODE cache_on_multi_language cache_on_kids_mode cache_on_media_version %}
 <section class="ftco-section bg-light" id="sermons-section">
   <div class="container">
     <div class="row justify-content-center pb-5">
@@ -168,4 +169,3 @@
 
 {% endcache %}
 {% endblock %}
-

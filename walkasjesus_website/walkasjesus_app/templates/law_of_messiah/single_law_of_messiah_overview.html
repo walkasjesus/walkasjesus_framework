@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
+{% url 'commandments:law_of_messiah_detail' law.id as detail_url %}
 <div class="col-md-4">
     <div class="sermon-wrap ftco-animate">
         <div class="img d-flex align-items-center justify-content-center" style="background-image: url('{% if law.primary_drawing %}{{ law.primary_drawing.thumbnail_url }}{% else %}{% static 'images/drawing_placeholder.png' %}{% endif %}');">
@@ -9,7 +10,7 @@
                 <h3>{{ law.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% include "commandments/_media_type_badges.html" with media_type_badges=law.media_type_badge_list %}
+                {% include "commandments/_media_type_badges.html" with media_type_badges=law.media_type_badge_list detail_url=detail_url only %}
             </div>
             <div class="text-content p-4 text-center">
                 <h3>{{ law.translated_title }}</h3>

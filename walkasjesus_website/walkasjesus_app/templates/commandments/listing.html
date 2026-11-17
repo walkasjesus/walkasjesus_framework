@@ -11,7 +11,8 @@
 {% block twitter_description %}{% trans 'Browse all 77 steps taught by Jesus, each with Scripture references, study prompts, and practical applications to help individuals, families, and small groups live what they learn.' %}{% endblock %}
 
 {% block content %}
-{% cache cache_timeout commandments_listing_v3 cache_on_language %}
+{% get_current_language as LANGUAGE_CODE %}
+{% cache cache_timeout commandments_listing_v4 LANGUAGE_CODE cache_on_multi_language cache_on_kids_mode cache_on_media_version %}
 <section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
   <div class="overlay"></div>
  </section>

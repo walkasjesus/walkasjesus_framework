@@ -10,7 +10,8 @@
             <div class="commandment-media-items">
                 {% if commandment.found_superbook.title %}<img targetaudience="kids" title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
                 {% if commandment.found_henkieshow.title %}<img targetaudience="kids" title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
-                {% include "commandments/_media_type_badges.html" with media_type_badges=commandment.media_type_badge_list %}
+                {% url 'commandments:detail' commandment.id as detail_url %}
+                {% include "commandments/_media_type_badges.html" with media_type_badges=commandment.media_type_badge_list detail_url=detail_url %}
             </div>
             <div class="text-content p-4 text-center">
                 <h3>{{ commandment.title }}</h3>

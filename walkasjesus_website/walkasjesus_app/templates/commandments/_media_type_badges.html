@@ -8,7 +8,7 @@
     {% elif badge.media_type == 'wajvideo' %}
         <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/wajvideo.png' %}" alt="{% trans 'WaJVideo' %}"></span>
     {% elif badge.media_type == 'sermon' %}
-        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/sermon.png' %}" alt="{% trans 'Sermon' %}"></span>
+        <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}">{% if detail_url %}<a href="{{ detail_url }}#sermons">{% endif %}<img class="lom-person-icon" src="{% static 'images/sermon.png' %}" alt="{% trans 'Sermon' %}">{% if detail_url %}</a>{% endif %}</span>
     {% elif badge.media_type == 'podcast' %}
         <span class="jc-tooltip-host jc-tooltip-immediate media-badge-tooltip" data-jc-tooltip="{{ badge.tooltip }}"><img class="lom-person-icon" src="{% static 'images/podcast.png' %}" alt="{% trans 'Podcast' %}"></span>
     {% elif badge.media_type == 'testimony' %}

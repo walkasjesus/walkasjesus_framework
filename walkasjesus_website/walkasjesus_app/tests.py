@@ -1147,6 +1147,26 @@ class DynamicUiRegressionTestCase(TestCase):
 
 
 class MediaTemplateFilterTestCase(SimpleTestCase):
+    def test_commandment_sermon_badge_links_to_step_sermons_section(self):
+        commandment = SimpleNamespace(
+            id=4,
+            title='Step',
+            background_drawing=SimpleNamespace(img_url=''),
+            found_superbook=SimpleNamespace(title=''),
+            found_henkieshow=SimpleNamespace(title=''),
+            media_type_badge_list=[{'media_type': 'sermon', 'tooltip': 'Sermon found'}],
+        )
+
+        with translation.override('nl'):
+            rendered = render_to_string(
+                'commandments/single_commandment_overview.html',
+                {'commandment': commandment},
+            )
+            step_url = reverse('commandments:detail', args=[4])
+
+        self.assertIn(f'href="{step_url}#sermons"', rendered)
+        self.assertIn('href="/stap/4/#sermons"', rendered)
+
     def test_is_youtube_url_filter_only_accepts_youtube_hosts(self):
         self.assertTrue(is_youtube_url_filter('https://www.youtube.com/watch?v=Ilbh6Dv_8Yw'))
         self.assertTrue(is_youtube_url_filter('https://youtu.be/Ilbh6Dv_8Yw'))

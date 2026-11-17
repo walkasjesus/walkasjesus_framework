@@ -8,13 +8,13 @@
                 <h3>{{ lesson.id }}</h3>
             </div>
             <div class="commandment-media-items">
-                {% if lesson.card_has_superbook %}<a href="{% url 'commandments:lessondetail' lesson.id %}#superbook" title="{% trans 'Superbook Found' %}"><img src="{% static 'images/superbook.png' %}" alt="{% trans 'Superbook Found' %}"></a>{% endif %}
-                {% if lesson.card_has_henkieshow %}<a href="{% url 'commandments:lessondetail' lesson.id %}#henkieshow" title="{% trans 'Henkie Show Found' %}"><img src="{% static 'images/henkieshow.png' %}" alt="{% trans 'Henkie Show Found' %}"></a>{% endif %}
-                {% if lesson.activities %}<a href="{% url 'commandments:lessondetail' lesson.id %}#activities" title="{% trans 'Activities Found' %}"><img src="{% static 'images/activities.png' %}" alt="{% trans 'Activities Found' %}"></a>{% endif %}
-                {% if lesson.card_has_song %}<a href="{% url 'commandments:lessondetail' lesson.id %}#songs" title="{% trans 'Songs Found' %}"><img src="{% static 'images/song.png' %}" alt="{% trans 'Songs Found' %}"></a>{% endif %}
-                {% if lesson.card_has_short_movie %}<a href="{% url 'commandments:lessondetail' lesson.id %}#short_movies" title="{% trans 'Short Movies Found' %}"><img src="{% static 'images/shortmovie.png' %}" alt="{% trans 'Short Movies Found' %}"></a>{% endif %}
-                {% if lesson.card_has_testimony %}<a href="{% url 'commandments:lessondetail' lesson.id %}#testimonies" title="{% trans 'Testimonies Found' %}"><img src="{% static 'images/testimony.png' %}" alt="{% trans 'Testimonies Found' %}"></a>{% endif %}
-                {% if lesson.commandment %}<a href="{% url 'commandments:lessondetail' lesson.id %}#bible_lesson_details" title="{% trans 'Related Step Found' %}"><img src="{% static 'images/games.png' %}" alt="{% trans 'Related Step Found' %}"></a>{% endif %}
+                {% if lesson.card_has_superbook %}<img title="{% trans 'Superbook Found' %}" src="{% static 'images/superbook.png' %}" alt="">{% endif %}
+                {% if lesson.card_has_henkieshow %}<img title="{% trans 'Henkie Show Found' %}" src="{% static 'images/henkieshow.png' %}" alt="">{% endif %}
+                {% if lesson.activities %}<img title="{% trans 'Activities Found' %}" src="{% static 'images/activities.png' %}" alt="">{% endif %}
+                {% if lesson.card_has_song %}<img title="{% trans 'Songs Found' %}" src="{% static 'images/song.png' %}" alt="">{% endif %}
+                {% if lesson.card_has_short_movie %}<img title="{% trans 'Short Movies Found' %}" src="{% static 'images/shortmovie.png' %}" alt="">{% endif %}
+                {% if lesson.card_has_testimony %}<img title="{% trans 'Testimonies Found' %}" src="{% static 'images/testimony.png' %}" alt="">{% endif %}
+                {% if lesson.commandment %}<img title="{% trans 'Related Step Found' %}" src="{% static 'images/games.png' %}" alt="">{% endif %}
             </div>
             <div class="text-content p-4 text-center">
                 <p>

@@ -1150,9 +1150,9 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
             break
 
     perfect_code = next((
-        re.fullmatch(r'H?V([qhp])[pq]([123])([mfc])([sp])', code)
+        re.fullmatch(r'H?V([qhpN])[pq]([123])([mfc])([sp])', code)
         for code in str(raw_grammar or '').split('/')
-        if re.fullmatch(r'H?V([qhp])[pq]([123])([mfc])([sp])', code)
+        if re.fullmatch(r'H?V([qhpN])[pq]([123])([mfc])([sp])', code)
     ), None)
     if perfect_code:
         stem_type, person, gender, number = perfect_code.groups()
@@ -1167,6 +1167,67 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
         for component in components:
             if component['role'] != 'root' or not component.get('lemma'):
                 continue
+            if stem_type == 'N':
+                letters = component['letters']
+                consonants = _hebrew_consonants(letters)
+                lemma = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+                niphal_ending = (
+                    'תה' if ending == 'ה' and lemma.endswith(('ה', 'א'))
+                    and consonants.endswith('תה') else ending
+                )
+                if ending == 'ה' and lemma.endswith('ה') and niphal_ending != 'תה':
+                    continue
+                if (
+                    not consonants.startswith('נ')
+                    or (not ending and (person, gender, number) != ('3', 'm', 's'))
+                    or (niphal_ending and not consonants.endswith(niphal_ending))
+                ):
+                    continue
+                stem_letters = letters[1:-len(niphal_ending)] if niphal_ending else letters[1:]
+                if not stem_letters:
+                    continue
+                stems = _hebrew_surface_stems(stem_letters)
+                expected_stems = _hebrew_lemma_stems(component['lemma'])
+                if lemma.endswith('ה'):
+                    expected_stems.add(lemma[:-1] + 'י')
+                assimilated_nun = lemma.startswith('נ') and (
+                    '\u05bc' in stem_letters[0]['glyph']
+                    or (
+                        stem_letters[0]['glyph'][0] in 'אהחע'
+                        and any(mark in letters[0]['glyph'] for mark in '\u05b4\u05b6\u05b7')
+                    )
+                )
+                if assimilated_nun:
+                    expected_stems.add(lemma[1:])
+                    if lemma.endswith('ה'):
+                        expected_stems.update((lemma[1:-1], lemma[1:-1] + 'י'))
+                if (
+                    len(lemma) == 3 and lemma[-1] == lemma[-2]
+                    and ('\u05b8' in letters[0]['glyph'] or '\u05bc' in stem_letters[-1]['glyph'])
+                ):
+                    expected_stems.add(lemma[:-1])
+                if lemma.startswith('י') and (
+                    '\u05b9' in letters[0]['glyph'] or '\u05bc' in stem_letters[0]['glyph']
+                ):
+                    expected_stems.add(lemma[1:])
+                matches = bool(stems & expected_stems)
+                if lemma.startswith('י') and stem_letters[0]['glyph'][0] == 'ו':
+                    matches = matches or (
+                        '\u05b9' in stem_letters[0]['glyph']
+                        and any('י' + stem[1:] in expected_stems for stem in stems)
+                    )
+                if not matches:
+                    continue
+                split_component(
+                    component, 1, 'prefix', perfect_code.group(0),
+                    'Niphal stem prefix', 'Niphal verb-stem formation.',
+                )
+                if niphal_ending:
+                    split_component(
+                        component, len(niphal_ending), 'suffix', perfect_code.group(0),
+                        'Verb conjugation ending', 'Verb conjugation ending.', at_end=True,
+                    )
+                break
             if not ending:
                 letters = component['letters']
                 if (
@@ -2413,7 +2474,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse, reference_system='english'):
-    cache_key = f'bible_study:original:v43:{reference_system}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v44:{reference_system}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -3115,7 +3176,7 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v33:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v34:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

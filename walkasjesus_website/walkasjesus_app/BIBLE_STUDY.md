@@ -366,7 +366,9 @@ weak final-he lemmas. Recognizable second-person feminine singular `י`, feminin
 Feminine singular construct
 nouns ending in `ת` are split when their lemma ends in `ה` and the other consonants match.
 The same lemma and morphology checks recognize selected Qal, Piel and Hiphil perfect endings,
-regular Niphal participle prefixes and plural endings, selected masculine Hiphil participle
+Niphal perfect prefixes and endings where the stem matches the lemma, including selected
+initial-nun, initial-yod, final-he and doubled-root weak forms. The checks also recognize regular
+Niphal participle prefixes and plural endings, selected masculine Hiphil participle
 prefixes and plural endings, selected Qal participle and imperative endings, and matching noun
 plural endings, including some lemmas already recorded in the plural. For example, Exodus 6:7
 separates the Hiphil participle prefix in `הַמּוֹצִ֣יא`, and Job 12:6 separates the Hiphil

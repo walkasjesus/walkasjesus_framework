@@ -826,6 +826,66 @@ class DutchOriginalTextTestCase(TestCase):
             [('prefix', 'נִ'), ('root', 'כְתֹּב')],
         )
 
+    def test_niphal_perfect_segments_prefix_and_endings(self):
+        cases = (
+            ('Genesis', 3, 5, 'וְנִפְ', [
+                ('prefix', 'וְ'), ('prefix', 'נִ'), ('root', 'פְקְח֖'), ('suffix', 'וּ'),
+            ]),
+            ('Genesis', 9, 14, 'וְנִרְאֲ', [
+                ('prefix', 'וְ'), ('prefix', 'נִ'), ('root', 'רְאֲ'), ('suffix', 'תָ֥ה'),
+            ]),
+            ('Joshua', 7, 14, 'וְנִקְרַ', [
+                ('prefix', 'וְ'), ('prefix', 'נִ'), ('root', 'קְרַבְ'), ('suffix', 'תֶּ֥ם'),
+            ]),
+            ('Joshua', 11, 11, 'נוֹתַ', [
+                ('prefix', 'נ'), ('root', 'וֹתַ֖ר'),
+            ]),
+            ('Job', 21, 6, 'וְנִבְ', [
+                ('prefix', 'וְ'), ('prefix', 'נִ'), ('root', 'בְהָ֑לְ'), ('suffix', 'תִּי'),
+            ]),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                self.assertEqual([(part['role'], part['surface']) for part in word['word_components']], expected)
+
+    def test_niphal_perfect_weak_forms_and_unmatched_forms(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H5358=נָקַם=avenge}', 'נִקַּמְתִּי', 'HVNp1cs',
+             [('prefix', 'נִ'), ('root', 'קַּמְ'), ('suffix', 'תִּי')]),
+            ('{H1540=גָּלָה=reveal}', 'נִגְלֵיתִי', 'HVNp1cs',
+             [('prefix', 'נִ'), ('root', 'גְלֵי'), ('suffix', 'תִי')]),
+            ('{H5352=נָקָה=clear}', 'נִקָּתָה', 'HVNp3fs',
+             [('prefix', 'נִ'), ('root', 'קָּ'), ('suffix', 'תָה')]),
+            ('{H5162=נָחַם=relent}', 'נִחַם', 'HVNp3ms',
+             [('prefix', 'נִ'), ('root', 'חַם')]),
+            ('{H5437=סָבַב=turn}', 'נָסַבּוּ', 'HVNp3cp',
+             [('prefix', 'נָ'), ('root', 'סַבּ'), ('suffix', 'וּ')]),
+            ('{H3498=יָתַר=remain}', 'נֹתְרוּ', 'HVNp3cp',
+             [('prefix', 'נֹ'), ('root', 'תְר'), ('suffix', 'וּ')]),
+            ('{H6381=פָּלָא=marvel}', 'נִפְלְאַתָה', 'HVNp3fs',
+             [('prefix', 'נִ'), ('root', 'פְלְאַ'), ('suffix', 'תָה')]),
+            ('{H5358=נָקַם=avenge}', 'נִקַמְתִּי', 'HVNp1cs',
+             [('root', 'נִקַמְתִּי')]),
+            ('{H5437=סָבַב=turn}', 'נְסַבוּ', 'HVNp3cp',
+             [('root', 'נְסַבוּ')]),
+            ('{H6491=פָּקַח=open}', 'נִפְקְחוּ', 'HVqp3cp',
+             [('root', 'נִפְקְחוּ')]),
+            ('{H3789=כָּתַב=write}', 'נִפְקְחוּ', 'HVNp3cp',
+             [('root', 'נִפְקְחוּ')]),
+            ('{H6491=פָּקַח=open}', 'נִפְקַח', 'HVNp3cp',
+             [('root', 'נִפְקַח')]),
+            ('{H3045=יָדַע=know}', 'נְוָדַע', 'HVNp3ms',
+             [('root', 'נְוָדַע')]),
+        )
+        for raw, surface, grammar, expected in cases:
+            with self.subTest(surface=surface, grammar=grammar, raw=raw):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], expected)
+
     def test_genesis_26_35_segments_inflections_and_section_marker(self):
         words = original_text_payload('Genesis', 26, 35)['words']
         self.assertEqual(

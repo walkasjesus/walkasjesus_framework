@@ -1,6 +1,8 @@
 {
   "description": "Manually assessed lexical and grammatical letter spans for selected STEPBible verse forms. The cited interlinears support the word and morphology; the letter boundaries are editorial assessments, not independently certified gold annotations.",
   "cases": [
+    {"book": "Genesis", "chapter": 3, "verse": 5, "prefix": "וְנִפְ", "source": "https://biblehub.com/interlinear/genesis/3-5.htm", "parts": [["prefix", "וְ"], ["prefix", "נִ"], ["root", "פְקְח֖"], ["suffix", "וּ"]]},
+    {"book": "Genesis", "chapter": 9, "verse": 14, "prefix": "וְנִרְאֲ", "source": "https://biblehub.com/interlinear/genesis/9-14.htm", "parts": [["prefix", "וְ"], ["prefix", "נִ"], ["root", "רְאֲ"], ["suffix", "תָ֥ה"]]},
     {"book": "Genesis", "chapter": 26, "verse": 35, "prefix": "וַתִּהְ", "source": "https://biblehub.com/interlinear/genesis/26-35.htm", "parts": [["prefix", "וַ"], ["prefix", "תִּ"], ["root", "הְיֶ֖י"], ["suffix", "ןָ"]]},
     {"book": "Genesis", "chapter": 26, "verse": 35, "prefix": "מֹ֣רַ", "source": "https://biblehub.com/interlinear/genesis/26-35.htm", "parts": [["root", "מֹ֣רַ"], ["suffix", "ת"]]},
     {"book": "Genesis", "chapter": 28, "verse": 1, "prefix": "מִבְּנ", "source": "https://biblehub.com/hebrew/1323.htm", "parts": [["prefix", "מִ"], ["root", "בְּנ֥"], ["suffix", "וֹת"]]},

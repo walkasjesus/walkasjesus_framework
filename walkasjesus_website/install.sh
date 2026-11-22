@@ -1,29 +1,30 @@
 #!/usr/bin/env bash
-#
-# This script will install all configured applications from `./walkasjesus_website/requirements.txt` in a virtual environment
-#
-# Program was created in python3 3.7
+set -euo pipefail
 
-# Create a virtual environment using the currently installed python3 version (should be python3 3 for this program)
-#rm -r ./venv
-python3 -m venv ./venv
+cd "$(dirname "$0")"
 
-# Activate the environment so we are running pip in the virtual environment
+# Install requirements.txt into the virtual environment at ./venv.
+
+# Use the currently installed Python version and replace a venv created by another minor version.
+python_version=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
 if [[ -f ./venv/Scripts/activate ]]; then
-    source ./venv/Scripts/activate
+    venv_python=./venv/Scripts/python.exe
 elif [[ -f ./venv/bin/activate ]]; then 
-    source ./venv/bin/activate
+    venv_python=./venv/bin/python
 else
-    echo "ERROR: cannot find environment binary"
-    exit 1
+    venv_python=./venv/bin/python
 fi
 
-if $(which pip > /dev/null 2>&1); then
-    pip=$(which pip)
-elif (which pip3 > /dev/null 2>&1); then
-    pip=$(which pip3)
+if [[ ! -x "${venv_python}" ]] || [[ "$("${venv_python}" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')" != "${python_version}" ]]; then
+    python3 -m venv --clear ./venv
+fi
+
+if [[ -f ./venv/Scripts/activate ]]; then
+    venv_python=./venv/Scripts/python.exe
+elif [[ -f ./venv/bin/activate ]]; then
+    venv_python=./venv/bin/python
 else
-    echo "ERROR: pip or pip3 not found"
+    echo "ERROR: cannot find environment binary"
     exit 1
 fi
 
@@ -47,16 +48,16 @@ if [[ "$os_type" == "Linux" || "$os_type" == "Darwin" ]]; then
 
     echo "INFO: ${start} - Start installing requirements" | tee -a "${log}"
     # Upgrade pip to the latest version
-    "${pip}" install --upgrade pip
+    "${venv_python}" -m pip install --upgrade pip
 
     # Install all used libraries
-    "${pip}" install --upgrade -r requirements.txt | tee -a "${log}"
+    "${venv_python}" -m pip install --upgrade -r requirements.txt | tee -a "${log}"
     end=$(date '+%Y-%m-%d %H:%M:%S')
     echo "INFO: ${end} - Ended installing requirements" | tee -a "${log}"
 else
     # Other Operating Systems like Windows
     echo "INFO: Start installing requirements"
     # Install all used libraries
-    pip install -r requirements.txt
+    "${venv_python}" -m pip install -r requirements.txt
     echo "INFO: Ended installing requirements"
 fi

@@ -1,7 +1,7 @@
 import hashlib
 import json
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from django.core.cache import cache
 from django.test import RequestFactory, SimpleTestCase
@@ -71,6 +71,7 @@ class ReverseWordStudyTestCase(SimpleTestCase):
         self.assertEqual(candidate['source_strongs_number'], 'H2416E')
         dictionary = strongs_word_detail(candidate['source_strongs_number'])
         self.assertTrue(dictionary['words'][0]['word_components'])
+        self.assertEqual(dictionary['words'][0]['word_components'][0]['analysis_origin'], 'lexicon')
         occurrence = strongs_occurrence_word_detail('H2416', 'Genesis', 1, 20, 6)
         word = occurrence['words'][0]
         self.assertEqual(word['gematria_value'], 23)
@@ -175,6 +176,23 @@ class ReverseWordStudyTestCase(SimpleTestCase):
 
 
 class ReverseWordStudyEndpointTestCase(SimpleTestCase):
+    @patch('walkasjesus_app.views.bible_study_view._record_bible_usage_for_sources')
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.strongs_occurrence_references', return_value=['Hos.2:1'])
+    def test_occurrence_text_uses_hebrew_mapping_for_hsv(self, references, quota, record):
+        self.bible.name = 'Herziene Statenvertaling'
+        self.bible.abbreviation = 'HSV'
+        self.bible.language = 'nl'
+        self.bible.verses = Mock(return_value='Zeg tegen uw broeders')
+        with self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+            response = self.get(query='H559', mode='strongs')
+        self.assertEqual(response.status_code, 200)
+        result = json.loads(response.content)['results'][0]
+        self.assertEqual(result['text'], 'Zeg tegen uw broeders')
+        self.assertEqual(result['hebrew_reference'], 'HOS.2:3')
+        self.assertEqual(result['translation_reference'], '1:12')
+        self.assertEqual(self.bible.verses.call_args.args[1:], (1, 12, 1, 12))
+
     @patch('walkasjesus_app.views.bible_study_view.search_result_word_study')
     @patch('walkasjesus_app.views.bible_study_view._api_bible_search_payload')
     def test_complete_word_search_analyzes_later_pages_and_caches_the_snapshot(self, api_search, study):

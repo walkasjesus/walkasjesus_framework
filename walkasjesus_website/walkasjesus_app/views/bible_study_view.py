@@ -6,6 +6,7 @@ import requests
 import threading
 import time
 from contextlib import contextmanager
+from functools import lru_cache
 from pathlib import Path
 from urllib.parse import urlencode
 from collections import Counter
@@ -14,9 +15,10 @@ from bible_lib import BibleBooks as BibleLibBibleBooks
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 from django.views import View
 
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
@@ -31,13 +33,15 @@ from walkasjesus_app.lib.strongs_service import (
     _search_stepbible_book_rows,
     english_alignment_payload,
     localized_original_text_payload,
+    _hebrew_verse_index,
+    english_hebrew_references,
+    hebrew_english_references,
+    hebrew_reference_metadata,
     search_result_word_study,
     search_strongs_dictionary,
     strongs_occurrence_references,
     strongs_word_detail,
     strongs_occurrence_word_detail,
-    psalm_english_reference,
-    psalm_hebrew_reference,
     psalm_verse_mapping,
 )
 from walkasjesus_app.models import BibleTranslation, UserPreferences, BibleTranslationUsageDaily
@@ -47,19 +51,95 @@ from walkasjesus_app.models.bibles import LocalCompleteJewishBible, LocalStatenv
 logger = logging.getLogger(__name__)
 
 
-def _study_verse_reference(bible, book, chapter, verse, reference_system):
-    if book == 'Psalms' and reference_system == 'hebrew' and _tagged_source_for_bible(bible) == 'kjv':
-        return psalm_english_reference(chapter, verse)
-    return chapter, verse
+def _study_verse_references(bible, book, chapter, verse, reference_system):
+    """Return storage references, displayed references, and any mapping warning."""
+    current = (int(chapter), int(verse))
+    if reference_system != 'hebrew' or book not in _OT_BOOKS:
+        return (current,), (current,), ''
+    english = hebrew_english_references(book, *current)
+    if not english:
+        return (), (), _('No Hebrew verse mapping is available for this passage.')
+    numbered = tuple(ref for ref in english if ref[1])
+    if isinstance(bible, LocalCompleteJewishBible) and book == 'Hosea':
+        return (current,), (current,), ''
+
+    name = str(getattr(bible, 'name', '') or '').lower()
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').upper()
+    if 'naardense' in name and book in {'Psalms', 'Hosea'}:
+        return (current,), (current,), ''
+    is_sv = isinstance(bible, LocalStatenvertalingBible)
+    is_hsv = abbreviation == 'HSV' or 'herziene statenvertaling' in name
+    if book == 'Psalms' and (is_sv or is_hsv):
+        return (current,), (current,), ''
+
+    is_kjv = abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name
+    if not (is_sv or is_hsv or is_kjv):
+        if numbered == (current,) and english_hebrew_references(book, *current) == (current,):
+            return (current,), (current,), _('Verse numbering for this translation has not been verified.')
+        return (), (), _('Verse numbering for this translation is not verified for this passage.')
+    if not numbered:
+        return (), (), ''
+
+    partial = len(numbered) > 1 or any(
+        english_hebrew_references(book, *ref) != (current,) for ref in numbered
+    )
+    warning = _('Verse boundaries differ; the translation may include text from an adjacent Hebrew verse.') if partial else ''
+    if is_sv or is_hsv:
+        displayed = []
+        for source_chapter, source_verse in numbered:
+            text = LocalStatenvertalingBible._chapters(book).get(str(source_chapter), {}).get(str(source_verse), '')
+            if not text:
+                return (), (), _('Verse numbering for this translation is not verified for this passage.')
+            markers = list(re.finditer(r'\[(\d{2,3}):(\d+)\]', text))
+            if len(markers) > 1 or (markers and text[:markers[0].start()].strip()):
+                return (), (), _('Verse numbering for this translation is not verified for this passage.')
+            displayed.append((int(markers[0][1]), int(markers[0][2])) if markers else (source_chapter, source_verse))
+        displayed = tuple(dict.fromkeys(displayed))
+        return (numbered if is_sv else displayed), displayed, warning
+    return numbered, numbered, warning
 
 
 def _study_verse_text(bible, book, chapter, verse, reference_system):
     if book == 'Psalms' and reference_system == 'hebrew' and isinstance(bible, LocalStatenvertalingBible):
         return bible.psalm_study_verse(chapter, verse)
-    source_chapter, source_verse = _study_verse_reference(bible, book, chapter, verse, reference_system)
-    if source_verse == 0:
-        return ''
-    return bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse)
+    sources, _, _ = _study_verse_references(bible, book, chapter, verse, reference_system)
+    texts = []
+    for source_chapter, source_verse in sources:
+        text = bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse)
+        if isinstance(bible, LocalStatenvertalingBible):
+            text = re.sub(r'\[\d{2,3}:\d+\]\s*', '', text)
+        if text:
+            texts.append(text)
+    return '\n'.join(texts)
+
+
+@lru_cache(maxsize=1)
+def _study_reference_metadata():
+    metadata = hebrew_reference_metadata()
+    dutch = {}
+    for book in _OT_BOOKS - {'Psalms'}:
+        references = {}
+        english_changes = metadata['english_to_hebrew'].get(book, {})
+        for chapter, verses in LocalStatenvertalingBible._chapters(book).items():
+            for verse, text in verses.items():
+                markers = list(re.finditer(r'\[(\d{2,3}):(\d+)\]', text))
+                if len(markers) > 1 or (markers and text[:markers[0].start()].strip()):
+                    for marker in markers:
+                        references[f'{int(marker[1])}:{int(marker[2])}'] = None
+                    continue
+                label = f'{int(markers[0][1])}:{int(markers[0][2])}' if markers else f'{int(chapter)}:{int(verse)}'
+                source = f'{int(chapter)}:{int(verse)}'
+                targets = english_changes.get(source, [(int(chapter), int(verse))])
+                if label not in references:
+                    references[label] = set()
+                if references[label] is not None:
+                    references[label].update(tuple(target) for target in targets)
+        dutch[book] = {
+            label: sorted(targets) if targets is not None else None
+            for label, targets in references.items()
+            if targets is None or targets != {tuple(map(int, label.split(':')))}
+        }
+    return {**metadata, 'dutch_to_hebrew': dutch}
 
 VERSE_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_API_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 30 * 6))
 BIBLE_SEARCH_CACHE_TIMEOUT = int(getattr(settings, 'BIBLE_STUDY_SEARCH_CACHE_TIMEOUT_SECONDS', 60 * 60 * 24 * 7))
@@ -706,11 +786,16 @@ class BibleStudyView(View):
         if not bible_ids and enabled_bibles:
             bible_ids = [enabled_bibles[0].id]
 
-        if book == 'Psalms' and request.GET.get('reference_system') == 'english':
+        if book in _OT_BOOKS and request.GET.get('reference_system') == 'english':
             source_chapter = chapter
-            chapter, start_verse = psalm_hebrew_reference(source_chapter, start_verse)
-            _, end_verse = psalm_hebrew_reference(source_chapter, end_verse)
-            end_verse = min(end_verse, start_verse + max_verses - 1)
+            start_refs = english_hebrew_references(book, source_chapter, start_verse)
+            end_refs = english_hebrew_references(book, source_chapter, end_verse)
+            if not start_refs or not end_refs:
+                return HttpResponseBadRequest(_('No Hebrew verse mapping is available for this passage.'))
+            if start_refs[0][0] != end_refs[-1][0]:
+                return HttpResponseBadRequest(_('This reference spans multiple Hebrew chapters; open its verses separately.'))
+            chapter, start_verse = start_refs[0]
+            end_verse = min(end_refs[-1][1], start_verse + max_verses - 1)
 
         verse_range = list(range(start_verse, end_verse + 1))
         is_ot_book = book in _OT_BOOKS
@@ -741,20 +826,24 @@ class BibleStudyView(View):
                 verse_texts = {}
                 verse_sources = {}
                 verse_references = {}
+                verse_warnings = {}
                 for v in verse_range:
-                    source_chapter, source_verse = _study_verse_reference(bible_obj, book, chapter, v, 'hebrew')
-                    verse_references[str(v)] = f'{source_chapter}:{source_verse}' if source_verse else '—'
-                    if source_verse == 0:
+                    sources, displayed, warning = _study_verse_references(bible_obj, book, chapter, v, 'hebrew')
+                    verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
+                    if warning:
+                        verse_warnings[str(v)] = warning
+                    if not sources:
                         verse_texts[str(v)] = ''
                         continue
-                    cache_key = f'bible_study:v2:hebrew:{bid}:{book}:{chapter}:{v}'
+                    cache_key = f'bible_study:v3:hebrew:{bid}:{book}:{chapter}:{v}'
                     cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
                     if cached is not None:
                         verse_texts[str(v)] = cached
                         verse_sources[str(v)] = 'cache'
                         continue
                     try:
-                        consume_bible_api_quota(request, bible_obj, BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
+                        for _source in sources:
+                            consume_bible_api_quota(request, bible_obj, BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
                         text = _study_verse_text(bible_obj, book, chapter, v, 'hebrew')
                     except BibleApiRateLimitExceeded as ex:
                         bible_api_rate_limit_error = ex.message
@@ -784,6 +873,7 @@ class BibleStudyView(View):
                     'verse_texts': verse_texts,
                     'verse_sources': verse_sources,
                     'verse_references': verse_references,
+                    'verse_warnings': verse_warnings,
                     'copyright': getattr(bible_obj, 'copyright', ''),
                 })
 
@@ -807,6 +897,7 @@ class BibleStudyView(View):
             'is_ot_book': is_ot_book,
             'show_original_text': show_original_text,
             'bible_api_rate_limit_error': bible_api_rate_limit_error,
+            'hebrew_reference_metadata': _study_reference_metadata(),
             'psalm_english_references': {
                 f'{english_chapter}:{english_verse}': [hebrew_chapter, hebrew_verse]
                 for (hebrew_chapter, hebrew_verse), (english_chapter, english_verse) in psalm_verse_mapping().items()
@@ -845,24 +936,29 @@ class BibleStudyVersesView(View):
         verses = {}
         verse_sources = {}
         verse_references = {}
+        verse_warnings = {}
         for v in range(start_verse, end_verse + 1):
-            source_chapter, source_verse = _study_verse_reference(bible, book_name, chapter, v, reference_system)
-            verse_references[str(v)] = f'{source_chapter}:{source_verse}' if source_verse else '—'
-            if source_verse == 0:
+            sources, displayed, warning = _study_verse_references(bible, book_name, chapter, v, reference_system)
+            verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
+            if warning:
+                verse_warnings[str(v)] = warning
+            if not sources:
                 verses[str(v)] = ''
                 continue
-            cache_key = f'bible_study:v2:{reference_system}:{bible_id}:{book_name}:{chapter}:{v}'
+            cache_key = f'bible_study:v3:{reference_system}:{bible_id}:{book_name}:{chapter}:{v}'
             cached = None if disable_cache else cache.get(cache_key)
             if cached is not None:
                 verses[str(v)] = cached
                 verse_sources[str(v)] = 'cache'
                 continue
             try:
-                consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+                for _source in sources:
+                    consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
                 text = _study_verse_text(bible, book_name, chapter, v, reference_system)
             except BibleApiRateLimitExceeded as ex:
                 return JsonResponse({'error': ex.message}, status=429)
             except Exception:
+                logger.exception('Failed to load verse text for bible=%s book=%s chapter=%s verse=%s', bible_id, book_name, chapter, v)
                 text = ''
             verses[str(v)] = text or ''
             verse_sources[str(v)] = 'api'
@@ -882,6 +978,7 @@ class BibleStudyVersesView(View):
             'verses': verses,
             'verse_sources': verse_sources,
             'verse_references': verse_references,
+            'verse_warnings': verse_warnings,
             'bible_name': getattr(bible, 'name', bible_id),
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),
@@ -1122,22 +1219,53 @@ class BibleStudySearchView(View):
                     if not parsed:
                         raise ValueError('Invalid concordance reference.')
                     book, chapter, verse = parsed
-                    key = f'bible_study:v1:{bible.id}:{book}:{chapter}:{verse}'
+                    hebrew_refs = english_hebrew_references(book, chapter, verse) if book in _OT_BOOKS else ()
+                    if book in _OT_BOOKS and not hebrew_refs:
+                        return JsonResponse({'error': _('No Hebrew verse mapping is available for this passage.')}, status=502)
+                    warnings = []
+                    translation_refs = []
+                    if hebrew_refs:
+                        for hebrew_chapter, hebrew_verse in hebrew_refs:
+                            _, displayed, warning = _study_verse_references(bible, book, hebrew_chapter, hebrew_verse, 'hebrew')
+                            for displayed_ref in displayed:
+                                if displayed_ref not in translation_refs:
+                                    translation_refs.append(displayed_ref)
+                            if warning and warning not in warnings:
+                                warnings.append(warning)
+                    key_version = 'v4:hebrew-occurrence' if hebrew_refs else 'v1'
+                    key = f'bible_study:{key_version}:{bible.id}:{book}:{chapter}:{verse}'
                     text = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(key)
                     source = 'cache'
                     if text is None:
-                        consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
-                        verse_sources[reference] = 'api'
-                        text = bible.verses(BibleLibBibleBooks[book], chapter, verse, chapter, verse)
+                        sources_available = True
+                        if hebrew_refs:
+                            texts = []
+                            sources_available = False
+                            for hebrew_chapter, hebrew_verse in hebrew_refs:
+                                sources, _, _ = _study_verse_references(bible, book, hebrew_chapter, hebrew_verse, 'hebrew')
+                                sources_available = sources_available or bool(sources)
+                                for _source in sources:
+                                    consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+                                passage = _study_verse_text(bible, book, hebrew_chapter, hebrew_verse, 'hebrew')
+                                if passage and passage not in texts:
+                                    texts.append(passage)
+                            text = '\n'.join(texts)
+                        else:
+                            consume_bible_api_quota(request, bible, BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+                            text = bible.verses(BibleLibBibleBooks[book], chapter, verse, chapter, verse)
                         source = 'api'
-                        if not text:
+                        if not text and (not warnings or sources_available):
                             return JsonResponse({'error': 'An occurrence verse is unavailable in this translation.'}, status=502)
-                        cache.set(key, text, VERSE_CACHE_TIMEOUT)
+                        if text:
+                            cache.set(key, text, VERSE_CACHE_TIMEOUT)
                     verse_sources[reference] = source
                     code = list(_API_BIBLE_BOOK_ORDER)[list(_CANONICAL_CHAPTER_COUNTS).index(book)]
                     results.append({
                         'id': f'{code}.{chapter}.{verse}', 'reference': reference,
                         'text': re.sub(r'<[^>]+>', '', str(text)),
+                        'warning': ' '.join(warnings),
+                        'hebrew_reference': ', '.join(f'{code}.{c}:{v}' for c, v in hebrew_refs),
+                        'translation_reference': ', '.join(f'{c}:{v}' for c, v in translation_refs),
                     })
             finally:
                 _record_bible_usage_for_sources(
@@ -1245,8 +1373,8 @@ class BibleStudyChapterMetaView(View):
             return JsonResponse({'error': 'Bible not found'}, status=404)
 
         max_verse = _chapter_max_verse_for_bible(bible, book_name, chapter)
-        if book_name == 'Psalms' and request.GET.get('reference_system') == 'hebrew':
-            max_verse = max((verse for source_chapter, verse in psalm_verse_mapping() if source_chapter == chapter), default=max_verse)
+        if book_name in _OT_BOOKS and request.GET.get('reference_system') == 'hebrew':
+            max_verse = max((verse for source_chapter, verse in _hebrew_verse_index(book_name)[0] if source_chapter == chapter), default=0)
         return JsonResponse({
             'book': book_name,
             'chapter': chapter,

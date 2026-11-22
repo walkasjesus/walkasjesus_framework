@@ -658,6 +658,118 @@ class EnglishWordAlignmentTestCase(TestCase):
     },
 })
 class DutchOriginalTextTestCase(TestCase):
+    def test_reference_set_preserves_reviewed_letter_roles(self):
+        from walkasjesus_app.lib.strongs_service import _hebrew_letter_data
+
+        reference_path = Path(settings.BASE_DIR) / 'walkasjesus_app/testdata/hebrew_segmentation_reference.json'
+        reference = json.loads(reference_path.read_text(encoding='utf-8'))
+        for case in reference['cases']:
+            with self.subTest(reference=f"{case['book']} {case['chapter']}:{case['verse']}", word=case['prefix']):
+                words = original_text_payload(case['book'], case['chapter'], case['verse'])['words']
+                matches = [word for word in words if word['text'].startswith(case['prefix'])]
+                self.assertEqual(len(matches), 1)
+                expected = [
+                    (letter['glyph'], role)
+                    for role, text in case['parts'] for letter in _hebrew_letter_data(text)
+                ]
+                actual = [
+                    (letter['glyph'], part['role'])
+                    for part in matches[0]['word_components'] for letter in part['letters']
+                ]
+                self.assertEqual(actual, expected, msg=f"Source: {case['source']}")
+
+    def test_incomplete_hebrew_analysis_is_reported_without_claiming_certainty(self):
+        cases = (
+            ('Hosea', 2, 3, 'וְשַׁתִּ', True),
+            ('Deuteronomy', 4, 2, 'תֹסִ', False),
+            ('Job', 1, 4, 'אַחְי', False),
+            ('Ruth', 2, 12, 'כְּנָפָ', False),
+            ('Psalms', 23, 1, 'אֶחְסָ', False),
+            ('Genesis', 4, 22, 'נְחֹ', False),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse, word=start):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                self.assertEqual(word['hebrew_analysis_may_be_incomplete'], expected)
+
+    def test_incomplete_analysis_handles_missing_data_and_partial_inflections(self):
+        from walkasjesus_app.lib.strongs_service import (
+            _fallback_token_payload,
+            _hebrew_analysis_may_be_incomplete,
+            _hebrew_letter_data,
+            _parse_hebrew_word_components,
+        )
+
+        raw = '{H3789=כָּתַב=write}'
+        surface = 'תִּכְתְּבו'
+        parts = _parse_hebrew_word_components(raw, surface, 'HVqi2mp')
+        self.assertTrue(_hebrew_analysis_may_be_incomplete(surface, 'HVqi2mp', parts))
+        partial = [
+            {'role': 'prefix', 'strongs_number': '', 'morphology_code': 'HVqi2mp',
+             'letters': _hebrew_letter_data('תִּ')},
+            {'role': 'root', 'strongs_number': 'H3789', 'letters': _hebrew_letter_data('כְתְּבוּ')},
+        ]
+        self.assertTrue(_hebrew_analysis_may_be_incomplete('תִּכְתְּבוּ', 'HVqi2mp', partial))
+        self.assertTrue(_hebrew_analysis_may_be_incomplete('כָּתַב', 'HVqp3ms', []))
+        untagged_grammar = _parse_hebrew_word_components(raw, 'כָּתַב', '')
+        self.assertTrue(any(part['role'] == 'root' for part in untagged_grammar))
+        self.assertTrue(_hebrew_analysis_may_be_incomplete('כָּתַב', '', untagged_grammar))
+        self.assertFalse(_hebrew_analysis_may_be_incomplete('׃', '', []))
+        self.assertTrue(_fallback_token_payload('כָּתַב', 'hebrew')['hebrew_analysis_may_be_incomplete'])
+        self.assertFalse(_fallback_token_payload('λόγος', 'greek')['hebrew_analysis_may_be_incomplete'])
+
+    @patch('walkasjesus_app.views.user_preferences._translate_google_batch', return_value=[])
+    def test_incomplete_analysis_survives_localization(self, mock_translate):
+        word = next(word for word in localized_original_text_payload('Hosea', 2, 3, 'nl')['words']
+                    if word['text'].startswith('וְשַׁתִּ'))
+        self.assertTrue(word['hebrew_analysis_may_be_incomplete'])
+        root = next(part for part in word['word_components'] if part['role'] == 'root')
+        self.assertEqual(root['analysis_origin'], 'stepbible')
+        self.assertEqual(root['letters'][-1]['possible_overlap_role'], 'suffix')
+
+    def test_possible_fused_ending_and_component_origins(self):
+        word = next(word for word in original_text_payload('Hosea', 2, 3)['words']
+                    if word['text'].startswith('וְשַׁתִּ'))
+        components = word['word_components']
+        self.assertEqual([part['analysis_origin'] for part in components], ['stepbible'] * 3)
+        root = next(part for part in components if part['role'] == 'root')
+        self.assertEqual([letter.get('possible_overlap_role') for letter in root['letters']], [None, 'suffix'])
+        self.assertEqual(
+            [letter['glyph'] for part in components for letter in part['letters']],
+            [letter['glyph'] for letter in word['hebrew_letters']],
+        )
+        self.assertTrue(word['hebrew_analysis_may_be_incomplete'])
+
+        split_word = next(word for word in original_text_payload('Genesis', 26, 35)['words']
+                          if word['text'].startswith('וַתִּהְ'))
+        self.assertEqual(
+            [part['analysis_origin'] for part in split_word['word_components']],
+            ['stepbible', 'inferred', 'stepbible', 'inferred'],
+        )
+
+    def test_possible_fused_ending_requires_matching_morphology_and_spelling(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        raw = 'H9001=ו=&/{H7896G=שִׁית=make}/H9034=Os3f=her'
+        cases = (
+            ('וְ/שַׁתִּ/הָ', 'Hc/Vqq1cs/Sp3fs', True),
+            ('וְ/שַׁתִ/הָ', 'Hc/Vqq1cs/Sp3fs', False),
+            ('וְ/שַׁתִּ/הָ', 'Hc/Vqq3ms/Sp3fs', False),
+            ('וְ/שַׁתִּ/הָ', 'Hc/Vqq1cs', False),
+        )
+        for surface, grammar, expected in cases:
+            with self.subTest(surface=surface, grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual(
+                    any(letter.get('possible_overlap_role') == 'suffix'
+                        for part in parts for letter in part['letters']),
+                    expected,
+                )
+        different_lemma = raw.replace('שִׁית', 'שָׁתַק')
+        parts = _parse_hebrew_word_components(different_lemma, 'וְ/שַׁתִּ/הָ', 'Hc/Vqq1cs/Sp3fs')
+        self.assertFalse(any(letter.get('possible_overlap_role') for part in parts for letter in part['letters']))
+
     def test_hitpael_word_components_explain_stem_prefix(self):
         word = original_text_payload('Genesis', 6, 9)['words'][11]
 
@@ -687,11 +799,11 @@ class DutchOriginalTextTestCase(TestCase):
 
         word = next(
             word for word in original_text_payload('Genesis', 8, 3)['words']
-            if 'H2637' in word['strongs_numbers']
+            if any(candidate['strongs_number'] == 'H2637' for candidate in word['candidates'])
         )
         self.assertEqual(
             [(part['role'], part['surface']) for part in word['word_components']],
-            [('prefix', 'וַ'), ('prefix', 'יַּ'), ('root', 'חְסְר֣וּ')],
+            [('prefix', 'וַ'), ('prefix', 'יַּ'), ('root', 'חְסְר֣'), ('suffix', 'וּ')],
         )
 
         aleph_form = _parse_hebrew_word_components(
@@ -713,6 +825,395 @@ class DutchOriginalTextTestCase(TestCase):
             [(part['role'], part['surface']) for part in nun_form],
             [('prefix', 'נִ'), ('root', 'כְתֹּב')],
         )
+
+    def test_genesis_26_35_segments_inflections_and_section_marker(self):
+        words = original_text_payload('Genesis', 26, 35)['words']
+        self.assertEqual(
+            [[(part['role'], part['surface']) for part in word['word_components'] if part['surface']]
+             for word in words],
+            [
+                [('prefix', 'וַ'), ('prefix', 'תִּ'), ('root', 'הְיֶ֖י'), ('suffix', 'ןָ')],
+                [('root', 'מֹ֣רַ'), ('suffix', 'ת')],
+                [('root', 'ר֑וּחַ')],
+                [('prefix', 'לְ'), ('root', 'יִצְחָ֖ק')],
+                [('prefix', 'וּ'), ('prefix', 'לְ'), ('root', 'רִבְקָֽה'), ('grammatical', 'ס')],
+            ],
+        )
+        self.assertEqual(words[-1]['hebrew_letters'][-1]['is_section_marker'], True)
+        self.assertEqual(words[-1]['gematria_value'], 343)
+        self.assertEqual(words[-1]['text'], 'וּלְרִבְקָֽה׃ ס')
+
+    def test_inflection_splitting_is_guarded_by_grammar_and_lemma(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H7392=רָכַב=ride}', 'תִּרְכַּ֙בְנָה֙', 'HVqw3fp',
+             [('prefix', 'תִּ'), ('root', 'רְכַּ֙בְ'), ('suffix', 'נָה֙')]),
+            ('{H5397=נְשָׁמָה=breath}', 'נִשְׁמַ֣ת', 'HNcfsc',
+             [('root', 'נִשְׁמַ֣'), ('suffix', 'ת')]),
+            ('{H5397=נְשָׁמָה=breath}', 'נִשְׁמַ֣ת', 'HNcfsa',
+             [('root', 'נִשְׁמַ֣ת')]),
+            ('{H1980=הָלַךְ=walk}', 'תִּרְכַּ֙בְנָה֙', 'HVqw3fp',
+             [('root', 'תִּרְכַּ֙בְנָה֙')]),
+        )
+        for raw, surface, grammar, expected in cases:
+            with self.subTest(surface=surface, grammar=grammar, raw=raw):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], expected)
+
+    def test_paragraph_marker_is_not_a_word_letter(self):
+        word = original_text_payload('Genesis', 1, 5)['words'][-1]
+        self.assertEqual(word['word_components'][-1]['strongs_number'], 'H9017')
+        self.assertEqual(word['word_components'][-1]['role'], 'grammatical')
+        self.assertTrue(word['hebrew_letters'][-1]['is_section_marker'])
+        self.assertEqual(word['gematria_value'], 13)
+
+    def test_tagged_hebrew_punctuation_is_shown_as_its_actual_symbol(self):
+        cases = (
+            ('Hosea', 2, 3, 'hebrew', 'H9016', '׃'),
+            ('Genesis', 1, 2, 'english', 'H9014', '־'),
+            ('Genesis', 1, 5, 'english', 'H9015', '׀'),
+            ('Genesis', 1, 5, 'english', 'H9017', 'פ'),
+            ('Genesis', 26, 35, 'english', 'H9018', 'ס'),
+            ('Numbers', 10, 34, 'english', 'H9019', '׆'),
+        )
+        for book, chapter, verse, system, code, symbol in cases:
+            with self.subTest(code=code):
+                words = original_text_payload(book, chapter, verse, system)['words']
+                word = next(word for word in words if any(part['strongs_number'] == code for part in word['word_components']))
+                component = next(part for part in word['word_components'] if part['strongs_number'] == code)
+                self.assertIn(symbol, word['text'])
+                self.assertEqual(component.get('display_surface') or component['surface'], symbol)
+                self.assertEqual(component['role'], 'grammatical')
+                self.assertEqual(component['gematria_value'], 0)
+
+    def test_missing_tagged_punctuation_is_not_invented(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        parts = _parse_hebrew_word_components('{H0001=אָב=father}\\H9016=׃=verseEnd', 'אָב', 'HNcmsa')
+        self.assertNotIn('display_surface', parts[-1])
+
+    def test_prepositions_and_particles_use_grammar_when_components_align(self):
+        cases = (
+            ('Genesis', 24, 61, 'עַל', [('grammatical', 'עַל')]),
+            ('Genesis', 8, 3, 'מֵעַ', [('prefix', 'מֵ'), ('grammatical', 'עַ֥ל')]),
+            ('Leviticus', 19, 18, 'לֹֽא', [('grammatical', 'לֹֽא')]),
+            ('Numbers', 6, 25, 'אֵלֶ', [('grammatical', 'אֵלֶ֖י'), ('suffix', 'ךָ')]),
+            ('Exodus', 20, 2, 'אֲשֶׁ', [('grammatical', 'אֲשֶׁ֧ר')]),
+            ('Exodus', 20, 2, 'מֵאֶ', [('prefix', 'מֵ'), ('root', 'אֶ֥רֶץ')]),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse, start=start):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                self.assertEqual(
+                    [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+                    expected,
+                )
+
+    def test_job_12_6_colors_word_parts(self):
+        words = original_text_payload('Job', 12, 6)['words']
+        self.assertEqual(
+            [[(part['role'], part['surface']) for part in word['word_components'] if part['surface']]
+             for word in words],
+            [
+                [('prefix', 'יִ'), ('root', 'שְׁלָ֤י'), ('suffix', 'וּ')],
+                [('root', 'אֹֽהָלִ֨'), ('suffix', 'ים')],
+                [('prefix', 'לְ'), ('root', 'שֹׁ֥דְדִ֗'), ('suffix', 'ים')],
+                [('prefix', 'וּֽ֭'), ('root', 'בַטֻּח'), ('suffix', 'וֹת')],
+                [('prefix', 'לְ'), ('prefix', 'מַ'), ('root', 'רְגִּ֣יזֵ'), ('suffix', 'י')],
+                [('root', 'אֵ֑ל')],
+                [('prefix', 'לַ'), ('grammatical', 'אֲשֶׁ֤ר')],
+                [('prefix', 'הֵ'), ('root', 'בִ֖יא')],
+                [('root', 'אֱל֣וֹהַּ')],
+                [('prefix', 'בְּ'), ('root', 'יָדֽ'), ('suffix', 'וֹ')],
+            ],
+        )
+
+    def test_job_12_6_inflections_require_matching_grammar_and_lemma(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H0935=בּוֹא=come}', 'הֵבִיא', 'HVqp3ms'),
+            ('{H3789=כָּתַב=write}', 'הֵבִיא', 'HVhp3ms'),
+            ('{H7703=שָׁדַד=ruin}', 'שֹׁדְדִים', 'HVqrmsa'),
+            ('{H3789=כָּתַב=write}', 'שֹׁדְדִים', 'HVqrmpa'),
+            ('{H0987=בַּטֻּחוֹת=security}', 'בַטֻּחוֹת', 'HNcfsa'),
+            ('{H3789=כָּתַב=write}', 'בַטֻּחוֹת', 'HNcfpa'),
+            ('{H0987=בַּטֻּחוֹת=security}', 'בַטֻּחות', 'HNcfpa'),
+        )
+        for raw, surface, grammar in cases:
+            with self.subTest(raw=raw, surface=surface, grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_hiphil_perfect_prefix_preserves_attached_object_suffix(self):
+        word = next(word for word in original_text_payload('Psalms', 78, 71)['words']
+                    if word['text'].startswith('הֱ֫בִיא'))
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in word['word_components']],
+            [('prefix', 'הֱ֫'), ('root', 'בִיא֥'), ('suffix', 'וֹ')],
+        )
+        self.assertEqual(word['word_components'][-1]['strongs_number'], 'H9033')
+
+    def test_hiphil_participles_and_additional_imperfect_forms(self):
+        cases = (
+            ('Exodus', 6, 7, 'הַמּוֹצִ', [('prefix', 'הַ'), ('prefix', 'מּ'), ('root', 'וֹצִ֣יא')]),
+            ('Isaiah', 8, 17, 'הַמַּסְתִּ', [('prefix', 'הַ'), ('prefix', 'מַּ'), ('root', 'סְתִּ֥יר')]),
+            ('Isaiah', 8, 19, 'וְהַמַּהְ', [
+                ('prefix', 'וְ'), ('prefix', 'הַ'), ('prefix', 'מַּ'), ('root', 'הְגִּ֑'), ('suffix', 'ים'),
+            ]),
+            ('Job', 12, 6, 'לְמַרְ', [('prefix', 'לְ'), ('prefix', 'מַ'), ('root', 'רְגִּ֣יזֵ'), ('suffix', 'י')]),
+            ('Judges', 6, 12, 'וַיֵּרָ', [('prefix', 'וַ'), ('prefix', 'יֵּ'), ('root', 'רָ֥א')]),
+            ('Proverbs', 3, 5, 'תִּשָּׁ', [('prefix', 'תִּ'), ('root', 'שָּׁעֵֽן')]),
+            ('Joshua', 1, 9, 'תֵּחָ', [('prefix', 'תֵּ'), ('root', 'חָ֑ת')]),
+            ('Ruth', 1, 16, 'תִּפְגְּ', [('prefix', 'תִּ'), ('root', 'פְגְּעִ'), ('suffix', 'י')]),
+            ('Ruth', 1, 16, 'תֵּלְכִ', [('prefix', 'תֵּ'), ('root', 'לְכִ֜'), ('suffix', 'י')]),
+            ('Ruth', 1, 16, 'תָּלִ', [('prefix', 'תָּ'), ('root', 'לִ֙ינִ'), ('suffix', 'י֙')]),
+            ('Joshua', 1, 9, 'צִוִּ', [('root', 'צִוִּי'), ('suffix', 'תִ֙י'), ('suffix', 'ךָ֙')]),
+            ('Malachi', 3, 6, 'בְּנֵ', [('root', 'בְּנֵֽ'), ('suffix', 'י')]),
+            ('Isaiah', 8, 19, 'דִּרְשׁ', [('root', 'דִּרְשׁ֤'), ('suffix', 'וּ')]),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse, start=start):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                self.assertEqual(
+                    [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+                    expected,
+                )
+
+    def test_hiphil_participle_does_not_split_nominal_or_unmatched_lemmas(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H4945=מַשְׁקֶה=cupbearer}', 'מַשְׁקֶה', 'HVhrmsa'),
+            ('{H3789=כָּתַב=write}', 'מּוֹצִיא', 'HVhrmsa'),
+            ('{H3318=יָצָא=go out}', 'מּוֹצִיא', 'HVqrmsa'),
+            ('{H3789=כָּתַב=write}', 'תִּפְגְּעִי', 'HVqi2fs'),
+            ('{H1696=דָּבַר=speak}', 'מּוֹצִיא', 'HVhrmsa'),
+            ('{H3789=כָּתַב=write}', 'צִוִּיתִי', 'HVpp1cs'),
+            ('{H2865=חָתַת=be dismayed}', 'תֵּחֶת', 'HVNj2ms'),
+            ('{H4945=מַשְׁקֶה=cupbearer}', 'מַשְׁקִים', 'HVhrmpa'),
+            ('{H1121=בֵּן=son}', 'בְּנֵי', 'HNcmsc'),
+            ('{H1875=דָּרַשׁ=seek}', 'דִּרְשׁו', 'HVqv2mp'),
+        )
+        for raw, surface, grammar in cases:
+            with self.subTest(surface=surface, grammar=grammar, raw=raw):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_construct_ending_preserves_tagged_possessive_suffix(self):
+        word = next(
+            word for word in original_text_payload('Genesis', 2, 2)['words']
+            if any(candidate['strongs_number'] == 'H4399' for candidate in word['candidates'])
+        )
+        self.assertEqual(
+            [(part['role'], part['surface']) for part in word['word_components']],
+            [('root', 'מְלַאכְ'), ('suffix', 'תּ֖'), ('suffix', 'וֹ')],
+        )
+        self.assertEqual(word['word_components'][-1]['strongs_number'], 'H9023')
+
+    def test_irregular_daughter_plural_preserves_prefixes_and_possessive_suffixes(self):
+        cases = (
+            (28, 1, [('prefix', 'מִ'), ('root', 'בְּנ֥'), ('suffix', 'וֹת')]),
+            (28, 2, [('prefix', 'מִ'), ('root', 'בְּנ֥'), ('suffix', 'וֹת')]),
+            (19, 8, [('root', 'בָנ֗'), ('suffix', 'וֹת')]),
+            (31, 26, [('root', 'בְּנֹ'), ('suffix', 'תַ֔'), ('suffix', 'י')]),
+            (19, 14, [('root', 'בְנֹ'), ('suffix', 'תָ֗י'), ('suffix', 'ו')]),
+            (31, 31, [('root', 'בְּנ'), ('suffix', 'וֹתֶ֖י'), ('suffix', 'ךָ')]),
+            (29, 18, [('root', 'בִּתְּ'), ('suffix', 'ךָ֖')]),
+        )
+        for chapter, verse, expected in cases:
+            with self.subTest(chapter=chapter, verse=verse):
+                word = next(word for word in original_text_payload('Genesis', chapter, verse)['words']
+                            if any(part['strongs_number'].startswith('H1323')
+                                   for part in word['word_components']))
+                self.assertEqual(
+                    [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+                    expected,
+                )
+
+    def test_irregular_daughter_plural_requires_matching_lemma_and_grammar(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H1323G=בַּת=daughter}', 'בְּנוֹת', 'HNcfsa'),
+            ('{H1121=בַּת=other}', 'בְּנוֹת', 'HNcfpc'),
+            ('{H1323G=אֵם=mother}', 'בְּנוֹת', 'HNcfpc'),
+            ('{H1323G=בַּת=daughter}', 'בְּנוֹת', 'HNcmpa'),
+        )
+        for raw, surface, grammar in cases:
+            with self.subTest(raw=raw, surface=surface, grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_irregular_sister_plural_preserves_possessives_and_singular(self):
+        cases = (
+            ('Job', 1, 4, [('root', 'אַחְיֽ'), ('suffix', 'וֹתֵי'), ('suffix', 'הֶ֔ם')]),
+            ('Joshua', 2, 13, [('root', 'אַחְי'), ('suffix', 'וֹתַ֔'), ('suffix', 'י')]),
+            ('ChroniclesFirstBook', 2, 16, [
+                ('prefix', 'וְ'), ('root', 'אַחְי'), ('suffix', 'וֹתֵי'), ('suffix', 'הֶ֖ם'),
+            ]),
+            ('Hosea', 2, 1, [
+                ('prefix', 'וְ'), ('prefix', 'לַ'), ('root', 'אֲחֽ'), ('suffix', 'וֹתֵי'), ('suffix', 'כֶ֖ם'),
+            ]),
+            ('Ezekiel', 16, 52, [('root', 'אַחְי'), ('suffix', 'וֹתֵֽ'), ('suffix', 'ךְ')]),
+            ('Exodus', 2, 4, [('root', 'אֲחֹת֖'), ('suffix', 'וֹ')]),
+        )
+        for book, chapter, verse, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse):
+                word = next(word for word in reversed(original_text_payload(book, chapter, verse)['words'])
+                            if any(part['strongs_number'].startswith('H0269')
+                                   for part in word['word_components']))
+                self.assertEqual(
+                    [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+                    expected,
+                )
+
+    def test_sister_plural_requires_matching_lemma_and_grammar(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        for raw, grammar in (
+            ('{H0269=אָחוֹת=sister}', 'HNcfsc'),
+            ('{H0269=אָחוֹת=sister}', 'HNcmpc'),
+            ('{H1323=אָחוֹת=other}', 'HNcfpc'),
+            ('{H0269=בַּת=other}', 'HNcfpc'),
+        ):
+            with self.subTest(raw=raw, grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, 'אַחְיוֹתֵי', grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', 'אַחְיוֹתֵי')])
+
+    def test_additional_inflections_found_in_old_testament_samples(self):
+        cases = (
+            ('Genesis', 4, 22, 'יָֽלְדָ', [('root', 'יָֽלְדָ'), ('suffix', 'ה֙')]),
+            ('Exodus', 2, 4, 'וַתֵּתַ', [
+                ('prefix', 'וַ'), ('prefix', 'תֵּתַ'), ('root', 'צַּ֥ב'),
+            ]),
+            ('Deuteronomy', 4, 2, 'תֹסִ', [('prefix', 'תֹ'), ('root', 'סִ֗פ'), ('suffix', 'וּ')]),
+            ('Deuteronomy', 4, 2, 'מְצַו', [('prefix', 'מְ'), ('root', 'צַוֶּ֣ה')]),
+            ('Joshua', 2, 13, 'וְהִצַּ', [
+                ('prefix', 'וְ'), ('prefix', 'הִ'), ('root', 'צַּלְ'), ('suffix', 'תֶּ֥ם'),
+            ]),
+            ('KingsSecondBook', 6, 16, 'רַבִּ', [('root', 'רַבִּ'), ('suffix', 'ים֙')]),
+            ('Ruth', 2, 12, 'שְׁלֵמָ', [('root', 'שְׁלֵמָ֗'), ('suffix', 'ה')]),
+            ('Ruth', 2, 12, 'כְּנָפָ', [('root', 'כְּנָפָֽ'), ('suffix', 'י'), ('suffix', 'ו')]),
+            ('Ezekiel', 16, 52, 'שְׂאִ', [('root', 'שְׂאִ֣'), ('suffix', 'י')]),
+            ('Ezekiel', 16, 52, 'בְּחַטֹּא', [
+                ('prefix', 'בְּ'), ('root', 'חַטֹּא'), ('suffix', 'תַ֛יִ'), ('suffix', 'ךְ'),
+            ]),
+            ('Hosea', 2, 3, 'עֲרֻמָּ', [('root', 'עֲרֻמָּ֔'), ('suffix', 'ה')]),
+            ('Hosea', 2, 3, 'הִוָּ', [
+                ('prefix', 'הִ'), ('root', 'וָּֽלְדָ֑'), ('grammatical', 'הּ'),
+            ]),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse, start=start):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                self.assertEqual(
+                    [(part['role'], part['surface']) for part in word['word_components'] if part['surface']],
+                    expected,
+                )
+
+    def test_additional_inflections_require_matching_grammar_and_stems(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H6213=עָשָׂה=do}', 'עָשָׂה', 'HVqp3fs'),
+            ('{H3205=יָלַד=bear}', 'יָלְדָה', 'HVqp3ms'),
+            ('{H5337=נָצַל=rescue}', 'הִצַלְתֶּם', 'HVhq2mp'),
+            ('{H3254=יָסַף=add}', 'תַסִפוּ', 'HVhi2mp'),
+            ('{H6680=צָוָה=command}', 'מְצַוֶּה', 'HVqrmsa'),
+            ('{H7227=רַב=many}', 'רַבִּים', 'HNcmsa'),
+            ('{H7227=רַב=many}', 'רַבִּים', 'HAafsa'),
+            ('{H3789=כָּתַב=write}', 'שְׂאִי', 'HVqv2fs'),
+            ('{H3320=יָצַב=stand}', 'תֵּתַצַּב', 'HVtw3ms'),
+            ('{H2403=חַטָּאת=sin}', 'חַטֹּאתַיִ', 'HNcfsc'),
+            ('{H0269=אָחוֹת=sister}', 'אַחְיוֹתֵי', 'HNcfsc'),
+            ('{H3671=כָּנָף=wing}', 'כְּנָפָי', 'HNcfsc'),
+            ('{H3205=יָלַד=bear}', 'הִוָּלְדָ', 'HVqcc'),
+            ('{H3205=כָּתַב=write}', 'הִוָּלְדָ', 'HVNcc'),
+        )
+        for raw, surface, grammar in cases:
+            with self.subTest(raw=raw, surface=surface, grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_dual_absolute_ending_is_separated_only_for_dual_grammar(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        raw = '{H3671=כָּנָף=wing}'
+        surface = 'כְּנָפַיִם'
+        parts = _parse_hebrew_word_components(raw, surface, 'HNcfda')
+        self.assertEqual([(part['role'], part['surface']) for part in parts], [
+            ('root', 'כְּנָפַ'), ('suffix', 'יִם'),
+        ])
+        parts = _parse_hebrew_word_components(raw, surface, 'HNcfsa')
+        self.assertEqual([(part['role'], part['surface']) for part in parts], [('root', surface)])
+
+    def test_torah_inflections_preserve_lexical_and_grammatical_parts(self):
+        cases = (
+            ('Genesis', 8, 3, 'וַיָּשׁ', [('prefix', 'וַ'), ('prefix', 'יָּ'), ('root', 'שֻׁ֧ב'), ('suffix', 'וּ')]),
+            ('Exodus', 20, 2, 'הוֹצֵא', [('prefix', 'ה'), ('root', 'וֹצֵא'), ('suffix', 'תִ֛י'), ('suffix', 'ךָ')]),
+            ('Leviticus', 26, 36, 'מְנֻ', [('root', 'מְנֻֽסַ'), ('suffix', 'ת')]),
+            ('Numbers', 6, 24, 'יְבָרֶ', [('prefix', 'יְ'), ('root', 'בָרֶכְ'), ('suffix', 'ךָ֥')]),
+            ('Deuteronomy', 6, 5, 'וְאָ֣הַב', [('prefix', 'וְ'), ('root', 'אָ֣הַבְ'), ('suffix', 'תָּ֔')]),
+            ('Genesis', 2, 2, 'וַיִּשְׁ', [('prefix', 'וַ'), ('prefix', 'יִּ'), ('root', 'שְׁבֹּת֙')]),
+            ('Genesis', 24, 61, 'וַתִּרְ', [('prefix', 'וַ'), ('prefix', 'תִּ'), ('root', 'רְכַּ֙בְ'), ('suffix', 'נָה֙')]),
+            ('Exodus', 20, 12, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִכ֣'), ('suffix', 'וּ'), ('prefix', 'ן')]),
+            ('Exodus', 6, 7, 'וִֽידַע', [('prefix', 'וִֽ'), ('root', 'ידַעְ'), ('suffix', 'תֶּ֗ם')]),
+            ('Leviticus', 19, 18, 'וְאָֽהַב', [('prefix', 'וְ'), ('root', 'אָֽהַבְ'), ('suffix', 'תָּ֥')]),
+            ('Leviticus', 19, 3, 'תִּשְׁ', [('prefix', 'תִּ'), ('root', 'שְׁמֹ֑ר'), ('suffix', 'וּ')]),
+            ('Numbers', 6, 25, 'יָאֵ', [('prefix', 'יָ'), ('root', 'אֵ֨ר')]),
+            ('Numbers', 15, 40, 'וַעֲשׂ', [('prefix', 'וַ'), ('root', 'עֲשִׂי'), ('suffix', 'תֶ֖ם')]),
+            ('Deuteronomy', 5, 16, 'אָבִ', [('root', 'אָבִ֙י'), ('suffix', 'ךָ֙')]),
+            ('Deuteronomy', 5, 16, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִיכֻ֣'), ('prefix', 'ן')]),
+            ('Deuteronomy', 6, 4, 'אֱלֹהֵ', [('root', 'אֱלֹהֵ֖י'), ('suffix', 'נוּ')]),
+            ('Leviticus', 26, 36, 'וְהַנִּשְׁ', [
+                ('prefix', 'וְ'), ('prefix', 'הַ'), ('prefix', 'נִּ'),
+                ('root', 'שְׁאָרִ֣'), ('suffix', 'ים'),
+            ]),
+            ('Genesis', 24, 61, 'וַתֵּלַ', [('prefix', 'וַ'), ('prefix', 'תֵּ'), ('root', 'לַ֖כְ'), ('suffix', 'נָה')]),
+            ('Genesis', 24, 61, 'וַיִּקַּ', [('prefix', 'וַ'), ('prefix', 'יִּ'), ('root', 'קַּ֥ח')]),
+            ('Genesis', 24, 61, 'וְנַעֲ', [('prefix', 'וְ'), ('root', 'נַעֲרֹ'), ('suffix', 'תֶ֗י'), ('suffix', 'הָ')]),
+            ('Leviticus', 19, 18, 'תִקֹּ', [('prefix', 'תִ'), ('root', 'קֹּ֤ם')]),
+            ('Numbers', 6, 25, 'וִֽיחֻ', [
+                ('prefix', 'וִֽ'), ('prefix', 'י'), ('root', 'חֻנֶּֽ'), ('suffix', 'ךָּ'), ('grammatical', 'ס'),
+            ]),
+        )
+        for book, chapter, verse, start, expected in cases:
+            with self.subTest(book=book, chapter=chapter, verse=verse, start=start):
+                word = next(word for word in original_text_payload(book, chapter, verse)['words']
+                            if word['text'].startswith(start))
+                parts = [(part['role'], part['surface']) for part in word['word_components'] if part['surface']]
+                self.assertEqual(parts, expected)
+
+    def test_inflection_rules_leave_unmatched_or_incompatible_forms_intact(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        cases = (
+            ('{H3045=יָדַע=know}', 'יְדַעְתֶּן', 'HVqp2fp',
+             [('root', 'יְדַעְ'), ('suffix', 'תֶּן')]),
+            ('{H3045=יָדַע=know}', 'יְדַעְתֶּן', 'HVqp3ms',
+             [('root', 'יְדַעְתֶּן')]),
+            ('{H3789=כָּתַב=write}', 'יְדַעְתֶּם', 'HVqp2mp',
+             [('root', 'יְדַעְתֶּם')]),
+            ('{H7604=שָׁאַר=remain}', 'נִשְׁאָרִים', 'HVqrmpa',
+             [('root', 'נִשְׁאָרִים')]),
+            ('{H3789=כָּתַב=write}', 'נִשְׁאָרִים', 'HVNrmpa',
+             [('root', 'נִשְׁאָרִים')]),
+            ('{H5358=נָקַם=avenge}', 'תִקֹם', 'HVqi2ms',
+             [('root', 'תִקֹם')]),
+            ('{H2603=חָנַן=be gracious}', 'יְחַנֶךָ', 'HVqi3ms',
+             [('root', 'יְחַנֶךָ')]),
+            ('{H0748=אָרַךְ=lengthen}', 'יַאֲרִיַכְ', 'HVhj3ms',
+             [('root', 'יַאֲרִיַכְ')]),
+        )
+        for raw, surface, grammar, expected in cases:
+            with self.subTest(surface=surface, grammar=grammar, raw=raw):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                self.assertEqual([(part['role'], part['surface']) for part in parts], expected)
 
     def test_stem_prefix_splitting_requires_morphology_and_matching_root(self):
         from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
@@ -881,7 +1382,8 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertGreater(candidate['translation_counts'][0]['count'], 0)
         self.assertGreater(len(candidate['usage_outline']), 0)
         self.assertEqual(candidate['usage_outline'][0]['label'], 'to watch over, guard, keep, preserve')
-        self.assertEqual(candidate['usage_outline'][0]['count'], 0)
+        self.assertGreater(candidate['usage_outline'][0]['count'], 0)
+        self.assertEqual(candidate['usage_outline'][0]['count'], len(candidate['usage_outline'][0]['references']))
         self.assertTrue(all(len(group) <= 3 for group in candidate['usage_outline'][0]['reference_groups']))
         self.assertTrue(candidate['kjv_definition'])
         self.assertTrue(any(root_word['strongs_number'] == 'G5083' for root_word in derived_candidate['root_words']))
@@ -925,7 +1427,7 @@ class StrongsServiceFallbackTestCase(TestCase):
         self.assertEqual(candidate['usage_outline'][1]['label'], 'to complete')
         self.assertIn('to execute, accomplish, carry out to the full', [child['label'] for child in candidate['usage_outline'][1]['children']])
         execute = next(child for child in candidate['usage_outline'][1]['children'] if child['label'] == 'to execute, accomplish, carry out to the full')
-        self.assertEqual(execute['count'], 0)
+        self.assertEqual(execute['count'], len(execute['references']))
         self.assertGreater(len(execute['references']), 20)
 
     def test_candidate_payload_normalizes_leading_zero_greek_strongs_and_avoids_step_artifacts(self):
@@ -1855,6 +2357,19 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
 
 class BibleStudySharedPanelsTestCase(SimpleTestCase):
+    def test_origin_explanations_are_translated_without_analysis_markers(self):
+        with translation.override('nl'):
+            script = render_to_string('bible_study/_study_panels_script.html')
+        self.assertNotIn('bs-hebrew-part-overlap', script)
+        self.assertNotIn('bs-hebrew-analysis-uncertain', script)
+        self.assertNotIn('De onderstreepte letter kan zowel bij de woordstam', script)
+        self.assertNotIn('mogelijk onvolledige analyse', script)
+        self.assertIn('Afgeleid uit grammatica en woordvorm.', script)
+        self.assertIn('Door STEPBible gemarkeerd onderdeel', script)
+        self.assertIn('Sof pasoek: sluit een vers af', script)
+        self.assertIn('Maqqef: verbindt woorden', script)
+        self.assertIn('Paseq: scheidt woorden', script)
+
     def test_shared_original_renderer_and_preview_compile_and_render(self):
         script = render_to_string('bible_study/_study_panels_script.html')
         preview = render_to_string('bible_study/_study_reference_preview.html')

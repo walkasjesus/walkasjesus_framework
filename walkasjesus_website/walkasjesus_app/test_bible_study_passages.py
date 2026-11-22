@@ -14,10 +14,16 @@ from walkasjesus_app.views.bible_study_view import (
     _CANONICAL_CHAPTER_COUNTS,
     _load_chapter_index,
     _primary_chapter_index_bible_id,
+    _study_verse_references,
+    _study_reference_metadata,
     _study_verse_text,
 )
 from walkasjesus_app.lib.strongs_service import (
     _stepbible_rows_for_verse,
+    english_alignment_payload,
+    english_hebrew_references,
+    hebrew_english_references,
+    hebrew_reference_metadata,
     psalm_english_reference,
     psalm_hebrew_reference,
     psalm_verse_mapping,
@@ -47,6 +53,7 @@ class PsalmVersificationTest(SimpleTestCase):
         bible.name = 'King James Version'
         bible.abbreviation = 'KJV'
         bible.language = 'en'
+        bible.verses.return_value = 'Body verse.'
         self.assertEqual(_study_verse_text(bible, 'Psalms', 30, 1, 'hebrew'), '')
         bible.verses.assert_not_called()
         _study_verse_text(bible, 'Psalms', 30, 2, 'hebrew')
@@ -57,6 +64,7 @@ class PsalmVersificationTest(SimpleTestCase):
         bible.name = 'Herziene Statenvertaling'
         bible.abbreviation = 'HSV'
         bible.language = 'nl'
+        bible.verses.return_value = 'Body verse.'
         _study_verse_text(bible, 'Psalms', 30, 2, 'hebrew')
         bible.verses.assert_called_once_with(BibleLibBibleBooks.Psalms, 30, 2, 30, 2)
 
@@ -69,6 +77,70 @@ class PsalmVersificationTest(SimpleTestCase):
             text = bible.psalm_study_verse(30, verse)
             self.assertTrue(text)
             self.assertNotIn('[030:', text)
+
+
+class HebrewVersificationTest(SimpleTestCase):
+    def test_hebrew_rows_and_cross_chapter_mappings_come_from_stepbible(self):
+        rows = _stepbible_rows_for_verse('Hosea', 2, 3, 'hebrew')
+        self.assertTrue(rows)
+        self.assertTrue(all(row.startswith('Hos.2.1(2.3)#') for row in rows))
+        self.assertEqual(hebrew_english_references('Hosea', 2, 3), ((2, 1),))
+        self.assertEqual(english_hebrew_references('Hosea', 2, 1), ((2, 3),))
+        self.assertEqual(hebrew_english_references('Joel', 3, 1), ((2, 28),))
+        self.assertEqual(hebrew_english_references('ChroniclesFirstBook', 5, 27), ((6, 1),))
+        self.assertEqual(hebrew_reference_metadata()['chapters']['Joel'], 4)
+        self.assertEqual(hebrew_reference_metadata()['chapters']['Malachi'], 3)
+        self.assertEqual(_study_reference_metadata()['dutch_to_hebrew']['Hosea']['1:12'], [(2, 3)])
+        self.assertEqual(_study_reference_metadata()['dutch_to_hebrew']['Joel']['2:28'], [(3, 1)])
+
+    def test_hosea_translations_use_their_own_numbers(self):
+        sv = LocalStatenvertalingBible('svv-statenvertaling')
+        hsv = Mock(name='HSV')
+        hsv.name = 'Herziene Statenvertaling'
+        hsv.abbreviation = 'HSV'
+        hsv.language = 'nl'
+        kjv = Mock(name='KJV')
+        kjv.name = 'King James Version'
+        kjv.abbreviation = 'KJV'
+        kjv.language = 'en'
+        naardense = Mock(name='Naardense')
+        naardense.name = 'Naardense Bijbel 2024'
+        naardense.language = 'nl'
+        self.assertEqual(_study_verse_references(sv, 'Hosea', 2, 3, 'hebrew')[:2], (((2, 1),), ((1, 12),)))
+        self.assertEqual(_study_verse_references(hsv, 'Hosea', 2, 3, 'hebrew')[:2], (((1, 12),), ((1, 12),)))
+        self.assertEqual(_study_verse_references(kjv, 'Hosea', 2, 3, 'hebrew')[:2], (((2, 1),), ((2, 1),)))
+        self.assertEqual(_study_verse_references(naardense, 'Hosea', 2, 3, 'hebrew')[:2], (((2, 3),), ((2, 3),)))
+        self.assertTrue(_study_verse_text(sv, 'Hosea', 2, 3, 'hebrew').startswith('Zegt tot uw broederen'))
+
+    def test_unverified_and_partial_verse_boundaries_are_not_silent(self):
+        unknown = Mock()
+        unknown.name = 'Unknown translation'
+        unknown.abbreviation = 'UNKNOWN'
+        unknown.language = 'nl'
+        sources, labels, warning = _study_verse_references(unknown, 'Hosea', 2, 3, 'hebrew')
+        self.assertEqual((sources, labels), ((), ()))
+        self.assertIn('not verified', warning)
+        sources, labels, warning = _study_verse_references(unknown, 'Genesis', 1, 1, 'hebrew')
+        self.assertEqual((sources, labels), (((1, 1),), ((1, 1),)))
+        self.assertIn('not been verified', warning)
+        kjv = Mock()
+        kjv.name = 'King James Version'
+        kjv.abbreviation = 'KJV'
+        kjv.language = 'en'
+        sources, _, warning = _study_verse_references(kjv, 'Numbers', 25, 19, 'hebrew')
+        self.assertEqual(sources, ((26, 1),))
+        self.assertIn('boundaries differ', warning)
+
+    @patch('walkasjesus_app.lib.strongs_service._align_english_words')
+    def test_partial_verse_alignment_does_not_guess_word_links(self, align):
+        cache.clear()
+        payload = english_alignment_payload(
+            'Numbers', 25, 19, 'These are the words', tagged_source='kjv',
+            reference_system='hebrew',
+        )
+        self.assertEqual(payload['aligned_count'], 0)
+        self.assertEqual(payload['tokens'], [])
+        align.assert_not_called()
 
 
 class ChapterIndexCoverageTest(SimpleTestCase):
@@ -164,6 +236,30 @@ class BibleStudyPassagesTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['max_verse'], 13)
+
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_hebrew_joel_chapter_meta_uses_hebrew_not_translation_numbering(self, translations):
+        translations.return_value.get.return_value = self.bible
+        response = self.client.get(reverse('commandments:bible_study_chapter_meta'), {
+            'bible_id': 'bgt', 'book': 'Joel', 'chapter': 3, 'reference_system': 'hebrew',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['max_verse'], 5)
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_hosea_hebrew_comparison_fetches_hsv_source_reference(self, translations, _quota):
+        self.bible.name = 'Herziene Statenvertaling'
+        self.bible.abbreviation = 'HSV'
+        translations.return_value.get.return_value = self.bible
+        with patch.object(self.bible, 'verses', return_value='Zeg tegen uw broeders.') as verses:
+            response = self.client.post(reverse('commandments:bible_study_verses'), {
+                'bible_id': 'bgt', 'book': 'Hosea', 'chapter': 2,
+                'start_verse': 3, 'end_verse': 3, 'reference_system': 'hebrew',
+            })
+        self.assertEqual(response.json()['verses'], {'3': 'Zeg tegen uw broeders.'})
+        self.assertEqual(response.json()['verse_references'], {'3': '1:12'})
+        verses.assert_called_once_with(BibleLibBibleBooks.Hosea, 1, 12, 1, 12)
 
     @patch('walkasjesus_app.views.bible_study_view.localized_original_text_payload')
     def test_original_endpoint_passes_hebrew_numbering(self, original):

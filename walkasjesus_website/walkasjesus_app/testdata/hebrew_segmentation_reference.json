@@ -1,0 +1,21 @@
+{
+  "description": "Manually assessed lexical and grammatical letter spans for selected STEPBible verse forms. The cited interlinears support the word and morphology; the letter boundaries are editorial assessments, not independently certified gold annotations.",
+  "cases": [
+    {"book": "Genesis", "chapter": 26, "verse": 35, "prefix": "וַתִּהְ", "source": "https://biblehub.com/interlinear/genesis/26-35.htm", "parts": [["prefix", "וַ"], ["prefix", "תִּ"], ["root", "הְיֶ֖י"], ["suffix", "ןָ"]]},
+    {"book": "Genesis", "chapter": 26, "verse": 35, "prefix": "מֹ֣רַ", "source": "https://biblehub.com/interlinear/genesis/26-35.htm", "parts": [["root", "מֹ֣רַ"], ["suffix", "ת"]]},
+    {"book": "Genesis", "chapter": 28, "verse": 1, "prefix": "מִבְּנ", "source": "https://biblehub.com/hebrew/1323.htm", "parts": [["prefix", "מִ"], ["root", "בְּנ֥"], ["suffix", "וֹת"]]},
+    {"book": "Job", "chapter": 1, "verse": 4, "prefix": "אַחְי", "source": "https://biblehub.com/hebrew/269.htm", "parts": [["root", "אַחְיֽ"], ["suffix", "וֹתֵי"], ["suffix", "הֶ֔ם"]]},
+    {"book": "Exodus", "chapter": 2, "verse": 4, "prefix": "וַתֵּתַ", "source": "https://biblehub.com/hebrew/3320.htm", "parts": [["prefix", "וַ"], ["prefix", "תֵּתַ"], ["root", "צַּ֥ב"]]},
+    {"book": "Leviticus", "chapter": 19, "verse": 11, "prefix": "תִּגְנ", "source": "https://biblehub.com/interlinear/leviticus/19-11.htm", "parts": [["prefix", "תִּ"], ["root", "גְנֹ֑ב"], ["suffix", "וּ"]]},
+    {"book": "Numbers", "chapter": 6, "verse": 24, "prefix": "יְבָרֶ", "source": "https://biblehub.com/interlinear/numbers/6-24.htm", "parts": [["prefix", "יְ"], ["root", "בָרֶכְ"], ["suffix", "ךָ֥"]]},
+    {"book": "Deuteronomy", "chapter": 4, "verse": 2, "prefix": "תֹסִ", "source": "https://biblehub.com/interlinear/deuteronomy/4-2.htm", "parts": [["prefix", "תֹ"], ["root", "סִ֗פ"], ["suffix", "וּ"]]},
+    {"book": "Deuteronomy", "chapter": 4, "verse": 2, "prefix": "מְצַוֶּ֣ה", "source": "https://biblehub.com/interlinear/deuteronomy/4-2.htm", "parts": [["prefix", "מְ"], ["root", "צַוֶּ֣ה"]]},
+    {"book": "Joshua", "chapter": 2, "verse": 13, "prefix": "וְהִצַּ", "source": "https://biblehub.com/interlinear/joshua/2-13.htm", "parts": [["prefix", "וְ"], ["prefix", "הִ"], ["root", "צַּלְ"], ["suffix", "תֶּ֥ם"]]},
+    {"book": "Ruth", "chapter": 2, "verse": 12, "prefix": "כְּנָפָ", "source": "https://biblehub.com/interlinear/ruth/2-12.htm", "parts": [["root", "כְּנָפָֽ"], ["suffix", "י"], ["suffix", "ו"]]},
+    {"book": "KingsSecondBook", "chapter": 6, "verse": 16, "prefix": "רַבִּ", "source": "https://biblehub.com/interlinear/2_kings/6-16.htm", "parts": [["root", "רַבִּ"], ["suffix", "ים֙"]]},
+    {"book": "Ezekiel", "chapter": 16, "verse": 52, "prefix": "שְׂאִ", "source": "https://biblehub.com/interlinear/ezekiel/16-52.htm", "parts": [["root", "שְׂאִ֣"], ["suffix", "י"]]},
+    {"book": "Job", "chapter": 12, "verse": 6, "prefix": "הֵבִ", "source": "https://biblehub.com/interlinear/job/12-6.htm", "parts": [["prefix", "הֵ"], ["root", "בִ֖יא"]]},
+    {"book": "Isaiah", "chapter": 8, "verse": 19, "prefix": "וְהַמַּהְ", "source": "https://biblehub.com/interlinear/isaiah/8-19.htm", "parts": [["prefix", "וְ"], ["prefix", "הַ"], ["prefix", "מַּ"], ["root", "הְגִּ֑"], ["suffix", "ים"]]},
+    {"book": "Psalms", "chapter": 23, "verse": 1, "prefix": "אֶחְסָ", "source": "https://biblehub.com/interlinear/psalms/23-1.htm", "parts": [["prefix", "אֶ"], ["root", "חְסָֽר"]]}
+  ]
+}

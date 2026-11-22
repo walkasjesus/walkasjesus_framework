@@ -749,6 +749,9 @@ _HEBREW_LETTER_RE = re.compile(r'[\u05D0-\u05EA]')
 _HEBREW_COMPONENT_RE = re.compile(
     r'(?P<strong>[GH]\d+[A-Za-z]?)(?:=(?P<value>[^=/{}/\\]+))?(?:=(?P<gloss>[^/{}/\\]+))?'
 )
+_HEBREW_TAGGED_PUNCTUATION = {
+    'H9014': '־', 'H9015': '׀', 'H9016': '׃', 'H9019': '׆',
+}
 _HEBREW_TRADITIONAL_IMAGES_NL = {
     'ox': 'os', 'house': 'huis', 'camel': 'kameel', 'door': 'deur',
     'window / breath': 'raam / adem', 'hook': 'haak', 'weapon': 'wapen',
@@ -802,6 +805,38 @@ def _hebrew_letter_data(text):
     return letters
 
 
+def _hebrew_consonants(letters):
+    final_forms = str.maketrans('ךםןףץ', 'כמנפצ')
+    return ''.join(letter['glyph'][0] for letter in letters).translate(final_forms)
+
+
+def _hebrew_lemma_stems(lemma):
+    letters = _hebrew_letter_data(lemma)
+    variants = {_hebrew_consonants(letters)}
+    for index, letter in enumerate(letters[1:-1], 1):
+        if letter['glyph'][0] == 'ו' and any(mark in letter['glyph'] for mark in ('\u05b9', '\u05bc')):
+            variants.add(_hebrew_consonants(letters[:index] + letters[index + 1:]))
+    if _hebrew_consonants(letters).endswith('ה'):
+        variants.update(stem[:-1] for stem in list(variants))
+    return {stem for stem in variants if len(stem) >= 2}
+
+
+def _hebrew_surface_stems(letters):
+    consonants = _hebrew_consonants(letters)
+    variants = {consonants}
+    for index, letter in enumerate(letters[1:-1], 1):
+        if (
+            letter['glyph'][0] == 'י'
+            and '\u05b4' in letters[index - 1]['glyph']
+            and not any(
+                mark in letter['glyph']
+                for mark in '\u05b0\u05b1\u05b2\u05b3\u05b4\u05b5\u05b6\u05b7\u05b8\u05b9\u05ba\u05bb\u05bc\u05c7'
+            )
+        ):
+            variants.add(consonants[:index] + consonants[index + 1:])
+    return variants
+
+
 def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''):
     components = []
     for match in _HEBREW_COMPONENT_RE.finditer(str(raw_components or '')):
@@ -809,18 +844,24 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
         value = str(match.group('value') or '').strip()
         gloss = str(match.group('gloss') or '').strip(' :;')
         value_is_hebrew = bool(_HEBREW_LETTER_RE.search(value))
+        punctuation = value if value == _HEBREW_TAGGED_PUNCTUATION.get(strongs_number) and value in str(raw_surface or '') else ''
         component = {
             'strongs_number': strongs_number,
+            'analysis_origin': 'stepbible',
             'surface': value if value_is_hebrew else '',
-            'morphology_code': '' if value_is_hebrew else value,
+            'morphology_code': '' if value_is_hebrew or punctuation else value,
             'gloss': _clean_translation_label(gloss).strip(' :;\t'),
         }
+        if punctuation:
+            component['display_surface'] = punctuation
         component['morphology_description'] = _hebrew_morphology_description(component['morphology_code'])
 
         numeric_match = re.match(r'^H(\d+)', strongs_number)
         numeric_code = int(numeric_match.group(1)) if numeric_match else 0
-        if 9001 <= numeric_code <= 9016:
+        if 9001 <= numeric_code <= 9013:
             component['role'] = 'prefix'
+        elif 9014 <= numeric_code <= 9019:
+            component['role'] = 'grammatical'
         elif 9020 <= numeric_code <= 9039:
             component['role'] = 'suffix'
         elif strongs_number in {'H0853', 'H0854'}:
@@ -835,7 +876,7 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
 
     surface_parts = [
         _clean_hebrew_surface(part)
-        for part in str(raw_surface or '').split('/')
+        for part in re.split(r'[/\\]', str(raw_surface or ''))
         if _HEBREW_LETTER_RE.search(part)
     ]
     surface_components = [
@@ -849,6 +890,39 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
             component['letters'] = _hebrew_letter_data(surface)
             component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
 
+        grammar_parts = str(raw_grammar or '').split('/')
+        if len(grammar_parts) == len(surface_components):
+            for component, grammar in zip(surface_components, grammar_parts):
+                if component['role'] == 'root' and re.fullmatch(r'H?(?:Rd?|T[nrc])', grammar):
+                    component['role'] = 'grammatical'
+
+    for component in components:
+        if component['strongs_number'] in {'H9017', 'H9018'}:
+            for letter in component['letters']:
+                letter['is_section_marker'] = True
+            component['gematria_value'] = 0
+
+    def split_component(component, count, role, code, gloss, description, *, at_end=False):
+        letters = component['letters']
+        part_letters = letters[-count:] if at_end else letters[:count]
+        remaining = letters[:-count] if at_end else letters[count:]
+        part = {
+            'strongs_number': '',
+            'analysis_origin': 'inferred',
+            'role': role,
+            'surface': ''.join(letter['glyph'] for letter in part_letters),
+            'letters': part_letters,
+            'gematria_value': sum(letter['value'] for letter in part_letters),
+            'morphology_code': code,
+            'gloss': gloss,
+            'morphology_description': description,
+        }
+        position = components.index(component)
+        components.insert(position + int(at_end), part)
+        component['letters'] = remaining
+        component['surface'] = ''.join(letter['glyph'] for letter in remaining)
+        component['gematria_value'] = sum(letter['value'] for letter in remaining)
+
     verb_code = next((
         code for code in str(raw_grammar or '').split('/')
         if re.match(r'^H?Vt', code)
@@ -860,11 +934,17 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
             consonants = ''.join(letter['glyph'][0] for letter in component['letters'])
             lemma_consonants = ''.join(letter['glyph'][0] for letter in _hebrew_letter_data(component['lemma']))
             prefix_consonants = consonants[:2]
-            if prefix_consonants not in {'הת', 'מת', 'ית', 'תת', 'את', 'נת'} or consonants[2:] != lemma_consonants:
+            matches = consonants[2:] == lemma_consonants or (
+                verb_code.lstrip('H') == 'Vtw3fs'
+                and _normalize_strongs_base_code(component['strongs_number']) == 'H3320'
+                and lemma_consonants == 'יצב' and consonants == 'תתצב'
+            )
+            if prefix_consonants not in {'הת', 'מת', 'ית', 'תת', 'את', 'נת'} or not matches:
                 continue
             prefix_letters = component['letters'][:2]
             prefix = {
                 'strongs_number': '',
+                'analysis_origin': 'inferred',
                 'role': 'prefix',
                 'surface': ''.join(letter['glyph'] for letter in prefix_letters),
                 'letters': prefix_letters,
@@ -883,7 +963,7 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
 
     person_prefix_code = None
     for code in str(raw_grammar or '').split('/'):
-        person_prefix_code = re.match(r'^H?V[a-z][wij]([123])([mfc])([sp])$', code)
+        person_prefix_code = re.match(r'^H?V[a-zN][wiju]([123])([mfc])([sp])$', code)
         if person_prefix_code:
             break
     if person_prefix_code:
@@ -896,30 +976,435 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
         for component in components:
             if component['role'] != 'root' or not component.get('lemma'):
                 continue
-            consonants = ''.join(letter['glyph'][0] for letter in component['letters'])
-            lemma_consonants = ''.join(letter['glyph'][0] for letter in _hebrew_letter_data(component['lemma']))
-            if (
-                len(consonants) <= len(lemma_consonants)
-                or consonants[0] not in possible_prefixes
-                or not consonants[1:].startswith(lemma_consonants)
-            ):
+            consonants = _hebrew_consonants(component['letters'])
+            stems = _hebrew_lemma_stems(component['lemma'])
+            if not consonants or consonants[0] not in possible_prefixes:
                 continue
-            prefix_letters = component['letters'][:1]
-            prefix = {
-                'strongs_number': '',
-                'role': 'prefix',
-                'surface': prefix_letters[0]['glyph'],
-                'letters': prefix_letters,
-                'gematria_value': sum(letter['value'] for letter in prefix_letters),
-                'morphology_code': person_prefix_code.group(0),
-                'gloss': 'Verb person prefix',
-                'morphology_description': 'Verb conjugation prefix.',
-            }
-            components.insert(components.index(component), prefix)
-            component['letters'] = component['letters'][1:]
-            component['surface'] = ''.join(letter['glyph'] for letter in component['letters'])
-            component['gematria_value'] = sum(letter['value'] for letter in component['letters'])
+            suffix_count = 0
+            if number == 'p' and gender == 'f' and person in {'2', '3'}:
+                if consonants.endswith('נה'):
+                    suffix_count = 2
+                elif consonants.endswith('נ') and '\u05b8' in component['letters'][-1]['glyph']:
+                    suffix_count = 1
+            elif number == 's' and gender == 'f' and person == '2':
+                if consonants.endswith('י'):
+                    suffix_count = 1
+            elif number == 'p' and gender in {'m', 'c'} and person in {'2', '3'}:
+                if consonants.endswith('ו') and '\u05bc' in component['letters'][-1]['glyph']:
+                    suffix_count = 1
+            stem = consonants[1:-suffix_count] if suffix_count else consonants[1:]
+            lemma = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            stem_letters = component['letters'][1:-suffix_count] if suffix_count else component['letters'][1:]
+            matches = bool(_hebrew_surface_stems(stem_letters) & stems) or (
+                lemma.endswith('ה')
+                and stem.endswith('י') and stem[:-1] in stems
+            )
+            if person_prefix_code.group(0).lstrip('H').startswith('Vq') and stem_letters:
+                matches = matches or (
+                    (lemma.startswith('נ') or lemma == 'לקח')
+                    and stem == lemma[1:] and '\u05bc' in stem_letters[0]['glyph']
+                ) or (
+                    lemma == 'הלכ' and stem == 'לכ'
+                ) or (
+                    lemma.endswith('ננ') and stem == lemma[:-1]
+                    and '\u05bc' in stem_letters[-1]['glyph']
+                )
+            if person_prefix_code.group(0).lstrip('H').startswith('Vh') and stem_letters:
+                matches = matches or (
+                    lemma.startswith('י') and stem == lemma[1:]
+                    and '\u05b9' in component['letters'][0]['glyph']
+                    and '\u05b4' in stem_letters[0]['glyph']
+                )
+            if person_prefix_code.group(0).lstrip('H').startswith('VN') and stem_letters:
+                matches = matches or (
+                    len(lemma) == 3 and lemma[-1] == lemma[-2]
+                    and stem == lemma[:-1]
+                    and stem_letters[0]['glyph'][0] in 'אהחע'
+                    and '\u05b8' in stem_letters[0]['glyph']
+                )
+            if not matches:
+                continue
+            split_component(
+                component, 1, 'prefix', person_prefix_code.group(0),
+                'Verb person prefix', 'Verb conjugation prefix.',
+            )
+            if suffix_count:
+                split_component(
+                    component, suffix_count, 'suffix', person_prefix_code.group(0),
+                    'Verb conjugation ending', 'Verb conjugation ending.',
+                    at_end=True,
+                )
             break
+
+    imperative_code = next((
+        re.fullmatch(r'H?Vqv2([mf])([sp])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Vqv2([mf])([sp])', code)
+    ), None)
+    if imperative_code:
+        gender, number = imperative_code.groups()
+        ending = {('m', 'p'): 'ו', ('f', 's'): 'י', ('f', 'p'): 'נה'}.get((gender, number), '')
+        for component in components:
+            if not ending or component['role'] != 'root' or not component.get('lemma'):
+                continue
+            letters = component['letters']
+            consonants = _hebrew_consonants(letters)
+            if not consonants.endswith(ending) or len(letters) <= len(ending):
+                continue
+            if ending == 'ו' and '\u05bc' not in letters[-1]['glyph']:
+                continue
+            if ending == 'י' and '\u05b4' not in letters[-2]['glyph']:
+                continue
+            stems_match = bool(
+                _hebrew_surface_stems(letters[:-len(ending)]) & _hebrew_lemma_stems(component['lemma'])
+            )
+            if (
+                ending == 'י' and _normalize_strongs_base_code(component['strongs_number']) == 'H5375'
+                and _hebrew_consonants(_hebrew_letter_data(component['lemma'])) == 'נשא'
+                and consonants[:-1] == 'שא'
+            ):
+                stems_match = True
+            if not stems_match:
+                continue
+            split_component(
+                component, len(ending), 'suffix', imperative_code.group(0),
+                'Verb conjugation ending', 'Verb conjugation ending.', at_end=True,
+            )
+            break
+
+    hiphil_participle = next((
+        re.fullmatch(r'H?Vhrm([sp])([ac])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Vhrm([sp])([ac])', code)
+    ), None)
+    if hiphil_participle:
+        number, state = hiphil_participle.groups()
+        ending = ('ימ' if state == 'a' else 'י') if number == 'p' else ''
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            letters = component['letters']
+            if len(letters) < 3 or letters[0]['glyph'][0] != 'מ':
+                continue
+            consonants = _hebrew_consonants(letters)
+            if ending and not consonants.endswith(ending):
+                continue
+            stem_letters = letters[1:-len(ending)] if ending else letters[1:]
+            if not stem_letters:
+                continue
+            stems = _hebrew_lemma_stems(component['lemma'])
+            surface_stems = _hebrew_surface_stems(stem_letters)
+            matches = bool(surface_stems & stems)
+            if stem_letters[0]['glyph'][0] == 'ו' and '\u05b9' in stem_letters[0]['glyph']:
+                matches = matches or any('י' + stem[1:] in stems for stem in surface_stems)
+            if matches:
+                split_component(
+                    component, 1, 'prefix', hiphil_participle.group(0),
+                    'Hiphil participle prefix', 'Hiphil participle formation.',
+                )
+                if ending:
+                    split_component(
+                        component, len(ending), 'suffix', hiphil_participle.group(0),
+                        'Participle ending', 'Participle plural ending.', at_end=True,
+                    )
+                break
+
+    piel_participle = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Vprms[ac]', code)
+    ), '')
+    if piel_participle:
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            letters = component['letters']
+            if (
+                len(letters) > 1 and letters[0]['glyph'][0] == 'מ'
+                and _hebrew_surface_stems(letters[1:]) & _hebrew_lemma_stems(component['lemma'])
+            ):
+                split_component(
+                    component, 1, 'prefix', piel_participle,
+                    'Piel participle prefix', 'Piel participle formation.',
+                )
+                break
+
+    qal_participle = next((
+        re.fullmatch(r'H?Vqrmp([ac])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Vqrmp([ac])', code)
+    ), None)
+    if qal_participle:
+        ending = 'ימ' if qal_participle.group(1) == 'a' else 'י'
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            letters = component['letters']
+            if len(letters) <= len(ending) or not _hebrew_consonants(letters).endswith(ending):
+                continue
+            if not (_hebrew_surface_stems(letters[:-len(ending)]) & _hebrew_lemma_stems(component['lemma'])):
+                continue
+            split_component(
+                component, len(ending), 'suffix', qal_participle.group(0),
+                'Participle ending', 'Participle plural ending.', at_end=True,
+            )
+            break
+
+    perfect_code = next((
+        re.fullmatch(r'H?V([qhp])[pq]([123])([mfc])([sp])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?V([qhp])[pq]([123])([mfc])([sp])', code)
+    ), None)
+    if perfect_code:
+        stem_type, person, gender, number = perfect_code.groups()
+        endings = {
+            ('1', 'c', 's'): 'תי', ('1', 'c', 'p'): 'נו',
+            ('2', 'm', 's'): 'ת', ('2', 'f', 's'): 'ת',
+            ('2', 'm', 'p'): 'תמ', ('2', 'f', 'p'): 'תנ',
+            ('3', 'c', 'p'): 'ו', ('3', 'm', 'p'): 'ו', ('3', 'f', 'p'): 'ו',
+            ('3', 'f', 's'): 'ה',
+        }
+        ending = endings.get((person, gender, number), '')
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            if not ending:
+                letters = component['letters']
+                if (
+                    (stem_type, person, gender, number) == ('h', '3', 'm', 's')
+                    and len(letters) > 1 and letters[0]['glyph'][0] == 'ה'
+                    and _hebrew_surface_stems(letters[1:]) & _hebrew_lemma_stems(component['lemma'])
+                ):
+                    split_component(
+                        component, 1, 'prefix', perfect_code.group(0),
+                        'Hiphil stem prefix', 'Hiphil verb-stem formation.',
+                    )
+                    break
+                continue
+            consonants = _hebrew_consonants(component['letters'])
+            if not consonants.endswith(ending):
+                continue
+            lemma = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            if ending == 'ה' and lemma.endswith('ה'):
+                continue
+            remaining = consonants[:-len(ending)]
+            stems = _hebrew_lemma_stems(component['lemma'])
+            stem_prefix = stem_type == 'h' and remaining.startswith('ה')
+            comparison = remaining[1:] if stem_prefix else remaining
+            matches = comparison in stems or (
+                stem_prefix and comparison.startswith('ו')
+                and 'י' + comparison[1:] in stems
+            ) or (
+                _hebrew_consonants(_hebrew_letter_data(component['lemma'])).endswith('ה')
+                and comparison.endswith('י') and comparison[:-1] in stems
+            ) or (
+                stem_prefix and lemma.startswith(('נ', 'י')) and comparison == lemma[1:]
+                and len(component['letters']) > 1
+                and '\u05bc' in component['letters'][1]['glyph']
+            )
+            if not matches:
+                continue
+            if stem_prefix:
+                split_component(
+                    component, 1, 'prefix', perfect_code.group(0),
+                    'Hiphil stem prefix', 'Hiphil verb-stem formation.',
+                )
+            split_component(
+                component, len(ending), 'suffix', perfect_code.group(0),
+                'Verb conjugation ending', 'Verb conjugation ending.',
+                at_end=True,
+            )
+            break
+
+    niphal_participle = next((
+        re.fullmatch(r'H?VNr([mfc])([sp])([ac])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?VNr([mfc])([sp])([ac])', code)
+    ), None)
+    if niphal_participle:
+        gender, number, _ = niphal_participle.groups()
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = _hebrew_consonants(component['letters'])
+            if not consonants.startswith('נ'):
+                continue
+            endings = ('ימ',) if gender == 'm' and number == 'p' else (
+                ('ות', 'ת') if gender == 'f' and number == 'p' else ('',)
+            )
+            for ending in endings:
+                stem = consonants[1:-len(ending)] if ending and consonants.endswith(ending) else (
+                    consonants[1:] if not ending else ''
+                )
+                if stem not in _hebrew_lemma_stems(component['lemma']):
+                    continue
+                split_component(
+                    component, 1, 'prefix', niphal_participle.group(0),
+                    'Niphal stem prefix', 'Niphal verb-stem formation.',
+                )
+                if ending:
+                    split_component(
+                        component, len(ending), 'suffix', niphal_participle.group(0),
+                        'Participle ending', 'Participle plural ending.',
+                        at_end=True,
+                    )
+                break
+            break
+
+    niphal_infinitive = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?VNcc', code)
+    ), '')
+    if niphal_infinitive:
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            letters = component['letters']
+            lemma = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            consonants = _hebrew_consonants(letters)
+            if (
+                len(letters) > 2 and consonants.startswith('הו') and lemma.startswith('י')
+                and 'י' + consonants[2:] == lemma and '\u05bc' in letters[1]['glyph']
+            ):
+                split_component(
+                    component, 1, 'prefix', niphal_infinitive,
+                    'Niphal infinitive prefix', 'Niphal infinitive formation.',
+                )
+                break
+
+    noun_code = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Ncfsc', code)
+    ), '')
+    if noun_code:
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = _hebrew_consonants(component['letters'])
+            lemma_consonants = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            if (
+                str(raw_grammar or '').split('/') == ['HNcfsc', 'Sp2fs']
+                and _normalize_strongs_base_code(component['strongs_number']) == 'H269'
+                and lemma_consonants == 'אחות' and consonants == 'אחיות'
+                and any(part['strongs_number'] == 'H9022' for part in components)
+            ):
+                split_component(
+                    component, 2, 'suffix', 'HNcfpc',
+                    'Plural ending', 'Noun plural ending.',
+                    at_end=True,
+                )
+                break
+            if (
+                lemma_consonants.endswith('ה')
+                and len(lemma_consonants) > 2
+                and consonants.endswith('ת')
+                and consonants[:-1] in _hebrew_lemma_stems(component['lemma'])
+            ):
+                split_component(
+                    component, 1, 'suffix', noun_code,
+                    'Feminine construct ending', 'Feminine singular construct ending.',
+                    at_end=True,
+                )
+                break
+    numbered_noun_code = next((
+        code for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Nc[fmb][pd][ac]', code)
+    ), '')
+    if numbered_noun_code:
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = _hebrew_consonants(component['letters'])
+            gender = numbered_noun_code[-3]
+            number = numbered_noun_code[-2]
+            state = numbered_noun_code[-1]
+            endings = (('י',) if state == 'c' else ('ימ',)) if number == 'd' else (
+                ('ותי', 'תי', 'ות', 'ת') if gender == 'f' and state == 'c' else (
+                    ('ות', 'ת') if gender == 'f' else (('י',) if state == 'c' else ('ימ',))
+                )
+            )
+            lemma_consonants = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            stems = _hebrew_lemma_stems(component['lemma'])
+            if (
+                gender == 'f' and number == 'p' and lemma_consonants == 'בת'
+                and _normalize_strongs_base_code(component['strongs_number']) == 'H1323'
+            ):
+                stems.add('בנ')
+            if (
+                gender == 'f' and number == 'p' and lemma_consonants == 'אחות'
+                and _normalize_strongs_base_code(component['strongs_number']) == 'H269'
+            ):
+                stems.update(('אח', 'אחי'))
+            if (
+                gender == 'f' and number == 'p' and lemma_consonants == 'חטאת'
+                and _normalize_strongs_base_code(component['strongs_number']) == 'H2403'
+            ):
+                stems.add('חטא')
+            for ending in endings:
+                matches_lemma = consonants[:-len(ending)] in stems
+                plural_lemma = (
+                    gender == 'f' and number == 'p' and state == 'a' and ending == 'ות'
+                    and consonants == lemma_consonants and len(consonants) >= 4
+                    and '\u05b9' in component['letters'][-2]['glyph']
+                )
+                if consonants.endswith(ending) and (matches_lemma or plural_lemma):
+                    split_component(
+                        component, len(ending), 'suffix', numbered_noun_code,
+                        'Dual ending' if number == 'd' else 'Plural ending',
+                        'Noun dual ending.' if number == 'd' else 'Noun plural ending.',
+                        at_end=True,
+                    )
+                    break
+            else:
+                continue
+            break
+
+    adjective_code = next((
+        re.fullmatch(r'H?Aa([mf])([sp])([ac])', code)
+        for code in str(raw_grammar or '').split('/')
+        if re.fullmatch(r'H?Aa([mf])([sp])([ac])', code)
+    ), None)
+    if adjective_code:
+        gender, number, state = adjective_code.groups()
+        endings = {
+            ('f', 's', 'a'): ('ה',), ('f', 's', 'c'): ('ת',),
+            ('m', 'p', 'a'): ('ימ',), ('m', 'p', 'c'): ('י',),
+            ('f', 'p', 'a'): ('ות', 'ת'), ('f', 'p', 'c'): ('ות', 'ת'),
+        }.get((gender, number, state), ())
+        for component in components:
+            if component['role'] != 'root' or not component.get('lemma'):
+                continue
+            consonants = _hebrew_consonants(component['letters'])
+            lemma = _hebrew_consonants(_hebrew_letter_data(component['lemma']))
+            for ending in endings:
+                if (
+                    not lemma.endswith('ה') and consonants.endswith(ending)
+                    and consonants[:-len(ending)] in _hebrew_lemma_stems(component['lemma'])
+                ):
+                    split_component(
+                        component, len(ending), 'suffix', adjective_code.group(0),
+                        'Adjective ending', 'Adjective gender or number ending.',
+                        at_end=True,
+                    )
+                    break
+            else:
+                continue
+            break
+
+    grammar_parts = str(raw_grammar or '').split('/')
+    if (
+        any(re.fullmatch(r'H?Vq[pq]1cs', code) for code in grammar_parts)
+        and any(re.fullmatch(r'H?Sp[123][mfc][sp]', code) for code in grammar_parts)
+    ):
+        for component in components:
+            letters = component['letters']
+            lemma = _hebrew_consonants(_hebrew_letter_data(component.get('lemma')))
+            if (
+                component['role'] == 'root' and len(letters) == 2
+                and len(lemma) == 3 and lemma[1] in 'וי' and lemma[-1] == 'ת'
+                and _hebrew_consonants(letters) == lemma[0] + lemma[-1]
+                and '\u05bc' in letters[-1]['glyph'] and '\u05b4' in letters[-1]['glyph']
+            ):
+                letters[-1]['possible_overlap_role'] = 'suffix'
     return components
 
 
@@ -1627,26 +2112,97 @@ def psalm_hebrew_reference(chapter, verse):
     return next((hebrew for hebrew, english in psalm_verse_mapping().items() if english == reference), reference)
 
 
+@lru_cache(maxsize=8)
+def _hebrew_verse_index(book_name):
+    """Index TAHOT rows by both the Hebrew and the primary English reference."""
+    book_code = _stepbible_book_code(book_name)
+    pattern = re.compile(
+        rf'{re.escape(book_code)}\.(\d+)\.(\d+)(?:\((\d+)\.(\d+)\))?'
+    )
+    rows_by_hebrew = {}
+    english_by_hebrew = {}
+    hebrew_by_english = {}
+    with _stepbible_file_for_book(book_name).open(encoding='utf-8') as handle:
+        for line in handle:
+            token, separator, _ = line.partition('#')
+            if not separator:
+                continue
+            match = pattern.fullmatch(token)
+            if not match:
+                continue
+            english = (int(match[1]), int(match[2]))
+            hebrew = (int(match[3] or match[1]), int(match[4] or match[2]))
+            rows_by_hebrew.setdefault(hebrew, []).append(line.rstrip('\n'))
+            english_by_hebrew.setdefault(hebrew, set()).add(english)
+            hebrew_by_english.setdefault(english, set()).add(hebrew)
+    return rows_by_hebrew, english_by_hebrew, hebrew_by_english
+
+
+def hebrew_english_references(book_name, chapter, verse):
+    if book_name not in _STEPBIBLE_OT_FILES:
+        return ((int(chapter), int(verse)),)
+    references = _hebrew_verse_index(book_name)[1].get((int(chapter), int(verse)), set())
+    numbered = sorted(reference for reference in references if reference[1])
+    return tuple(numbered or sorted(references))
+
+
+def english_hebrew_references(book_name, chapter, verse):
+    if book_name not in _STEPBIBLE_OT_FILES:
+        return ((int(chapter), int(verse)),)
+    return tuple(sorted(_hebrew_verse_index(book_name)[2].get((int(chapter), int(verse)), set())))
+
+
+@lru_cache(maxsize=1)
+def hebrew_reference_metadata():
+    book_by_code = {_stepbible_book_code(book): book for book in _STEPBIBLE_OT_FILES}
+    pattern = re.compile(r'([A-Za-z0-9]+)\.(\d+)\.(\d+)(?:\((\d+)\.(\d+)\))?')
+    reverse = {}
+    chapters = {}
+    for path in {_stepbible_file_for_book(book) for book in _STEPBIBLE_OT_FILES}:
+        with path.open(encoding='utf-8') as handle:
+            for line in handle:
+                token, separator, _ = line.partition('#')
+                match = pattern.fullmatch(token) if separator else None
+                if not match or match[1] not in book_by_code:
+                    continue
+                book = book_by_code[match[1]]
+                english = (int(match[2]), int(match[3]))
+                hebrew = (int(match[4] or match[2]), int(match[5] or match[3]))
+                chapters[book] = max(chapters.get(book, 0), hebrew[0])
+                reverse.setdefault((book, *english), set()).add(hebrew)
+    changes = {}
+    for (book, chapter, verse), references in reverse.items():
+        if verse and references != {(chapter, verse)}:
+            changes.setdefault(book, {})[f'{chapter}:{verse}'] = sorted(references)
+    return {'chapters': chapters, 'english_to_hebrew': changes}
+
+
+def _unambiguous_tagged_reference(book_name, chapter, verse):
+    references = hebrew_english_references(book_name, chapter, verse)
+    if len(references) != 1 or references[0][1] == 0:
+        return None
+    if english_hebrew_references(book_name, *references[0]) != ((int(chapter), int(verse)),):
+        return None
+    return references[0]
+
+
 def _stepbible_rows_for_verse(book_name, chapter, verse, reference_system='english'):
+    if reference_system == 'hebrew' and book_name in _STEPBIBLE_OT_FILES:
+        return list(_hebrew_verse_index(book_name)[0].get((int(chapter), int(verse)), []))
     book_code = _stepbible_book_code(book_name)
     reference_prefix = f'{book_code}.{chapter}.{verse}'
     reference = f'{book_code}.{chapter}:{verse}'
     rows = []
     path = _stepbible_file_for_book(book_name)
-    use_hebrew_reference = reference_system == 'hebrew' and book_name == 'Psalms'
     with path.open('r', encoding='utf-8') as handle:
         for raw_line in handle:
             line = raw_line.rstrip('\n')
-            if not line.startswith(f'{book_code}.' if use_hebrew_reference else reference_prefix):
+            if not line.startswith(reference_prefix):
                 continue
             reference_token, separator, _ = line.partition('#')
             if not separator:
                 continue
-            if use_hebrew_reference:
-                match = re.fullmatch(r'Psa\.(\d+)\.(\d+)(?:\((\d+)\.(\d+)\))?', reference_token)
-                if not match or (int(match[3] or match[1]), int(match[4] or match[2])) != (int(chapter), int(verse)):
-                    continue
-            elif _step_reference_to_display(reference_token) != reference:
+            if _step_reference_to_display(reference_token) != reference:
                 continue
             rows.append(line)
     return rows
@@ -1728,6 +2284,49 @@ def _parse_stepbible_row(line, language):
     }
 
 
+def _hebrew_analysis_may_be_incomplete(surface, grammar, components):
+    letters = _hebrew_letter_data(surface)
+    if not letters:
+        return False
+    component_letters = [letter for part in components for letter in part.get('letters', [])]
+    if [letter['glyph'][0] for letter in letters] != [letter['glyph'][0] for letter in component_letters]:
+        return True
+    if not any(part.get('role') == 'root' for part in components):
+        return False
+    if not grammar:
+        return True
+
+    def inferred_part(code, role):
+        return any(
+            part.get('role') == role and not part.get('strongs_number')
+            and part.get('morphology_code') == code
+            for part in components
+        )
+
+    for code in str(grammar or '').split('/'):
+        imperfect = re.fullmatch(r'H?V[a-zN][wiju]([123])([mfc])([sp])', code)
+        if imperfect:
+            person, gender, number = imperfect.groups()
+            suffix_expected = (
+                person == '2' and gender == 'f' and number == 's'
+            ) or (
+                person in {'2', '3'} and number == 'p'
+            )
+            if not inferred_part(code, 'prefix') or (
+                suffix_expected and not inferred_part(code, 'suffix')
+            ):
+                return True
+        perfect = re.fullmatch(r'H?V[a-zN][pq]([123])([mfc])([sp])', code)
+        if perfect:
+            person, gender, number = perfect.groups()
+            suffix_expected = person in {'1', '2'} or number == 'p' or gender == 'f'
+            if suffix_expected and not inferred_part(code, 'suffix'):
+                return True
+        if re.fullmatch(r'H?Nc[fmb][pd][ac]', code) and not inferred_part(code, 'suffix'):
+            return True
+    return False
+
+
 def _fallback_token_payload(raw_token, language):
     lookup_key = _normalize_lookup_word(raw_token, language)
 
@@ -1748,6 +2347,7 @@ def _fallback_token_payload(raw_token, language):
         'hebrew_letters': [],
         'gematria_value': 0,
         'tagging_source': '',
+        'hebrew_analysis_may_be_incomplete': language == 'hebrew' and bool(_HEBREW_LETTER_RE.search(raw_token)),
     }
 
 
@@ -1771,6 +2371,19 @@ def _token_payload_from_step_row(row_data, language):
     # Fall back to the richer STEP/outline data only when no local Strong's KJV definition is available.
     primary_label = _primary_translation_label(candidates) or str(row_data.get('translation_label') or '')
 
+    hebrew_letters = _hebrew_letter_data(row_data.get('surface_text') or '') if language == 'hebrew' else []
+    components = list(row_data.get('word_components') or [])
+    component_letters = [
+        (letter, component['strongs_number'] in {'H9017', 'H9018'})
+        for component in components for letter in component.get('letters') or []
+    ]
+    if [letter['glyph'][0] for letter in hebrew_letters] == [
+        letter['glyph'][0] for letter, _ in component_letters
+    ]:
+        for letter, (_, is_section_marker) in zip(hebrew_letters, component_letters):
+            if is_section_marker:
+                letter['is_section_marker'] = True
+
     return {
         'text': str(row_data.get('surface_text') or ''),
         'sentence_text': str(row_data.get('sentence_text') or row_data.get('surface_text') or ''),
@@ -1789,25 +2402,30 @@ def _token_payload_from_step_row(row_data, language):
         'candidates': candidates,
         'grammar': str(row_data.get('grammar') or ''),
         'grammar_details': list(row_data.get('grammar_details') or []),
-        'word_components': list(row_data.get('word_components') or []),
-        'hebrew_letters': _hebrew_letter_data(row_data.get('surface_text') or '') if language == 'hebrew' else [],
-        'gematria_value': sum(letter['value'] for letter in _hebrew_letter_data(row_data.get('surface_text') or '')) if language == 'hebrew' else 0,
+        'word_components': components,
+        'hebrew_letters': hebrew_letters,
+        'gematria_value': sum(letter['value'] for letter in hebrew_letters if not letter.get('is_section_marker')),
         'tagging_source': 'STEPBible',
+        'hebrew_analysis_may_be_incomplete': language == 'hebrew' and _hebrew_analysis_may_be_incomplete(
+            row_data.get('surface_text'), row_data.get('grammar'), components,
+        ),
     }
 
 
 def original_text_payload(book_name, chapter, verse, reference_system='english'):
-    cache_key = f'bible_study:original:v22:{reference_system}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v43:{reference_system}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
     language = original_language_code(book_name)
     bible = BibleTranslation().get(original_bible_id(book_name))
-    original_text = bible.verses(BibleLibBibleBooks[book_name], chapter, verse, chapter, verse) or ''
     step_rows = [_parse_stepbible_row(row, language) for row in _stepbible_rows_for_verse(book_name, chapter, verse, reference_system)]
     words = [_token_payload_from_step_row(row, language) for row in step_rows if row and str(row.get('surface_text') or '').strip()]
+    original_text = ''
     if not words:
+        if reference_system != 'hebrew' or language != 'hebrew':
+            original_text = bible.verses(BibleLibBibleBooks[book_name], chapter, verse, chapter, verse) or ''
         raw_tokens = _WORD_RE.findall(original_text)
         words = [_fallback_token_payload(token, language) for token in raw_tokens if str(token or '').strip()]
 
@@ -2012,7 +2630,7 @@ def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_sour
 
     tagged_source = str(tagged_source or '').strip().lower()
     digest = hashlib.sha256(text.encode('utf-8')).hexdigest()[:24]
-    cache_key = f'bible_study:alignment:v6:{reference_system}:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
+    cache_key = f'bible_study:alignment:v8:{reference_system}:{tagged_source}:{int(bool(allow_scoring))}:{book_name}:{chapter}:{verse}:{digest}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2030,15 +2648,16 @@ def english_alignment_payload(book_name, chapter, verse, verse_text, tagged_sour
 
     mapping = None
     method = ''
+    tagged_reference = (
+        _unambiguous_tagged_reference(book_name, chapter, verse)
+        if reference_system == 'hebrew' else (chapter, verse)
+    )
     if tagged_source in TAGGED_BIBLE_SOURCES:
-        tagged_chapter, tagged_verse = (chapter, verse)
-        if reference_system == 'hebrew' and book_name == 'Psalms':
-            tagged_chapter, tagged_verse = psalm_english_reference(chapter, verse)
-        mapping = _tagged_mapping(tagged_source, book_name, tagged_chapter, tagged_verse, display_words, words)
+        mapping = _tagged_mapping(tagged_source, book_name, *tagged_reference, display_words, words) if tagged_reference else None
         if mapping is not None:
             method = 'tagged'
 
-    if mapping is None and allow_scoring:
+    if mapping is None and allow_scoring and tagged_reference:
         specs = [_alignment_spec_for_word(word or {}) for word in words]
         mapping = _align_english_words(display_words, specs)
         method = 'lexicon'
@@ -2304,6 +2923,7 @@ def strongs_word_detail(code, language_code='en'):
         service = 9001 <= int(code[1:]) <= 9039 or int(code[1:]) in {853, 854}
         components = [{
             'strongs_number': candidate['source_strongs_number'],
+            'analysis_origin': 'lexicon',
             'surface': summary['lemma'], 'lemma': summary['lemma'],
             'role': 'grammatical' if service else 'root',
             'gloss': summary['gloss'], 'local_gloss': summary['local_gloss'], 'letters': letters,
@@ -2495,7 +3115,7 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v12:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v33:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2503,9 +3123,13 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     words = payload.get('words') or []
     phrases_by_token = {}
     phrases_by_component = {}
-    tagged_chapter, tagged_verse = (chapter, verse)
-    if reference_system == 'hebrew' and book_name == 'Psalms':
-        tagged_chapter, tagged_verse = psalm_english_reference(chapter, verse)
+    tagged_reference = (
+        _unambiguous_tagged_reference(book_name, chapter, verse)
+        if reference_system == 'hebrew' else (chapter, verse)
+    )
+    if not tagged_reference:
+        return payload
+    tagged_chapter, tagged_verse = tagged_reference
     tagged_segments = _tagged_segments(source, book_name, tagged_chapter, tagged_verse)
     assignments = _tagged_run_assignments(source, book_name, tagged_chapter, tagged_verse, words)
     for segment, (token_index, segment_words) in zip(tagged_segments, assignments):

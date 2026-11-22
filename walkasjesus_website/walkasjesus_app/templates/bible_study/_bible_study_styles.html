@@ -459,6 +459,10 @@
       justify-content: flex-end;
     }
 
+    :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-punctuation {
+      color: #757575;
+    }
+
     :is(.bible-study-shell, .waj-study-panels) .bs-original-sentence-token {
       cursor: pointer;
       border-radius: 0.45rem;
@@ -808,7 +812,8 @@
       font-size: 0.86rem;
     }
 
-    :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology {
+    :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology,
+    :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-origin {
       color: #6f633e;
       grid-column: 2 / -1;
       font-size: 0.78rem;
@@ -858,7 +863,8 @@
       }
 
       :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-gloss,
-      :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology {
+      :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology,
+      :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-origin {
         grid-column: 1 / -1;
       }
     }

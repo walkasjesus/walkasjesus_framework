@@ -10,6 +10,7 @@
 
 {% block content %}
 {{ psalm_english_references|json_script:"bs-psalm-english-references" }}
+{{ hebrew_reference_metadata|json_script:"bs-hebrew-reference-metadata" }}
 <section class="ftco-daily-verse img bible-study-top-banner" style="background-image:url('{% static 'images/bg_2.jpg' %}');">
   <div class="overlay"></div>
 </section>
@@ -405,6 +406,9 @@
                     {% endif %}
                     {% endwith %}
                     {% endwith %}
+                    {% endwith %}
+                    {% with warning=bible.verse_warnings|get_item:verse.verse_num %}
+                    {% if warning %}<small class="bs-verse-numbering-warning d-block text-muted">{{ warning }}</small>{% endif %}
                     {% endwith %}
                   </div>
                   <p class="bs-verse-text js-copy-selectable-line" data-bible-verse-text="1" data-copy-footer="{{ selected_book_label }} {{ selected_chapter }}:{{ verse.verse_num }}" data-copy-group="bs|{{ bible.id }}|{{ selected_book }}|{{ selected_chapter }}" data-copy-book-label="{{ selected_book_label|escape }}" data-copy-chapter="{{ selected_chapter }}" data-copy-verse="{{ verse.verse_num }}" data-copy-text="{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|striptags|escape }}">{{ bible.verse_texts|get_item:verse.verse_num|default:'—'|linebreaksbr }}</p>

@@ -50,31 +50,36 @@ the Bible Study page keeps its existing in-page passage navigation.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
 
-### Psalm verse numbering
+### Hebrew verse numbering
 
-Bible Study passage comparisons use Hebrew Psalm numbering, independent of the
-first selected translation. The TAHOT references explicitly map the primary
-English/KJV reference to its Hebrew reference, e.g. `Psa.30.1(30.2)`.
-The original-text and word-alignment requests send `reference_system=hebrew`;
-the shared detail-page controllers retain their existing English reference system.
-Caches distinguish the two systems.
+Old Testament passage selection, original text and chapter navigation use TAHOT's
+Hebrew references. Its paired English/KJV references provide the conversion to
+source verses, including chapter changes (Hebrew Hosea 2:3 is KJV 2:1, and
+Hebrew Joel 3:1 is KJV 2:28). Differing source references appear beside each
+translation. The original-text and alignment caches distinguish reference systems.
 
-Psalm 30:1 is the Hebrew title. HSV and Naardense number that title as verse 1.
-KJV does not number it: its first body verse (30:1) is displayed alongside Hebrew
-30:2, with its own source reference shown above the translation. A dash represents
-the absent numbered KJV title, not a substituted body verse. Chapter navigation
-uses TAHOT's Hebrew maximum, including the last body verse.
+The local Statenvertaling uses KJV storage slots, with embedded Dutch references
+such as `[01:12]`. These determine its displayed numbering and the corresponding
+HSV lookup outside Psalms; this assumes HSV follows those markers and is not an
+independently verified mapping for every passage. In Psalms the local SV's embedded
+markers are split to separate the title and body, while HSV uses Hebrew numbering.
+Naardense is treated as Hebrew-numbered for Psalms and Hosea; the local Complete
+Jewish Bible is treated as Hebrew-numbered for Hosea. Other profiles are not
+verified: unchanged references carry a warning, and at known numbering differences
+no potentially incorrect verse is substituted.
 
-The local Statenvertaling's CrossWire storage uses KJV slots, but its text embeds
-the Dutch/Hebrew markers such as `[030:2]`. Bible Study splits those markers to keep
-the title separate from the body; it does not change the underlying bundled data.
-Word links and Dutch contextual glosses use the same Hebrew-to-tagged-slot mapping.
-KJV editions are recognized by their existing tagging metadata; other translations
-retain their supplied Psalm numbering.
-Psalm occurrence previews convert English concordance references to Hebrew;
-translation-text search links convert KJV/local-SV storage references only.
-Detail-page links can explicitly request `reference_system=english`, which the
-page converts to the Hebrew passage before rendering.
+Psalm 30:1 is a Hebrew title and has no numbered KJV counterpart; a dash marks
+the absence. For merged or split verse boundaries the complete source verse is
+shown with a warning that it can contain adjacent Hebrew text. Ambiguous source
+boundaries do not produce automatic translated-word alignments.
+
+Concordance and KJV/local-SV search references are converted from English storage
+numbering; HSV search references outside Psalms use the local SV markers as an
+approximation. Unknown profiles cannot be converted reliably at known numbering
+differences. Dictionary occurrence results display the Hebrew reference and
+translation reference, and fetch translation text using that same mapping.
+Detail-page links may explicitly request `reference_system=english`.
+If such a range maps across Hebrew chapters, it must be opened as separate verses.
 
 ### Text search and dictionary word study
 
@@ -319,11 +324,11 @@ Cached 30 days under `bible_study:original-local:v11:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
 
-Hebrew word surfaces use the dark original-text brown (`#3d2f08`) for the tagged lexical root/stem component and gray
-for tagged prefixes, suffixes and grammatical components. This applies to the verse
+Hebrew word surfaces use the dark original-text brown (`#3d2f08`) for the lexical root/stem component and gray
+for tagged or confidently inferred prefixes, suffixes and grammatical components. This applies to the verse
 sentence, word buttons and selected-word details; a legend explains the colors.
-Coloring follows STEPBible component boundaries, not a guess based on individual
-letters. If the components do not cover the displayed word exactly, it stays
+Coloring follows STEPBible component boundaries, supplemented by the morphology and
+lemma checks described below. If the components do not cover the displayed word exactly, it stays
 unsegmented. Vowel points, accents, punctuation and copyable text are preserved.
 The lexical component is not necessarily a reconstructed three-consonant root.
 Hebrew lemmas beside Strong's numbers use the same colors in Bible Study and inline
@@ -342,17 +347,63 @@ TEHMC supplies explanations for morphology codes such as `HRd` (definite preposi
 (object suffix, second-person masculine plural). For Dutch, each piece uses its exact Statenvertaling
 rendering when available; otherwise its short gloss is localized. A word can consist only of
 attached grammatical parts, with no separate lexical root tagged.
+When the morphology aligns one-to-one with the tagged components, standalone prepositions,
+relative and subordinating particles, and negation are also classified as grammatical.
 
-Punctuation markers do not participate in alignment to the inflected surface. The dictionary
+Hebrew punctuation, including the verse-ending `׃`, is gray rather than part of the lexical word.
+Tagged section markers `ס` and `פ` are also gray and excluded from letter tooltips and gematria.
+The component details show the actual STEPBible-tagged punctuation and explain its function,
+including maqqef, paseq, sof pasuq, section markers and inverted nun.
+The dictionary
 lemma is retained separately while the component shows the actual pointed form in the verse.
 For Hitpael verbs, morphology plus an exact consonantal lemma match identifies the regular
 two-letter stem prefix (for example `הִתְ`, `מִתְ`, or `יִתְ`). This prefix has no separate
 Strong's number: it is verb-stem formation, not an independent service word or a fixed translation.
-Uncertain forms, including consonant changes that prevent an exact match, remain unsplit rather
-than inferring a root boundary from spelling alone. Imperfect verb forms are also split at their
-person prefix (Aleph, Nun, Tav or Yod) when morphology identifies the prefix and the following
-consonants begin with the tagged lemma; for example, the Yod in Genesis 8:3 is shown as a
-grammatical prefix rather than part of Strong's H2637 root.
+Imperfect and consecutive verb forms are split at their person prefix (Aleph, Nun, Tav or
+Yod) when morphology and the consonants support the tagged lemma, including matching
+weak final-he lemmas. Recognizable second-person feminine singular `י`, feminine-plural
+`נה`/`ןָ` and masculine-plural `וּ` endings are separated when the remaining stem still matches.
+Feminine singular construct
+nouns ending in `ת` are split when their lemma ends in `ה` and the other consonants match.
+The same lemma and morphology checks recognize selected Qal, Piel and Hiphil perfect endings,
+regular Niphal participle prefixes and plural endings, selected masculine Hiphil participle
+prefixes and plural endings, selected Qal participle and imperative endings, and matching noun
+plural endings, including some lemmas already recorded in the plural. For example, Exodus 6:7
+separates the Hiphil participle prefix in `הַמּוֹצִ֣יא`, and Job 12:6 separates the Hiphil
+perfect prefix in `הֵבִ֖יא`. Matching Piel masculine singular participle prefixes, selected
+feminine perfect and imperative endings, selected Niphal infinitive prefixes, regular dual noun
+endings, and matching adjective gender and number endings are also separated. The irregular
+plural stems of `בַּת` (H1323), `אָחוֹת` (H0269), and
+`חַטָּאת` (H2403) are recognized, including construct and possessive forms such as
+`בְּנוֹת` and `אַחְיוֹתֵיהֶם`. In Ezekiel 16:52 the distinctive `אַחְיוֹתֵךְ` is
+treated as plural despite the singular STEPBible tag, consistent with the plural form
+in BDB and the Bible Hub interlinear; other ambiguous singular forms retain their source tag.
+Some Qal weak-verb forms are recognized when assimilation is supported by the pointed
+spelling, and regular feminine construct-plural endings can precede a tagged possessive.
+For example, Genesis 26:35 separates the person prefix and ending of `וַתִּהְיֶ֖יןָ`
+and the construct ending of `מֹ֣רַת`. Uncertain forms remain unsplit: a brown lexical
+component may therefore still include an inflection that the data cannot reliably isolate.
+
+The original-text data retains heuristic flags for potentially incomplete analyses and selected
+possible overlaps between a stem and an ending. These flags are not displayed as question marks
+or underlines. They are editorial inferences, not confidence scores or explicit STEPBible letter
+boundaries, and do not detect every uncertain form.
+
+Each component's details identify whether it comes from a STEPBible tag, was inferred from the
+word form and morphology, or is a STEPBible lexicon lemma. A source tag does not certify the
+displayed boundaries or role: the analysis can adapt them.
+
+The manually assessed test cases in
+[`testdata/hebrew_segmentation_reference.json`](testdata/hebrew_segmentation_reference.json)
+record expected letter roles for 16 words and cite interlinear or lexicon sources. The Django
+test compares each pointed Hebrew letter and role with this fixed fixture. The sources support
+the forms and morphology, but the letter boundaries are editorial judgments, not independently
+certified annotations or proof of Old Testament-wide accuracy. Run the test from
+`walkasjesus_website`:
+
+```shell
+./venv/bin/python manage.py test walkasjesus_app.tests.DutchOriginalTextTestCase.test_reference_set_preserves_reviewed_letter_roles --noinput
+```
 
 The large Hebrew word distinguishes lexical roots from attached grammatical parts by color.
 Clicking the word or its question-mark icon expands the parts-and-letters panel.

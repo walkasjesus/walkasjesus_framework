@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="bs-passage-nav-shell">
+  <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="prev" data-step="{{ max_verses }}">
+    <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>{% trans 'Previous' %} {{ max_verses }} {% trans 'verses' %}
+  </button>
+  <h5 class="bs-passage-pill">{{ selected_book_label }} {{ selected_chapter }}:{{ selected_start_verse }}{% if selected_end_verse != selected_start_verse %}&ndash;{{ selected_end_verse }}{% endif %}</h5>
+  <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="next" data-step="{{ max_verses }}">
+    {% trans 'Next' %} {{ max_verses }} {% trans 'verses' %}<i class="fa fa-angle-right ml-1" aria-hidden="true"></i>
+  </button>
+</div>

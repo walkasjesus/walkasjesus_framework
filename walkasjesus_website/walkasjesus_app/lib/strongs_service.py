@@ -752,6 +752,25 @@ _HEBREW_COMPONENT_RE = re.compile(
 _HEBREW_TAGGED_PUNCTUATION = {
     'H9014': '־', 'H9015': '׀', 'H9016': '׃', 'H9019': '׆',
 }
+_HEBREW_SERVICE_MEANINGS = {
+    'H9001': {'en': 'and, but, in order that, so that, because', 'nl': 'en, maar, opdat, zodat, doordat'},
+    'H9002': {'en': 'and, but, in order that, so that, because', 'nl': 'en, maar, opdat, zodat, doordat'},
+    'H9003': {'en': 'in, on, at, with, by, against, during', 'nl': 'in, op, bij, met, door, tegen, tijdens'},
+    'H9004': {'en': 'like, as, according to', 'nl': 'zoals, als, volgens'},
+    'H9005': {'en': 'to, for, toward', 'nl': 'aan, voor, naar, tot'},
+    'H9006': {'en': 'from, out of, more than', 'nl': 'van, uit, meer dan'},
+    'H9007': {'en': 'who, which, that', 'nl': 'die, dat, welke'},
+    'H9008': {'en': 'question marker', 'nl': 'vraagpartikel'},
+    'H9009': {'en': 'the', 'nl': 'de, het'},
+    'H9011': {'en': 'toward, to', 'nl': 'naar, richting'},
+    'H9012': {'en': 'emphasis or volition', 'nl': 'nadruk of wens'},
+    'H9013': {'en': 'emphasis', 'nl': 'nadruk'},
+}
+_HEBREW_WAW_SUFFIX_MEANINGS = {
+    'Ps3m': {'en': 'his, its', 'nl': 'zijn, ervan'},
+    'Os3m': {'en': 'him, it', 'nl': 'hem, het'},
+    'Ss3m': {'en': 'he, it', 'nl': 'hij, het'},
+}
 _HEBREW_TRADITIONAL_IMAGES_NL = {
     'ox': 'os', 'house': 'huis', 'camel': 'kameel', 'door': 'deur',
     'window / breath': 'raam / adem', 'hook': 'haak', 'weapon': 'wapen',
@@ -858,11 +877,13 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
 
         numeric_match = re.match(r'^H(\d+)', strongs_number)
         numeric_code = int(numeric_match.group(1)) if numeric_match else 0
-        if 9001 <= numeric_code <= 9013:
+        if 9001 <= numeric_code <= 9010:
             component['role'] = 'prefix'
+        elif 9011 <= numeric_code <= 9013:
+            component['role'] = 'suffix'
         elif 9014 <= numeric_code <= 9019:
             component['role'] = 'grammatical'
-        elif 9020 <= numeric_code <= 9039:
+        elif 9020 <= numeric_code <= 9049:
             component['role'] = 'suffix'
         elif strongs_number in {'H0853', 'H0854'}:
             component['role'] = 'grammatical'
@@ -1466,6 +1487,24 @@ def _parse_hebrew_word_components(raw_components, raw_surface='', raw_grammar=''
                 and '\u05bc' in letters[-1]['glyph'] and '\u05b4' in letters[-1]['glyph']
             ):
                 letters[-1]['possible_overlap_role'] = 'suffix'
+    for component in components:
+        meanings = _HEBREW_SERVICE_MEANINGS.get(component['strongs_number'])
+        if component['role'] == 'suffix' and _hebrew_consonants(component['letters']) == 'ו':
+            meanings = _HEBREW_WAW_SUFFIX_MEANINGS.get(component['morphology_code'], meanings)
+            if (
+                component['analysis_origin'] == 'inferred'
+                and component['gloss'] == 'Verb conjugation ending'
+                and re.fullmatch(r'H?V[a-zN][a-z]3[mfc]p', component['morphology_code'])
+            ):
+                meanings = {'en': 'they (verb ending)', 'nl': 'zij (werkwoordsuitgang)'}
+            elif (
+                component['analysis_origin'] == 'inferred'
+                and component['gloss'] == 'Verb conjugation ending'
+                and re.fullmatch(r'H?V[a-zN][a-z]2[mfc]p', component['morphology_code'])
+            ):
+                meanings = {'en': 'you plural (verb ending)', 'nl': 'jullie (werkwoordsuitgang)'}
+        if meanings:
+            component['possible_meanings'] = meanings
     return components
 
 
@@ -2474,7 +2513,7 @@ def _token_payload_from_step_row(row_data, language):
 
 
 def original_text_payload(book_name, chapter, verse, reference_system='english'):
-    cache_key = f'bible_study:original:v44:{reference_system}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original:v45:{reference_system}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
@@ -2981,7 +3020,7 @@ def strongs_word_detail(code, language_code='en'):
     letters = _hebrew_letter_data(summary['lemma']) if language == 'hebrew' else []
     components = []
     if language == 'hebrew':
-        service = 9001 <= int(code[1:]) <= 9039 or int(code[1:]) in {853, 854}
+        service = 9001 <= int(code[1:]) <= 9049 or int(code[1:]) in {853, 854}
         components = [{
             'strongs_number': candidate['source_strongs_number'],
             'analysis_origin': 'lexicon',
@@ -3176,7 +3215,7 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
     if not source:
         return payload
 
-    cache_key = f'bible_study:original-local:v34:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
+    cache_key = f'bible_study:original-local:v35:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached

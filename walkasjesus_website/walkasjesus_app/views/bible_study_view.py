@@ -51,6 +51,31 @@ from walkasjesus_app.models.bibles import LocalCompleteJewishBible, LocalStatenv
 logger = logging.getLogger(__name__)
 
 
+def _study_numbering_profile(bible):
+    name = str(getattr(bible, 'name', '') or '').lower()
+    abbreviation = str(getattr(bible, 'abbreviation', '') or '').upper()
+    if isinstance(bible, LocalStatenvertalingBible):
+        return 'sv'
+    if isinstance(bible, LocalCompleteJewishBible):
+        return 'cjb'
+    if 'naardense' in name:
+        return 'naardense'
+    if abbreviation == 'HSV' or 'herziene statenvertaling' in name:
+        return 'hsv'
+    if abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name:
+        return 'kjv'
+    return 'unknown'
+
+
+def _public_study_warning(warning, sources):
+    if warning in {
+        _('Verse numbering for this translation has not been verified.'),
+        _('Verse numbering for this translation is not verified for this passage.'),
+    }:
+        return '' if sources else _('This passage cannot be shown reliably in this translation. Choose another translation.')
+    return warning
+
+
 def _study_verse_references(bible, book, chapter, verse, reference_system):
     """Return storage references, displayed references, and any mapping warning."""
     current = (int(chapter), int(verse))
@@ -60,19 +85,18 @@ def _study_verse_references(bible, book, chapter, verse, reference_system):
     if not english:
         return (), (), _('No Hebrew verse mapping is available for this passage.')
     numbered = tuple(ref for ref in english if ref[1])
-    if isinstance(bible, LocalCompleteJewishBible) and book == 'Hosea':
+    profile = _study_numbering_profile(bible)
+    if profile == 'cjb' and book == 'Hosea':
         return (current,), (current,), ''
 
-    name = str(getattr(bible, 'name', '') or '').lower()
-    abbreviation = str(getattr(bible, 'abbreviation', '') or '').upper()
-    if 'naardense' in name and book in {'Psalms', 'Hosea'}:
+    if profile == 'naardense' and book in {'Psalms', 'Hosea'}:
         return (current,), (current,), ''
-    is_sv = isinstance(bible, LocalStatenvertalingBible)
-    is_hsv = abbreviation == 'HSV' or 'herziene statenvertaling' in name
+    is_sv = profile == 'sv'
+    is_hsv = profile == 'hsv'
     if book == 'Psalms' and (is_sv or is_hsv):
         return (current,), (current,), ''
 
-    is_kjv = abbreviation in _TAGGED_KJV_ABBREVIATIONS or 'king james' in name
+    is_kjv = profile == 'kjv'
     if not (is_sv or is_hsv or is_kjv):
         if numbered == (current,) and english_hebrew_references(book, *current) == (current,):
             return (current,), (current,), _('Verse numbering for this translation has not been verified.')
@@ -829,6 +853,7 @@ class BibleStudyView(View):
                 verse_warnings = {}
                 for v in verse_range:
                     sources, displayed, warning = _study_verse_references(bible_obj, book, chapter, v, 'hebrew')
+                    warning = _public_study_warning(warning, sources)
                     verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
                     if warning:
                         verse_warnings[str(v)] = warning
@@ -939,6 +964,7 @@ class BibleStudyVersesView(View):
         verse_warnings = {}
         for v in range(start_verse, end_verse + 1):
             sources, displayed, warning = _study_verse_references(bible, book_name, chapter, v, reference_system)
+            warning = _public_study_warning(warning, sources)
             verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
             if warning:
                 verse_warnings[str(v)] = warning
@@ -1175,7 +1201,7 @@ class BibleStudySearchView(View):
             if mode == 'lexicon':
                 candidates = search_strongs_dictionary(query, request.LANGUAGE_CODE)
                 candidates = [item for item in candidates if item['strongs_number'].startswith(prefix)]
-                if search_range:
+                if search_range and request.GET.get('study_scope') != 'all':
                     candidates = [item for item in candidates
                                   if any(self.reference_in_scope(ref, search_range)
                                          for code in item.get('source_strongs_numbers', [item['strongs_number']])
@@ -1184,6 +1210,9 @@ class BibleStudySearchView(View):
                     return JsonResponse({
                         'mode': 'lexicon', 'query': query, 'total': len(candidates),
                         'candidates': candidates[offset:offset + limit],
+                        'word_study': {'candidates': candidates[offset:offset + limit], 'dictionary': True},
+                        'page': offset // limit + 1,
+                        'page_count': max(1, (len(candidates) + limit - 1) // limit),
                         'offset': offset, 'limit': limit,
                     })
                 codes = [item['strongs_number'] for item in candidates]
@@ -1226,7 +1255,8 @@ class BibleStudySearchView(View):
                     translation_refs = []
                     if hebrew_refs:
                         for hebrew_chapter, hebrew_verse in hebrew_refs:
-                            _, displayed, warning = _study_verse_references(bible, book, hebrew_chapter, hebrew_verse, 'hebrew')
+                            sources, displayed, warning = _study_verse_references(bible, book, hebrew_chapter, hebrew_verse, 'hebrew')
+                            warning = _public_study_warning(warning, sources)
                             for displayed_ref in displayed:
                                 if displayed_ref not in translation_refs:
                                     translation_refs.append(displayed_ref)

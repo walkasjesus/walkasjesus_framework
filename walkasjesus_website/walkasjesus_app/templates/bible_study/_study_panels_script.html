@@ -230,6 +230,7 @@
       function hebrewWordStudyHtml(word) {
         var components = (word && word.word_components) || [];
         var letters = (word && word.hebrew_letters) || [];
+        var isDutch = String($root.data('commentary-language') || '').slice(0, 2) === 'nl';
         if (!components.length && !letters.length) {
           return '';
         }
@@ -242,9 +243,7 @@
           grammatical: '{% trans "Grammatical element" %}'
         };
         var originLabels = {
-          stepbible: '{% trans "STEPBible-tagged component; role and boundaries may be adapted by the analysis." as bsi18n_origin_step %}{{ bsi18n_origin_step|escapejs }}',
-          inferred: '{% trans "Inferred from morphology and word form." as bsi18n_origin_inferred %}{{ bsi18n_origin_inferred|escapejs }}',
-          lexicon: '{% trans "STEPBible lexicon lemma." as bsi18n_origin_lexicon %}{{ bsi18n_origin_lexicon|escapejs }}'
+          inferred: '{% trans "Inferred from morphology and word form." as bsi18n_origin_inferred %}{{ bsi18n_origin_inferred|escapejs }}'
         };
         var punctuationLabels = {
           H9014: '{% trans "Maqqef: connects words" as bsi18n_maqqef %}{{ bsi18n_maqqef|escapejs }}',
@@ -263,12 +262,16 @@
           var localMorphology = String(component.local_description || '').trim();
           var morphology = localMorphology || String(component.morphology_description || '').trim();
           var morphologyClass = localMorphology ? '' : ' bs-translatable-text';
+          var meanings = component.possible_meanings || {};
+          var possibleMeanings = String(meanings[isDutch ? 'nl' : 'en'] || '').trim();
+          var meaningsLabel = isDutch ? 'Mogelijke betekenissen (afhankelijk van de context)' : 'Possible meanings (depending on context)';
           return '<div class="bs-hebrew-component-row bs-hebrew-part-' + escapeHtml(component.role || 'grammatical') + '">' +
             '<span class="bs-hebrew-component-role">' + escapeHtml(roleLabels[component.role] || roleLabels.grammatical) + '</span>' +
             (surface ? '<span class="bs-hebrew-component-letters bs-original-language-hbo">' +
               ((component.letters || []).length ? hebrewLetterDetailsHtml(component.letters) : hebrewPunctuationHtml(surface)) + '</span>' : '<span></span>') +
             '<code>' + escapeHtml(String(component.strongs_number || '')) + '</code>' +
             (gloss ? '<span class="bs-hebrew-component-gloss' + glossClass + '">' + escapeHtml(gloss) + '</span>' : '<span></span>') +
+            (possibleMeanings ? '<small class="bs-hebrew-component-meanings">' + escapeHtml(meaningsLabel + ': ' + possibleMeanings) + '</small>' : '') +
             (morphology ? '<small class="bs-hebrew-component-morphology' + morphologyClass + '">' + escapeHtml(morphology) + '</small>' : '') +
             (originLabels[component.analysis_origin] ? '<small class="bs-hebrew-component-origin">' + escapeHtml(originLabels[component.analysis_origin]) + '</small>' : '') +
           '</div>';

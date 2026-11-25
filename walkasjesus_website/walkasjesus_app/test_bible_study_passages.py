@@ -1,13 +1,14 @@
 import json
 import tempfile
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib.bible_api.api_bible import ApiBible
 from django.core.cache import cache
 from django.core.management import call_command, CommandError
-from django.test import SimpleTestCase, TestCase, override_settings
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
 from walkasjesus_app.views.bible_study_view import (
@@ -29,6 +30,34 @@ from walkasjesus_app.lib.strongs_service import (
     psalm_verse_mapping,
 )
 from walkasjesus_app.models.bibles import LocalStatenvertalingBible
+from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
+
+
+class BibleNumberingAdminTest(TestCase):
+    @patch('walkasjesus_app.views.admin.admin_bible_view.CacheController')
+    @patch('walkasjesus_app.views.admin.admin_bible_view.Services')
+    @patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslationMetaData')
+    @patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslation')
+    @patch.object(AdminBibleView, 'bible_count_in_cache', return_value=(1, 2))
+    def test_numbering_profiles_and_limitations_are_visible_only_to_staff(self, count, translations, metadata, services, controller):
+        bibles = [
+            SimpleNamespace(id='unknown', name='Unknown translation', abbreviation='UNK', language='en'),
+            SimpleNamespace(id='hsv', name='Herziene Statenvertaling', abbreviation='HSV', language='nl'),
+        ]
+        translations.return_value.all.return_value = bibles
+        metadata.objects.filter.return_value.exists.return_value = True
+        metadata.objects.get.return_value.is_enabled = True
+        services.return_value.cache.cache_items_not_persisted = 0
+        request = RequestFactory().get('/admin/bibles/')
+        request.session = {}
+        request.user = SimpleNamespace(is_active=True, is_staff=True)
+        response = AdminBibleView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Verse numbering profile and limitations')
+        self.assertContains(response, 'Verse numbering for this translation has not been verified.')
+        self.assertContains(response, 'not independently verified')
+        request.user.is_staff = False
+        self.assertEqual(AdminBibleView.as_view()(request).status_code, 302)
 
 
 class PsalmVersificationTest(SimpleTestCase):
@@ -210,6 +239,28 @@ class BibleStudyPassagesTest(TestCase):
             '1': 'Combined passage.', '2': 'Combined passage.', '3': 'Combined passage.',
             '4': 'Combined passage.', '5': 'Next verse.',
         })
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_unverified_numbering_is_hidden_but_unavailable_passages_remain_explicit(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        with patch.object(self.bible, 'verses', return_value='Verse text.') as verses:
+            response = self.client.post(reverse('commandments:bible_study_verses'), {
+                'bible_id': 'bgt', 'book': 'Exodus', 'chapter': 18,
+                'start_verse': 11, 'end_verse': 15, 'reference_system': 'hebrew',
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json()['verse_warnings'], {})
+            self.assertEqual(response.json()['verses']['11'], 'Verse text.')
+            verses.reset_mock()
+            response = self.client.post(reverse('commandments:bible_study_verses'), {
+                'bible_id': 'bgt', 'book': 'Hosea', 'chapter': 2,
+                'start_verse': 3, 'end_verse': 3, 'reference_system': 'hebrew',
+            })
+        self.assertEqual(response.json()['verses'], {'3': ''})
+        self.assertIn('Choose another translation', response.json()['verse_warnings']['3'])
+        self.assertNotIn('not verified', response.json()['verse_warnings']['3'])
+        verses.assert_not_called()
 
     @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')

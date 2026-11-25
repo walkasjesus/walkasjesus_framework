@@ -43,11 +43,14 @@
         <img src="{% static 'images/bible.png' %}" width="55px" alt="">
       </div>
       <div class="our-services-text" style="flex:1;">
-        <h4 class="mb-1">{% trans 'Bible Study - Settings' %}</h4>
-        <button class="btn law-filter-legend-toggle law-filter-legend-btn btn-sm" type="button"
-          data-toggle="collapse" data-target="#bibleStudyLegend" aria-expanded="false" aria-controls="bibleStudyLegend">
-          <span class="ion-ios-information-circle-outline mr-1"></span> {% trans 'Legend — how does this page work?' %} <span class="ion-ios-arrow-down ml-1"></span>
-        </button>
+        <div class="bs-settings-header">
+          <h4 class="mb-0">{% trans 'Bible Study - Settings' %}</h4>
+          <button class="btn law-filter-legend-toggle law-filter-legend-btn btn-sm" type="button"
+            data-toggle="collapse" data-target="#bibleStudyLegend" aria-expanded="false" aria-controls="bibleStudyLegend"
+            title="{% trans 'Legend — how does this page work?' %}" aria-label="{% trans 'Legend — how does this page work?' %}">
+            <span class="ion-ios-information-circle-outline mr-1" aria-hidden="true"></span> {% trans 'Legend' %} <span class="ion-ios-arrow-down ml-1" aria-hidden="true"></span>
+          </button>
+        </div>
 
         <hr class="my-3">
 
@@ -111,6 +114,10 @@
                     <label class="form-check-label" for="bs-search-greek">{% trans 'Greek' %}</label>
                   </div>
                 </div>
+                <div class="form-check mt-2">
+                  <input type="checkbox" class="form-check-input" id="bs-dictionary-search-bible" checked>
+                  <label class="form-check-label" for="bs-dictionary-search-bible">{% trans "Also search Strong in Bible" %}</label>
+                </div>
               </div>
             </div>
           </div>
@@ -137,7 +144,7 @@
             {% for slot in "1234" %}
             <div class="col-md-3 mb-3 bs-bible-selector-col" id="bs-col-{{ forloop.counter }}"{% if forloop.counter > visible_bible_slots %} style="display:none;"{% endif %}>
               <label for="bs-bible-{{ forloop.counter }}" class="form-label d-flex align-items-center justify-content-between">
-                <span>{% trans 'Translation' %} {{ forloop.counter }}</span>
+                <span>{% trans 'Bible translation' %} {{ forloop.counter }}</span>
                 <button type="button" class="btn btn-link btn-sm p-0 text-danger bs-remove-bible" data-col="{{ forloop.counter }}" title="{% trans 'Remove translation' %}" aria-label="{% trans 'Remove translation' %}">
                   <i class="fa fa-times-circle"></i>
                 </button>
@@ -166,125 +173,8 @@
       </div>
     </div>
 
-    <div class="modal fade" id="bsWordSearchAdvancedModal" tabindex="-1" role="dialog" aria-labelledby="bsWordSearchAdvancedTitle" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="bsWordSearchAdvancedTitle">{% trans 'Search options' %}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-            <div class="bs-search-options-stack">
-              <p class="small text-muted">{% trans 'These options apply only to searching words in Bible verses.' %}</p>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-scope" class="form-label">{% trans 'Search in' %}</label>
-                  <p class="small text-muted">{% trans 'Pick the Bible section to search. Choose custom Bible books to limit from one book to another.' %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select selectpicker" id="bs-search-scope" data-live-search="false" data-width="100%" data-size="30">
-                      <option value="whole">{% trans 'The Whole Bible' %}</option>
-                      <option value="ot">{% trans 'Old Testament' %}</option>
-                      <option value="nt">{% trans 'New Testament' %}</option>
-                      <option value="torah">{% trans 'Torah' %}</option>
-                      <option value="prophets">{% trans "Prophets (Nevi'im)" %}</option>
-                      <option value="writings">{% trans 'Writings (Ketuvim)' %}</option>
-                      <option value="gospels">{% trans 'Gospels' %}</option>
-                      <option value="pauline">{% trans 'Pauline Epistles' %}</option>
-                      <option value="general">{% trans 'General Epistles' %}</option>
-                      <option value="custom_books">{% trans 'Custom Bible books' %}</option>
-                    </select>
-                  </div>
-                  <div class="bs-search-custom-range">
-                    <div class="bs-search-custom-range-row">
-                      <div>
-                        <label for="bs-search-from-book" class="form-label">{% trans 'From' %}</label>
-                        <div class="select law-filter-select-wrap">
-                          <select class="form-control law-filter-select" id="bs-search-from-book">
-                            {% for book_name, book_label in bible_books %}<option value="{{ book_name }}">{{ book_label }}</option>{% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                      <div>
-                        <label for="bs-search-to-book" class="form-label">{% trans 'To' %}</label>
-                        <div class="select law-filter-select-wrap">
-                          <select class="form-control law-filter-select" id="bs-search-to-book">
-                            {% for book_name, book_label in bible_books %}<option value="{{ book_name }}"{% if book_name == 'Revelation' %} selected{% endif %}>{{ book_label }}</option>{% endfor %}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-limit" class="form-label">{% trans 'Results per page' %}</label>
-                  <p class="small text-muted">{% trans 'Choose how many verses to show on each result page.' %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select" id="bs-search-limit">
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50" selected>50</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-sort" class="form-label">{% trans 'Result order' %}</label>
-                  <p class="small text-muted">{% trans 'Keep canonical Bible order or prioritize best matches first.' %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select" id="bs-search-sort">
-                      <option value="canonical" selected>{% trans 'Bible order' %}</option>
-                      <option value="relevance">{% trans 'Best matches first' %}</option>
-                      <option value="reverse-canonical">{% trans 'Reverse Bible order' %}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-fuzziness" class="form-label">{% trans 'Match strictness' %}</label>
-                  <p class="small text-muted">{% trans 'Set how strict spelling should be while searching.' %}</p>
-                </div>
-                <div class="bs-search-option-control">
-                  <div class="select law-filter-select-wrap">
-                    <select class="form-control law-filter-select" id="bs-search-fuzziness">
-                      <option value="AUTO">{% trans 'Automatic' %}</option>
-                      <option value="0">{% trans 'Exact spelling only' %}</option>
-                      <option value="1">{% trans 'Allow close spelling' %}</option>
-                      <option value="2">{% trans 'Allow broader spelling' %}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="bs-search-option-row">
-                <div class="bs-search-option-copy">
-                  <label for="bs-search-exact-phrase" class="form-label">{% trans 'Exact phrase mode' %}</label>
-                  <p class="small text-muted">{% trans 'Enable this to search the full query as one exact phrase.' %}</p>
-                </div>
-                <div class="bs-search-option-control d-flex align-items-center">
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox" value="1" id="bs-search-exact-phrase">
-                    <label class="form-check-label" for="bs-search-exact-phrase">{% trans 'Search as one exact phrase' %}</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn commentary-action-btn" data-dismiss="modal"><i class="fa fa-times mr-1" aria-hidden="true"></i>{% trans 'Cancel' %}</button>
-            <button type="button" class="btn commentary-action-btn" id="bs-search-advanced-apply"><i class="fa fa-search mr-1" aria-hidden="true"></i>{% trans 'Apply and search' %}</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "bible_study/_search_options.html" with modal_id="bsWordSearchAdvancedModal" search_prefix="bs-search" strong_search=False %}
+    {% include "bible_study/_search_options.html" with modal_id="bsDictionarySearchAdvancedModal" search_prefix="bs-dictionary-search" strong_search=True %}
 
     <div class="collapse mt-3" id="bibleStudyLegend">
       <div class="card card-body bg-light border-0">
@@ -297,17 +187,18 @@
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-list-ol"></i></span>{% trans 'Verse range' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose an autocomplete suggestion, press Enter or click Search to open it. Suggestions respect chapter boundaries and show up to' %} {{ max_verses }} {% trans 'verses.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'Use Previous and Next above the passage to move through the Bible. Combine verses gives continuous text; turn it off for separate verse cards and word-by-word study.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Use Previous and Next above or below the passage to move through the Bible. Combine verses gives continuous text; turn it off for separate verse cards and word-by-word study.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-search"></i></span>{% trans 'Search words in Bible translation' %}</h6>
             <p class="small text-muted mb-1">{% trans 'The second box searches only the first selected translation, without Hebrew/Greek word study. Matching words are highlighted; click a result to open its passage. Search and Enter do the same thing.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'Only this box has Options: choose a Bible section or custom book range, results per page, sorting, spelling strictness and exact phrase matching. Automatic spelling can return related spellings, not just the literal query. Local translations use literal matching and do not support fuzzy spelling.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Text search options include Bible sections, custom book ranges, results per page, sorting, spelling strictness and exact phrase matching. Local translations use literal matching and do not support fuzzy spelling.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-book"></i></span>{% trans "Search words in Strong's Dictionary" %}</h6>
             <p class="small text-muted mb-1">{% trans 'Use the third box for a word meaning, a Strong’s number such as H2416 or G26, or a Hebrew/Greek word. Check Hebrew, Greek or both; at least one language must be selected. Hebrew is selected initially.' %}</p>
-            <p class="small text-muted mb-1">{% trans 'Dictionary search uses local lemmas, English meanings and available Dutch Statenvertaling renderings. It does not require the typed word to appear in the selected translation. It searches the whole Bible in Bible order, with 50 occurrence verses per page; the second box’s Options do not apply.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Dictionary search uses local lemmas, English meanings and available Dutch Statenvertaling renderings. The typed word need not appear in the translation. Options next to Search selected words in Bible control the Bible section, book range, results per page and Bible order. These settings are separate from text search options.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Also search Strong in Bible is on by default. Turn it off to search only the local dictionary, without fetching Bible verses. Select words and use Search selected words in Bible to fetch their occurrences in the first selected translation.' %}</p>
             <p class="small text-muted mb-0">{% trans 'The first matching Strong’s word starts selected. Select more word buttons to include their occurrence verses; deselect them to remove those verses. Deselecting all shows no verses. Selection is kept while paging, and page buttons show reference ranges. Close the result panel with its cross.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
@@ -351,15 +242,7 @@
   {% if selected_bibles %}
   <div class="row mb-2">
     <div class="col-12">
-      <div class="bs-passage-nav-shell">
-        <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="prev" data-step="{{ max_verses }}">
-          <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>{% trans 'Previous' %} {{ max_verses }} {% trans 'verses' %}
-        </button>
-        <h5 class="bs-passage-pill">{{ selected_book_label }} {{ selected_chapter }}:{{ selected_start_verse }}{% if selected_end_verse != selected_start_verse %}&ndash;{{ selected_end_verse }}{% endif %}</h5>
-        <button type="button" class="btn btn-sm commentary-action-btn bs-passage-nav-btn" data-bs-nav="next" data-step="{{ max_verses }}">
-          {% trans 'Next' %} {{ max_verses }} {% trans 'verses' %}<i class="fa fa-angle-right ml-1" aria-hidden="true"></i>
-        </button>
-      </div>
+      {% include "bible_study/_passage_navigation.html" %}
       <p class="text-muted small mb-0 bs-results-head-badges">
         {% for bible in selected_bibles %}
         <span class="badge badge-secondary mr-1">{{ bible.display_name }}</span>
@@ -432,6 +315,9 @@
     {% endfor %}
     </div>
   </div>
+  <div class="row mt-2"><div class="col-12 bs-bottom-navigation">
+    {% include "bible_study/_passage_navigation.html" %}
+  </div></div>
   {% else %}
   <div class="row">
     <div class="col-12">

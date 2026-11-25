@@ -1164,7 +1164,7 @@ class DutchOriginalTextTestCase(TestCase):
             ]),
             ('Hosea', 2, 3, 'עֲרֻמָּ', [('root', 'עֲרֻמָּ֔'), ('suffix', 'ה')]),
             ('Hosea', 2, 3, 'הִוָּ', [
-                ('prefix', 'הִ'), ('root', 'וָּֽלְדָ֑'), ('grammatical', 'הּ'),
+                ('prefix', 'הִ'), ('root', 'וָּֽלְדָ֑'), ('suffix', 'הּ'),
             ]),
         )
         for book, chapter, verse, start, expected in cases:
@@ -1221,14 +1221,14 @@ class DutchOriginalTextTestCase(TestCase):
             ('Deuteronomy', 6, 5, 'וְאָ֣הַב', [('prefix', 'וְ'), ('root', 'אָ֣הַבְ'), ('suffix', 'תָּ֔')]),
             ('Genesis', 2, 2, 'וַיִּשְׁ', [('prefix', 'וַ'), ('prefix', 'יִּ'), ('root', 'שְׁבֹּת֙')]),
             ('Genesis', 24, 61, 'וַתִּרְ', [('prefix', 'וַ'), ('prefix', 'תִּ'), ('root', 'רְכַּ֙בְ'), ('suffix', 'נָה֙')]),
-            ('Exodus', 20, 12, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִכ֣'), ('suffix', 'וּ'), ('prefix', 'ן')]),
+            ('Exodus', 20, 12, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִכ֣'), ('suffix', 'וּ'), ('suffix', 'ן')]),
             ('Exodus', 6, 7, 'וִֽידַע', [('prefix', 'וִֽ'), ('root', 'ידַעְ'), ('suffix', 'תֶּ֗ם')]),
             ('Leviticus', 19, 18, 'וְאָֽהַב', [('prefix', 'וְ'), ('root', 'אָֽהַבְ'), ('suffix', 'תָּ֥')]),
             ('Leviticus', 19, 3, 'תִּשְׁ', [('prefix', 'תִּ'), ('root', 'שְׁמֹ֑ר'), ('suffix', 'וּ')]),
             ('Numbers', 6, 25, 'יָאֵ', [('prefix', 'יָ'), ('root', 'אֵ֨ר')]),
             ('Numbers', 15, 40, 'וַעֲשׂ', [('prefix', 'וַ'), ('root', 'עֲשִׂי'), ('suffix', 'תֶ֖ם')]),
             ('Deuteronomy', 5, 16, 'אָבִ', [('root', 'אָבִ֙י'), ('suffix', 'ךָ֙')]),
-            ('Deuteronomy', 5, 16, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִיכֻ֣'), ('prefix', 'ן')]),
+            ('Deuteronomy', 5, 16, 'יַאֲרִ', [('prefix', 'יַ'), ('root', 'אֲרִיכֻ֣'), ('suffix', 'ן')]),
             ('Deuteronomy', 6, 4, 'אֱלֹהֵ', [('root', 'אֱלֹהֵ֖י'), ('suffix', 'נוּ')]),
             ('Leviticus', 26, 36, 'וְהַנִּשְׁ', [
                 ('prefix', 'וְ'), ('prefix', 'הַ'), ('prefix', 'נִּ'),
@@ -1320,6 +1320,57 @@ class DutchOriginalTextTestCase(TestCase):
 
         dutch_genesis_word = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
         self.assertEqual(dutch_genesis_word['word_components'][1]['local_gloss'], 'beginne')
+
+    def test_service_meanings_are_separate_from_occurrence_glosses(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        genesis = localized_original_text_payload('Genesis', 1, 1, 'nl')['words'][0]
+        prefix = genesis['word_components'][0]
+        self.assertEqual(prefix['strongs_number'], 'H9003')
+        self.assertEqual(prefix['gloss'], 'in')
+        self.assertIn('met', prefix['possible_meanings']['nl'].split(', '))
+        self.assertEqual(genesis['word_components'][1]['local_gloss'], 'beginne')
+
+        conjunction = original_text_payload('Genesis', 1, 3)['words'][0]['word_components'][0]
+        self.assertEqual(conjunction['strongs_number'], 'H9001')
+        self.assertEqual(conjunction['possible_meanings']['nl'].split(', '), [
+            'en', 'maar', 'opdat', 'zodat', 'doordat',
+        ])
+        other_conjunction = original_text_payload('Genesis', 1, 2)['words'][0]['word_components'][0]
+        self.assertEqual(other_conjunction['possible_meanings'], conjunction['possible_meanings'])
+        for code, letter, gloss, meaning in (
+            ('H9004', 'כ', 'like', 'zoals'),
+            ('H9005', 'ל', 'to', 'voor'),
+            ('H9006', 'מ', 'from', 'uit'),
+        ):
+            with self.subTest(code=code):
+                part = _parse_hebrew_word_components(f'{code}={letter}={gloss}')[0]
+                self.assertIn(meaning, part['possible_meanings']['nl'].split(', '))
+
+    def test_waw_suffix_meanings_follow_morphology_not_the_letter_alone(self):
+        from walkasjesus_app.lib.strongs_service import _parse_hebrew_word_components
+
+        for raw, surface, grammar, expected in (
+            ('{H3027=יָד=hand}/H9023=Ps3m=his', 'יָד/וֹ', 'HNcmsc/Sp3ms', 'zijn'),
+            ('H9005=ל=to/{H9033=Os3m=him}', 'ל/וֹ', 'HR/Sp3ms', 'hem'),
+            ('{H3205=יָלַד=beget}/H9043=Ss3m=he', 'הוֹלִיד/וֹ', 'HVhcc/Sp3ms', 'hij'),
+            ('{H1980=הָלַךְ=walk}', 'הָלְכוּ', 'HVqp3cp', 'zij'),
+            ('{H1980=הָלַךְ=walk}', 'הִלְכוּ', 'HVqv2mp', 'jullie'),
+        ):
+            with self.subTest(grammar=grammar):
+                parts = _parse_hebrew_word_components(raw, surface, grammar)
+                suffix = parts[-1]
+                self.assertEqual(suffix['role'], 'suffix')
+                self.assertIn(expected, suffix['possible_meanings']['nl'])
+
+        directional = _parse_hebrew_word_components(
+            '{H0776=אֶרֶץ=land}/H9011=ה=to', 'אַרְצָ/ה', 'HNcfsa/Sd'
+        )[-1]
+        self.assertEqual(directional['role'], 'suffix')
+        self.assertIn('naar', directional['possible_meanings']['nl'])
+        subject_suffix = original_text_payload('Genesis', 2, 4)['words'][4]['word_components'][-1]
+        self.assertEqual(subject_suffix['strongs_number'], 'H9048')
+        self.assertEqual(subject_suffix['role'], 'suffix')
 
     @patch('walkasjesus_app.views.user_preferences._translate_google_batch')
     def test_dutch_payload_localizes_grammatical_component_glosses(self, mock_translate_batch):
@@ -2417,6 +2468,28 @@ class BibleTranslationsForLanguageViewTestCase(SimpleTestCase):
 
 
 class BibleStudySharedPanelsTestCase(SimpleTestCase):
+    def test_occurrence_options_keep_text_only_controls_out_of_the_dictionary_dialog(self):
+        with translation.override('nl'):
+            text_options = render_to_string('bible_study/_search_options.html', {
+                'modal_id': 'bsWordSearchAdvancedModal', 'search_prefix': 'bs-search',
+                'strong_search': False,
+            })
+            occurrence_options = render_to_string('bible_study/_search_options.html', {
+                'modal_id': 'bsDictionarySearchAdvancedModal', 'search_prefix': 'bs-dictionary-search',
+                'strong_search': True,
+            })
+        self.assertIn('id="bs-search-fuzziness"', text_options)
+        self.assertIn('id="bs-search-exact-phrase"', text_options)
+        self.assertIn('value="relevance"', text_options)
+        self.assertNotIn('-fuzziness', occurrence_options)
+        self.assertNotIn('-exact-phrase', occurrence_options)
+        self.assertNotIn('value="relevance"', occurrence_options)
+        self.assertIn('id="bs-dictionary-search-scope"', occurrence_options)
+        self.assertIn('id="bs-dictionary-search-limit"', occurrence_options)
+        self.assertIn('value="reverse-canonical"', occurrence_options)
+        self.assertIn('Opslaan en zoeken', text_options)
+        self.assertIn('Opslaan en zoeken', occurrence_options)
+
     def test_origin_explanations_are_translated_without_analysis_markers(self):
         with translation.override('nl'):
             script = render_to_string('bible_study/_study_panels_script.html')
@@ -2425,10 +2498,15 @@ class BibleStudySharedPanelsTestCase(SimpleTestCase):
         self.assertNotIn('De onderstreepte letter kan zowel bij de woordstam', script)
         self.assertNotIn('mogelijk onvolledige analyse', script)
         self.assertIn('Afgeleid uit grammatica en woordvorm.', script)
-        self.assertIn('Door STEPBible gemarkeerd onderdeel', script)
+        self.assertNotIn('Door STEPBible gemarkeerd onderdeel', script)
+        self.assertNotIn('STEPBible-tagged component; role and boundaries', script)
+        self.assertNotIn('Lemma uit het woordenboek van STEPBible', script)
+        self.assertNotIn('STEPBible lexicon lemma.', script)
         self.assertIn('Sof pasoek: sluit een vers af', script)
         self.assertIn('Maqqef: verbindt woorden', script)
         self.assertIn('Paseq: scheidt woorden', script)
+        self.assertIn('Mogelijke betekenissen (afhankelijk van de context)', script)
+        self.assertIn('component.possible_meanings', script)
 
     def test_shared_original_renderer_and_preview_compile_and_render(self):
         script = render_to_string('bible_study/_study_panels_script.html')
@@ -2529,6 +2607,7 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
             DISABLE_CACHE_FOR_DEBUG=True,
         ):
             response = self.client.get(reverse('commandments:bible_study'))
+            dutch_response = self.client.get(reverse('commandments:bible_study'), HTTP_ACCEPT_LANGUAGE='nl', follow=True)
 
         self.assertEqual(response.status_code, 200)
         html = response.content.decode('utf-8')
@@ -2559,6 +2638,13 @@ class BibleStudyLanguageCoverageTestCase(SimpleTestCase):
         self.assertNotIn('You can also search for words or phrases in the first selected translation and jump straight', html)
         self.assertIn('King James Version', html)
         self.assertIn('That which we have seen and heard declare we unto you.', html)
+        self.assertEqual(html.count('data-bs-nav="prev" data-step="5"'), 2)
+        self.assertEqual(html.count('data-bs-nav="next" data-step="5"'), 2)
+        dutch_html = dutch_response.content.decode('utf-8')
+        self.assertIn('Zoek woorden in het Strong-woordenboek', dutch_html)
+        self.assertIn('Bijbelvertaling 1', dutch_html)
+        self.assertIn('Bijbelvertaling 2', dutch_html)
+        self.assertIn('Hebreeuws', dutch_html)
         self.assertIn('/static/images/StepBible.png', html)
         self.assertIn('/static/images/BLB.png', html)
         self.assertIn('https://www.stepbible.org/?q=version=KJV@strong=', html)

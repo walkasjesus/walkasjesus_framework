@@ -203,6 +203,15 @@
     display: block;
 }
 
+#law-of-messiah-section .law-filter-card .services-inner:has(.native-combo-open),
+#law-of-messiah-section .law-filter-card .services-inner:has(.bootstrap-select.show) {
+    z-index: 20;
+}
+
+#law-of-messiah-section .law-filter-select-wrap.native-combo-open {
+    z-index: 21;
+}
+
 .select.native-combo-open .native-combo-input {
     background: #fff7dc;
 }

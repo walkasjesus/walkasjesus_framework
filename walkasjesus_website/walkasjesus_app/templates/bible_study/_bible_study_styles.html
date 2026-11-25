@@ -1,10 +1,66 @@
 {% load static %}
 <style>
+    @media (min-width: 992px) {
+      .container.bible-study-shell {
+        max-width: none;
+        width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+
     .bible-study-shell .bs-search-study-detail {
       border: 1px solid #d6c697;
       border-radius: 8px;
       padding: 0.75rem;
     }
+
+    .bible-study-shell .bs-dictionary-actions {
+      align-items: center;
+      background: #f7f1df;
+      border: 1px solid #c8a84b;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem;
+    }
+
+    .bible-study-shell .bs-dictionary-actions .btn {
+      gap: 0.5rem;
+      white-space: normal;
+    }
+
+    .bible-study-shell .bs-dictionary-occurrences-btn {
+      background: #654b14;
+      border: 1px solid #654b14;
+      color: #fff;
+    }
+
+    .bible-study-shell .bs-dictionary-occurrences-btn:not(:disabled):hover,
+    .bible-study-shell .bs-dictionary-occurrences-btn:focus-visible {
+      background: #49360e;
+      color: #fff;
+    }
+
+    .bible-study-shell .bs-dictionary-options-btn {
+      background: #fff;
+      border: 1px solid #806525;
+      color: #49360e;
+    }
+
+    .bible-study-shell .bs-dictionary-options-btn:hover,
+    .bible-study-shell .bs-dictionary-options-btn:focus-visible {
+      background: #f4e8c8;
+      color: #49360e;
+    }
+
+    .bible-study-shell .bs-dictionary-actions .btn:focus-visible {
+      outline: 2px solid #654b14;
+      outline-offset: 2px;
+    }
+
     .bible-study-shell .bs-search-study-detail .bs-hebrew-study-disclosure {
       position: relative;
       background: #faf7ec;
@@ -812,6 +868,7 @@
       font-size: 0.86rem;
     }
 
+    :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-meanings,
     :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology,
     :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-origin {
       color: #6f633e;
@@ -863,6 +920,7 @@
       }
 
       :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-gloss,
+      :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-meanings,
       :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-morphology,
       :is(.bible-study-shell, .waj-study-panels) .bs-hebrew-component-origin {
         grid-column: 1 / -1;
@@ -1274,9 +1332,26 @@
       align-items: center;
     }
 
-    .bible-study-shell [data-target="#bibleStudyLegend"] {
-      width: 100%;
-      white-space: normal;
+    .bible-study-shell .bs-settings-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+    }
+
+    .bible-study-shell .bs-settings-header [data-target="#bibleStudyLegend"] {
+      flex: 0 0 auto;
+      margin-left: auto;
+      padding: 0 10px;
+      width: auto;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 575.98px) {
+      .bible-study-shell .bs-settings-header {
+        flex-direction: column;
+      }
     }
 
     .bible-study-shell .bs-search-method-panel .bs-word-search-row {

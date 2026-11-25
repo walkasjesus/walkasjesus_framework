@@ -5,10 +5,12 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from django.views import View
 
 from walkasjesus_app.models import BibleTranslation, BibleReferences
 from walkasjesus_app.models.bibles import BibleTranslationMetaData
+from walkasjesus_app.views.bible_study_view import _study_numbering_profile
 
 
 class AdminBibleView(View):
@@ -24,8 +26,17 @@ class AdminBibleView(View):
         ]
         cache = Services().cache
         cache_controller = CacheController(cache)
+        numbering_profiles = {
+            'sv': _('KJV storage references; embedded Dutch references. Psalm titles are separated.'),
+            'hsv': _('Uses SV references outside Psalms (not independently verified); Hebrew numbering in Psalms.'),
+            'kjv': _('KJV reference profile; Hebrew references are converted using STEPBible.'),
+            'naardense': _('Hebrew numbering in Psalms and Hosea; other numbering differences are not verified.'),
+            'cjb': _('Hebrew numbering in Hosea; other numbering differences are not verified.'),
+            'unknown': _('Verse numbering for this translation has not been verified.'),
+        }
 
         for bible in bibles:
+            bible.numbering_status = numbering_profiles[_study_numbering_profile(bible)]
             cached_count, total_count = self.bible_count_in_cache(bible, cache_controller)
 
             bible.percentage_cached = cached_count / max(total_count, 0.0001) * 100

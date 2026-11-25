@@ -1,0 +1,126 @@
+{% load i18n %}
+<div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_id }}Title" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="{{ modal_id }}Title">{% trans 'Search options' %}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="bs-search-options-stack">
+          {% if strong_search %}
+          <p class="small text-muted">{% trans 'These options apply to Bible verses containing the selected Strong’s words, not to local dictionary matches.' %}</p>
+          {% else %}
+          <p class="small text-muted">{% trans 'These options apply only to searching words in Bible verses.' %}</p>
+          {% endif %}
+          <div class="bs-search-option-row">
+            <div class="bs-search-option-copy">
+              <label for="{{ search_prefix }}-scope" class="form-label">{% trans 'Search in' %}</label>
+              <p class="small text-muted">{% trans 'Pick the Bible section to search. Choose custom Bible books to limit from one book to another.' %}</p>
+            </div>
+            <div class="bs-search-option-control">
+              <div class="select law-filter-select-wrap">
+                <select class="form-control law-filter-select selectpicker" id="{{ search_prefix }}-scope" data-live-search="false" data-width="100%" data-size="30">
+                  <option value="whole">{% trans 'The Whole Bible' %}</option>
+                  <option value="ot">{% trans 'Old Testament' %}</option>
+                  <option value="nt">{% trans 'New Testament' %}</option>
+                  <option value="torah">{% trans 'Torah' %}</option>
+                  <option value="prophets">{% trans "Prophets (Nevi'im)" %}</option>
+                  <option value="writings">{% trans 'Writings (Ketuvim)' %}</option>
+                  <option value="gospels">{% trans 'Gospels' %}</option>
+                  <option value="pauline">{% trans 'Pauline Epistles' %}</option>
+                  <option value="general">{% trans 'General Epistles' %}</option>
+                  <option value="custom_books">{% trans 'Custom Bible books' %}</option>
+                </select>
+              </div>
+              <div class="bs-search-custom-range">
+                <div class="bs-search-custom-range-row">
+                  <div>
+                    <label for="{{ search_prefix }}-from-book" class="form-label">{% trans 'From' %}</label>
+                    <div class="select law-filter-select-wrap">
+                      <select class="form-control law-filter-select" id="{{ search_prefix }}-from-book">
+                        {% for book_name, book_label in bible_books %}<option value="{{ book_name }}">{{ book_label }}</option>{% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="{{ search_prefix }}-to-book" class="form-label">{% trans 'To' %}</label>
+                    <div class="select law-filter-select-wrap">
+                      <select class="form-control law-filter-select" id="{{ search_prefix }}-to-book">
+                        {% for book_name, book_label in bible_books %}<option value="{{ book_name }}"{% if book_name == 'Revelation' %} selected{% endif %}>{{ book_label }}</option>{% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bs-search-option-row">
+            <div class="bs-search-option-copy">
+              <label for="{{ search_prefix }}-limit" class="form-label">{% trans 'Results per page' %}</label>
+              <p class="small text-muted">{% trans 'Choose how many verses to show on each result page.' %}</p>
+            </div>
+            <div class="bs-search-option-control">
+              <div class="select law-filter-select-wrap">
+                <select class="form-control law-filter-select" id="{{ search_prefix }}-limit">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50" selected>50</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="bs-search-option-row">
+            <div class="bs-search-option-copy">
+              <label for="{{ search_prefix }}-sort" class="form-label">{% trans 'Result order' %}</label>
+              {% if not strong_search %}<p class="small text-muted">{% trans 'Keep canonical Bible order or prioritize best matches first.' %}</p>{% endif %}
+            </div>
+            <div class="bs-search-option-control">
+              <div class="select law-filter-select-wrap">
+                <select class="form-control law-filter-select" id="{{ search_prefix }}-sort">
+                  <option value="canonical" selected>{% trans 'Bible order' %}</option>
+                  {% if not strong_search %}<option value="relevance">{% trans 'Best matches first' %}</option>{% endif %}
+                  <option value="reverse-canonical">{% trans 'Reverse Bible order' %}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          {% if not strong_search %}
+          <div class="bs-search-option-row">
+            <div class="bs-search-option-copy">
+              <label for="{{ search_prefix }}-fuzziness" class="form-label">{% trans 'Match strictness' %}</label>
+              <p class="small text-muted">{% trans 'Set how strict spelling should be while searching.' %}</p>
+            </div>
+            <div class="bs-search-option-control">
+              <div class="select law-filter-select-wrap">
+                <select class="form-control law-filter-select" id="{{ search_prefix }}-fuzziness">
+                  <option value="AUTO">{% trans 'Automatic' %}</option>
+                  <option value="0">{% trans 'Exact spelling only' %}</option>
+                  <option value="1">{% trans 'Allow close spelling' %}</option>
+                  <option value="2">{% trans 'Allow broader spelling' %}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="bs-search-option-row">
+            <div class="bs-search-option-copy">
+              <label for="{{ search_prefix }}-exact-phrase" class="form-label">{% trans 'Exact phrase mode' %}</label>
+              <p class="small text-muted">{% trans 'Enable this to search the full query as one exact phrase.' %}</p>
+            </div>
+            <div class="bs-search-option-control d-flex align-items-center">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="1" id="{{ search_prefix }}-exact-phrase">
+                <label class="form-check-label" for="{{ search_prefix }}-exact-phrase">{% trans 'Search as one exact phrase' %}</label>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn commentary-action-btn" data-dismiss="modal"><i class="fa fa-times mr-1" aria-hidden="true"></i>{% trans 'Cancel' %}</button>
+        <button type="button" class="btn commentary-action-btn" id="{{ search_prefix }}-advanced-apply"><i class="fa fa-search mr-1" aria-hidden="true"></i>{% trans 'Apply and search' %}</button>
+      </div>
+    </div>
+  </div>
+</div>

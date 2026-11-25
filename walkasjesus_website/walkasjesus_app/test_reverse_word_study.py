@@ -239,6 +239,49 @@ class ReverseWordStudyEndpointTestCase(SimpleTestCase):
     @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
     @patch('walkasjesus_app.views.bible_study_view.strongs_occurrence_references')
     @patch('walkasjesus_app.views.bible_study_view.search_strongs_dictionary')
+    def test_local_dictionary_pages_do_not_fetch_occurrences_or_bible_text(self, dictionary, references, quota, record):
+        dictionary.return_value = [
+            {'strongs_number': 'H6086', 'lemma': 'tree'},
+            {'strongs_number': 'H6196', 'lemma': 'plane tree'},
+        ]
+        self.bible.verses = Mock()
+        with patch('walkasjesus_app.views.bible_study_view.requests.get') as api_get:
+            response = self.get(query='tree', mode='lexicon', study_scope='dictionary',
+                                selected_strongs='H6086,H6196', limit=1, offset=1)
+        self.assertEqual(response.status_code, 200)
+        payload = json.loads(response.content)
+        self.assertEqual(payload['mode'], 'lexicon')
+        self.assertEqual(payload['total'], 2)
+        self.assertEqual((payload['page'], payload['page_count']), (2, 2))
+        self.assertEqual(payload['word_study'], {
+            'dictionary': True, 'candidates': [dictionary.return_value[1]],
+        })
+        self.assertNotIn('results', payload)
+        references.assert_not_called()
+        self.bible.verses.assert_not_called()
+        quota.assert_not_called()
+        record.assert_not_called()
+        api_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.requests.get')
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    def test_local_dictionary_and_lemma_details_use_real_local_data_without_bible_api(self, quota, api_get):
+        self.bible.verses = Mock()
+        with self.settings(DISABLE_CACHE_FOR_DEBUG=True):
+            search = self.get(query='H2416', mode='lexicon', study_scope='dictionary')
+            detail = self.get(query='H2416', mode='detail')
+        self.assertEqual(search.status_code, 200)
+        self.assertEqual(json.loads(search.content)['word_study']['candidates'][0]['strongs_number'], 'H2416')
+        self.assertEqual(detail.status_code, 200)
+        self.assertTrue(json.loads(detail.content)['detail']['words'])
+        self.bible.verses.assert_not_called()
+        quota.assert_not_called()
+        api_get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view._record_bible_usage_for_sources')
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.strongs_occurrence_references')
+    @patch('walkasjesus_app.views.bible_study_view.search_strongs_dictionary')
     def test_dictionary_multiselect_deduplicates_and_labels_every_page(self, dictionary, references, quota, record):
         for index in range(1, 23):
             self.addCleanup(cache.delete, f'bible_study:v1:test-bible:Genesis:1:{index}')
@@ -272,6 +315,17 @@ class ReverseWordStudyEndpointTestCase(SimpleTestCase):
             self.assertEqual(empty['results'], [])
             self.assertEqual(self.get(query='tree', mode='lexicon', study_scope='all',
                                       selected_strongs='H9999').status_code, 400)
+            scoped = json.loads(self.get(query='tree', mode='lexicon', study_scope='all',
+                                         selected_strongs='H6086,H6196', range='GEN.1.18-GEN.1.22',
+                                         sort='reverse-canonical', limit=1, offset=4).content)
+            self.assertEqual(scoped['total'], 5)
+            self.assertEqual(scoped['page_count'], 5)
+            self.assertEqual([item['reference'] for item in scoped['results']], ['Gen.1:18'])
+            no_occurrences = self.get(query='tree', mode='lexicon', study_scope='all',
+                                      selected_strongs='H6086', range='EXO.1.1-EXO.40.38')
+            self.assertEqual(no_occurrences.status_code, 200)
+            self.assertEqual(json.loads(no_occurrences.content)['total'], 0)
+            self.assertEqual(json.loads(no_occurrences.content)['selected_strongs'], ['H6086'])
 
     def test_occurrence_details_preserve_verse_morphology(self):
         response = self.get(query='H2416', mode='detail', book='Genesis', chapter=1, verse=20, word_index=6)

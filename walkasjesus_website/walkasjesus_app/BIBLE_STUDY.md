@@ -21,7 +21,12 @@ text is linked word-by-word to the Hebrew/Greek.
 
 The page renders the first passage server-side, then everything else (changing passage,
 translations, toggles, panels) happens through AJAX so the API.Bible quota is only spent on
-verses that are actually shown.
+verses that are actually shown. On desktop (992px and wider), the study container
+uses the available screen width with small side margins; smaller layouts retain
+their existing responsive behavior.
+Previous/next passage controls appear above and below the verses, including
+after AJAX updates and in combined and verse-by-verse modes. Navigating from
+the lower controls scrolls to the beginning of the newly selected passage.
 
 ### Shared panels on other pages
 
@@ -65,8 +70,11 @@ independently verified mapping for every passage. In Psalms the local SV's embed
 markers are split to separate the title and body, while HSV uses Hebrew numbering.
 Naardense is treated as Hebrew-numbered for Psalms and Hosea; the local Complete
 Jewish Bible is treated as Hebrew-numbered for Hosea. Other profiles are not
-verified: unchanged references carry a warning, and at known numbering differences
-no potentially incorrect verse is substituted.
+verified: their technical status and profile limitations appear only in the
+staff-only Bible cache management overview. Unchanged references display without
+a verification warning. At known numbering differences no potentially incorrect
+verse is substituted; visitors see a short message asking them to choose another
+translation. Actual split/merged verse-boundary notices remain visible.
 
 Psalm 30:1 is a Hebrew title and has no numbered KJV counterpart; a dash marks
 the absence. For merged or split verse boundaries the complete source verse is
@@ -87,7 +95,8 @@ Three matching search boxes are shown in Settings:
 **Search Bible passage**, **Search words in Bible translation**, and
 **Search words in Strong's Dictionary**.
 The three boxes sit side by side on desktop and stack on smaller screens. Each has
-its own input and Search button. Only **Search words in Bible translation** has Options.
+its own input and Search button. **Search words in Bible translation** has Options
+beside its search button; dictionary results have separate Bible occurrence Options.
 Passage search retains
 autocomplete and Enter-to-open behavior. The other boxes retain independent query
 text and route directly to their respective search methods on Search or Enter.
@@ -95,16 +104,39 @@ The second box always uses `mode=text`: it searches the first selected translati
 without original-word analysis, candidate filtering, or an alignment warning. The
 word-study checkbox and Search method selector have been removed. Options and Apply
 apply only to this text search (scope, page size, sorting, fuzziness, exact phrase).
-Dictionary search has no Options button and does not inherit these text options:
-it searches the whole Bible in canonical order, 50 results per page. The Original
+Dictionary occurrence options reuse the same template and scope controls, with
+independent Bible section/book range, page size and canonical/reverse-canonical
+order settings. Spelling, exact-phrase and relevance controls appear only in text
+search, since occurrence search matches Strong's codes rather than translation text.
+Defaults remain the whole Bible in canonical order, 50 results per page. The Original
 language checkboxes are directly in the third box: Hebrew (initially checked) and
 Greek. Check either or both; searching with neither selected shows an explicit
 validation message. There is no dropdown or extra dictionary description below Search.
 Word study is shown only by the third box's dictionary search.
+**Also search Strong in Bible** is checked by default, preserving automatic
+occurrence fetching. Unchecking it uses the existing local dictionary endpoint
+without `study_scope=all`: dictionary matches are paged locally, and selected
+lemma details use only local Strong's data. Selection changes in this mode do
+not fetch Bible verses. **Search selected words in Bible** explicitly fetches
+occurrences of all selected codes in the first selected translation, without
+changing the checkbox preference. Clicking it scrolls to the loading panel and then
+the verse results (or an error), below the dictionary details, with room for the
+fixed navigation bar. The loading message distinguishes local dictionary searches
+from Bible occurrence searches. Existing dictionary details are kept when this
+button fetches verses, preventing detail-loading layout shifts from moving the
+verse results out of view. The button is disabled when nothing is selected.
+Only this explicit button activates result scrolling and late-detail scroll
+correction. Selecting or deselecting word buttons resets that behavior and restores
+keyboard focus without scrolling. Applying occurrence options searches the same
+selected codes without activating result scrolling. Scope filters apply to verses,
+not to the validity of selected dictionary entries: selections with no occurrences
+in the chosen scope produce an empty result rather than a selection error.
 Dictionary result summaries show the query followed by each selected Strong's code
 and its dictionary lemma. The pagination line shows the reference range without
 repeating those codes. Multiple selections keep each code paired with its own lemma.
-The introductory paragraph is omitted to keep Settings compact. The full-width,
+The introductory paragraph is omitted to keep Settings compact. A compact Legend
+button sits at the right of the Settings heading, moving onto a separate line on
+phones. Its accessible label and tooltip retain the longer explanation. The full-width,
 initially collapsed legend explains the three searches, text options, dictionary
 selection and paging, translations, passage navigation, combined/per-verse display,
 original-word details, word-link limitations, commentary and data sources.
@@ -180,8 +212,8 @@ selected automatically. Selected words show their details and the union of their
 verses in the first
 selected translation. These are occurrences of the original Strong's number, so the
 displayed translation need not contain the originally typed search word. The API still
-supports book scopes, page size and reverse-canonical sorting for dictionary clients;
-the third box uses the defaults described above. Verse retrieval uses the existing cache and quota
+supports book scopes, page size and reverse-canonical sorting, exposed by the
+dictionary results' Options button. Verse retrieval uses the existing cache and quota
 accounting; unavailable verses and quota failures are reported explicitly.
 Concordance references are sorted canonically and deduplicated. STEPBible's KJV
 alternate numbering is used for KJV/SVV editions (for example 2 Corinthians 13:14);
@@ -320,7 +352,7 @@ Clicking it opens the integrated **Occurrence Viewer** dialog:
 - The existing **Translate** button still machine-translates lexicon definitions. Translation requests
   are versioned and queued sequentially to avoid provider rate-limit bursts.
 
-Cached 30 days under `bible_study:original-local:v11:<source>:<book>:<ch>:<v>`.
+Cached 30 days under `bible_study:original-local:v35:<reference-system>:<source>:<book>:<ch>:<v>`.
 
 ### Hebrew composition and letter information
 
@@ -347,8 +379,16 @@ TEHMC supplies explanations for morphology codes such as `HRd` (definite preposi
 (object suffix, second-person masculine plural). For Dutch, each piece uses its exact Statenvertaling
 rendering when available; otherwise its short gloss is localized. A word can consist only of
 attached grammatical parts, with no separate lexical root tagged.
+For common service prefixes and directional/emphatic suffixes, the component also shows
+possible meanings separately from the occurrence gloss. These are contextual possibilities,
+not interchangeable translations of the current verse. A final waw is interpreted using
+its tagged morphology or a confidently inferred verb ending: possessive, object, subject
+and plural verb endings do not have the same meaning.
 When the morphology aligns one-to-one with the tagged components, standalone prepositions,
 relative and subordinating particles, and negation are also classified as grammatical.
+STEPBible's internal component-origin/analysis-boundary note and repeated lexicon
+lemma attribution are not shown in word details; dataset attribution remains
+available in the legend.
 
 Hebrew punctuation, including the verse-ending `׃`, is gray rather than part of the lexical word.
 Tagged section markers `ס` and `פ` are also gray and excluded from letter tooltips and gematria.

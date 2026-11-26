@@ -1925,21 +1925,37 @@
     }
     ensureOriginalTextPanels(state);
     updateOriginalPanelsVisibility();
-    fetchBibleStudyOriginalRange(state, function(payload, errorMessage) {
-      var currentState = currentBibleStudyState();
-      if (bibleStudyRangeKey('', state.book, state.chapter, state.startVerse, state.endVerse) !==
-          bibleStudyRangeKey('', currentState.book, currentState.chapter, currentState.startVerse, currentState.endVerse)) {
+    Object.keys(bsOriginalOpenVerses).forEach(function(verseNumber) {
+      var $shell = $('.bible-study-original-shell[data-verse="' + verseNumber + '"]');
+      if (!$shell.length || $shell.data('originalLoading')) {
         return;
       }
-      if (!payload) {
-        $('.bible-study-original-row .bs-original-sentence, .bible-study-original-row .bs-original-word-detail')
-          .empty().append($('<p class="text-danger" role="alert"></p>').text(errorMessage));
-        $('.bible-study-original-row .bs-original-word-cloud').empty();
+      if ($shell.data('versePayload')) {
+        applyPendingAlignedSelectionToVerse(verseNumber);
         return;
       }
-      applyBibleStudyOriginalPayloadToDom(state, payload);
-      updateOriginalPanelsVisibility();
-      syncBibleStudyOriginalToggleButtons();
+      $shell.data('originalLoading', true);
+      var verseState = $.extend({}, state, { startVerse: verseNumber, endVerse: verseNumber });
+      fetchBibleStudyOriginalRange(verseState, function(payload, errorMessage) {
+        $shell.removeData('originalLoading');
+        var currentState = currentBibleStudyState();
+        if (bibleStudyRangeKey('', state.book, state.chapter, state.startVerse, state.endVerse) !==
+            bibleStudyRangeKey('', currentState.book, currentState.chapter, currentState.startVerse, currentState.endVerse)) {
+          return;
+        }
+        var $row = $('.bible-study-original-row[data-verse="' + verseNumber + '"]');
+        if (!payload) {
+          $row.find('.bs-original-sentence, .bs-original-word-detail')
+            .empty().append($('<p class="text-danger" role="alert"></p>').text(errorMessage));
+          $row.find('.bs-original-word-cloud').empty();
+          return;
+        }
+        if (!$row.find('.bible-study-original-shell').data('versePayload')) {
+          applyBibleStudyOriginalPayloadToDom(state, payload);
+        }
+        updateOriginalPanelsVisibility();
+        syncBibleStudyOriginalToggleButtons();
+      });
     });
   }
 

@@ -1,5 +1,6 @@
 import json
 import tempfile
+from io import StringIO
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
@@ -7,6 +8,7 @@ from unittest.mock import Mock, patch
 import requests
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib.bible_api.api_bible import ApiBible
+from bible_lib.simple_cache import SimpleCache
 from django.core.cache import cache
 from django.core.management import call_command, CommandError
 from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
@@ -36,12 +38,11 @@ from walkasjesus_app.views.admin.admin_bible_view import AdminBibleView
 
 
 class BibleNumberingAdminTest(TestCase):
-    @patch('walkasjesus_app.views.admin.admin_bible_view.CacheController')
+    @patch('walkasjesus_app.views.admin.admin_bible_view.chapters_for_book', return_value=range(1, 2))
     @patch('walkasjesus_app.views.admin.admin_bible_view.Services')
     @patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslationMetaData')
     @patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslation')
-    @patch.object(AdminBibleView, 'bible_count_in_cache', return_value=(1, 2))
-    def test_numbering_profiles_and_limitations_are_visible_only_to_staff(self, count, translations, metadata, services, controller):
+    def test_numbering_profiles_and_limitations_are_visible_only_to_staff(self, translations, metadata, services, chapters):
         bibles = [
             SimpleNamespace(id='unknown', name='Unknown translation', abbreviation='UNK', language='en'),
             SimpleNamespace(id='hsv', name='Herziene Statenvertaling', abbreviation='HSV', language='nl'),
@@ -50,6 +51,7 @@ class BibleNumberingAdminTest(TestCase):
         metadata.objects.filter.return_value.exists.return_value = True
         metadata.objects.get.return_value.is_enabled = True
         services.return_value.cache.cache_items_not_persisted = 0
+        services.return_value.cache.cache_path = Path('/nonexistent-bible-cache-for-test')
         request = RequestFactory().get('/admin/bibles/')
         request.session = {}
         request.user = SimpleNamespace(is_active=True, is_staff=True)
@@ -60,6 +62,76 @@ class BibleNumberingAdminTest(TestCase):
         self.assertContains(response, 'not independently verified')
         request.user.is_staff = False
         self.assertEqual(AdminBibleView.as_view()(request).status_code, 302)
+
+    @override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'limited': 5})
+    def test_chapter_coverage_reads_disk_and_excludes_expired_and_partial_passages(self):
+        bible = ApiBible(api_key='test', bible_id='free')
+        bible.name, bible.language, bible.abbreviation = 'Test Bible', 'en', 'TEST'
+        limited = ApiBible(api_key='test', bible_id='limited')
+        limited.name, limited.language, limited.abbreviation = 'Limited', 'en', 'LIMIT'
+        book = BibleLibBibleBooks.Titus
+        def payload(content):
+            return json.dumps({'data': {'content': content}})
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'cache.json'
+            server_cache = SimpleCache(path)
+            script_cache = SimpleCache(path)
+            script_cache.set_value(bible.chapter_passage_url(book, 1, 3), payload('[1] One [2] Two [3] Three'))
+            script_cache.set_value(bible.chapter_passage_url(book, 2, 2), payload('[1] One'), ttl_seconds=300)
+            entries = json.loads(path.read_text())
+            entries[bible.chapter_passage_url(book, 3, 2)] = {
+                'value': payload('[1] One [2] Two'), 'expires_at': 1,
+            }
+            path.write_text(json.dumps(entries))
+            request = RequestFactory().get('/admin/bibles/')
+            request.user = SimpleNamespace(is_active=True, is_staff=True)
+            request.session = {}
+            with patch('walkasjesus_app.views.admin.admin_bible_view.Services') as services, \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslation') as translations, \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslationMetaData') as metadata, \
+                    patch('walkasjesus_app.views.admin.admin_bible_view._CANONICAL_CHAPTER_COUNTS', {'Titus': 3}), \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.chapters_for_book', return_value=range(1, 4)), \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.max_display_verse', return_value=2):
+                services.return_value.cache = server_cache
+                translations.return_value.all.return_value = [bible, limited]
+                metadata.objects.filter.return_value.exists.return_value = True
+                metadata.objects.get.return_value.is_enabled = True
+                response = AdminBibleView.as_view()(request)
+                self.assertContains(response, '1 / 3 (33.3%)')
+                self.assertIsNone(limited.percentage_cached)
+                script_cache.set_value(bible.chapter_passage_url(book, 2, 2), payload('[1] One [2] Two'))
+                response = AdminBibleView.as_view()(request)
+                self.assertContains(response, '2 / 3 (66.7%)')
+
+    def test_chapter_coverage_accepts_larger_passages_and_requires_all_source_chapters(self):
+        bible = ApiBible(api_key='test', bible_id='free')
+        entry = {'value': json.dumps({'data': {'content': '[1] One [2] Two [3] Three'}})}
+        passages = {'TIT': [(1, entry)]}
+        with patch('walkasjesus_app.views.admin.admin_bible_view.max_display_verse', return_value=2), \
+                patch('walkasjesus_app.views.admin.admin_bible_view._study_verse_references',
+                      side_effect=lambda bible, book, chapter, verse, system: ([(verse, 1)], (), '')):
+            view = AdminBibleView()
+            self.assertEqual(view.bible_count_in_cache(bible, passages, {'Titus': [1]}), 0)
+            passages['TIT'].append((2, entry))
+            self.assertEqual(view.bible_count_in_cache(bible, passages, {'Titus': [1]}), 1)
+
+    def test_chapter_coverage_shows_error_for_unreadable_cache(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'cache.json'
+            path.write_text('{')
+            with patch('walkasjesus_app.views.admin.admin_bible_view.Services') as services, \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.BibleTranslation') as translations, \
+                    patch('walkasjesus_app.views.admin.admin_bible_view.chapters_for_book', return_value=range(1, 2)):
+                services.return_value.cache.cache_path = path
+                services.return_value.cache.cache_items_not_persisted = 0
+                translations.return_value.all.return_value = []
+                request = RequestFactory().get('/admin/bibles/')
+                request.user = SimpleNamespace(is_active=True, is_staff=True)
+                request.session = {}
+                with self.assertLogs('walkasjesus_app.views.admin.admin_bible_view', level='WARNING'):
+                    response = AdminBibleView.as_view()(request)
+                self.assertContains(response, 'The chapter cache could not be read.')
 
 
 class PsalmVersificationTest(SimpleTestCase):
@@ -640,13 +712,59 @@ class BibleStudyChapterDisplayTest(TestCase):
     def test_prefetch_command_skips_license_limited_and_local_translations(self):
         from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
         limited = ApiBible(api_key='test', bible_id='nbv21')
+        limited.name = 'NBV21'
         local = SimpleNamespace(id='svv', name='SVV', is_local_source=True)
+        output = StringIO()
         with patch('walkasjesus_app.management.commands.prefetch_bible_chapters.BibleTranslation') as translations:
             translations.return_value.all_in_supported_languages.return_value = [self.bible, limited, local]
-            command = Command()
-            command.stdout = Mock()
+            command = Command(stdout=output)
             eligible = command._target_bibles(None)
         self.assertEqual([bible.id for bible in eligible], ['free'])
+        self.assertIn('Skipping NBV21 (nbv21)', output.getvalue())
+
+    @override_settings(BIBLE_PREFETCH_BIBLE_IDS=[])
+    def test_prefetch_default_and_explicit_translation_order(self):
+        from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
+
+        def bible(bible_id, name, language):
+            return SimpleNamespace(id=bible_id, name=name, language=language, chapter_verses=Mock())
+
+        other = bible('other', 'Other', 'en')
+        messianic = bible('wmb', 'World Messianic Bible', 'en')
+        kjv = bible('de4e12af7f28f599-01', 'King James Version', 'en')
+        dutch = bible('nl', 'Nederlandse Bijbel', 'nl')
+        with patch('walkasjesus_app.management.commands.prefetch_bible_chapters.BibleTranslation') as translations:
+            translations.return_value.all_in_supported_languages.return_value = [other, messianic, kjv, dutch]
+            translations.return_value.get.side_effect = {b.id: b for b in [other, messianic, kjv, dutch]}.get
+            command = Command()
+            self.assertEqual([b.id for b in command._target_bibles(None)],
+                             ['nl', kjv.id, 'wmb', 'other'])
+            self.assertEqual([b.id for b in command._target_bibles(['wmb', 'nl'])], ['wmb', 'nl'])
+            with override_settings(BIBLE_PREFETCH_BIBLE_IDS=['other', 'nl']):
+                self.assertEqual([b.id for b in command._target_bibles(None)], ['other', 'nl'])
+
+    def test_prefetch_respects_book_order_and_logs_translation(self):
+        from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
+        self.bible.name = 'Test Translation'
+        output = StringIO()
+        with patch.object(Command, '_target_bibles', return_value=[self.bible]), \
+                patch('walkasjesus_app.management.commands.prefetch_bible_chapters.chapters_for_book', return_value=[1]), \
+                patch('walkasjesus_app.management.commands.prefetch_bible_chapters.max_display_verse', return_value=1), \
+                patch('walkasjesus_app.management.commands.prefetch_bible_chapters._study_chapter_source_plan',
+                      return_value=({1: [(1, 1)]}, {1: 1})), \
+                patch('walkasjesus_app.management.commands.prefetch_bible_chapters.Services') as services:
+            services.return_value.cache.expires_at.return_value = None
+            call_command('prefetch_bible_chapters', books=['John', 'Genesis'],
+                         max_requests=2, dry_run=True, stdout=output)
+        log = output.getvalue()
+        self.assertIn('Test Translation (free): would refresh John 1', log)
+        self.assertLess(log.index('John 1'), log.index('Genesis 1'))
+
+    def test_prefetch_rejects_unknown_book(self):
+        from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
+        with patch.object(Command, '_target_bibles', return_value=[self.bible]):
+            with self.assertRaisesRegex(CommandError, 'Unknown Bible book.*NotABook'):
+                call_command('prefetch_bible_chapters', books=['NotABook'], stdout=StringIO())
 
     def test_chapter_verses_parses_passage_content(self):
         content = '[1] In the beginning. [2] And the earth. [3] And God said.'

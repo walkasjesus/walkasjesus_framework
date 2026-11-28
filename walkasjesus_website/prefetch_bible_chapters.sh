@@ -16,6 +16,9 @@
 # Extra arguments are passed through, e.g.:
 #   ./prefetch_bible_chapters.sh --dry-run
 #   ./prefetch_bible_chapters.sh --bible-ids 89f6d2447cc48fbd-01 87f620660790371b-01
+#   ./prefetch_bible_chapters.sh --books John Genesis
+# Bible IDs and books are processed in the given order. By default, eligible
+# Dutch translations come first, followed by KJV, Messianic/Jewish, and the rest.
 
 set -e
 

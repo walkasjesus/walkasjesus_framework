@@ -19,6 +19,7 @@ class ApiVerseMarkersTest(TestCase):
                 self.assertEqual([(v.chapter, v.verse, v.text) for v in verses], [
                     (1, 1, 'Combined passage.'), (1, 5, 'Next verse.'),
                 ])
+                self.assertEqual([(v.verse, v.end_verse) for v in verses], [(1, 4), (5, 5)])
 
     def test_each_member_of_a_combined_passage_returns_text(self):
         self.bible.client.get = Mock(return_value=json.dumps({

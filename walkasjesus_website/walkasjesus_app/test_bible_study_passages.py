@@ -225,20 +225,58 @@ class BibleStudyPassagesTest(TestCase):
 
     @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    @override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'bgt': 5}, DISABLE_CACHE_FOR_DEBUG=False)
     def test_titus_bgt_combined_verses_are_not_empty(self, translations, _quota):
         translations.return_value.get.return_value = self.bible
-        self.bible.client.get = Mock(side_effect=[
-            json.dumps({'data': {'content': '[1-4] Combined passage.', 'copyright': 'test'}})
-            for _ in range(4)
-        ] + [json.dumps({'data': {'content': '[5] Next verse.', 'copyright': 'test'}})])
+        self.bible.client.get = Mock(return_value=json.dumps({
+            'data': {'content': '[1-4] Combined passage. [5] Next verse.', 'copyright': 'test'},
+        }))
         response = self.client.post(reverse('commandments:bible_study_verses'), {
             'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 5,
+            'reference_system': 'hebrew',
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['verses'], {
             '1': 'Combined passage.', '2': 'Combined passage.', '3': 'Combined passage.',
             '4': 'Combined passage.', '5': 'Next verse.',
         })
+        self.assertEqual(response.json()['verse_references'], {
+            '1': '1:1-4', '2': '1:1-4', '3': '1:1-4', '4': '1:1-4', '5': '1:5',
+        })
+        self.bible.client.get.assert_called_once()
+
+        self.bible.client.get.reset_mock()
+        response = self.client.post(reverse('commandments:bible_study_verses'), {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 5,
+            'reference_system': 'hebrew',
+        })
+        self.assertEqual(response.json()['verse_references']['3'], '1:1-4')
+        self.assertEqual(set(response.json()['verse_sources'].values()), {'cache'})
+        self.bible.client.get.assert_not_called()
+        translations.return_value.all_in_supported_languages.return_value = [self.bible]
+        response = self.client.get(reverse('commandments:bible_study'), {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 5,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['selected_bibles'][0]['verse_references']['4'], '1:1-4')
+        self.bible.client.get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    @override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'bgt': 5})
+    def test_bgt_range_starting_inside_merged_verses_keeps_complete_group(self, translations, _quota):
+        translations.return_value.get.return_value = self.bible
+        self.bible.client.get = Mock(return_value=json.dumps({
+            'data': {'content': '[1–4] Combined passage. [5] Next verse.', 'copyright': 'test'},
+        }))
+        response = self.client.post(reverse('commandments:bible_study_verses'), {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 2, 'end_verse': 5,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['verses']['2'], 'Combined passage.')
+        self.assertEqual(response.json()['verse_references']['2'], '1:1-4')
+        self.assertNotIn('1', response.json()['verses'])
+        self.assertIn('TIT.1.2-TIT.1.5?', self.bible.client.get.call_args.args[0])
 
     @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
@@ -364,3 +402,97 @@ class BibleStudyPassagesTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(alignment.call_args.kwargs['reference_system'], 'hebrew')
+
+
+@override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'nbv21': 5})
+class BibleStudyChapterDisplayTest(TestCase):
+    """Whole-chapter display for unrestricted translations and license limit enforcement."""
+
+    def setUp(self):
+        cache.clear()
+        self.bible = ApiBible(api_key='test', bible_id='free')
+        self.bible.name = 'Naardense Bijbel'
+        self.bible.language = 'nl'
+
+    def test_effective_max_verses_uses_strictest_license_limit(self):
+        from walkasjesus_app.lib.bible_display_limits import effective_max_verses, max_verses_for_bible_id
+        self.assertEqual(max_verses_for_bible_id('nbv21'), 5)
+        self.assertIsNone(max_verses_for_bible_id('free'))
+        self.assertEqual(effective_max_verses(['free', 'nbv21']), 5)
+        self.assertEqual(effective_max_verses(['free']), 200)
+        self.assertEqual(effective_max_verses([]), 200)
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_license_limited_translation_is_clamped_server_side(self, translations, quota):
+        limited = ApiBible(api_key='test', bible_id='nbv21')
+        limited.name = 'NBV21'
+        limited.language = 'nl'
+        translations.return_value.get.return_value = limited
+        limited.client.get = Mock(return_value=json.dumps({
+            'data': {'content': ' '.join(f'[{v}] Verse {v}.' for v in range(1, 6)), 'copyright': 'test'},
+        }))
+        with patch.object(limited, 'chapter_verses') as chapter_fetch:
+            response = self.client.post(reverse('commandments:bible_study_verses'), {
+                'bible_id': 'nbv21', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 16,
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(sorted(response.json()['verses'], key=int), ['1', '2', '3', '4', '5'])
+        self.assertIn('TIT.1.1-TIT.1.5?', limited.client.get.call_args.args[0])
+        chapter_fetch.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_whole_chapter_uses_single_passage_request_and_seeds_cache(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        content = ' '.join(f'[{v}] Verse {v}.' for v in range(1, 17))
+        self.bible.client.get = Mock(return_value=json.dumps({'data': {'content': content, 'copyright': 'test'}}))
+        response = self.client.post(reverse('commandments:bible_study_verses'), {
+            'bible_id': 'free', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 16,
+        })
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload['verses']['1'], 'Verse 1.')
+        self.assertEqual(payload['verses']['16'], 'Verse 16.')
+        self.assertEqual(set(payload['verse_sources'].values()), {'api'})
+        self.bible.client.get.assert_called_once()
+        quota.assert_called_once()
+
+        # Second request is served entirely from the seeded per-verse cache.
+        self.bible.client.get.reset_mock()
+        response = self.client.post(reverse('commandments:bible_study_verses'), {
+            'bible_id': 'free', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 16,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(set(response.json()['verse_sources'].values()), {'cache'})
+        self.bible.client.get.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_failed_chapter_fetch_falls_back_to_per_verse_requests(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        with patch.object(self.bible, 'chapter_verses', side_effect=Exception('boom')), \
+                patch.object(self.bible, 'verses', return_value='Fallback verse.') as verses:
+            response = self.client.post(reverse('commandments:bible_study_verses'), {
+                'bible_id': 'free', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 16,
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['verses']['16'], 'Fallback verse.')
+        self.assertEqual(verses.call_count, 16)
+
+    def test_prefetch_command_skips_license_limited_and_local_translations(self):
+        from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
+        limited = ApiBible(api_key='test', bible_id='nbv21')
+        local = SimpleNamespace(id='svv', name='SVV', is_local_source=True)
+        with patch('walkasjesus_app.management.commands.prefetch_bible_chapters.BibleTranslation') as translations:
+            translations.return_value.all_in_supported_languages.return_value = [self.bible, limited, local]
+            command = Command()
+            command.stdout = Mock()
+            eligible = command._target_bibles(None)
+        self.assertEqual([bible.id for bible in eligible], ['free'])
+
+    def test_chapter_verses_parses_passage_content(self):
+        content = '[1] In the beginning. [2] And the earth. [3] And God said.'
+        self.bible.client.get = Mock(return_value=json.dumps({'data': {'content': content, 'copyright': 'test'}}))
+        mapping = self.bible.chapter_verses(BibleLibBibleBooks.Genesis, 1, 3)
+        self.assertEqual(mapping, {1: 'In the beginning.', 2: 'And the earth.', 3: 'And God said.'})

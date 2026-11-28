@@ -90,6 +90,16 @@ class SimpleCache:
             return False
         return True
 
+    def expires_at(self, key):
+        """Return the expiry timestamp for a cached key, or None when absent/expired."""
+        normalized_key = str(key)
+        entry = self._cache.get(normalized_key)
+        if entry is None or not self._entry_is_valid(entry, time.time()):
+            return None
+        if isinstance(entry, dict):
+            return entry.get('expires_at')
+        return None
+
     def get_value(self, key, default=None):
         normalized_key = str(key)
         value = self._cache.get(normalized_key)

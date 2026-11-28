@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 from collections import Counter
 
 from bible_lib import BibleBooks as BibleLibBibleBooks
+from bible_lib.bible_api.api_bible import ApiBible
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
@@ -22,6 +23,11 @@ from django.utils.translation import gettext as _
 from django.views import View
 
 from walkasjesus_app.lib.bible_api_rate_limit import BibleApiRateLimitExceeded, consume_bible_api_quota
+from walkasjesus_app.lib.bible_display_limits import (
+    chapter_verse_cap,
+    effective_max_verses,
+    max_verses_for_bible_id,
+)
 from walkasjesus_app.lib.access_policy import (
     filter_visible_bibles_for_request,
     is_bible_id_visible_for_request,
@@ -135,6 +141,124 @@ def _study_verse_text(bible, book, chapter, verse, reference_system):
         if text:
             texts.append(text)
     return '\n'.join(texts)
+
+
+def _study_verse_cache_key(reference_system, bible_id, book_name, chapter, verse):
+    return f'bible_study:v3:{reference_system}:{bible_id}:{book_name}:{chapter}:{verse}'
+
+
+# Below this number of uncached verses a chapter-level fetch is not worthwhile;
+# the regular per-verse retrieval is used instead.
+_CHAPTER_FETCH_MIN_MISSING_VERSES = 6
+
+
+def _fetch_licensed_passage(bible, book_name, chapter, verse_numbers, reference_system, request, endpoint):
+    """Fetch only the licensed range, retaining merged verse labels such as BGT 1–4."""
+    if not isinstance(bible, ApiBible) or max_verses_for_bible_id(bible.id) is None:
+        return {}, {}, {}
+    verse_numbers = list(verse_numbers)
+    if any(
+        _study_verse_references(bible, book_name, chapter, v, reference_system)[0] != ((chapter, v),)
+        for v in verse_numbers
+    ):
+        return {}, {}, {}
+    start, end = verse_numbers[0], verse_numbers[-1]
+    key = f'bible_study:licensed_passage:v1:{reference_system}:{bible.id}:{book_name}:{chapter}:{start}:{end}'
+    disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
+    cached = None if disable_cache else cache.get(key)
+    source = 'cache' if cached is not None else 'api'
+    if cached is None:
+        consume_bible_api_quota(request, bible, endpoint)
+        groups = bible.passage_verses(BibleLibBibleBooks[book_name], chapter, start, end)
+        texts, references = {}, {}
+        for group in groups:
+            if group.chapter != chapter:
+                continue
+            label = f'{chapter}:{group.verse}'
+            if group.end_verse != group.verse:
+                label += f'-{group.end_verse}'
+            for v in range(max(start, group.verse), min(end, group.end_verse) + 1):
+                texts[v] = group.text
+                references[str(v)] = label
+        cached = (texts, references)
+        if texts and not disable_cache:
+            cache.set(key, cached, VERSE_CACHE_TIMEOUT)
+    texts, references = cached
+    return texts, references, {str(v): source for v in texts}
+
+
+def _study_chapter_source_plan(bible, book_name, chapter, verse_numbers, reference_system):
+    """Map display verses to source references, grouped with per-source-chapter maxima."""
+    plan = {}
+    last_verse_by_chapter = {}
+    for v in verse_numbers:
+        sources, _, _ = _study_verse_references(bible, book_name, chapter, v, reference_system)
+        if not sources:
+            continue
+        plan[int(v)] = sources
+        for source_chapter, source_verse in sources:
+            last_verse_by_chapter[source_chapter] = max(last_verse_by_chapter.get(source_chapter, 0), source_verse)
+    return plan, last_verse_by_chapter
+
+
+def _fetch_chapter_verse_texts(bible, book_name, chapter, verse_numbers, reference_system,
+                               request=None, endpoint=None, force_refresh=False):
+    """Fetch the uncached verses of a chapter with one api.bible call per source chapter.
+
+    Seeds the per-verse Django cache and returns the freshly fetched texts keyed by
+    display verse number. Returns an empty dict when a chapter-level fetch is not
+    possible or not worthwhile; callers then fall back to per-verse retrieval.
+    Never use this for translations with a per-translation license verse limit.
+    """
+    if not hasattr(bible, 'chapter_verses') or getattr(bible, 'is_local_source', False):
+        return {}
+
+    disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
+    bible_id = str(getattr(bible, 'id', '') or '')
+    missing = []
+    for v in verse_numbers:
+        key = _study_verse_cache_key(reference_system, bible_id, book_name, chapter, v)
+        if not force_refresh and not disable_cache and cache.get(key) is not None:
+            continue
+        missing.append(int(v))
+    if not force_refresh and len(missing) < _CHAPTER_FETCH_MIN_MISSING_VERSES:
+        return {}
+
+    plan, last_verse_by_chapter = _study_chapter_source_plan(bible, book_name, chapter, missing, reference_system)
+    if not plan:
+        return {}
+
+    texts_by_source_chapter = {}
+    for source_chapter, last_verse in sorted(last_verse_by_chapter.items()):
+        if request is not None:
+            consume_bible_api_quota(request, bible, endpoint or BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+        try:
+            texts_by_source_chapter[source_chapter] = bible.chapter_verses(
+                BibleLibBibleBooks[book_name], source_chapter, last_verse, force_refresh=force_refresh)
+        except Exception:
+            logger.warning(
+                'Chapter fetch failed for bible=%s book=%s chapter=%s; falling back to per-verse retrieval.',
+                bible_id, book_name, source_chapter)
+
+    fetched = {}
+    for v, sources in plan.items():
+        texts = []
+        complete = True
+        for source_chapter, source_verse in sources:
+            text = (texts_by_source_chapter.get(source_chapter) or {}).get(source_verse, '')
+            if not text:
+                complete = False
+                break
+            texts.append(text)
+        if not complete:
+            continue
+        text = '\n'.join(texts)
+        fetched[v] = text
+        if not disable_cache:
+            cache.set(
+                _study_verse_cache_key(reference_system, bible_id, book_name, chapter, v),
+                text, VERSE_CACHE_TIMEOUT)
+    return fetched
 
 
 @lru_cache(maxsize=1)
@@ -775,7 +899,7 @@ def _default_bible_ids_from_settings(enabled_bibles, max_bibles):
 
 class BibleStudyView(View):
     def get(self, request):
-        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        verse_nav_step = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
         show_original_text = str(request.GET.get('show_original', '')).strip().lower() in {'1', 'true', 'yes', 'on'}
         max_bibles = 4
 
@@ -795,7 +919,6 @@ class BibleStudyView(View):
         start_verse = _safe_int(request.GET.get('start_verse'), 3)
         end_verse = _safe_int(request.GET.get('end_verse'), 6)
         end_verse = max(start_verse, end_verse)
-        end_verse = min(end_verse, start_verse + max_verses - 1)
 
         bible_ids = request.GET.getlist('bible_id')
         if not bible_ids:
@@ -809,6 +932,11 @@ class BibleStudyView(View):
         bible_ids = [bid for bid in bible_ids if bid in visible_ids]
         if not bible_ids and enabled_bibles:
             bible_ids = [enabled_bibles[0].id]
+
+        # The strictest license limit across the selected translations applies,
+        # since every translation column shows the same verse range.
+        max_verses = effective_max_verses(bible_ids)
+        end_verse = min(end_verse, start_verse + max_verses - 1)
 
         if book in _OT_BOOKS and request.GET.get('reference_system') == 'english':
             source_chapter = chapter
@@ -847,6 +975,28 @@ class BibleStudyView(View):
                 break
             bible_obj = bt.get(bid)
             if bible_obj:
+                prewarmed = {}
+                passage_references = {}
+                passage_sources = {}
+                try:
+                    prewarmed, passage_references, passage_sources = _fetch_licensed_passage(
+                        bible_obj, book, chapter, verse_range, 'hebrew', request,
+                        BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
+                except BibleApiRateLimitExceeded as ex:
+                    bible_api_rate_limit_error = ex.message
+                    rate_limit_exceeded = True
+                    break
+                except Exception:
+                    logger.exception('Licensed passage fetch failed for bible=%s; falling back to per-verse retrieval.', bid)
+                if max_verses_for_bible_id(bid) is None:
+                    try:
+                        prewarmed = _fetch_chapter_verse_texts(
+                            bible_obj, book, chapter, verse_range, 'hebrew',
+                            request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE)
+                    except BibleApiRateLimitExceeded as ex:
+                        bible_api_rate_limit_error = ex.message
+                        rate_limit_exceeded = True
+                        break
                 verse_texts = {}
                 verse_sources = {}
                 verse_references = {}
@@ -854,11 +1004,16 @@ class BibleStudyView(View):
                 for v in verse_range:
                     sources, displayed, warning = _study_verse_references(bible_obj, book, chapter, v, 'hebrew')
                     warning = _public_study_warning(warning, sources)
-                    verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
+                    verse_references[str(v)] = passage_references.get(
+                        str(v), ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—')
                     if warning:
                         verse_warnings[str(v)] = warning
                     if not sources:
                         verse_texts[str(v)] = ''
+                        continue
+                    if v in prewarmed:
+                        verse_texts[str(v)] = prewarmed[v]
+                        verse_sources[str(v)] = passage_sources.get(str(v), 'api')
                         continue
                     cache_key = f'bible_study:v3:hebrew:{bid}:{book}:{chapter}:{v}'
                     cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
@@ -904,6 +1059,7 @@ class BibleStudyView(View):
 
         book_label = str(BibleBooks[book].value) if book in _VALID_BOOK_NAMES else book
         visible_bible_slots = max(1, min(max_bibles, len(selected_bibles) or 1))
+        license_limited_names = [b['name'] for b in selected_bibles if max_verses_for_bible_id(b['id'])]
 
         return render(request, 'bible_study/bible_study.html', {
             'bible_books': bible_books,
@@ -917,6 +1073,10 @@ class BibleStudyView(View):
             'selected_bibles': selected_bibles,
             'verse_data': verse_data,
             'max_verses': max_verses,
+            'verse_nav_step': verse_nav_step,
+            'chapter_verse_cap': chapter_verse_cap(),
+            'bible_verse_limits_json': json.dumps(getattr(settings, 'BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID', {}) or {}),
+            'license_limited_names': license_limited_names,
             'max_bibles': max_bibles,
             'visible_bible_slots': visible_bible_slots,
             'is_ot_book': is_ot_book,
@@ -942,7 +1102,7 @@ class BibleStudyVersesView(View):
         end_verse = _safe_int(request.POST.get('end_verse'), start_verse)
         end_verse = max(start_verse, end_verse)
 
-        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        max_verses = max_verses_for_bible_id(bible_id) or chapter_verse_cap()
         end_verse = min(end_verse, start_verse + max_verses - 1)
 
         if book_name not in _VALID_BOOK_NAMES:
@@ -958,6 +1118,24 @@ class BibleStudyVersesView(View):
 
         disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
         reference_system = 'hebrew' if request.POST.get('reference_system') == 'hebrew' else 'english'
+        prewarmed = {}
+        passage_references = {}
+        passage_sources = {}
+        try:
+            prewarmed, passage_references, passage_sources = _fetch_licensed_passage(
+                bible, book_name, chapter, range(start_verse, end_verse + 1), reference_system, request,
+                BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+        except BibleApiRateLimitExceeded as ex:
+            return JsonResponse({'error': ex.message}, status=429)
+        except Exception:
+            logger.exception('Licensed passage fetch failed for bible=%s; falling back to per-verse retrieval.', bible_id)
+        if max_verses_for_bible_id(bible_id) is None:
+            try:
+                prewarmed = _fetch_chapter_verse_texts(
+                    bible, book_name, chapter, range(start_verse, end_verse + 1), reference_system,
+                    request=request, endpoint=BibleTranslationUsageDaily.ENDPOINT_VERSES_API)
+            except BibleApiRateLimitExceeded as ex:
+                return JsonResponse({'error': ex.message}, status=429)
         verses = {}
         verse_sources = {}
         verse_references = {}
@@ -965,11 +1143,16 @@ class BibleStudyVersesView(View):
         for v in range(start_verse, end_verse + 1):
             sources, displayed, warning = _study_verse_references(bible, book_name, chapter, v, reference_system)
             warning = _public_study_warning(warning, sources)
-            verse_references[str(v)] = ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—'
+            verse_references[str(v)] = passage_references.get(
+                str(v), ', '.join(f'{c}:{n}' for c, n in displayed) if displayed else '—')
             if warning:
                 verse_warnings[str(v)] = warning
             if not sources:
                 verses[str(v)] = ''
+                continue
+            if v in prewarmed:
+                verses[str(v)] = prewarmed[v]
+                verse_sources[str(v)] = passage_sources.get(str(v), 'api')
                 continue
             cache_key = f'bible_study:v3:{reference_system}:{bible_id}:{book_name}:{chapter}:{v}'
             cached = None if disable_cache else cache.get(cache_key)
@@ -1423,7 +1606,8 @@ class BibleStudyOriginalTextView(View):
         end_verse = _safe_int(request.POST.get('end_verse'), start_verse)
         end_verse = max(start_verse, end_verse)
 
-        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        # Original-language text is served from local data; allow whole chapters.
+        max_verses = chapter_verse_cap()
         end_verse = min(end_verse, start_verse + max_verses - 1)
 
         if book_name not in _VALID_BOOK_NAMES:
@@ -1472,7 +1656,8 @@ class BibleStudyWordAlignmentView(View):
         if not isinstance(requested_verses, dict):
             return JsonResponse({'error': 'Invalid verses payload'}, status=400)
 
-        max_verses = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
+        # Alignment works on locally available data; allow whole chapters.
+        max_verses = chapter_verse_cap()
         alignments = {}
         for verse_key, verse_text in list(requested_verses.items())[:max_verses]:
             try:

@@ -731,6 +731,10 @@ $(document).ready(function(){
         if (verse) {
           verseNumbers.push(verse);
         }
+        var endVerse = parseInt(String($line.attr('data-copy-end-verse') || ''), 10);
+        if (endVerse) {
+          verseNumbers.push(endVerse);
+        }
       });
 
       if (mergedLines.length) {

@@ -19,6 +19,8 @@
 #   ./prefetch_bible_chapters.sh --books John Genesis
 # Bible IDs and books are processed in the given order. By default, eligible
 # Dutch translations come first, followed by KJV, Messianic/Jewish, and the rest.
+# Cached chapters are skipped until they are within the refresh margin (5 days
+# by default); each skipped or refreshed chapter is reported in the log.
 
 set -e
 

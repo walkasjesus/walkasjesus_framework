@@ -1,8 +1,12 @@
 import json
 import logging
 import os
+import tempfile
+import threading
 import time
 from pathlib import Path
+
+from filelock import FileLock
 
 DEFAULT_CACHE_TTL_SECONDS = 60 * 60 * 24 * 30
 
@@ -27,10 +31,15 @@ def _resolve_ttl_seconds(ttl_seconds=None):
 class SimpleCache:
     def __init__(self, cache_path: Path = Path('cache.json'), ttl_seconds: int = None):
         self._cache = {}
+        self._pending_updates = {}
+        self._pending_deletions = set()
+        self._disk_signature = None
+        self._mutex = threading.RLock()
         self.cache_hits = 0
         self.cache_misses = 0
         self.cache_items_not_persisted = 0
         self.cache_path = cache_path
+        self._file_lock = FileLock(str(cache_path) + '.lock')
         self.ttl_seconds = _resolve_ttl_seconds(ttl_seconds)
         self.logger = logging.getLogger()
         self.load_state()
@@ -62,105 +71,146 @@ class SimpleCache:
     def get(self, get_function, arguments):
         key = str(arguments)
         now = time.time()
-
-        existing = self._cache.get(key)
-        if existing is not None and self._entry_is_valid(existing, now):
-            self.cache_hits += 1
-            return self._entry_value(existing)
-
-        self.cache_misses += 1
-        self.cache_items_not_persisted += 1
+        with self._mutex:
+            self._sync_if_changed()
+            existing = self._cache.get(key)
+            if existing is not None and self._entry_is_valid(existing, now):
+                self.cache_hits += 1
+                return self._entry_value(existing)
+            self.cache_misses += 1
         value = get_function(arguments)
-        # Stringify when storing, otherwise we run into problems
-        # when serializing to disk, where json serializer makes int 5 a string '5'
-        # which will be seen as something different when reloading the data.
-        self._cache[key] = {
-            'value': value,
-            'expires_at': now + self.ttl_seconds,
-        }
-        self.store_state()
+        self.set_value(key, value)
         return value
 
     def __contains__(self, item):
-        key = str(item)
-        if key not in self._cache:
-            return False
-        if not self._entry_is_valid(self._cache[key], time.time()):
-            self._cache.pop(key, None)
-            return False
-        return True
+        with self._mutex:
+            self._sync_if_changed()
+            entry = self._cache.get(str(item))
+            return entry is not None and self._entry_is_valid(entry, time.time())
 
     def expires_at(self, key):
         """Return the expiry timestamp for a cached key, or None when absent/expired."""
-        normalized_key = str(key)
-        entry = self._cache.get(normalized_key)
-        if entry is None or not self._entry_is_valid(entry, time.time()):
+        with self._mutex:
+            self._sync_if_changed()
+            entry = self._cache.get(str(key))
+            if entry is None or not self._entry_is_valid(entry, time.time()):
+                return None
+            if isinstance(entry, dict):
+                return entry.get('expires_at')
             return None
-        if isinstance(entry, dict):
-            return entry.get('expires_at')
-        return None
 
     def get_value(self, key, default=None):
-        normalized_key = str(key)
-        value = self._cache.get(normalized_key)
-        if value is None:
-            return default
-        if not self._entry_is_valid(value, time.time()):
-            self._cache.pop(normalized_key, None)
-            return default
-        return self._entry_value(value)
+        with self._mutex:
+            self._sync_if_changed()
+            value = self._cache.get(str(key))
+            if value is None or not self._entry_is_valid(value, time.time()):
+                return default
+            return self._entry_value(value)
 
     def set_value(self, key, value, ttl_seconds=None):
         normalized_key = str(key)
         if ttl_seconds is None:
             ttl_seconds = self.ttl_seconds
-        self._cache[normalized_key] = {
-            'value': value,
-            'expires_at': time.time() + ttl_seconds,
-        }
-        self.store_state()
+        with self._mutex:
+            entry = {'value': value, 'expires_at': time.time() + ttl_seconds}
+            self._cache[normalized_key] = entry
+            self._pending_updates[normalized_key] = entry
+            self._pending_deletions.discard(normalized_key)
+            self.cache_items_not_persisted = len(self._pending_updates) + len(self._pending_deletions)
+            self.store_state()
 
     def clear_key(self, key: str):
-        self._cache.pop(str(key), None)
-        self.store_state()
+        with self._mutex:
+            key = str(key)
+            self._cache.pop(key, None)
+            self._pending_updates.pop(key, None)
+            self._pending_deletions.add(key)
+            self.cache_items_not_persisted = len(self._pending_updates) + len(self._pending_deletions)
+            self.store_state()
 
     def cached_keys(self) -> [str]:
-        return list(self._cache.keys())
+        with self._mutex:
+            self._sync_if_changed()
+            self._prune_expired()
+            return list(self._cache.keys())
+
+    def _signature(self):
+        try:
+            stat = self.cache_path.stat()
+            return stat.st_ino, stat.st_mtime_ns, stat.st_size
+        except FileNotFoundError:
+            return None
+
+    def _read_disk(self):
+        try:
+            with self.cache_path.open(encoding='utf-8') as file:
+                loaded = json.load(file)
+        except FileNotFoundError:
+            return {}
+        if not isinstance(loaded, dict):
+            raise ValueError('Cache state must be a JSON object')
+        return {
+            key: value if isinstance(value, dict) and 'value' in value
+            else {'value': value, 'expires_at': None}
+            for key, value in loaded.items()
+        }
+
+    def _sync_if_changed(self):
+        try:
+            if self._signature() != self._disk_signature:
+                self.load_state()
+        except OSError as exc:
+            self.logger.warning('Could not inspect cache state at %s: %s', self.cache_path, exc)
 
     def load_state(self):
         """" Load the cache content from disk. """
-        if not self.cache_path.exists():
-            self.logger.info(f'Could not find cache at {self.cache_path}')
-            return
-
-        try:
-            with self.cache_path.open() as file:
-                loaded = json.load(file)
-        except (OSError, PermissionError, ValueError, TypeError, json.JSONDecodeError) as exc:
-            self.logger.warning('Could not load cache state from %s: %s', self.cache_path, exc)
-            self._cache = {}
-            return
-
-        if not isinstance(loaded, dict):
-            self._cache = {}
-            return
-
-        self._cache = {
-            key: (
-                value if isinstance(value, dict) and 'value' in value
-                else {'value': value, 'expires_at': None}
-            )
-            for key, value in loaded.items()
-        }
-        self._prune_expired()
+        with self._mutex:
+            try:
+                self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+                with self._file_lock:
+                    loaded = self._read_disk()
+                    signature = self._signature()
+                loaded.update(self._pending_updates)
+                for key in self._pending_deletions:
+                    loaded.pop(key, None)
+                self._cache = loaded
+                self._disk_signature = signature
+                self._prune_expired()
+            except (OSError, ValueError, TypeError) as exc:
+                self.logger.warning('Could not load cache state from %s: %s', self.cache_path, exc)
 
     def store_state(self):
         """" Store the cache content to disk. """
-        self._prune_expired()
-        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            with self.cache_path.open('w+') as file:
-                json.dump(self._cache, file, indent=4)
-            self.cache_items_not_persisted = 0
-        except (OSError, PermissionError) as exc:
-            self.logger.warning('Could not persist cache state to %s: %s', self.cache_path, exc)
+        with self._mutex:
+            if not self._pending_updates and not self._pending_deletions:
+                self._sync_if_changed()
+                return
+            temp_path = None
+            try:
+                self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+                with self._file_lock:
+                    merged = self._read_disk()
+                    merged.update(self._pending_updates)
+                    for key in self._pending_deletions:
+                        merged.pop(key, None)
+                    now = time.time()
+                    merged = {key: value for key, value in merged.items() if self._entry_is_valid(value, now)}
+                    with tempfile.NamedTemporaryFile(
+                            mode='w', encoding='utf-8', dir=self.cache_path.parent,
+                            prefix=self.cache_path.name + '.', suffix='.tmp', delete=False) as file:
+                        temp_path = Path(file.name)
+                        json.dump(merged, file, indent=4)
+                    if self.cache_path.exists():
+                        os.chmod(temp_path, self.cache_path.stat().st_mode & 0o777)
+                    os.replace(temp_path, self.cache_path)
+                    temp_path = None
+                    self._disk_signature = self._signature()
+                    self._cache = merged
+                    self._pending_updates.clear()
+                    self._pending_deletions.clear()
+                    self.cache_items_not_persisted = 0
+            except (OSError, ValueError, TypeError) as exc:
+                self.logger.warning('Could not persist cache state to %s: %s', self.cache_path, exc)
+            finally:
+                if temp_path is not None:
+                    temp_path.unlink(missing_ok=True)

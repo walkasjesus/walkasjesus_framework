@@ -16,5 +16,6 @@ class CachedBibleApiClient(BibleApiClient):
         """Force a fresh retrieval of the url, replacing any cached entry."""
         if os.environ.get('BIBLE_API_OFFLINE') == '1':
             raise RuntimeError('Refreshing API.Bible content is disabled in cache-only mode.')
-        self.cache.clear_key(url)
-        return self.get(url)
+        value = super().get(url)
+        self.cache.set_value(url, value)
+        return value

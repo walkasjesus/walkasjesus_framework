@@ -754,11 +754,44 @@ class BibleStudyChapterDisplayTest(TestCase):
                       return_value=({1: [(1, 1)]}, {1: 1})), \
                 patch('walkasjesus_app.management.commands.prefetch_bible_chapters.Services') as services:
             services.return_value.cache.expires_at.return_value = None
+            services.return_value.cache.cache_items_not_persisted = 0
             call_command('prefetch_bible_chapters', books=['John', 'Genesis'],
                          max_requests=2, dry_run=True, stdout=output)
         log = output.getvalue()
         self.assertIn('Test Translation (free): would refresh John 1', log)
         self.assertLess(log.index('John 1'), log.index('Genesis 1'))
+
+    def test_prefetch_second_run_skips_persisted_chapter_and_advances(self):
+        from walkasjesus_app.management.commands.prefetch_bible_chapters import Command
+        self.bible.name = 'Test Translation'
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'api-cache.json'
+            other_process = SimpleCache(path)
+            output = StringIO()
+
+            def fetch(bible, book, chapter, verses, reference_system, force_refresh):
+                current_cache.set_value(bible.chapter_passage_url(BibleLibBibleBooks.Titus, chapter, 1), 'text')
+                return {1: 'text'}
+
+            with patch.object(Command, '_target_bibles', return_value=[self.bible]), \
+                    patch('walkasjesus_app.management.commands.prefetch_bible_chapters.chapters_for_book',
+                          return_value=[1, 2]), \
+                    patch('walkasjesus_app.management.commands.prefetch_bible_chapters.max_display_verse',
+                          return_value=1), \
+                    patch('walkasjesus_app.management.commands.prefetch_bible_chapters._study_chapter_source_plan',
+                          side_effect=lambda bible, book, chapter, verses, system: ({}, {chapter: 1})), \
+                    patch('walkasjesus_app.management.commands.prefetch_bible_chapters._fetch_chapter_verse_texts',
+                          side_effect=fetch), \
+                    patch('walkasjesus_app.management.commands.prefetch_bible_chapters.Services') as services:
+                current_cache = SimpleCache(path)
+                services.return_value.cache = current_cache
+                call_command('prefetch_bible_chapters', books=['Titus'], max_requests=1, sleep=0, stdout=output)
+                other_process.set_value('unrelated', 'value')
+                current_cache = SimpleCache(path)
+                services.return_value.cache = current_cache
+                call_command('prefetch_bible_chapters', books=['Titus'], max_requests=1, sleep=0, stdout=output)
+            self.assertIn('skipped Titus 1 (cache still valid)', output.getvalue())
+            self.assertIn('refreshed Titus 2', output.getvalue())
 
     def test_prefetch_rejects_unknown_book(self):
         from walkasjesus_app.management.commands.prefetch_bible_chapters import Command

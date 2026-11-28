@@ -63,6 +63,8 @@ class Command(BaseCommand):
         dry_run = options['dry_run']
 
         api_cache = Services().cache
+        self.stdout.write(f'Cache: {api_cache.cache_path}; refresh margin: '
+                          f'{options["refresh_margin_days"]:g} day(s)')
         requests_made = 0
         chapters_refreshed = 0
         chapters_fresh = 0
@@ -92,17 +94,18 @@ class Command(BaseCommand):
                         for source_chapter, last_verse in sorted(last_verse_by_chapter.items())
                     ]
                     now = time.time()
-                    needs_refresh = any(
-                        api_cache.expires_at(url) is None or api_cache.expires_at(url) - now < margin_seconds
-                        for url in urls
-                    )
-                    if not needs_refresh:
+                    expirations = [api_cache.expires_at(url) for url in urls]
+                    if all(expiry is not None and expiry - now >= margin_seconds for expiry in expirations):
                         chapters_fresh += 1
+                        self.stdout.write(f'  {bible.name} ({bible.id}): skipped '
+                                          f'{book_name} {chapter} (cache still valid)')
                         continue
+                    reason = ('cache missing or expired' if any(expiry is None for expiry in expirations)
+                              else 'cache nearing expiry')
 
                     if dry_run:
                         self.stdout.write(f'  {bible.name} ({bible.id}): would refresh '
-                                          f'{book_name} {chapter} ({len(urls)} request(s))')
+                                          f'{book_name} {chapter} ({len(urls)} request(s); {reason})')
                         requests_made += len(urls)
                         chapters_refreshed += 1
                         continue
@@ -119,7 +122,7 @@ class Command(BaseCommand):
                     if fetched:
                         chapters_refreshed += 1
                         self.stdout.write(f'  {bible.name} ({bible.id}): refreshed '
-                                          f'{book_name} {chapter} ({len(fetched)} verses)')
+                                          f'{book_name} {chapter} ({len(fetched)} verses; {reason})')
                     else:
                         chapters_failed += 1
                         self.stdout.write(self.style.WARNING(
@@ -128,6 +131,8 @@ class Command(BaseCommand):
                         time.sleep(sleep_seconds)
 
         api_cache.store_state()
+        if api_cache.cache_items_not_persisted:
+            raise CommandError('Could not persist all Bible API cache changes; see the cache warnings above.')
         summary = (f'Done. requests={requests_made} refreshed={chapters_refreshed} '
                    f'fresh={chapters_fresh} failed={chapters_failed}')
         self.stdout.write(self.style.SUCCESS(f'[dry-run] {summary}' if dry_run else summary))

@@ -6,5 +6,5 @@ setup(
     description='Library to look up bible texts from scripture.api.bible',
     packages=['bible_lib'],
     test_suite="tests",
-    install_requires=['requests', 'pycountry'],
+    install_requires=['requests', 'pycountry', 'filelock>=3.0'],
 )

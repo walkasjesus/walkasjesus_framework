@@ -23,6 +23,10 @@
 <br />
 <br />
 <h1>{% trans 'Bibles available' %}</h1>
+<p>{% trans 'Chapter coverage uses the persisted API.Bible chapter passages and the verses mapped by Bible Study. Local and license-limited translations are not included. The total covers the canonical Bible, including books absent from partial translations.' %}</p>
+{% if chapter_cache_unavailable %}
+<p class="errornote">{% trans 'The chapter cache could not be read. Please try again.' %}</p>
+{% endif %}
 <table>
 
     <tr>
@@ -31,7 +35,7 @@
         <th>{% trans 'Abbreviation' %}</th>
         <th>{% trans 'Language' %}</th>
         <th>{% trans 'Enabled' %}</th>
-        <th>{% trans 'Percentage cached' %}</th>
+        <th>{% trans 'Chapters cached' %}</th>
         <th>{% trans 'Verse numbering profile and limitations' %}</th>
         <th>{% trans 'Automatic numbering report' %}</th>
         <th></th>
@@ -43,7 +47,7 @@
         <td>{{ bible.abbreviation|default:bible.name }}</td>
         <td>{{ bible.language }}</td>
         <td>{{ bible.enabled }}</td>
-        <td>{{ bible.percentage_cached|floatformat:0 }}</td>
+        <td>{% if bible.percentage_cached is not None %}{{ bible.cached_chapters }} / {{ bible.total_chapters }} ({{ bible.percentage_cached|floatformat:1 }}%){% else %}&mdash;{% endif %}</td>
         <td>{{ bible.numbering_status }}</td>
         <td>
             {{ bible.numbering_review_status }}<br>

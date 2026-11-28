@@ -333,8 +333,8 @@ BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID = {
 BIBLE_STUDY_CHAPTER_VERSE_CAP = 200
 # Daily request budget for the prefetch_bible_chapters management command.
 BIBLE_PREFETCH_MAX_REQUESTS_PER_RUN = 300
-# Bible ids targeted by prefetch_bible_chapters. Empty list = all non-local
-# translations without a per-translation verse limit.
+# Bible ids targeted by prefetch_bible_chapters, in priority order. Empty list =
+# all eligible translations, Dutch first, then KJV, Messianic/Jewish, and others.
 BIBLE_PREFETCH_BIBLE_IDS = []
 # Default Bible Study translations per language when no bible_id query params are provided.
 # Example: {'EN': ['kjv'], 'NL': ['hsv']}

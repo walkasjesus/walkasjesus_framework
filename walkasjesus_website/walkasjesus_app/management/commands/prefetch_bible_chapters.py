@@ -14,15 +14,13 @@ import time
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib.bible_api.services import Services
 from django.conf import settings
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
+from walkasjesus_app.lib.bible_chapter_prefetch import chapters_for_book, max_display_verse
 from walkasjesus_app.lib.bible_display_limits import max_verses_for_bible_id
-from walkasjesus_app.lib.strongs_service import _hebrew_verse_index
 from walkasjesus_app.models import BibleTranslation
 from walkasjesus_app.views.bible_study_view import (
     _CANONICAL_CHAPTER_COUNTS,
-    _OT_BOOKS,
-    _chapter_max_verse_for_bible,
     _fetch_chapter_verse_texts,
     _study_chapter_source_plan,
 )
@@ -33,10 +31,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--bible-ids', nargs='*', default=None,
-                            help='Bible ids to prefetch. Default: settings.BIBLE_PREFETCH_BIBLE_IDS, '
-                                 'or all non-local translations without a license verse limit.')
+                            help='Bible ids to prefetch, in priority order. Default: '
+                                 'settings.BIBLE_PREFETCH_BIBLE_IDS, or Dutch, KJV, Messianic/Jewish, '
+                                 'then other eligible translations.')
         parser.add_argument('--books', nargs='*', default=None,
-                            help='Limit to these Bible book names (e.g. Genesis John).')
+                            help='Limit to these Bible book names, in priority order (e.g. John Genesis).')
         parser.add_argument('--max-requests', type=int,
                             default=int(getattr(settings, 'BIBLE_PREFETCH_MAX_REQUESTS_PER_RUN', 300)),
                             help='Maximum number of api.bible requests for this run.')
@@ -53,7 +52,11 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING('No eligible bibles to prefetch.'))
             return
 
-        requested_books = set(options['books'] or [])
+        requested_books = options['books'] or list(_CANONICAL_CHAPTER_COUNTS)
+        invalid_books = [book for book in requested_books if book not in _CANONICAL_CHAPTER_COUNTS]
+        if invalid_books:
+            raise CommandError(f'Unknown Bible book(s): {", ".join(invalid_books)}')
+        requested_books = list(dict.fromkeys(requested_books))
         margin_seconds = max(0.0, options['refresh_margin_days']) * 86400
         max_requests = max(0, options['max_requests'])
         sleep_seconds = max(0.0, options['sleep'])
@@ -69,15 +72,13 @@ class Command(BaseCommand):
             if requests_made >= max_requests:
                 break
             self.stdout.write(f'Prefetching bible {bible.id} ({bible.name})')
-            for book_name in _CANONICAL_CHAPTER_COUNTS:
-                if requested_books and book_name not in requested_books:
-                    continue
+            for book_name in requested_books:
                 if requests_made >= max_requests:
                     break
-                for chapter in self._chapters_for_book(book_name):
+                for chapter in chapters_for_book(book_name):
                     if requests_made >= max_requests:
                         break
-                    last_display_verse = self._max_display_verse(bible, book_name, chapter)
+                    last_display_verse = max_display_verse(bible, book_name, chapter)
                     if not last_display_verse:
                         continue
                     verse_numbers = range(1, last_display_verse + 1)
@@ -100,7 +101,8 @@ class Command(BaseCommand):
                         continue
 
                     if dry_run:
-                        self.stdout.write(f'  would refresh {book_name} {chapter} ({len(urls)} request(s))')
+                        self.stdout.write(f'  {bible.name} ({bible.id}): would refresh '
+                                          f'{book_name} {chapter} ({len(urls)} request(s))')
                         requests_made += len(urls)
                         chapters_refreshed += 1
                         continue
@@ -109,16 +111,19 @@ class Command(BaseCommand):
                         fetched = _fetch_chapter_verse_texts(
                             bible, book_name, chapter, verse_numbers, 'hebrew', force_refresh=True)
                     except Exception as ex:
-                        self.stderr.write(f'  failed to refresh {book_name} {chapter}: {ex}')
+                        self.stderr.write(f'  {bible.name} ({bible.id}): '
+                                          f'failed to refresh {book_name} {chapter}: {ex}')
                         chapters_failed += 1
                         fetched = {}
                     requests_made += len(urls)
                     if fetched:
                         chapters_refreshed += 1
-                        self.stdout.write(f'  refreshed {book_name} {chapter} ({len(fetched)} verses)')
+                        self.stdout.write(f'  {bible.name} ({bible.id}): refreshed '
+                                          f'{book_name} {chapter} ({len(fetched)} verses)')
                     else:
                         chapters_failed += 1
-                        self.stdout.write(self.style.WARNING(f'  no verses for {book_name} {chapter}'))
+                        self.stdout.write(self.style.WARNING(
+                            f'  {bible.name} ({bible.id}): no verses for {book_name} {chapter}'))
                     if sleep_seconds:
                         time.sleep(sleep_seconds)
 
@@ -138,7 +143,7 @@ class Command(BaseCommand):
             if configured:
                 selected = [bible for bible in (translations.get(bid) for bid in configured) if bible]
             else:
-                selected = all_bibles
+                selected = sorted(all_bibles, key=self._default_priority)
 
         eligible = []
         for bible in selected:
@@ -147,24 +152,19 @@ class Command(BaseCommand):
             if max_verses_for_bible_id(getattr(bible, 'id', '')):
                 # License-limited translations (e.g. NBV21/BGT) must not be bulk-fetched.
                 self.stdout.write(self.style.WARNING(
-                    f'Skipping {bible.id}: license limits display to '
+                    f'Skipping {bible.name} ({bible.id}): license limits display to '
                     f'{max_verses_for_bible_id(bible.id)} verses at a time.'))
                 continue
             eligible.append(bible)
         return eligible
 
     @staticmethod
-    def _chapters_for_book(book_name):
-        if book_name in _OT_BOOKS:
-            hebrew_chapters = sorted({chapter for chapter, _ in _hebrew_verse_index(book_name)[0]})
-            if hebrew_chapters:
-                return hebrew_chapters
-        return range(1, _CANONICAL_CHAPTER_COUNTS.get(book_name, 0) + 1)
-
-    @staticmethod
-    def _max_display_verse(bible, book_name, chapter):
-        if book_name in _OT_BOOKS:
-            # The study tool displays OT passages in Hebrew verse numbering.
-            return max((verse for source_chapter, verse in _hebrew_verse_index(book_name)[0]
-                        if source_chapter == chapter), default=0)
-        return _chapter_max_verse_for_bible(bible, book_name, chapter)
+    def _default_priority(bible):
+        if str(getattr(bible, 'language', '') or '').lower() == 'nl':
+            return 0
+        if bible.id == 'de4e12af7f28f599-01':
+            return 1
+        name = str(getattr(bible, 'name', '') or '').lower()
+        if 'messianic' in name or 'jewish' in name:
+            return 2
+        return 3

@@ -19,3 +19,4 @@ from .maimonides import *
 from .sword_commentary import *
 from .bible_usage import *
 from .media_review import *
+from .bible_numbering import *

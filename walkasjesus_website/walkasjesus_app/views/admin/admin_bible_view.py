@@ -6,11 +6,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
+from django.urls import reverse
 from django.views import View
 
 from walkasjesus_app.models import BibleTranslation, BibleReferences
 from walkasjesus_app.models.bibles import BibleTranslationMetaData
 from walkasjesus_app.views.bible_study_view import _study_numbering_profile
+from walkasjesus_app.models.bible_numbering import BibleNumberingReview
 
 
 class AdminBibleView(View):
@@ -30,13 +32,23 @@ class AdminBibleView(View):
             'sv': _('KJV storage references; embedded Dutch references. Psalm titles are separated.'),
             'hsv': _('Uses SV references outside Psalms (not independently verified); Hebrew numbering in Psalms.'),
             'kjv': _('KJV reference profile; Hebrew references are converted using STEPBible.'),
-            'naardense': _('Hebrew numbering in Psalms and Hosea; other numbering differences are not verified.'),
+            'naardense': _('Hebrew numbering in Psalms, Hosea and Joel; other numbering differences are not verified.'),
             'cjb': _('Hebrew numbering in Hosea; other numbering differences are not verified.'),
             'unknown': _('Verse numbering for this translation has not been verified.'),
+        }
+        reviews = {
+            review.bible_id: review
+            for review in BibleNumberingReview.objects.all()
         }
 
         for bible in bibles:
             bible.numbering_status = numbering_profiles[_study_numbering_profile(bible)]
+            review = reviews.get(bible.id)
+            bible.numbering_review_status = review.scanned_at if review else _('No scan yet')
+            bible.numbering_review_url = (
+                reverse('admin:commandments_app_biblenumberingreview_change', args=[review.pk])
+                if review else ''
+            )
             cached_count, total_count = self.bible_count_in_cache(bible, cache_controller)
 
             bible.percentage_cached = cached_count / max(total_count, 0.0001) * 100

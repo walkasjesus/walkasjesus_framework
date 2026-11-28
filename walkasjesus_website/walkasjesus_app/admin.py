@@ -21,6 +21,7 @@ from walkasjesus_app.views.admin.admin_bible_usage_view import AdminBibleUsageVi
 from walkasjesus_app.views.admin.admin_page_usage_view import AdminPageUsageView
 from walkasjesus_app.views.admin.media_review_views import MediaCoverageReportView, MediaReviewDashboardView, MediaReviewReportView, user_can_review_media_resources
 from walkasjesus_website.settings import BASE_DIR
+from walkasjesus_app import admin_bible_numbering
 
 
 class Bible(models.Model):

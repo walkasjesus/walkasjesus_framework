@@ -49,11 +49,43 @@ the Bible Study page keeps its existing in-page passage navigation.
 | URL name | Purpose |
 | --- | --- |
 | `bible_study` | Page render, also honours deep links (`?book=&chapter=&start_verse=…`) |
-| `bible_study_verses` | Verse text for one translation and verse range (cached 6 months) |
+| `bible_study_verses` | Verse text for one translation and verse range (cached 25 days) |
 | `bible_study_chapter_meta` | Last verse number of a chapter, from `data/bible_study_chapter_index.json` |
 | `bible_study_original_text` | Original-language words + Strong's candidates for a verse range |
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
+
+### Section headings in combined text
+
+When "Combine verses into continuous text" and "Show section headings from the
+translation" are enabled, API.Bible translations show their own editorial headings
+from the book `/sections` metadata endpoint. The heading checkbox defaults to on,
+is disabled in per-verse mode, and retains its selection when switching modes.
+The `show_sections=0` URL parameter switches it off; AJAX and browser cache keys
+also distinguish the setting. This
+fetches titles and verse boundaries, not additional verse text. Only sections
+overlapping the displayed source verses appear, including the active heading when
+the passage starts halfway through a section. Source numbering is mapped to the
+displayed Hebrew references; headings are not copied between translations. Book
+metadata includes sections that begin in a previous chapter, unlike chapter lists.
+
+Book metadata (including a 404 indicating no sections) is cached for the configured
+25-day API TTL. Uncombined mode and local translations do not fetch section metadata.
+Transport/validation failures are logged and shown beside the translation while
+leaving the verses available; failures are not cached. Metadata requests count toward
+the normal device API quota.
+
+Study verse requests explicitly exclude inline titles to avoid duplicates and titles
+being appended to the preceding verse. Study caches use a new version to avoid
+reusing old text with embedded titles. Headings are displayed separately and excluded
+from the verse-copy controls.
+
+In side-by-side combined columns, each displayed verse starts at the same height.
+Heading slots reserve the same space in translations without that heading, and
+headings within the text have a blank line above them. Combined verse ranges span
+the height of the corresponding individual verses without duplicating their text.
+Alignment is recalculated after loading, font loading and resizing; stacked mobile
+columns use their natural heights.
 
 ### Hebrew verse numbering
 
@@ -68,7 +100,7 @@ such as `[01:12]`. These determine its displayed numbering and the corresponding
 HSV lookup outside Psalms; this assumes HSV follows those markers and is not an
 independently verified mapping for every passage. In Psalms the local SV's embedded
 markers are split to separate the title and body, while HSV uses Hebrew numbering.
-Naardense is treated as Hebrew-numbered for Psalms and Hosea; the local Complete
+Naardense is treated as Hebrew-numbered for Psalms, Hosea and Joel; the local Complete
 Jewish Bible is treated as Hebrew-numbered for Hosea. Other profiles are not
 verified: their technical status and profile limitations appear only in the
 staff-only Bible cache management overview. Unchanged references display without
@@ -88,6 +120,89 @@ differences. Dictionary occurrence results display the Hebrew reference and
 translation reference, and fetch translation text using that same mapping.
 Detail-page links may explicitly request `reference_system=english`.
 If such a range maps across Hebrew chapters, it must be opened as separate verses.
+
+### Automatic numbering checks and budgeted source acquisition
+
+The staff Bible overview links to read-only automatic reports. There are no manual
+checklists or approval controls. Historical checklist entries are archived by the
+migration, not discarded. Reports do not automatically activate production mappings.
+Console summaries show the translation ID and readable name from the already
+loaded catalogue, without extra API requests. Missing catalogue names are explicitly
+labelled as unavailable.
+
+The script checks fresh cache first and acquires missing risk passages directly
+using provider book, chapter and verse IDs. It does **not** use the study display
+mapping, so an unverified mapping cannot prevent acquiring its source evidence.
+Metadata resolves three-versus-four-chapter editions and prevents requesting
+nonexistent verse numbers. Only missing risk ranges are fetched, not whole Bibles.
+
+```bash
+cd walkasjesus_website
+./check_bible_numbering.sh
+./check_bible_numbering.sh --language=nl
+./check_bible_numbering.sh --language=nl --books=all
+./check_bible_numbering.sh --language=nl --books='numbers'
+./check_bible_numbering.sh --bible-ids 89f6d2447cc48fbd-01 --books Joel
+./check_bible_numbering.sh --max-requests 10
+./check_bible_numbering.sh --cache-only --no-save --output /tmp/bible-numbering-report.json
+```
+
+The default and maximum budget is **100 HTTP requests per run**, including
+catalogues and failed attempts. There are no automatic retries or redirects.
+Requests are spaced by 0.5 seconds (`--sleep` overrides). When the budget runs out,
+the script stops acquisition, writes its current report and resumes from fresh
+cache on the next run. Default acquisition order is Joel, Hosea, Psalms per
+translation. `--bible-ids` and `--books` narrow the work. Without explicit IDs, the
+script uses translations already present in the passage cache, including disabled
+translations previously cached. Licence-limited translations such as NBV21/BGT
+are **not automatically prefetched**; their existing cache is still checked.
+`--language=nl` filters both reports and acquisition to Dutch translations from the
+already loaded catalogue, without a network lookup. It intersects with `--bible-ids`
+when both are given; absent catalogue languages cause an explicit error.
+Book names are case-insensitive canonical names (`numbers`, `ChroniclesFirstBook`,
+etc.); multiple names can follow `--books`. `--books=all` derives risk cases for all
+books from the local reference mappings, including Numbers, Chronicles and Malachi.
+Books without known mapping differences do not cause source acquisition. This does
+not prove they have no edition-specific merged/split verses; structural checks still
+inspect all fresh cached passages. Books without a local numbering mapping (the NT
+and deuterocanonical books) report `no_reference_mapping`, not successful verification.
+The default remains Joel, Hosea and Psalms.
+
+The equivalent command is `python manage.py check_bible_numbering`. Both entry
+points keep ordinary API.Bible access disabled **before Django starts**, including
+catalogue loading by model imports. Only the dedicated, counted acquisition client
+can make requests after startup. `--cache-only` or `--max-requests 0` guarantees zero
+requests. `--no-save` skips database report writes, not source acquisition.
+
+The command reads `bible_api_cache.json`; acquired source responses are stored there
+with the configured 25-day TTL. `--cache-path` selects another existing file.
+Only fresh, expiry-bearing text-passage entries are examined; expired
+entries, legacy entries without a usable expiry, unsupported content formats and
+entries whose remaining TTL exceeds the configured 25-day lifetime are excluded.
+Missing data remains incomplete when the budget or licence prevents acquisition. The
+command does not inspect Django's derived text cache because it often lacks the
+original provider verse markers.
+
+Reports identify missing requested verses, malformed/overlapping verse markers,
+empty verse text, conflicting cached boundaries and merged ranges. Fresh provider
+chapter catalogues supply chapter coverage counts where available; missing cached
+chapters are not treated as missing chapters in the translation. For selected OT books the
+local STEPBible mapping supplies expected risk cases; cached Hebrew or English
+references are only **available source evidence**, not proof of correct
+translation boundaries. Fresh book catalogues can mark OT checks inapplicable to
+NT-only editions. Equal counts do not prove equal verse boundaries.
+
+By default the latest text-free report is stored in the read-only admin overview.
+`--no-save` avoids database writes;
+`--output` also writes JSON without scripture text. `--fail-on-findings` exits
+nonzero when structural findings need attention. No finding, missing cache data,
+or successful scan automatically confirms a translation.
+
+Naardense Joel was explicitly checked against provider metadata and passages:
+four numbered chapters, Joel 3:1–5 containing the Spirit-outpouring passage, and
+Joel 4:1–21 containing the nations/judgement passage. Its study mapping uses Hebrew
+chapter numbering, rather than KJV Joel 2:28–32 / 3:1–21. Regression tests cover
+both chapter transitions and final verses.
 
 ### Text search and dictionary word study
 

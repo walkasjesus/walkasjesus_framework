@@ -33,6 +33,7 @@
         <th>{% trans 'Enabled' %}</th>
         <th>{% trans 'Percentage cached' %}</th>
         <th>{% trans 'Verse numbering profile and limitations' %}</th>
+        <th>{% trans 'Automatic numbering report' %}</th>
         <th></th>
     </tr>
     {% for bible in bibles %}
@@ -44,6 +45,12 @@
         <td>{{ bible.enabled }}</td>
         <td>{{ bible.percentage_cached|floatformat:0 }}</td>
         <td>{{ bible.numbering_status }}</td>
+        <td>
+            {{ bible.numbering_review_status }}<br>
+            {% if bible.numbering_review_url %}
+            <a href="{{ bible.numbering_review_url }}">{% trans 'View automatic report' %}</a>
+            {% endif %}
+        </td>
         <td>
             <form action="{% url 'commandments:admin_enable_bible' %}" method="post">
             {% csrf_token %}

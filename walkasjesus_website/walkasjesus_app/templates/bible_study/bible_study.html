@@ -126,7 +126,7 @@
             <div class="col-12">
               <div class="bs-passage-mode-toggle">
                 <div class="form-check mb-0">
-                  <input class="form-check-input" type="checkbox" id="bs-combine-verses" name="combine_verses" value="1" checked>
+                  <input class="form-check-input" type="checkbox" id="bs-combine-verses" name="combine_verses" value="1"{% if combine_verses %} checked{% endif %}>
                   <label class="form-check-label" for="bs-combine-verses">{% trans 'Combine verses into one continuous text' %} {% trans '(turn off for verse-by-verse word study)' %}</label>
                   {# Line breaks inside data-jc-tooltip are kept (white-space: pre-line) to separate the on/off explanation. #}
                   <span class="bs-combine-help jc-tooltip-host jc-tooltip-immediate" tabindex="0"
@@ -134,7 +134,11 @@
 
 {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %}
 
-{% trans "Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong's details." %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans "Only when off: in English and Dutch translations every word is linked to the Hebrew or Greek word behind it. Point at a word to highlight the matching original word; click it to open its Strong's details." %}</span></span>
+{% trans "Only when off: reliably aligned English and Dutch words are linked to the matching Hebrew or Greek word. Point at a linked word to highlight the original word; click it to open its Strong's details." %}"><i class="fa fa-info-circle" aria-hidden="true"></i><span class="sr-only">{% trans 'On (combined): each translation is shown as one continuous text that reads easily. Below the text you find, per verse, the buttons for commentary and the original Hebrew/Greek text.' %} {% trans 'Off (per verse): every verse gets its own card with the selected translations side by side, so you can compare them verse by verse.' %} {% trans "Only when off: reliably aligned English and Dutch words are linked to the matching Hebrew or Greek word. Point at a linked word to highlight the original word; click it to open its Strong's details." %}</span></span>
+                </div>
+                <div class="form-check mt-2 bs-section-toggle{% if not combine_verses %} is-disabled{% endif %}">
+                  <input class="form-check-input" type="checkbox" id="bs-show-sections" name="show_sections" value="1"{% if show_sections %} checked{% endif %}{% if not combine_verses %} disabled{% endif %}>
+                  <label class="form-check-label" for="bs-show-sections">{% trans 'Show section headings from the translation' %}</label>
                 </div>
               </div>
             </div>
@@ -189,8 +193,24 @@
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-list-ol"></i></span>{% trans 'Verse range' %}</h6>
-            <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose an autocomplete suggestion, press Enter or click Search to open it. Suggestions respect chapter boundaries and show up to' %} {{ verse_nav_step }} {% trans 'verses.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'Use Previous and Next above or below the passage to move through the Bible. Combine verses gives continuous text; turn it off for separate verse cards and word-by-word study.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose a suggestion, press Enter or click Search. Explicit ranges can extend to the end of the chapter, within the strictest licence limit of the selected translations.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Show whole chapter is available when all selected translations allow it. Previous and Next normally move through verse ranges; in whole-chapter mode they move to the previous or next chapter, also across book boundaries.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'NBV21 and BGT allow at most 5 verses at a time. A red notice below the translation selectors explains the active limit and disappears after 10 seconds; the limit still applies.' %}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-align-left"></i></span>{% trans 'Continuous text and section headings' %}</h6>
+            <p class="small text-muted mb-1">{% trans 'Combine verses gives continuous text per translation; turn it off for separate verse cards and word-by-word study. The section-headings checkbox below it is only available in combined mode. Its selection is kept when switching modes.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Headings are editorial titles supplied by the selected translation, not numbered verses or original-language text. Not every translation provides them. An active heading may start in an earlier verse or chapter; it is shown above the relevant displayed text.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'Side-by-side columns align verse starts and leave a blank line above headings within the text. Merged verse blocks stay together. On small screens the translations stack without alignment padding.' %}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-list-ol"></i></span>{% trans 'Verse numbering and merged verses' %}</h6>
+            <p class="small text-muted mb-1">{% trans 'Old Testament selection and original text use Hebrew verse numbering, which can differ from the translation. Differing source references and verse-boundary warnings are shown. When no reliable mapping is available, choose another translation rather than displaying a potentially wrong passage.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'A translation may combine several verses into one text block, such as BGT 1-4. Combined mode shows that block once with its range. Numbered Psalm titles remain part of the verses and are different from the optional editorial headings.' %}</p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-copy"></i></span>{% trans 'Copying verses' %}</h6>
+            <p class="small text-muted mb-0">{% trans 'Click an unlinked part of the verse text to select or deselect it, then use the copy bar. References retain merged verse ranges. Editorial section headings are not included in copied verse text.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-search"></i></span>{% trans 'Search words in Bible translation' %}</h6>
@@ -218,7 +238,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-cogs"></i></span>{% trans 'How the word links are made' %}</h6>
-            <p class="small text-muted mb-1">{% trans "For the King James Version and the Dutch Statenvertaling the link is exact: those editions were tagged word by word with Strong's numbers long ago, so we simply look the number up." %}</p>
+            <p class="small text-muted mb-1">{% trans "For the King James Version and the Dutch Statenvertaling, word links use local word-by-word Strong's tagging. A link is only shown when it can be matched to the original words and verse boundaries." %}</p>
             <p class="small text-muted mb-1">{% trans 'Modern revisions such as the Herziene Statenvertaling are matched against that older tagged edition; where the wording still agrees, the link carries over. Where it differs too much, no link is shown rather than a wrong one.' %}</p>
             <p class="small text-muted mb-0">{% trans 'For other English translations there is no tagging, so the link is estimated: every original word carries a short English rendering plus its dictionary meanings, and the sentence is matched in reading order. This is a best effort and can occasionally be off by a word.' %}</p>
           </div>
@@ -226,15 +246,16 @@
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-database"></i></span>{% trans 'Where the data comes from' %}</h6>
             <p class="small text-muted mb-1">{% trans 'Translation texts come from API.Bible, the local Statenvertaling and the local Complete Jewish Bible; each translation has its own copyright notice. Local text search does not call API.Bible. Fetching external translation verses can be subject to the daily API allowance; errors are shown explicitly.' %}</p>
             <p class="small text-muted mb-1">{% trans "The Hebrew and Greek words, their grammar and their meanings come from the STEPBible datasets (TAHOT, TAGNT and the brief Strong's lexicons, CC BY 4.0) by Tyndale House Cambridge." %}</p>
-            <p class="small text-muted mb-1">{% trans "The Strong's definitions and the &quot;KJV usage&quot; lists come from the public-domain OpenScriptures Strong's dictionaries. The word-by-word tagging comes from the public CrossWire Bible Society modules." %}</p>
+            <p class="small text-muted mb-1">{% trans "Local STEPBible lexicons are supplemented by the public-domain OpenScriptures Strong's definitions and KJV usage lists. Word-by-word tagging comes from the public CrossWire Bible Society modules." %}</p>
+            <p class="small text-muted mb-1">{% trans 'API.Bible section metadata contains titles and verse references, not extra verse text. It is cached per translation and book for 25 days. Disabling headings avoids metadata requests; temporary metadata failures leave the verses visible with a warning.' %}</p>
             <p class="small text-muted mb-1">{% trans 'When the site is set to Dutch, each original word also shows how the Statenvertaling renders it here, plus a list of all its Statenvertaling renderings with how often each one is used.' %}</p>
             <p class="small text-muted mb-0">{% trans 'All of this word data is stored on this server, so studying words costs no external requests and works even when the Bible API is unavailable.' %}</p>
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><svg class="commentary-inline-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false" style="width:16px; height:16px;"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg></span>{% trans 'Commentary buttons' %}</h6>
-            <p class="small text-muted mb-1"><strong>{% trans 'Other Commentary' %}</strong> {% trans 'opens BijbelAPI commentary for both Old and New Testament passages.' %}</p>
+            <p class="small text-muted mb-1"><strong>{% trans 'Other Commentary' %}</strong> {% trans 'opens enabled commentary sources for the selected passage.' %}</p>
             <p class="small text-muted mb-1"><strong>{% trans 'Jewish Commentary' %}</strong> {% trans 'opens Sefaria commentary for Old Testament passages.' %}</p>
-            <p class="small text-muted mb-0">{% trans 'If no Scriptura commentators are enabled, the Other Commentary button is hidden.' %}</p>
+            <p class="small text-muted mb-0">{% trans 'The Other Commentary button is hidden when no enabled commentary source supports the selected book.' %}</p>
           </div>
         </div>
       </div>

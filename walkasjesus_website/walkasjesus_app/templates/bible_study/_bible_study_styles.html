@@ -1579,6 +1579,23 @@
       white-space: pre-line;
     }
 
+    :is(.bible-study-shell, .waj-study-panels) .bs-section-heading {
+      display: block;
+      font-weight: 700;
+    }
+
+    .bible-study-shell .bs-combined-verse-row:not(:first-child) .bs-section-slot:not(:empty) {
+      padding-top: 1.55em;
+    }
+
+    .bible-study-shell .bs-section-toggle.is-disabled {
+      opacity: 0.55;
+    }
+
+    .bible-study-shell .bs-section-toggle.is-disabled .form-check-label {
+      color: #6c757d;
+    }
+
     @media (max-width: 767.98px) {
       :is(.bible-study-shell, .waj-study-panels) .bs-search-option-row {
         gap: 0.45rem;

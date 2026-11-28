@@ -49,7 +49,7 @@ the Bible Study page keeps its existing in-page passage navigation.
 | URL name | Purpose |
 | --- | --- |
 | `bible_study` | Page render, also honours deep links (`?book=&chapter=&start_verse=…`) |
-| `bible_study_verses` | Verse text for one translation and verse range (cached 6 months) |
+| `bible_study_verses` | Verse text for one translation and verse range (cached 25 days) |
 | `bible_study_chapter_meta` | Last verse number of a chapter, from `data/bible_study_chapter_index.json` |
 | `bible_study_original_text` | Original-language words + Strong's candidates for a verse range |
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
@@ -88,6 +88,60 @@ differences. Dictionary occurrence results display the Hebrew reference and
 translation reference, and fetch translation text using that same mapping.
 Detail-page links may explicitly request `reference_system=english`.
 If such a range maps across Hebrew chapters, it must be opened as separate verses.
+
+### Numbering review and cache-only checks
+
+The staff Bible cache overview links each translation to a **review dossier and
+checklist**. The dossier records the edition, notes and latest structural scan.
+The checklist covers structure, Psalm headings, Hosea, Joel and merged verse blocks.
+Each item has a status, explicitly checked passages, reliable source, evidence,
+next action, reviewer and review date. Confirmation requires an edition, passages, source and
+evidence; a discrepancy requires a next action. Django's normal model permissions
+and admin change history apply.
+
+Confirmation only covers the recorded passages. It does **not** activate a mapping
+or declare the whole translation verified. Correct the mapping and add regression
+tests in code before enabling previously ambiguous references. Mapping/edition
+changes flag earlier confirmations for revalidation.
+
+Run the offline checks after acquiring more cache data:
+
+```bash
+cd walkasjesus_website
+./check_bible_numbering.sh
+./check_bible_numbering.sh --bible-ids 89f6d2447cc48fbd-01 87f620660790371b-01
+./check_bible_numbering.sh --no-save --output /tmp/bible-numbering-report.json
+```
+
+The equivalent command is `python manage.py check_bible_numbering`. Both entry
+points disable API.Bible network access **before Django starts**, including the
+Bible catalogue loaded by model imports. For other Django entry points, explicitly
+set `BIBLE_API_OFFLINE=1` before startup. An absent catalogue may produce a warning;
+the scan still reads translation IDs directly from the supplied cache file.
+
+The command reads `bible_api_cache.json` without updating it. `--cache-path` selects
+another file. Only fresh, expiry-bearing text-passage entries are examined; expired
+entries, legacy entries without a usable expiry, unsupported content formats and
+entries whose remaining TTL exceeds the configured 25-day lifetime are excluded.
+Missing data is reported as incomplete coverage and is **never fetched**. The
+command does not inspect Django's derived text cache because it often lacks the
+original provider verse markers. Restrictive translation licences still apply to
+cache acquisition; this command does not prefetch NBV21/BGT.
+
+Reports identify missing requested verses, malformed/overlapping verse markers,
+empty verse text, conflicting cached boundaries and merged ranges. Fresh provider
+chapter catalogues supply chapter coverage counts where available; missing cached
+chapters are not treated as missing chapters in the translation. For Psalms, Hosea and Joel the
+local STEPBible mapping supplies expected risk cases; cached Hebrew or English
+references are only **candidates for manual comparison**, not proof of correct
+translation boundaries. Fresh book catalogues can mark OT checks inapplicable to
+NT-only editions. Equal counts do not prove equal verse boundaries.
+
+By default the latest text-free report is stored in the admin dossier, while human
+statuses and evidence remain untouched. `--no-save` avoids database writes;
+`--output` also writes JSON without scripture text. `--fail-on-findings` exits
+nonzero when structural findings need attention. No finding, missing cache data,
+or successful scan automatically confirms a translation.
 
 ### Text search and dictionary word study
 

@@ -1,4 +1,5 @@
 import logging
+import os
 import requests
 
 from bible_lib.exceptions import *
@@ -10,6 +11,8 @@ class BibleApiClient:
         self.logger = logging.getLogger()
 
     def get(self, url: str):
+        if os.environ.get('BIBLE_API_OFFLINE') == '1':
+            raise RuntimeError('API.Bible network access is disabled in cache-only mode.')
         self.logger.info('GET {}'.format(url))
 
         try:

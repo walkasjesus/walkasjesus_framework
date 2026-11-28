@@ -976,6 +976,53 @@
         });
       }
 
+      function restoreOriginalReferences(payload) {
+        if (!Array.isArray(payload.reference_lists)) { return payload; }
+        var lists = payload.reference_lists;
+        var groupedLists = {};
+
+        function restore(value) {
+          if (Array.isArray(value)) {
+            value.forEach(restore);
+          } else if (value && typeof value === 'object') {
+            Object.keys(value).forEach(function(key) {
+              var item = value[key];
+              if ((key === 'references' || key === 'reference_groups') &&
+                  item && !Array.isArray(item) && typeof item === 'object' &&
+                  Object.prototype.hasOwnProperty.call(item, '$refs')) {
+                var refs = lists[item.$refs];
+                if (!Array.isArray(refs)) { throw new Error('Invalid original-text reference list'); }
+                if (key === 'references') {
+                  value[key] = refs;
+                } else {
+                  if (!Array.isArray(item.groups)) { throw new Error('Invalid original-text reference groups'); }
+                  var groupKey = String(item.$refs) + ':' + item.groups.join(',');
+                  if (!groupedLists[groupKey]) {
+                    var offset = 0;
+                    groupedLists[groupKey] = item.groups.map(function(size) {
+                      if (!Number.isInteger(size) || size < 0 || offset + size > refs.length) {
+                        throw new Error('Invalid original-text reference group size');
+                      }
+                      var group = refs.slice(offset, offset + size);
+                      offset += size;
+                      return group;
+                    });
+                    if (offset !== refs.length) { throw new Error('Incomplete original-text reference groups'); }
+                  }
+                  value[key] = groupedLists[groupKey];
+                }
+              } else {
+                restore(item);
+              }
+            });
+          }
+        }
+
+        restore(payload.verses);
+        delete payload.reference_lists;
+        return payload;
+      }
+
       function fetchBibleStudyOriginalRange(state, onDone) {
         var rangeKey = bibleStudyOriginalRangeKey(state);
         if (bibleStudyOriginalCache[rangeKey]) {
@@ -1009,9 +1056,17 @@
               chapter: state.chapter,
               start_verse: startVerse,
               end_verse: state.endVerse,
+              compact_references: '1',
               reference_system: options.referenceSystem || 'english'
             },
             success: function(payload) {
+              try {
+                payload = restoreOriginalReferences(payload);
+              } catch (error) {
+                console.error('Invalid original-text reference data:', error);
+                finish(null, '{% trans "Could not load text at the moment." %}');
+                return;
+              }
               var verses = payload && payload.verses;
               if (!verses || !Object.prototype.hasOwnProperty.call(verses, String(startVerse))) {
                 console.error('Missing original-text verse in response:', state.book, state.chapter, startVerse);

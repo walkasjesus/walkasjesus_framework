@@ -658,6 +658,37 @@ class EnglishWordAlignmentTestCase(TestCase):
     },
 })
 class DutchOriginalTextTestCase(TestCase):
+    @patch('walkasjesus_app.lib.strongs_service.original_text_payload')
+    @patch('walkasjesus_app.lib.strongs_service.cache')
+    def test_localized_cache_hit_does_not_load_original_payload(self, mocked_cache, original):
+        mocked_cache.get.return_value = {'words': [{'text': 'cached'}]}
+        result = localized_original_text_payload('Genesis', 1, 1, 'nl')
+        self.assertEqual(result, {'words': [{'text': 'cached'}]})
+        original.assert_not_called()
+
+    @patch('walkasjesus_app.lib.strongs_service._tagged_usage_index', return_value={'H1': [['een', 3, ['Gen.1:1']]]})
+    @patch('walkasjesus_app.lib.strongs_service._tagged_run_assignments', return_value=[])
+    @patch('walkasjesus_app.lib.strongs_service._tagged_segments', return_value=[])
+    @patch('walkasjesus_app.lib.strongs_service.cache')
+    @patch('walkasjesus_app.lib.strongs_service.original_text_payload')
+    def test_localization_does_not_mutate_original_payload(self, original, mocked_cache, segments, assignments, usage):
+        import copy
+
+        payload = {
+            'words': [{
+                'text': 'word', 'clickable': True, 'candidates': [{'strongs_number': 'H1'}],
+                'word_components': [], 'grammar_details': [],
+                'hebrew_letters': [{'name': 'Aleph', 'traditional_image': 'Ox'}],
+            }],
+        }
+        before = copy.deepcopy(payload)
+        original.return_value = payload
+        mocked_cache.get.return_value = None
+        localized = localized_original_text_payload('Genesis', 1, 1, 'nl')
+        self.assertEqual(payload, before)
+        self.assertEqual(localized['words'][0]['candidates'][0]['local_usage'][0]['label'], 'een')
+        self.assertIn('name_local', localized['words'][0]['hebrew_letters'][0])
+
     def test_reference_set_preserves_reviewed_letter_roles(self):
         from walkasjesus_app.lib.strongs_service import _hebrew_letter_data
 

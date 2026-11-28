@@ -1723,6 +1723,7 @@ def _lookup_step_lexicon_entry(code, language):
     return None
 
 
+@lru_cache(maxsize=16384)
 def _variant_step_codes(base_code, language):
     lexicon = _stepbible_lexicon(language)
     pattern = re.compile(r'^' + re.escape(str(base_code or '')) + r'[A-Za-z]+$')
@@ -2290,22 +2291,8 @@ def _stepbible_rows_for_verse(book_name, chapter, verse, reference_system='engli
     if reference_system == 'hebrew' and book_name in _STEPBIBLE_OT_FILES:
         return list(_hebrew_verse_index(book_name)[0].get((int(chapter), int(verse)), []))
     book_code = _stepbible_book_code(book_name)
-    reference_prefix = f'{book_code}.{chapter}.{verse}'
     reference = f'{book_code}.{chapter}:{verse}'
-    rows = []
-    path = _stepbible_file_for_book(book_name)
-    with path.open('r', encoding='utf-8') as handle:
-        for raw_line in handle:
-            line = raw_line.rstrip('\n')
-            if not line.startswith(reference_prefix):
-                continue
-            reference_token, separator, _ = line.partition('#')
-            if not separator:
-                continue
-            if _step_reference_to_display(reference_token) != reference:
-                continue
-            rows.append(line)
-    return rows
+    return list(_search_stepbible_book_rows(book_name).get(reference, []))
 
 
 @lru_cache(maxsize=8)
@@ -3211,15 +3198,15 @@ def search_result_word_study(results, query, tagged_source='', allow_scoring=Fal
 def localized_original_text_payload(book_name, chapter, verse, language_code='en', reference_system='english'):
     """Original-language payload enriched with glosses from a tagged edition in the UI language."""
     source = GLOSS_SOURCE_BY_LANGUAGE.get(str(language_code or '').strip().lower()[:2])
-    payload = original_text_payload(book_name, chapter, verse, reference_system)
     if not source:
-        return payload
+        return original_text_payload(book_name, chapter, verse, reference_system)
 
     cache_key = f'bible_study:original-local:v35:{reference_system}:{source}:{book_name}:{chapter}:{verse}'
     cached = cache.get(cache_key)
     if cached is not None:
         return cached
 
+    payload = original_text_payload(book_name, chapter, verse, reference_system)
     words = payload.get('words') or []
     phrases_by_token = {}
     phrases_by_component = {}
@@ -3242,7 +3229,17 @@ def localized_original_text_payload(book_name, chapter, verse, language_code='en
             phrases_by_component.setdefault((token_index, base_code), []).append(phrase)
 
     usage_index = _tagged_usage_index(source)
-    enriched = copy.deepcopy(payload)
+    enriched = dict(payload)
+    enriched['words'] = [
+        {
+            **word,
+            'candidates': [dict(candidate) for candidate in word.get('candidates') or []],
+            'word_components': copy.deepcopy(word.get('word_components') or []),
+            'hebrew_letters': copy.deepcopy(word.get('hebrew_letters') or []),
+            'grammar_details': copy.deepcopy(word.get('grammar_details') or []),
+        }
+        for word in payload.get('words') or []
+    ]
 
     unresolved_words = []
     unresolved_components = []

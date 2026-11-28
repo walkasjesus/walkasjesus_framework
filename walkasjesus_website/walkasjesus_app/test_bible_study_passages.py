@@ -135,6 +135,24 @@ class BibleNumberingAdminTest(TestCase):
 
 
 class PsalmVersificationTest(SimpleTestCase):
+    def test_indexed_english_references_match_source_rows(self):
+        from walkasjesus_app.lib.strongs_service import (
+            _stepbible_book_code, _stepbible_file_for_book, _step_reference_to_display,
+        )
+        for book, chapter, verse in [('John', 3, 1), ('Psalms', 30, 1), ('Hosea', 2, 1)]:
+            with self.subTest(book=book):
+                code = _stepbible_book_code(book)
+                expected_reference = f'{code}.{chapter}:{verse}'
+                with _stepbible_file_for_book(book).open(encoding='utf-8') as file:
+                    expected = [
+                        line.rstrip('\n') for line in file
+                        if line.startswith(f'{code}.{chapter}.{verse}')
+                        and '#' in line
+                        and _step_reference_to_display(line.partition('#')[0]) == expected_reference
+                    ]
+                self.assertTrue(expected)
+                self.assertEqual(_stepbible_rows_for_verse(book, chapter, verse), expected)
+
     def test_hebrew_heading_and_body_have_distinct_original_rows(self):
         title = _stepbible_rows_for_verse('Psalms', 30, 1, 'hebrew')
         body = _stepbible_rows_for_verse('Psalms', 30, 2, 'hebrew')
@@ -452,6 +470,26 @@ class BibleStudyPassagesTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(original.call_args.kwargs['reference_system'], 'hebrew')
+
+    @patch('walkasjesus_app.views.bible_study_view.localized_original_text_payload')
+    def test_original_endpoint_compacts_repeated_references_without_losing_groups(self, original):
+        refs = [f'Gen.1:{i}' for i in range(1, 13)]
+        groups = [refs[:2], refs[2:5], refs[5:9], refs[9:]]
+        original.return_value = {
+            'words': [{'references': refs, 'reference_groups': groups}, {'references': refs}],
+            'selected_word': {'references': refs},
+        }
+        data = {'book': 'Genesis', 'chapter': 1, 'start_verse': 1, 'end_verse': 1}
+        url = reverse('commandments:bible_study_original_text')
+        legacy = self.client.post(url, data).json()
+        compact = self.client.post(url, {**data, 'compact_references': '1'}).json()
+        self.assertNotIn('reference_lists', legacy)
+        self.assertEqual(compact['reference_lists'], [refs])
+        word = compact['verses']['1']['words'][0]
+        self.assertEqual(word['references'], {'$refs': 0})
+        self.assertEqual(word['reference_groups'], {'$refs': 0, 'groups': [2, 3, 4, 3]})
+        self.assertEqual(compact['verses']['1']['selected_word']['references'], {'$refs': 0})
+        self.assertEqual(legacy['verses']['1'], original.return_value)
 
     @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')

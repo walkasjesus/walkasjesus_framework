@@ -1684,6 +1684,41 @@ class BibleStudyChapterMetaView(View):
         })
 
 
+def _compact_original_references(verses):
+    references = []
+    references_index = {}
+
+    def intern(items):
+        key = tuple(items)
+        if key not in references_index:
+            references_index[key] = len(references)
+            references.append(items)
+        return references_index[key]
+
+    def compact(value):
+        if isinstance(value, list):
+            return [compact(item) for item in value]
+        if not isinstance(value, dict):
+            return value
+        result = {}
+        for key, item in value.items():
+            if (key == 'references' and isinstance(item, list) and len(item) >= 10
+                    and all(isinstance(reference, str) for reference in item)):
+                result[key] = {'$refs': intern(item)}
+            elif (key == 'reference_groups' and isinstance(item, list) and len(item) >= 4
+                  and all(isinstance(group, list) and all(isinstance(ref, str) for ref in group)
+                          for group in item)):
+                result[key] = {
+                    '$refs': intern([ref for group in item for ref in group]),
+                    'groups': [len(group) for group in item],
+                }
+            else:
+                result[key] = compact(item)
+        return result
+
+    return {'verses': compact(verses), 'reference_lists': references}
+
+
 class BibleStudyOriginalTextView(View):
     """AJAX endpoint: returns original-language verses with candidate Strongs lookups."""
 
@@ -1708,6 +1743,8 @@ class BibleStudyOriginalTextView(View):
                 reference_system='hebrew' if request.POST.get('reference_system') == 'hebrew' else 'english',
             )
 
+        if request.POST.get('compact_references') == '1':
+            return JsonResponse(_compact_original_references(verses))
         return JsonResponse({'verses': verses})
 
 

@@ -1,63 +1,46 @@
 from django.contrib import admin
-from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 from walkasjesus_app.lib.bible_numbering_checks import numbering_mapping_revision
-from walkasjesus_app.lib.bible_numbering_review import check_needs_revalidation, numbering_review_status
 from walkasjesus_app.models.bible_numbering import (
-    BibleNumberingReview, BibleNumberingCheck, ensure_numbering_checklist,
+    BibleNumberingReview,
     NUMBERING_CHECK_SCOPES,
 )
 
 
-class BibleNumberingCheckInline(admin.StackedInline):
-    model = BibleNumberingCheck
-    extra = 0
-    can_delete = False
-    readonly_fields = ('scope', 'reviewed_by', 'reviewed_at', 'review_validity')
-    fields = (
-        'scope', 'status', 'checked_passages', 'source', 'notes', 'follow_up',
-        'reviewed_by', 'reviewed_at', 'review_validity',
-    )
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    @admin.display(description=_('Review validity'))
-    def review_validity(self, obj):
-        if check_needs_revalidation(obj):
-            return _('The mapping or edition changed. Check the specified passages again.')
-        return _('Confirmation applies only to the explicitly specified passages; it does not activate mappings.')
-
-
 @admin.register(BibleNumberingReview)
 class BibleNumberingReviewAdmin(admin.ModelAdmin):
-    list_display = ('bible_id', 'edition', 'review_status', 'scanned_at')
-    search_fields = ('bible_id', 'edition')
-    inlines = (BibleNumberingCheckInline,)
-    readonly_fields = ('review_status', 'scanned_at', 'report_summary')
-    fields = ('bible_id', 'edition', 'notes', 'review_status', 'scanned_at', 'report_summary')
+    list_display = ('bible_id', 'scanned_at')
+    search_fields = ('bible_id',)
+    readonly_fields = ('bible_id', 'scanned_at', 'report_summary')
+    fields = readonly_fields
 
-    def get_readonly_fields(self, request, obj=None):
-        fields = super().get_readonly_fields(request, obj)
-        return (*fields, 'bible_id') if obj else fields
+    def has_add_permission(self, request):
+        return False
 
-    @admin.display(description=_('Review status'))
-    def review_status(self, obj):
-        if obj is None or obj.pk is None:
-            return _('Not checked')
-        return numbering_review_status(obj)
+    def has_change_permission(self, request, obj=None):
+        return False
 
-    @admin.display(description=_('Latest cache-only report'))
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    @admin.display(description=_('Latest automatic report'))
     def report_summary(self, obj):
         if obj is None or not obj.report:
-            return _('No scan yet. Run check_bible_numbering.sh; it makes no API requests.')
+            return _('No scan yet. Run check_bible_numbering.sh.')
         lines = [
             str(_('This is a structural report, not proof of correct verse boundaries.')),
             str(_('Fresh cached references at scan time: %(count)s')) % {'count': obj.report.get('available_references', 0)},
             str(_('Cache entries: %(entries)s')) % {'entries': obj.report.get('entries', {})},
         ]
+        acquisition = obj.report.get('acquisition', {})
+        if acquisition:
+            lines.append(str(_('API requests in this run: %(count)s')) % {'count': acquisition['requests']})
+            if acquisition['budget_exhausted']:
+                lines.append(str(_('Request budget reached; run the script again to continue.')))
+            lines.extend(acquisition['errors'])
+            lines.extend(acquisition['skipped'])
         if obj.mapping_revision != numbering_mapping_revision():
             lines.append(str(_('The mapping changed since this scan; run the cache-only checks again.')))
         for coverage in obj.report.get('chapter_catalogue_coverage', []):
@@ -65,11 +48,13 @@ class BibleNumberingReviewAdmin(admin.ModelAdmin):
         states = {
             'no_data': _('No fresh cache data'),
             'incomplete': _('Incomplete cache coverage'),
-            'requires_manual_review': _('Manual comparison required'),
+            'cached_candidates_available': _('Source references available; no automatic mapping approval'),
             'not_applicable': _('Not applicable to this edition'),
             'findings': _('Structural findings require review'),
             'no_structural_issues_detected': _('No structural issues detected in cached passages'),
             'no_merged_groups_observed': _('No merged ranges observed in cached passages'),
+            'no_known_numbering_differences': _('No numbering differences in the local reference mapping'),
+            'no_reference_mapping': _('No local numbering reference mapping available'),
         }
         labels = dict(NUMBERING_CHECK_SCOPES)
         for scope, result in obj.report.get('scopes', {}).items():
@@ -91,17 +76,3 @@ class BibleNumberingReviewAdmin(admin.ModelAdmin):
                 'count': len(findings) - 30,
             })
         return format_html('<pre style="white-space:pre-wrap">{}</pre>', '\n'.join(lines))
-
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        ensure_numbering_checklist(obj)
-
-    def save_formset(self, request, form, formset, change):
-        instances = formset.save(commit=False)
-        for instance in instances:
-            instance.reviewed_by = request.user
-            instance.reviewed_at = timezone.now()
-            instance.mapping_revision = numbering_mapping_revision()
-            instance.reviewed_edition = form.instance.edition
-            instance.save()
-        formset.save_m2m()

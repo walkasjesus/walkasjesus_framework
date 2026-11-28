@@ -30,7 +30,8 @@
       if (/herziene statenvertaling|\bhsv\b/i.test(bible.displayName || '') && parsed.book !== 'Psalms') {
         mappings = dutchToHebrew;
       } else if (bible.id !== 'svv-statenvertaling' && !/king james|kjv/i.test(bible.displayName || '')) {
-        var knownHebrew = (parsed.book === 'Hosea' && /naardense|complete jewish/i.test(bible.displayName || '')) ||
+        var knownHebrew = (parsed.book === 'Joel' && /naardense/i.test(bible.displayName || '')) ||
+          (parsed.book === 'Hosea' && /naardense|complete jewish/i.test(bible.displayName || '')) ||
           (parsed.book === 'Psalms' && /naardense|herziene statenvertaling|\bhsv\b/i.test(bible.displayName || ''));
         var englishChanges = englishToHebrew[parsed.book] || {};
         if (!knownHebrew && (englishChanges[parsed.chapter + ':' + parsed.startVerse] ||

@@ -95,7 +95,7 @@ def _study_verse_references(bible, book, chapter, verse, reference_system):
     if profile == 'cjb' and book == 'Hosea':
         return (current,), (current,), ''
 
-    if profile == 'naardense' and book in {'Psalms', 'Hosea'}:
+    if profile == 'naardense' and book in {'Psalms', 'Hosea', 'Joel'}:
         return (current,), (current,), ''
     is_sv = profile == 'sv'
     is_hsv = profile == 'hsv'

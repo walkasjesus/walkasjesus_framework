@@ -160,6 +160,21 @@ class HebrewVersificationTest(SimpleTestCase):
         self.assertEqual(sources, ((26, 1),))
         self.assertIn('boundaries differ', warning)
 
+    def test_naardense_joel_uses_provider_hebrew_chapters_not_kjv_chapters(self):
+        bible = Mock()
+        bible.name = 'Naardense Bijbel 2024'
+        bible.language = 'nl'
+        bible.abbreviation = 'NAB2024'
+        bible.verses.return_value = 'Provider source text.'
+        for chapter, verse in ((2, 27), (3, 1), (3, 5), (4, 1), (4, 21)):
+            with self.subTest(chapter=chapter, verse=verse):
+                self.assertEqual(
+                    _study_verse_references(bible, 'Joel', chapter, verse, 'hebrew'),
+                    (((chapter, verse),), ((chapter, verse),), ''),
+                )
+                _study_verse_text(bible, 'Joel', chapter, verse, 'hebrew')
+                bible.verses.assert_called_with(BibleLibBibleBooks.Joel, chapter, verse, chapter, verse)
+
     @patch('walkasjesus_app.lib.strongs_service._align_english_words')
     def test_partial_verse_alignment_does_not_guess_word_links(self, align):
         cache.clear()

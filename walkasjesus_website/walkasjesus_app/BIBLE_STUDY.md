@@ -68,7 +68,7 @@ such as `[01:12]`. These determine its displayed numbering and the corresponding
 HSV lookup outside Psalms; this assumes HSV follows those markers and is not an
 independently verified mapping for every passage. In Psalms the local SV's embedded
 markers are split to separate the title and body, while HSV uses Hebrew numbering.
-Naardense is treated as Hebrew-numbered for Psalms and Hosea; the local Complete
+Naardense is treated as Hebrew-numbered for Psalms, Hosea and Joel; the local Complete
 Jewish Bible is treated as Hebrew-numbered for Hosea. Other profiles are not
 verified: their technical status and profile limitations appear only in the
 staff-only Bible cache management overview. Unchanged references display without
@@ -89,59 +89,88 @@ translation reference, and fetch translation text using that same mapping.
 Detail-page links may explicitly request `reference_system=english`.
 If such a range maps across Hebrew chapters, it must be opened as separate verses.
 
-### Numbering review and cache-only checks
+### Automatic numbering checks and budgeted source acquisition
 
-The staff Bible cache overview links each translation to a **review dossier and
-checklist**. The dossier records the edition, notes and latest structural scan.
-The checklist covers structure, Psalm headings, Hosea, Joel and merged verse blocks.
-Each item has a status, explicitly checked passages, reliable source, evidence,
-next action, reviewer and review date. Confirmation requires an edition, passages, source and
-evidence; a discrepancy requires a next action. Django's normal model permissions
-and admin change history apply.
+The staff Bible overview links to read-only automatic reports. There are no manual
+checklists or approval controls. Historical checklist entries are archived by the
+migration, not discarded. Reports do not automatically activate production mappings.
+Console summaries show the translation ID and readable name from the already
+loaded catalogue, without extra API requests. Missing catalogue names are explicitly
+labelled as unavailable.
 
-Confirmation only covers the recorded passages. It does **not** activate a mapping
-or declare the whole translation verified. Correct the mapping and add regression
-tests in code before enabling previously ambiguous references. Mapping/edition
-changes flag earlier confirmations for revalidation.
-
-Run the offline checks after acquiring more cache data:
+The script checks fresh cache first and acquires missing risk passages directly
+using provider book, chapter and verse IDs. It does **not** use the study display
+mapping, so an unverified mapping cannot prevent acquiring its source evidence.
+Metadata resolves three-versus-four-chapter editions and prevents requesting
+nonexistent verse numbers. Only missing risk ranges are fetched, not whole Bibles.
 
 ```bash
 cd walkasjesus_website
 ./check_bible_numbering.sh
-./check_bible_numbering.sh --bible-ids 89f6d2447cc48fbd-01 87f620660790371b-01
-./check_bible_numbering.sh --no-save --output /tmp/bible-numbering-report.json
+./check_bible_numbering.sh --language=nl
+./check_bible_numbering.sh --language=nl --books=all
+./check_bible_numbering.sh --language=nl --books='numbers'
+./check_bible_numbering.sh --bible-ids 89f6d2447cc48fbd-01 --books Joel
+./check_bible_numbering.sh --max-requests 10
+./check_bible_numbering.sh --cache-only --no-save --output /tmp/bible-numbering-report.json
 ```
 
-The equivalent command is `python manage.py check_bible_numbering`. Both entry
-points disable API.Bible network access **before Django starts**, including the
-Bible catalogue loaded by model imports. For other Django entry points, explicitly
-set `BIBLE_API_OFFLINE=1` before startup. An absent catalogue may produce a warning;
-the scan still reads translation IDs directly from the supplied cache file.
+The default and maximum budget is **100 HTTP requests per run**, including
+catalogues and failed attempts. There are no automatic retries or redirects.
+Requests are spaced by 0.5 seconds (`--sleep` overrides). When the budget runs out,
+the script stops acquisition, writes its current report and resumes from fresh
+cache on the next run. Default acquisition order is Joel, Hosea, Psalms per
+translation. `--bible-ids` and `--books` narrow the work. Without explicit IDs, the
+script uses translations already present in the passage cache, including disabled
+translations previously cached. Licence-limited translations such as NBV21/BGT
+are **not automatically prefetched**; their existing cache is still checked.
+`--language=nl` filters both reports and acquisition to Dutch translations from the
+already loaded catalogue, without a network lookup. It intersects with `--bible-ids`
+when both are given; absent catalogue languages cause an explicit error.
+Book names are case-insensitive canonical names (`numbers`, `ChroniclesFirstBook`,
+etc.); multiple names can follow `--books`. `--books=all` derives risk cases for all
+books from the local reference mappings, including Numbers, Chronicles and Malachi.
+Books without known mapping differences do not cause source acquisition. This does
+not prove they have no edition-specific merged/split verses; structural checks still
+inspect all fresh cached passages. Books without a local numbering mapping (the NT
+and deuterocanonical books) report `no_reference_mapping`, not successful verification.
+The default remains Joel, Hosea and Psalms.
 
-The command reads `bible_api_cache.json` without updating it. `--cache-path` selects
-another file. Only fresh, expiry-bearing text-passage entries are examined; expired
+The equivalent command is `python manage.py check_bible_numbering`. Both entry
+points keep ordinary API.Bible access disabled **before Django starts**, including
+catalogue loading by model imports. Only the dedicated, counted acquisition client
+can make requests after startup. `--cache-only` or `--max-requests 0` guarantees zero
+requests. `--no-save` skips database report writes, not source acquisition.
+
+The command reads `bible_api_cache.json`; acquired source responses are stored there
+with the configured 25-day TTL. `--cache-path` selects another existing file.
+Only fresh, expiry-bearing text-passage entries are examined; expired
 entries, legacy entries without a usable expiry, unsupported content formats and
 entries whose remaining TTL exceeds the configured 25-day lifetime are excluded.
-Missing data is reported as incomplete coverage and is **never fetched**. The
+Missing data remains incomplete when the budget or licence prevents acquisition. The
 command does not inspect Django's derived text cache because it often lacks the
-original provider verse markers. Restrictive translation licences still apply to
-cache acquisition; this command does not prefetch NBV21/BGT.
+original provider verse markers.
 
 Reports identify missing requested verses, malformed/overlapping verse markers,
 empty verse text, conflicting cached boundaries and merged ranges. Fresh provider
 chapter catalogues supply chapter coverage counts where available; missing cached
-chapters are not treated as missing chapters in the translation. For Psalms, Hosea and Joel the
+chapters are not treated as missing chapters in the translation. For selected OT books the
 local STEPBible mapping supplies expected risk cases; cached Hebrew or English
-references are only **candidates for manual comparison**, not proof of correct
+references are only **available source evidence**, not proof of correct
 translation boundaries. Fresh book catalogues can mark OT checks inapplicable to
 NT-only editions. Equal counts do not prove equal verse boundaries.
 
-By default the latest text-free report is stored in the admin dossier, while human
-statuses and evidence remain untouched. `--no-save` avoids database writes;
+By default the latest text-free report is stored in the read-only admin overview.
+`--no-save` avoids database writes;
 `--output` also writes JSON without scripture text. `--fail-on-findings` exits
 nonzero when structural findings need attention. No finding, missing cache data,
 or successful scan automatically confirms a translation.
+
+Naardense Joel was explicitly checked against provider metadata and passages:
+four numbered chapters, Joel 3:1–5 containing the Spirit-outpouring passage, and
+Joel 4:1–21 containing the nations/judgement passage. Its study mapping uses Hebrew
+chapter numbering, rather than KJV Joel 2:28–32 / 3:1–21. Regression tests cover
+both chapter transitions and final verses.
 
 ### Text search and dictionary word study
 

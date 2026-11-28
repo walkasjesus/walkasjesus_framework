@@ -44,7 +44,10 @@ def numbering_mapping_revision():
 
 
 def _risk_cases(book):
-    from walkasjesus_app.lib.strongs_service import _hebrew_verse_index
+    from walkasjesus_app.lib.strongs_service import _hebrew_verse_index, _STEPBIBLE_OT_FILES
+
+    if book not in _STEPBIBLE_OT_FILES:
+        return []
 
     code = _BOOK_CODES[book]
     cases = []
@@ -85,7 +88,8 @@ def _expiry_status(entry, now, max_ttl_seconds):
     return 'fresh'
 
 
-def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_seconds=25 * 86400):
+def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_seconds=25 * 86400,
+                         include_source_references=False, books=None):
     now = time.time() if now is None else now
     with cache_path.open(encoding='utf-8') as handle:
         entries = json.load(handle)
@@ -118,6 +122,8 @@ def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_sec
                         if catalogue[2]:
                             chapter_ids = set()
                             for item in ids:
+                                if item == f'{catalogue[2]}.intro':
+                                    continue
                                 chapter_match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)', item)
                                 if chapter_match is None or chapter_match[1] != catalogue[2]:
                                     raise ValueError('Invalid cached chapter ID.')
@@ -197,7 +203,9 @@ def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_sec
         reports.setdefault(bible_id, {
             'bible_id': bible_id, 'entries': Counter(), 'findings': [], 'merged_groups': set(),
         })
-    risks = {book: _risk_cases(book) for book in ('Psalms', 'Hosea', 'Joel')}
+    from walkasjesus_app.lib.strongs_service import _STEPBIBLE_OT_FILES
+
+    risks = {book: _risk_cases(book) for book in (books if books is not None else ('Psalms', 'Hosea', 'Joel'))}
     for bible_id, report in reports.items():
         available = boundaries[bible_id]
         conflicts = [
@@ -210,6 +218,8 @@ def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_sec
             })
         report['entries'] = dict(report['entries'])
         report['available_references'] = len(available)
+        if include_source_references:
+            report['source_references'] = sorted(available)
         report['cached_chapters'] = len({(ref[0], ref[1]) for ref in available})
         report['chapter_catalogue_coverage'] = []
         for book, expected in sorted(chapters_by_bible[bible_id].items()):
@@ -233,7 +243,9 @@ def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_sec
             missing = [label for label, candidates in cases if not any(ref in available for ref in candidates)]
             report['scopes'][scope] = {
                 'state': ('not_applicable' if not applicable else
-                          'incomplete' if missing else 'requires_manual_review'),
+                          'no_reference_mapping' if book not in _STEPBIBLE_OT_FILES else
+                          'no_known_numbering_differences' if not cases else
+                          'incomplete' if missing else 'cached_candidates_available'),
                 'expected_cases': len(cases) if applicable else 0,
                 'cached_candidates': len(covered) if applicable else 0,
                 'missing_examples': missing[:30] if applicable else [],
@@ -245,7 +257,7 @@ def scan_numbering_cache(cache_path: Path, bible_ids=None, now=None, max_ttl_sec
             'finding_count': len(report['findings']),
         }
         report['scopes']['merged'] = {
-            'state': ('requires_manual_review' if report['merged_groups'] else
+            'state': ('cached_candidates_available' if report['merged_groups'] else
                       'no_merged_groups_observed' if available else 'no_data'),
             'group_count': len(report['merged_groups']),
         }

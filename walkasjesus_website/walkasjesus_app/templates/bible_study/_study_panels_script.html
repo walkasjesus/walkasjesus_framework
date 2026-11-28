@@ -4,6 +4,7 @@
 (function($) {
   'use strict';
   var bibleStudyOriginalCache = {};
+  var bibleStudyOriginalPending = {};
   var bsTranslateCache = {};
   var previewSequence = 0;
   $(document).on('keydown', function(event) {
@@ -49,7 +50,11 @@
 
       function bibleStudyOriginalPanelsHtml(state, verseNumber) {
         var rangeKey = bibleStudyOriginalRangeKey(state);
-        var spinnerSource = bibleStudyOriginalCache[rangeKey] ? 'cache' : 'api';
+        var verseKey = bibleStudyOriginalRangeKey($.extend({}, state, {
+          startVerse: verseNumber,
+          endVerse: verseNumber
+        }));
+        var spinnerSource = bibleStudyOriginalCache[rangeKey] || bibleStudyOriginalCache[verseKey] ? 'cache' : 'api';
         var uiLang = String($root.data('commentary-language') || '').slice(0, 2);
         var translateBtnHtml = (uiLang && uiLang !== 'en')
           ? '<button type="button" class="btn btn-sm btn-outline-secondary bs-strongs-translate-btn mt-1 mb-1" data-verse="' + escapeHtml(String(verseNumber)) + '" title="{% trans "Auto-translate definitions to your language" %}">' +
@@ -980,6 +985,17 @@
           return;
         }
 
+        if (bibleStudyOriginalPending[rangeKey]) {
+          bibleStudyOriginalPending[rangeKey].push(onDone);
+          return;
+        }
+        bibleStudyOriginalPending[rangeKey] = [onDone];
+        function finish(payload, errorMessage) {
+          var callbacks = bibleStudyOriginalPending[rangeKey];
+          delete bibleStudyOriginalPending[rangeKey];
+          callbacks.forEach(function(callback) { callback(payload, errorMessage); });
+        }
+
         var merged = { verses: {} };
         function fetchNext(startVerse) {
           $.ajax({
@@ -999,7 +1015,7 @@
               var verses = payload && payload.verses;
               if (!verses || !Object.prototype.hasOwnProperty.call(verses, String(startVerse))) {
                 console.error('Missing original-text verse in response:', state.book, state.chapter, startVerse);
-                onDone(null, '{% trans "No original-language word data found for this verse." %}');
+                finish(null, '{% trans "No original-language word data found for this verse." %}');
                 return;
               }
               $.extend(merged.verses, verses);
@@ -1011,12 +1027,12 @@
                 fetchNext(nextVerse);
               } else {
                 bibleStudyOriginalCache[rangeKey] = merged;
-                onDone(merged);
+                finish(merged);
               }
             },
             error: function(xhr) {
               console.error('Failed to load original text:', xhr.status, xhr.responseText);
-              onDone(null, (xhr.responseJSON && xhr.responseJSON.error) || '{% trans "Could not load text at the moment." %}');
+              finish(null, (xhr.responseJSON && xhr.responseJSON.error) || '{% trans "Could not load text at the moment." %}');
             }
           });
         }

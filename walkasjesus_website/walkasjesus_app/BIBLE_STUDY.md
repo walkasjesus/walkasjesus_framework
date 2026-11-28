@@ -548,6 +548,9 @@ Both results are cached 30 days under
 
 In `_bible_study_script.html`:
 
+- Opening an original-text panel requests only that verse. Results are cached in the browser
+  per verse and reference system; already-open panels keep their selected word when another
+  verse is opened. Concurrent requests for the same range share one request.
 - After verse text is rendered (`applyBibleStudyPayloadToDom`, or on first page load),
   `loadBibleStudyWordAlignment()` posts the displayed verse text to `bible_study_word_alignment`
   and replaces the paragraph with tokenised HTML. It only runs when `combine_verses` is off and

@@ -230,8 +230,9 @@ ROSETTA_MESSAGES_PER_PAGE = 25
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1500
 
 # Bible text retrieval settings
-# 6 months default for verse text caching (seconds)
-BIBLE_API_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
+# api.bible terms require cached content to be refreshed at least once every 30 days.
+# Keep a safety margin below that limit (seconds).
+BIBLE_API_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 25
 # 6 months default for commentary cache (translations + frontend commentary cache)
 COMMENTARY_CACHE_TIMEOUT_SECONDS = 60 * 60 * 24 * 30 * 6
 # Commentary endpoint defaults to BijbelAPI and supports optional x-api-key auth.
@@ -317,8 +318,24 @@ CJB_BIBLE_ENABLED = True
 CJB_BIBLE_LOGGED_IN_ONLY = False
 # Verse count above which passages are manual "Study this passage" links instead of auto-loading the text on the page.
 BIBLE_AUTO_LOAD_VERSE_LIMIT = 5
-# Maximum number of verses the user can select simultaneously on the Bible Study page.
+# Default number of verses shown/stepped at a time on the Bible Study page.
+# Also the fallback limit when a per-translation license limit applies.
 BIBLE_STUDY_MAX_VERSES = 5
+# Per-translation license limits on the number of verses that may be displayed per
+# request. Translations listed here are clamped server-side; all other translations
+# may show a whole chapter at once.
+# NBG license (NBV21 + BGT): "maximaal 5 Bijbelverzen per keer".
+BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID = {
+    '01b58d476a09e6a6-01': 5,  # NBV21 (NBG)
+    '173b6ec5bba026d2-01': 5,  # Bijbel in Gewone Taal (NBG)
+}
+# Hard upper bound for whole-chapter display (longest chapter is Psalm 119: 176 verses).
+BIBLE_STUDY_CHAPTER_VERSE_CAP = 200
+# Daily request budget for the prefetch_bible_chapters management command.
+BIBLE_PREFETCH_MAX_REQUESTS_PER_RUN = 300
+# Bible ids targeted by prefetch_bible_chapters. Empty list = all non-local
+# translations without a per-translation verse limit.
+BIBLE_PREFETCH_BIBLE_IDS = []
 # Default Bible Study translations per language when no bible_id query params are provided.
 # Example: {'EN': ['kjv'], 'NL': ['hsv']}
 BIBLE_STUDY_DEFAULT_BIBLE_IDS_BY_LANGUAGE = {}

@@ -9,3 +9,8 @@ class CachedBibleApiClient(BibleApiClient):
 
     def get(self, url: str):
         return self.cache.get(super(CachedBibleApiClient, self).get, url)
+
+    def refresh(self, url: str):
+        """Force a fresh retrieval of the url, replacing any cached entry."""
+        self.cache.clear_key(url)
+        return self.get(url)

@@ -168,6 +168,9 @@
             {% endfor %}
           </div>
 
+          <div id="bs-license-limit-note" class="alert alert-danger text-center bs-license-limit-note" role="alert"{% if not license_limited_names %} style="display:none;"{% endif %}>
+            {% if license_limited_names %}{% blocktrans with names=license_limited_names|join:", " limit=max_verses %}The license for {{ names }} allows at most {{ limit }} verses at a time.{% endblocktrans %}{% endif %}
+          </div>
         </form>
         <div id="bs-word-search-results" class="bs-word-search-results" aria-live="polite"></div>
       </div>
@@ -186,7 +189,7 @@
           </div>
           <div class="col-md-6 mb-3">
             <h6 class="font-weight-bold"><span class="bs-legend-icon"><i class="fa fa-list-ol"></i></span>{% trans 'Verse range' %}</h6>
-            <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose an autocomplete suggestion, press Enter or click Search to open it. Suggestions respect chapter boundaries and show up to' %} {{ max_verses }} {% trans 'verses.' %}</p>
+            <p class="small text-muted mb-1">{% trans 'Use the first search box for a passage such as Gen 1:1 or Genesis 1:1-5. Choose an autocomplete suggestion, press Enter or click Search to open it. Suggestions respect chapter boundaries and show up to' %} {{ verse_nav_step }} {% trans 'verses.' %}</p>
             <p class="small text-muted mb-0">{% trans 'Use Previous and Next above or below the passage to move through the Bible. Combine verses gives continuous text; turn it off for separate verse cards and word-by-word study.' %}</p>
           </div>
           <div class="col-md-6 mb-3">

@@ -55,13 +55,44 @@ class ApiBible(Bible):
 
         return self.formatter.flush()
 
+    def chapter_passage_url(self, book: BibleBooks, chapter: int, last_verse: int) -> str:
+        """Return the passage url that covers verses 1..last_verse of a chapter."""
+        return self.query_builder.get_verses(self.id, book, chapter, 1, chapter, last_verse)
+
+    def passage_verses(self, book: BibleBooks, chapter: int, start_verse: int, end_verse: int) -> list[Verse]:
+        """Retrieve a passage while preserving the provider's combined verse ranges."""
+        url = self.query_builder.get_verses(self.id, book, chapter, start_verse, chapter, end_verse)
+        json_content = json.loads(self.client.get(url))
+        data = json_content['data']
+        if not self.copyright:
+            self.copyright = data.get('copyright', '')
+        return self.extract_verses(book, chapter, data['content'])
+
+    def chapter_verses(self, book: BibleBooks, chapter: int, last_verse: int, force_refresh: bool = False) -> dict:
+        """Retrieve verses 1..last_verse of a chapter with a single passage request.
+
+        Returns a mapping of verse number to verse text. Unlike verses(), failures
+        raise so callers can fall back to per-verse retrieval.
+        """
+        url = self.chapter_passage_url(book, chapter, last_verse)
+        response = self.client.refresh(url) if force_refresh else self.client.get(url)
+        json_content = json.loads(response)
+        verses_html = json_content['data']['content']
+        if not self.copyright:
+            self.copyright = json_content['data'].get('copyright', '')
+        return {
+            verse.verse: verse.text
+            for verse in self.extract_verses(book, chapter, verses_html)
+            if verse.chapter == chapter
+        }
+
     def extract_verses(self, book: BibleBooks, start_chapter: int, verses_text: str) -> [Verse]:
         parsed_verses = []
         current_chapter = start_chapter
 
         # Format when using content-type=text is like [1] text... [2] ... [1] ...
         normalized_text = re.sub(r'\s+', ' ', verses_text).replace('\n', '')
-        markers = list(re.finditer(r'\[(\d+)(?:\s*[-\u2013\u2014]\s*\d+)?\]\s*', normalized_text))
+        markers = list(re.finditer(r'\[(\d+)(?:\s*[-\u2013\u2014]\s*(\d+))?\]\s*', normalized_text))
 
         for index, marker in enumerate(markers):
             current_verse = int(marker.group(1))
@@ -71,7 +102,9 @@ class ApiBible(Bible):
                 continue
             if current_verse == 1 and parsed_verses:
                 current_chapter += 1
-            parsed_verses.append(Verse(book, current_chapter, current_verse, text))
+            parsed_verses.append(Verse(
+                book, current_chapter, current_verse, text,
+                end_verse=int(marker.group(2)) if marker.group(2) else current_verse))
 
         return parsed_verses
 

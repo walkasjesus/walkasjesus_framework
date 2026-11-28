@@ -55,6 +55,38 @@ the Bible Study page keeps its existing in-page passage navigation.
 | `bible_study_word_alignment` | Maps the words of a translated verse onto original-language word indexes |
 | `bible_study_search` | Full-text search with reverse word study, or local Strong's dictionary/occurrence search |
 
+### Section headings in combined text
+
+When "Combine verses into continuous text" and "Show section headings from the
+translation" are enabled, API.Bible translations show their own editorial headings
+from the book `/sections` metadata endpoint. The heading checkbox defaults to on,
+is disabled in per-verse mode, and retains its selection when switching modes.
+The `show_sections=0` URL parameter switches it off; AJAX and browser cache keys
+also distinguish the setting. This
+fetches titles and verse boundaries, not additional verse text. Only sections
+overlapping the displayed source verses appear, including the active heading when
+the passage starts halfway through a section. Source numbering is mapped to the
+displayed Hebrew references; headings are not copied between translations. Book
+metadata includes sections that begin in a previous chapter, unlike chapter lists.
+
+Book metadata (including a 404 indicating no sections) is cached for the configured
+25-day API TTL. Uncombined mode and local translations do not fetch section metadata.
+Transport/validation failures are logged and shown beside the translation while
+leaving the verses available; failures are not cached. Metadata requests count toward
+the normal device API quota.
+
+Study verse requests explicitly exclude inline titles to avoid duplicates and titles
+being appended to the preceding verse. Study caches use a new version to avoid
+reusing old text with embedded titles. Headings are displayed separately and excluded
+from the verse-copy controls.
+
+In side-by-side combined columns, each displayed verse starts at the same height.
+Heading slots reserve the same space in translations without that heading, and
+headings within the text have a blank line above them. Combined verse ranges span
+the height of the corresponding individual verses without duplicating their text.
+Alignment is recalculated after loading, font loading and resizing; stacked mobile
+columns use their natural heights.
+
 ### Hebrew verse numbering
 
 Old Testament passage selection, original text and chapter navigation use TAHOT's

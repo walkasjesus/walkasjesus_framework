@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock, patch
 
+import requests
 from bible_lib import BibleBooks as BibleLibBibleBooks
 from bible_lib.bible_api.api_bible import ApiBible
 from django.core.cache import cache
@@ -18,6 +19,7 @@ from walkasjesus_app.views.bible_study_view import (
     _study_verse_references,
     _study_reference_metadata,
     _study_verse_text,
+    _study_section_headings,
 )
 from walkasjesus_app.lib.strongs_service import (
     _stepbible_rows_for_verse,
@@ -225,6 +227,10 @@ class BibleStudyPassagesTest(TestCase):
         self.bible = ApiBible(api_key='test', bible_id='bgt')
         self.bible.name = 'BGT'
         self.bible.language = 'nl'
+        sections = patch(
+            'walkasjesus_app.views.bible_study_view.requests.get', return_value=Mock(status_code=404))
+        self.section_network = sections.start()
+        self.addCleanup(sections.stop)
 
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
     def test_psalm_77_and_other_multi_digit_chapters_have_metadata(self, translations):
@@ -329,7 +335,7 @@ class BibleStudyPassagesTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['verses'], {'1': '', '2': 'Body verse.'})
         self.assertEqual(response.json()['verse_references'], {'1': '—', '2': '30:1'})
-        verses.assert_called_once_with(BibleLibBibleBooks.Psalms, 30, 1, 30, 1)
+        verses.assert_called_once_with(BibleLibBibleBooks.Psalms, 30, 1, 30, 1, include_titles=False)
         quota.assert_called_once()
 
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
@@ -363,7 +369,7 @@ class BibleStudyPassagesTest(TestCase):
             })
         self.assertEqual(response.json()['verses'], {'3': 'Zeg tegen uw broeders.'})
         self.assertEqual(response.json()['verse_references'], {'3': '1:12'})
-        verses.assert_called_once_with(BibleLibBibleBooks.Hosea, 1, 12, 1, 12)
+        verses.assert_called_once_with(BibleLibBibleBooks.Hosea, 1, 12, 1, 12, include_titles=False)
 
     @patch('walkasjesus_app.views.bible_study_view.localized_original_text_payload')
     def test_original_endpoint_passes_hebrew_numbering(self, original):
@@ -417,6 +423,142 @@ class BibleStudyPassagesTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(alignment.call_args.kwargs['reference_system'], 'hebrew')
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    @override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'bgt': 5}, DISABLE_CACHE_FOR_DEBUG=False)
+    def test_combined_sections_are_scoped_cached_and_in_initial_page_payload(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        translations.return_value.all_in_supported_languages.return_value = [self.bible]
+        self.bible.client.get = Mock(return_value=json.dumps({
+            'data': {'content': '[1-4] Combined passage. [5] Next verse.', 'copyright': 'test'},
+        }))
+        self.section_network.return_value = Mock(status_code=200, json=Mock(return_value={'data': [
+            {'id': 'TIT.S1', 'title': 'First <heading>', 'firstVerseId': 'TIT.1.1', 'lastVerseId': 'TIT.1.4'},
+            {'id': 'TIT.S2', 'title': 'Next heading', 'firstVerseId': 'TIT.1.5', 'lastVerseId': 'TIT.2.3'},
+            {'id': 'TIT.S3', 'title': 'Unrelated heading', 'firstVerseId': 'TIT.1.6', 'lastVerseId': 'TIT.1.9'},
+        ]}))
+        parameters = {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 2, 'end_verse': 5,
+            'reference_system': 'hebrew', 'combine_verses': '1',
+        }
+        response = self.client.post(reverse('commandments:bible_study_verses'), parameters)
+        self.assertEqual(response.status_code, 200)
+        expected = [
+            {'id': 'TIT.S1', 'title': 'First <heading>', 'verse': 2},
+            {'id': 'TIT.S2', 'title': 'Next heading', 'verse': 5},
+        ]
+        self.assertEqual(response.json()['sections'], expected)
+        self.assertEqual(response.json()['verses']['2'], 'Combined passage.')
+        self.assertEqual(quota.call_count, 2)
+        self.assertIn('include-titles=false', self.bible.client.get.call_args.args[0])
+        self.section_network.assert_called_once()
+        response = self.client.post(reverse('commandments:bible_study_verses'), parameters)
+        self.assertEqual(response.json()['sections'], expected)
+        self.section_network.assert_called_once()
+        self.assertEqual(quota.call_count, 2)
+        response = self.client.get(reverse('commandments:bible_study'), parameters)
+        self.assertEqual(response.context['selected_bibles'][0]['sections'], expected)
+        self.assertContains(response, 'First \\u003Cheading\\u003E')
+        self.assertNotContains(response, 'First <heading>')
+        self.section_network.assert_called_once()
+        response = self.client.post(
+            reverse('commandments:bible_study_verses'), {**parameters, 'combine_verses': '0'})
+        self.assertEqual(response.json()['sections'], [])
+        self.section_network.assert_called_once()
+        headings, warning = _study_section_headings(
+            self.bible, 'Titus', 2, [1, 2], 'english', RequestFactory().get('/'), 'verses_api')
+        self.assertEqual(headings, [{'id': 'TIT.S2', 'title': 'Next heading', 'verse': 1}])
+        self.assertEqual(warning, '')
+        self.section_network.assert_called_once()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @override_settings(DISABLE_CACHE_FOR_DEBUG=False)
+    def test_sections_use_source_references_for_hebrew_cross_chapter_mapping(self, quota):
+        self.bible.name = 'King James Version'
+        self.section_network.return_value = Mock(status_code=200, json=Mock(return_value={'data': [
+            {'id': 'JOL.S1', 'title': 'Heading', 'firstVerseId': 'JOL.2.28', 'lastVerseId': 'JOL.3.21'},
+        ]}))
+        headings, warning = _study_section_headings(
+            self.bible, 'Joel', 3, [1, 2, 3], 'hebrew', RequestFactory().get('/'),
+            'verses_api',
+        )
+        self.assertEqual(headings, [{'id': 'JOL.S1', 'title': 'Heading', 'verse': 1}])
+        self.assertEqual(warning, '')
+        self.assertIn('/books/JOL/sections', self.section_network.call_args.args[0])
+        quota.assert_called_once()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    def test_heading_checkbox_gates_page_and_ajax_and_keeps_disabled_selection(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        translations.return_value.all_in_supported_languages.return_value = [self.bible]
+        parameters = {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 1,
+            'combine_verses': '1', 'show_sections': '0',
+        }
+        with patch.object(self.bible, 'verses', return_value='Verse text.'), \
+                patch('walkasjesus_app.views.bible_study_view._study_section_headings') as sections:
+            response = self.client.get(reverse('commandments:bible_study'), parameters)
+            self.assertFalse(response.context['show_sections'])
+            self.assertEqual(response.context['selected_bibles'][0]['sections'], [])
+            self.assertContains(response, 'id="bs-show-sections" name="show_sections" value="1">')
+            response = self.client.post(reverse('commandments:bible_study_verses'), parameters)
+            self.assertEqual(response.json()['sections'], [])
+            self.assertEqual(response.json()['section_warning'], '')
+            response = self.client.get(
+                reverse('commandments:bible_study'), {**parameters, 'combine_verses': '0', 'show_sections': '1'})
+            self.assertTrue(response.context['show_sections'])
+            self.assertFalse(response.context['combine_verses'])
+            self.assertContains(response, 'id="bs-show-sections" name="show_sections" value="1" checked disabled>')
+            response = self.client.post(
+                reverse('commandments:bible_study_verses'), {**parameters, 'combine_verses': '0', 'show_sections': '1'})
+            self.assertEqual(response.json()['sections'], [])
+            sections.assert_not_called()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @override_settings(DISABLE_CACHE_FOR_DEBUG=False)
+    def test_sections_absence_is_cached_and_local_translations_do_not_fetch(self, quota):
+        arguments = (self.bible, 'Titus', 1, [1, 2], 'english', RequestFactory().get('/'), 'verses_api')
+        for _ in range(2):
+            self.assertEqual(_study_section_headings(*arguments), ([], ''))
+        self.section_network.assert_called_once()
+        quota.assert_called_once()
+        self.assertEqual(_study_section_headings(
+            LocalStatenvertalingBible('svv-statenvertaling'), *arguments[1:]), ([], ''))
+        self.section_network.assert_called_once()
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    @override_settings(DISABLE_CACHE_FOR_DEBUG=False)
+    def test_section_failures_preserve_verses_and_can_be_retried(self, translations, quota):
+        translations.return_value.get.return_value = self.bible
+        parameters = {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1, 'start_verse': 1, 'end_verse': 1,
+            'combine_verses': '1',
+        }
+        with patch.object(self.bible, 'verses', return_value='Verse text.'), \
+                self.assertLogs('walkasjesus_app.views.bible_study_view', level='ERROR'):
+            self.section_network.side_effect = requests.Timeout('Metadata timeout')
+            response = self.client.post(reverse('commandments:bible_study_verses'), parameters)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['verses'], {'1': 'Verse text.'})
+        self.assertTrue(response.json()['section_warning'])
+        self.section_network.side_effect = None
+        response = self.client.post(reverse('commandments:bible_study_verses'), parameters)
+        self.assertEqual(response.json()['section_warning'], '')
+        self.assertEqual(self.section_network.call_count, 2)
+
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    def test_invalid_section_references_are_explicitly_reported(self, quota):
+        self.section_network.return_value = Mock(status_code=200, json=Mock(return_value={'data': [
+            {'id': 'TIT.S1', 'title': 'Heading', 'firstVerseId': 'INVALID', 'lastVerseId': 'TIT.1.5'},
+        ]}))
+        with self.assertLogs('walkasjesus_app.views.bible_study_view', level='ERROR'):
+            headings, warning = _study_section_headings(
+                self.bible, 'Titus', 1, [1], 'english', RequestFactory().get('/'), 'verses_api')
+        self.assertEqual(headings, [])
+        self.assertTrue(warning)
 
 
 @override_settings(BIBLE_STUDY_MAX_VERSES_BY_BIBLE_ID={'nbv21': 5})

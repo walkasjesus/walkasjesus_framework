@@ -19,11 +19,13 @@ class QueryBuilder:
                    start_chapter: int,
                    start_verse: int,
                    end_chapter: int,
-                   end_verse: int) -> str:
+                   end_verse: int,
+                   include_titles: bool = True) -> str:
         book_id = self._get_book_id(bible_id, book)
         verse_query = f'{book_id}.{start_chapter}.{start_verse}-{book_id}.{end_chapter}.{end_verse}'
 
-        return self.build_url(f'bibles/{bible_id}/passages/{verse_query}?content-type={self.content_type}')
+        url = self.build_url(f'bibles/{bible_id}/passages/{verse_query}?content-type={self.content_type}')
+        return url if include_titles else url + '&include-titles=false'
 
     def _get_book_id(self, bible_id: str, book: BibleBooks) -> str:
         """" Convert the bible book enum to the id used on the bible api. """

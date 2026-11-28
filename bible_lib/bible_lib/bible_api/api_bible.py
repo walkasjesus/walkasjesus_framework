@@ -24,9 +24,11 @@ class ApiBible(Bible):
                start_chapter: int,
                start_verse: int,
                end_chapter: int,
-               end_verse: int) -> str:
+               end_verse: int,
+               include_titles: bool = True) -> str:
         verses_str = f'{book}{start_chapter}{start_verse}-{end_chapter}{end_chapter}'
-        url = self.query_builder.get_verses(self.id, book, start_chapter, start_verse, end_chapter, end_verse)
+        url = self.query_builder.get_verses(
+            self.id, book, start_chapter, start_verse, end_chapter, end_verse, include_titles=include_titles)
 
         try:
             response = self.client.get(url)
@@ -57,11 +59,12 @@ class ApiBible(Bible):
 
     def chapter_passage_url(self, book: BibleBooks, chapter: int, last_verse: int) -> str:
         """Return the passage url that covers verses 1..last_verse of a chapter."""
-        return self.query_builder.get_verses(self.id, book, chapter, 1, chapter, last_verse)
+        return self.query_builder.get_verses(self.id, book, chapter, 1, chapter, last_verse, include_titles=False)
 
     def passage_verses(self, book: BibleBooks, chapter: int, start_verse: int, end_verse: int) -> list[Verse]:
         """Retrieve a passage while preserving the provider's combined verse ranges."""
-        url = self.query_builder.get_verses(self.id, book, chapter, start_verse, chapter, end_verse)
+        url = self.query_builder.get_verses(
+            self.id, book, chapter, start_verse, chapter, end_verse, include_titles=False)
         json_content = json.loads(self.client.get(url))
         data = json_content['data']
         if not self.copyright:

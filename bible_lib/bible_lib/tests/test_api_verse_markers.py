@@ -38,3 +38,17 @@ class ApiVerseMarkersTest(TestCase):
     def test_new_chapter_starts_only_after_a_previous_verse(self):
         verses = self.bible.extract_verses(BibleBooks.John, 1, '[51] End. [1] Start.')
         self.assertEqual([(v.chapter, v.verse) for v in verses], [(1, 51), (2, 1)])
+
+    def test_study_passage_requests_exclude_titles_without_changing_default_verses(self):
+        self.bible.client.get = Mock(return_value=json.dumps({
+            'data': {'content': '[1] Verse text.', 'copyright': 'test'},
+        }))
+        self.bible.verses(BibleBooks.Titus, 1, 1, 1, 1)
+        self.assertNotIn('include-titles=false', self.bible.client.get.call_args.args[0])
+        for fetch in (
+            lambda: self.bible.verses(BibleBooks.Titus, 1, 1, 1, 1, include_titles=False),
+            lambda: self.bible.passage_verses(BibleBooks.Titus, 1, 1, 1),
+            lambda: self.bible.chapter_verses(BibleBooks.Titus, 1, 1),
+        ):
+            fetch()
+            self.assertIn('include-titles=false', self.bible.client.get.call_args.args[0])

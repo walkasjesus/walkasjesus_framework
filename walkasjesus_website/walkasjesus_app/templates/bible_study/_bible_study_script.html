@@ -1169,8 +1169,8 @@
     return '<i class="fa fa-spinner fa-spin ' + spinnerClass + '"></i>';
   }
 
-  function bibleStudyRangeKey(bibleId, book, chapter, startVerse, endVerse) {
-    return [String(bibleId || ''), String(book || ''), String(chapter || ''), String(startVerse || ''), String(endVerse || '')].join('|');
+  function bibleStudyRangeKey(bibleId, book, chapter, startVerse, endVerse, combineVerses, showSections) {
+    return [String(bibleId || ''), String(book || ''), String(chapter || ''), String(startVerse || ''), String(endVerse || '')].join('|') + (combineVerses ? '|combined' + (showSections ? '|sections' : '') : '');
   }
 
   function bsEffectiveMaxVerses() {
@@ -1266,7 +1266,8 @@
       endVerse: range.endVerse,
       bibles: selectedBibleDescriptors(),
       showOriginalText: $('#bs-show-original').is(':checked'),
-      combineVerses: bsCombineVerses
+      combineVerses: bsCombineVerses,
+      showSections: $('#bs-show-sections').is(':checked')
     };
   }
 
@@ -1292,6 +1293,7 @@
       params.set('show_original', '1');
     }
     params.set('combine_verses', state.combineVerses ? '1' : '0');
+    params.set('show_sections', state.showSections ? '1' : '0');
     $.each(state.bibles, function(_, bible) {
       if (bible.id) {
         params.append('bible_id', bible.id);
@@ -1394,14 +1396,27 @@
       '<div class="bible-study-translation-head">' +
       '<span class="bible-study-translation-title">' + escapeHtml(bible.displayName) + '</span>' +
       '</div>' +
-      '<p class="bs-verse-text bs-combined-text" data-bible-verse-text="1">' + verseSpinnerHtml('api') + '</p>' +
+      '<div class="bs-verse-text bs-combined-text" data-bible-verse-text="1">' + verseSpinnerHtml('api') + '</div>' +
+      '<small class="bs-section-warning d-block text-danger" role="alert"></small>' +
       (bible.copyright ? '<p class="bible-study-copyright mb-0"><small>' + escapeHtml(bible.copyright) + '</small></p>' : '') +
       '</div></div>';
   }
 
-  function buildCombinedBibleStudyText(state, bibleId, displayName, verses, references, warnings) {
+  function buildCombinedBibleStudyText(state, bibleId, displayName, verses, references, warnings, sections) {
     var lines = [];
     var renderedGroups = {};
+    var headingsByVerse = {};
+    (sections || []).forEach(function(section) {
+      var position = Number(section.verse);
+      var group = /^(\d+):(\d+)-(\d+)$/.exec((references || {})[String(position)] || '');
+      if (group && Number(group[1]) === Number(state.chapter)) {
+        position = Math.max(state.startVerse, Number(group[2]));
+      }
+      if (!headingsByVerse[position]) {
+        headingsByVerse[position] = [];
+      }
+      headingsByVerse[position].push(section.title);
+    });
     var abbreviation = bibleStudyAbbreviationForSelection(bibleId, displayName || '').toUpperCase();
     bibleStudyVerseNumbers(state).forEach(function(verseNumber) {
       var text = String(verses[String(verseNumber)] || '—');
@@ -1430,13 +1445,81 @@
       var copyVerse = mergedRange ? mergedRange[2] : verseNumber;
       var copyEndVerse = mergedRange ? mergedRange[3] : verseNumber;
       var warning = (warnings || {})[String(verseNumber)] || '';
-      lines.push('<span class="js-copy-selectable-line bs-copy-line" data-copy-group="' + escapeHtml('bs|' + String(bibleId || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(copyVerse || '')) + '" data-copy-end-verse="' + escapeHtml(String(copyEndVerse || '')) + '" data-copy-abbreviation="' + escapeHtml(abbreviation) + '" data-copy-text="' + escapeHtml(text.replace(/\s+/g, ' ').trim()) + '" data-copy-footer="' + escapeHtml(footer) + '">' + escapeHtml(verseLabel + sourceLabel + ' ' + text).replace(/\n/g, '<br>') + '</span>' + (warning ? '<small class="bs-verse-numbering-warning d-block text-muted">' + escapeHtml(warning) + '</small>' : ''));
+      var headingsHtml = (headingsByVerse[verseNumber] || []).map(function(title) {
+        return '<span class="bs-section-heading" role="heading" aria-level="3">' + escapeHtml(title) + '</span>';
+      }).join('');
+      var verseHtml = '<span class="js-copy-selectable-line bs-copy-line" data-copy-group="' + escapeHtml('bs|' + String(bibleId || '') + '|' + String((state && state.book) || '') + '|' + String((state && state.chapter) || '')) + '" data-copy-book-label="' + escapeHtml(String((state && state.bookLabel) || '')) + '" data-copy-chapter="' + escapeHtml(String((state && state.chapter) || '')) + '" data-copy-verse="' + escapeHtml(String(copyVerse || '')) + '" data-copy-end-verse="' + escapeHtml(String(copyEndVerse || '')) + '" data-copy-abbreviation="' + escapeHtml(abbreviation) + '" data-copy-text="' + escapeHtml(text.replace(/\s+/g, ' ').trim()) + '" data-copy-footer="' + escapeHtml(footer) + '">' + escapeHtml(verseLabel + sourceLabel + ' ' + text).replace(/\n/g, '<br>') + '</span>' + (warning ? '<small class="bs-verse-numbering-warning d-block text-muted">' + escapeHtml(warning) + '</small>' : '');
+      var rowEndVerse = mergedRange && Number(mergedRange[1]) === Number(state.chapter)
+        ? Math.min(state.endVerse, Number(mergedRange[3])) : verseNumber;
+      lines.push('<div class="bs-combined-verse-row" data-verse="' + verseNumber + '" data-end-verse="' + rowEndVerse + '">' +
+        '<div class="bs-section-slot">' + headingsHtml + '</div>' +
+        '<div class="bs-verse-slot">' + verseHtml + '</div></div>');
     });
-    return lines.join('<br>');
+    return lines.join('');
+  }
+
+  function alignCombinedBibleStudyRows() {
+    var $cards = $('#bs-results-region .bible-study-translation-card').filter(function() {
+      return $(this).find('.bs-combined-text').length > 0;
+    });
+    var $heads = $cards.find('.bible-study-translation-head');
+    var $rows = $cards.find('.bs-combined-verse-row');
+    $heads.add($rows.find('.bs-section-slot, .bs-verse-slot')).css('min-height', '');
+    if ($cards.length < 2 || !window.matchMedia('(min-width: 768px)').matches ||
+        $cards.filter(function() { return !$(this).find('.bs-combined-verse-row').length; }).length) {
+      return;
+    }
+    var headHeight = 0;
+    $heads.each(function() { headHeight = Math.max(headHeight, $(this).outerHeight()); });
+    $heads.css('min-height', Math.ceil(headHeight) + 'px');
+    var headingHeights = {};
+    var verseHeights = {};
+    var rows = [];
+    $rows.each(function() {
+      var $row = $(this);
+      var start = Number($row.attr('data-verse'));
+      var end = Number($row.attr('data-end-verse'));
+      var $heading = $row.find('.bs-section-slot');
+      var $verse = $row.find('.bs-verse-slot');
+      headingHeights[start] = Math.max(headingHeights[start] || 0, Math.ceil($heading.outerHeight()));
+      var height = Math.ceil($verse.outerHeight());
+      if (start === end) {
+        verseHeights[start] = Math.max(verseHeights[start] || 0, height);
+      }
+      rows.push({ start: start, end: end, height: height, heading: $heading, verse: $verse });
+    });
+    function contentHeight(row) {
+      var height = 0;
+      for (var verse = row.start; verse <= row.end; verse += 1) {
+        height += verseHeights[verse] || 0;
+        if (verse !== row.start) height += headingHeights[verse] || 0;
+      }
+      return height;
+    }
+    // A merged block spans the same height as its individual verses in other columns.
+    rows.forEach(function(row) {
+      var missingHeight = row.height - contentHeight(row);
+      if (missingHeight > 0) {
+        verseHeights[row.end] = (verseHeights[row.end] || 0) + missingHeight;
+      }
+    });
+    rows.forEach(function(row) {
+      row.heading.css('min-height', (headingHeights[row.start] || 0) + 'px');
+      row.verse.css('min-height', contentHeight(row) + 'px');
+    });
+  }
+
+  var bsCombinedResizeTimer;
+  $(window).on('resize', function() {
+    window.clearTimeout(bsCombinedResizeTimer);
+    bsCombinedResizeTimer = window.setTimeout(alignCombinedBibleStudyRows, 100);
+  });
+  if (document.fonts) {
+    document.fonts.ready.then(alignCombinedBibleStudyRows);
   }
 
   function bibleStudyTranslationCardHtml(state, verseNumber, bible, isLastVerse) {
-    var requestKey = bibleStudyRangeKey(bible.id, state.book, state.chapter, state.startVerse, state.endVerse);
+    var requestKey = bibleStudyRangeKey(bible.id, state.book, state.chapter, state.startVerse, state.endVerse, state.combineVerses, state.showSections);
     var cached = bibleStudyRequestCache[requestKey];
     var spinnerSource = cached ? 'cache' : 'api';
     var copyrightHtml = isLastVerse && bible.copyright
@@ -1555,7 +1638,8 @@
         if (displayName) {
           $combinedCard.find('.bible-study-translation-title').text(displayName);
         }
-        $combinedCard.find('[data-bible-verse-text="1"]').html(buildCombinedBibleStudyText(state, bibleId, displayName || (bibleStudyAbbreviationForSelection(bibleId, $combinedCard.find('.bible-study-translation-title').text()) || ''), verses, payload.verse_references, payload.verse_warnings));
+        $combinedCard.find('[data-bible-verse-text="1"]').html(buildCombinedBibleStudyText(state, bibleId, displayName || (bibleStudyAbbreviationForSelection(bibleId, $combinedCard.find('.bible-study-translation-title').text()) || ''), verses, payload.verse_references, payload.verse_warnings, state.showSections ? payload.sections : []));
+        $combinedCard.find('.bs-section-warning').text(state.showSections ? (payload.section_warning || '') : '');
         if (copyrights) {
           if (!$combinedCard.find('.bible-study-copyright').length) {
             $combinedCard.append('<p class="bible-study-copyright mb-0"><small></small></p>');
@@ -1563,6 +1647,7 @@
           $combinedCard.find('.bible-study-copyright small').text(copyrights);
         }
       });
+      alignCombinedBibleStudyRows();
       ensureBibleStudyCopyButtons(state);
       return;
     }
@@ -2036,7 +2121,7 @@
   }
 
   function fetchBibleStudyRange(state, bible, onDone) {
-    var requestKey = bibleStudyRangeKey(bible.id, state.book, state.chapter, state.startVerse, state.endVerse);
+    var requestKey = bibleStudyRangeKey(bible.id, state.book, state.chapter, state.startVerse, state.endVerse, state.combineVerses, state.showSections);
     if (bibleStudyRequestCache[requestKey]) {
       window.setTimeout(function() {
         onDone(bibleStudyRequestCache[requestKey]);
@@ -2056,10 +2141,14 @@
         chapter: state.chapter,
         start_verse: state.startVerse,
         end_verse: state.endVerse,
-        reference_system: 'hebrew'
+        reference_system: 'hebrew',
+        combine_verses: state.combineVerses ? '1' : '0',
+        show_sections: state.showSections ? '1' : '0'
       },
       success: function(payload) {
-        bibleStudyRequestCache[requestKey] = payload || {};
+        if (payload && !payload.section_warning) {
+          bibleStudyRequestCache[requestKey] = payload;
+        }
         onDone(payload || {});
       },
       error: function() {
@@ -2076,6 +2165,8 @@
       chapter: {{ selected_chapter }},
       startVerse: {{ selected_start_verse }},
       endVerse: {{ selected_end_verse }},
+      combineVerses: {{ combine_verses|yesno:"true,false" }},
+      showSections: {{ show_sections|yesno:"true,false" }},
       bibles: []
     };
     {% for bible in selected_bibles %}
@@ -2084,9 +2175,11 @@
       displayName: '{{ bible.display_name|escapejs }}',
       copyright: '{{ bible.copyright|escapejs }}'
     });
-    bibleStudyRequestCache[bibleStudyRangeKey('{{ bible.id|escapejs }}', initialState.book, initialState.chapter, initialState.startVerse, initialState.endVerse)] = {
+    {% if not bible.section_warning %}
+    bibleStudyRequestCache[bibleStudyRangeKey('{{ bible.id|escapejs }}', initialState.book, initialState.chapter, initialState.startVerse, initialState.endVerse, initialState.combineVerses, initialState.showSections)] = {
       bible_display_name: '{{ bible.display_name|escapejs }}',
       copyright: '{{ bible.copyright|escapejs }}',
+      sections: [{% for section in bible.sections %}{id: '{{ section.id|escapejs }}', title: '{{ section.title|escapejs }}', verse: {{ section.verse }}}{% if not forloop.last %}, {% endif %}{% endfor %}],
       verses: {
         {% for verse in verse_data %}'{{ verse.verse_num }}': '{{ bible.verse_texts|get_item:verse.verse_num|default:""|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}
       },
@@ -2100,6 +2193,7 @@
         {% for verse in verse_data %}'{{ verse.verse_num }}': '{{ bible.verse_warnings|get_item:verse.verse_num|default:""|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}
       }
     };
+    {% endif %}
     {% endfor %}
     {% endif %}
   }
@@ -2516,6 +2610,11 @@
 
     $.each(state.bibles, function(_, bible) {
       fetchBibleStudyRange(state, bible, function(payload) {
+        var currentState = currentBibleStudyState();
+        if (bibleStudyRangeKey('', state.book, state.chapter, state.startVerse, state.endVerse, state.combineVerses, state.showSections) !==
+            bibleStudyRangeKey('', currentState.book, currentState.chapter, currentState.startVerse, currentState.endVerse, currentState.combineVerses, currentState.showSections)) {
+          return;
+        }
         applyBibleStudyPayloadToDom(state, bible.id, payload || {});
         loadBibleStudyWordAlignment(state, bible);
       });
@@ -2786,6 +2885,13 @@
   var bsSelectedStrongsParam = $.trim(String(bsInitialParams.get('selected_strongs') || ''));
   bsCombineVerses = String(bsInitialParams.get('combine_verses') || '1') !== '0';
   $('#bs-combine-verses').prop('checked', bsCombineVerses);
+  $('#bs-show-sections').prop('checked', String(bsInitialParams.get('show_sections') || '1') !== '0');
+  function syncBibleStudySectionToggle() {
+    var disabled = !$('#bs-combine-verses').is(':checked');
+    $('#bs-show-sections').prop('disabled', disabled);
+    $('.bs-section-toggle').toggleClass('is-disabled', disabled);
+  }
+  syncBibleStudySectionToggle();
   if (bsSelectedVerseParam && bsSelectedStrongsParam) {
     bsPendingStrongsSelection = {
       verse: bsSelectedVerseParam,
@@ -2794,6 +2900,10 @@
   }
 
   $(document).on('change', '#bs-combine-verses', function() {
+    syncBibleStudySectionToggle();
+    queueBibleStudyAutoApply(0);
+  });
+  $(document).on('change', '#bs-show-sections', function() {
     queueBibleStudyAutoApply(0);
   });
 

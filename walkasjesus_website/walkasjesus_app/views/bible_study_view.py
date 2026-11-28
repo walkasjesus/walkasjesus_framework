@@ -135,7 +135,8 @@ def _study_verse_text(bible, book, chapter, verse, reference_system):
     sources, _, _ = _study_verse_references(bible, book, chapter, verse, reference_system)
     texts = []
     for source_chapter, source_verse in sources:
-        text = bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse)
+        options = {'include_titles': False} if isinstance(bible, ApiBible) else {}
+        text = bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse, **options)
         if isinstance(bible, LocalStatenvertalingBible):
             text = re.sub(r'\[\d{2,3}:\d+\]\s*', '', text)
         if text:
@@ -144,7 +145,7 @@ def _study_verse_text(bible, book, chapter, verse, reference_system):
 
 
 def _study_verse_cache_key(reference_system, bible_id, book_name, chapter, verse):
-    return f'bible_study:v3:{reference_system}:{bible_id}:{book_name}:{chapter}:{verse}'
+    return f'bible_study:v4:{reference_system}:{bible_id}:{book_name}:{chapter}:{verse}'
 
 
 # Below this number of uncached verses a chapter-level fetch is not worthwhile;
@@ -163,7 +164,7 @@ def _fetch_licensed_passage(bible, book_name, chapter, verse_numbers, reference_
     ):
         return {}, {}, {}
     start, end = verse_numbers[0], verse_numbers[-1]
-    key = f'bible_study:licensed_passage:v1:{reference_system}:{bible.id}:{book_name}:{chapter}:{start}:{end}'
+    key = f'bible_study:licensed_passage:v2:{reference_system}:{bible.id}:{book_name}:{chapter}:{start}:{end}'
     disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
     cached = None if disable_cache else cache.get(key)
     source = 'cache' if cached is not None else 'api'
@@ -199,6 +200,76 @@ def _study_chapter_source_plan(bible, book_name, chapter, verse_numbers, referen
         for source_chapter, source_verse in sources:
             last_verse_by_chapter[source_chapter] = max(last_verse_by_chapter.get(source_chapter, 0), source_verse)
     return plan, last_verse_by_chapter
+
+
+def _study_section_headings(bible, book_name, chapter, verse_numbers, reference_system, request, endpoint):
+    if not isinstance(bible, ApiBible):
+        return [], ''
+    plan, _source_chapters = _study_chapter_source_plan(bible, book_name, chapter, verse_numbers, reference_system)
+    if not plan:
+        return [], ''
+    code = bible.query_builder._get_book_id(bible.id, BibleLibBibleBooks[book_name])
+    disable_cache = getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False)
+    headings = []
+    seen = set()
+    try:
+        key = f'bible_study:sections:v2:{bible.id}:{code}'
+        sections = None if disable_cache else cache.get(key)
+        if sections is None:
+            consume_bible_api_quota(request, bible, endpoint)
+            # Chapter lists omit sections beginning in the preceding chapter.
+            url = bible.query_builder.build_url(f'bibles/{bible.id}/books/{code}/sections')
+            response = requests.get(
+                url, headers={'api-key': settings.BIBLE_API_KEY}, timeout=15, allow_redirects=False)
+            if response.status_code == 404:
+                logger.info('No section metadata for bible=%s book=%s', bible.id, code)
+                sections = []
+            else:
+                response.raise_for_status()
+                if response.status_code != 200:
+                    raise ValueError(f'Unexpected section response status: {response.status_code}')
+                payload = response.json()
+                sections = payload.get('data') if isinstance(payload, dict) else None
+                if not isinstance(sections, list):
+                    raise ValueError('Expected a list of section metadata.')
+                normalized = []
+                for section in sections:
+                    if not isinstance(section, dict) or any(
+                        not isinstance(section.get(field), str)
+                        for field in ('id', 'title', 'firstVerseId', 'lastVerseId')
+                    ) or not section['id']:
+                        raise ValueError('Invalid section metadata.')
+                    references = []
+                    for field in ('firstVerseId', 'lastVerseId'):
+                        match = re.fullmatch(r'([A-Z0-9]+)\.(\d+)\.(\d+)', section[field])
+                        if match is None or match[1] != code or int(match[2]) < 1:
+                            raise ValueError('Invalid section verse reference.')
+                        references.append((int(match[2]), int(match[3])))
+                    if references[0] > references[1]:
+                        raise ValueError('Reversed section verse range.')
+                    normalized.append({
+                        'id': section['id'], 'title': section['title'].strip(),
+                        'first': references[0], 'last': references[1],
+                    })
+                sections = normalized
+            if not disable_cache:
+                cache.set(key, sections, VERSE_CACHE_TIMEOUT)
+        for section in sections:
+            if section['id'] in seen or not section['title']:
+                continue
+            positions = [
+                verse for verse, sources in plan.items()
+                if any(tuple(section['first']) <= source <= tuple(section['last']) for source in sources)
+            ]
+            if positions:
+                seen.add(section['id'])
+                headings.append({'id': section['id'], 'title': section['title'], 'verse': min(positions)})
+    except BibleApiRateLimitExceeded as error:
+        return headings, error.message
+    except (requests.RequestException, ValueError):
+        logger.exception('Failed to load section metadata for bible=%s book=%s chapter=%s', bible.id, book_name, chapter)
+        return headings, _('Section headings could not be loaded. The verse text is still available.')
+    return sorted(headings, key=lambda heading: heading['verse']), ''
 
 
 def _fetch_chapter_verse_texts(bible, book_name, chapter, verse_numbers, reference_system,
@@ -901,6 +972,8 @@ class BibleStudyView(View):
     def get(self, request):
         verse_nav_step = int(getattr(settings, 'BIBLE_STUDY_MAX_VERSES', 5))
         show_original_text = str(request.GET.get('show_original', '')).strip().lower() in {'1', 'true', 'yes', 'on'}
+        combine_verses = request.GET.get('combine_verses', '1') != '0'
+        show_sections = request.GET.get('show_sections', '1') != '0'
         max_bibles = 4
 
         bible_books = [(b.name, str(b.value)) for b in BibleBooks]
@@ -1015,7 +1088,7 @@ class BibleStudyView(View):
                         verse_texts[str(v)] = prewarmed[v]
                         verse_sources[str(v)] = passage_sources.get(str(v), 'api')
                         continue
-                    cache_key = f'bible_study:v3:hebrew:{bid}:{book}:{chapter}:{v}'
+                    cache_key = _study_verse_cache_key('hebrew', bid, book, chapter, v)
                     cached = None if getattr(settings, 'DISABLE_CACHE_FOR_DEBUG', False) else cache.get(cache_key)
                     if cached is not None:
                         verse_texts[str(v)] = cached
@@ -1044,6 +1117,10 @@ class BibleStudyView(View):
                     endpoint=BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE,
                 )
 
+                sections, section_warning = _study_section_headings(
+                    bible_obj, book, chapter, [v for v in verse_range if verse_texts.get(str(v))],
+                    'hebrew', request, BibleTranslationUsageDaily.ENDPOINT_STUDY_PAGE,
+                ) if combine_verses and show_sections else ([], '')
                 verse_texts_by_bible[bid] = verse_texts
                 selected_bibles.append({
                     'id': bid,
@@ -1054,6 +1131,8 @@ class BibleStudyView(View):
                     'verse_sources': verse_sources,
                     'verse_references': verse_references,
                     'verse_warnings': verse_warnings,
+                    'sections': sections,
+                    'section_warning': section_warning,
                     'copyright': getattr(bible_obj, 'copyright', ''),
                 })
 
@@ -1081,6 +1160,8 @@ class BibleStudyView(View):
             'visible_bible_slots': visible_bible_slots,
             'is_ot_book': is_ot_book,
             'show_original_text': show_original_text,
+            'combine_verses': combine_verses,
+            'show_sections': show_sections,
             'bible_api_rate_limit_error': bible_api_rate_limit_error,
             'hebrew_reference_metadata': _study_reference_metadata(),
             'psalm_english_references': {
@@ -1154,7 +1235,7 @@ class BibleStudyVersesView(View):
                 verses[str(v)] = prewarmed[v]
                 verse_sources[str(v)] = passage_sources.get(str(v), 'api')
                 continue
-            cache_key = f'bible_study:v3:{reference_system}:{bible_id}:{book_name}:{chapter}:{v}'
+            cache_key = _study_verse_cache_key(reference_system, bible_id, book_name, chapter, v)
             cached = None if disable_cache else cache.get(cache_key)
             if cached is not None:
                 verses[str(v)] = cached
@@ -1183,11 +1264,18 @@ class BibleStudyVersesView(View):
 
         language_code = str(getattr(bible, 'language', '') or '').strip().upper()[:2]
         display_name = f'{language_code} - {getattr(bible, "name", bible_id)}' if language_code else getattr(bible, 'name', bible_id)
+        sections, section_warning = _study_section_headings(
+            bible, book_name, chapter,
+            [v for v in range(start_verse, end_verse + 1) if verses.get(str(v))],
+            reference_system, request, BibleTranslationUsageDaily.ENDPOINT_VERSES_API,
+        ) if request.POST.get('combine_verses') == '1' and request.POST.get('show_sections', '1') != '0' else ([], '')
         return JsonResponse({
             'verses': verses,
             'verse_sources': verse_sources,
             'verse_references': verse_references,
             'verse_warnings': verse_warnings,
+            'sections': sections,
+            'section_warning': section_warning,
             'bible_name': getattr(bible, 'name', bible_id),
             'bible_display_name': display_name,
             'copyright': getattr(bible, 'copyright', ''),

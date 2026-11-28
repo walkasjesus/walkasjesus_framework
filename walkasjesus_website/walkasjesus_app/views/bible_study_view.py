@@ -137,6 +137,8 @@ def _study_verse_text(bible, book, chapter, verse, reference_system):
     for source_chapter, source_verse in sources:
         options = {'include_titles': False} if isinstance(bible, ApiBible) else {}
         text = bible.verses(BibleLibBibleBooks[book], source_chapter, source_verse, source_chapter, source_verse, **options)
+        if isinstance(bible, ApiBible) and text in {'Not found', 'Could not read text'}:
+            raise RuntimeError(f'Bible API failed to retrieve verse text: {text}')
         if isinstance(bible, LocalStatenvertalingBible):
             text = re.sub(r'\[\d{2,3}:\d+\]\s*', '', text)
         if text:

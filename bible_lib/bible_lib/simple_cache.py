@@ -39,7 +39,6 @@ class SimpleCache:
         self.cache_misses = 0
         self.cache_items_not_persisted = 0
         self.cache_path = cache_path
-        self._file_lock = FileLock(str(cache_path) + '.lock')
         self.ttl_seconds = _resolve_ttl_seconds(ttl_seconds)
         self.logger = logging.getLogger()
         self.load_state()
@@ -167,7 +166,7 @@ class SimpleCache:
         with self._mutex:
             try:
                 self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-                with self._file_lock:
+                with FileLock(str(self.cache_path) + '.lock'):
                     loaded = self._read_disk()
                     signature = self._signature()
                 loaded.update(self._pending_updates)
@@ -188,7 +187,7 @@ class SimpleCache:
             temp_path = None
             try:
                 self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-                with self._file_lock:
+                with FileLock(str(self.cache_path) + '.lock'):
                     merged = self._read_disk()
                     merged.update(self._pending_updates)
                     for key in self._pending_deletions:

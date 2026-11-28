@@ -1,4 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import get_context
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -10,6 +11,11 @@ from bible_lib.simple_cache import SimpleCache
 
 def write_cache_entry(path, key):
     SimpleCache(Path(path)).set_value(key, key)
+
+
+def write_inherited_cache_entry(cache):
+    cache.load_state()
+    cache.set_value('child', 'value')
 
 
 class TestSimpleCache(TestCase):
@@ -69,6 +75,14 @@ class TestSimpleCache(TestCase):
             with ProcessPoolExecutor(max_workers=4) as executor:
                 list(executor.map(write_cache_entry, [path] * 16, [str(i) for i in range(16)]))
             self.assertEqual(set(SimpleCache(Path(path)).cached_keys()), {str(i) for i in range(16)})
+
+    def test_inherited_cache_can_be_read_and_written_after_fork(self):
+        cache = SimpleCache(self.cache_path)
+        process = get_context('fork').Process(target=write_inherited_cache_entry, args=(cache,))
+        process.start()
+        process.join()
+        self.assertEqual(process.exitcode, 0)
+        self.assertEqual(SimpleCache(self.cache_path).get_value('child'), 'value')
 
     def test_invalid_disk_cache_is_not_overwritten(self):
         with TemporaryDirectory() as directory:

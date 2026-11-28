@@ -322,6 +322,37 @@ class BibleStudyPassagesTest(TestCase):
         self.section_network = sections.start()
         self.addCleanup(sections.stop)
 
+    @patch('walkasjesus_app.views.bible_study_view.consume_bible_api_quota')
+    @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
+    @override_settings(DISABLE_CACHE_FOR_DEBUG=False)
+    def test_api_errors_are_not_cached_as_verse_text(self, translations, _quota):
+        translations.return_value.get.return_value = self.bible
+        translations.return_value.all_in_supported_languages.return_value = [self.bible]
+        parameters = {
+            'bible_id': 'bgt', 'book': 'Titus', 'chapter': 1,
+            'start_verse': 1, 'end_verse': 1, 'reference_system': 'hebrew',
+        }
+        for endpoint in ('commandments:bible_study', 'commandments:bible_study_verses'):
+            with self.subTest(endpoint=endpoint):
+                cache.clear()
+                with patch('walkasjesus_app.views.bible_study_view._fetch_licensed_passage',
+                           return_value=({}, {}, {})), \
+                        patch('walkasjesus_app.views.bible_study_view._fetch_chapter_verse_texts',
+                              return_value={}), \
+                        patch.object(self.bible, 'verses', side_effect=['Not found', 'Verse text.']):
+                    if endpoint == 'commandments:bible_study':
+                        first = self.client.get(reverse(endpoint), parameters)
+                        second = self.client.get(reverse(endpoint), parameters)
+                        first_text = first.context['selected_bibles'][0]['verse_texts']['1']
+                        second_text = second.context['selected_bibles'][0]['verse_texts']['1']
+                    else:
+                        first = self.client.post(reverse(endpoint), parameters)
+                        second = self.client.post(reverse(endpoint), parameters)
+                        first_text = first.json()['verses']['1']
+                        second_text = second.json()['verses']['1']
+                self.assertEqual(first_text, '')
+                self.assertEqual(second_text, 'Verse text.')
+
     @patch('walkasjesus_app.views.bible_study_view.BibleTranslation')
     def test_psalm_77_and_other_multi_digit_chapters_have_metadata(self, translations):
         translations.return_value.get.return_value = self.bible
